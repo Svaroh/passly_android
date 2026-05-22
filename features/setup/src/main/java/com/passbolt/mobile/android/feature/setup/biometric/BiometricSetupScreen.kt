@@ -25,7 +25,6 @@ package com.passbolt.mobile.android.feature.setup.biometric
 
 import PassboltTheme
 import android.app.Activity
-import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -62,9 +61,9 @@ import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.ActivityIntents
 import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig.Setup
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.Home
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior.FINISH_TO_HOME
+import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior.NAVIGATE_TO_ACCESSIBILITY_POLICIES
 import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.EncourageNativeAutofill
+import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.AccessibilityPolicies
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.dialogs.KeyChangesDetectedAlertDialog
 import com.passbolt.mobile.android.feature.authentication.auth.showBiometricPrompt
@@ -78,9 +77,9 @@ import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.MaybeLater
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ResumeView
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.UseBiometric
+import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToAccessibilityPolicies
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToAppSystemSettings
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToEncourageAutofill
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToHome
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.ShowBiometricPrompt
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.ShowErrorSnackbar
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.StartAuthActivity
@@ -98,7 +97,6 @@ fun BiometricSetupScreen(
     navigator: AppNavigator = koinInject(),
 ) {
     val context = LocalContext.current
-    val activity = LocalActivity.current
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val environment = rememberBiometricSetupEnvironment(viewModel::onIntent)
 
@@ -136,11 +134,8 @@ fun BiometricSetupScreen(
                     ),
                 )
             NavigateToEncourageAutofill ->
-                navigator.navigateToKey(EncourageNativeAutofill(dismissBehavior = FINISH_TO_HOME))
-            NavigateToHome -> {
-                navigator.startNavigationActivity(context, Home)
-                activity?.finish()
-            }
+                navigator.navigateToKey(EncourageNativeAutofill(dismissBehavior = NAVIGATE_TO_ACCESSIBILITY_POLICIES))
+            NavigateToAccessibilityPolicies -> navigator.navigateToKey(AccessibilityPolicies)
             is ShowErrorSnackbar ->
                 environment.coroutineScope.launch {
                     environment.snackbarHostState.showSnackbar(

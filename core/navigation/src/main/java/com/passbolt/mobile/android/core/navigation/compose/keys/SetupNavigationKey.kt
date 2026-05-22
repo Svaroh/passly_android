@@ -6,6 +6,9 @@ import kotlinx.serialization.Serializable
 
 sealed interface SetupNavigationKey : NavKey {
     @Serializable
+    object AccessibilityPolicies : SetupNavigationKey
+
+    @Serializable
     object Welcome : SetupNavigationKey
 
     @Serializable

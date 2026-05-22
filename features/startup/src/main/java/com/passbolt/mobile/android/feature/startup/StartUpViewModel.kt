@@ -7,17 +7,19 @@ import com.passbolt.mobile.android.feature.startup.StartUpSideEffect.NavigateToS
 import com.passbolt.mobile.android.feature.startup.StartUpSideEffect.NavigateToSignIn
 
 class StartUpViewModel(
-    accountSetupDataModel: AccountSetupDataModel?,
+    private val accountSetupDataModel: AccountSetupDataModel?,
     private val getAccountsUseCase: GetAccountsUseCase,
 ) : SideEffectViewModel<StartUpState, StartUpSideEffect>(StartUpState) {
     init {
-        launch {
-            val accounts = getAccountsUseCase.execute(Unit).users
-            if (accounts.isEmpty() || accountSetupDataModel != null) {
-                emitSideEffect(NavigateToSetup(accountSetupDataModel))
-            } else {
-                emitSideEffect(NavigateToSignIn)
-            }
+        launch { resolveAccountNavigation() }
+    }
+
+    private suspend fun resolveAccountNavigation() {
+        val accounts = getAccountsUseCase.execute(Unit).users
+        if (accounts.isEmpty() || accountSetupDataModel != null) {
+            emitSideEffect(NavigateToSetup(accountSetupDataModel))
+        } else {
+            emitSideEffect(NavigateToSignIn)
         }
     }
 }

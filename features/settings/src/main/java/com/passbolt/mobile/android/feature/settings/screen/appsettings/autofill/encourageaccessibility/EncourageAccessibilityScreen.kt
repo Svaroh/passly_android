@@ -6,15 +6,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,8 +28,6 @@ import com.passbolt.mobile.android.core.ui.switch.SwitchWithDescriptionItem
 import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
 import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityIntent.Close
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityIntent.ConsentToEnableAccessibility
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityIntent.DismissEnableAccessibilityConsent
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityIntent.EnableAccessibilityService
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityIntent.GrantOverlayPermission
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityIntent.RefreshState
@@ -123,33 +118,6 @@ private fun EncourageAccessibilityScreen(
                     description = stringResource(LocalizationR.string.autofill_service_overlay_description),
                     isChecked = state.isOverlayPermissionGranted,
                     onClick = { onIntent(GrantOverlayPermission) },
-                )
-            }
-
-            if (state.showAccessibilityConsent) {
-                AlertDialog(
-                    onDismissRequest = { onIntent(DismissEnableAccessibilityConsent) },
-                    title = { Text(stringResource(LocalizationR.string.dialog_accessibility_consent_title)) },
-                    text = {
-                        Text(
-                            text = stringResource(LocalizationR.string.dialog_accessibility_consent_message),
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .heightIn(max = 480.dp)
-                                    .verticalScroll(rememberScrollState()),
-                        )
-                    },
-                    confirmButton = {
-                        TextButton(onClick = { onIntent(ConsentToEnableAccessibility) }) {
-                            Text(stringResource(LocalizationR.string.consent))
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = { onIntent(DismissEnableAccessibilityConsent) }) {
-                            Text(stringResource(LocalizationR.string.cancel))
-                        }
-                    },
                 )
             }
         },

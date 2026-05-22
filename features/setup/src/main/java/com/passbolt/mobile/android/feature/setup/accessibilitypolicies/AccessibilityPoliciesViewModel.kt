@@ -1,7 +1,3 @@
-package com.passbolt.mobile.android.feature.setup.biometric
-
-import javax.crypto.Cipher
-
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -25,29 +21,17 @@ import javax.crypto.Cipher
  * @since v1.0
  */
 
-sealed interface BiometricSetupSideEffect {
-    data class ShowBiometricPrompt(
-        val cipher: Cipher,
-    ) : BiometricSetupSideEffect
+package com.passbolt.mobile.android.feature.setup.accessibilitypolicies
 
-    data object NavigateToAppSystemSettings : BiometricSetupSideEffect
+import com.passbolt.mobile.android.core.compose.SideEffectViewModel
+import com.passbolt.mobile.android.feature.setup.accessibilitypolicies.AccessibilityPoliciesIntent.Acknowledge
+import com.passbolt.mobile.android.feature.setup.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToHome
 
-    data object StartAuthActivity : BiometricSetupSideEffect
-
-    data object NavigateToEncourageAutofill : BiometricSetupSideEffect
-
-    data object NavigateToAccessibilityPolicies : BiometricSetupSideEffect
-
-    data class ShowErrorSnackbar(
-        val errorType: SnackbarErrorType,
-    ) : BiometricSetupSideEffect
-}
-
-enum class SnackbarErrorType {
-    GENERIC_ERROR,
-    AUTHENTICATION_LOCKOUT,
-    AUTHENTICATION_LOCKOUT_PERMANENT,
-    AUTHENTICATION_GENERIC,
-    BIOMETRIC_ENCRYPT_ERROR,
-    BIOMETRIC_NO_CRYPTO_CIPHER,
+internal class AccessibilityPoliciesViewModel :
+    SideEffectViewModel<AccessibilityPoliciesState, AccessibilityPoliciesSideEffect>(AccessibilityPoliciesState) {
+    fun onIntent(intent: AccessibilityPoliciesIntent) {
+        when (intent) {
+            Acknowledge -> emitSideEffect(NavigateToHome)
+        }
+    }
 }
