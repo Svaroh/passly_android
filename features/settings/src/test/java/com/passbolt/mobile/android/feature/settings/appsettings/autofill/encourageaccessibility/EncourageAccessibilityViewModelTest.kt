@@ -27,8 +27,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityIntent.Close
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityIntent.ConsentToEnableAccessibility
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityIntent.DismissEnableAccessibilityConsent
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityIntent.EnableAccessibilityService
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityIntent.GrantOverlayPermission
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityIntent.RefreshState
@@ -128,30 +126,12 @@ class EncourageAccessibilityViewModelTest : KoinTest {
             }
         }
 
+    @OptIn(ExperimentalTime::class)
     @Test
-    fun `should show consent dialog when service is not enabled and service click`() =
+    fun `should open accessibility settings on service click`() =
         runTest {
             val autofillInformationProvider: AutofillInformationProvider = get()
             whenever(autofillInformationProvider.isAccessibilityServiceEnabled()) doReturn false
-            whenever(autofillInformationProvider.isAccessibilityOverlayEnabled()) doReturn false
-
-            viewModel = get()
-
-            viewModel.viewState.test {
-                assertThat(awaitItem().showAccessibilityConsent).isFalse()
-
-                viewModel.onIntent(EnableAccessibilityService)
-
-                assertThat(awaitItem().showAccessibilityConsent).isTrue()
-            }
-        }
-
-    @OptIn(ExperimentalTime::class)
-    @Test
-    fun `should open accessibility settings when service is already enabled and service click`() =
-        runTest {
-            val autofillInformationProvider: AutofillInformationProvider = get()
-            whenever(autofillInformationProvider.isAccessibilityServiceEnabled()) doReturn true
             whenever(autofillInformationProvider.isAccessibilityOverlayEnabled()) doReturn false
 
             viewModel = get()
@@ -194,51 +174,6 @@ class EncourageAccessibilityViewModelTest : KoinTest {
                 viewModel.onIntent(Close)
 
                 assertIs<NavigateBack>(awaitItem())
-            }
-        }
-
-    @OptIn(ExperimentalTime::class)
-    @Test
-    fun `should dismiss consent dialog and open accessibility settings on consent given`() =
-        runTest {
-            val autofillInformationProvider: AutofillInformationProvider = get()
-            whenever(autofillInformationProvider.isAccessibilityServiceEnabled()) doReturn false
-            whenever(autofillInformationProvider.isAccessibilityOverlayEnabled()) doReturn false
-
-            viewModel = get()
-
-            viewModel.viewState.test {
-                assertThat(awaitItem().showAccessibilityConsent).isFalse()
-
-                viewModel.onIntent(EnableAccessibilityService)
-                assertThat(awaitItem().showAccessibilityConsent).isTrue()
-
-                viewModel.sideEffect.test {
-                    viewModel.onIntent(ConsentToEnableAccessibility)
-                    assertIs<OpenAccessibilitySettings>(awaitItem())
-                }
-
-                assertThat(awaitItem().showAccessibilityConsent).isFalse()
-            }
-        }
-
-    @Test
-    fun `should dismiss consent dialog on dismiss consent`() =
-        runTest {
-            val autofillInformationProvider: AutofillInformationProvider = get()
-            whenever(autofillInformationProvider.isAccessibilityServiceEnabled()) doReturn false
-            whenever(autofillInformationProvider.isAccessibilityOverlayEnabled()) doReturn false
-
-            viewModel = get()
-
-            viewModel.viewState.test {
-                assertThat(awaitItem().showAccessibilityConsent).isFalse()
-
-                viewModel.onIntent(EnableAccessibilityService)
-                assertThat(awaitItem().showAccessibilityConsent).isTrue()
-
-                viewModel.onIntent(DismissEnableAccessibilityConsent)
-                assertThat(awaitItem().showAccessibilityConsent).isFalse()
             }
         }
 }

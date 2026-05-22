@@ -64,7 +64,7 @@ sealed interface SettingsNavigationKey : NavKey {
     @Serializable
     enum class DismissBehavior {
         NAVIGATE_BACK,
-        FINISH_TO_HOME,
+        NAVIGATE_TO_ACCESSIBILITY_POLICIES,
     }
 
     @Serializable

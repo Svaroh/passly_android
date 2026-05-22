@@ -20,9 +20,9 @@ import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.MaybeLater
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ResumeView
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.UseBiometric
+import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToAccessibilityPolicies
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToAppSystemSettings
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToEncourageAutofill
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToHome
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.ShowBiometricPrompt
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.ShowErrorSnackbar
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.StartAuthActivity
@@ -86,7 +86,7 @@ class BiometricSetupViewModel(
             }
             DismissKeyPermanentlyInvalidated -> updateViewState { copy(showKeyChangesDetected = false) }
             ConfirmKeyPermanentlyInvalidated -> emitSideEffect(StartAuthActivity)
-            GoToApp -> emitSideEffect(NavigateToHome)
+            GoToApp -> emitSideEffect(NavigateToAccessibilityPolicies)
             AuthenticationSuccess -> showBiometricPrompt()
             is BiometricAuthenticationSuccess -> saveAccountData(intent.cipher)
             BiometricAuthenticationCancel -> {}
@@ -121,7 +121,7 @@ class BiometricSetupViewModel(
                 ) {
                     emitSideEffect(NavigateToEncourageAutofill)
                 } else {
-                    emitSideEffect(NavigateToHome)
+                    emitSideEffect(NavigateToAccessibilityPolicies)
                 }
             }
             is PotentialPassphrase.PassphraseNotPresent -> {

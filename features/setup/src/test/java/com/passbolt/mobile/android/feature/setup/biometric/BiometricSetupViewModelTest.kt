@@ -45,9 +45,9 @@ import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.MaybeLater
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ResumeView
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.UseBiometric
+import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToAccessibilityPolicies
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToAppSystemSettings
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToEncourageAutofill
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToHome
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.ShowBiometricPrompt
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.ShowErrorSnackbar
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.StartAuthActivity
@@ -232,7 +232,7 @@ class BiometricSetupViewModelTest : KoinTest {
                 viewModel.onIntent(MaybeLater)
 
                 val effect = awaitItem()
-                assertIs<NavigateToHome>(effect)
+                assertIs<NavigateToAccessibilityPolicies>(effect)
             }
         }
 
@@ -251,7 +251,7 @@ class BiometricSetupViewModelTest : KoinTest {
                 viewModel.onIntent(MaybeLater)
 
                 val effect = awaitItem()
-                assertIs<NavigateToHome>(effect)
+                assertIs<NavigateToAccessibilityPolicies>(effect)
             }
         }
 
@@ -337,7 +337,7 @@ class BiometricSetupViewModelTest : KoinTest {
                 viewModel.onIntent(GoToApp)
 
                 val effect = awaitItem()
-                assertIs<NavigateToHome>(effect)
+                assertIs<NavigateToAccessibilityPolicies>(effect)
             }
         }
 
@@ -411,7 +411,7 @@ class BiometricSetupViewModelTest : KoinTest {
                 viewModel.onIntent(BiometricAuthenticationSuccess(mockAuthenticatedCipher))
 
                 val effect = awaitItem()
-                assertIs<NavigateToHome>(effect)
+                assertIs<NavigateToAccessibilityPolicies>(effect)
             }
 
             verify(savePassphraseUseCase).execute(any())

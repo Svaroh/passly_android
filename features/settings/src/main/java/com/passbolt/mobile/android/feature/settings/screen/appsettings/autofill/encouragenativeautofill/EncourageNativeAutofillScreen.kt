@@ -3,7 +3,6 @@ package com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill
 import PassboltTheme
 import android.content.Intent
 import android.provider.Settings
-import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -24,11 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,16 +35,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.Home
 import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior.FINISH_TO_HOME
 import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior.NAVIGATE_BACK
+import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior.NAVIGATE_TO_ACCESSIBILITY_POLICIES
+import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.AccessibilityPolicies
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.circlestepsview.CircleStepIcon
 import com.passbolt.mobile.android.core.ui.circlestepsview.CircleStepItemModel
@@ -76,9 +68,7 @@ internal fun EncourageNativeAutofillScreen(
     viewModel: EncourageNativeAutofillViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
-    val activity = LocalActivity.current
     val state = viewModel.viewState.collectAsStateWithLifecycle()
-    var navigateToHomeOnResume by remember { mutableStateOf(false) }
     val autofillSettingsLauncher =
         rememberLauncherForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
@@ -91,47 +81,17 @@ internal fun EncourageNativeAutofillScreen(
         onIntent = viewModel::onIntent,
     )
 
-    // After enabling autofill in OS settings the foreground auth check pauses this screen.
-    // Wait for a full pause/resume cycle (auth completes) before navigating to Home to prevent both
-    // Foreground auth mechanism and home asking for auth at once
-    if (navigateToHomeOnResume) {
-        val lifecycleOwner = LocalLifecycleOwner.current
-        DisposableEffect(lifecycleOwner) {
-            var hasPausedSinceEnabled = false
-            val observer =
-                object : DefaultLifecycleObserver {
-                    override fun onPause(owner: LifecycleOwner) {
-                        hasPausedSinceEnabled = true
-                    }
-
-                    override fun onResume(owner: LifecycleOwner) {
-                        if (hasPausedSinceEnabled) {
-                            navigator.startNavigationActivity(context, Home)
-                            activity?.finish()
-                        }
-                    }
-                }
-            lifecycleOwner.lifecycle.addObserver(observer)
-            onDispose {
-                lifecycleOwner.lifecycle.removeObserver(observer)
-            }
-        }
-    }
-
     SideEffectDispatcher(viewModel.sideEffect) {
         when (it) {
             NavigateBack ->
                 when (dismissBehavior) {
                     NAVIGATE_BACK -> navigator.navigateBack()
-                    FINISH_TO_HOME -> {
-                        navigator.startNavigationActivity(context, Home)
-                        activity?.finish()
-                    }
+                    NAVIGATE_TO_ACCESSIBILITY_POLICIES -> navigator.navigateToKey(AccessibilityPolicies)
                 }
             AutofillEnabled ->
                 when (dismissBehavior) {
                     NAVIGATE_BACK -> navigator.navigateBack()
-                    FINISH_TO_HOME -> navigateToHomeOnResume = true
+                    NAVIGATE_TO_ACCESSIBILITY_POLICIES -> navigator.navigateToKey(AccessibilityPolicies)
                 }
             OpenAutofillSettings ->
                 autofillSettingsLauncher.launch(
