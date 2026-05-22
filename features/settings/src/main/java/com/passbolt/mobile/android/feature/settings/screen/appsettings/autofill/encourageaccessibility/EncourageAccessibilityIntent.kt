@@ -8,8 +8,4 @@ sealed interface EncourageAccessibilityIntent {
     data object GrantOverlayPermission : EncourageAccessibilityIntent
 
     data object Close : EncourageAccessibilityIntent
-
-    data object ConsentToEnableAccessibility : EncourageAccessibilityIntent
-
-    data object DismissEnableAccessibilityConsent : EncourageAccessibilityIntent
 }
