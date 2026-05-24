@@ -26,7 +26,9 @@ package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.trans
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingIntent.GoBack
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingIntent.RefreshedPassphrase
+import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingIntent.ScanBrowserFirstLoginClick
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingIntent.StartTransferClick
+import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreenSideEffect.NavigateToBrowserFirstLoginScan
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreenSideEffect.NavigateToRefreshPassphrase
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreenSideEffect.NavigateToTransferAccount
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreenSideEffect.NavigateUp
@@ -35,11 +37,29 @@ internal class TransferAccountOnboardingViewModel :
     SideEffectViewModel<TransferAccountOnboardingState, TransferAccountOnboardingScreenSideEffect>(
         TransferAccountOnboardingState,
     ) {
+    private var pendingAction = PendingAction.TRANSFER_ACCOUNT
+
     fun onIntent(intent: TransferAccountOnboardingIntent) {
         when (intent) {
             GoBack -> emitSideEffect(NavigateUp)
-            StartTransferClick -> emitSideEffect(NavigateToRefreshPassphrase)
-            RefreshedPassphrase -> emitSideEffect(NavigateToTransferAccount)
+            StartTransferClick -> {
+                pendingAction = PendingAction.TRANSFER_ACCOUNT
+                emitSideEffect(NavigateToRefreshPassphrase)
+            }
+            ScanBrowserFirstLoginClick -> {
+                pendingAction = PendingAction.BROWSER_FIRST_LOGIN
+                emitSideEffect(NavigateToRefreshPassphrase)
+            }
+            RefreshedPassphrase ->
+                when (pendingAction) {
+                    PendingAction.TRANSFER_ACCOUNT -> emitSideEffect(NavigateToTransferAccount)
+                    PendingAction.BROWSER_FIRST_LOGIN -> emitSideEffect(NavigateToBrowserFirstLoginScan)
+                }
         }
+    }
+
+    private enum class PendingAction {
+        TRANSFER_ACCOUNT,
+        BROWSER_FIRST_LOGIN,
     }
 }

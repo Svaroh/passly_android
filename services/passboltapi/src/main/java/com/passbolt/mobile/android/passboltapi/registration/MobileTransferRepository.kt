@@ -2,6 +2,8 @@ package com.passbolt.mobile.android.passboltapi.registration
 
 import com.passbolt.mobile.android.core.networking.ResponseHandler
 import com.passbolt.mobile.android.core.networking.callWithHandler
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginAccountRequestDto
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginResponseRequestDto
 import com.passbolt.mobile.android.dto.request.CreateTransferRequestDto
 import com.passbolt.mobile.android.dto.request.UpdateTransferRequestDto
 
@@ -51,5 +53,19 @@ class MobileTransferRepository(
         uuid: String,
     ) = callWithHandler(responseHandler) {
         mobileTransferDataSource.viewTransfer(authToken, mfaCookie, uuid)
+    }
+
+    suspend fun setBrowserFirstLoginAccount(
+        uuid: String,
+        request: BrowserFirstLoginAccountRequestDto,
+    ) = callWithHandler(responseHandler) {
+        mobileTransferDataSource.setBrowserFirstLoginAccount(uuid, request)
+    }
+
+    suspend fun setBrowserFirstLoginResponse(
+        uuid: String,
+        request: BrowserFirstLoginResponseRequestDto,
+    ) = callWithHandler(responseHandler) {
+        mobileTransferDataSource.setBrowserFirstLoginResponse(uuid, request)
     }
 }

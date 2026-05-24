@@ -51,6 +51,12 @@ class QrScanResultsMapper(
                         json.decodeFromString(String(payloadBytes)),
                     )
                 }
+                BROWSER_FIRST_LOGIN_PROTOCOL_VERSION -> {
+                    ParseResult.PassboltQr.BrowserFirstLoginPage(
+                        reservedBytesDto,
+                        json.decodeFromString(String(payloadBytes)),
+                    )
+                }
                 else -> error("Unsupported protocol version: ${reservedBytesDto.version}")
             }
         } catch (exception: Exception) {
@@ -87,6 +93,9 @@ class QrScanResultsMapper(
         const val ACCOUNT_KIT_TRANSFER_PROTOCOL_VERSION = 2
 
         @VisibleForTesting
+        const val BROWSER_FIRST_LOGIN_PROTOCOL_VERSION = 3
+
+        @VisibleForTesting
         const val PAGE_NUMBER_BYTES_COUNT = 2
 
         @VisibleForTesting
@@ -98,6 +107,7 @@ class QrScanResultsMapper(
             setOf(
                 QR_TRANSFER_PROTOCOL_VERSION,
                 ACCOUNT_KIT_TRANSFER_PROTOCOL_VERSION,
+                BROWSER_FIRST_LOGIN_PROTOCOL_VERSION,
             )
         private const val RESERVED_BYTES_NUMBER_RADIX = 16
         private const val RESERVED_BYTES_COUNT = 3

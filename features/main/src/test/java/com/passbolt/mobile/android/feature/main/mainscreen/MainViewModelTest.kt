@@ -7,11 +7,14 @@ import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
 import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider
 import com.passbolt.mobile.android.core.inappreview.InAppReviewInteractor
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
+import com.passbolt.mobile.android.core.navigation.deeplink.BrowserFirstLoginDeepLinkStore
 import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
 import com.passbolt.mobile.android.feature.main.mainscreen.MainSideEffect.CheckForAppUpdates
 import com.passbolt.mobile.android.feature.main.mainscreen.MainSideEffect.PerformFullDataRefresh
 import com.passbolt.mobile.android.feature.main.mainscreen.MainSideEffect.TryLaunchReviewFlow
 import com.passbolt.mobile.android.feature.main.mainscreen.encouragements.EncouragementsInteractor
+import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginQrParser
+import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.usecase.CompleteBrowserFirstLoginUseCase
 import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -86,6 +89,8 @@ private val mockGetFeatureFlagsUseCase =
     mock<GetFeatureFlagsUseCase> {
         onBlocking { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(defaultFeatureFlags)
     }
+private val mockBrowserFirstLoginQrParser = mock<BrowserFirstLoginQrParser>()
+private val mockCompleteBrowserFirstLoginUseCase = mock<CompleteBrowserFirstLoginUseCase>()
 
 private val testMainModule =
     module {
@@ -97,6 +102,9 @@ private val testMainModule =
                 encouragementsInteractor = mockEncouragementsInteractor,
                 autofillInformationProvider = mockAutofillInformationProvider,
                 appNavigator = mockAppNavigator,
+                browserFirstLoginDeepLinkStore = BrowserFirstLoginDeepLinkStore(),
+                browserFirstLoginQrParser = mockBrowserFirstLoginQrParser,
+                completeBrowserFirstLoginUseCase = mockCompleteBrowserFirstLoginUseCase,
             )
         }
         singleOf(::DataRefreshTrackingFlow)

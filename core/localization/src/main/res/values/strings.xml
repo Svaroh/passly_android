@@ -546,6 +546,13 @@
 
     <string name="transfer_account_onboarding_header">Show QR codes to transfer your account details</string>
     <string name="transfer_account_onboarding_transfer_button">Start transfer</string>
+    <string name="browser_first_login_scan_button">Scan browser login QR</string>
+    <string name="browser_first_login_scan_tooltip">Center the browser login QR code in the camera</string>
+    <string name="browser_first_login_processing">Confirming browser login...</string>
+    <string name="browser_first_login_camera_error">Could not start the camera</string>
+    <string name="browser_first_login_scan_error">Could not read this browser login QR code</string>
+    <string name="browser_first_login_success">Browser extension authorized</string>
+    <string name="browser_first_login_failure">Could not authorize browser extension</string>
 
     <string name="transfer_account_cancel_button">Cancel transfer</string>
     <string name="transfer_account_stop_button">Stop transfer</string>

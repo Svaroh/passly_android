@@ -1,8 +1,11 @@
 package com.passbolt.mobile.android.passboltapi.registration
 
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginAccountRequestDto
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginResponseRequestDto
 import com.passbolt.mobile.android.dto.request.CreateTransferRequestDto
 import com.passbolt.mobile.android.dto.request.UpdateTransferRequestDto
 import com.passbolt.mobile.android.dto.response.BaseResponse
+import com.passbolt.mobile.android.dto.response.BrowserFirstLoginRequestResponseDto
 import com.passbolt.mobile.android.dto.response.CreateTransferResponseDto
 import com.passbolt.mobile.android.dto.response.TransferResponseDto
 
@@ -44,4 +47,14 @@ interface MobileTransferDataSource {
         mfaCookie: String?,
         uuid: String,
     ): TransferResponseDto
+
+    suspend fun setBrowserFirstLoginAccount(
+        uuid: String,
+        request: BrowserFirstLoginAccountRequestDto,
+    ): BrowserFirstLoginRequestResponseDto
+
+    suspend fun setBrowserFirstLoginResponse(
+        uuid: String,
+        request: BrowserFirstLoginResponseRequestDto,
+    ): BrowserFirstLoginRequestResponseDto
 }

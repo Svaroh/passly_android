@@ -60,15 +60,19 @@ import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.ActivityIntents
 import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
+import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.BrowserFirstLoginScan
 import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Transfer
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
+import com.passbolt.mobile.android.core.ui.button.SecondaryButton
 import com.passbolt.mobile.android.core.ui.circlestepsview.CircleStepItemModel
 import com.passbolt.mobile.android.core.ui.circlestepsview.CircleStepsView
 import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
 import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingIntent.GoBack
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingIntent.RefreshedPassphrase
+import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingIntent.ScanBrowserFirstLoginClick
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingIntent.StartTransferClick
+import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreenSideEffect.NavigateToBrowserFirstLoginScan
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreenSideEffect.NavigateToRefreshPassphrase
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreenSideEffect.NavigateToTransferAccount
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreenSideEffect.NavigateUp
@@ -110,6 +114,7 @@ internal fun TransferAccountOnboardingScreen(
                     ),
                 )
             NavigateToTransferAccount -> navigator.navigateToKey(Transfer)
+            NavigateToBrowserFirstLoginScan -> navigator.navigateToKey(BrowserFirstLoginScan)
         }
     }
 }
@@ -196,6 +201,16 @@ private fun TransferAccountOnboardingScreen(
                         .fillMaxWidth()
                         .padding(16.dp)
                         .testTag(TransferAccount.START_TRANSFER_BUTTON),
+            )
+
+            SecondaryButton(
+                text = stringResource(LocalizationR.string.browser_first_login_scan_button),
+                icon = painterResource(CoreUiR.drawable.ic_camera),
+                onClick = { onIntent(ScanBrowserFirstLoginClick) },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
             )
 
             Spacer(modifier = Modifier.height(16.dp))

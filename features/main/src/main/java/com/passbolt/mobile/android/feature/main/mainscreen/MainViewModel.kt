@@ -6,6 +6,7 @@ import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider.Chr
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
 import com.passbolt.mobile.android.core.inappreview.InAppReviewInteractor
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
+import com.passbolt.mobile.android.core.navigation.deeplink.BrowserFirstLoginDeepLinkStore
 import com.passbolt.mobile.android.feature.main.mainscreen.MainIntent.AppUpdateDownloaded
 import com.passbolt.mobile.android.feature.main.mainscreen.MainIntent.CloseChromeNativeAutofill
 import com.passbolt.mobile.android.feature.main.mainscreen.MainIntent.GoToSettings
@@ -18,7 +19,10 @@ import com.passbolt.mobile.android.feature.main.mainscreen.MainSideEffect.ShowSn
 import com.passbolt.mobile.android.feature.main.mainscreen.MainSideEffect.TryLaunchReviewFlow
 import com.passbolt.mobile.android.feature.main.mainscreen.bottomnavigation.MainBottomNavigationModel
 import com.passbolt.mobile.android.feature.main.mainscreen.encouragements.EncouragementsInteractor
+import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginQrParser
+import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.usecase.CompleteBrowserFirstLoginUseCase
 import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
+import timber.log.Timber
 
 class MainViewModel(
     private val inAppReviewInteractor: InAppReviewInteractor,
@@ -27,6 +31,9 @@ class MainViewModel(
     private val encouragementsInteractor: EncouragementsInteractor,
     private val autofillInformationProvider: AutofillInformationProvider,
     private val appNavigator: AppNavigator,
+    private val browserFirstLoginDeepLinkStore: BrowserFirstLoginDeepLinkStore,
+    private val browserFirstLoginQrParser: BrowserFirstLoginQrParser,
+    private val completeBrowserFirstLoginUseCase: CompleteBrowserFirstLoginUseCase,
 ) : SideEffectViewModel<MainState, MainSideEffect>(MainState()) {
     init {
         setupBottomNavigation()
@@ -35,6 +42,7 @@ class MainViewModel(
         emitSideEffect(CheckForAppUpdates)
         checkReviewFlow()
         collectTabSwitchRequests()
+        completePendingBrowserFirstLogin()
     }
 
     fun onIntent(intent: MainIntent) {
@@ -91,6 +99,41 @@ class MainViewModel(
         launch {
             appNavigator.tabSwitchRequest.collect { tab ->
                 updateViewState { copy(selectedTab = tab) }
+            }
+        }
+    }
+
+    private fun completePendingBrowserFirstLogin() {
+        val deepLink = browserFirstLoginDeepLinkStore.consume() ?: return
+        Timber.i("[BrowserFirstLogin] Consumed pending deep link")
+        val page =
+            browserFirstLoginQrParser.parse(deepLink)
+                ?: run {
+                    Timber.e("[BrowserFirstLogin] Could not parse pending deep link")
+                    emitSideEffect(ShowSnackbar(SnackbarType.BROWSER_FIRST_LOGIN_FAILURE))
+                    return
+        }
+
+        launch {
+            Timber.i("[BrowserFirstLogin] Completing pending deep link")
+            when (
+                val result =
+                    completeBrowserFirstLoginUseCase.execute(CompleteBrowserFirstLoginUseCase.Input(page))
+            ) {
+                CompleteBrowserFirstLoginUseCase.Output.Success ->
+                    emitSideEffect(ShowSnackbar(SnackbarType.BROWSER_FIRST_LOGIN_SUCCESS))
+                is CompleteBrowserFirstLoginUseCase.Output.DomainMismatch -> {
+                    Timber.e(
+                        "Browser first-login domain mismatch: QR=%s account=%s",
+                        result.qrDomain,
+                        result.accountDomain,
+                    )
+                    emitSideEffect(ShowSnackbar(SnackbarType.BROWSER_FIRST_LOGIN_FAILURE))
+                }
+                is CompleteBrowserFirstLoginUseCase.Output.Failure -> {
+                    Timber.e("Browser first-login failed: %s", result.message)
+                    emitSideEffect(ShowSnackbar(SnackbarType.BROWSER_FIRST_LOGIN_FAILURE))
+                }
             }
         }
     }

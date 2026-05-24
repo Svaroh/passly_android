@@ -443,6 +443,13 @@
     <string name="import_profile_invalid_private_key">Приватний ключ не може бути порожнім</string>
     <string name="transfer_account_onboarding_header">Показати QR-коди, щоб передати дані вашого облікового запису</string>
     <string name="transfer_account_onboarding_transfer_button">Почати передачу</string>
+    <string name="browser_first_login_scan_button">Сканувати QR входу в браузері</string>
+    <string name="browser_first_login_scan_tooltip">Наведіть камеру на QR-код входу в браузері</string>
+    <string name="browser_first_login_processing">Підтвердження входу в браузері...</string>
+    <string name="browser_first_login_camera_error">Не вдалося запустити камеру</string>
+    <string name="browser_first_login_scan_error">Не вдалося прочитати QR-код входу в браузері</string>
+    <string name="browser_first_login_success">Розширення браузера авторизовано</string>
+    <string name="browser_first_login_failure">Не вдалося авторизувати розширення браузера</string>
     <string name="transfer_account_cancel_button">Скасувати передачу</string>
     <string name="transfer_account_stop_button">Зупинити передачу</string>
     <string name="transfer_account_title">Передача даних облікового запису</string>

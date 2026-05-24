@@ -18,6 +18,19 @@
             <intent-filter>
                 <action android:name="com.passbolt.mobile.android.MANAGED_PROFILE" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="browser-first-login"
+                    android:scheme="passbolt" />
+                <data
+                    android:host="browser-first-login"
+                    android:scheme="intent" />
+            </intent-filter>
         </activity>
     </application>
 

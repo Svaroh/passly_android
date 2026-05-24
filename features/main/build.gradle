@@ -18,6 +18,7 @@ dependencies {
     implementation project(':inappreview')
     implementation project(':otp')
     implementation project(':database')
+    implementation project(':dto')
     implementation project(':resourcetypes')
     implementation project(':entity')
     implementation project(':scanotp')
@@ -29,6 +30,7 @@ dependencies {
     implementation project(':navigation')
     implementation project(':autofill')
     implementation project(':testtags')
+    implementation project(':transferaccounttoanotherdevice')
 
     implementation platform(libs.koin.bom)
     implementation libs.koin

@@ -1,5 +1,7 @@
 package com.passbolt.mobile.android.passboltapi.registration
 
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginAccountRequestDto
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginResponseRequestDto
 import com.passbolt.mobile.android.dto.request.CreateTransferRequestDto
 import com.passbolt.mobile.android.dto.request.UpdateTransferRequestDto
 import com.passbolt.mobile.android.dto.response.BaseResponse
@@ -49,4 +51,14 @@ internal class MobileTransferRemoteDataSource(
     } else {
         mobileTransferApi.viewTransfer(authToken, uuid).body
     }
+
+    override suspend fun setBrowserFirstLoginAccount(
+        uuid: String,
+        request: BrowserFirstLoginAccountRequestDto,
+    ) = mobileTransferApi.setBrowserFirstLoginAccount(uuid, request).body
+
+    override suspend fun setBrowserFirstLoginResponse(
+        uuid: String,
+        request: BrowserFirstLoginResponseRequestDto,
+    ) = mobileTransferApi.setBrowserFirstLoginResponse(uuid, request).body
 }

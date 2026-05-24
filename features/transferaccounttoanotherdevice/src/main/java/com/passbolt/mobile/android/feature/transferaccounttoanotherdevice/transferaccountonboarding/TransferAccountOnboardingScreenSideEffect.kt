@@ -29,4 +29,6 @@ internal sealed interface TransferAccountOnboardingScreenSideEffect {
     data object NavigateToRefreshPassphrase : TransferAccountOnboardingScreenSideEffect
 
     data object NavigateToTransferAccount : TransferAccountOnboardingScreenSideEffect
+
+    data object NavigateToBrowserFirstLoginScan : TransferAccountOnboardingScreenSideEffect
 }

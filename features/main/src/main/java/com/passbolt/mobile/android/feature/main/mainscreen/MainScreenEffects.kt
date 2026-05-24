@@ -154,5 +154,15 @@ private suspend fun handleSnackbar(
                 message = context.getString(LocalizationR.string.main_chrome_native_autofill_setup_success),
             )
         }
+        SnackbarType.BROWSER_FIRST_LOGIN_SUCCESS -> {
+            snackbarHostState.showSnackbar(
+                message = context.getString(LocalizationR.string.browser_first_login_success),
+            )
+        }
+        SnackbarType.BROWSER_FIRST_LOGIN_FAILURE -> {
+            snackbarHostState.showSnackbar(
+                message = context.getString(LocalizationR.string.browser_first_login_failure),
+            )
+        }
     }
 }

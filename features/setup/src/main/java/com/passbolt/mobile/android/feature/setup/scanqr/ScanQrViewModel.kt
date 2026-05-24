@@ -58,6 +58,7 @@ import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.ParseResult.Fai
 import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.ParseResult.FinishedWithSuccess
 import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.ParseResult.PassboltQr
 import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.ParseResult.PassboltQr.AccountKitPage
+import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.ParseResult.PassboltQr.BrowserFirstLoginPage
 import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.ParseResult.PassboltQr.FirstPage
 import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.ParseResult.PassboltQr.SubsequentPage
 import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.ParseResult.ScanFailure
@@ -138,6 +139,7 @@ internal class ScanQrViewModel(
                     is FirstPage -> parserFirstPage(parserResult)
                     is SubsequentPage -> parserSubsequentPage(parserResult)
                     is AccountKitPage -> setupFromAccountKit(parserResult)
+                    is BrowserFirstLoginPage -> updateViewState { copy(tooltipMessage = ScanQrState.TooltipMessage.NOT_A_PASSBOLT_QR) }
                 }
             is FinishedWithSuccess -> parserFinishedWithSuccess(parserResult.armoredKey)
             is UserResolvableError ->

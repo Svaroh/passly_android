@@ -25,10 +25,12 @@ package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.navig
 import PassboltTheme
 import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
 import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
+import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.BrowserFirstLoginScan
 import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Onboarding
 import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Transfer
 import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.TransferStatus
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryScreen
+import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanScreen
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountScreen
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreen
 
@@ -43,6 +45,11 @@ class TransferAccountToAnotherDeviceFeatureNavigation : FeatureModuleNavigation 
             entry<Transfer> {
                 PassboltTheme {
                     TransferAccountScreen()
+                }
+            }
+            entry<BrowserFirstLoginScan> {
+                PassboltTheme {
+                    BrowserFirstLoginScanScreen()
                 }
             }
             entry<TransferStatus> {

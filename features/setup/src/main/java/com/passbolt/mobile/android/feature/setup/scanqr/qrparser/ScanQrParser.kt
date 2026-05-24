@@ -89,10 +89,19 @@ class ScanQrParser(
                         processAccountKitPageData(it)
                         _parseResultFlow.tryEmit(it)
                     }
+                } else if (it is ParseResult.PassboltQr.BrowserFirstLoginPage) {
+                    if (it.isNotScanned()) {
+                        processBrowserFirstLoginPageData(it)
+                        _parseResultFlow.tryEmit(it)
+                    }
                 } else {
                     _parseResultFlow.tryEmit(it)
                 }
             }
+    }
+
+    private fun processBrowserFirstLoginPageData(browserFirstLoginPage: ParseResult.PassboltQr.BrowserFirstLoginPage) {
+        alreadyScannedPages.add(browserFirstLoginPage.reservedBytesDto.page)
     }
 
     private fun processAccountKitPageData(accountKitPage: ParseResult.PassboltQr.AccountKitPage) {

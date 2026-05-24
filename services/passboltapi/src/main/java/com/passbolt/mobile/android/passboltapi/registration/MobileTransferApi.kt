@@ -1,9 +1,12 @@
 package com.passbolt.mobile.android.passboltapi.registration
 
 import com.passbolt.mobile.android.dto.request.CreateTransferRequestDto
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginAccountRequestDto
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginResponseRequestDto
 import com.passbolt.mobile.android.dto.request.UpdateTransferRequestDto
 import com.passbolt.mobile.android.dto.response.BaseResponse
 import com.passbolt.mobile.android.dto.response.CreateTransferResponseDto
+import com.passbolt.mobile.android.dto.response.BrowserFirstLoginRequestResponseDto
 import com.passbolt.mobile.android.dto.response.TransferResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -63,6 +66,18 @@ internal interface MobileTransferApi {
         @Query(USER_PROFILE_INFO) userProfile: String?,
     ): BaseResponse<TransferResponseDto>
 
+    @POST(BROWSER_FIRST_LOGIN_ACCOUNT)
+    suspend fun setBrowserFirstLoginAccount(
+        @Path(PATH_UUID) uuid: String,
+        @Body request: BrowserFirstLoginAccountRequestDto,
+    ): BaseResponse<BrowserFirstLoginRequestResponseDto>
+
+    @POST(BROWSER_FIRST_LOGIN_RESPONSE)
+    suspend fun setBrowserFirstLoginResponse(
+        @Path(PATH_UUID) uuid: String,
+        @Body request: BrowserFirstLoginResponseRequestDto,
+    ): BaseResponse<BrowserFirstLoginRequestResponseDto>
+
     private companion object {
         private const val PATH_UUID = "uuid"
         private const val PATH_AUTH_TOKEN = "AUTH_TOKEN"
@@ -72,5 +87,8 @@ internal interface MobileTransferApi {
         private const val MOBILE_TRANSFERS = "mobile/transfers.json"
         private const val TRANSFER_BY_ID_AND_AUTH_TOKEN = "mobile/transfers/{$PATH_UUID}/{$PATH_AUTH_TOKEN}.json"
         private const val TRANSFER_BY_ID = "mobile/transfers/{$PATH_UUID}.json"
+        private const val BROWSER_FIRST_LOGIN_REQUEST = "mobile/browser-first-login/requests/{$PATH_UUID}"
+        private const val BROWSER_FIRST_LOGIN_ACCOUNT = "$BROWSER_FIRST_LOGIN_REQUEST/account.json"
+        private const val BROWSER_FIRST_LOGIN_RESPONSE = "$BROWSER_FIRST_LOGIN_REQUEST/response.json"
     }
 }
