@@ -27,6 +27,9 @@ import com.passbolt.mobile.android.core.architecture.result.DomainResult
 import com.passbolt.mobile.android.domain.mobiletransfer.model.CreateTransferModel
 import com.passbolt.mobile.android.domain.mobiletransfer.model.TransferModel
 import com.passbolt.mobile.android.domain.mobiletransfer.model.UpdateTransferModel
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginAccountRequestDto
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginResponseRequestDto
+import com.passbolt.mobile.android.dto.response.BrowserFirstLoginRequestResponseDto
 import com.passbolt.mobile.android.ui.Status
 
 interface MobileTransferRepository {
@@ -47,4 +50,14 @@ interface MobileTransferRepository {
         mfaCookie: String?,
         uuid: String,
     ): DomainResult<TransferModel>
+
+    suspend fun setBrowserFirstLoginAccount(
+        uuid: String,
+        request: BrowserFirstLoginAccountRequestDto,
+    ): DomainResult<BrowserFirstLoginRequestResponseDto>
+
+    suspend fun setBrowserFirstLoginResponse(
+        uuid: String,
+        request: BrowserFirstLoginResponseRequestDto,
+    ): DomainResult<BrowserFirstLoginRequestResponseDto>
 }

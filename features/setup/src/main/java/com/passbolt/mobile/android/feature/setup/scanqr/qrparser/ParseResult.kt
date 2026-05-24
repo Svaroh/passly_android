@@ -1,6 +1,7 @@
 package com.passbolt.mobile.android.feature.setup.scanqr.qrparser
 
 import com.passbolt.mobile.android.dto.response.qrcode.AccountKitPageDto
+import com.passbolt.mobile.android.dto.response.qrcode.BrowserFirstLoginPageDto
 import com.passbolt.mobile.android.dto.response.qrcode.QrFirstPageDto
 import com.passbolt.mobile.android.dto.response.qrcode.ReservedBytesDto
 
@@ -71,6 +72,31 @@ sealed class ParseResult {
                 if (javaClass != other?.javaClass) return false
 
                 other as AccountKitPage
+
+                if (reservedBytesDto != other.reservedBytesDto) return false
+                if (content != other.content) return false
+
+                return true
+            }
+
+            // generated
+            override fun hashCode(): Int {
+                var result = reservedBytesDto.hashCode()
+                result = 31 * result + content.hashCode()
+                return result
+            }
+        }
+
+        data class BrowserFirstLoginPage(
+            override val reservedBytesDto: ReservedBytesDto,
+            val content: BrowserFirstLoginPageDto,
+        ) : PassboltQr(reservedBytesDto) {
+            // generated
+            override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (javaClass != other?.javaClass) return false
+
+                other as BrowserFirstLoginPage
 
                 if (reservedBytesDto != other.reservedBytesDto) return false
                 if (content != other.content) return false

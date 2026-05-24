@@ -21,6 +21,9 @@ dependencies {
     implementation(project(":auth-domain"))
     implementation(project(":privatekey-domain"))
     implementation(project(":testtags"))
+    implementation(project(":passphrasememorycache"))
+    implementation(project(":qrscan"))
+    implementation(libs.camerax.view)
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin)

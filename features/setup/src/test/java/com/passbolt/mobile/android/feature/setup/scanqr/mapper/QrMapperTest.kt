@@ -120,8 +120,7 @@ class QrMapperTest : KoinTest {
 
     @Test
     fun `mapper should return failure when protocol version is unsupported`() {
-        // Version 3 (unsupported) with page 0
-        val scanResult = BarcodeScanResult.SingleBarcode("300{\"test\":\"data\"}".toByteArray())
+        val scanResult = BarcodeScanResult.SingleBarcode("400{\"test\":\"data\"}".toByteArray())
         val mapped = qrMapper.apply(scanResult)
         assertThat(mapped).isInstanceOf(ParseResult.UserResolvableError::class.java)
     }
@@ -183,5 +182,16 @@ class QrMapperTest : KoinTest {
         val accountKitPage = mapped as ParseResult.PassboltQr.AccountKitPage
         assertThat(accountKitPage.reservedBytesDto.version).isEqualTo(2)
         assertThat(accountKitPage.reservedBytesDto.page).isEqualTo(0)
+    }
+
+    @Test
+    fun `mapper should correctly parse browser first login page with correct version`() {
+        val scanResult = BarcodeScanResult.SingleBarcode(PASSBOLT_BROWSER_FIRST_LOGIN_PAGE_SCAN)
+        val mapped = qrMapper.apply(scanResult)
+        assertThat(mapped).isInstanceOf(ParseResult.PassboltQr.BrowserFirstLoginPage::class.java)
+        val firstLoginPage = mapped as ParseResult.PassboltQr.BrowserFirstLoginPage
+        assertThat(firstLoginPage.reservedBytesDto.version).isEqualTo(3)
+        assertThat(firstLoginPage.reservedBytesDto.page).isEqualTo(0)
+        assertThat(firstLoginPage.content.domain).isEqualTo("https://pass.66ton99.org.ua")
     }
 }

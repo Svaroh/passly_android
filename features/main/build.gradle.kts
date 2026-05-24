@@ -27,6 +27,8 @@ dependencies {
     implementation(project(":navigation"))
     implementation(project(":autofill"))
     implementation(project(":testtags"))
+    implementation(project(":dto"))
+    implementation(project(":transferaccounttoanotherdevice"))
 
     implementation(libs.fragment)
 

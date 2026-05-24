@@ -28,5 +28,7 @@ sealed interface TransferAccountOnboardingIntent {
 
     data object StartTransferClick : TransferAccountOnboardingIntent
 
+    data object ScanBrowserFirstLoginClick : TransferAccountOnboardingIntent
+
     data object RefreshedPassphrase : TransferAccountOnboardingIntent
 }

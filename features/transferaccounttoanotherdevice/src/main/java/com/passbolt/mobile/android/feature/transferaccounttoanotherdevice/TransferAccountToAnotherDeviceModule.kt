@@ -2,10 +2,14 @@ package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice
 
 import com.passbolt.mobile.android.core.navigation.compose.base.Feature
 import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
+import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginQrParser
+import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin.browserFirstLoginScanModule
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.navigation.TransferAccountToAnotherDeviceFeatureNavigation
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.transferAccountSummaryModule
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.transferAccountModule
 import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.transferAccountOnboardingModule
+import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.usecase.CompleteBrowserFirstLoginUseCase
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -41,4 +45,8 @@ val transferAccountToAnotherDeviceModule =
         transferAccountModule()
         transferAccountOnboardingModule()
         transferAccountSummaryModule()
+        browserFirstLoginScanModule()
+
+        singleOf(::BrowserFirstLoginQrParser)
+        singleOf(::CompleteBrowserFirstLoginUseCase)
     }

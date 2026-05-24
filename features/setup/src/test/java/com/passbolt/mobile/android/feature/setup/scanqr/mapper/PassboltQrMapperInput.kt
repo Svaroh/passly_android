@@ -62,3 +62,14 @@ internal val PASSBOLT_FIRST_PAGE_ACCOUNT_KIT_SCAN =
             "\"account_kit_url\":\"mock_url\"" +
             "}"
     ).toByteArray()
+
+internal val PASSBOLT_BROWSER_FIRST_LOGIN_PAGE_SCAN =
+    (
+        "300{" +
+            "\"type\":\"browser_first_login\"," +
+            "\"version\":1," +
+            "\"domain\":\"https://pass.66ton99.org.ua\"," +
+            "\"request_id\":\"6a63c0f1-1c87-4402-84eb-b3141e1e6397\"," +
+            "\"secret\":\"pairing-secret\"" +
+            "}"
+    ).toByteArray()

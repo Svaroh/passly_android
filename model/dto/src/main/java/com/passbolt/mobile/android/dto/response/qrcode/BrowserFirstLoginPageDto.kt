@@ -1,6 +1,12 @@
+package com.passbolt.mobile.android.dto.response.qrcode
+
+import android.annotation.SuppressLint
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 /**
  * Passbolt - Open source password manager for teams
- * Copyright (c) 2021 Passbolt SA
+ * Copyright (c) 2026 Passbolt SA
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
  * Public License (AGPL) as published by the Free Software Foundation version 3.
@@ -18,23 +24,19 @@
  * @copyright Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link https://www.passbolt.com Passbolt (tm)
- * @since v1.0
  */
-package com.passbolt.mobile.android.core.navigation.compose
 
-import com.passbolt.mobile.android.core.navigation.deeplink.BrowserFirstLoginDeepLinkStore
-import org.koin.core.module.Module
-import org.koin.core.module.dsl.scopedOf
-import org.koin.core.module.dsl.singleOf
-import org.koin.core.qualifier.named
-
-val APP_NAVIGATOR_SCOPE = named<AppNavigator>()
-
-fun Module.composeNavigationModule() {
-    singleOf(::AppNavigator)
-    singleOf(::BrowserFirstLoginDeepLinkStore)
-
-    scope(APP_NAVIGATOR_SCOPE) {
-        scopedOf(::AppNavigator)
-    }
-}
+@SuppressLint("UnsafeOptInUsageError") // false positive in K2
+@Serializable
+data class BrowserFirstLoginPageDto(
+    @SerialName("type")
+    val type: String,
+    @SerialName("version")
+    val version: Int,
+    @SerialName("domain")
+    val domain: String,
+    @SerialName("request_id")
+    val requestId: String,
+    @SerialName("secret")
+    val secret: String,
+)

@@ -57,9 +57,9 @@ class TimberInitializer :
         }
         val logFilePath = logFilesManager.initializeLogFile()
         fileLoggingTree.initialize(logFilePath)
-        if (globalPreferencesRepository.getGlobalPreferences().areDebugLogsEnabled &&
-            !Timber.forest().contains(fileLoggingTree)
-        ) {
+        val shouldWriteFileLogs =
+            BuildConfig.DEBUG || globalPreferencesRepository.getGlobalPreferences().areDebugLogsEnabled
+        if (shouldWriteFileLogs && !Timber.forest().contains(fileLoggingTree)) {
             Timber.plant(fileLoggingTree)
             Timber.d("File logging tree planted")
         }

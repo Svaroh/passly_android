@@ -29,6 +29,9 @@ import com.passbolt.mobile.android.domain.mobiletransfer.MobileTransferRepositor
 import com.passbolt.mobile.android.domain.mobiletransfer.model.CreateTransferModel
 import com.passbolt.mobile.android.domain.mobiletransfer.model.TransferModel
 import com.passbolt.mobile.android.domain.mobiletransfer.model.UpdateTransferModel
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginAccountRequestDto
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginResponseRequestDto
+import com.passbolt.mobile.android.dto.response.BrowserFirstLoginRequestResponseDto
 import com.passbolt.mobile.android.ui.Status
 
 internal class MobileTransferRepositoryImpl(
@@ -51,4 +54,16 @@ internal class MobileTransferRepositoryImpl(
         mfaCookie: String?,
         uuid: String,
     ): DomainResult<TransferModel> = remoteDataSource.viewTransfer(authToken, mfaCookie, uuid)
+
+    override suspend fun setBrowserFirstLoginAccount(
+        uuid: String,
+        request: BrowserFirstLoginAccountRequestDto,
+    ): DomainResult<BrowserFirstLoginRequestResponseDto> =
+        remoteDataSource.setBrowserFirstLoginAccount(uuid, request)
+
+    override suspend fun setBrowserFirstLoginResponse(
+        uuid: String,
+        request: BrowserFirstLoginResponseRequestDto,
+    ): DomainResult<BrowserFirstLoginRequestResponseDto> =
+        remoteDataSource.setBrowserFirstLoginResponse(uuid, request)
 }

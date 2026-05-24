@@ -15,6 +15,9 @@ import com.passbolt.mobile.android.domain.mobiletransfer.MobileTransferDataSourc
 import com.passbolt.mobile.android.domain.mobiletransfer.model.CreateTransferModel
 import com.passbolt.mobile.android.domain.mobiletransfer.model.TransferModel
 import com.passbolt.mobile.android.domain.mobiletransfer.model.UpdateTransferModel
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginAccountRequestDto
+import com.passbolt.mobile.android.dto.request.BrowserFirstLoginResponseRequestDto
+import com.passbolt.mobile.android.dto.response.BrowserFirstLoginRequestResponseDto
 import com.passbolt.mobile.android.ui.Status
 
 /**
@@ -75,6 +78,22 @@ internal class MobileTransferRemoteDataSource(
                 mobileTransferApi.viewTransfer(authToken, uuid).body
             }
         }.toDomainResult().map { it.toTransferModel() }
+
+    override suspend fun setBrowserFirstLoginAccount(
+        uuid: String,
+        request: BrowserFirstLoginAccountRequestDto,
+    ): DomainResult<BrowserFirstLoginRequestResponseDto> =
+        callWithHandler(responseHandler) {
+            mobileTransferApi.setBrowserFirstLoginAccount(uuid, request).body
+        }.toDomainResult()
+
+    override suspend fun setBrowserFirstLoginResponse(
+        uuid: String,
+        request: BrowserFirstLoginResponseRequestDto,
+    ): DomainResult<BrowserFirstLoginRequestResponseDto> =
+        callWithHandler(responseHandler) {
+            mobileTransferApi.setBrowserFirstLoginResponse(uuid, request).body
+        }.toDomainResult()
 
     private companion object {
         private const val PROFILE_INFO_REQUIRED = "1"

@@ -17,4 +17,6 @@ sealed interface MainSideEffect {
 enum class SnackbarType {
     APP_UPDATE_DOWNLOADED,
     CHROME_NATIVE_AUTOFILL_SETUP_SUCCESS,
+    BROWSER_FIRST_LOGIN_SUCCESS,
+    BROWSER_FIRST_LOGIN_FAILURE,
 }

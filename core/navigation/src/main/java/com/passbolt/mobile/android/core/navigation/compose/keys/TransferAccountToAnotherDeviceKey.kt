@@ -12,6 +12,9 @@ sealed interface TransferAccountToAnotherDeviceKey : NavKey {
     @Serializable
     object Transfer : TransferAccountToAnotherDeviceKey
 
+    @Serializable
+    object BrowserFirstLoginScan : TransferAccountToAnotherDeviceKey
+
     @SuppressLint("UnsafeOptInUsageError") // false positive in K2
     @Serializable
     data class TransferStatus(

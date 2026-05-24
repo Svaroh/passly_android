@@ -293,6 +293,30 @@ class QrParserTest : KoinTest {
             scanningJob.cancel()
         }
 
+    @Test
+    fun `parser should parse browser first login page qr correct`() =
+        runTest {
+            scanningJob =
+                launch {
+                    scanQrParser.startParsing(mockScanningFlow)
+                }
+
+            val testJob =
+                launch {
+                    scanQrParser.parseResultFlow.test {
+                        assertNoBarcodesInRange(awaitItem())
+                        assertPassboltBrowserFirstLoginPage(awaitItem())
+                        cancelAndIgnoreRemainingEvents()
+                    }
+                }
+            yield()
+            mockScanningFlow.emit(SingleBarcode(PASSBOLT_BROWSER_FIRST_LOGIN_PAGE_SCAN))
+            yield()
+
+            testJob.join()
+            scanningJob.cancel()
+        }
+
     private fun assertPassboltQrFirstPage(item: ParseResult) {
         assertThat(item).isInstanceOf(ParseResult.PassboltQr.FirstPage::class.java)
     }
@@ -303,6 +327,10 @@ class QrParserTest : KoinTest {
 
     private fun assertPassboltAccountKitPage(item: ParseResult) {
         assertThat(item).isInstanceOf(ParseResult.PassboltQr.AccountKitPage::class.java)
+    }
+
+    private fun assertPassboltBrowserFirstLoginPage(item: ParseResult) {
+        assertThat(item).isInstanceOf(ParseResult.PassboltQr.BrowserFirstLoginPage::class.java)
     }
 
     private fun assertFailWithScanException(item: ParseResult) {
