@@ -31,6 +31,8 @@ internal sealed interface AutofillScreenSideEffect {
 
     data object NavigateToEncourageAccessibilityAutofill : AutofillScreenSideEffect
 
+    data object NavigateToAccessibilityPoliciesConsent : AutofillScreenSideEffect
+
     data object NavigateToChromeNativeAutofill : AutofillScreenSideEffect
 
     data class ShowErrorSnackBar(

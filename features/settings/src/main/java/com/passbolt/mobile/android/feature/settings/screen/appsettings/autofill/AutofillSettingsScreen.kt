@@ -58,6 +58,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
+import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.AccessibilityPoliciesConsent
 import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.AutofillEnabled
 import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior
 import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.EncourageAccessibilityAutofill
@@ -67,6 +68,7 @@ import com.passbolt.mobile.android.core.ui.switch.SwitchWithDescriptionItem
 import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
 import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.ErrorSnackbarType.NATIVE_AUTOFILL_NOT_SUPPORTED
+import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToAccessibilityPoliciesConsent
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToAutofillEnabled
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToChromeNativeAutofill
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToEncourageAccessibilityAutofill
@@ -109,6 +111,7 @@ internal fun AutofillSettingsScreen(
             NavigateToEncourageNativeAutofill -> navigator.navigateToKey(EncourageNativeAutofill(DismissBehavior.NAVIGATE_BACK))
             NavigateToAutofillEnabled -> navigator.navigateToKey(AutofillEnabled)
             NavigateToEncourageAccessibilityAutofill -> navigator.navigateToKey(EncourageAccessibilityAutofill)
+            NavigateToAccessibilityPoliciesConsent -> navigator.navigateToKey(AccessibilityPoliciesConsent)
             NavigateToChromeNativeAutofill -> navigator.openChromeNativeAutofillSettings(context)
             is ShowErrorSnackBar ->
                 coroutineScope.launch {

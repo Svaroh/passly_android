@@ -21,8 +21,6 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.accessibilitypolicies
+package com.passbolt.mobile.android.feature.accessibilitypolicies
 
-sealed interface AccessibilityPoliciesIntent {
-    data object Acknowledge : AccessibilityPoliciesIntent
-}
+data object AccessibilityPoliciesState
