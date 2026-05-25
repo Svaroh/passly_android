@@ -21,6 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.accessibilitypolicies
+package com.passbolt.mobile.android.feature.accessibilitypolicies
 
-data object AccessibilityPoliciesState
+import org.koin.core.module.Module
+import org.koin.core.module.dsl.viewModelOf
+
+fun Module.accessibilityPoliciesModule() {
+    viewModelOf(::AccessibilityPoliciesViewModel)
+}

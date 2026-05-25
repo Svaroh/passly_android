@@ -32,6 +32,8 @@
     <string name="location">Location</string>
     <string name="content_not_available">The content is not available anymore</string>
     <string name="consent">I have read and consent</string>
+    <string name="accessibility_policies_accept">Accept</string>
+    <string name="accessibility_policies_decline">Decline</string>
     <string name="name_suspended">%s (suspended)</string>
     <string name="name_expired">%s (expired)</string>
     <string name="proceed">Proceed</string>

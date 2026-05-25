@@ -49,6 +49,9 @@ class UpdateGlobalPreferencesUseCase(
             input.isHideRootDialogEnabled?.let {
                 putBoolean(KEY_IS_HIDE_ROOT_DIALOG_ENABLED, it)
             }
+            input.accessibilityPoliciesConsentGiven?.let {
+                putBoolean(KEY_ACCESSIBILITY_POLICIES_CONSENT_GIVEN, it)
+            }
             apply()
         }
     }
@@ -59,5 +62,6 @@ class UpdateGlobalPreferencesUseCase(
         val debugLogLastAppVersion: String? = null,
         val isDeveloperModeEnabled: Boolean? = null,
         val isHideRootDialogEnabled: Boolean? = null,
+        val accessibilityPoliciesConsentGiven: Boolean? = null,
     )
 }

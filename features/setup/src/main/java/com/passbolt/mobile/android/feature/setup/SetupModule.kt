@@ -6,7 +6,7 @@ import com.passbolt.mobile.android.common.BiometricImpl
 import com.passbolt.mobile.android.common.BiometricInformationProvider
 import com.passbolt.mobile.android.core.navigation.compose.base.Feature.SETUP
 import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.feature.setup.accessibilitypolicies.accessibilityPoliciesModule
+import com.passbolt.mobile.android.feature.accessibilitypolicies.accessibilityPoliciesModule
 import com.passbolt.mobile.android.feature.setup.biometric.biometricModule
 import com.passbolt.mobile.android.feature.setup.importprofile.importProfileModule
 import com.passbolt.mobile.android.feature.setup.navigation.SetupFeatureNavigation

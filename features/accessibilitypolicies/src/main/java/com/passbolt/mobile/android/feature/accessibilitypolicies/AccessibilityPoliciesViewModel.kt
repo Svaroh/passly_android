@@ -21,17 +21,32 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.accessibilitypolicies
+package com.passbolt.mobile.android.feature.accessibilitypolicies
 
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.setup.accessibilitypolicies.AccessibilityPoliciesIntent.Acknowledge
-import com.passbolt.mobile.android.feature.setup.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToHome
+import com.passbolt.mobile.android.core.preferences.usecase.UpdateGlobalPreferencesUseCase
+import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesIntent.Accept
+import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesIntent.Decline
+import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToAcceptedScreen
+import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToDeclinedScreen
+import timber.log.Timber
 
-internal class AccessibilityPoliciesViewModel :
-    SideEffectViewModel<AccessibilityPoliciesState, AccessibilityPoliciesSideEffect>(AccessibilityPoliciesState) {
+class AccessibilityPoliciesViewModel(
+    private val updateGlobalPreferencesUseCase: UpdateGlobalPreferencesUseCase,
+) : SideEffectViewModel<AccessibilityPoliciesState, AccessibilityPoliciesSideEffect>(AccessibilityPoliciesState) {
     fun onIntent(intent: AccessibilityPoliciesIntent) {
         when (intent) {
-            Acknowledge -> emitSideEffect(NavigateToHome)
+            Accept -> {
+                Timber.d("Accessibility policies accepted")
+                updateGlobalPreferencesUseCase.execute(
+                    UpdateGlobalPreferencesUseCase.Input(accessibilityPoliciesConsentGiven = true),
+                )
+                emitSideEffect(NavigateToAcceptedScreen)
+            }
+            Decline -> {
+                Timber.d("Accessibility policies declined")
+                emitSideEffect(NavigateToDeclinedScreen)
+            }
         }
     }
 }
