@@ -116,6 +116,7 @@ class WelcomeViewModelTest : KoinTest {
                 isDeveloperModeEnabled = false,
                 isHideRootDialogEnabled = false,
                 debugLogLastAppVersion = null,
+                accessibilityPoliciesConsentGiven = true,
             )
     }
 
@@ -193,6 +194,7 @@ class WelcomeViewModelTest : KoinTest {
                     isDeveloperModeEnabled = false,
                     isHideRootDialogEnabled = true,
                     debugLogLastAppVersion = null,
+                    accessibilityPoliciesConsentGiven = true,
                 )
 
             viewModel = get()

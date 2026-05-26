@@ -27,7 +27,9 @@ import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider
 import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.ENABLED
 import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.NOT_SUPPORTED
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
+import com.passbolt.mobile.android.core.preferences.usecase.GetGlobalPreferencesUseCase
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.ErrorSnackbarType.NATIVE_AUTOFILL_NOT_SUPPORTED
+import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToAccessibilityPoliciesConsent
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToAutofillEnabled
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToChromeNativeAutofill
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToEncourageAccessibilityAutofill
@@ -39,9 +41,11 @@ import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.ToggleChromeNativeAutofill
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.ToggleNativeAutofill
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.UpdateAutofillState
+import timber.log.Timber
 
 internal class AutofillSettingsViewModel(
     private val autofillInformationProvider: AutofillInformationProvider,
+    private val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase,
 ) : SideEffectViewModel<AutofillSettingsState, AutofillScreenSideEffect>(AutofillSettingsState()) {
     init {
         loadInitialValues()
@@ -50,10 +54,19 @@ internal class AutofillSettingsViewModel(
     fun onIntent(intent: AutofillSettingsIntent) {
         when (intent) {
             GoBack -> emitSideEffect(NavigateUp)
-            ToggleAccessibilityAutofill -> emitSideEffect(NavigateToEncourageAccessibilityAutofill)
+            ToggleAccessibilityAutofill -> toggleAccessibilityAutofill()
             ToggleChromeNativeAutofill -> emitSideEffect(NavigateToChromeNativeAutofill)
             ToggleNativeAutofill -> toggleNativeAutofill()
             UpdateAutofillState -> loadInitialValues()
+        }
+    }
+
+    private fun toggleAccessibilityAutofill() {
+        if (getGlobalPreferencesUseCase.execute(Unit).accessibilityPoliciesConsentGiven) {
+            emitSideEffect(NavigateToEncourageAccessibilityAutofill)
+        } else {
+            Timber.d("Accessibility consent shown (no prior consent)")
+            emitSideEffect(NavigateToAccessibilityPoliciesConsent)
         }
     }
 

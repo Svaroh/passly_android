@@ -10,7 +10,8 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationK
 import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.Summary
 import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.TransferDetails
 import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.Welcome
-import com.passbolt.mobile.android.feature.setup.accessibilitypolicies.AccessibilityPoliciesScreen
+import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesFlow
+import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesScreen
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupScreen
 import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileScreen
 import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrScreen
@@ -44,7 +45,7 @@ class SetupFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =
         {
             entry<AccessibilityPolicies> {
-                PassboltTheme { AccessibilityPoliciesScreen() }
+                PassboltTheme { AccessibilityPoliciesScreen(flow = AccessibilityPoliciesFlow.SETUP) }
             }
             entry<Welcome> {
                 PassboltTheme { WelcomeScreen() }

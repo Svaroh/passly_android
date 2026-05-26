@@ -21,8 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.accessibilitypolicies
+package com.passbolt.mobile.android.feature.accessibilitypolicies
 
-internal sealed interface AccessibilityPoliciesSideEffect {
-    data object NavigateToHome : AccessibilityPoliciesSideEffect
+sealed interface AccessibilityPoliciesSideEffect {
+    data object NavigateToAcceptedScreen : AccessibilityPoliciesSideEffect
+
+    data object NavigateToDeclinedScreen : AccessibilityPoliciesSideEffect
 }

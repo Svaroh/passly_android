@@ -21,11 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.accessibilitypolicies
+package com.passbolt.mobile.android.feature.accessibilitypolicies
 
-import org.koin.core.module.Module
-import org.koin.core.module.dsl.viewModelOf
+sealed interface AccessibilityPoliciesIntent {
+    data object Accept : AccessibilityPoliciesIntent
 
-fun Module.accessibilityPoliciesModule() {
-    viewModelOf(::AccessibilityPoliciesViewModel)
+    data object Decline : AccessibilityPoliciesIntent
 }
