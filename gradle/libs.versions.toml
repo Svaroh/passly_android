@@ -1,11 +1,11 @@
 [versions]
-androidGradlePlugin = "8.13.0"
+androidGradlePlugin = "9.2.1"
 commonsValidator = "1.10.0"
 dexmakerMockitoInlineExtended = "2.28.6"
 gradleVersionsPlugin = "0.53.0"
 desugarJdkLibs = "2.1.5"
 kotlin = "2.2.21"
-kotlinKsp = "2.2.21-2.0.4"
+kotlinKsp = "2.3.2"
 coroutines = "1.10.2"
 koinBom = "4.1.1"
 composeLifecycleViewModel = "2.9.4"

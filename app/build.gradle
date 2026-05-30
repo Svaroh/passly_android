@@ -43,7 +43,7 @@ android {
             applicationIdSuffix ".qa"
             debuggable false
             minifyEnabled true
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             firebaseAppDistribution {
                 appId = "1:660923335137:android:c7e452d7912a9e3ab092a0"
                 serviceCredentialsFile = findProperty("serviceKey") ?: ""
@@ -55,7 +55,7 @@ android {
             matchingFallbacks = ['debug']
 
             applicationIdSuffix ".qa.automated"
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             firebaseAppDistribution {
                 appId = "1:660923335137:android:c7e452d7912a9e3ab092a0"
                 serviceCredentialsFile = findProperty("serviceKey") ?: ""
@@ -78,7 +78,7 @@ android {
         release {
             debuggable false
             minifyEnabled true
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
 
