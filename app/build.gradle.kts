@@ -38,7 +38,7 @@ fun getVersionCode(): Int = System.getenv("GITLAB_BUILD_NUMBER")?.toInt() ?: pro
 android {
     namespace = "com.passbolt.mobile.android"
     defaultConfig {
-        applicationId = "com.passbolt.mobile.android"
+        applicationId = "com.svaroh.passly.android"
         versionCode = getVersionCode()
         versionName = projectVersionName
     }
