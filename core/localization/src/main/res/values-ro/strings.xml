@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Passbolt</string>
+    <string name="app_name">Passly</string>
     <string name="ok">Ok</string>
     <string name="cancel">Anulează</string>
     <string name="settings">Setări</string>
@@ -106,7 +106,7 @@
     <string name="help_menu_import_profile_manually">Importați contul manual</string>
     <string name="help_menu_import_account_kit">Importați kitul contului</string>
     <string name="logs_share_title">Distribuiți log-urile</string>
-    <string name="logs_share_email_title">Logurile Passbolt</string>
+    <string name="logs_share_email_title">Logurile Passly</string>
     <string name="logs_share_email">contact@passbolt.com</string>
     <string name="root_warning_title">Dispozitivul poate fi jailbroken</string>
     <string name="root_warning_message">Suspectăm că dispozitivul tău poate fi jailbroken. Acest lucru reduce securitatea generală a dispozitivului și poate fi folosit în mod răuvoitor pentru a-ți procura parolele.</string>
@@ -178,7 +178,7 @@
     Contactați administratorul pentru mai multe informații.</string>
     <string name="dialog_unable_to_generate_password_title">Nu s-a putut genera o parolă puternică</string>
     <string name="dialog_unable_to_generate_password_message">Generatorul de parole nu poate genera o parolă suficient de puternică. Sunt necesari minimum %d biți</string>
-    <string name="autofill_service_name">Autocompletare Passbolt</string>
+    <string name="autofill_service_name">Autocompletare Passly</string>
     <string name="dialog_encourage_autofill_header">Conectează-te la aplicațiile tale preferate în 3 secunde!</string>
     <string name="dialog_autofill_header">Autocompletare</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">Samsung</string>
@@ -187,10 +187,10 @@
     <string name="dialog_encourage_autofill_accessibility_other">Altele</string>
     <string name="dialog_encourage_autofill_go_to_settings">Accesați setările</string>
     <string name="dialog_encourage_autofill_service_header">Activează autocompletarea pentru majoritatea aplicațiilor</string>
-    <string name="dialog_encourage_autofill_service_description">În ecranul de setări Android, selectați Passbolt, activați comutatorul și apăsați OK.
+    <string name="dialog_encourage_autofill_service_description">În ecranul de setări Android, selectați Passly, activați comutatorul și apăsați OK.
     Sau verificați ghidul specific pentru dispozitivul dumneavoastră:</string>
     <string name="dialog_encourage_autofill_overlay_header">Activați permisiunea overlay</string>
-    <string name="dialog_encourage_autofill_overlay_description">În ecranul de setări Android, activați permisiunea ‘Desenați peste alte aplicații’ pentru autocompletarea Passbolt,
+    <string name="dialog_encourage_autofill_overlay_description">În ecranul de setări Android, activați permisiunea ‘Desenați peste alte aplicații’ pentru autocompletarea Passly,
     sau verificați ghidul specific pentru dispozitivul dumneavoastră:</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_title">Autocompletare nesuportată</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_message">Autocompletarea nu este suportată pe acest dispozitiv.</string>
@@ -198,23 +198,23 @@
     <string name="dialog_encourage_chrome_autofill_go_to_settings">Accesați setările Chrome</string>
     <string name="dialog_autofill_enabled_go_to_app">Accesați aplicația</string>
     <string name="dialog_autofill_enabled_got_it">Am înțeles!</string>
-    <string name="dialog_autofill_enabled_title">Autocompletare Passbolt activată!</string>
-    <string name="dialog_autofill_accessibility_service_description">Autocompletarea Passbolt pe baza serviciului de accesibilitate.</string>
+    <string name="dialog_autofill_enabled_title">Autocompletare Passly activată!</string>
+    <string name="dialog_autofill_accessibility_service_description">Autocompletarea Passly pe baza serviciului de accesibilitate.</string>
     <string name="dialog_autofill_enabled_message">Odată ce ați completat un formular, apasă pe câmpul de intrare și pe
-        Autocompletarea activată va sugera completarea acestuia cu datele de autentificare pe care le-ai adăugat deja în aplicația Passbolt.</string>
+        Autocompletarea activată va sugera completarea acestuia cu datele de autentificare pe care le-ai adăugat deja în aplicația Passly.</string>
     <string name="autofill_title">Selectaţi parola</string>
     <string name="autofill_error">A apărut o eroare de autocompletare</string>
     <string name="autofill_select_password">Selectaţi parola</string>
-    <string name="autofill_service_channel_name">Servicii de autocompletare Passbolt</string>
-    <string name="data_sync_service_channel_name">Serviciu de sincronizare date Passbolt</string>
-    <string name="autofill_service_title">Passbolt</string>
+    <string name="autofill_service_channel_name">Servicii de autocompletare Passly</string>
+    <string name="data_sync_service_channel_name">Serviciu de sincronizare date Passly</string>
+    <string name="autofill_service_title">Passly</string>
     <string name="autofill_service_content">Serviciul de autocompletare de accesibilitate activat</string>
     <string name="data_sync_service_content">Se reîmprospătează resursele</string>
     <string name="autofill_service_enable_overlay">Activați permisiunea overlay</string>
-    <string name="autofill_service_overlay_description"><![CDATA[Completare automată nume de utilizator și parole pentru browserele web Android. Vă rugăm să activați permisiunea ‘Desenează peste alte aplicații’ pentru completarea automată Passbolt]]></string>
+    <string name="autofill_service_overlay_description"><![CDATA[Completare automată nume de utilizator și parole pentru browserele web Android. Vă rugăm să activați permisiunea ‘Desenează peste alte aplicații’ pentru completarea automată Passly]]></string>
     <string name="autofill_service_enable_service">Activează autocompletarea pentru majoritatea aplicațiilor</string>
-    <string name="autofill_dropdown_select">Selectaţi din Passbolt</string>
-    <string name="autofill_dropdown_fill">Completează cu Passbolt</string>
+    <string name="autofill_dropdown_select">Selectaţi din Passly</string>
+    <string name="autofill_dropdown_fill">Completează cu Passly</string>
     <string name="autofill_resources_create">Creați&amp;completați</string>
     <string name="home_empty_list">Listă goală</string>
     <string name="home_create">Creare</string>
@@ -375,13 +375,13 @@
     <string name="transfer_details_camera_access_dialog_title">Este necesar accesul la camera foto</string>
     <string name="transfer_details_camera_required_dialog_title">Cameră foto necesară</string>
     <string name="transfer_details_camera_required_dialog_message">Ne pare rău, aveți nevoie de un dispozitiv cu cameră foto pentru a continua, deoarece transferul cheii se face folosind coduri QR.</string>
-    <string name="transfer_details_camera_access_dialog_message">Vă rugăm să oferiți permisiuni aplicației Passbolt pentru a accesa camera foto în setările dvs.</string>
+    <string name="transfer_details_camera_access_dialog_message">Vă rugăm să oferiți permisiuni aplicației Passly pentru a accesa camera foto în setările dvs.</string>
     <string name="scan_qr_exit_confirmation_dialog_message">Dacă renunțați, va trebui să scanați din nou codurile QR.</string>
     <string name="scan_qr_exit_information_dialog_message">Veți vedea o secvență de coduri QR. Vom scana aceste coduri până când bara de progres este completă. Apoi vă veți putea autentifica!</string>
     <string name="scan_qr_exit_information_dialog_title">Se scanează codurile QR</string>
     <string name="scan_qr_keep_going">Se scanează codurile QR</string>
     <string name="scan_qr_aim_at_qr_code">Direcționează camera către codul QR</string>
-    <string name="scan_qr_not_a_passbolt_qr">Nu este codul QR al Passbolt. Încercați din nou!</string>
+    <string name="scan_qr_not_a_passbolt_qr">Nu este codul QR al Passly. Încercați din nou!</string>
     <string name="scan_qr_multiple_codes_in_range">Multiple coduri QR în raza de acțiune - vă rugăm să urmăriți doar unul</string>
     <string name="scan_qr_scanning_error">Eroare în timpul scanării</string>
     <string name="scan_qr_camera_error">Eroare cameră foto</string>
@@ -418,7 +418,7 @@
     <string name="permission_recipients_already_added">Deja adăugat</string>
     <string name="permission_recipients_user_or_group_not_found">Utilizatorul sau grupul nu a fost găsit</string>
     <string name="permission_deletion_dialog_message">Parola nu va mai fi partajată cu acest utilizator.</string>
-    <string name="main_update_downloaded">Actualizarea Passbolt a fost descărcată</string>
+    <string name="main_update_downloaded">Actualizarea Passly a fost descărcată</string>
     <string name="main_update_download_in_progress">Se descarcă în fundal. Te vom notifica de îndată ce descărcarea se va termina.</string>
     <string name="main_update_downloaded_install">Instalează</string>
     <string name="dialog_encryption_error_title">A apărut o eroare de criptare</string>
@@ -561,10 +561,10 @@
     </string-array>
     <string-array name="dialog_encourage_autofill_setup_steps">
         <item>&lt;b&gt;Activați setările pentru autocompletare&lt;/b&gt;</item>
-        <item>Alegeţi &lt;b&gt;Passbolt!&lt;/b&gt;</item>
+        <item>Alegeţi &lt;b&gt;Passly!&lt;/b&gt;</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
-        <item>Asigurați-vă că Passbolt completarea automată nativă este activată în setările sistemului de operare Android</item>
+        <item>Asigurați-vă că Passly completarea automată nativă este activată în setările sistemului de operare Android</item>
         <item>Accesați &lt;b&gt;setările Chrome&lt;/b&gt; și selectați &lt;b&gt;Serviciile de completare automată&lt;/b&gt;</item>
         <item>Alegeți &lt;b&gt;Completare automată folosind un alt serviciu&lt;/b&gt;</item>
     </string-array>

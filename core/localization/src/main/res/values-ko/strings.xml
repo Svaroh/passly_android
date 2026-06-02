@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Passbolt</string>
+    <string name="app_name">Passly</string>
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
     <string name="settings">설정</string>
@@ -106,7 +106,7 @@
     <string name="help_menu_import_profile_manually">수동으로 계정 가져오기</string>
     <string name="help_menu_import_account_kit">계정 키트 가져오기</string>
     <string name="logs_share_title">로그 공유</string>
-    <string name="logs_share_email_title">Passbolt 로그</string>
+    <string name="logs_share_email_title">Passly 로그</string>
     <string name="logs_share_email">contact@passbolt.com</string>
     <string name="root_warning_title">기기가 루팅되었을 수 있습니다.</string>
     <string name="root_warning_message">기기가 루팅이 되었을 수 있습니다. 기기 전체 보안을 약화하고 비밀번호 획득에 악용될 수 있습니다.</string>
@@ -178,7 +178,7 @@
 자세한 내용은 관리자에게 문의하십시오.</string>
     <string name="dialog_unable_to_generate_password_title">강력한 비밀번호를 생성할 수 없습니다</string>
     <string name="dialog_unable_to_generate_password_message">비밀번호 생성기에서 강력한 비밀번호 생성되지 않습니다. 최소 %d 비트가 필요합니다</string>
-    <string name="autofill_service_name">Passbolt 자동채우기</string>
+    <string name="autofill_service_name">Passly 자동채우기</string>
     <string name="dialog_encourage_autofill_header">3초만에 즐겨찾는 앱으로 로그인하세요!</string>
     <string name="dialog_autofill_header">자동 채우기</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">삼성</string>
@@ -187,10 +187,10 @@
     <string name="dialog_encourage_autofill_accessibility_other">기타</string>
     <string name="dialog_encourage_autofill_go_to_settings">설정으로 이동</string>
     <string name="dialog_encourage_autofill_service_header">대부분의 앱에 대해 자동 채우기 사용</string>
-    <string name="dialog_encourage_autofill_service_description">안드로이드 설정 화면에서 Passbolt를 선택하고 토글을 켠 다음 확인을 누릅니다.
+    <string name="dialog_encourage_autofill_service_description">안드로이드 설정 화면에서 Passly를 선택하고 토글을 켠 다음 확인을 누릅니다.
      또는 기기의 특정 가이드를 확인하세요:</string>
     <string name="dialog_encourage_autofill_overlay_header">오버레이 사용 권한 사용</string>
-    <string name="dialog_encourage_autofill_overlay_description">Android 설정 화면에서 Passbolt 자동 채우기에 대한 \'다른 앱 위로 그리기\' 권한을 활성화하거나
+    <string name="dialog_encourage_autofill_overlay_description">Android 설정 화면에서 Passly 자동 채우기에 대한 \'다른 앱 위로 그리기\' 권한을 활성화하거나
  기기의 특정 가이드를 확인하세요:</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_title">자동 채우기가 지원되지 않음</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_message">자동 채우기가 이 기기를 지원하지 않습니다.</string>
@@ -198,23 +198,23 @@
     <string name="dialog_encourage_chrome_autofill_go_to_settings">크롬 설정으로 이동</string>
     <string name="dialog_autofill_enabled_go_to_app">앱으로 이동</string>
     <string name="dialog_autofill_enabled_got_it">예!</string>
-    <string name="dialog_autofill_enabled_title">Passbolt 자동 채우기 활성화됨!</string>
-    <string name="dialog_autofill_accessibility_service_description">접근성 서비스를 기반으로 한 Passbolt 자동 채우기.</string>
+    <string name="dialog_autofill_enabled_title">Passly 자동 채우기 활성화됨!</string>
+    <string name="dialog_autofill_accessibility_service_description">접근성 서비스를 기반으로 한 Passly 자동 채우기.</string>
     <string name="dialog_autofill_enabled_message">양식을 작성한 후 입력 필드를 탭하기만 하면 활성화한
-        자동 채우기가 Passbolt 앱에 이미 추가한 로그인 자격 증명에서 양식을 작성하도록 제안합니다.</string>
+        자동 채우기가 Passly 앱에 이미 추가한 로그인 자격 증명에서 양식을 작성하도록 제안합니다.</string>
     <string name="autofill_title">비밀번호 선택</string>
     <string name="autofill_error">자동 채우기 오류 발생</string>
     <string name="autofill_select_password">비밀번호 선택</string>
-    <string name="autofill_service_channel_name">Passbolt 자동 채우기서비스</string>
-    <string name="data_sync_service_channel_name">Passbolt 데이터 동기화 서비스</string>
-    <string name="autofill_service_title">Passbolt</string>
+    <string name="autofill_service_channel_name">Passly 자동 채우기서비스</string>
+    <string name="data_sync_service_channel_name">Passly 데이터 동기화 서비스</string>
+    <string name="autofill_service_title">Passly</string>
     <string name="autofill_service_content">접근성 자동 채우기 서비스가 활성화됨</string>
     <string name="data_sync_service_content">리소스를 새로 고침</string>
     <string name="autofill_service_enable_overlay">오버레이 사용 권한 사용</string>
-    <string name="autofill_service_overlay_description"><![CDATA[Android 웹 브라우저의 사용자 이름 및 비밀번호 자동 채우기. Passbolt 자동 채우기에 대한 \'다른 앱 위로 그리기\' 권한을 활성화하세요]]></string>
+    <string name="autofill_service_overlay_description"><![CDATA[Android 웹 브라우저의 사용자 이름 및 비밀번호 자동 채우기. Passly 자동 채우기에 대한 \'다른 앱 위로 그리기\' 권한을 활성화하세요]]></string>
     <string name="autofill_service_enable_service">대부분의 앱에 대해 자동 채우기 사용</string>
-    <string name="autofill_dropdown_select">Passbolt에서 선택</string>
-    <string name="autofill_dropdown_fill">Passbolt로 채우기</string>
+    <string name="autofill_dropdown_select">Passly에서 선택</string>
+    <string name="autofill_dropdown_fill">Passly로 채우기</string>
     <string name="autofill_resources_create">생성 &amp; 채우기</string>
     <string name="home_empty_list">목록 비우기</string>
     <string name="home_create">생성</string>
@@ -375,13 +375,13 @@
     <string name="transfer_details_camera_access_dialog_title">카메라 접근 필요</string>
     <string name="transfer_details_camera_required_dialog_title">카메라 필요</string>
     <string name="transfer_details_camera_required_dialog_message">죄송합니다, QR 코드를 사용하여 키를 전송하므로 계속 진행하려면 카메라가 있는 기기가 필요합니다.</string>
-    <string name="transfer_details_camera_access_dialog_message">설정에서 Passbolt 앱에 카메라 접근에 대한 권한을 부여하세요.</string>
+    <string name="transfer_details_camera_access_dialog_message">설정에서 Passly 앱에 카메라 접근에 대한 권한을 부여하세요.</string>
     <string name="scan_qr_exit_confirmation_dialog_message">나가게 되면 QR코드를 다시 스캔해야 합니다.</string>
     <string name="scan_qr_exit_information_dialog_message">일련의 QR 코드가 표시됩니다. 진행률 표시줄이 가득 찰 때까지 이 코드를 스캔합니다. 그러면 로그인할 수 있습니다!</string>
     <string name="scan_qr_exit_information_dialog_title">QR 코드 스캔</string>
     <string name="scan_qr_keep_going">QR 코드 스캔 중</string>
     <string name="scan_qr_aim_at_qr_code">카메라를 QR 코드에 맞추세요.</string>
-    <string name="scan_qr_not_a_passbolt_qr">Passbolt QR코드가 아닙니다. 다시 시도하세요!</string>
+    <string name="scan_qr_not_a_passbolt_qr">Passly QR코드가 아닙니다. 다시 시도하세요!</string>
     <string name="scan_qr_multiple_codes_in_range">범위 내에 여러 개의 QR 코드가 있습니다. 한 개에 맞추세요.</string>
     <string name="scan_qr_scanning_error">스캔 중 오류</string>
     <string name="scan_qr_camera_error">카메라 오류</string>
@@ -418,7 +418,7 @@
     <string name="permission_recipients_already_added">이미 추가됨</string>
     <string name="permission_recipients_user_or_group_not_found">사용자 또는 그룹을 찾을 수 없음</string>
     <string name="permission_deletion_dialog_message">비밀번호가 더 이상 이 사용자와 공유되지 않습니다.</string>
-    <string name="main_update_downloaded">Passbolt 업데이트가 방금 다운로드됨</string>
+    <string name="main_update_downloaded">Passly 업데이트가 방금 다운로드됨</string>
     <string name="main_update_download_in_progress">백그라운드에서 다운로드 중입니다. 다운로드가 완료되면 알려드리겠습니다.</string>
     <string name="main_update_downloaded_install">설치</string>
     <string name="dialog_encryption_error_title">암호화 오류가 발생했습니다.</string>
@@ -561,10 +561,10 @@
     </string-array>
     <string-array name="dialog_encourage_autofill_setup_steps">
         <item>자동완설 설정 켜기</item>
-        <item>&lt;b&gt;Passbolt!&lt;/b&gt;를 선택</item>
+        <item>&lt;b&gt;Passly!&lt;/b&gt;를 선택</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
-        <item>Android OS 설정에서 Passbolt 기본 자동 채우기가 켜져 있는지 확인하세요</item>
+        <item>Android OS 설정에서 Passly 기본 자동 채우기가 켜져 있는지 확인하세요</item>
         <item>&lt;b&gt;크롬 설정&lt;/b&gt;으로 이동하여 &lt;b&gt;자동 채우기 서비스&lt;/b&gt;를 선택하세요</item>
         <item>&lt;b&gt;다른 서비스를 사용하여 자동 채우기&lt;/b&gt;를 선택하세요</item>
     </string-array>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Passbolt</string>
+    <string name="app_name">Passly</string>
     <string name="ok">OK</string>
     <string name="cancel">Annulla</string>
     <string name="settings">Impostazioni</string>
@@ -106,7 +106,7 @@
     <string name="help_menu_import_profile_manually">Importa manualmente il tuo account</string>
     <string name="help_menu_import_account_kit">Importa il tuo account kit</string>
     <string name="logs_share_title">Condividi i log</string>
-    <string name="logs_share_email_title">Log di Passbolt</string>
+    <string name="logs_share_email_title">Log di Passly</string>
     <string name="logs_share_email">contact@passbolt.com</string>
     <string name="root_warning_title">Il dispositivo può essere rootato</string>
     <string name="root_warning_message">Sospettiamo che il tuo dispositivo possa essere rootato. Tieni presente che riduce la sicurezza generale del dispositivo e può essere utilizzato maliziosamente per acquisire le tue password.</string>
@@ -178,7 +178,7 @@
     Contattare l\'amministratore per ulteriori informazioni.</string>
     <string name="dialog_unable_to_generate_password_title">Impossibile generare una password forte</string>
     <string name="dialog_unable_to_generate_password_message">Il generatore di password non genererà password abbastanza sicure. È necessario un minimo di %d bit</string>
-    <string name="autofill_service_name">Compilazione automatica di Passbolt</string>
+    <string name="autofill_service_name">Compilazione automatica di Passly</string>
     <string name="dialog_encourage_autofill_header">Accedi alle tue app preferite in 3 secondi!</string>
     <string name="dialog_autofill_header">Compilazione automatica</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">Samsung</string>
@@ -187,32 +187,32 @@
     <string name="dialog_encourage_autofill_accessibility_other">Altro</string>
     <string name="dialog_encourage_autofill_go_to_settings">Vai alle impostazioni</string>
     <string name="dialog_encourage_autofill_service_header">Abilita la compilazione automatica per la maggior parte delle app</string>
-    <string name="dialog_encourage_autofill_service_description">Nella schermata delle impostazioni di Android, selezionare Passbolt, attivare l\'interruttore e premere OK.
+    <string name="dialog_encourage_autofill_service_description">Nella schermata delle impostazioni di Android, selezionare Passly, attivare l\'interruttore e premere OK.
     Oppure controllare la guida specifica per il proprio dispositivo:</string>
     <string name="dialog_encourage_autofill_overlay_header">Abilita il permesso di sovrapposizione</string>
-    <string name="dialog_encourage_autofill_overlay_description">Nella schermata delle impostazioni di Android, abilita l\'autorizzazione \"Mostra sopra altre app\" per la Compilazione automatica di Passbolt, oppure consulta la guida specifica per il dispositivo:</string>
+    <string name="dialog_encourage_autofill_overlay_description">Nella schermata delle impostazioni di Android, abilita l\'autorizzazione \"Mostra sopra altre app\" per la Compilazione automatica di Passly, oppure consulta la guida specifica per il dispositivo:</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_title">Compilazione automatica non supportata</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_message">La compilazione automatica non è supportata su questo dispositivo.</string>
     <string name="dialog_encourage_chrome_autofill_title">Abilita compilazione automatica nativa di Chrome</string>
     <string name="dialog_encourage_chrome_autofill_go_to_settings">Vai alle impostazioni di Chrome</string>
     <string name="dialog_autofill_enabled_go_to_app">Vai all\'app</string>
     <string name="dialog_autofill_enabled_got_it">Ho capito!</string>
-    <string name="dialog_autofill_enabled_title">Compilazione automatica di Passbolt attivata!</string>
-    <string name="dialog_autofill_accessibility_service_description">Compilazione automatica di Passbolt basata sul servizio Accessibilità.</string>
-    <string name="dialog_autofill_enabled_message">Una volta compilato un modulo, basta toccare il campo d\'immissione e l\'Autocompilazione che hai abilitato suggerirà la sua compilazione con le credenziali di accesso che hai già aggiunto all\'app Passbolt.</string>
+    <string name="dialog_autofill_enabled_title">Compilazione automatica di Passly attivata!</string>
+    <string name="dialog_autofill_accessibility_service_description">Compilazione automatica di Passly basata sul servizio Accessibilità.</string>
+    <string name="dialog_autofill_enabled_message">Una volta compilato un modulo, basta toccare il campo d\'immissione e l\'Autocompilazione che hai abilitato suggerirà la sua compilazione con le credenziali di accesso che hai già aggiunto all\'app Passly.</string>
     <string name="autofill_title">Seleziona password</string>
     <string name="autofill_error">Si è verificato un errore di compilazione automatica</string>
     <string name="autofill_select_password">Seleziona password</string>
-    <string name="autofill_service_channel_name">Servizi di compilazione automatica di Passbolt</string>
-    <string name="data_sync_service_channel_name">Servizio di sincronizzazione dati Passbolt</string>
-    <string name="autofill_service_title">Passbolt</string>
+    <string name="autofill_service_channel_name">Servizi di compilazione automatica di Passly</string>
+    <string name="data_sync_service_channel_name">Servizio di sincronizzazione dati Passly</string>
+    <string name="autofill_service_title">Passly</string>
     <string name="autofill_service_content">Servizio di compilazione automatica abilitato</string>
     <string name="data_sync_service_content">Aggiornamento risorse</string>
     <string name="autofill_service_enable_overlay">Abilita il permesso di sovrapposizione</string>
-    <string name="autofill_service_overlay_description"><![CDATA[Compilazione automatica username & password per browser web Android. Si prega di abilitare l\'autorizzazione "Mostra sopra altre app" per Compilazione automatica di Passbolt]]></string>
+    <string name="autofill_service_overlay_description"><![CDATA[Compilazione automatica username & password per browser web Android. Si prega di abilitare l\'autorizzazione "Mostra sopra altre app" per Compilazione automatica di Passly]]></string>
     <string name="autofill_service_enable_service">Abilita la compilazione automatica per la maggior parte delle applicazioni</string>
-    <string name="autofill_dropdown_select">Seleziona da Passbolt</string>
-    <string name="autofill_dropdown_fill">Compila con Passbolt</string>
+    <string name="autofill_dropdown_select">Seleziona da Passly</string>
+    <string name="autofill_dropdown_fill">Compila con Passly</string>
     <string name="autofill_resources_create">Crea e compila</string>
     <string name="autofill_conflict_message">Multiple autofill methods are active.\nThis may cause issues.</string>
     <string name="autofill_conflict_message_detailed">Multiple autofill methods are active.\nPlease disable one to ensure a smooth autofill experience.</string>
@@ -375,13 +375,13 @@
     <string name="transfer_details_camera_access_dialog_title">Accesso alla fotocamera richiesto</string>
     <string name="transfer_details_camera_required_dialog_title">Necessaria fotocamera</string>
     <string name="transfer_details_camera_required_dialog_message">Spiacenti, per continuare serve un dispositivo dotato di fotocamera, poiché il trasferimento della chiave avviene tramite codici QR.</string>
-    <string name="transfer_details_camera_access_dialog_message">Si prega di fornire nelle impostazioni i permessi per l\'applicazione Passbolt ad accedere alla fotocamera.</string>
+    <string name="transfer_details_camera_access_dialog_message">Si prega di fornire nelle impostazioni i permessi per l\'applicazione Passly ad accedere alla fotocamera.</string>
     <string name="scan_qr_exit_confirmation_dialog_message">Se abbandoni, dovrai scansionare di nuovo i codici QR.</string>
     <string name="scan_qr_exit_information_dialog_message">Vedrai una sequenza di codici QR. Scansioneremo i codici fino al riempimento della barra di avanzamento, poi potrai effettuare il login!</string>
     <string name="scan_qr_exit_information_dialog_title">Scansionamento codici QR</string>
     <string name="scan_qr_keep_going">Scansionamento codici QR</string>
     <string name="scan_qr_aim_at_qr_code">Inquadra il codice QR con la fotocamera</string>
-    <string name="scan_qr_not_a_passbolt_qr">Non è il QR code di Passbolt. Riprova!</string>
+    <string name="scan_qr_not_a_passbolt_qr">Non è il QR code di Passly. Riprova!</string>
     <string name="scan_qr_multiple_codes_in_range">Ci sono più Codici QR nell\'intervallo - si prega di inquadrarne solo uno</string>
     <string name="scan_qr_scanning_error">Errore durante la scansione</string>
     <string name="scan_qr_camera_error">Errore della fotocamera</string>
@@ -418,7 +418,7 @@
     <string name="permission_recipients_already_added">Già aggiunto</string>
     <string name="permission_recipients_user_or_group_not_found">Utente o gruppo non trovato</string>
     <string name="permission_deletion_dialog_message">La password non sarà più condivisa con questo utente.</string>
-    <string name="main_update_downloaded">L\'aggiornamento di Passbolt è stato scaricato</string>
+    <string name="main_update_downloaded">L\'aggiornamento di Passly è stato scaricato</string>
     <string name="main_update_download_in_progress">Scaricamento in background. Ti avviseremo al termine del download.</string>
     <string name="main_update_downloaded_install">Installa</string>
     <string name="dialog_encryption_error_title">Si è verificato un errore di crittografia</string>
@@ -562,10 +562,10 @@
     </string-array>
     <string-array name="dialog_encourage_autofill_setup_steps">
         <item>&lt;b&gt;Attiva le impostazioni di riempimento automatico&lt;/b&gt;</item>
-        <item>Scegli &lt;b&gt;Passbolt!&lt;/b&gt;</item>
+        <item>Scegli &lt;b&gt;Passly!&lt;/b&gt;</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
-        <item>Assicurati che la compilazione automatica nativa di Passbolt sia attivata nelle impostazioni del sistema Android</item>
+        <item>Assicurati che la compilazione automatica nativa di Passly sia attivata nelle impostazioni del sistema Android</item>
         <item>Vai su &lt;b&gt;Impostazioni di Chrome&lt;/b&gt; e seleziona &lt;b&gt;Servizi di compilazione automatica&lt;/b&gt;;</item>
         <item>Scegli &lt;b&gt;Compilazione automatica utilizzando un altro servizio&lt;/b&gt;;</item>
     </string-array>

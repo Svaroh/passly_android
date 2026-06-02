@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Passboltas</string>
+    <string name="app_name">Passly</string>
     <string name="ok">Gerai</string>
     <string name="cancel">Atšaukti</string>
     <string name="settings">Nustatymai</string>
@@ -106,7 +106,7 @@
     <string name="help_menu_import_profile_manually">Importuoti paskyrą rankiniu būdu</string>
     <string name="help_menu_import_account_kit">Importuoti paskyros rinkinį</string>
     <string name="logs_share_title">Bendrinti žurnalus</string>
-    <string name="logs_share_email_title">Passbolt žurnalai</string>
+    <string name="logs_share_email_title">Passly žurnalai</string>
     <string name="logs_share_email">contact@passbolt.com</string>
     <string name="root_warning_title">Įrenginys gali būti rootintas</string>
     <string name="root_warning_message">Įtariame, kad jūsų įrenginys gali būti rootintas. Atminkite, kad tai sumažina bendrą įrenginio saugumą ir gali būti piktybiškai panaudota slaptažodžiams gauti.</string>
@@ -178,7 +178,7 @@
     Norėdami gauti daugiau informacijos, susisiekite su administratoriumi.</string>
     <string name="dialog_unable_to_generate_password_title">Nepavyko sugeneruoti stipraus slaptažodžio</string>
     <string name="dialog_unable_to_generate_password_message">Slaptažodžių generatorius negali sugeneruoti pakankamai stipraus slaptažodžio. Reikia bent %d bitų</string>
-    <string name="autofill_service_name">Passbolt automatinis pildymas</string>
+    <string name="autofill_service_name">Passly automatinis pildymas</string>
     <string name="dialog_encourage_autofill_header">Prisijunkite prie mėgstamų programų per 3 sekundes!</string>
     <string name="dialog_autofill_header">Automatinis pildymas</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">„Samsung“</string>
@@ -187,10 +187,10 @@
     <string name="dialog_encourage_autofill_accessibility_other">Kita</string>
     <string name="dialog_encourage_autofill_go_to_settings">Eiti į nustatymus</string>
     <string name="dialog_encourage_autofill_service_header">Įjunkite automatinį pildymą daugumai programų</string>
-    <string name="dialog_encourage_autofill_service_description">Android nustatymų ekrane pasirinkite Passbolt, įjunkite jungiklį ir paspauskite Gerai.
+    <string name="dialog_encourage_autofill_service_description">Android nustatymų ekrane pasirinkite Passly, įjunkite jungiklį ir paspauskite Gerai.
     Arba peržiūrėkite specifinį jūsų įrenginiui skirtą vadovą:</string>
     <string name="dialog_encourage_autofill_overlay_header">Įjunkite persidengimo leidimą</string>
-    <string name="dialog_encourage_autofill_overlay_description">Android nustatymų ekrane įjunkite „Rodyti virš kitų programų“ leidimą Passbolt Autofill,
+    <string name="dialog_encourage_autofill_overlay_description">Android nustatymų ekrane įjunkite „Rodyti virš kitų programų“ leidimą Passly Autofill,
     arba peržiūrėkite specifinį jūsų įrenginiui skirtą vadovą:</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_title">Automatinis pildymas nepalaikomas</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_message">Šiame įrenginyje automatinis pildymas nepalaikomas.</string>
@@ -198,22 +198,22 @@
     <string name="dialog_encourage_chrome_autofill_go_to_settings">Eiti į Chrome nustatymus</string>
     <string name="dialog_autofill_enabled_go_to_app">Eiti į programą</string>
     <string name="dialog_autofill_enabled_got_it">Supratau!</string>
-    <string name="dialog_autofill_enabled_title">Passbolt automatinis pildymas įjungtas!</string>
-    <string name="dialog_autofill_accessibility_service_description">Passbolt automatinis pildymas, paremtas Accessibility paslauga.</string>
-    <string name="dialog_autofill_enabled_message">Kai užpildysite formą, tiesiog palieskite įvesties lauką ir įjungtas automatinis pildymas pasiūlys užpildyti jį iš prisijungimo duomenų, kuriuos jau pridėjote Passbolt programoje.</string>
+    <string name="dialog_autofill_enabled_title">Passly automatinis pildymas įjungtas!</string>
+    <string name="dialog_autofill_accessibility_service_description">Passly automatinis pildymas, paremtas Accessibility paslauga.</string>
+    <string name="dialog_autofill_enabled_message">Kai užpildysite formą, tiesiog palieskite įvesties lauką ir įjungtas automatinis pildymas pasiūlys užpildyti jį iš prisijungimo duomenų, kuriuos jau pridėjote Passly programoje.</string>
     <string name="autofill_title">Pasirinkti slaptažodį</string>
     <string name="autofill_error">Įvyko automatinio pildymo klaida</string>
     <string name="autofill_select_password">Pasirinkti slaptažodį</string>
-    <string name="autofill_service_channel_name">Passbolt automatinio pildymo paslaugos</string>
-    <string name="data_sync_service_channel_name">Passbolt duomenų sinchronizavimo paslauga</string>
-    <string name="autofill_service_title">Passboltas</string>
+    <string name="autofill_service_channel_name">Passly automatinio pildymo paslaugos</string>
+    <string name="data_sync_service_channel_name">Passly duomenų sinchronizavimo paslauga</string>
+    <string name="autofill_service_title">Passly</string>
     <string name="autofill_service_content">Prieinamumo automatinio pildymo paslauga įjungta</string>
     <string name="data_sync_service_content">Atnaujinami ištekliai</string>
     <string name="autofill_service_enable_overlay">Įjungti persidengimo leidimą</string>
-    <string name="autofill_service_overlay_description"><![CDATA[Automatiškai pildyti vartotojo vardus ir slaptažodžius Android naršyklėse. Prašome įjungti „Rodyti virš kitų programų“ leidimą Passbolt Autofill]]></string>
+    <string name="autofill_service_overlay_description"><![CDATA[Automatiškai pildyti vartotojo vardus ir slaptažodžius Android naršyklėse. Prašome įjungti „Rodyti virš kitų programų“ leidimą Passly Autofill]]></string>
     <string name="autofill_service_enable_service">Įjungti automatinį pildymą daugumai programų</string>
-    <string name="autofill_dropdown_select">Pasirinkti iš Passbolt</string>
-    <string name="autofill_dropdown_fill">Užpildyti su Passbolt</string>
+    <string name="autofill_dropdown_select">Pasirinkti iš Passly</string>
+    <string name="autofill_dropdown_fill">Užpildyti su Passly</string>
     <string name="autofill_resources_create">Sukurti&amp;užpildyti</string>
     <string name="home_empty_list">Tuščias sąrašas</string>
     <string name="home_create">Sukurti</string>
@@ -374,13 +374,13 @@
     <string name="transfer_details_camera_access_dialog_title">Reikalinga prieiga prie kameros</string>
     <string name="transfer_details_camera_required_dialog_title">Reikalinga kamera</string>
     <string name="transfer_details_camera_required_dialog_message">Atsiprašome, jums reikia įrenginio su kamera, kad tęstumėte, nes rakto perdavimas vykdomas naudojant QR kodus.</string>
-    <string name="transfer_details_camera_access_dialog_message">Prašome suteikti programai Passbolt prieigą prie kameros jūsų nustatymuose.</string>
+    <string name="transfer_details_camera_access_dialog_message">Prašome suteikti programai Passly prieigą prie kameros jūsų nustatymuose.</string>
     <string name="scan_qr_exit_confirmation_dialog_message">Jei išeisite, turėsite dar kartą nuskaityti QR kodus.</string>
     <string name="scan_qr_exit_information_dialog_message">Pamatysite QR kodų seką. Mes skenuosime šiuos kodus, kol užsipildys progreso juosta. Tada galėsite prisijungti!</string>
     <string name="scan_qr_exit_information_dialog_title">Nuskaitymo QR kodų</string>
     <string name="scan_qr_keep_going">Nuskaitykite QR kodus</string>
     <string name="scan_qr_aim_at_qr_code">Nukreipkite kamerą į QR kodą</string>
-    <string name="scan_qr_not_a_passbolt_qr">Tai ne Passbolt QR. Pabandykite dar kartą!</string>
+    <string name="scan_qr_not_a_passbolt_qr">Tai ne Passly QR. Pabandykite dar kartą!</string>
     <string name="scan_qr_multiple_codes_in_range">Rasta keli QR kodai - nukreipkite į vieną</string>
     <string name="scan_qr_scanning_error">Klaida nuskaitymo metu</string>
     <string name="scan_qr_camera_error">Kameros klaida</string>
@@ -417,7 +417,7 @@
     <string name="permission_recipients_already_added">Jau pridėta</string>
     <string name="permission_recipients_user_or_group_not_found">Vartotojas ar grupė nerasta</string>
     <string name="permission_deletion_dialog_message">Šis slaptažodis nebebus bendrinamas su šiuo vartotoju.</string>
-    <string name="main_update_downloaded">Passbolt atnaujinimas ką tik buvo atsisiųstas</string>
+    <string name="main_update_downloaded">Passly atnaujinimas ką tik buvo atsisiųstas</string>
     <string name="main_update_download_in_progress">Atsisiunčiama fone. Pranešime jus, kai atsisiuntimas bus baigtas.</string>
     <string name="main_update_downloaded_install">Instaliuoti</string>
     <string name="dialog_encryption_error_title">Įvyko šifravimo klaida</string>
@@ -560,10 +560,10 @@
     </string-array>
     <string-array name="dialog_encourage_autofill_setup_steps">
         <item>&lt;b&gt;Įjunkite automatinį pildymą&lt;/b&gt; nustatymus</item>
-        <item>Pasirinkite &lt;b&gt;Passbolt!&lt;/b&gt;</item>
+        <item>Pasirinkite &lt;b&gt;Passly!&lt;/b&gt;</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
-        <item>Įsitikinkite, kad Passbolt natūralus automatinis pildymas yra įjungtas Android OS nustatymuose</item>
+        <item>Įsitikinkite, kad Passly natūralus automatinis pildymas yra įjungtas Android OS nustatymuose</item>
         <item>Eikite į &lt;b&gt;Chrome nustatymus&lt;/b&gt; ir pasirinkite &lt;b&gt;Autofill services&lt;/b&gt;</item>
         <item>Pasirinkite &lt;b&gt;Autofill using another service&lt;/b&gt;</item>
     </string-array>

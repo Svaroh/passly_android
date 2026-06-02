@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Passbolt</string>
+    <string name="app_name">Passly</string>
     <string name="ok">OK</string>
     <string name="cancel">Avbryt</string>
     <string name="settings">Inställningar</string>
@@ -106,7 +106,7 @@
     <string name="help_menu_import_profile_manually">Importera ditt konto manuellt</string>
     <string name="help_menu_import_account_kit">Importera ditt kontopaket</string>
     <string name="logs_share_title">Dela loggar</string>
-    <string name="logs_share_email_title">Passbolt-loggar</string>
+    <string name="logs_share_email_title">Passly-loggar</string>
     <string name="logs_share_email">contact@passbolt.com</string>
     <string name="root_warning_title">Enheten kan vara rootad</string>
     <string name="root_warning_message">Vi misstänker att din enhet kan vara rootad. Detta minskar enhetens säkerhet och kan utnyttjas illvilligt för att få tillgång till dina lösenord.</string>
@@ -178,7 +178,7 @@
 Kontakta din administratör för mer information.</string>
     <string name="dialog_unable_to_generate_password_title">Kunde inte generera ett starkt lösenord</string>
     <string name="dialog_unable_to_generate_password_message">Lösenordsgeneratorn genererar inte tillräckligt starkt lösenord. Minst %d bitar krävs</string>
-    <string name="autofill_service_name">Passbolt Autofyll</string>
+    <string name="autofill_service_name">Passly Autofyll</string>
     <string name="dialog_encourage_autofill_header">Logga in i dina favoritappar på 3 sekunder!</string>
     <string name="dialog_autofill_header">Autofyll</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">Samsung</string>
@@ -187,10 +187,10 @@ Kontakta din administratör för mer information.</string>
     <string name="dialog_encourage_autofill_accessibility_other">Annat</string>
     <string name="dialog_encourage_autofill_go_to_settings">Gå till inställningar</string>
     <string name="dialog_encourage_autofill_service_header">Aktivera autofyll för de flesta appar</string>
-    <string name="dialog_encourage_autofill_service_description">I Android-inställningarna, välj Passbolt, slå på växlingen och tryck på OK.
+    <string name="dialog_encourage_autofill_service_description">I Android-inställningarna, välj Passly, slå på växlingen och tryck på OK.
 Eller läs den specifika guiden för din enhet:</string>
     <string name="dialog_encourage_autofill_overlay_header">Aktivera overlay-behörighet</string>
-    <string name="dialog_encourage_autofill_overlay_description">I Android-inställningarna, aktivera behörigheten ”Rita över andra appar” för Passbolt Autofyll,
+    <string name="dialog_encourage_autofill_overlay_description">I Android-inställningarna, aktivera behörigheten ”Rita över andra appar” för Passly Autofyll,
 eller läs den specifika guiden för din enhet:</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_title">Autofyll stöds inte</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_message">Autofyll stöds inte på den här enheten.</string>
@@ -198,23 +198,23 @@ eller läs den specifika guiden för din enhet:</string>
     <string name="dialog_encourage_chrome_autofill_go_to_settings">Gå till Chrome-inställningarna</string>
     <string name="dialog_autofill_enabled_go_to_app">Gå till appen</string>
     <string name="dialog_autofill_enabled_got_it">Uppfattat!</string>
-    <string name="dialog_autofill_enabled_title">Passbolt Autofyll är aktiverat!</string>
-    <string name="dialog_autofill_accessibility_service_description">Passbolt autofyll baserad på Tillgänglighetstjänsten.</string>
+    <string name="dialog_autofill_enabled_title">Passly Autofyll är aktiverat!</string>
+    <string name="dialog_autofill_accessibility_service_description">Passly autofyll baserad på Tillgänglighetstjänsten.</string>
     <string name="dialog_autofill_enabled_message">När du har fyllt i ett formulär, tryck bara på inmatningsfältet så kommer
-den aktiverade autofyll-funktionen att föreslå att fylla i dina tidigare tillagda inloggningsuppgifter i Passbolt-appen.</string>
+den aktiverade autofyll-funktionen att föreslå att fylla i dina tidigare tillagda inloggningsuppgifter i Passly-appen.</string>
     <string name="autofill_title">Välj lösenord</string>
     <string name="autofill_error">Ett fel uppstod vid autofyll</string>
     <string name="autofill_select_password">Välj lösenord</string>
-    <string name="autofill_service_channel_name">Passbolt autofyll-tjänster</string>
-    <string name="data_sync_service_channel_name">Passbolt datasynkroniseringstjänst</string>
-    <string name="autofill_service_title">Passbolt</string>
+    <string name="autofill_service_channel_name">Passly autofyll-tjänster</string>
+    <string name="data_sync_service_channel_name">Passly datasynkroniseringstjänst</string>
+    <string name="autofill_service_title">Passly</string>
     <string name="autofill_service_content">Autofyll via Tillgänglighetstjänst är aktiverad</string>
     <string name="data_sync_service_content">Uppdaterar resurser</string>
     <string name="autofill_service_enable_overlay">Aktivera overlay-behörighet</string>
-    <string name="autofill_service_overlay_description"><![CDATA[Autofyll användarnamn och lösenord i Androids webbläsare. Vänligen aktivera behörigheten ”Rita över andra appar” för Passbolt Autofyll]]></string>
+    <string name="autofill_service_overlay_description"><![CDATA[Autofyll användarnamn och lösenord i Androids webbläsare. Vänligen aktivera behörigheten ”Rita över andra appar” för Passly Autofyll]]></string>
     <string name="autofill_service_enable_service">Aktivera autofyll för de flesta appar</string>
-    <string name="autofill_dropdown_select">Välj från Passbolt</string>
-    <string name="autofill_dropdown_fill">Fyll i med Passbolt</string>
+    <string name="autofill_dropdown_select">Välj från Passly</string>
+    <string name="autofill_dropdown_fill">Fyll i med Passly</string>
     <string name="autofill_resources_create">Skapa&amp;fyll i</string>
     <string name="home_empty_list">Tom lista</string>
     <string name="home_create">Skapa</string>
@@ -375,13 +375,13 @@ den aktiverade autofyll-funktionen att föreslå att fylla i dina tidigare tilla
     <string name="transfer_details_camera_access_dialog_title">Kamerabehörighet krävs</string>
     <string name="transfer_details_camera_required_dialog_title">Kamera krävs</string>
     <string name="transfer_details_camera_required_dialog_message">Tyvärr behöver du en enhet med kamera för att fortsätta, eftersom nyckelöverföringen sker med QR-koder.</string>
-    <string name="transfer_details_camera_access_dialog_message">Ge Passbolt-programmet behörighet att använda kameran i dina inställningar.</string>
+    <string name="transfer_details_camera_access_dialog_message">Ge Passly-programmet behörighet att använda kameran i dina inställningar.</string>
     <string name="scan_qr_exit_confirmation_dialog_message">Om du lämnar måste du skanna QR-koder igen.</string>
     <string name="scan_qr_exit_information_dialog_message">Du kommer att se en sekvens av QR-koder. Vi skannar dessa koder tills förloppsindikatorn är full. Sedan kan du logga in!</string>
     <string name="scan_qr_exit_information_dialog_title">Skannar QR-koder</string>
     <string name="scan_qr_keep_going">Skannar QR-koder</string>
     <string name="scan_qr_aim_at_qr_code">Rikta kameran mot QR-koden</string>
-    <string name="scan_qr_not_a_passbolt_qr">Det är inte en Passbolt-QR. Försök igen!</string>
+    <string name="scan_qr_not_a_passbolt_qr">Det är inte en Passly-QR. Försök igen!</string>
     <string name="scan_qr_multiple_codes_in_range">Flera QR-koder i sikte - rikta mot en</string>
     <string name="scan_qr_scanning_error">Fel vid skanning</string>
     <string name="scan_qr_camera_error">Kamerafel</string>
@@ -418,7 +418,7 @@ den aktiverade autofyll-funktionen att föreslå att fylla i dina tidigare tilla
     <string name="permission_recipients_already_added">Redan tillagd</string>
     <string name="permission_recipients_user_or_group_not_found">Användare eller grupp hittades inte</string>
     <string name="permission_deletion_dialog_message">Lösenordet kommer inte längre att delas med den här användaren.</string>
-    <string name="main_update_downloaded">Passbolt-uppdatering har just laddats ner</string>
+    <string name="main_update_downloaded">Passly-uppdatering har just laddats ner</string>
     <string name="main_update_download_in_progress">Hämtar i bakgrunden. Vi meddelar dig när hämtningen är klar.</string>
     <string name="main_update_downloaded_install">Installera</string>
     <string name="dialog_encryption_error_title">Ett krypteringsfel uppstod</string>
@@ -561,10 +561,10 @@ den aktiverade autofyll-funktionen att föreslå att fylla i dina tidigare tilla
     </string-array>
     <string-array name="dialog_encourage_autofill_setup_steps">
         <item>&lt;b&gt;Aktivera Autofyll&lt;/b&gt;-inställningar</item>
-        <item>Välj &lt;b&gt;Passbolt!&lt;/b&gt;</item>
+        <item>Välj &lt;b&gt;Passly!&lt;/b&gt;</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
-        <item>Se till att Passbolt inbyggda autofyll är aktiverat i Android-inställningarna</item>
+        <item>Se till att Passly inbyggda autofyll är aktiverat i Android-inställningarna</item>
         <item>Gå till &lt;b&gt;Chrome-inställningarna&lt;/b&gt; och välj &lt;b&gt;Autofyll-tjänster&lt;/b&gt;</item>
         <item>Välj &lt;b&gt;Autofyll med en annan tjänst&lt;/b&gt;</item>
     </string-array>

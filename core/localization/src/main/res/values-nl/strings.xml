@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Passbolt</string>
+    <string name="app_name">Passly</string>
     <string name="ok">Ok</string>
     <string name="cancel">Annuleren</string>
     <string name="settings">Instellingen</string>
@@ -106,7 +106,7 @@
     <string name="help_menu_import_profile_manually">Importeer je account handmatig</string>
     <string name="help_menu_import_account_kit">Importeer je accountkit</string>
     <string name="logs_share_title">Logs delen</string>
-    <string name="logs_share_email_title">Passbolt-logs</string>
+    <string name="logs_share_email_title">Passly-logs</string>
     <string name="logs_share_email">contact@passbolt.com</string>
     <string name="root_warning_title">Apparaat kan geroot zijn</string>
     <string name="root_warning_message">We vermoeden dat je apparaat is geroot. Wees ervan bewust dat dit de algehele veiligheid vermindert en kwaadwillig kan worden gebruikt om je wachtwoorden te bemachtigen.</string>
@@ -178,7 +178,7 @@
  Neem contact op met uw beheerder voor meer informatie.</string>
     <string name="dialog_unable_to_generate_password_title">Kan geen sterk wachtwoord genereren</string>
     <string name="dialog_unable_to_generate_password_message">De wachtwoordgenerator genereert geen sterk genoeg wachtwoord. Er is minimaal %d bits vereist</string>
-    <string name="autofill_service_name">Passbolt Automatisch invullen</string>
+    <string name="autofill_service_name">Passly Automatisch invullen</string>
     <string name="dialog_encourage_autofill_header">Log in bij je favoriete apps in 3 seconden!</string>
     <string name="dialog_autofill_header">Auto-aanvullen</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">Samsung</string>
@@ -187,10 +187,10 @@
     <string name="dialog_encourage_autofill_accessibility_other">Overig</string>
     <string name="dialog_encourage_autofill_go_to_settings">Ga naar de instellingen</string>
     <string name="dialog_encourage_autofill_service_header">Schakel auto-aanvullen in voor de meeste apps</string>
-    <string name="dialog_encourage_autofill_service_description">Selecteer in het Android-instellingsscherm Passbolt, schakel de schakelaar in en druk op OK.
+    <string name="dialog_encourage_autofill_service_description">Selecteer in het Android-instellingsscherm Passly, schakel de schakelaar in en druk op OK.
     Of bekijk de specifieke gids voor je apparaat:</string>
     <string name="dialog_encourage_autofill_overlay_header">Wijs overlay-machtiging toe</string>
-    <string name="dialog_encourage_autofill_overlay_description">Schakel in het Android-instellingsscherm de machtiging \'Over andere apps weergeven\' voor Passbolt Autofill in,
+    <string name="dialog_encourage_autofill_overlay_description">Schakel in het Android-instellingsscherm de machtiging \'Over andere apps weergeven\' voor Passly Autofill in,
     of bekijk de specifieke gids voor je apparaat:</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_title">Auto-aanvullen niet ondersteund</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_message">Auto-aanvullen wordt niet ondersteund op dit apparaat.</string>
@@ -198,23 +198,23 @@
     <string name="dialog_encourage_chrome_autofill_go_to_settings">Ga naar Chrome-instellingen</string>
     <string name="dialog_autofill_enabled_go_to_app">Ga naar de app</string>
     <string name="dialog_autofill_enabled_got_it">Begrepen!</string>
-    <string name="dialog_autofill_enabled_title">Passbolt Auto-aanvullen ingeschakeld!</string>
-    <string name="dialog_autofill_accessibility_service_description">Passbolt auto-aanvullen op basis van toegankelijkheidsservice.</string>
+    <string name="dialog_autofill_enabled_title">Passly Auto-aanvullen ingeschakeld!</string>
+    <string name="dialog_autofill_accessibility_service_description">Passly auto-aanvullen op basis van toegankelijkheidsservice.</string>
     <string name="dialog_autofill_enabled_message">Zodra je een formulier hebt ingevuld, tik je gewoon op het invoerveld en de
-        Autofill die je hebt ingeschakeld zal voorstellen het in te vullen met de inloggegevens die je al in de Passbolt-app hebt toegevoegd.</string>
+        Autofill die je hebt ingeschakeld zal voorstellen het in te vullen met de inloggegevens die je al in de Passly-app hebt toegevoegd.</string>
     <string name="autofill_title">Selecteer wachtwoord</string>
     <string name="autofill_error">Er is een fout opgetreden bij auto-aanvullen</string>
     <string name="autofill_select_password">Selecteer wachtwoord</string>
-    <string name="autofill_service_channel_name">Passbolt auto-aanvulservices</string>
-    <string name="data_sync_service_channel_name">Passbolt-gegevenssynchronisatieservice</string>
-    <string name="autofill_service_title">Passbolt</string>
+    <string name="autofill_service_channel_name">Passly auto-aanvulservices</string>
+    <string name="data_sync_service_channel_name">Passly-gegevenssynchronisatieservice</string>
+    <string name="autofill_service_title">Passly</string>
     <string name="autofill_service_content">Toegankelijkheid auto-aanvullen service ingeschakeld</string>
     <string name="data_sync_service_content">Resources verversen</string>
     <string name="autofill_service_enable_overlay">Machtiging overlay inschakelen</string>
-    <string name="autofill_service_overlay_description"><![CDATA[Auto-aanvullen van gebruikersnamen en wachtwoorden voor Android-browsers. Schakel svp \'Over andere apps weergeven\' in voor Passbolt Autofill]]></string>
+    <string name="autofill_service_overlay_description"><![CDATA[Auto-aanvullen van gebruikersnamen en wachtwoorden voor Android-browsers. Schakel svp \'Over andere apps weergeven\' in voor Passly Autofill]]></string>
     <string name="autofill_service_enable_service">Auto-aanvullen inschakelen voor de meeste apps</string>
-    <string name="autofill_dropdown_select">Selecteer uit Passbolt</string>
-    <string name="autofill_dropdown_fill">Invullen met Passbolt</string>
+    <string name="autofill_dropdown_select">Selecteer uit Passly</string>
+    <string name="autofill_dropdown_fill">Invullen met Passly</string>
     <string name="autofill_resources_create">Aanmaken&amp;invullen</string>
     <string name="home_empty_list">Lege lijst</string>
     <string name="home_create">Aanmaken</string>
@@ -375,13 +375,13 @@
     <string name="transfer_details_camera_access_dialog_title">Cameratoegang vereist</string>
     <string name="transfer_details_camera_required_dialog_title">Camera vereist</string>
     <string name="transfer_details_camera_required_dialog_message">Sorry, je hebt een apparaat met camera nodig om door te gaan, omdat de sleuteloverdracht gebeurt met QR-codes.</string>
-    <string name="transfer_details_camera_access_dialog_message">Geef de Passbolt-app toestemming om de camera te gebruiken in je instellingen.</string>
+    <string name="transfer_details_camera_access_dialog_message">Geef de Passly-app toestemming om de camera te gebruiken in je instellingen.</string>
     <string name="scan_qr_exit_confirmation_dialog_message">Als je weggaat, moet je opnieuw QR-codes scannen.</string>
     <string name="scan_qr_exit_information_dialog_message">Je ziet een reeks QR-codes. We scannen deze codes totdat de voortgangsbalk vol is. Dan kun je inloggen!</string>
     <string name="scan_qr_exit_information_dialog_title">QR-codes scannen</string>
     <string name="scan_qr_keep_going">QR-codes scannen</string>
     <string name="scan_qr_aim_at_qr_code">Richt de camera op de QR-code</string>
-    <string name="scan_qr_not_a_passbolt_qr">Dit is niet de Passbolt-QR. Probeer het opnieuw!</string>
+    <string name="scan_qr_not_a_passbolt_qr">Dit is niet de Passly-QR. Probeer het opnieuw!</string>
     <string name="scan_qr_multiple_codes_in_range">Meerdere QR-codes in beeld - richt op één</string>
     <string name="scan_qr_scanning_error">Fout tijdens scannen</string>
     <string name="scan_qr_camera_error">Camerafout</string>
@@ -418,7 +418,7 @@
     <string name="permission_recipients_already_added">Al toegevoegd</string>
     <string name="permission_recipients_user_or_group_not_found">Gebruiker of groep niet gevonden</string>
     <string name="permission_deletion_dialog_message">Het wachtwoord wordt niet langer met deze gebruiker gedeeld.</string>
-    <string name="main_update_downloaded">Passbolt-update is zojuist gedownload</string>
+    <string name="main_update_downloaded">Passly-update is zojuist gedownload</string>
     <string name="main_update_download_in_progress">Downloaden op de achtergrond. We laten het je weten zodra de download klaar is.</string>
     <string name="main_update_downloaded_install">Installeren</string>
     <string name="dialog_encryption_error_title">Er is een versleutelingsfout opgetreden</string>
@@ -561,10 +561,10 @@
     </string-array>
     <string-array name="dialog_encourage_autofill_setup_steps">
         <item>&lt;b&gt;Schakel Autofill in&lt;/b&gt; instellingen</item>
-        <item>Kies &lt;b&gt;Passbolt!&lt;/b&gt;;</item>
+        <item>Kies &lt;b&gt;Passly!&lt;/b&gt;;</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
-        <item>Zorg ervoor dat Passbolt native auto-aanvullen is ingeschakeld in de Android OS-instellingen</item>
+        <item>Zorg ervoor dat Passly native auto-aanvullen is ingeschakeld in de Android OS-instellingen</item>
         <item>Ga naar &lt;b&gt;Chrome-instellingen&lt;/b&gt; en selecteer &lt;b&gt;Autofill-services&lt;/b&gt;;</item>
         <item>Kies &lt;b&gt;Auto-aanvullen met een andere service&lt;/b&gt;;</item>
     </string-array>

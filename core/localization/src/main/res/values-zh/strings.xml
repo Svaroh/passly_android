@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Passbolt</string>
+    <string name="app_name">Passly</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="settings">设置</string>
@@ -106,7 +106,7 @@
     <string name="help_menu_import_profile_manually">手动导入您的帐户</string>
     <string name="help_menu_import_account_kit">导入您的账户</string>
     <string name="logs_share_title">分享日志</string>
-    <string name="logs_share_email_title">Passbolt日志</string>
+    <string name="logs_share_email_title">Passly日志</string>
     <string name="logs_share_email">contact@passbolt.com</string>
     <string name="root_warning_title">设备可能已root</string>
     <string name="root_warning_message">我们怀疑您的设备可能已经root过。请注意，这会降低设备的整体安全性，并可能被恶意利用从而获取您的密码</string>
@@ -178,7 +178,7 @@
     请联系您的管理员获取更多信息。</string>
     <string name="dialog_unable_to_generate_password_title">无法生成强密码</string>
     <string name="dialog_unable_to_generate_password_message">密码生成器不能生成足够强度的密码。需要至少%d位。</string>
-    <string name="autofill_service_name">Passbolt 自动填充</string>
+    <string name="autofill_service_name">Passly 自动填充</string>
     <string name="dialog_encourage_autofill_header">在 3 秒内登录您最喜欢的应用！</string>
     <string name="dialog_autofill_header">自动填充</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">三星</string>
@@ -198,23 +198,23 @@
     <string name="dialog_encourage_chrome_autofill_go_to_settings">前往 Chrome设置</string>
     <string name="dialog_autofill_enabled_go_to_app">转到应用</string>
     <string name="dialog_autofill_enabled_got_it">明白了！</string>
-    <string name="dialog_autofill_enabled_title">Passbolt 密码自动填充已启用！</string>
+    <string name="dialog_autofill_enabled_title">Passly 密码自动填充已启用！</string>
     <string name="dialog_autofill_accessibility_service_description">基于辅助功能服务的密码自动填充。</string>
     <string name="dialog_autofill_enabled_message">一旦您填写了表单， 只需点击条目字段，您启用的
         自动填充将建议您从您已经添加到密码应用程序的登录凭据中填写它。</string>
     <string name="autofill_title">选择密码记录</string>
     <string name="autofill_error">自动填充错误</string>
     <string name="autofill_select_password">选择密码记录</string>
-    <string name="autofill_service_channel_name">Passbolt 密码自动填充服务</string>
-    <string name="data_sync_service_channel_name">Passbolt data sync service</string>
-    <string name="autofill_service_title">Passbolt</string>
+    <string name="autofill_service_channel_name">Passly 密码自动填充服务</string>
+    <string name="data_sync_service_channel_name">Passly data sync service</string>
+    <string name="autofill_service_title">Passly</string>
     <string name="autofill_service_content">辅助功能自动填充服务已启用</string>
     <string name="data_sync_service_content">Refreshing resources</string>
     <string name="autofill_service_enable_overlay">启用覆盖权限</string>
     <string name="autofill_service_overlay_description"><![CDATA[Android 网络浏览器的自动填充用户名和密码。请启用“在其他应用上绘制”权限以便自动填充密码]]></string>
     <string name="autofill_service_enable_service">对大多数应用启用自动填充</string>
-    <string name="autofill_dropdown_select">从 Passbolt 中选择密码记录</string>
-    <string name="autofill_dropdown_fill">用 Passbolt 的密码记录填充</string>
+    <string name="autofill_dropdown_select">从 Passly 中选择密码记录</string>
+    <string name="autofill_dropdown_fill">用 Passly 的密码记录填充</string>
     <string name="autofill_resources_create">创建&amp;填充</string>
     <string name="home_empty_list">空列表</string>
     <string name="home_create">创建</string>
@@ -375,13 +375,13 @@
     <string name="transfer_details_camera_access_dialog_title">需要相机访问权限</string>
     <string name="transfer_details_camera_required_dialog_title">需要摄像头权限</string>
     <string name="transfer_details_camera_required_dialog_message">抱歉，您需要一个拥有相机的设备才能继续，因为密钥传输是使用二维码进行的。</string>
-    <string name="transfer_details_camera_access_dialog_message">请在您的设置中为Passbolt提供访问相机的权限。</string>
+    <string name="transfer_details_camera_access_dialog_message">请在您的设置中为Passly提供访问相机的权限。</string>
     <string name="scan_qr_exit_confirmation_dialog_message">如果您离开，您需要再次扫描二维码。</string>
     <string name="scan_qr_exit_information_dialog_message">你会看到一系列二维码。我们会扫描这些二维码，直到进度条满格。届时你就可以登录啦！</string>
     <string name="scan_qr_exit_information_dialog_title">扫描二维码</string>
     <string name="scan_qr_keep_going">扫描二维码</string>
     <string name="scan_qr_aim_at_qr_code">将摄像头对准二维码</string>
-    <string name="scan_qr_not_a_passbolt_qr">这不是 Passbolt 二维码，请重试！</string>
+    <string name="scan_qr_not_a_passbolt_qr">这不是 Passly 二维码，请重试！</string>
     <string name="scan_qr_multiple_codes_in_range">有多个二维码在范围内，请瞄准其中一个。</string>
     <string name="scan_qr_scanning_error">扫描二维码时出现错误</string>
     <string name="scan_qr_camera_error">摄像头错误</string>
@@ -418,7 +418,7 @@
     <string name="permission_recipients_already_added">已被添加</string>
     <string name="permission_recipients_user_or_group_not_found">用户或组不存在</string>
     <string name="permission_deletion_dialog_message">密码将不再与该用户共享。</string>
-    <string name="main_update_downloaded">Passbolt刚刚下载了更新</string>
+    <string name="main_update_downloaded">Passly刚刚下载了更新</string>
     <string name="main_update_download_in_progress">下载将在后台进行。下载完毕后，我们将会通知您。</string>
     <string name="main_update_downloaded_install">安装</string>
     <string name="dialog_encryption_error_title">加密出错</string>
@@ -561,10 +561,10 @@
     </string-array>
     <string-array name="dialog_encourage_autofill_setup_steps">
         <item>&lt;b&gt;打开自动填充&lt;/b&gt; 设置</item>
-        <item>选择 &lt;b&gt;Passbolt!&lt;/b&gt;</item>
+        <item>选择 &lt;b&gt;Passly!&lt;/b&gt;</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
-        <item>请确保在安卓系统设置中已启用 Passbolt 的原生自动填充功能</item>
+        <item>请确保在安卓系统设置中已启用 Passly 的原生自动填充功能</item>
         <item>前往<b>Chrome 设置</b>并选择<b>自动填充服务</b></item>
         <item>选择&lt;b&gt;使用其他服务进行自动填充&lt;/b&gt;</item>
     </string-array>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Passbolt</string>
+    <string name="app_name">Passly</string>
     <string name="ok">OK</string>
     <string name="cancel">Anuluj</string>
     <string name="settings">Ustawienia</string>
@@ -106,7 +106,7 @@
     <string name="help_menu_import_profile_manually">Zaimportuj swoje konto ręcznie</string>
     <string name="help_menu_import_account_kit">Importowanie pakietu konta</string>
     <string name="logs_share_title">Udostępnij rejestry</string>
-    <string name="logs_share_email_title">Rejestry Passbolt</string>
+    <string name="logs_share_email_title">Rejestry Passly</string>
     <string name="logs_share_email">contact@passbolt.com</string>
     <string name="root_warning_title">Urządzenie może być zrootowane</string>
     <string name="root_warning_message">Podejrzewamy, że Twoje urządzenie może być zrootowane. Pamiętaj, że obniża to ogólne bezpieczeństwo urządzenia i może być wykorzystane w złośliwy sposób do pozyskania Twoich haseł.</string>
@@ -178,7 +178,7 @@
     Skontaktuj się z administratorem, aby uzyskać więcej informacji.</string>
     <string name="dialog_unable_to_generate_password_title">Nie udało się wygenerować silnego hasła</string>
     <string name="dialog_unable_to_generate_password_message">Generator haseł nie wygeneruje wystarczająco silnego hasła. Wymagane jest przynajmniej %d bitów</string>
-    <string name="autofill_service_name">Passbolt</string>
+    <string name="autofill_service_name">Passly</string>
     <string name="dialog_encourage_autofill_header">Zaloguj się do ulubionych aplikacji w 3 sekundy!</string>
     <string name="dialog_autofill_header">Autouzupełnianie</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">Samsung</string>
@@ -187,10 +187,10 @@
     <string name="dialog_encourage_autofill_accessibility_other">Inne</string>
     <string name="dialog_encourage_autofill_go_to_settings">Przejdź do ustawień</string>
     <string name="dialog_encourage_autofill_service_header">Włącz autouzupełnianie dla większości aplikacji</string>
-    <string name="dialog_encourage_autofill_service_description">Przejdź do ekranu ustawień Androida, wybierz Passbolt, włącz przełącznik i wciśnij OK.
+    <string name="dialog_encourage_autofill_service_description">Przejdź do ekranu ustawień Androida, wybierz Passly, włącz przełącznik i wciśnij OK.
     Możesz też sprawdzić szczegółowy poradnik dla Twojego urządzenia:</string>
     <string name="dialog_encourage_autofill_overlay_header">Włącz uprawnienia nakładki</string>
-    <string name="dialog_encourage_autofill_overlay_description">Przejdź do ekranu ustawień Androida i włącz uprawnienie \"Nadpisuj inne aplikacje\" dla funkcji Autouzupełnianie Passbolt.
+    <string name="dialog_encourage_autofill_overlay_description">Przejdź do ekranu ustawień Androida i włącz uprawnienie \"Nadpisuj inne aplikacje\" dla funkcji Autouzupełnianie Passly.
     Możesz też sprawdzić szczegółowy poradnik dla Twojego urządzenia:</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_title">Autouzupełnianie nie jest obsługiwane</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_message">Autouzupełnianie nie jest obsługiwane na tym urządzeniu.</string>
@@ -198,23 +198,23 @@
     <string name="dialog_encourage_chrome_autofill_go_to_settings">Przejdź do ustawień Chrome</string>
     <string name="dialog_autofill_enabled_go_to_app">Przejdź do aplikacji</string>
     <string name="dialog_autofill_enabled_got_it">Rozumiem!</string>
-    <string name="dialog_autofill_enabled_title">Włączono autouzupełnianie Passbolt!</string>
-    <string name="dialog_autofill_accessibility_service_description">Autouzupełnianie Passbolt na podstawie usługi Ułatwień dostępu.</string>
+    <string name="dialog_autofill_enabled_title">Włączono autouzupełnianie Passly!</string>
+    <string name="dialog_autofill_accessibility_service_description">Autouzupełnianie Passly na podstawie usługi Ułatwień dostępu.</string>
     <string name="dialog_autofill_enabled_message">Po wypełnieniu formularza dotknij pole do wypełnienia,
-        a włączone Autouzupełnianie zasugeruje wypełnienie pola danymi logowania, które wcześniej dodałeś/łaś w aplikacji Passbolt.</string>
+        a włączone Autouzupełnianie zasugeruje wypełnienie pola danymi logowania, które wcześniej dodałeś/łaś w aplikacji Passly.</string>
     <string name="autofill_title">Wybierz hasło</string>
     <string name="autofill_error">Wystąpił błąd autouzupełniania</string>
     <string name="autofill_select_password">Wybierz hasło</string>
-    <string name="autofill_service_channel_name">Usługi autouzupełniania Passbolt</string>
-    <string name="data_sync_service_channel_name">Usługa synchronizacji danych Passbolt</string>
-    <string name="autofill_service_title">Passbolt</string>
+    <string name="autofill_service_channel_name">Usługi autouzupełniania Passly</string>
+    <string name="data_sync_service_channel_name">Usługa synchronizacji danych Passly</string>
+    <string name="autofill_service_title">Passly</string>
     <string name="autofill_service_content">Włączono usługę autouzupełniania ułatwień dostępu</string>
     <string name="data_sync_service_content">Odświeżanie zasobów</string>
     <string name="autofill_service_enable_overlay">Włącz uprawnienia nakładki</string>
-    <string name="autofill_service_overlay_description"><![CDATA[Automatycznie uzupełniaj nazwy użytkownika i hasła w przeglądarkach Androida. Włącz uprawnienie "Nadpisuj inne aplikacje" dla funkcji Autouzupełnianie Passbolt]]></string>
+    <string name="autofill_service_overlay_description"><![CDATA[Automatycznie uzupełniaj nazwy użytkownika i hasła w przeglądarkach Androida. Włącz uprawnienie "Nadpisuj inne aplikacje" dla funkcji Autouzupełnianie Passly]]></string>
     <string name="autofill_service_enable_service">Włącz autouzupełnianie dla większości aplikacji</string>
-    <string name="autofill_dropdown_select">Wybierz z Passbolt</string>
-    <string name="autofill_dropdown_fill">Uzupełnij z Passbolt</string>
+    <string name="autofill_dropdown_select">Wybierz z Passly</string>
+    <string name="autofill_dropdown_fill">Uzupełnij z Passly</string>
     <string name="autofill_resources_create">Stwórz&amp;uzupełnij</string>
     <string name="home_empty_list">Pusta lista</string>
     <string name="home_create">Stwórz</string>
@@ -375,13 +375,13 @@
     <string name="transfer_details_camera_access_dialog_title">Wymagany dostęp do kamery</string>
     <string name="transfer_details_camera_required_dialog_title">Wymagana kamera</string>
     <string name="transfer_details_camera_required_dialog_message">Przepraszamy, potrzebujesz urządzenia z kamerą, aby kontynuować, ponieważ transfer klucza odbywa się za pomocą kodów QR.</string>
-    <string name="transfer_details_camera_access_dialog_message">Nadaj uprawnienia aplikacji Passbolt, aby uzyskać w ustawieniach dostęp do kamery.</string>
+    <string name="transfer_details_camera_access_dialog_message">Nadaj uprawnienia aplikacji Passly, aby uzyskać w ustawieniach dostęp do kamery.</string>
     <string name="scan_qr_exit_confirmation_dialog_message">Jeżeli porzucisz ten proces, poprosimy Cię o ponowne zeskanowanie kodów QR.</string>
     <string name="scan_qr_exit_information_dialog_message">Za chwilę zobaczysz sekwencję kodów QR. Będziemy skanować te kody, póki pasek postępu nie zapełni się. Dopiero wtedy się zalogujesz!</string>
     <string name="scan_qr_exit_information_dialog_title">Skanowanie kodów QR</string>
     <string name="scan_qr_keep_going">Skanowanie kodów QR</string>
     <string name="scan_qr_aim_at_qr_code">Skieruj kamerę na kod QR</string>
-    <string name="scan_qr_not_a_passbolt_qr">To nie jest kod QR z usługi Passbolt. Spróbuj jeszcze raz!</string>
+    <string name="scan_qr_not_a_passbolt_qr">To nie jest kod QR z usługi Passly. Spróbuj jeszcze raz!</string>
     <string name="scan_qr_multiple_codes_in_range">Wykryliśmy kilka kodów QR - zeskanuj tylko jeden</string>
     <string name="scan_qr_scanning_error">Błąd podczas skanowania</string>
     <string name="scan_qr_camera_error">Błąd kamery</string>
@@ -418,7 +418,7 @@
     <string name="permission_recipients_already_added">Już dodany</string>
     <string name="permission_recipients_user_or_group_not_found">Użytkownik lub grupa nie została znaleziona</string>
     <string name="permission_deletion_dialog_message">Hasło nie będzie już udostępniane temu użytkownikowi.</string>
-    <string name="main_update_downloaded">Pobrano aktualizację do Passbolt</string>
+    <string name="main_update_downloaded">Pobrano aktualizację do Passly</string>
     <string name="main_update_download_in_progress">Pobieranie w tle. Damy Ci znać, gdy plik zostanie pobrany.</string>
     <string name="main_update_downloaded_install">Instaluj</string>
     <string name="dialog_encryption_error_title">Wystąpił błąd szyfrowania</string>
@@ -561,10 +561,10 @@
     </string-array>
     <string-array name="dialog_encourage_autofill_setup_steps">
         <item>&lt;b&gt;Włącz ustawienia autouzupełniania&lt;/b&gt;</item>
-        <item>Wybierz &lt;b&gt;Passbolt!&lt;/b&gt;</item>
+        <item>Wybierz &lt;b&gt;Passly!&lt;/b&gt;</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
-        <item>Upewnij się, że natywne autouzupełnianie Passbolt jest włączone w ustawieniach systemu Android</item>
+        <item>Upewnij się, że natywne autouzupełnianie Passly jest włączone w ustawieniach systemu Android</item>
         <item>Przejdź do &lt;b&gt;ustawień Chrome&lt;/b&gt; i wybierz &lt;b&gt;usługi autouzupełniania&lt;/b&gt;;</item>
         <item>Wybierz &lt;b&gt;Autouzupełnianie przy użyciu innej usługi&lt;/b&gt;;</item>
     </string-array>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Passbolt</string>
+    <string name="app_name">Passly</string>
     <string name="ok">OK</string>
     <string name="cancel">Отмена</string>
     <string name="settings">Настройки</string>
@@ -106,7 +106,7 @@
     <string name="help_menu_import_profile_manually">Импортировать аккаунт вручную</string>
     <string name="help_menu_import_account_kit">Импортировать комплект учётной записи</string>
     <string name="logs_share_title">Поделиться журналом</string>
-    <string name="logs_share_email_title">Журнал Passbolt</string>
+    <string name="logs_share_email_title">Журнал Passly</string>
     <string name="logs_share_email">contact@passbolt.com</string>
     <string name="root_warning_title">Возможно, на устройстве был получен рут-доступ</string>
     <string name="root_warning_message">Мы подозреваем, что на устройстве был получен рут-доступ. Имейте в виду, это снижает общий уровень защиты и может быть использовано для кражи ваших паролей.</string>
@@ -178,7 +178,7 @@
 Обратитесь к вашему администратору за дополнительной информацией.</string>
     <string name="dialog_unable_to_generate_password_title">Невозможно сгенерировать надёжный пароль</string>
     <string name="dialog_unable_to_generate_password_message">Генератор парольной фразы не будет генерировать достаточно сложную парольную фразу. Требуется минимум %d бит</string>
-    <string name="autofill_service_name">Passbolt Автозаполнение</string>
+    <string name="autofill_service_name">Passly Автозаполнение</string>
     <string name="dialog_encourage_autofill_header">Войдите в свои любимые приложения за 3 секунды!</string>
     <string name="dialog_autofill_header">Автозаполнение</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">Samsung</string>
@@ -187,10 +187,10 @@
     <string name="dialog_encourage_autofill_accessibility_other">Прочие</string>
     <string name="dialog_encourage_autofill_go_to_settings">Перейти к настройкам</string>
     <string name="dialog_encourage_autofill_service_header">Включить автозаполнение для большинства приложений</string>
-    <string name="dialog_encourage_autofill_service_description">На экране настроек Android выберите Passbolt, включите переключатель и нажмите OK.
+    <string name="dialog_encourage_autofill_service_description">На экране настроек Android выберите Passly, включите переключатель и нажмите OK.
     Или проверьте руководство для вашего устройства:</string>
     <string name="dialog_encourage_autofill_overlay_header">Включить разрешение на наложение</string>
-    <string name="dialog_encourage_autofill_overlay_description">На экране настроек Android включите разрешение «Наложение поверх других окон» для автозаполнения Passbolt,
+    <string name="dialog_encourage_autofill_overlay_description">На экране настроек Android включите разрешение «Наложение поверх других окон» для автозаполнения Passly,
     или проверьте инструкции для вашего устройства:</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_title">Автозаполнение не поддерживается</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_message">Автозаполнение не поддерживается на этом устройстве.</string>
@@ -198,22 +198,22 @@
     <string name="dialog_encourage_chrome_autofill_go_to_settings">Перейти к настройкам Chrome</string>
     <string name="dialog_autofill_enabled_go_to_app">Перейти в приложение</string>
     <string name="dialog_autofill_enabled_got_it">Понятно!</string>
-    <string name="dialog_autofill_enabled_title">Автозаполнение Passbolt включено!</string>
+    <string name="dialog_autofill_enabled_title">Автозаполнение Passly включено!</string>
     <string name="dialog_autofill_accessibility_service_description">Автозаполнение паролей на основе службы специальных возможностей.</string>
-    <string name="dialog_autofill_enabled_message">После того как вы заполнили форму, просто нажмите на поле ввода, и включенное вами автозаполнение предложит заполнить его с помощью учетных данных для входа, которые вы уже добавили в приложение Passbolt.</string>
+    <string name="dialog_autofill_enabled_message">После того как вы заполнили форму, просто нажмите на поле ввода, и включенное вами автозаполнение предложит заполнить его с помощью учетных данных для входа, которые вы уже добавили в приложение Passly.</string>
     <string name="autofill_title">Выберите пароль</string>
     <string name="autofill_error">Произошла ошибка автозаполнения</string>
     <string name="autofill_select_password">Выберите пароль</string>
-    <string name="autofill_service_channel_name">Службы автозаполнения Passbolt</string>
-    <string name="data_sync_service_channel_name">Служба синхронизации данных Passbolt</string>
-    <string name="autofill_service_title">Passbolt</string>
+    <string name="autofill_service_channel_name">Службы автозаполнения Passly</string>
+    <string name="data_sync_service_channel_name">Служба синхронизации данных Passly</string>
+    <string name="autofill_service_title">Passly</string>
     <string name="autofill_service_content">Служба специальных возможностей автозаполнения включена</string>
     <string name="data_sync_service_content">Обновление ресурсов</string>
     <string name="autofill_service_enable_overlay">Включить разрешение на наложение</string>
-    <string name="autofill_service_overlay_description"><![CDATA[Автозаполнение имен пользователей и паролей для браузеров Android. Пожалуйста, включите «Наложение поверх других окон» для автозаполнения Passbolt]]></string>
+    <string name="autofill_service_overlay_description"><![CDATA[Автозаполнение имен пользователей и паролей для браузеров Android. Пожалуйста, включите «Наложение поверх других окон» для автозаполнения Passly]]></string>
     <string name="autofill_service_enable_service">Включить автозаполнение для большинства приложений</string>
-    <string name="autofill_dropdown_select">Выбрать из Passbolt</string>
-    <string name="autofill_dropdown_fill">Заполнить с помощью Passbolt</string>
+    <string name="autofill_dropdown_select">Выбрать из Passly</string>
+    <string name="autofill_dropdown_fill">Заполнить с помощью Passly</string>
     <string name="autofill_resources_create">Создать и заполнить</string>
     <string name="home_empty_list">Пустой список</string>
     <string name="home_create">Создать</string>
@@ -374,13 +374,13 @@
     <string name="transfer_details_camera_access_dialog_title">Требуется доступ к камере</string>
     <string name="transfer_details_camera_required_dialog_title">Требуется камера</string>
     <string name="transfer_details_camera_required_dialog_message">Извините, для продолжения вам нужно устройство с работающей камерой, так как передача ключей осуществляется с помощью QR-кодов.</string>
-    <string name="transfer_details_camera_access_dialog_message">Пожалуйста, предоставьте приложению Passbolt разрешения на доступ к камере в настройках.</string>
+    <string name="transfer_details_camera_access_dialog_message">Пожалуйста, предоставьте приложению Passly разрешения на доступ к камере в настройках.</string>
     <string name="scan_qr_exit_confirmation_dialog_message">После отмены, вам нужно будет сканировать QR-коды заново.</string>
     <string name="scan_qr_exit_information_dialog_message">Вы увидите последовательность QR-кодов. Мы будем сканировать эти коды до тех пор, пока индикатор прогресса не будет заполнен. Затем вы сможете войти в систему!</string>
     <string name="scan_qr_exit_information_dialog_title">Сканирование QR-кодов</string>
     <string name="scan_qr_keep_going">Сканирование QR-кодов</string>
     <string name="scan_qr_aim_at_qr_code">Наведите камеру на QR-код</string>
-    <string name="scan_qr_not_a_passbolt_qr">Это не QR-код Passbolt. Попробуйте еще раз!</string>
+    <string name="scan_qr_not_a_passbolt_qr">Это не QR-код Passly. Попробуйте еще раз!</string>
     <string name="scan_qr_multiple_codes_in_range">Несколько QR-кодов в диапазоне — пожалуйста, наведите камеру на один</string>
     <string name="scan_qr_scanning_error">Ошибка при сканировании</string>
     <string name="scan_qr_camera_error">Ошибка камеры</string>
@@ -417,7 +417,7 @@
     <string name="permission_recipients_already_added">Уже добавлено</string>
     <string name="permission_recipients_user_or_group_not_found">Пользователь или группа не найдены</string>
     <string name="permission_deletion_dialog_message">Пароль больше не будет доступен этому пользователю.</string>
-    <string name="main_update_downloaded">Обновление Passbolt было загружено</string>
+    <string name="main_update_downloaded">Обновление Passly было загружено</string>
     <string name="main_update_download_in_progress">Загрузка в фоновом режиме. Мы уведомим вас о завершении загрузки.</string>
     <string name="main_update_downloaded_install">Установка</string>
     <string name="dialog_encryption_error_title">Произошла ошибка шифрования</string>
@@ -560,7 +560,7 @@
     </string-array>
     <string-array name="dialog_encourage_autofill_setup_steps">
         <item>&lt;b&gt;Включить Автозаполнение&lt;/b&gt; настройки</item>
-        <item>Выберите &lt;b&gt;Passbolt!&lt;/b&gt;</item>
+        <item>Выберите &lt;b&gt;Passly!&lt;/b&gt;</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
         <item>Убедитесь, что нативное автозаполнение Пассболт включено в настройках Android</item>

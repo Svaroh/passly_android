@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Passbolt</string>
+    <string name="app_name">Passly</string>
     <string name="ok">OK</string>
     <string name="cancel">Zrušit</string>
     <string name="settings">Nastavení</string>
@@ -106,7 +106,7 @@
     <string name="help_menu_import_profile_manually">Ručně importovat účet</string>
     <string name="help_menu_import_account_kit">Importovat svůj account kit</string>
     <string name="logs_share_title">Sdílet logy</string>
-    <string name="logs_share_email_title">Logy Passboltu</string>
+    <string name="logs_share_email_title">Logy Passly</string>
     <string name="logs_share_email">contact@passbolt.com</string>
     <string name="root_warning_title">Zařízení může být rootnuté</string>
     <string name="root_warning_message">Máme podezření, že vaše zařízení může být rootnuté. Mějte prosím na paměti, že toto snižuje celkovou bezpečnost zařízení a může být zneužito k získání hesel.</string>
@@ -178,7 +178,7 @@
     Kontaktujte svého správce pro více informací.</string>
     <string name="dialog_unable_to_generate_password_title">Nelze vygenerovat silné heslo</string>
     <string name="dialog_unable_to_generate_password_message">Generátor hesel nevygeneruje dostatečně silné heslo. Je vyžadováno minimum %d bitů.</string>
-    <string name="autofill_service_name">Passbolt Autofill</string>
+    <string name="autofill_service_name">Passly Autofill</string>
     <string name="dialog_encourage_autofill_header">Přihlaste se do oblíbených aplikací během 3 sekund!</string>
     <string name="dialog_autofill_header">Autofill</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">Samsung</string>
@@ -187,10 +187,10 @@
     <string name="dialog_encourage_autofill_accessibility_other">Jiné</string>
     <string name="dialog_encourage_autofill_go_to_settings">Přejít do nastavení</string>
     <string name="dialog_encourage_autofill_service_header">Povolit automatické vyplňování pro většinu aplikací</string>
-    <string name="dialog_encourage_autofill_service_description">Na obrazovce nastavení systému Android vyberte Passbolt, zapněte přepínač a stiskněte tlačítko OK.
+    <string name="dialog_encourage_autofill_service_description">Na obrazovce nastavení systému Android vyberte Passly, zapněte přepínač a stiskněte tlačítko OK.
     Nebo zkontrolujte specifický návod pro vaše zařízení:</string>
     <string name="dialog_encourage_autofill_overlay_header">Povolit oprávnění pro překrytí</string>
-    <string name="dialog_encourage_autofill_overlay_description">Na obrazovce nastavení systému Android povolte oprávnění „Vykreslit přes jiné aplikace“ pro Passbolt Autofill,
+    <string name="dialog_encourage_autofill_overlay_description">Na obrazovce nastavení systému Android povolte oprávnění „Vykreslit přes jiné aplikace“ pro Passly Autofill,
     nebo zkontrolujte konkrétní návod pro vaše zařízení:</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_title">Automatické vyplňování není podporováno</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_message">Automatické vyplňování není na tomto zařízení podporováno.</string>
@@ -198,23 +198,23 @@
     <string name="dialog_encourage_chrome_autofill_go_to_settings">Přejít do nastavení Chrome</string>
     <string name="dialog_autofill_enabled_go_to_app">Přejít do aplikace</string>
     <string name="dialog_autofill_enabled_got_it">Rozumím!</string>
-    <string name="dialog_autofill_enabled_title">Passbolt Automatické vyplňování povoleno!</string>
-    <string name="dialog_autofill_accessibility_service_description">Automatické vyplňování Passbolt na základě služby Přístupnost.</string>
+    <string name="dialog_autofill_enabled_title">Passly Automatické vyplňování povoleno!</string>
+    <string name="dialog_autofill_accessibility_service_description">Automatické vyplňování Passly na základě služby Přístupnost.</string>
     <string name="dialog_autofill_enabled_message">Jakmile vyplníte formulář, jednoduše klepněte na pole záznamu a
-    povolené Automatické vyplňování jej navrhne vyplnit z přihlašovacích údajů, které jste již přidali do aplikace Passbolt.</string>
+    povolené Automatické vyplňování jej navrhne vyplnit z přihlašovacích údajů, které jste již přidali do aplikace Passly.</string>
     <string name="autofill_title">Vyberte heslo</string>
     <string name="autofill_error">Došlo k chybě automatického vyplňování</string>
     <string name="autofill_select_password">Vyberte heslo</string>
-    <string name="autofill_service_channel_name">Passbolt služby automatického vyplňování</string>
-    <string name="data_sync_service_channel_name">Služba synchronizace dat Passbolt</string>
-    <string name="autofill_service_title">Passbolt</string>
+    <string name="autofill_service_channel_name">Passly služby automatického vyplňování</string>
+    <string name="data_sync_service_channel_name">Služba synchronizace dat Passly</string>
+    <string name="autofill_service_title">Passly</string>
     <string name="autofill_service_content">Služba automatického vyplňování povolena</string>
     <string name="data_sync_service_content">Obnovování prostředků</string>
     <string name="autofill_service_enable_overlay">Povolit oprávnění pro překrytí</string>
-    <string name="autofill_service_overlay_description"><![CDATA[Automatické vyplňování uživatelských jmen a hesel pro Android webové prohlížeče. Povolte oprávnění "Vykreslit přes jiné aplikace" pro Passbolt Automatické vyplňování]]></string>
+    <string name="autofill_service_overlay_description"><![CDATA[Automatické vyplňování uživatelských jmen a hesel pro Android webové prohlížeče. Povolte oprávnění "Vykreslit přes jiné aplikace" pro Passly Automatické vyplňování]]></string>
     <string name="autofill_service_enable_service">Povolit automatické vyplňování pro většinu aplikací</string>
-    <string name="autofill_dropdown_select">Vybrat z Passboltu</string>
-    <string name="autofill_dropdown_fill">Vyplnit pomocí Passboltu</string>
+    <string name="autofill_dropdown_select">Vybrat z Passly</string>
+    <string name="autofill_dropdown_fill">Vyplnit pomocí Passly</string>
     <string name="autofill_resources_create">Vytvořit&amp;vyplnit</string>
     <string name="home_empty_list">Prázdný seznam</string>
     <string name="home_create">Vytvořit</string>
@@ -375,13 +375,13 @@
     <string name="transfer_details_camera_access_dialog_title">Je vyžadován přístup k fotoaparátu</string>
     <string name="transfer_details_camera_required_dialog_title">Vyžadován fotoaparát</string>
     <string name="transfer_details_camera_required_dialog_message">Omlouváme se, k pokračování potřebujete zařízení s Fotoaparátem, protože přenos klíčů probíhá pomocí QR kódů.</string>
-    <string name="transfer_details_camera_access_dialog_message">Udělte prosím oprávnění aplikaci Passbolt pro přístup k fotoaparátu v nastavení.</string>
+    <string name="transfer_details_camera_access_dialog_message">Udělte prosím oprávnění aplikaci Passly pro přístup k fotoaparátu v nastavení.</string>
     <string name="scan_qr_exit_confirmation_dialog_message">Pokud odejdete, budete muset znovu načíst QR kódy.</string>
     <string name="scan_qr_exit_information_dialog_message">Uvidíte sérii QR kódů. Budeme je skenovat, dokud nebude ukazatel pokroku plný. Poté se budete moci přihlásit!</string>
     <string name="scan_qr_exit_information_dialog_title">Načítání QR kódů</string>
     <string name="scan_qr_keep_going">Načítání QR kódů</string>
     <string name="scan_qr_aim_at_qr_code">Namiřte fotoaparát na QR kód</string>
-    <string name="scan_qr_not_a_passbolt_qr">To není Passbolt QR kód. Zkuste to znovu!</string>
+    <string name="scan_qr_not_a_passbolt_qr">To není Passly QR kód. Zkuste to znovu!</string>
     <string name="scan_qr_multiple_codes_in_range">Více QR kódů v zorném poli – zaměřte se na jeden</string>
     <string name="scan_qr_scanning_error">Chyba při načítání</string>
     <string name="scan_qr_camera_error">Chyba fotoaparátu</string>
@@ -418,7 +418,7 @@
     <string name="permission_recipients_already_added">Již přidáno</string>
     <string name="permission_recipients_user_or_group_not_found">Uživatel nebo skupina nenalezen</string>
     <string name="permission_deletion_dialog_message">Heslo již nebude sdíleno s tímto uživatelem.</string>
-    <string name="main_update_downloaded">Aktualizace Passbolt byla právě stažena</string>
+    <string name="main_update_downloaded">Aktualizace Passly byla právě stažena</string>
     <string name="main_update_download_in_progress">Stahování na pozadí. Jakmile stahování skončí, budeme Vás informovat.</string>
     <string name="main_update_downloaded_install">Instalovat</string>
     <string name="dialog_encryption_error_title">Došlo k chybě při šifrování</string>
@@ -561,10 +561,10 @@
     </string-array>
     <string-array name="dialog_encourage_autofill_setup_steps">
         <item>&lt;b&gt;Zapnout nastavení automatického vyplňování&lt;/b&gt;</item>
-        <item>Vyberte &lt;b&gt;Passbolt!&lt;/b&gt;</item>
+        <item>Vyberte &lt;b&gt;Passly!&lt;/b&gt;</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
-        <item>Ujistěte se, že je nativní vyplňování Passbolt zapnuto v nastavení Android OS</item>
+        <item>Ujistěte se, že je nativní vyplňování Passly zapnuto v nastavení Android OS</item>
         <item>Přejít na &lt;b&gt;nastavení Chrome&lt;/b&gt; a vyberte &lt;b&gt;Autofill services&lt;/b&gt;</item>
         <item>Vyberte &lt;b&gt;Autofill using another service&lt;/b&gt;</item>
     </string-array>

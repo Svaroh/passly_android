@@ -1,16 +1,14 @@
-	      ____                  __          ____
-	     / __ \____  _____ ____/ /_  ____  / / /_
-	    / /_/ / __ `/ ___/ ___/ __ \/ __ \/ / __/
-	   / ____/ /_/ (__  |__  ) /_/ / /_/ / / /_
-	  /_/    \__,_/____/____/_.___/\____/_/\__/
+# Passly Android
 
-	Open source password manager for teams
-	(c) 2021 Passbolt SA
-	https://www.passbolt.com
+Passly Android application for the open source password manager for teams.
+
+This repository is a Svaroh-maintained fork of `passbolt/mobile-passbolt-android`.
+The fork keeps the upstream AGPL license, copyright notices, and Passbolt trademark
+notice intact while using Passly as the product name for Svaroh builds.
 
 ## License
 
-Passbolt - Open source password manager for teams
+Passly Android, based on Passbolt.
 
 (c) 2021 Passbolt SA
 
@@ -33,11 +31,11 @@ This repository contains the code of the Android mobile application.
 
 ### Reporting a security Issue
 
-If you've found a security related issue in Passbolt, please don't open an issue in GitHub.
+If you've found a security related issue in Passly, please don't open an issue in GitHub.
 Instead contact us at security@passbolt.com. In the spirit of responsible disclosure we ask that the reporter keep the
 issue confidential until we announce it.
 
-The passbolt team will take the following actions:
+The maintainers will take the following actions:
 
 - Try to first reproduce the issue and confirm the vulnerability.
 - Acknowledge to the reporter that we’ve received the issue and are working on a fix.

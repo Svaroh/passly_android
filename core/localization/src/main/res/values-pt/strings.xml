@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Passbolt</string>
+    <string name="app_name">Passly</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
     <string name="settings">Configurações</string>
@@ -106,7 +106,7 @@
     <string name="help_menu_import_profile_manually">Importe sua conta manualmente</string>
     <string name="help_menu_import_account_kit">Importar seu kit de conta</string>
     <string name="logs_share_title">Compartilhar logs</string>
-    <string name="logs_share_email_title">Logs do Passbolt</string>
+    <string name="logs_share_email_title">Logs do Passly</string>
     <string name="logs_share_email">contato@passbolt.com</string>
     <string name="root_warning_title">O dispositivo pode ter acesso root</string>
     <string name="root_warning_message">Nós suspeitamos que seu dispositivo pode ser roteado. Por favor, esteja ciente de que ele diminui a segurança geral do dispositivo e pode ser usado maliciosamente para adquirir suas senhas.</string>
@@ -178,7 +178,7 @@
     Entre em contato com seu administrador para obter mais informações.</string>
     <string name="dialog_unable_to_generate_password_title">Não foi possível gerar uma senha forte</string>
     <string name="dialog_unable_to_generate_password_message">O gerador de senhas não gerará uma senha suficientemente forte. É necessário um mínimo de %d bits</string>
-    <string name="autofill_service_name">Autocompletar Passbolt</string>
+    <string name="autofill_service_name">Autocompletar Passly</string>
     <string name="dialog_encourage_autofill_header">Entre em seus aplicativos favoritos em 3 segundos!</string>
     <string name="dialog_autofill_header">Autocompletar</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">Samsung</string>
@@ -187,10 +187,10 @@
     <string name="dialog_encourage_autofill_accessibility_other">Outros</string>
     <string name="dialog_encourage_autofill_go_to_settings">Ir para Configurações</string>
     <string name="dialog_encourage_autofill_service_header">Habilitar preenchimento automático para a maioria dos apps</string>
-    <string name="dialog_encourage_autofill_service_description">Na tela de configurações do Android, selecione Passbolt, ative o botão de alternância e pressione OK.
+    <string name="dialog_encourage_autofill_service_description">Na tela de configurações do Android, selecione Passly, ative o botão de alternância e pressione OK.
     Ou consulte o guia específico para o seu dispositivo:</string>
     <string name="dialog_encourage_autofill_overlay_header">Ativar permissão de sobreposição</string>
-    <string name="dialog_encourage_autofill_overlay_description">Na tela de configurações do Android, ative a permissão \'Sobrepor a outros apps\' para o preenchimento automático do Passbolt,
+    <string name="dialog_encourage_autofill_overlay_description">Na tela de configurações do Android, ative a permissão \'Sobrepor a outros apps\' para o preenchimento automático do Passly,
     ou consulte o guia específico para o seu dispositivo:</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_title">Preenchimento automático não suportado</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_message">O preenchimento automático não tem suporte neste dispositivo.</string>
@@ -198,23 +198,23 @@
     <string name="dialog_encourage_chrome_autofill_go_to_settings">Ir para as configurações do Chrome</string>
     <string name="dialog_autofill_enabled_go_to_app">Vá para o app</string>
     <string name="dialog_autofill_enabled_got_it">Entendi!</string>
-    <string name="dialog_autofill_enabled_title">Preenchimento automático do Passbolt ativado!</string>
-    <string name="dialog_autofill_accessibility_service_description">Preenchimento automático do Passbolt baseado em acessibilidade.</string>
+    <string name="dialog_autofill_enabled_title">Preenchimento automático do Passly ativado!</string>
+    <string name="dialog_autofill_accessibility_service_description">Preenchimento automático do Passly baseado em acessibilidade.</string>
     <string name="dialog_autofill_enabled_message">Depois de preencher um formulário, basta tocar no campo de entrada e o
-        preenchimento automático irá sugerir o preenchimento com as credenciais de login que você já adicionou ao aplicativo Passbolt.</string>
+        preenchimento automático irá sugerir o preenchimento com as credenciais de login que você já adicionou ao aplicativo Passly.</string>
     <string name="autofill_title">Escolha uma senha</string>
     <string name="autofill_error">Erro no preenchimento automático</string>
     <string name="autofill_select_password">Selecione uma senha</string>
-    <string name="autofill_service_channel_name">Serviços de preenchimento automático de Passbolt</string>
-    <string name="data_sync_service_channel_name">Serviço de sincronização de dados do Passbolt</string>
-    <string name="autofill_service_title">Passbolt</string>
+    <string name="autofill_service_channel_name">Serviços de preenchimento automático de Passly</string>
+    <string name="data_sync_service_channel_name">Serviço de sincronização de dados do Passly</string>
+    <string name="autofill_service_title">Passly</string>
     <string name="autofill_service_content">Serviço de autopreenchimento de acessibilidade ativado</string>
     <string name="data_sync_service_content">Atualizando recursos</string>
     <string name="autofill_service_enable_overlay">Ativar permissão de sobreposição</string>
-    <string name="autofill_service_overlay_description"><![CDATA[Autopreencha usuários e senhas para navegadores web Android. Por favor, habilite a permissão \'Chamar sobre outros aplicativos\' para o preenchimento automático Passbolt]]></string>
+    <string name="autofill_service_overlay_description"><![CDATA[Autopreencha usuários e senhas para navegadores web Android. Por favor, habilite a permissão \'Chamar sobre outros aplicativos\' para o preenchimento automático Passly]]></string>
     <string name="autofill_service_enable_service">Habilitar preenchimento automático para a maioria dos apps</string>
-    <string name="autofill_dropdown_select">Selecionar do Passbolt</string>
-    <string name="autofill_dropdown_fill">Preencher com o Passbolt</string>
+    <string name="autofill_dropdown_select">Selecionar do Passly</string>
+    <string name="autofill_dropdown_fill">Preencher com o Passly</string>
     <string name="autofill_resources_create">Criar e preencher</string>
     <string name="home_empty_list">Lista vazia</string>
     <string name="home_create">Criar</string>
@@ -375,13 +375,13 @@
     <string name="transfer_details_camera_access_dialog_title">Acesso à câmera necessário</string>
     <string name="transfer_details_camera_required_dialog_title">Câmara necessária</string>
     <string name="transfer_details_camera_required_dialog_message">Desculpe, você precisa de um dispositivo com câmera para continuar, pois a transferência das chaves é feita por meio de QR codes.</string>
-    <string name="transfer_details_camera_access_dialog_message">Por favor, forneça permissões para o aplicativo Passbolt acessar a câmera nas suas configurações.</string>
+    <string name="transfer_details_camera_access_dialog_message">Por favor, forneça permissões para o aplicativo Passly acessar a câmera nas suas configurações.</string>
     <string name="scan_qr_exit_confirmation_dialog_message">Se você sair, precisará ler os QR codes novamente.</string>
     <string name="scan_qr_exit_information_dialog_message">Você verá uma sequência de QR codes. Vamos ler esses códigos até que a barra de progresso esteja cheia. Então você poderá fazer login!</string>
     <string name="scan_qr_exit_information_dialog_title">Lendo os QR codes</string>
     <string name="scan_qr_keep_going">Lendo os QR codes</string>
     <string name="scan_qr_aim_at_qr_code">Aponte a câmera para o QR Code</string>
-    <string name="scan_qr_not_a_passbolt_qr">Não é o QR code do Passbolt. Tente novamente!</string>
+    <string name="scan_qr_not_a_passbolt_qr">Não é o QR code do Passly. Tente novamente!</string>
     <string name="scan_qr_multiple_codes_in_range">Vários códigos QR no alcance - aponte para apenas um</string>
     <string name="scan_qr_scanning_error">Erro durante a leitura</string>
     <string name="scan_qr_camera_error">Erro na câmera</string>
@@ -418,7 +418,7 @@
     <string name="permission_recipients_already_added">Já adicionado</string>
     <string name="permission_recipients_user_or_group_not_found">Usuário ou grupo não encontrado</string>
     <string name="permission_deletion_dialog_message">A senha não será mais compartilhada com este usuário.</string>
-    <string name="main_update_downloaded">A atualização do Passbolt acabou de ser baixada</string>
+    <string name="main_update_downloaded">A atualização do Passly acabou de ser baixada</string>
     <string name="main_update_download_in_progress">Baixando em segundo plano. Nós o notificaremos quando o download terminar.</string>
     <string name="main_update_downloaded_install">Instalar</string>
     <string name="dialog_encryption_error_title">Ocorreu um erro de criptografia</string>
@@ -561,10 +561,10 @@
     </string-array>
     <string-array name="dialog_encourage_autofill_setup_steps">
         <item>&lt;b&gt;Ativar configurações de preenchimento automático&lt;/b&gt;</item>
-        <item>Escolha &lt;b&gt;Passbolt!&lt;/b&gt;</item>
+        <item>Escolha &lt;b&gt;Passly!&lt;/b&gt;</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
-        <item>Certifique-se de que o preenchimento automático nativo do Passbolt esteja ativado nas configurações do sistema Android</item>
+        <item>Certifique-se de que o preenchimento automático nativo do Passly esteja ativado nas configurações do sistema Android</item>
         <item>Vá para &lt;b&gt;Configurações do Chrome&lt;/b&gt; e selecione &lt;b&gt;Serviços de preenchimento automático&lt;/b&gt;</item>
         <item>Escolha &lt;b&gt;Preencher automaticamente usando outro serviço&lt;/b&gt;</item>
     </string-array>

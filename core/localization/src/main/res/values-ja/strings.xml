@@ -106,7 +106,7 @@
     <string name="help_menu_import_profile_manually">アカウントを手動でインポート</string>
     <string name="help_menu_import_account_kit">アカウントキットをインポート</string>
     <string name="logs_share_title">ログを共有</string>
-    <string name="logs_share_email_title">Passboltログ</string>
+    <string name="logs_share_email_title">Passlyログ</string>
     <string name="logs_share_email">contact@passbolt.com</string>
     <string name="root_warning_title">端末がroot化されている可能性があります</string>
     <string name="root_warning_message">お使いの端末がroot化されている可能性があります。これは端末全体のセキュリティを低下させ、悪用されるとパスワードを取得される恐れがあります。ご注意ください。</string>
@@ -195,22 +195,22 @@
     <string name="dialog_encourage_chrome_autofill_go_to_settings">Chromeの設定に移動</string>
     <string name="dialog_autofill_enabled_go_to_app">アプリに移動</string>
     <string name="dialog_autofill_enabled_got_it">了解しました！</string>
-    <string name="dialog_autofill_enabled_title">Passbolt Autofillが有効になりました！</string>
-    <string name="dialog_autofill_accessibility_service_description">Passbolt自動入力はアクセシビリティサービスを利用します。</string>
-    <string name="dialog_autofill_enabled_message">フォームに入力した後、入力欄をタップすると有効にした自動入力が、Passboltアプリに追加済みのログイン情報から入力を提案します。</string>
+    <string name="dialog_autofill_enabled_title">Passly Autofillが有効になりました！</string>
+    <string name="dialog_autofill_accessibility_service_description">Passly自動入力はアクセシビリティサービスを利用します。</string>
+    <string name="dialog_autofill_enabled_message">フォームに入力した後、入力欄をタップすると有効にした自動入力が、Passlyアプリに追加済みのログイン情報から入力を提案します。</string>
     <string name="autofill_title">パスワードを選択</string>
     <string name="autofill_error">自動入力エラーが発生しました</string>
     <string name="autofill_select_password">パスワードを選択</string>
-    <string name="autofill_service_channel_name">Passbolt自動入力サービス</string>
-    <string name="data_sync_service_channel_name">Passbolt データ同期サービス</string>
+    <string name="autofill_service_channel_name">Passly自動入力サービス</string>
+    <string name="data_sync_service_channel_name">Passly データ同期サービス</string>
     <string name="autofill_service_title">パスボルト</string>
     <string name="autofill_service_content">アクセシビリティ自動入力サービスが有効</string>
     <string name="data_sync_service_content">リソースを更新しています</string>
     <string name="autofill_service_enable_overlay">オーバーレイ権限を有効にする</string>
     <string name="autofill_service_overlay_description"><![CDATA[Androidウェブブラウザでユーザー名とパスワードを自動入力します。パスボルト自動入力に「他のアプリの上に重ねて表示」の権限を付与してください]]></string>
     <string name="autofill_service_enable_service">ほとんどのアプリで自動入力を有効にする</string>
-    <string name="autofill_dropdown_select">Passboltから選択</string>
-    <string name="autofill_dropdown_fill">Passboltで入力</string>
+    <string name="autofill_dropdown_select">Passlyから選択</string>
+    <string name="autofill_dropdown_fill">Passlyで入力</string>
     <string name="autofill_resources_create">作成&amp;入力</string>
     <string name="home_empty_list">リストが空です</string>
     <string name="home_create">作成</string>
@@ -371,13 +371,13 @@
     <string name="transfer_details_camera_access_dialog_title">カメラアクセスが必要です</string>
     <string name="transfer_details_camera_required_dialog_title">カメラが必要です</string>
     <string name="transfer_details_camera_required_dialog_message">申し訳ありませんが、カメラのある端末が必要です。キー転送はQRコードで行われます。</string>
-    <string name="transfer_details_camera_access_dialog_message">設定からPassboltアプリにカメラアクセスを許可してください。</string>
+    <string name="transfer_details_camera_access_dialog_message">設定からPasslyアプリにカメラアクセスを許可してください。</string>
     <string name="scan_qr_exit_confirmation_dialog_message">このまま離れると、QRコードを再度スキャンする必要があります。</string>
     <string name="scan_qr_exit_information_dialog_message">連続するQRコードを表示します。進捗バーが満タンになるまでこれらのコードをスキャンしてください。完了後、ログイン可能になります！</string>
     <string name="scan_qr_exit_information_dialog_title">QRコードをスキャン中</string>
     <string name="scan_qr_keep_going">QRコードをスキャン中</string>
     <string name="scan_qr_aim_at_qr_code">カメラをQRコードに向けてください</string>
-    <string name="scan_qr_not_a_passbolt_qr">パスボルトのQRではありません。もう一度試してください！</string>
+    <string name="scan_qr_not_a_passbolt_qr">Passly QRではありません。もう一度試してください！</string>
     <string name="scan_qr_multiple_codes_in_range">複数のQRコードが検出されました - 1つに狙いを定めてください</string>
     <string name="scan_qr_scanning_error">スキャン中にエラーが発生しました</string>
     <string name="scan_qr_camera_error">カメラエラー</string>
@@ -414,7 +414,7 @@
     <string name="permission_recipients_already_added">既に追加されています</string>
     <string name="permission_recipients_user_or_group_not_found">ユーザーまたはグループが見つかりません</string>
     <string name="permission_deletion_dialog_message">このユーザーとの共有が解除されます。</string>
-    <string name="main_update_downloaded">Passboltの更新がダウンロードされました</string>
+    <string name="main_update_downloaded">Passlyの更新がダウンロードされました</string>
     <string name="main_update_download_in_progress">バックグラウンドでダウンロード中です。完了したら通知します。</string>
     <string name="main_update_downloaded_install">インストール</string>
     <string name="dialog_encryption_error_title">暗号化エラーが発生しました</string>
@@ -560,7 +560,7 @@
         <item>「<b>パスボルト！</b>」を選択；</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
-        <item>Android OSの設定でPassboltネイティブ自動入力がオンになっていることを確認してください</item>
+        <item>Android OSの設定でPasslyネイティブ自動入力がオンになっていることを確認してください</item>
         <item>「<b>Chromeの設定</b>」に移動して「<b>自動入力サービス</b>」を選択；</item>
         <item>「<b>他のサービスで自動入力</b>」を選択；</item>
     </string-array>
