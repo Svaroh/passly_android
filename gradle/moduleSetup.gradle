@@ -101,11 +101,11 @@ def setupCommonDependencies(isAndroid) {
 def setupCommonTasks(isAndroid) {
     if (isAndroid) {
         tasks.register("unitTest") { task ->
-            task.dependsOn(testDebugUnitTest)
+            task.dependsOn(tasks.matching { it.name == "testDebugUnitTest" })
         }
     } else {
         tasks.register("unitTest") { task ->
-            task.dependsOn(test)
+            task.dependsOn(tasks.named("test"))
         }
     }
 }
