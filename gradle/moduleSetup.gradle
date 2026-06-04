@@ -40,7 +40,10 @@ def setupModule(isAndroid, isAndroidComponent) {
                 buildTypes {
                     release {
                         minifyEnabled false
-                        consumerProguardFiles 'proguard-rules.pro'
+                        def moduleConsumerProguardFile = project.file("proguard-rules.pro")
+                        if (moduleConsumerProguardFile.exists()) {
+                            consumerProguardFiles moduleConsumerProguardFile
+                        }
                     }
                 }
             }
