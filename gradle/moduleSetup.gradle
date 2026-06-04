@@ -1,3 +1,5 @@
+import org.gradle.testing.jacoco.tasks.JacocoReport
+
 afterEvaluate { project ->
     def isAndroid = project.plugins.hasPlugin("com.android.library") ||
         project.plugins.hasPlugin("com.android.dynamic-feature") ||
@@ -9,6 +11,7 @@ afterEvaluate { project ->
     setupModule(isAndroid, isAndroidComponent)
     setupCommonDependencies(isAndroid)
     setupCommonTasks(isAndroid)
+    setupCoverageTasks(isAndroid)
 }
 
 def setupModule(isAndroid, isAndroidComponent) {
@@ -107,5 +110,67 @@ def setupCommonTasks(isAndroid) {
         tasks.register("unitTest") { task ->
             task.dependsOn(tasks.named("test"))
         }
+    }
+}
+
+def setupCoverageTasks(isAndroid) {
+    apply plugin: "jacoco"
+
+    tasks.withType(Test).configureEach {
+        jacoco {
+            includeNoLocationClasses = true
+            excludes = ["jdk.internal.*"]
+        }
+    }
+
+    if (!isAndroid) {
+        return
+    }
+
+    tasks.register("jacocoDebugUnitTestReport", JacocoReport) { task ->
+        group = "verification"
+        description = "Generates a JaCoCo coverage report for debug unit tests."
+        dependsOn(tasks.matching { it.name == "testDebugUnitTest" })
+
+        reports {
+            xml.required = true
+            html.required = true
+            csv.required = false
+        }
+
+        def fileFilter = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            '**/*$ViewInjector*.*',
+            '**/*$ViewBinder*.*',
+            '**/*MembersInjector*.*',
+            '**/*_Factory.*',
+            '**/*_Provide*Factory*.*',
+            '**/*_ViewBinding*.*',
+            '**/AutoValue_*.*',
+            '**/R2.class',
+            '**/R2$*.class',
+            '**/*Directions$*',
+            '**/*Directions.*',
+            '**/*Binding.*',
+            '**/*Args.*',
+            '**/*Companion*.*',
+            '**/*Module.*',
+            '**/*Dagger*.*',
+            '**/*Hilt*.*'
+        ]
+
+        classDirectories.setFrom(files([
+            fileTree(dir: "${project.buildDir}/intermediates/javac/debug/classes", excludes: fileFilter),
+            fileTree(dir: "${project.buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+        ]))
+        sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
+        executionData.setFrom(fileTree(dir: project.buildDir, includes: [
+            "jacoco/testDebugUnitTest.exec",
+            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
+        ]))
     }
 }

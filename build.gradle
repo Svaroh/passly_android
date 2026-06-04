@@ -8,6 +8,7 @@ buildscript {
 }
 
 plugins {
+    id "jacoco"
     alias libs.plugins.android.application apply false
     alias libs.plugins.android.library apply false
     alias libs.plugins.kotlin.gradle apply false
@@ -56,4 +57,10 @@ apply from: "gradle/dependencyUpdates.gradle"
 
 tasks.register('clean', Delete) {
     delete rootProject.layout.buildDirectory
+}
+
+tasks.register("coverageReport") {
+    group = "verification"
+    description = "Runs JaCoCo unit-test coverage reports for all Android modules."
+    dependsOn subprojects.collect { subproject -> "${subproject.path}:jacocoDebugUnitTestReport" }
 }

@@ -1,0 +1,79 @@
+name: Coverage
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "13 5 * * 1"
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: coverage-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  jacoco:
+    name: Android unit-test coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx4608m -Dfile.encoding=UTF-8
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v6
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+
+      - name: Install Android SDK packages
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Run unit-test coverage
+        run: ./gradlew --no-daemon --stacktrace coverageReport
+
+      - name: Collect coverage report paths
+        id: coverage-files
+        run: |
+          files="$(find . -path '*/build/reports/jacoco/jacocoDebugUnitTestReport/jacocoDebugUnitTestReport.xml' -type f | sort | paste -sd, -)"
+          if [ -z "$files" ]; then
+            echo "No JaCoCo XML coverage reports were generated." >&2
+            exit 1
+          fi
+          echo "files=$files" >> "$GITHUB_OUTPUT"
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v6
+        with:
+          use_oidc: true
+          files: ${{ steps.coverage-files.outputs.files }}
+          disable_search: true
+          flags: android-unit
+          name: passly-android-jacoco
+          fail_ci_if_error: true
+          verbose: true
+
+      - name: Upload coverage artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-android
+          path: |
+            **/build/reports/jacoco/jacocoDebugUnitTestReport/
+          if-no-files-found: ignore
