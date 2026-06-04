@@ -58,7 +58,52 @@ jobs:
           fi
           echo "files=$files" >> "$GITHUB_OUTPUT"
 
+      - name: Publish coverage summary
+        if: always()
+        run: |
+          python3 <<'PY'
+          import glob
+          import os
+          import xml.etree.ElementTree as ET
+
+          summary_file = os.environ["GITHUB_STEP_SUMMARY"]
+          files = sorted(glob.glob("**/build/reports/jacoco/jacocoDebugUnitTestReport/jacocoDebugUnitTestReport.xml", recursive=True))
+
+          if not files:
+              with open(summary_file, "a", encoding="utf-8") as summary:
+                  summary.write("### Android unit-test coverage\n\nCoverage reports were not generated.\n")
+              raise SystemExit(0)
+
+          counters = {}
+          for coverage_file in files:
+              root = ET.parse(coverage_file).getroot()
+              for counter in root.findall("counter"):
+                  counter_type = counter.attrib["type"]
+                  missed, covered = counters.get(counter_type, (0, 0))
+                  counters[counter_type] = (
+                      missed + int(counter.attrib.get("missed", "0")),
+                      covered + int(counter.attrib.get("covered", "0")),
+                  )
+
+          def percent(covered, total):
+              if total == 0:
+                  return "n/a"
+              return f"{covered / total * 100:.2f}%"
+
+          with open(summary_file, "a", encoding="utf-8") as summary:
+              summary.write("### Android unit-test coverage\n\n")
+              summary.write(f"Aggregated {len(files)} JaCoCo XML report(s).\n\n")
+              summary.write("| Metric | Covered | Total | Coverage |\n")
+              summary.write("| --- | ---: | ---: | ---: |\n")
+              for counter_type in ("INSTRUCTION", "LINE", "BRANCH", "METHOD", "CLASS"):
+                  missed, covered = counters.get(counter_type, (0, 0))
+                  total = missed + covered
+                  summary.write(f"| {counter_type.title()} | {covered} | {total} | {percent(covered, total)} |\n")
+              summary.write("\n")
+          PY
+
       - name: Upload coverage to Codecov
+        continue-on-error: true
         uses: codecov/codecov-action@v6
         with:
           use_oidc: true
@@ -66,7 +111,7 @@ jobs:
           disable_search: true
           flags: android-unit
           name: passly-android-jacoco
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           verbose: true
 
       - name: Upload coverage artifacts
