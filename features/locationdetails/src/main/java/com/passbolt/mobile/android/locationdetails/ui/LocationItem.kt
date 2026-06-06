@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.locationdetails.ui
+package net.svaroh.passly.locationdetails.ui
 
 /**
  * Passbolt - Open source password manager for teams

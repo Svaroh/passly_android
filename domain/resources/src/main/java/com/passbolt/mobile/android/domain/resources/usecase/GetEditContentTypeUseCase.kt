@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.domain.resources.usecase
+package net.svaroh.passly.domain.resources.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.domain.metadata.usecase.GetMetadataTypesSettingsUseCase
-import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
-import com.passbolt.mobile.android.ui.MetadataTypeModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.domain.metadata.usecase.GetMetadataTypesSettingsUseCase
+import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.supportedresourceTypes.ContentType
+import net.svaroh.passly.ui.MetadataTypeModel
 import java.util.UUID
 
 /**

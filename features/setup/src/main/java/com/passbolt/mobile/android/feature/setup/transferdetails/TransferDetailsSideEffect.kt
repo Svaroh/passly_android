@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.transferdetails
+package net.svaroh.passly.feature.setup.transferdetails
 
 internal sealed interface TransferDetailsSideEffect {
     data object NavigateBack : TransferDetailsSideEffect

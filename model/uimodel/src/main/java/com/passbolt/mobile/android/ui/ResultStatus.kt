@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
-import com.passbolt.mobile.android.ui.ResultStatusType.ALREADY_LINKED
-import com.passbolt.mobile.android.ui.ResultStatusType.FAILURE
-import com.passbolt.mobile.android.ui.ResultStatusType.HTTP_NOT_SUPPORTED
-import com.passbolt.mobile.android.ui.ResultStatusType.NO_NETWORK
-import com.passbolt.mobile.android.ui.ResultStatusType.SUCCESS
+import net.svaroh.passly.ui.ResultStatusType.ALREADY_LINKED
+import net.svaroh.passly.ui.ResultStatusType.FAILURE
+import net.svaroh.passly.ui.ResultStatusType.HTTP_NOT_SUPPORTED
+import net.svaroh.passly.ui.ResultStatusType.NO_NETWORK
+import net.svaroh.passly.ui.ResultStatusType.SUCCESS
 import kotlinx.serialization.Serializable
 
 /**

@@ -31,7 +31,7 @@ dependencies {
 val androidConfig = extensions.getByType<AndroidCommonConfig>()
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.startup"
+    namespace = "net.svaroh.passly.feature.startup"
     defaultConfig {
         buildConfigField("int", "MIN_FULLY_SUPPORTED_SDK", "${androidConfig.minFullySupportedSdk}")
     }

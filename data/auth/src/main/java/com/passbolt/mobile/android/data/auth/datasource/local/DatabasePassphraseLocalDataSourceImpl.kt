@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.data.auth.datasource.local
+package net.svaroh.passly.data.auth.datasource.local
 
 import androidx.core.content.edit
-import com.passbolt.mobile.android.domain.auth.datasource.DatabasePassphraseLocalDataSource
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.domain.auth.datasource.DatabasePassphraseLocalDataSource
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
 
 /**
  * Passbolt - Open source password manager for teams

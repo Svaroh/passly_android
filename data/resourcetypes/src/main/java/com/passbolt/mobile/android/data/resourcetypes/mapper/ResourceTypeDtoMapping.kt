@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.resourcetypes.mapper
+package net.svaroh.passly.data.resourcetypes.mapper
 
-import com.passbolt.mobile.android.domain.resourcetypes.model.ResourceType
-import com.passbolt.mobile.android.dto.response.ResourceTypeDto
+import net.svaroh.passly.domain.resourcetypes.model.ResourceType
+import net.svaroh.passly.dto.response.ResourceTypeDto
 import java.time.ZonedDateTime
 
 fun List<ResourceTypeDto>.toDomain(): List<ResourceType> = map { it.toResourceType() }

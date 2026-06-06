@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.favourites
+package net.svaroh.passly.domain.favourites
 
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.mvp.authentication.CompleteAuthenticatedOutput
-import com.passbolt.mobile.android.domain.favourites.usecase.AddToFavouritesUseCase
-import com.passbolt.mobile.android.domain.favourites.usecase.RemoveFromFavouritesUseCase
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
+import net.svaroh.passly.domain.favourites.usecase.AddToFavouritesUseCase
+import net.svaroh.passly.domain.favourites.usecase.RemoveFromFavouritesUseCase
 import timber.log.Timber
 
 class FavouritesInteractor(

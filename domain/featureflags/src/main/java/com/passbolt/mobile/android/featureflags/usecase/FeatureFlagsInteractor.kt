@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.featureflags.usecase
+package net.svaroh.passly.featureflags.usecase
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
-import com.passbolt.mobile.android.featureflags.FeatureFlagsRepository
-import com.passbolt.mobile.android.featureflags.mapper.toFeatureFlagsModel
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
+import net.svaroh.passly.featureflags.FeatureFlagsRepository
+import net.svaroh.passly.featureflags.mapper.toFeatureFlagsModel
 import timber.log.Timber
 
 class FeatureFlagsInteractor(

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.groups.model
+package net.svaroh.passly.domain.groups.model
 
 data class GroupMember(
     val userId: String,

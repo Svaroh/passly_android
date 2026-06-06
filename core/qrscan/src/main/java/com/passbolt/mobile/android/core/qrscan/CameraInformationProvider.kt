@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.qrscan
+package net.svaroh.passly.core.qrscan
 
 import android.Manifest
 import android.content.Context

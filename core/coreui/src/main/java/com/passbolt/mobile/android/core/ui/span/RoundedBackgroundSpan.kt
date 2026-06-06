@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.core.ui.span
+package net.svaroh.passly.core.ui.span
 
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.text.style.ReplacementSpan
 import androidx.annotation.ColorInt
-import com.passbolt.mobile.android.core.extension.px
+import net.svaroh.passly.core.extension.px
 import kotlin.math.roundToInt
 
 /**

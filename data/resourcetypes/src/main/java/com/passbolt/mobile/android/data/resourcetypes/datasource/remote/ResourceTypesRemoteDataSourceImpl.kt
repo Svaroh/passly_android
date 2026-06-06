@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.resourcetypes.datasource.remote
+package net.svaroh.passly.data.resourcetypes.datasource.remote
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.resourcetypes.datasource.remote.api.ResourceTypesApi
-import com.passbolt.mobile.android.data.resourcetypes.mapper.toDomain
-import com.passbolt.mobile.android.domain.resourcetypes.ResourceTypesRemoteDataSource
-import com.passbolt.mobile.android.domain.resourcetypes.model.ResourceType
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.resourcetypes.datasource.remote.api.ResourceTypesApi
+import net.svaroh.passly.data.resourcetypes.mapper.toDomain
+import net.svaroh.passly.domain.resourcetypes.ResourceTypesRemoteDataSource
+import net.svaroh.passly.domain.resourcetypes.model.ResourceType
 
 internal class ResourceTypesRemoteDataSourceImpl(
     private val resourceTypesApi: ResourceTypesApi,

@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.mobiletransfer
+package net.svaroh.passly.domain.mobiletransfer
 
-import com.passbolt.mobile.android.domain.mobiletransfer.usecase.CreateTransferUseCase
-import com.passbolt.mobile.android.domain.mobiletransfer.usecase.UpdateTransferUseCase
-import com.passbolt.mobile.android.domain.mobiletransfer.usecase.ViewTransferUseCase
+import net.svaroh.passly.domain.mobiletransfer.usecase.CreateTransferUseCase
+import net.svaroh.passly.domain.mobiletransfer.usecase.UpdateTransferUseCase
+import net.svaroh.passly.domain.mobiletransfer.usecase.ViewTransferUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

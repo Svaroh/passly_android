@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.preferences.usecase
+package net.svaroh.passly.domain.preferences.usecase
 
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesRepository
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
 import timber.log.Timber
 
 class ApplyAutomaticPageSizeUseCase(

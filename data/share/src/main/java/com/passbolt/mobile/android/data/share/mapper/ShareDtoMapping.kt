@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.share.mapper
+package net.svaroh.passly.data.share.mapper
 
-import com.passbolt.mobile.android.domain.share.model.EncryptedSecret
-import com.passbolt.mobile.android.domain.share.model.ShareChanges
-import com.passbolt.mobile.android.domain.share.model.SharePermission
-import com.passbolt.mobile.android.domain.share.model.ShareRecipient
-import com.passbolt.mobile.android.dto.request.EncryptedSharedSecret
-import com.passbolt.mobile.android.dto.response.ShareRecipientDto
-import com.passbolt.mobile.android.dto.response.SimulateShareResponse
-import com.passbolt.mobile.android.dto.request.SharePermission as SharePermissionDto
+import net.svaroh.passly.domain.share.model.EncryptedSecret
+import net.svaroh.passly.domain.share.model.ShareChanges
+import net.svaroh.passly.domain.share.model.SharePermission
+import net.svaroh.passly.domain.share.model.ShareRecipient
+import net.svaroh.passly.dto.request.EncryptedSharedSecret
+import net.svaroh.passly.dto.response.ShareRecipientDto
+import net.svaroh.passly.dto.response.SimulateShareResponse
+import net.svaroh.passly.dto.request.SharePermission as SharePermissionDto
 
 internal fun SharePermission.toDto(): SharePermissionDto =
     when (this) {

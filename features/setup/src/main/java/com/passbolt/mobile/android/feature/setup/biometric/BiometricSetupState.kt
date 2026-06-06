@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.setup.biometric
+package net.svaroh.passly.feature.setup.biometric
 
 /**
  * Passbolt - Open source password manager for teams

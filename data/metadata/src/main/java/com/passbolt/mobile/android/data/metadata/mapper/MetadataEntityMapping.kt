@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.metadata.mapper
+package net.svaroh.passly.data.metadata.mapper
 
-import com.passbolt.mobile.android.domain.metadata.model.ParsedMetadataKey
-import com.passbolt.mobile.android.domain.metadata.model.ParsedMetadataPrivateKey
-import com.passbolt.mobile.android.entity.metadata.MetadataKeyWithPrivateKeys
+import net.svaroh.passly.domain.metadata.model.ParsedMetadataKey
+import net.svaroh.passly.domain.metadata.model.ParsedMetadataPrivateKey
+import net.svaroh.passly.entity.metadata.MetadataKeyWithPrivateKeys
 import java.util.UUID
-import com.passbolt.mobile.android.entity.metadata.MetadataKey as MetadataKeyEntity
-import com.passbolt.mobile.android.entity.metadata.MetadataPrivateKey as MetadataPrivateKeyEntity
+import net.svaroh.passly.entity.metadata.MetadataKey as MetadataKeyEntity
+import net.svaroh.passly.entity.metadata.MetadataPrivateKey as MetadataPrivateKeyEntity
 
 internal fun MetadataKeyWithPrivateKeys.toDomain(): ParsedMetadataKey =
     ParsedMetadataKey(

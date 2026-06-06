@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.passwordpolicies.model
+package net.svaroh.passly.domain.passwordpolicies.model
 
 data class PasswordPolicies(
     val defaultGenerator: PasswordGeneratorType,

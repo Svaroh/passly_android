@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.featureflags.datasource.remote.api
+package net.svaroh.passly.data.featureflags.datasource.remote.api
 
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.SettingsResponseDto
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.SettingsResponseDto
 import retrofit2.http.GET
 
 internal interface FeatureFlagsApi {

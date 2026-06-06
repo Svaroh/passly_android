@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.mvp.authentication
+package net.svaroh.passly.core.mvp.authentication
 
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
 
 class MfaProvidersHandler {
     private lateinit var providers: List<MfaProvider?>

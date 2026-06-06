@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.authentication.auth
+package net.svaroh.passly.feature.authentication.auth
 
 data class AuthState(
     val accountData: AccountData = AccountData(),

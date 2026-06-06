@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.biometrickey
+package net.svaroh.passly.data.biometrickey
 
-import com.passbolt.mobile.android.domain.biometrickey.BiometricKeyLocalDataSource
-import com.passbolt.mobile.android.domain.biometrickey.BiometricKeyRepository
-import com.passbolt.mobile.android.domain.biometrickey.model.BiometricKey
+import net.svaroh.passly.domain.biometrickey.BiometricKeyLocalDataSource
+import net.svaroh.passly.domain.biometrickey.BiometricKeyRepository
+import net.svaroh.passly.domain.biometrickey.model.BiometricKey
 
 internal class BiometricKeyRepositoryImpl(
     private val localDataSource: BiometricKeyLocalDataSource,

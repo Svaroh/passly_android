@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.duo
+package net.svaroh.passly.feature.authentication.mfa.duo
 
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.duowebviewsheet.DuoState
+import net.svaroh.passly.feature.authentication.mfa.duo.duowebviewsheet.DuoState
 
 sealed interface AuthWithDuoIntent {
     data object AuthenticateWithDuo : AuthWithDuoIntent

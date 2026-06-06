@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.navigation.compose.results
+package net.svaroh.passly.core.navigation.compose.results
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

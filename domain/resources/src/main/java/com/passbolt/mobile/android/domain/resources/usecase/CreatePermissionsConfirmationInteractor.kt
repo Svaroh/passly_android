@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.usecase
+package net.svaroh.passly.domain.resources.usecase
 
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.FetchFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
-import com.passbolt.mobile.android.ui.PermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.folders.usecase.FetchFolderPermissionsUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderPermissionsUseCase
+import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
+import net.svaroh.passly.ui.PermissionModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourcePermission
 import timber.log.Timber
 
 class CreatePermissionsConfirmationInteractor(

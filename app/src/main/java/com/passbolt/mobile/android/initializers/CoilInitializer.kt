@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.initializers
+package net.svaroh.passly.initializers
 
 import android.content.Context
 import androidx.startup.Initializer

@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.feature.autofill
+package net.svaroh.passly.feature.autofill
 
 import android.content.Context
 import android.os.PowerManager
 import android.view.WindowManager
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider
-import com.passbolt.mobile.android.core.autofill.system.AssistStructureParser
-import com.passbolt.mobile.android.feature.autofill.autofill.RemoteViewsFactory
-import com.passbolt.mobile.android.feature.autofill.informationprovider.AutofillInformationProviderImpl
-import com.passbolt.mobile.android.feature.autofill.resources.autofillResourcesModule
+import net.svaroh.passly.core.autofill.AutofillInformationProvider
+import net.svaroh.passly.core.autofill.system.AssistStructureParser
+import net.svaroh.passly.feature.autofill.autofill.RemoteViewsFactory
+import net.svaroh.passly.feature.autofill.informationprovider.AutofillInformationProviderImpl
+import net.svaroh.passly.feature.autofill.resources.autofillResourcesModule
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf

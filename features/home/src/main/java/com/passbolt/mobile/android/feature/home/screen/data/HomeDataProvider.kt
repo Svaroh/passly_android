@@ -20,38 +20,38 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.feature.home.screen.data
+package net.svaroh.passly.feature.home.screen.data
 
 import androidx.paging.PagingData
 import androidx.paging.filter
-import com.passbolt.mobile.android.common.urimatcher.AutofillUriMatcher
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalDirectChildFoldersPaginatedUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalSubFoldersForFolderPaginatedUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalSubFoldersForFolderUseCase
-import com.passbolt.mobile.android.domain.groups.usecase.GetLocalGroupsWithShareItemsCountPaginatedUseCase
-import com.passbolt.mobile.android.domain.rbac.usecase.GetRbacRulesUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcesPaginatedUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcesWithGroupPaginatedUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcesWithTagPaginatedUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalSubFolderResourcesFilteredPaginatedUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetResourcesInFolderPaginatedUseCase
-import com.passbolt.mobile.android.domain.tags.usecase.GetLocalTagsPaginatedUseCase
-import com.passbolt.mobile.android.feature.home.screen.ShowSuggestedModel
-import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes.homeSlugs
-import com.passbolt.mobile.android.ui.Folder
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.AllItems
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Expiry
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Favourites
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Folders
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Groups
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.NotLoaded
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.OwnedByMe
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.RecentlyModified
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.SharedWithMe
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Tags
-import com.passbolt.mobile.android.ui.RbacRuleModel.ALLOW
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.common.urimatcher.AutofillUriMatcher
+import net.svaroh.passly.domain.folders.usecase.GetLocalDirectChildFoldersPaginatedUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalSubFoldersForFolderPaginatedUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalSubFoldersForFolderUseCase
+import net.svaroh.passly.domain.groups.usecase.GetLocalGroupsWithShareItemsCountPaginatedUseCase
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesPaginatedUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesWithGroupPaginatedUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesWithTagPaginatedUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalSubFolderResourcesFilteredPaginatedUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetResourcesInFolderPaginatedUseCase
+import net.svaroh.passly.domain.tags.usecase.GetLocalTagsPaginatedUseCase
+import net.svaroh.passly.feature.home.screen.ShowSuggestedModel
+import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.homeSlugs
+import net.svaroh.passly.ui.Folder
+import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.HomeDisplayViewModel.AllItems
+import net.svaroh.passly.ui.HomeDisplayViewModel.Expiry
+import net.svaroh.passly.ui.HomeDisplayViewModel.Favourites
+import net.svaroh.passly.ui.HomeDisplayViewModel.Folders
+import net.svaroh.passly.ui.HomeDisplayViewModel.Groups
+import net.svaroh.passly.ui.HomeDisplayViewModel.NotLoaded
+import net.svaroh.passly.ui.HomeDisplayViewModel.OwnedByMe
+import net.svaroh.passly.ui.HomeDisplayViewModel.RecentlyModified
+import net.svaroh.passly.ui.HomeDisplayViewModel.SharedWithMe
+import net.svaroh.passly.ui.HomeDisplayViewModel.Tags
+import net.svaroh.passly.ui.RbacRuleModel.ALLOW
+import net.svaroh.passly.ui.ResourceUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.passwordpolicies.usecase
+package net.svaroh.passly.domain.passwordpolicies.usecase
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.CompleteAuthenticatedOutput
-import com.passbolt.mobile.android.core.mvp.authentication.IncompleteAuthenticatedOutput
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.passwordpolicies.PasswordPoliciesRepository
-import com.passbolt.mobile.android.domain.passwordpolicies.mapper.toUiModel
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordPolicies
-import com.passbolt.mobile.android.domain.passwordpolicies.validation.PasswordPoliciesValidator
-import com.passbolt.mobile.android.ui.PasswordPoliciesUiModel
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
+import net.svaroh.passly.core.mvp.authentication.IncompleteAuthenticatedOutput
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.passwordpolicies.PasswordPoliciesRepository
+import net.svaroh.passly.domain.passwordpolicies.mapper.toUiModel
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordPolicies
+import net.svaroh.passly.domain.passwordpolicies.validation.PasswordPoliciesValidator
+import net.svaroh.passly.ui.PasswordPoliciesUiModel
 
 class PasswordPoliciesInteractor(
     private val passwordPoliciesRepository: PasswordPoliciesRepository,

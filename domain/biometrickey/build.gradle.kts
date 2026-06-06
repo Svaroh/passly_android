@@ -11,5 +11,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.domain.biometrickey"
+    namespace = "net.svaroh.passly.domain.biometrickey"
 }

@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.inappreview
+package net.svaroh.passly.data.inappreview
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.inappreview.InAppReviewLocalDataSource
-import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewParameters
-import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewShowMode
+import net.svaroh.passly.domain.inappreview.InAppReviewLocalDataSource
+import net.svaroh.passly.domain.inappreview.model.InAppReviewParameters
+import net.svaroh.passly.domain.inappreview.model.InAppReviewShowMode
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

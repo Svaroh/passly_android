@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.feature.setup.scanqr.qrparser
+package net.svaroh.passly.feature.setup.scanqr.qrparser
 
-import com.passbolt.mobile.android.dto.response.qrcode.AccountKitPageDto
-import com.passbolt.mobile.android.dto.response.qrcode.BrowserFirstLoginPageDto
-import com.passbolt.mobile.android.dto.response.qrcode.QrFirstPageDto
-import com.passbolt.mobile.android.dto.response.qrcode.ReservedBytesDto
+import net.svaroh.passly.dto.response.qrcode.AccountKitPageDto
+import net.svaroh.passly.dto.response.qrcode.BrowserFirstLoginPageDto
+import net.svaroh.passly.dto.response.qrcode.QrFirstPageDto
+import net.svaroh.passly.dto.response.qrcode.ReservedBytesDto
 
 /**
  * Passbolt - Open source password manager for teams

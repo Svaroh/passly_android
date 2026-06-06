@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password
+package net.svaroh.passly.feature.resourceform.additionalsecrets.password
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -25,45 +25,45 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.AdvancedSecretGenerationForm
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
-import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.dialogs.UnableToGeneratePasswordAlertDialog
-import com.passbolt.mobile.android.core.ui.text.TextInput
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.PasswordFormIntent.AdvancedSecretGenerationResult
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.PasswordFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.PasswordFormIntent.DismissUnableToGeneratePassword
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.PasswordFormIntent.GeneratePassword
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.PasswordFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.PasswordFormIntent.MainUriTextChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.PasswordFormIntent.OpenAdvancedSecretGeneration
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.PasswordFormIntent.PasswordTextChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.PasswordFormIntent.UsernameTextChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.PasswordFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.PasswordFormSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.PasswordFormSideEffect.NavigateToAdvancedSecretGeneration
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.ui.PasswordGenerationInput
-import com.passbolt.mobile.android.feature.resourceform.main.ui.SettingRow
-import com.passbolt.mobile.android.feature.resourceform.navigation.AdvancedSecretGenerationFormResult
-import com.passbolt.mobile.android.feature.resourceform.navigation.PasswordFormResult
-import com.passbolt.mobile.android.ui.LeadingContentType
-import com.passbolt.mobile.android.ui.PasswordStrength
-import com.passbolt.mobile.android.ui.PasswordUiModel
-import com.passbolt.mobile.android.ui.ResourceFormMode
-import com.passbolt.mobile.android.ui.ResourceFormMode.Create
-import com.passbolt.mobile.android.ui.ResourceFormMode.Edit
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.AdvancedSecretGenerationForm
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.navigation.compose.results.ResultEffect
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.dialogs.UnableToGeneratePasswordAlertDialog
+import net.svaroh.passly.core.ui.text.TextInput
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.AdvancedSecretGenerationResult
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.DismissUnableToGeneratePassword
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.GeneratePassword
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.MainUriTextChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.OpenAdvancedSecretGeneration
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.PasswordTextChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.UsernameTextChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormSideEffect.NavigateBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormSideEffect.NavigateToAdvancedSecretGeneration
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.ui.PasswordGenerationInput
+import net.svaroh.passly.feature.resourceform.main.ui.SettingRow
+import net.svaroh.passly.feature.resourceform.navigation.AdvancedSecretGenerationFormResult
+import net.svaroh.passly.feature.resourceform.navigation.PasswordFormResult
+import net.svaroh.passly.ui.LeadingContentType
+import net.svaroh.passly.ui.PasswordStrength
+import net.svaroh.passly.ui.PasswordUiModel
+import net.svaroh.passly.ui.ResourceFormMode
+import net.svaroh.passly.ui.ResourceFormMode.Create
+import net.svaroh.passly.ui.ResourceFormMode.Edit
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun PasswordFormScreen(

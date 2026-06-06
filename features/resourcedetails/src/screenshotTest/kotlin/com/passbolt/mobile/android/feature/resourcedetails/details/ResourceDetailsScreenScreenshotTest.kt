@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourcedetails.details
+package net.svaroh.passly.feature.resourcedetails.details
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.material3.SnackbarHostState
@@ -6,20 +6,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.android.tools.screenshot.PreviewTest
-import com.passbolt.mobile.android.core.formatter.OtpFormatter
-import com.passbolt.mobile.android.core.ui.controller.TotpComposeController
-import com.passbolt.mobile.android.core.ui.screenshot.PassboltEdgeToEdgePreviewWrapper
-import com.passbolt.mobile.android.core.ui.screenshot.ensureScreenshotKoinStarted
-import com.passbolt.mobile.android.jsonmodel.jsonModelModule
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.MetadataJsonModel
-import com.passbolt.mobile.android.ui.OtpItemWrapper
-import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
-import com.passbolt.mobile.android.ui.ResourcePermission.OWNER
-import com.passbolt.mobile.android.ui.ResourcePermission.READ
-import com.passbolt.mobile.android.ui.ResourceUiModel
-import com.passbolt.mobile.android.ui.UserWithAvatar
+import net.svaroh.passly.core.formatter.OtpFormatter
+import net.svaroh.passly.core.ui.controller.TotpComposeController
+import net.svaroh.passly.core.ui.screenshot.PassboltEdgeToEdgePreviewWrapper
+import net.svaroh.passly.core.ui.screenshot.ensureScreenshotKoinStarted
+import net.svaroh.passly.jsonmodel.jsonModelModule
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.MetadataJsonModel
+import net.svaroh.passly.ui.OtpItemWrapper
+import net.svaroh.passly.ui.PermissionModelUi.GroupPermissionModel
+import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
+import net.svaroh.passly.ui.ResourcePermission.OWNER
+import net.svaroh.passly.ui.ResourcePermission.READ
+import net.svaroh.passly.ui.ResourceUiModel
+import net.svaroh.passly.ui.UserWithAvatar
 import org.koin.dsl.module
 import java.time.ZonedDateTime
 

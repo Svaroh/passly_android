@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.passwordexpiry.model
+package net.svaroh.passly.domain.passwordexpiry.model
 
 data class PasswordExpirySettings(
     val automaticExpiry: Boolean,

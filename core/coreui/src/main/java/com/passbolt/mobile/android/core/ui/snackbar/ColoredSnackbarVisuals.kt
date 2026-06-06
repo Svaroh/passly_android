@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.snackbar
+package net.svaroh.passly.core.ui.snackbar
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarVisuals

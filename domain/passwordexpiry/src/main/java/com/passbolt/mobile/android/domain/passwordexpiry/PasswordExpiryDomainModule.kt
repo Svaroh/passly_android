@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.passwordexpiry
+package net.svaroh.passly.domain.passwordexpiry
 
-import com.passbolt.mobile.android.domain.passwordexpiry.usecase.GetPasswordExpirySettingsUseCase
-import com.passbolt.mobile.android.domain.passwordexpiry.usecase.PasswordExpiryPoliciesInteractor
+import net.svaroh.passly.domain.passwordexpiry.usecase.GetPasswordExpirySettingsUseCase
+import net.svaroh.passly.domain.passwordexpiry.usecase.PasswordExpiryPoliciesInteractor
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

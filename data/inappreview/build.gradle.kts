@@ -11,5 +11,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.data.inappreview"
+    namespace = "net.svaroh.passly.data.inappreview"
 }

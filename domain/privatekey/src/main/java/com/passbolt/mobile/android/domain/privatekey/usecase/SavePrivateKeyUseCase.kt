@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.domain.privatekey.usecase
+package net.svaroh.passly.domain.privatekey.usecase
 
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
-import com.passbolt.mobile.android.domain.privatekey.model.PrivateKey
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
+import net.svaroh.passly.domain.privatekey.model.PrivateKey
 
 /**
  * Passbolt - Open source password manager for teams

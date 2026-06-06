@@ -21,19 +21,19 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.gson
+package net.svaroh.passly.serializers.gson
 
 import com.google.gson.Gson
 import com.google.gson.JsonElement
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.database.snapshot.ResourcesSnapshot
-import com.passbolt.mobile.android.dto.PassphraseNotInCacheException
-import com.passbolt.mobile.android.dto.response.ResourceResponseDto
-import com.passbolt.mobile.android.dto.response.ResourceResponseV4Dto
-import com.passbolt.mobile.android.dto.response.ResourceResponseV5Dto
-import com.passbolt.mobile.android.entity.resource.ResourceWithMetadata
-import com.passbolt.mobile.android.serializers.gson.validation.JsonSchemaValidationRunner
-import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.database.snapshot.ResourcesSnapshot
+import net.svaroh.passly.dto.PassphraseNotInCacheException
+import net.svaroh.passly.dto.response.ResourceResponseDto
+import net.svaroh.passly.dto.response.ResourceResponseV4Dto
+import net.svaroh.passly.dto.response.ResourceResponseV5Dto
+import net.svaroh.passly.entity.resource.ResourceWithMetadata
+import net.svaroh.passly.serializers.gson.validation.JsonSchemaValidationRunner
+import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.time.ZonedDateTime

@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.feature.authentication.session
+package net.svaroh.passly.feature.authentication.session
 
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason
-import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackingFlow
-import com.passbolt.mobile.android.core.mvp.authentication.UnauthenticatedReason
-import com.passbolt.mobile.android.core.navigation.AppForegroundListener
-import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetSessionExpiryUseCase
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.RefreshSessionUseCase
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason
+import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
+import net.svaroh.passly.core.mvp.authentication.UnauthenticatedReason
+import net.svaroh.passly.core.navigation.AppForegroundListener
+import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
+import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take

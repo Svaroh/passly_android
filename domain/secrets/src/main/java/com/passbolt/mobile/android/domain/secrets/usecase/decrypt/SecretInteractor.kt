@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.secrets.usecase.decrypt
+package net.svaroh.passly.domain.secrets.usecase.decrypt
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.mvp.authentication.CompleteAuthenticatedOutput
-import com.passbolt.mobile.android.core.mvp.authentication.IncompleteAuthenticatedOutput
-import com.passbolt.mobile.android.core.mvp.authentication.UnauthenticatedReason
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpError
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
+import net.svaroh.passly.core.mvp.authentication.IncompleteAuthenticatedOutput
+import net.svaroh.passly.core.mvp.authentication.UnauthenticatedReason
+import net.svaroh.passly.gopenpgp.exception.OpenPgpError
 
 class SecretInteractor(
     private val fetchSecretUseCase: FetchSecretUseCase,

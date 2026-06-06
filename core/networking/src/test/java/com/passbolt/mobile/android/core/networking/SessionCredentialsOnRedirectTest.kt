@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.core.networking
+package net.svaroh.passly.core.networking
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.accounts.usecase.GetCurrentApiUrlUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetCurrentApiUrlUseCase
+import net.svaroh.passly.domain.auth.usecase.GetSessionUseCase
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.circlestepsview
+package net.svaroh.passly.core.ui.circlestepsview
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable

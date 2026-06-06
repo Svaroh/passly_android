@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.data.secrets.datasource.remote.api
+package net.svaroh.passly.data.secrets.datasource.remote.api
 
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.SecretResponseDto
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.SecretResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 

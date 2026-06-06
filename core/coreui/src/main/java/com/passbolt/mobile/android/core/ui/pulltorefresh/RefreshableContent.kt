@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.pulltorefresh
+package net.svaroh.passly.core.ui.pulltorefresh
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -34,7 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import com.passbolt.mobile.android.core.ui.progressindicator.DataRefreshProgressIndicator
+import net.svaroh.passly.core.ui.progressindicator.DataRefreshProgressIndicator
 
 @Composable
 internal fun RefreshableContent(

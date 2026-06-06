@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.core.notifications.accessibilityautofill
+package net.svaroh.passly.core.notifications.accessibilityautofill
 
 import android.app.Notification
 import android.app.NotificationManager.IMPORTANCE_HIGH
 import android.app.NotificationManager.IMPORTANCE_LOW
 import android.content.Context
-import com.passbolt.mobile.android.core.notifications.NotificationChannelManager
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.notifications.NotificationChannelManager
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 /**
  * Passbolt - Open source password manager for teams

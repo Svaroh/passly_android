@@ -50,7 +50,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.transferaccounttoanotherdevice"
+    namespace = "net.svaroh.passly.feature.transferaccounttoanotherdevice"
     buildFeatures {
         compose = true
     }

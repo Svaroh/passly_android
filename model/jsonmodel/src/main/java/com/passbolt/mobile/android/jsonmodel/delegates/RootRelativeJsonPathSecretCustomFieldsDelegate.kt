@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.jsonmodel.delegates
+package net.svaroh.passly.jsonmodel.delegates
 
 import com.google.gson.Gson
-import com.passbolt.mobile.android.jsonmodel.JSON_MODEL_GSON
-import com.passbolt.mobile.android.jsonmodel.JsonModel
-import com.passbolt.mobile.android.jsonmodel.jsonpathops.JsonPathsOps
+import net.svaroh.passly.jsonmodel.JSON_MODEL_GSON
+import net.svaroh.passly.jsonmodel.JsonModel
+import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathsOps
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named

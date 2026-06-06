@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.base
+package net.svaroh.passly.feature.base
 
 import org.koin.test.KoinTest
 

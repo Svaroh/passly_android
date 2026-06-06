@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.overlap
+package net.svaroh.passly.core.ui.overlap
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test

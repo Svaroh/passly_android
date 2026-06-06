@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.favourites
+package net.svaroh.passly.data.favourites
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.favourites.datasource.remote.FavouritesRemoteDataSource
-import com.passbolt.mobile.android.data.favourites.datasource.remote.api.FavouritesApi
-import com.passbolt.mobile.android.domain.favourites.FavouritesDataSource
-import com.passbolt.mobile.android.domain.favourites.FavouritesRepository
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.favourites.datasource.remote.FavouritesRemoteDataSource
+import net.svaroh.passly.data.favourites.datasource.remote.api.FavouritesApi
+import net.svaroh.passly.domain.favourites.FavouritesDataSource
+import net.svaroh.passly.domain.favourites.FavouritesRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

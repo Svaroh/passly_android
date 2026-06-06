@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.users.mapper
+package net.svaroh.passly.data.users.mapper
 
-import com.passbolt.mobile.android.domain.users.model.GpgKey
-import com.passbolt.mobile.android.entity.user.User
-import com.passbolt.mobile.android.entity.user.UserGpgKey
-import com.passbolt.mobile.android.entity.user.UserUpdateState
-import com.passbolt.mobile.android.domain.users.model.UserProfile as DomainUserProfile
-import com.passbolt.mobile.android.entity.user.UserProfile as UserProfileEntity
+import net.svaroh.passly.domain.users.model.GpgKey
+import net.svaroh.passly.entity.user.User
+import net.svaroh.passly.entity.user.UserGpgKey
+import net.svaroh.passly.entity.user.UserUpdateState
+import net.svaroh.passly.domain.users.model.UserProfile as DomainUserProfile
+import net.svaroh.passly.entity.user.UserProfile as UserProfileEntity
 
 internal fun User.toDomain(): DomainUserProfile =
     DomainUserProfile(

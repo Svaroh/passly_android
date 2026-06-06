@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.groups
+package net.svaroh.passly.data.groups
 
 import androidx.paging.PagingData
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.groups.GroupsRepository
-import com.passbolt.mobile.android.domain.groups.datasource.GroupsLocalDataSource
-import com.passbolt.mobile.android.domain.groups.datasource.GroupsRemoteDataSource
-import com.passbolt.mobile.android.domain.groups.model.Group
-import com.passbolt.mobile.android.domain.groups.model.GroupWithItemsCount
-import com.passbolt.mobile.android.domain.groups.model.GroupWithMembers
-import com.passbolt.mobile.android.domain.groups.model.GroupWithUsers
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.groups.GroupsRepository
+import net.svaroh.passly.domain.groups.datasource.GroupsLocalDataSource
+import net.svaroh.passly.domain.groups.datasource.GroupsRemoteDataSource
+import net.svaroh.passly.domain.groups.model.Group
+import net.svaroh.passly.domain.groups.model.GroupWithItemsCount
+import net.svaroh.passly.domain.groups.model.GroupWithMembers
+import net.svaroh.passly.domain.groups.model.GroupWithUsers
 import kotlinx.coroutines.flow.Flow
 
 internal class GroupsRepositoryImpl(

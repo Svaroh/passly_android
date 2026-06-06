@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
 data class ResourceMoreMenuModel(
     val title: String,

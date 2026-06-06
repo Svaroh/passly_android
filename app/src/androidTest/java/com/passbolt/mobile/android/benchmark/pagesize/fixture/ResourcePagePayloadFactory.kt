@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.fixture
+package net.svaroh.passly.benchmark.pagesize.fixture
 
 import com.google.gson.Gson
-import com.passbolt.mobile.android.dto.response.MetadataKeyTypeDto
-import com.passbolt.mobile.android.dto.response.PermissionDto
-import com.passbolt.mobile.android.dto.response.ResourceResponseV5Dto
+import net.svaroh.passly.dto.response.MetadataKeyTypeDto
+import net.svaroh.passly.dto.response.PermissionDto
+import net.svaroh.passly.dto.response.ResourceResponseV5Dto
 import okio.Buffer
 import java.util.UUID
 

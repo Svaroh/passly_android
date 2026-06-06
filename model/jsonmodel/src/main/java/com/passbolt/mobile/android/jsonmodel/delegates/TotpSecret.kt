@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.jsonmodel.delegates
+package net.svaroh.passly.jsonmodel.delegates
 
 import com.google.gson.annotations.SerializedName
 

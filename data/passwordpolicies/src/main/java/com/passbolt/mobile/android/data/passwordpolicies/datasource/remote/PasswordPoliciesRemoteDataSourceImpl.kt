@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.passwordpolicies.datasource.remote
+package net.svaroh.passly.data.passwordpolicies.datasource.remote
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.passwordpolicies.datasource.remote.api.PasswordPoliciesApi
-import com.passbolt.mobile.android.data.passwordpolicies.mapper.toDomain
-import com.passbolt.mobile.android.domain.passwordpolicies.PasswordPoliciesRemoteDataSource
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordPolicies
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.passwordpolicies.datasource.remote.api.PasswordPoliciesApi
+import net.svaroh.passly.data.passwordpolicies.mapper.toDomain
+import net.svaroh.passly.domain.passwordpolicies.PasswordPoliciesRemoteDataSource
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordPolicies
 
 internal class PasswordPoliciesRemoteDataSourceImpl(
     private val passwordPoliciesApi: PasswordPoliciesApi,

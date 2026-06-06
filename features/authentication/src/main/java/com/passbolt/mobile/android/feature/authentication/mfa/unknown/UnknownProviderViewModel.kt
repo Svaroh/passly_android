@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.unknown
+package net.svaroh.passly.feature.authentication.mfa.unknown
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignOutUseCase
-import com.passbolt.mobile.android.feature.authentication.mfa.unknown.UnknownProviderIntent.Close
-import com.passbolt.mobile.android.feature.authentication.mfa.unknown.UnknownProviderSideEffect.CloseAndNavigateToStartup
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
+import net.svaroh.passly.feature.authentication.mfa.unknown.UnknownProviderIntent.Close
+import net.svaroh.passly.feature.authentication.mfa.unknown.UnknownProviderSideEffect.CloseAndNavigateToStartup
 
 class UnknownProviderViewModel(
     private val signOutUseCase: SignOutUseCase,

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourceform.metadata.appearance
+package net.svaroh.passly.feature.resourceform.metadata.appearance
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

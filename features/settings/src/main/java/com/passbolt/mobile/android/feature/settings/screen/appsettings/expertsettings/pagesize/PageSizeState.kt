@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize
+package net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize
 
-import com.passbolt.mobile.android.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
 
 internal data class PageSizeState(
     val selectedIndex: Int = INITIAL_INDEX,

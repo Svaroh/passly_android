@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.domain.preferences.mapper
+package net.svaroh.passly.domain.preferences.mapper
 
-import com.passbolt.mobile.android.ui.DefaultFilterUiModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewUiModel
+import net.svaroh.passly.ui.DefaultFilterUiModel
+import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.HomeDisplayViewUiModel
 
 /**
  * Passbolt - Open source password manager for teams

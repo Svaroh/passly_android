@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.feature.otp.scanotp
+package net.svaroh.passly.feature.otp.scanotp
 
-import com.passbolt.mobile.android.core.qrscan.CameraInformationProvider
-import com.passbolt.mobile.android.core.qrscan.analyzer.BarcodeScanResult
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpViewModel
-import com.passbolt.mobile.android.feature.otp.scanotp.parser.OtpQrParser
-import com.passbolt.mobile.android.ui.OtpParseResult
-import com.passbolt.mobile.android.ui.OtpParseResult.UserResolvableError.ErrorType.NO_BARCODES_IN_RANGE
+import net.svaroh.passly.core.qrscan.CameraInformationProvider
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpViewModel
+import net.svaroh.passly.feature.otp.scanotp.parser.OtpQrParser
+import net.svaroh.passly.ui.OtpParseResult
+import net.svaroh.passly.ui.OtpParseResult.UserResolvableError.ErrorType.NO_BARCODES_IN_RANGE
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module

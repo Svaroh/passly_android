@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.home.screen.list
+package net.svaroh.passly.feature.home.screen.list
 
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
@@ -57,15 +57,15 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
-import com.passbolt.mobile.android.common.extension.isInFuture
-import com.passbolt.mobile.android.common.extension.toSingleLine
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.domain.resources.resourceicon.ResourceIconProvider
-import com.passbolt.mobile.android.testtags.composetags.Home
-import com.passbolt.mobile.android.ui.ResourceUiModel
-import com.passbolt.mobile.android.ui.contentType
-import com.passbolt.mobile.android.ui.isExpired
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.common.extension.isInFuture
+import net.svaroh.passly.common.extension.toSingleLine
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.domain.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.testtags.composetags.Home
+import net.svaroh.passly.ui.ResourceUiModel
+import net.svaroh.passly.ui.contentType
+import net.svaroh.passly.ui.isExpired
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 fun ResourceItem(

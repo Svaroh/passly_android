@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.defaultfilter
+package net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter
 
-import com.passbolt.mobile.android.ui.DefaultFilterUiModel
+import net.svaroh.passly.ui.DefaultFilterUiModel
 
 /**
  * Passbolt - Open source password manager for teams

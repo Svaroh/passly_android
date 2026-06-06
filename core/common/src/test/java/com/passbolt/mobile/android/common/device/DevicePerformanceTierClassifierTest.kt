@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.common.device
+package net.svaroh.passly.common.device
 
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
-import com.passbolt.mobile.android.common.device.DevicePerformanceTier.HIGH
-import com.passbolt.mobile.android.common.device.DevicePerformanceTier.LOW
-import com.passbolt.mobile.android.common.device.DevicePerformanceTier.MEDIUM
+import net.svaroh.passly.common.device.DevicePerformanceTier.HIGH
+import net.svaroh.passly.common.device.DevicePerformanceTier.LOW
+import net.svaroh.passly.common.device.DevicePerformanceTier.MEDIUM
 import org.junit.Test
 
 class DevicePerformanceTierClassifierTest {

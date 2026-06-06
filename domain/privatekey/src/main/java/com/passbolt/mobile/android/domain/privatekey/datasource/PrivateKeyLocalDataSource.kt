@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.privatekey.datasource
+package net.svaroh.passly.domain.privatekey.datasource
 
-import com.passbolt.mobile.android.domain.privatekey.model.PrivateKey
+import net.svaroh.passly.domain.privatekey.model.PrivateKey
 
 interface PrivateKeyLocalDataSource {
     fun getPrivateKey(userId: String): PrivateKey?

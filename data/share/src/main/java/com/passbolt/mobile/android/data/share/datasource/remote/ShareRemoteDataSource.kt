@@ -21,23 +21,23 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.share.datasource.remote
+package net.svaroh.passly.data.share.datasource.remote
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.share.datasource.remote.api.ShareApi
-import com.passbolt.mobile.android.data.share.mapper.toDomain
-import com.passbolt.mobile.android.data.share.mapper.toDto
-import com.passbolt.mobile.android.domain.share.ShareDataSource
-import com.passbolt.mobile.android.domain.share.model.EncryptedSecret
-import com.passbolt.mobile.android.domain.share.model.ShareChanges
-import com.passbolt.mobile.android.domain.share.model.SharePermission
-import com.passbolt.mobile.android.dto.request.FolderShareRequest
-import com.passbolt.mobile.android.dto.request.ResourceShareRequest
-import com.passbolt.mobile.android.dto.request.SimulateShareRequest
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.share.datasource.remote.api.ShareApi
+import net.svaroh.passly.data.share.mapper.toDomain
+import net.svaroh.passly.data.share.mapper.toDto
+import net.svaroh.passly.domain.share.ShareDataSource
+import net.svaroh.passly.domain.share.model.EncryptedSecret
+import net.svaroh.passly.domain.share.model.ShareChanges
+import net.svaroh.passly.domain.share.model.SharePermission
+import net.svaroh.passly.dto.request.FolderShareRequest
+import net.svaroh.passly.dto.request.ResourceShareRequest
+import net.svaroh.passly.dto.request.SimulateShareRequest
 
 internal class ShareRemoteDataSource(
     private val shareApi: ShareApi,

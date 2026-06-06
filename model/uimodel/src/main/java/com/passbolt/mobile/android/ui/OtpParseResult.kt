@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
 // Check details in the documentation
 // intro: https://github.com/google/google-authenticator/wiki/Key-Uri-Format

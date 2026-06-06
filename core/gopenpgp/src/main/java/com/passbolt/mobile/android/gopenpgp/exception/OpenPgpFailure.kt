@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.gopenpgp.exception
+package net.svaroh.passly.gopenpgp.exception
 
 /**
  * Passbolt - Open source password manager for teams

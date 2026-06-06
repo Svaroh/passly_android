@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.helpmenu
+package net.svaroh.passly.helpmenu
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

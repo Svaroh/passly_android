@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.accountslist
+package net.svaroh.passly.feature.authentication.accountslist
 
 import android.content.Context
-import com.passbolt.mobile.android.core.localization.R
+import net.svaroh.passly.core.localization.R
 
 internal fun getSnackBarMessage(
     context: Context,

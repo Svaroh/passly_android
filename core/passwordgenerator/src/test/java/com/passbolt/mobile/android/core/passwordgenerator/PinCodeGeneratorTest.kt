@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.passwordgenerator
+package net.svaroh.passly.core.passwordgenerator
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.ui.PinCodeUiModel.Companion.MAX_LENGTH
-import com.passbolt.mobile.android.ui.PinCodeUiModel.Companion.MIN_LENGTH
+import net.svaroh.passly.ui.PinCodeUiModel.Companion.MAX_LENGTH
+import net.svaroh.passly.ui.PinCodeUiModel.Companion.MIN_LENGTH
 import org.junit.Assert.assertThrows
 import org.junit.Test
 import java.security.SecureRandom

@@ -19,7 +19,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.autofill"
+    namespace = "net.svaroh.passly.core.autofill"
 
     buildFeatures {
         buildConfig = true

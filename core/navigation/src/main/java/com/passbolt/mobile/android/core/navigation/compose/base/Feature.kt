@@ -20,7 +20,7 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.navigation.compose.base
+package net.svaroh.passly.core.navigation.compose.base
 
 enum class Feature {
     AUTHENTICATION,

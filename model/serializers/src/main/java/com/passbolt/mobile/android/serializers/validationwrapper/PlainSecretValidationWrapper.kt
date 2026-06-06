@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.serializers.validationwrapper
+package net.svaroh.passly.serializers.validationwrapper
 
 import com.google.gson.Gson
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
+import net.svaroh.passly.supportedresourceTypes.ContentType
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

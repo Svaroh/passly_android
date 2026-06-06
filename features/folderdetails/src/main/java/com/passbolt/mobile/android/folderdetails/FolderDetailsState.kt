@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.folderdetails
+package net.svaroh.passly.folderdetails
 
-import com.passbolt.mobile.android.domain.folders.model.FolderModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.domain.folders.model.FolderModel
+import net.svaroh.passly.ui.PermissionModelUi
 
 data class FolderDetailsState(
     val folderId: String? = null,

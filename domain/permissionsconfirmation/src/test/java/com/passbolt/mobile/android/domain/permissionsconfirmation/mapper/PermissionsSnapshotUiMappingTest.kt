@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.permissionsconfirmation.mapper
+package net.svaroh.passly.domain.permissionsconfirmation.mapper
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
-import com.passbolt.mobile.android.domain.users.model.UserProfile
-import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper.Companion.TEMPORARY_NEW_PERMISSION_ID
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.PermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.domain.permissionsconfirmation.model.PermissionsSnapshot
+import net.svaroh.passly.domain.users.model.UserProfile
+import net.svaroh.passly.mappers.SharePermissionsModelMapper.Companion.TEMPORARY_NEW_PERMISSION_ID
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.PermissionModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourcePermission
 import org.junit.Test
 import java.time.ZonedDateTime
 

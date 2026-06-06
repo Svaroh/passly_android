@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.startup.deprecatedoswarning
+package net.svaroh.passly.feature.startup.deprecatedoswarning
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.envinfo.EnvInfo
-import com.passbolt.mobile.android.core.envinfo.EnvInfoProvider
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
-import com.passbolt.mobile.android.domain.preferences.PreferencesDefaults
-import com.passbolt.mobile.android.domain.preferences.usecase.GetGlobalPreferencesUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
-import com.passbolt.mobile.android.feature.startup.BuildConfig
-import com.passbolt.mobile.android.ui.GlobalPreferencesUiModel
+import net.svaroh.passly.core.envinfo.EnvInfo
+import net.svaroh.passly.core.envinfo.EnvInfoProvider
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.feature.startup.BuildConfig
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock

@@ -21,19 +21,19 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.accounts
+package net.svaroh.passly.feature.settings.screen.accounts
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToAccountDetails
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToKeyInspector
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToManageAccounts
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToTransferAccount
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsSettingsIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsSettingsIntent.GoToAccountDetails
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsSettingsIntent.GoToKeyInspector
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsSettingsIntent.GoToManageAccounts
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsSettingsIntent.GoToTransferAccount
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateBack
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToAccountDetails
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToKeyInspector
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToManageAccounts
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToTransferAccount
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsSettingsIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsSettingsIntent.GoToAccountDetails
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsSettingsIntent.GoToKeyInspector
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsSettingsIntent.GoToManageAccounts
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsSettingsIntent.GoToTransferAccount
 
 internal class AccountsSettingsViewModel : SideEffectViewModel<Unit, AccountsScreenSideEffect>(Unit) {
     fun onIntent(intent: AccountsSettingsIntent) {

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourcedetails.details.ui.metadata
+package net.svaroh.passly.feature.resourcedetails.details.ui.metadata
 
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.ui.span.RoundedBackgroundSpan
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.ui.span.RoundedBackgroundSpan
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun TagsItem(

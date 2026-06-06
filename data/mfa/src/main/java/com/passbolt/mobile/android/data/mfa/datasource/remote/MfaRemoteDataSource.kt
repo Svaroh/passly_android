@@ -21,23 +21,23 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.mfa.datasource.remote
+package net.svaroh.passly.data.mfa.datasource.remote
 
-import com.passbolt.mobile.android.common.CookieExtractor
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.ErrorHeaderMapper
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.mfa.datasource.remote.api.MfaApi
-import com.passbolt.mobile.android.domain.mfa.MfaDataSource
-import com.passbolt.mobile.android.domain.mfa.model.DuoPrompt
-import com.passbolt.mobile.android.domain.mfa.model.DuoVerification
-import com.passbolt.mobile.android.domain.mfa.model.TotpVerification
-import com.passbolt.mobile.android.domain.mfa.model.YubikeyVerification
-import com.passbolt.mobile.android.dto.request.HotpRequest
-import com.passbolt.mobile.android.dto.request.TotpRequest
+import net.svaroh.passly.common.CookieExtractor
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.ErrorHeaderMapper
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.mfa.datasource.remote.api.MfaApi
+import net.svaroh.passly.domain.mfa.MfaDataSource
+import net.svaroh.passly.domain.mfa.model.DuoPrompt
+import net.svaroh.passly.domain.mfa.model.DuoVerification
+import net.svaroh.passly.domain.mfa.model.TotpVerification
+import net.svaroh.passly.domain.mfa.model.YubikeyVerification
+import net.svaroh.passly.dto.request.HotpRequest
+import net.svaroh.passly.dto.request.TotpRequest
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response

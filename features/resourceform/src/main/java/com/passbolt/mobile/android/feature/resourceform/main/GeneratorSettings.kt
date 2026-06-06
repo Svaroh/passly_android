@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.feature.resourceform.main
+package net.svaroh.passly.feature.resourceform.main
 
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
 
 data class GeneratorSettings(
     val type: PasswordGeneratorTypeUiModel,

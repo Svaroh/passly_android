@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.passwordpolicies.mapper
+package net.svaroh.passly.data.passwordpolicies.mapper
 
-import com.passbolt.mobile.android.domain.passwordpolicies.model.CaseType
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PassphraseGeneratorSettings
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordGeneratorSettings
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordGeneratorType
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordPolicies
-import com.passbolt.mobile.android.dto.response.CaseTypeDto
-import com.passbolt.mobile.android.dto.response.PassphraseGeneratorSettingsDto
-import com.passbolt.mobile.android.dto.response.PasswordGeneratorSettingsDto
-import com.passbolt.mobile.android.dto.response.PasswordGeneratorTypeDto
-import com.passbolt.mobile.android.dto.response.PasswordPoliciesDto
+import net.svaroh.passly.domain.passwordpolicies.model.CaseType
+import net.svaroh.passly.domain.passwordpolicies.model.PassphraseGeneratorSettings
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordGeneratorSettings
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordGeneratorType
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordPolicies
+import net.svaroh.passly.dto.response.CaseTypeDto
+import net.svaroh.passly.dto.response.PassphraseGeneratorSettingsDto
+import net.svaroh.passly.dto.response.PasswordGeneratorSettingsDto
+import net.svaroh.passly.dto.response.PasswordGeneratorTypeDto
+import net.svaroh.passly.dto.response.PasswordPoliciesDto
 
 fun PasswordPoliciesDto.toDomain(): PasswordPolicies =
     PasswordPolicies(

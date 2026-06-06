@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.tabs
+package net.svaroh.passly.core.ui.tabs
 
 data class ButtonTabItemModel(
     val id: String,

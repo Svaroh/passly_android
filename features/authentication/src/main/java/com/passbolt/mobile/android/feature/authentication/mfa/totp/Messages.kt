@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.totp
+package net.svaroh.passly.feature.authentication.mfa.totp
 
 import android.content.Context
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.GENERIC
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.NETWORK
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.SESSION_EXPIRED
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.WRONG_CODE
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.GENERIC
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.NETWORK
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.SESSION_EXPIRED
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.WRONG_CODE
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getSnackbarMessage(
     context: Context,

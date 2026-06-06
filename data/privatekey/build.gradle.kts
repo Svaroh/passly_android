@@ -12,5 +12,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.data.privatekey"
+    namespace = "net.svaroh.passly.data.privatekey"
 }

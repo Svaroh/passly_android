@@ -21,39 +21,39 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_DIGIT
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_EMOJI
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_LOWER
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_PARENTHESIS
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR1
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR2
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR3
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR4
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR5
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_UPPER
-import com.passbolt.mobile.android.core.passwordgenerator.SecretGenerator
-import com.passbolt.mobile.android.core.passwordgenerator.SecretGenerator.SecretGenerationResult.FailedToGenerateLowEntropy
-import com.passbolt.mobile.android.core.passwordgenerator.SecretGenerator.SecretGenerationResult.Success
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PassphraseWordCaseChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PassphraseWordSeparatorChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PassphraseWordsCountChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PasswordCharacterSetToggled
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PasswordExcludeLookAlikeChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PasswordLengthChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PreviewMaskToggled
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.SavePreferences
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.TabSelected
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationSideEffect.NavigateBack
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel.PASSPHRASE
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel.PASSWORD
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_DIGIT
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_EMOJI
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_LOWER
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_PARENTHESIS
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR1
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR2
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR3
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR4
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR5
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_UPPER
+import net.svaroh.passly.core.passwordgenerator.SecretGenerator
+import net.svaroh.passly.core.passwordgenerator.SecretGenerator.SecretGenerationResult.FailedToGenerateLowEntropy
+import net.svaroh.passly.core.passwordgenerator.SecretGenerator.SecretGenerationResult.Success
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PassphraseWordCaseChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PassphraseWordSeparatorChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PassphraseWordsCountChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PasswordCharacterSetToggled
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PasswordExcludeLookAlikeChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PasswordLengthChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PreviewMaskToggled
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.SavePreferences
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.TabSelected
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationSideEffect.NavigateBack
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel.PASSPHRASE
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel.PASSWORD
 import kotlinx.coroutines.Job
 
 internal class AdvancedSecretGenerationViewModel(

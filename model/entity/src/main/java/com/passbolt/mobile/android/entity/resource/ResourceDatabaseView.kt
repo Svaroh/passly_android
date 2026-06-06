@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.entity.resource
+package net.svaroh.passly.entity.resource
 
 /**
  * Objects representing different filtering and sorting options for database queries

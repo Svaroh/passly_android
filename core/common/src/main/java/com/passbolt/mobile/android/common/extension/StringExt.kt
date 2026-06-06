@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common.extension
+package net.svaroh.passly.common.extension
 
 import android.text.Html
 import android.text.Spanned

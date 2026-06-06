@@ -21,23 +21,23 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.usecase
+package net.svaroh.passly.domain.resources.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.FetchFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.groups.model.Group
-import com.passbolt.mobile.android.domain.groups.model.GroupMember
-import com.passbolt.mobile.android.domain.groups.model.GroupWithMembers
-import com.passbolt.mobile.android.domain.groups.usecase.FetchGroupsByIdsUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.PermissionsSnapshotRepository
-import com.passbolt.mobile.android.domain.users.model.UserProfile
-import com.passbolt.mobile.android.domain.users.usecase.FetchUsersByIdsUseCase
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.PermissionModel
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.folders.usecase.FetchFolderPermissionsUseCase
+import net.svaroh.passly.domain.groups.model.Group
+import net.svaroh.passly.domain.groups.model.GroupMember
+import net.svaroh.passly.domain.groups.model.GroupWithMembers
+import net.svaroh.passly.domain.groups.usecase.FetchGroupsByIdsUseCase
+import net.svaroh.passly.domain.permissionsconfirmation.PermissionsSnapshotRepository
+import net.svaroh.passly.domain.users.model.UserProfile
+import net.svaroh.passly.domain.users.usecase.FetchUsersByIdsUseCase
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.PermissionModel
+import net.svaroh.passly.ui.ResourcePermission
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule

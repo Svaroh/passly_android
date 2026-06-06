@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize
+package net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
-import com.passbolt.mobile.android.domain.preferences.usecase.GetAutomaticPageSizeUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.GetGlobalPreferencesUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.PageSizeChanged
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.RestoreDefaultsClick
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.SaveClick
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeSideEffect.NavigateBack
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.usecase.GetAutomaticPageSizeUseCase
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.PageSizeChanged
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.RestoreDefaultsClick
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.SaveClick
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeSideEffect.NavigateBack
 
 internal class PageSizeViewModel(
     private val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase,

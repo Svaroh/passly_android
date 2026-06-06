@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.share
+package net.svaroh.passly.data.share
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.share.datasource.remote.ShareRemoteDataSource
-import com.passbolt.mobile.android.data.share.datasource.remote.api.ShareApi
-import com.passbolt.mobile.android.domain.share.ShareDataSource
-import com.passbolt.mobile.android.domain.share.ShareRepository
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.share.datasource.remote.ShareRemoteDataSource
+import net.svaroh.passly.data.share.datasource.remote.api.ShareApi
+import net.svaroh.passly.domain.share.ShareDataSource
+import net.svaroh.passly.domain.share.ShareRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

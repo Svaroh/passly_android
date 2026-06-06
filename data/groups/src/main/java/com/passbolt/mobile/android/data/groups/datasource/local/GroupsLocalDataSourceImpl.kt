@@ -21,23 +21,23 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.groups.datasource.local
+package net.svaroh.passly.data.groups.datasource.local
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.passbolt.mobile.android.data.groups.mapper.toDomain
-import com.passbolt.mobile.android.data.groups.mapper.toEntity
-import com.passbolt.mobile.android.database.DatabaseProvider
-import com.passbolt.mobile.android.database.QuerySanitizer
-import com.passbolt.mobile.android.domain.groups.datasource.GroupsLocalDataSource
-import com.passbolt.mobile.android.domain.groups.model.Group
-import com.passbolt.mobile.android.domain.groups.model.GroupWithItemsCount
-import com.passbolt.mobile.android.domain.groups.model.GroupWithMembers
-import com.passbolt.mobile.android.domain.groups.model.GroupWithUsers
-import com.passbolt.mobile.android.entity.group.GroupUpdateState.PENDING
-import com.passbolt.mobile.android.entity.group.UsersAndGroupCrossRef
+import net.svaroh.passly.data.groups.mapper.toDomain
+import net.svaroh.passly.data.groups.mapper.toEntity
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.database.QuerySanitizer
+import net.svaroh.passly.domain.groups.datasource.GroupsLocalDataSource
+import net.svaroh.passly.domain.groups.model.Group
+import net.svaroh.passly.domain.groups.model.GroupWithItemsCount
+import net.svaroh.passly.domain.groups.model.GroupWithMembers
+import net.svaroh.passly.domain.groups.model.GroupWithUsers
+import net.svaroh.passly.entity.group.GroupUpdateState.PENDING
+import net.svaroh.passly.entity.group.UsersAndGroupCrossRef
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

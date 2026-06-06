@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.appearance
+package net.svaroh.passly.feature.resourceform.metadata.appearance
 
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.ui.ResourceAppearanceModel
+import net.svaroh.passly.ui.ResourceFormMode
 
 internal data class AppearanceFormState(
     val resourceFormMode: ResourceFormMode? = null,

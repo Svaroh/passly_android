@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.resourceform.metadata.appearance
+package net.svaroh.passly.feature.resourceform.metadata.appearance
 
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel
+import net.svaroh.passly.ui.ResourceAppearanceModel
 
 /**
  * Passbolt - Open source password manager for teams

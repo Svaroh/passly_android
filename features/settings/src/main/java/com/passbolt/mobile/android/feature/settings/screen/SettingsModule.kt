@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.screen
+package net.svaroh.passly.feature.settings.screen
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

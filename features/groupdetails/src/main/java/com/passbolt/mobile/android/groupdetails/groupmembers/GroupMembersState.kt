@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.groupdetails.groupmembers
+package net.svaroh.passly.groupdetails.groupmembers
 
-import com.passbolt.mobile.android.ui.UserUiModel
+import net.svaroh.passly.ui.UserUiModel
 
 data class GroupMembersState(
     val groupName: String = "",

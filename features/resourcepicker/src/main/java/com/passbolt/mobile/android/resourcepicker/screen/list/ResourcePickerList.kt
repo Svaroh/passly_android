@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.screen.list
+package net.svaroh.passly.resourcepicker.screen.list
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,18 +37,18 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.passbolt.mobile.android.core.compose.rememberDebouncedBoolean
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.ui.empty.EmptyResourceListState
-import com.passbolt.mobile.android.core.ui.lists.HeaderItem
-import com.passbolt.mobile.android.core.ui.loading.LoadingListState
-import com.passbolt.mobile.android.domain.resources.resourceicon.ResourceIconProvider
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerIntent
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerIntent.ResourcePicked
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerState
-import com.passbolt.mobile.android.ui.ResourcePickerListItem
+import net.svaroh.passly.core.compose.rememberDebouncedBoolean
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.ui.empty.EmptyResourceListState
+import net.svaroh.passly.core.ui.lists.HeaderItem
+import net.svaroh.passly.core.ui.loading.LoadingListState
+import net.svaroh.passly.domain.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.ResourcePicked
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerState
+import net.svaroh.passly.ui.ResourcePickerListItem
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun ResourcePickerList(

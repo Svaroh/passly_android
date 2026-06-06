@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.users.datasource.remote.api
+package net.svaroh.passly.data.users.datasource.remote.api
 
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.UserDto
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.UserDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 

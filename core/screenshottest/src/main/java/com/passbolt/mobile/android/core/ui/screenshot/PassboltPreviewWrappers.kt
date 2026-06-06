@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.screenshot
+package net.svaroh.passly.core.ui.screenshot
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -34,7 +34,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.PreviewWrapperProvider
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.PassboltTheme
+import net.svaroh.passly.core.compose.PassboltTheme
 
 private val PREVIEW_CONTENT_PADDING = 16.dp
 

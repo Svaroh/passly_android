@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.navigation.compose.results
+package net.svaroh.passly.core.navigation.compose.results
 
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionModelUi
 
 data class PermissionsConfirmedResult(
     val permissions: List<PermissionModelUi>,

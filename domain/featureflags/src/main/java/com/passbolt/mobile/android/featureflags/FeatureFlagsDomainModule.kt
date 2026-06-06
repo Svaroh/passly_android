@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.featureflags
+package net.svaroh.passly.featureflags
 
-import com.passbolt.mobile.android.featureflags.usecase.FeatureFlagsInteractor
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
+import net.svaroh.passly.featureflags.usecase.FeatureFlagsInteractor
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

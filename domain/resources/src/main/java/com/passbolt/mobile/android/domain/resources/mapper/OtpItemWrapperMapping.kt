@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.mapper
+package net.svaroh.passly.domain.resources.mapper
 
-import com.passbolt.mobile.android.ui.OtpItemWrapper
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.ui.OtpItemWrapper
+import net.svaroh.passly.ui.ResourceUiModel
 
 fun ResourceUiModel.toOtpItemWrapper(): OtpItemWrapper {
     metadataJsonModel.warmCache()

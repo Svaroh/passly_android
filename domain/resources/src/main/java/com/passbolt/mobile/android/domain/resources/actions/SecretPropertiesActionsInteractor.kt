@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.actions
+package net.svaroh.passly.domain.resources.actions
 
 import androidx.annotation.VisibleForTesting
-import com.passbolt.mobile.android.domain.secrets.model.SecretJsonModel
-import com.passbolt.mobile.android.domain.secrets.parser.SecretParser
-import com.passbolt.mobile.android.domain.secrets.usecase.decrypt.SecretInteractor
-import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldsModel
-import com.passbolt.mobile.android.jsonmodel.delegates.TotpSecret
-import com.passbolt.mobile.android.ui.DecryptedSecretOrError
-import com.passbolt.mobile.android.ui.ResourceUiModel
-import com.passbolt.mobile.android.ui.contentType
+import net.svaroh.passly.domain.secrets.model.SecretJsonModel
+import net.svaroh.passly.domain.secrets.parser.SecretParser
+import net.svaroh.passly.domain.secrets.usecase.decrypt.SecretInteractor
+import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldsModel
+import net.svaroh.passly.jsonmodel.delegates.TotpSecret
+import net.svaroh.passly.ui.DecryptedSecretOrError
+import net.svaroh.passly.ui.ResourceUiModel
+import net.svaroh.passly.ui.contentType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single

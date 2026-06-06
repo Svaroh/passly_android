@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.autofill.resources
+package net.svaroh.passly.feature.autofill.resources
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -30,28 +30,28 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
-import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.otpcore.TotpParametersProvider
-import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountsUseCase
-import com.passbolt.mobile.android.domain.resources.actions.SecretPropertiesActionsInteractor
-import com.passbolt.mobile.android.domain.resources.actions.SecretPropertyActionResult
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceUseCase
-import com.passbolt.mobile.android.domain.secrets.model.SecretJsonModel
-import com.passbolt.mobile.android.feature.autofill.resources.AutofillResourcesIntent.NewResourceCreated
-import com.passbolt.mobile.android.feature.autofill.resources.AutofillResourcesIntent.SelectAutofillItem
-import com.passbolt.mobile.android.feature.autofill.resources.AutofillResourcesIntent.UserAuthenticated
-import com.passbolt.mobile.android.feature.autofill.resources.AutofillResourcesSideEffect.AutofillReturn
-import com.passbolt.mobile.android.feature.autofill.resources.AutofillResourcesSideEffect.NavigateToAuth
-import com.passbolt.mobile.android.feature.autofill.resources.AutofillResourcesSideEffect.NavigateToSetup
-import com.passbolt.mobile.android.feature.autofill.resources.AutofillResourcesSideEffect.ShowToast
-import com.passbolt.mobile.android.jsonmodel.JSON_MODEL_GSON
-import com.passbolt.mobile.android.jsonmodel.delegates.TotpSecret
-import com.passbolt.mobile.android.jsonmodel.jsonpathops.JsonPathJsonPathOps
-import com.passbolt.mobile.android.jsonmodel.jsonpathops.JsonPathsOps
-import com.passbolt.mobile.android.ui.MetadataJsonModel
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.otpcore.TotpParametersProvider
+import net.svaroh.passly.domain.accounts.usecase.GetAccountsUseCase
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.SecretPropertyActionResult
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.domain.secrets.model.SecretJsonModel
+import net.svaroh.passly.feature.autofill.resources.AutofillResourcesIntent.NewResourceCreated
+import net.svaroh.passly.feature.autofill.resources.AutofillResourcesIntent.SelectAutofillItem
+import net.svaroh.passly.feature.autofill.resources.AutofillResourcesIntent.UserAuthenticated
+import net.svaroh.passly.feature.autofill.resources.AutofillResourcesSideEffect.AutofillReturn
+import net.svaroh.passly.feature.autofill.resources.AutofillResourcesSideEffect.NavigateToAuth
+import net.svaroh.passly.feature.autofill.resources.AutofillResourcesSideEffect.NavigateToSetup
+import net.svaroh.passly.feature.autofill.resources.AutofillResourcesSideEffect.ShowToast
+import net.svaroh.passly.jsonmodel.JSON_MODEL_GSON
+import net.svaroh.passly.jsonmodel.delegates.TotpSecret
+import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathJsonPathOps
+import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathsOps
+import net.svaroh.passly.ui.MetadataJsonModel
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.ResourceUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf

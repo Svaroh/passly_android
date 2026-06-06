@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.localization"
+    namespace = "net.svaroh.passly.core.localization"
 }

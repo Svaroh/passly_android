@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.resourcetypes
+package net.svaroh.passly.data.resourcetypes
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.resourcetypes.datasource.local.ResourceTypesLocalDataSourceImpl
-import com.passbolt.mobile.android.data.resourcetypes.datasource.remote.ResourceTypesRemoteDataSourceImpl
-import com.passbolt.mobile.android.data.resourcetypes.datasource.remote.api.ResourceTypesApi
-import com.passbolt.mobile.android.domain.resourcetypes.RefreshResourceTypesRepository
-import com.passbolt.mobile.android.domain.resourcetypes.ResourceTypesLocalDataSource
-import com.passbolt.mobile.android.domain.resourcetypes.ResourceTypesRemoteDataSource
-import com.passbolt.mobile.android.domain.resourcetypes.ResourceTypesRepository
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.resourcetypes.datasource.local.ResourceTypesLocalDataSourceImpl
+import net.svaroh.passly.data.resourcetypes.datasource.remote.ResourceTypesRemoteDataSourceImpl
+import net.svaroh.passly.data.resourcetypes.datasource.remote.api.ResourceTypesApi
+import net.svaroh.passly.domain.resourcetypes.RefreshResourceTypesRepository
+import net.svaroh.passly.domain.resourcetypes.ResourceTypesLocalDataSource
+import net.svaroh.passly.domain.resourcetypes.ResourceTypesRemoteDataSource
+import net.svaroh.passly.domain.resourcetypes.ResourceTypesRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

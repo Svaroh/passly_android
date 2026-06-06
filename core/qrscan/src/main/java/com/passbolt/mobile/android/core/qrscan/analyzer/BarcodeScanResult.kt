@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.qrscan.analyzer
+package net.svaroh.passly.core.qrscan.analyzer
 
 sealed class BarcodeScanResult {
     data class SingleBarcode(

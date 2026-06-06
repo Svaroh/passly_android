@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.users
+package net.svaroh.passly.data.users
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.domain.users.UsersDataSource
-import com.passbolt.mobile.android.domain.users.UsersLocalDataSource
-import com.passbolt.mobile.android.domain.users.model.UserProfile
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.domain.users.UsersDataSource
+import net.svaroh.passly.domain.users.UsersLocalDataSource
+import net.svaroh.passly.domain.users.model.UserProfile
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.scanqr
+package net.svaroh.passly.feature.setup.scanqr
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -49,42 +49,42 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.LogsNavigationKey.Logs
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.ImportProfile
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.Summary
-import com.passbolt.mobile.android.core.qrscan.SCAN_MANAGER_SCOPE
-import com.passbolt.mobile.android.core.qrscan.manager.ScanManager
-import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
-import com.passbolt.mobile.android.core.ui.dialogs.ServerNotReachableDialog
-import com.passbolt.mobile.android.core.ui.dialogs.SetupExitConfirmationDialog
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.core.ui.progresstoolbar.ProgressToolbar
-import com.passbolt.mobile.android.feature.setup.AccountSetupDataHolder
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrIntent.AccessLogs
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrIntent.ConfirmSetupLeave
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrIntent.DismissHelpMenu
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrIntent.DismissServerNotReachable
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrIntent.DismissSetupLeave
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrIntent.GoBack
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrIntent.ImportProfileManually
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrIntent.Initialize
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrIntent.OpenHelpMenu
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrIntent.SelectedAccountKit
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrSideEffect.NavigateToImportProfile
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrSideEffect.NavigateToLogs
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrSideEffect.NavigateToSummary
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrSideEffect.ShowToast
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheet
-import com.passbolt.mobile.android.ui.HelpMenuModel
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.LogsNavigationKey.Logs
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.ImportProfile
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.Summary
+import net.svaroh.passly.core.qrscan.SCAN_MANAGER_SCOPE
+import net.svaroh.passly.core.qrscan.manager.ScanManager
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
+import net.svaroh.passly.core.ui.dialogs.ServerNotReachableDialog
+import net.svaroh.passly.core.ui.dialogs.SetupExitConfirmationDialog
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.progresstoolbar.ProgressToolbar
+import net.svaroh.passly.feature.setup.AccountSetupDataHolder
+import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.AccessLogs
+import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.ConfirmSetupLeave
+import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.DismissHelpMenu
+import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.DismissServerNotReachable
+import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.DismissSetupLeave
+import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.GoBack
+import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.ImportProfileManually
+import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.Initialize
+import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.OpenHelpMenu
+import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.SelectedAccountKit
+import net.svaroh.passly.feature.setup.scanqr.ScanQrSideEffect.NavigateBack
+import net.svaroh.passly.feature.setup.scanqr.ScanQrSideEffect.NavigateToImportProfile
+import net.svaroh.passly.feature.setup.scanqr.ScanQrSideEffect.NavigateToLogs
+import net.svaroh.passly.feature.setup.scanqr.ScanQrSideEffect.NavigateToSummary
+import net.svaroh.passly.feature.setup.scanqr.ScanQrSideEffect.ShowToast
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheet
+import net.svaroh.passly.ui.HelpMenuModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.compose.scope.KoinScope
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.qualifier.named
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable

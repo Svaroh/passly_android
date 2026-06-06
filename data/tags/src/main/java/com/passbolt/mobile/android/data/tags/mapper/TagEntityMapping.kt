@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.tags.mapper
+package net.svaroh.passly.data.tags.mapper
 
-import com.passbolt.mobile.android.entity.resource.Tag
-import com.passbolt.mobile.android.entity.resource.TagWithTaggedItemsCount
-import com.passbolt.mobile.android.ui.TagModel
-import com.passbolt.mobile.android.ui.TagWithCount
+import net.svaroh.passly.entity.resource.Tag
+import net.svaroh.passly.entity.resource.TagWithTaggedItemsCount
+import net.svaroh.passly.ui.TagModel
+import net.svaroh.passly.ui.TagWithCount
 
 internal fun List<TagModel>.toEntity(): List<Tag> =
     map {

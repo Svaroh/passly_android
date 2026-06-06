@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.feature.resourcedetails
+package net.svaroh.passly.feature.resourcedetails
 
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsFeatureNavigation
-import com.passbolt.mobile.android.feature.resourcedetails.details.detailsModule
+import net.svaroh.passly.core.navigation.compose.base.Feature
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsFeatureNavigation
+import net.svaroh.passly.feature.resourcedetails.details.detailsModule
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

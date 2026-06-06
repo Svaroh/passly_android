@@ -20,9 +20,9 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.navigation
+package net.svaroh.passly.core.navigation
 
-import com.passbolt.mobile.android.core.navigation.compose.composeNavigationModule
+import net.svaroh.passly.core.navigation.compose.composeNavigationModule
 import org.koin.dsl.module
 
 val navigationModule =

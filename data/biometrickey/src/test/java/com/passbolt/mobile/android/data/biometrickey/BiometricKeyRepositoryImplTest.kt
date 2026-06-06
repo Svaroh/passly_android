@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.biometrickey
+package net.svaroh.passly.data.biometrickey
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.biometrickey.BiometricKeyLocalDataSource
-import com.passbolt.mobile.android.domain.biometrickey.model.BiometricKey
+import net.svaroh.passly.domain.biometrickey.BiometricKeyLocalDataSource
+import net.svaroh.passly.domain.biometrickey.model.BiometricKey
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

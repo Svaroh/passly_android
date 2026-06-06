@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.passwordexpiry
+package net.svaroh.passly.data.passwordexpiry
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.passwordexpiry.PasswordExpiryLocalDataSource
-import com.passbolt.mobile.android.domain.passwordexpiry.PasswordExpiryRemoteDataSource
-import com.passbolt.mobile.android.domain.passwordexpiry.PasswordExpiryRepository
-import com.passbolt.mobile.android.domain.passwordexpiry.model.PasswordExpirySettings
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.passwordexpiry.PasswordExpiryLocalDataSource
+import net.svaroh.passly.domain.passwordexpiry.PasswordExpiryRemoteDataSource
+import net.svaroh.passly.domain.passwordexpiry.PasswordExpiryRepository
+import net.svaroh.passly.domain.passwordexpiry.model.PasswordExpirySettings
 
 internal class PasswordExpiryRepositoryImpl(
     private val memoryDataSource: PasswordExpiryLocalDataSource,

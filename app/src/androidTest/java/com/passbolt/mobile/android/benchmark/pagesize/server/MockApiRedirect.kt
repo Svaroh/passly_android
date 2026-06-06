@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.server
+package net.svaroh.passly.benchmark.pagesize.server
 
-import com.passbolt.mobile.android.domain.accounts.usecase.GetCurrentApiUrlUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.SaveCurrentApiUrlUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetCurrentApiUrlUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveCurrentApiUrlUseCase
 
 class MockApiRedirect(
     private val saveCurrentApiUrlUseCase: SaveCurrentApiUrlUseCase,

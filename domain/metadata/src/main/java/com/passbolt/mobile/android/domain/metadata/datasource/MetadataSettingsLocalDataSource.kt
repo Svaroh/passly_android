@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.metadata.datasource
+package net.svaroh.passly.domain.metadata.datasource
 
-import com.passbolt.mobile.android.domain.metadata.model.MetadataKeysSettings
-import com.passbolt.mobile.android.domain.metadata.model.MetadataTypesSettings
-import com.passbolt.mobile.android.domain.metadata.model.TrustedMetadataKey
+import net.svaroh.passly.domain.metadata.model.MetadataKeysSettings
+import net.svaroh.passly.domain.metadata.model.MetadataTypesSettings
+import net.svaroh.passly.domain.metadata.model.TrustedMetadataKey
 
 interface MetadataSettingsLocalDataSource {
     suspend fun getMetadataKeysSettings(userId: String): MetadataKeysSettings

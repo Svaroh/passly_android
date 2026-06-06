@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.totp.compose
+package net.svaroh.passly.feature.authentication.mfa.totp.compose
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -36,7 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.passbolt.mobile.android.core.compose.PassboltTheme
+import net.svaroh.passly.core.compose.PassboltTheme
 
 /**
  * Passbolt - Open source password manager for teams

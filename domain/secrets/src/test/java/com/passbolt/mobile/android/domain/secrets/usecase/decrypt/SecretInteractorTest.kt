@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.secrets.usecase.decrypt
+package net.svaroh.passly.domain.secrets.usecase.decrypt
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpError
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.gopenpgp.exception.OpenPgpError
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule

@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.data.passwordexpiry.datasource.remote.api
+package net.svaroh.passly.data.passwordexpiry.datasource.remote.api
 
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.PasswordExpirySettingsDto
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.PasswordExpirySettingsDto
 import retrofit2.http.GET
 
 /**

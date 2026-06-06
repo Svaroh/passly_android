@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.autofill.accessibility
+package net.svaroh.passly.core.autofill.accessibility
 
 import android.graphics.PixelFormat
 import android.graphics.Point
@@ -11,10 +11,10 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityNodeInfo.ACTION_SET_TEXT
 import android.view.accessibility.AccessibilityWindowInfo
 import androidx.core.net.toUri
-import com.passbolt.mobile.android.common.ResourceDimenProvider
-import com.passbolt.mobile.android.core.autofill.system.AutofillField
-import com.passbolt.mobile.android.core.autofill.system.AutofillHintsFactory
-import com.passbolt.mobile.android.core.navigation.AutofillType
+import net.svaroh.passly.common.ResourceDimenProvider
+import net.svaroh.passly.core.autofill.system.AutofillField
+import net.svaroh.passly.core.autofill.system.AutofillHintsFactory
+import net.svaroh.passly.core.navigation.AutofillType
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.description
+package net.svaroh.passly.feature.resourceform.metadata.description
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.resourceform.metadata.description.DescriptionFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.metadata.description.DescriptionFormIntent.DescriptionChanged
-import com.passbolt.mobile.android.feature.resourceform.metadata.description.DescriptionFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.metadata.description.DescriptionFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.metadata.description.DescriptionFormSideEffect.NavigateBack
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormIntent.DescriptionChanged
+import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormSideEffect.NavigateBack
+import net.svaroh.passly.ui.ResourceFormMode
 
 internal class DescriptionFormViewModel(
     mode: ResourceFormMode,

@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.groups.usecase
+package net.svaroh.passly.domain.groups.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.displayMessage
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.CompleteAuthenticatedOutput
-import com.passbolt.mobile.android.core.mvp.authentication.IncompleteAuthenticatedOutput
-import com.passbolt.mobile.android.domain.groups.GroupsRepository
-import com.passbolt.mobile.android.domain.groups.model.GroupWithMembers
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.displayMessage
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
+import net.svaroh.passly.core.mvp.authentication.IncompleteAuthenticatedOutput
+import net.svaroh.passly.domain.groups.GroupsRepository
+import net.svaroh.passly.domain.groups.model.GroupWithMembers
 
 class FetchGroupsByIdsUseCase(
     private val groupsRepository: GroupsRepository,

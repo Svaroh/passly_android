@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.sweep
+package net.svaroh.passly.benchmark.pagesize.sweep
 
-import com.passbolt.mobile.android.benchmark.pagesize.fixture.MetadataProfile
+import net.svaroh.passly.benchmark.pagesize.fixture.MetadataProfile
 import java.io.File
 import java.util.Locale
 

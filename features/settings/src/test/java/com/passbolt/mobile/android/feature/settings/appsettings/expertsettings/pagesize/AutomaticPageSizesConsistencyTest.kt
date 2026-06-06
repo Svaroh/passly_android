@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.appsettings.expertsettings.pagesize
+package net.svaroh.passly.feature.settings.appsettings.expertsettings.pagesize
 
 /**
  * Passbolt - Open source password manager for teams
@@ -23,12 +23,12 @@ package com.passbolt.mobile.android.feature.settings.appsettings.expertsettings.
  * @since v1.0
  */
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.preferences.PreferencesDefaults
-import com.passbolt.mobile.android.domain.preferences.pagesize.DevicePerformanceFingerprint
-import com.passbolt.mobile.android.domain.preferences.pagesize.DevicePerformanceFingerprintProvider
-import com.passbolt.mobile.android.domain.preferences.pagesize.DeviceTierClassifier
-import com.passbolt.mobile.android.domain.preferences.usecase.GetAutomaticPageSizeUseCase
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.ALLOWED_PAGE_SIZES
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.domain.preferences.pagesize.DevicePerformanceFingerprint
+import net.svaroh.passly.domain.preferences.pagesize.DevicePerformanceFingerprintProvider
+import net.svaroh.passly.domain.preferences.pagesize.DeviceTierClassifier
+import net.svaroh.passly.domain.preferences.usecase.GetAutomaticPageSizeUseCase
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.ALLOWED_PAGE_SIZES
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock

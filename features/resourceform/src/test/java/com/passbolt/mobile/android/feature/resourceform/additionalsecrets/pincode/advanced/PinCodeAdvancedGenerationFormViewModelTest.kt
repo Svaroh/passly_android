@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormIntent.LengthChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormIntent.SavePreferences
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormSideEffect.NavigateBack
-import com.passbolt.mobile.android.ui.LeadingContentType.PIN_CODE
-import com.passbolt.mobile.android.ui.PinCodeUiModel
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormIntent.LengthChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormIntent.SavePreferences
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormSideEffect.NavigateBack
+import net.svaroh.passly.ui.LeadingContentType.PIN_CODE
+import net.svaroh.passly.ui.PinCodeUiModel
+import net.svaroh.passly.ui.ResourceFormMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

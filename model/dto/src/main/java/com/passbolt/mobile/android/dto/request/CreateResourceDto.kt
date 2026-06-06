@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.dto.request
+package net.svaroh.passly.dto.request
 
 import com.google.gson.annotations.SerializedName
-import com.passbolt.mobile.android.dto.response.MetadataKeyTypeDto
+import net.svaroh.passly.dto.response.MetadataKeyTypeDto
 import java.time.ZonedDateTime
 
 /**

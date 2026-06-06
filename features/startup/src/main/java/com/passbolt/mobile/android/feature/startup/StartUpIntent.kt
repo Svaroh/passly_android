@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.startup
+package net.svaroh.passly.feature.startup
 
 sealed interface StartUpIntent {
     data object AcknowledgeDeprecatedOsWarning : StartUpIntent

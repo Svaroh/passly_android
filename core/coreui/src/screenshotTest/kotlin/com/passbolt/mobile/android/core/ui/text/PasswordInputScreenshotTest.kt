@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.core.ui.text
+package net.svaroh.passly.core.ui.text
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.android.tools.screenshot.PreviewTest
-import com.passbolt.mobile.android.core.ui.screenshot.PassboltPreviewWrapper
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Error
+import net.svaroh.passly.core.ui.screenshot.PassboltPreviewWrapper
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Error
 
 @PreviewTest
 @Preview(showBackground = true)

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.lists
+package net.svaroh.passly.core.ui.lists
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 /**
  * Passbolt - Open source password manager for teams

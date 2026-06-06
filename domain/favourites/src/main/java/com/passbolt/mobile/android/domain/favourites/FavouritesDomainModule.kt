@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.favourites
+package net.svaroh.passly.domain.favourites
 
-import com.passbolt.mobile.android.domain.favourites.usecase.AddToFavouritesUseCase
-import com.passbolt.mobile.android.domain.favourites.usecase.RemoveFromFavouritesUseCase
+import net.svaroh.passly.domain.favourites.usecase.AddToFavouritesUseCase
+import net.svaroh.passly.domain.favourites.usecase.RemoveFromFavouritesUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.scenarios.resourcesedition
+package net.svaroh.passly.scenarios.resourcesedition
 
 enum class EditableFieldInput(
     val hintName: String,

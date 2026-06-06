@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.accounts
+package net.svaroh.passly.core.accounts
 
-import com.passbolt.mobile.android.core.accounts.usecase.BiometricCipherImpl
-import com.passbolt.mobile.android.encryptedstorage.biometric.BiometricCipher
+import net.svaroh.passly.core.accounts.usecase.BiometricCipherImpl
+import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

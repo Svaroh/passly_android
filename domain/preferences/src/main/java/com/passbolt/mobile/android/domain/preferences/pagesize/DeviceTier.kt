@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.preferences.pagesize
+package net.svaroh.passly.domain.preferences.pagesize
 
 enum class DeviceTier {
     LOW,

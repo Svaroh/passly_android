@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountDataUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.auth.AuthRepository
-import com.passbolt.mobile.android.domain.auth.SessionRepository
-import com.passbolt.mobile.android.domain.auth.model.RefreshedSession
-import com.passbolt.mobile.android.domain.auth.model.Session
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.auth.AuthRepository
+import net.svaroh.passly.domain.auth.SessionRepository
+import net.svaroh.passly.domain.auth.model.RefreshedSession
+import net.svaroh.passly.domain.auth.model.Session
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.sweep
+package net.svaroh.passly.benchmark.pagesize.sweep
 
 import timber.log.Timber
 

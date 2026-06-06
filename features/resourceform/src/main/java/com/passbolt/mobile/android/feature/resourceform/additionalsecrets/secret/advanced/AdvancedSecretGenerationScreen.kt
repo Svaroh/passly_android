@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -40,37 +40,37 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.section.Section
-import com.passbolt.mobile.android.core.ui.tabs.ButtonTabItemModel
-import com.passbolt.mobile.android.core.ui.tabs.ButtonTabs
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PreviewMaskToggled
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.SavePreferences
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.TabSelected
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.ui.PassphraseTabContent
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.ui.PasswordTabContent
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.ui.SecretPreviewSection
-import com.passbolt.mobile.android.feature.resourceform.navigation.AdvancedSecretGenerationFormResult
-import com.passbolt.mobile.android.ui.CaseTypeUiModel.LOWERCASE
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel.PASSPHRASE
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel.PASSWORD
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.section.Section
+import net.svaroh.passly.core.ui.tabs.ButtonTabItemModel
+import net.svaroh.passly.core.ui.tabs.ButtonTabs
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PreviewMaskToggled
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.SavePreferences
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.TabSelected
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationSideEffect.NavigateBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.ui.PassphraseTabContent
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.ui.PasswordTabContent
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.ui.SecretPreviewSection
+import net.svaroh.passly.feature.resourceform.navigation.AdvancedSecretGenerationFormResult
+import net.svaroh.passly.ui.CaseTypeUiModel.LOWERCASE
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel.PASSPHRASE
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel.PASSWORD
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun AdvancedSecretGenerationScreen(

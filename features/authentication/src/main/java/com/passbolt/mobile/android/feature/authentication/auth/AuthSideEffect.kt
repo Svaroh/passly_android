@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.feature.authentication.auth
+package net.svaroh.passly.feature.authentication.auth
 
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaDialogState
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.feature.authentication.mfa.MfaDialogState
 import javax.crypto.Cipher
 
 sealed interface AuthSideEffect {

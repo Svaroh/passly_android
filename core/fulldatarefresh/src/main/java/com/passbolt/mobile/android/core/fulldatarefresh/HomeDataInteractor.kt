@@ -21,24 +21,24 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.fulldatarefresh
+package net.svaroh.passly.core.fulldatarefresh
 
-import com.passbolt.mobile.android.core.idlingresource.ResourcesFullRefreshIdlingResource
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.mvp.authentication.plus
-import com.passbolt.mobile.android.database.snapshot.ResourcesSnapshot
-import com.passbolt.mobile.android.domain.folders.usecase.FoldersInteractor
-import com.passbolt.mobile.android.domain.groups.usecase.GroupsInteractor
-import com.passbolt.mobile.android.domain.metadata.interactor.MetadataKeysInteractor
-import com.passbolt.mobile.android.domain.metadata.interactor.MetadataKeysSettingsInteractor
-import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysInteractor
-import com.passbolt.mobile.android.domain.metadata.interactor.MetadataSessionKeysInteractor
-import com.passbolt.mobile.android.domain.metadata.interactor.MetadataTypesSettingsInteractor
-import com.passbolt.mobile.android.domain.resources.usecase.ResourceInteractor
-import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypesInteractor
-import com.passbolt.mobile.android.domain.users.usecase.UsersInteractor
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
+import net.svaroh.passly.core.idlingresource.ResourcesFullRefreshIdlingResource
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.mvp.authentication.plus
+import net.svaroh.passly.database.snapshot.ResourcesSnapshot
+import net.svaroh.passly.domain.folders.usecase.FoldersInteractor
+import net.svaroh.passly.domain.groups.usecase.GroupsInteractor
+import net.svaroh.passly.domain.metadata.interactor.MetadataKeysInteractor
+import net.svaroh.passly.domain.metadata.interactor.MetadataKeysSettingsInteractor
+import net.svaroh.passly.domain.metadata.interactor.MetadataPrivateKeysInteractor
+import net.svaroh.passly.domain.metadata.interactor.MetadataSessionKeysInteractor
+import net.svaroh.passly.domain.metadata.interactor.MetadataTypesSettingsInteractor
+import net.svaroh.passly.domain.resources.usecase.ResourceInteractor
+import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypesInteractor
+import net.svaroh.passly.domain.users.usecase.UsersInteractor
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import timber.log.Timber

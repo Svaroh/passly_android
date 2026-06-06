@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.pwnedpasswordsapi.range
+package net.svaroh.passly.pwnedpasswordsapi.range
 
 /**
  * Passbolt - Open source password manager for teams

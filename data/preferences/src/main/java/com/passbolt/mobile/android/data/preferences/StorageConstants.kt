@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.preferences
+package net.svaroh.passly.data.preferences
 
 internal const val GLOBAL_PREFERENCES_FILE_NAME = "preferences"
 internal const val KEY_DEBUG_LOGS_ENABLED = "KEY_DEBUG_LOGS_ENABLED"

@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.domain.preferences.usecase
+package net.svaroh.passly.domain.preferences.usecase
 
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.domain.preferences.AccountPreferencesRepository
-import com.passbolt.mobile.android.ui.DefaultFilterUiModel
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.domain.preferences.AccountPreferencesRepository
+import net.svaroh.passly.ui.DefaultFilterUiModel
 
 /**
  * Passbolt - Open source password manager for teams

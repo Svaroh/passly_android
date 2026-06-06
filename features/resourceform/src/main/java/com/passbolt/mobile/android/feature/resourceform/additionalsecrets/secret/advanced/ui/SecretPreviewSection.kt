@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.ui
+package net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -42,12 +42,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.testtags.composetags.PasswordField
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel.PASSPHRASE
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel.PASSWORD
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.testtags.composetags.PasswordField
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel.PASSPHRASE
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel.PASSWORD
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun SecretPreviewSection(

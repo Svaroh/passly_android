@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.common.BiometricInformationProvider
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.domain.auth.usecase.CheckIfPassphraseFileExistsUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.RemoveAllAccountsPassphrasesUseCase
-import com.passbolt.mobile.android.domain.biometrickey.BiometricKeyRepository
+import net.svaroh.passly.common.BiometricInformationProvider
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.domain.auth.usecase.CheckIfPassphraseFileExistsUseCase
+import net.svaroh.passly.domain.auth.usecase.RemoveAllAccountsPassphrasesUseCase
+import net.svaroh.passly.domain.biometrickey.BiometricKeyRepository
 import timber.log.Timber
 
 /**

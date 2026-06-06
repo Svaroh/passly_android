@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.mobiletransfer.mapper
+package net.svaroh.passly.data.mobiletransfer.mapper
 
-import com.passbolt.mobile.android.domain.mobiletransfer.model.CreateTransferModel
-import com.passbolt.mobile.android.domain.mobiletransfer.model.TransferModel
-import com.passbolt.mobile.android.domain.mobiletransfer.model.UpdateTransferModel
-import com.passbolt.mobile.android.dto.request.CreateTransferRequestDto
-import com.passbolt.mobile.android.dto.request.StatusRequest
-import com.passbolt.mobile.android.dto.request.UpdateTransferRequestDto
-import com.passbolt.mobile.android.dto.response.CreateTransferResponseDto
-import com.passbolt.mobile.android.dto.response.StatusResponse
-import com.passbolt.mobile.android.dto.response.TransferResponseDto
-import com.passbolt.mobile.android.ui.Status
+import net.svaroh.passly.domain.mobiletransfer.model.CreateTransferModel
+import net.svaroh.passly.domain.mobiletransfer.model.TransferModel
+import net.svaroh.passly.domain.mobiletransfer.model.UpdateTransferModel
+import net.svaroh.passly.dto.request.CreateTransferRequestDto
+import net.svaroh.passly.dto.request.StatusRequest
+import net.svaroh.passly.dto.request.UpdateTransferRequestDto
+import net.svaroh.passly.dto.response.CreateTransferResponseDto
+import net.svaroh.passly.dto.response.StatusResponse
+import net.svaroh.passly.dto.response.TransferResponseDto
+import net.svaroh.passly.ui.Status
 
 internal fun TransferResponseDto.toTransferModel(): TransferModel =
     TransferModel(

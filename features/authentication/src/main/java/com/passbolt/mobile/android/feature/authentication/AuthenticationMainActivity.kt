@@ -1,17 +1,17 @@
-package com.passbolt.mobile.android.feature.authentication
+package net.svaroh.passly.feature.authentication
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.content.IntentCompat
 import androidx.fragment.app.FragmentActivity
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.core.navigation.compose.APP_NAVIGATOR_SCOPE
-import com.passbolt.mobile.android.core.navigation.compose.AuthenticationNavigation
-import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureSetter
-import com.passbolt.mobile.android.core.ui.orientation.LockCompactScreenOrientation
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.core.navigation.compose.APP_NAVIGATOR_SCOPE
+import net.svaroh.passly.core.navigation.compose.AuthenticationNavigation
+import net.svaroh.passly.core.security.flagsecure.FlagSecureSetter
+import net.svaroh.passly.core.ui.orientation.LockCompactScreenOrientation
 import org.koin.android.ext.android.inject
 import org.koin.compose.scope.KoinScope
 import org.koin.core.annotation.KoinExperimentalAPI

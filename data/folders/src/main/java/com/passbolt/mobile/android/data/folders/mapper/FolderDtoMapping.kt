@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.folders.mapper
+package net.svaroh.passly.data.folders.mapper
 
-import com.passbolt.mobile.android.domain.folders.model.FolderModel
-import com.passbolt.mobile.android.domain.folders.model.FolderModelWithAttributes
-import com.passbolt.mobile.android.domain.folders.model.FoldersPage
-import com.passbolt.mobile.android.dto.response.BasePaginatedResponse
-import com.passbolt.mobile.android.dto.response.CreateFolderResponseDto
-import com.passbolt.mobile.android.dto.response.FolderResponseDto
-import com.passbolt.mobile.android.mappers.PermissionsModelMapper
+import net.svaroh.passly.domain.folders.model.FolderModel
+import net.svaroh.passly.domain.folders.model.FolderModelWithAttributes
+import net.svaroh.passly.domain.folders.model.FoldersPage
+import net.svaroh.passly.dto.response.BasePaginatedResponse
+import net.svaroh.passly.dto.response.CreateFolderResponseDto
+import net.svaroh.passly.dto.response.FolderResponseDto
+import net.svaroh.passly.mappers.PermissionsModelMapper
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime

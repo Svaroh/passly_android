@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.passphrasememorycache
+package net.svaroh.passly.core.passphrasememorycache
 
 fun interface AuthOnEveryEntryChecker {
     fun isRequired(): Boolean

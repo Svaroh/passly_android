@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.passwordpolicies.validation
+package net.svaroh.passly.domain.passwordpolicies.validation
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordPolicies
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordPolicies
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

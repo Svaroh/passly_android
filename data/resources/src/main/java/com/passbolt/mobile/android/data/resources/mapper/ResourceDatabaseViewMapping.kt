@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.resources.mapper
+package net.svaroh.passly.data.resources.mapper
 
-import com.passbolt.mobile.android.entity.resource.Permission
-import com.passbolt.mobile.android.entity.resource.ResourceDatabaseView
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
+import net.svaroh.passly.entity.resource.Permission
+import net.svaroh.passly.entity.resource.ResourceDatabaseView
+import net.svaroh.passly.ui.HomeDisplayViewModel
 
 internal fun HomeDisplayViewModel.toResourceDatabaseView(): ResourceDatabaseView =
     when (this) {

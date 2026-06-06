@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.mfa
+package net.svaroh.passly.domain.mfa
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.mfa.model.DuoPrompt
-import com.passbolt.mobile.android.domain.mfa.model.DuoVerification
-import com.passbolt.mobile.android.domain.mfa.model.TotpVerification
-import com.passbolt.mobile.android.domain.mfa.model.YubikeyVerification
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.mfa.model.DuoPrompt
+import net.svaroh.passly.domain.mfa.model.DuoVerification
+import net.svaroh.passly.domain.mfa.model.TotpVerification
+import net.svaroh.passly.domain.mfa.model.YubikeyVerification
 
 interface MfaDataSource {
     suspend fun verifyTotp(

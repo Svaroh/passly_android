@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.core.navigation.compose.keys
+package net.svaroh.passly.core.navigation.compose.keys
 
 import android.annotation.SuppressLint
 import androidx.navigation3.runtime.NavKey
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.HomeDisplayViewModel
 import kotlinx.serialization.Serializable
 
 /**

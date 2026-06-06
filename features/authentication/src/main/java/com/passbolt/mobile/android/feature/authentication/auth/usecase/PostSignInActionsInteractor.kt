@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.domain.rbac.usecase.RbacInteractor
-import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
-import com.passbolt.mobile.android.featureflags.usecase.FeatureFlagsInteractor
+import net.svaroh.passly.domain.rbac.usecase.RbacInteractor
+import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
+import net.svaroh.passly.featureflags.usecase.FeatureFlagsInteractor
 import timber.log.Timber
 
 class PostSignInActionsInteractor(

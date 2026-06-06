@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.inappreview.model
+package net.svaroh.passly.domain.inappreview.model
 
 import java.time.LocalDate
 

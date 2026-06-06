@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.folders.model
+package net.svaroh.passly.domain.folders.model
 
-import com.passbolt.mobile.android.common.search.Searchable
-import com.passbolt.mobile.android.ui.PermissionModel
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.common.search.Searchable
+import net.svaroh.passly.ui.PermissionModel
+import net.svaroh.passly.ui.ResourcePermission
 import java.time.ZonedDateTime
 
 data class FolderModel(

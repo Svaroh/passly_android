@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormIntent.LengthChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormIntent.SavePreferences
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormSideEffect.NavigateBack
-import com.passbolt.mobile.android.ui.PinCodeUiModel
-import com.passbolt.mobile.android.ui.PinCodeUiModel.Companion.MAX_LENGTH
-import com.passbolt.mobile.android.ui.PinCodeUiModel.Companion.MIN_LENGTH
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormIntent.LengthChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormIntent.SavePreferences
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormSideEffect.NavigateBack
+import net.svaroh.passly.ui.PinCodeUiModel
+import net.svaroh.passly.ui.PinCodeUiModel.Companion.MAX_LENGTH
+import net.svaroh.passly.ui.PinCodeUiModel.Companion.MIN_LENGTH
+import net.svaroh.passly.ui.ResourceFormMode
 
 internal class PinCodeAdvancedGenerationFormViewModel(
     mode: ResourceFormMode,

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.featureflags.datasource.local
+package net.svaroh.passly.data.featureflags.datasource.local
 
 internal object StorageConstants {
     const val PRIVACY_POLICY_KEY = "PRIVACY_POLICY_KEY"

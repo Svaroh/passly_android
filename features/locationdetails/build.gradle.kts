@@ -37,7 +37,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.locationdetails"
+    namespace = "net.svaroh.passly.feature.locationdetails"
     buildFeatures {
         compose = true
     }

@@ -10,5 +10,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.data.permissionsconfirmation"
+    namespace = "net.svaroh.passly.data.permissionsconfirmation"
 }

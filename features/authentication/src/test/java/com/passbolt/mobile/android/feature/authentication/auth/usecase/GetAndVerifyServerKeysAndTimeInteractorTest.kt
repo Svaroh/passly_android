@@ -21,21 +21,21 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.SERVER
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.TIMEOUT
-import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountDataUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.IsServerFingerprintCorrectUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.FetchServerPublicPgpKeyUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.SaveServerPublicRsaKeyUseCase
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.SERVER
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.TIMEOUT
+import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.IsServerFingerprintCorrectUseCase
+import net.svaroh.passly.domain.auth.usecase.FetchServerPublicPgpKeyUseCase
+import net.svaroh.passly.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveServerPublicRsaKeyUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test

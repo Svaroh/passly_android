@@ -20,11 +20,11 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.domain.resources.usecase.db
+package net.svaroh.passly.domain.resources.usecase.db
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.domain.resources.ResourcesRepository
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.domain.resources.ResourcesRepository
 
 class RemoveLocalUrisUseCase(
     private val resourcesRepository: ResourcesRepository,

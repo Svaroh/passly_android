@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.gopenpgp
+package net.svaroh.passly.gopenpgp
 
-import com.passbolt.mobile.android.gopenpgp.exception.GopenPgpExceptionParser
+import net.svaroh.passly.gopenpgp.exception.GopenPgpExceptionParser
 import com.proton.gopenpgp.crypto.Crypto
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

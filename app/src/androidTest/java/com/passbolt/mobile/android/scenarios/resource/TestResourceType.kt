@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.scenarios.resource
+package net.svaroh.passly.scenarios.resource
 
 enum class TestResourceType(
     val displayName: String,

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common.validation
+package net.svaroh.passly.common.validation
 
 class RequiredIntInInclusiveRangeValidation : (Int, InclusiveMin, InclusiveMax) -> Boolean {
     override fun invoke(

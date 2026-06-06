@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.favourites
+package net.svaroh.passly.domain.favourites
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult
 
 interface FavouritesRepository {
     suspend fun addToFavourites(resourceId: String): DomainResult<String>

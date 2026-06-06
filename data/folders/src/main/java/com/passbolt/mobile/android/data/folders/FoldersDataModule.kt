@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.folders
+package net.svaroh.passly.data.folders
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.folders.datasource.local.FoldersLocalDataSourceImpl
-import com.passbolt.mobile.android.data.folders.datasource.remote.FoldersRemoteDataSourceImpl
-import com.passbolt.mobile.android.data.folders.datasource.remote.api.FoldersApi
-import com.passbolt.mobile.android.domain.folders.FoldersRepository
-import com.passbolt.mobile.android.domain.folders.datasource.FoldersLocalDataSource
-import com.passbolt.mobile.android.domain.folders.datasource.FoldersRemoteDataSource
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.folders.datasource.local.FoldersLocalDataSourceImpl
+import net.svaroh.passly.data.folders.datasource.remote.FoldersRemoteDataSourceImpl
+import net.svaroh.passly.data.folders.datasource.remote.api.FoldersApi
+import net.svaroh.passly.domain.folders.FoldersRepository
+import net.svaroh.passly.domain.folders.datasource.FoldersLocalDataSource
+import net.svaroh.passly.domain.folders.datasource.FoldersRemoteDataSource
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

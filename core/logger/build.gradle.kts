@@ -15,5 +15,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.logger"
+    namespace = "net.svaroh.passly.core.logger"
 }

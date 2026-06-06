@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.main.mainscreen
+package net.svaroh.passly.feature.main.mainscreen
 
-import com.passbolt.mobile.android.core.navigation.compose.BottomTab
+import net.svaroh.passly.core.navigation.compose.BottomTab
 
 sealed interface MainIntent {
     data object AppUpdateDownloaded : MainIntent

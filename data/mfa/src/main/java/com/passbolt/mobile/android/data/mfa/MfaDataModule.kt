@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.mfa
+package net.svaroh.passly.data.mfa
 
-import com.passbolt.mobile.android.core.networking.NO_REDIRECT_RETROFIT_SERVICE
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.mfa.datasource.remote.MfaRemoteDataSource
-import com.passbolt.mobile.android.data.mfa.datasource.remote.api.MfaApi
-import com.passbolt.mobile.android.domain.mfa.MfaDataSource
-import com.passbolt.mobile.android.domain.mfa.MfaRepository
+import net.svaroh.passly.core.networking.NO_REDIRECT_RETROFIT_SERVICE
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.mfa.datasource.remote.MfaRemoteDataSource
+import net.svaroh.passly.data.mfa.datasource.remote.api.MfaApi
+import net.svaroh.passly.domain.mfa.MfaDataSource
+import net.svaroh.passly.domain.mfa.MfaRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind

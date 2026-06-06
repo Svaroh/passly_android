@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.core.passphrasememorycache
+package net.svaroh.passly.core.passphrasememorycache
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.passbolt.mobile.android.common.coroutinetimer.timerFlow
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.common.extension.erase
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.common.coroutinetimer.timerFlow
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.common.extension.erase
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

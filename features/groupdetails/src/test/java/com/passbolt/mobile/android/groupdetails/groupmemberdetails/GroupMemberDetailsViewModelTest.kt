@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.groupdetails.groupmemberdetails
+package net.svaroh.passly.groupdetails.groupmemberdetails
 
 /**
  * Passbolt - Open source password manager for teams
@@ -25,16 +25,16 @@ package com.passbolt.mobile.android.groupdetails.groupmemberdetails
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.users.usecase.GetLocalUserUseCase
-import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.GoBack
-import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.Initialize
-import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsSideEffect.NavigateUp
-import com.passbolt.mobile.android.ui.GpgKeyUiModel
-import com.passbolt.mobile.android.ui.UserProfileUiModel
-import com.passbolt.mobile.android.ui.UserUiModel
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalUserUseCase
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.GoBack
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.Initialize
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsSideEffect.NavigateUp
+import net.svaroh.passly.ui.GpgKeyUiModel
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

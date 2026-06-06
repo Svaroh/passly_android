@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.resources.mapper
+package net.svaroh.passly.data.resources.mapper
 
-import com.passbolt.mobile.android.dto.response.TagDto
-import com.passbolt.mobile.android.ui.TagModel
+import net.svaroh.passly.dto.response.TagDto
+import net.svaroh.passly.ui.TagModel
 
 internal fun TagDto.toUiModel(): TagModel =
     TagModel(

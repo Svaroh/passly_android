@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.screen
+package net.svaroh.passly.resourcepicker.screen
 
-import com.passbolt.mobile.android.resourcepicker.model.PickResourceAction
-import com.passbolt.mobile.android.ui.ResourcePickerListItem
+import net.svaroh.passly.resourcepicker.model.PickResourceAction
+import net.svaroh.passly.ui.ResourcePickerListItem
 
 sealed class ResourcePickerIntent {
     object GoBack : ResourcePickerIntent()

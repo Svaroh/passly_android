@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.pulltorefresh
+package net.svaroh.passly.core.ui.pulltorefresh
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,8 +39,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.ui.R
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.ui.R
 
 @Composable
 internal fun PullArrow(

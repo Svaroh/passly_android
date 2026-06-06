@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.common
+package net.svaroh.passly.common
 
-import com.passbolt.mobile.android.common.coroutinetimer.CoroutineTimerFactory
-import com.passbolt.mobile.android.common.coroutinetimer.TimerFactory
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.common.hash.MessageDigestHash
-import com.passbolt.mobile.android.common.time.AndroidTimeProvider
-import com.passbolt.mobile.android.common.time.TimeProvider
-import com.passbolt.mobile.android.common.urimatcher.AutofillUriMatcher
-import com.passbolt.mobile.android.common.usecase.FetchFileAsStringUseCase
+import net.svaroh.passly.common.coroutinetimer.CoroutineTimerFactory
+import net.svaroh.passly.common.coroutinetimer.TimerFactory
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.common.hash.MessageDigestHash
+import net.svaroh.passly.common.time.AndroidTimeProvider
+import net.svaroh.passly.common.time.TimeProvider
+import net.svaroh.passly.common.urimatcher.AutofillUriMatcher
+import net.svaroh.passly.common.usecase.FetchFileAsStringUseCase
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

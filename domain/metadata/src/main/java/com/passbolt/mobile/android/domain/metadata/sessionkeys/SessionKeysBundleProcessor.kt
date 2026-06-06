@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.metadata.sessionkeys
+package net.svaroh.passly.domain.metadata.sessionkeys
 
 import androidx.annotation.VisibleForTesting
-import com.passbolt.mobile.android.dto.request.SessionKeysBundleDto
+import net.svaroh.passly.dto.request.SessionKeysBundleDto
 
 class SessionKeysBundleProcessor {
     fun processPostFetch(bundle: SessionKeysBundleDto): SessionKeysBundleDto =

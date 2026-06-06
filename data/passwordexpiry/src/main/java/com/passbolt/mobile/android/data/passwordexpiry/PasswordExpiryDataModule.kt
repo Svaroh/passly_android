@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.passwordexpiry
+package net.svaroh.passly.data.passwordexpiry
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.passwordexpiry.datasource.memory.PasswordExpiryMemoryDataSource
-import com.passbolt.mobile.android.data.passwordexpiry.datasource.remote.PasswordExpiryRemoteDataSourceImpl
-import com.passbolt.mobile.android.data.passwordexpiry.datasource.remote.api.PasswordExpiryApi
-import com.passbolt.mobile.android.domain.passwordexpiry.PasswordExpiryLocalDataSource
-import com.passbolt.mobile.android.domain.passwordexpiry.PasswordExpiryRemoteDataSource
-import com.passbolt.mobile.android.domain.passwordexpiry.PasswordExpiryRepository
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.passwordexpiry.datasource.memory.PasswordExpiryMemoryDataSource
+import net.svaroh.passly.data.passwordexpiry.datasource.remote.PasswordExpiryRemoteDataSourceImpl
+import net.svaroh.passly.data.passwordexpiry.datasource.remote.api.PasswordExpiryApi
+import net.svaroh.passly.domain.passwordexpiry.PasswordExpiryLocalDataSource
+import net.svaroh.passly.domain.passwordexpiry.PasswordExpiryRemoteDataSource
+import net.svaroh.passly.domain.passwordexpiry.PasswordExpiryRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

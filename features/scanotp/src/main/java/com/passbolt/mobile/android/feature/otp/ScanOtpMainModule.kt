@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.otp
+package net.svaroh.passly.feature.otp
 
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.feature.otp.scanotp.navigation.ScanOtpFeatureNavigation
-import com.passbolt.mobile.android.feature.otp.scanotp.scanOtpModule
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.scanOtpSuccessModule
+import net.svaroh.passly.core.navigation.compose.base.Feature
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.feature.otp.scanotp.navigation.ScanOtpFeatureNavigation
+import net.svaroh.passly.feature.otp.scanotp.scanOtpModule
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.scanOtpSuccessModule
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

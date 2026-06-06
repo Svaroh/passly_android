@@ -12,5 +12,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.qrscan"
+    namespace = "net.svaroh.passly.core.qrscan"
 }

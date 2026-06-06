@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.groups
+package net.svaroh.passly.domain.groups
 
-import com.passbolt.mobile.android.domain.groups.usecase.FetchGroupsByIdsUseCase
-import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
-import com.passbolt.mobile.android.domain.groups.usecase.GetLocalGroupsUseCase
-import com.passbolt.mobile.android.domain.groups.usecase.GetLocalGroupsWithShareItemsCountPaginatedUseCase
-import com.passbolt.mobile.android.domain.groups.usecase.GroupsInteractor
+import net.svaroh.passly.domain.groups.usecase.FetchGroupsByIdsUseCase
+import net.svaroh.passly.domain.groups.usecase.GetGroupWithUsersUseCase
+import net.svaroh.passly.domain.groups.usecase.GetLocalGroupsUseCase
+import net.svaroh.passly.domain.groups.usecase.GetLocalGroupsWithShareItemsCountPaginatedUseCase
+import net.svaroh.passly.domain.groups.usecase.GroupsInteractor
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

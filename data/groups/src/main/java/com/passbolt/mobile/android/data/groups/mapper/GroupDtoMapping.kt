@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.groups.mapper
+package net.svaroh.passly.data.groups.mapper
 
-import com.passbolt.mobile.android.domain.groups.model.Group
-import com.passbolt.mobile.android.domain.groups.model.GroupMember
-import com.passbolt.mobile.android.domain.groups.model.GroupWithMembers
-import com.passbolt.mobile.android.dto.response.GroupsResponseDto
+import net.svaroh.passly.domain.groups.model.Group
+import net.svaroh.passly.domain.groups.model.GroupMember
+import net.svaroh.passly.domain.groups.model.GroupWithMembers
+import net.svaroh.passly.dto.response.GroupsResponseDto
 
 internal fun GroupsResponseDto.toDomain(): GroupWithMembers =
     GroupWithMembers(

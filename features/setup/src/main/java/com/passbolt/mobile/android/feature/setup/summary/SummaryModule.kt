@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.setup.summary
+package net.svaroh.passly.feature.setup.summary
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf

@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.passwordgenerator
+package net.svaroh.passly.core.passwordgenerator
 
-import com.passbolt.mobile.android.core.passwordgenerator.dice.Dice
-import com.passbolt.mobile.android.core.passwordgenerator.entropy.EntropyCalculator
-import com.passbolt.mobile.android.core.passwordgenerator.usecase.CheckPasswordPropertiesUseCase
+import net.svaroh.passly.core.passwordgenerator.dice.Dice
+import net.svaroh.passly.core.passwordgenerator.entropy.EntropyCalculator
+import net.svaroh.passly.core.passwordgenerator.usecase.CheckPasswordPropertiesUseCase
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

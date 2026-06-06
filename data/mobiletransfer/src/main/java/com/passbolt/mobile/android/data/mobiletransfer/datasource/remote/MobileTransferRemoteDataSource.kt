@@ -1,24 +1,24 @@
-package com.passbolt.mobile.android.data.mobiletransfer.datasource.remote
+package net.svaroh.passly.data.mobiletransfer.datasource.remote
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.mobiletransfer.datasource.remote.api.MobileTransferApi
-import com.passbolt.mobile.android.data.mobiletransfer.mapper.createTransferRequestDto
-import com.passbolt.mobile.android.data.mobiletransfer.mapper.toCreateTransferModel
-import com.passbolt.mobile.android.data.mobiletransfer.mapper.toTransferModel
-import com.passbolt.mobile.android.data.mobiletransfer.mapper.toUpdateTransferModel
-import com.passbolt.mobile.android.data.mobiletransfer.mapper.updateTransferRequestDto
-import com.passbolt.mobile.android.domain.mobiletransfer.MobileTransferDataSource
-import com.passbolt.mobile.android.domain.mobiletransfer.model.CreateTransferModel
-import com.passbolt.mobile.android.domain.mobiletransfer.model.TransferModel
-import com.passbolt.mobile.android.domain.mobiletransfer.model.UpdateTransferModel
-import com.passbolt.mobile.android.dto.request.BrowserFirstLoginAccountRequestDto
-import com.passbolt.mobile.android.dto.request.BrowserFirstLoginResponseRequestDto
-import com.passbolt.mobile.android.dto.response.BrowserFirstLoginRequestResponseDto
-import com.passbolt.mobile.android.ui.Status
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.mobiletransfer.datasource.remote.api.MobileTransferApi
+import net.svaroh.passly.data.mobiletransfer.mapper.createTransferRequestDto
+import net.svaroh.passly.data.mobiletransfer.mapper.toCreateTransferModel
+import net.svaroh.passly.data.mobiletransfer.mapper.toTransferModel
+import net.svaroh.passly.data.mobiletransfer.mapper.toUpdateTransferModel
+import net.svaroh.passly.data.mobiletransfer.mapper.updateTransferRequestDto
+import net.svaroh.passly.domain.mobiletransfer.MobileTransferDataSource
+import net.svaroh.passly.domain.mobiletransfer.model.CreateTransferModel
+import net.svaroh.passly.domain.mobiletransfer.model.TransferModel
+import net.svaroh.passly.domain.mobiletransfer.model.UpdateTransferModel
+import net.svaroh.passly.dto.request.BrowserFirstLoginAccountRequestDto
+import net.svaroh.passly.dto.request.BrowserFirstLoginResponseRequestDto
+import net.svaroh.passly.dto.response.BrowserFirstLoginRequestResponseDto
+import net.svaroh.passly.ui.Status
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.passwordexpiry.usecase
+package net.svaroh.passly.domain.passwordexpiry.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.passwordexpiry.PasswordExpiryRepository
-import com.passbolt.mobile.android.domain.passwordexpiry.model.PasswordExpirySettings
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.passwordexpiry.PasswordExpiryRepository
+import net.svaroh.passly.domain.passwordexpiry.model.PasswordExpirySettings
 
 class GetPasswordExpirySettingsUseCase(
     private val passwordExpiryRepository: PasswordExpiryRepository,

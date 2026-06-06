@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.passwordgenerator.entropy
+package net.svaroh.passly.core.passwordgenerator.entropy
 
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets
-import com.passbolt.mobile.android.core.passwordgenerator.codepoints.Codepoint
-import com.passbolt.mobile.android.core.passwordgenerator.codepoints.CodepointSet
-import com.passbolt.mobile.android.core.passwordgenerator.codepoints.toCodepoints
-import com.passbolt.mobile.android.core.passwordgenerator.dice.Dice
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.passwordgenerator.Alphabets
+import net.svaroh.passly.core.passwordgenerator.codepoints.Codepoint
+import net.svaroh.passly.core.passwordgenerator.codepoints.CodepointSet
+import net.svaroh.passly.core.passwordgenerator.codepoints.toCodepoints
+import net.svaroh.passly.core.passwordgenerator.dice.Dice
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.withContext
 import kotlin.math.ln

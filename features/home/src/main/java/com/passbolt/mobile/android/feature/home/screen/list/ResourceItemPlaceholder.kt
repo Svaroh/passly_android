@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.home.screen.list
+package net.svaroh.passly.feature.home.screen.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

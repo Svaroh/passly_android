@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.data.passwordexpiry.datasource.memory
+package net.svaroh.passly.data.passwordexpiry.datasource.memory
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.passwordexpiry.PasswordExpiryLocalDataSource
-import com.passbolt.mobile.android.domain.passwordexpiry.model.PasswordExpirySettings
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.passwordexpiry.PasswordExpiryLocalDataSource
+import net.svaroh.passly.domain.passwordexpiry.model.PasswordExpirySettings
 
 /**
  * Passbolt - Open source password manager for teams

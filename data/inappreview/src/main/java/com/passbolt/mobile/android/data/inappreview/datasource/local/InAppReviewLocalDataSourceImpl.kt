@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.inappreview.datasource.local
+package net.svaroh.passly.data.inappreview.datasource.local
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.passbolt.mobile.android.domain.inappreview.InAppReviewLocalDataSource
-import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewParameters
-import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewShowMode
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.domain.inappreview.InAppReviewLocalDataSource
+import net.svaroh.passly.domain.inappreview.model.InAppReviewParameters
+import net.svaroh.passly.domain.inappreview.model.InAppReviewShowMode
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
 import java.time.LocalDate
 
 internal class InAppReviewLocalDataSourceImpl(

@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.appstate
+package net.svaroh.passly.benchmark.pagesize.appstate
 
-import com.passbolt.mobile.android.database.DatabaseProvider
-import com.passbolt.mobile.android.domain.resources.usecase.db.RemoveLocalResourcesWithUpdateStateUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.db.SetLocalResourcesUpdateStateUseCase
-import com.passbolt.mobile.android.entity.resource.ResourceUpdateState.PENDING
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.domain.resources.usecase.db.RemoveLocalResourcesWithUpdateStateUseCase
+import net.svaroh.passly.domain.resources.usecase.db.SetLocalResourcesUpdateStateUseCase
+import net.svaroh.passly.entity.resource.ResourceUpdateState.PENDING
 import kotlinx.coroutines.runBlocking
 
 class LocalResourceStore(

@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android
+package net.svaroh.passly
 
 import android.app.Application
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.AppForegroundListener
-import com.passbolt.mobile.android.core.navigation.isAuthenticated
-import com.passbolt.mobile.android.core.security.runtimeauth.RuntimeAuthenticatedFlag
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesRepository
-import com.passbolt.mobile.android.domain.preferences.usecase.ApplyAutomaticPageSizeUseCase
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.AppForegroundListener
+import net.svaroh.passly.core.navigation.isAuthenticated
+import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
+import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
+import net.svaroh.passly.domain.preferences.usecase.ApplyAutomaticPageSizeUseCase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent

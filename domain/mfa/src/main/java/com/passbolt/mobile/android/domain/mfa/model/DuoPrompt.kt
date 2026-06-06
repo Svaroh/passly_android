@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.mfa.model
+package net.svaroh.passly.domain.mfa.model
 
 sealed interface DuoPrompt {
     data class Found(

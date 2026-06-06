@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.metadata
+package net.svaroh.passly.domain.metadata
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult
 
 sealed interface UpdateMetadataSessionKeysResult {
     data object Success : UpdateMetadataSessionKeysResult

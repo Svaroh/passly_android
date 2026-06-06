@@ -1,25 +1,25 @@
-package com.passbolt.mobile.android.data.auth.datasource.remote
+package net.svaroh.passly.data.auth.datasource.remote
 
-import com.passbolt.mobile.android.common.CookieExtractor
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.callWithLibraryResponseHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.auth.datasource.remote.api.AuthApi
-import com.passbolt.mobile.android.data.auth.mapper.toDomain
-import com.passbolt.mobile.android.domain.auth.datasource.AuthRemoteDataSource
-import com.passbolt.mobile.android.domain.auth.model.RefreshedSession
-import com.passbolt.mobile.android.domain.auth.model.ServerPgpKey
-import com.passbolt.mobile.android.domain.auth.model.ServerRsaKey
-import com.passbolt.mobile.android.domain.auth.model.SignInFailureType
-import com.passbolt.mobile.android.domain.auth.model.SignInResult
-import com.passbolt.mobile.android.dto.request.RefreshSessionRequest
-import com.passbolt.mobile.android.dto.request.SignInRequestDto
-import com.passbolt.mobile.android.dto.request.SignOutRequestDto
+import net.svaroh.passly.common.CookieExtractor
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.callWithLibraryResponseHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.auth.datasource.remote.api.AuthApi
+import net.svaroh.passly.data.auth.mapper.toDomain
+import net.svaroh.passly.domain.auth.datasource.AuthRemoteDataSource
+import net.svaroh.passly.domain.auth.model.RefreshedSession
+import net.svaroh.passly.domain.auth.model.ServerPgpKey
+import net.svaroh.passly.domain.auth.model.ServerRsaKey
+import net.svaroh.passly.domain.auth.model.SignInFailureType
+import net.svaroh.passly.domain.auth.model.SignInResult
+import net.svaroh.passly.dto.request.RefreshSessionRequest
+import net.svaroh.passly.dto.request.SignInRequestDto
+import net.svaroh.passly.dto.request.SignOutRequestDto
 import java.net.HttpURLConnection
 
 /**

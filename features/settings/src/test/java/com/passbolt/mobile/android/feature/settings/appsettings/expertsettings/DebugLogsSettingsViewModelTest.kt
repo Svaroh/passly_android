@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.appsettings.expertsettings
+package net.svaroh.passly.feature.settings.appsettings.expertsettings
 
 /**
  * Passbolt - Open source password manager for teams
@@ -23,12 +23,12 @@ package com.passbolt.mobile.android.feature.settings.appsettings.expertsettings
  * @since v1.0
  */
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.preferences.PreferencesDefaults
-import com.passbolt.mobile.android.domain.preferences.usecase.GetGlobalPreferencesUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleHideRootWarning
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsViewModel
-import com.passbolt.mobile.android.ui.GlobalPreferencesUiModel
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleHideRootWarning
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsViewModel
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

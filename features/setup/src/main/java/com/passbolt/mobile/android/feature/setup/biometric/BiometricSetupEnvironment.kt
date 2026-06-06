@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.biometric
+package net.svaroh.passly.feature.setup.biometric
 
 import android.content.Context
 import android.content.Intent

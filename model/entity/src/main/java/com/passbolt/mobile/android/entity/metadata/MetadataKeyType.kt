@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.entity.metadata
+package net.svaroh.passly.entity.metadata
 
 enum class MetadataKeyType {
     SHARED,

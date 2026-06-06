@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced
 
-import com.passbolt.mobile.android.core.passwordgenerator.SecretGenerator
+import net.svaroh.passly.core.passwordgenerator.SecretGenerator
 import org.koin.dsl.module
 import org.mockito.Mockito.mock
 

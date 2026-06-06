@@ -21,29 +21,29 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.accountdetails.screen
+package net.svaroh.passly.feature.accountdetails.screen
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.common.validation.StringMaxLength
-import com.passbolt.mobile.android.common.validation.StringNotBlank
-import com.passbolt.mobile.android.common.validation.validation
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.UpdateAccountDataUseCase
-import com.passbolt.mobile.android.domain.users.profile.UserProfileInteractor
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsIntent.GoBack
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsIntent.SaveChanges
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsIntent.StartTransferAccount
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsIntent.UpdateLabel
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsScreenSideEffect.NavigateToTransferAccount
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsScreenSideEffect.NavigateUp
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsScreenSideEffect.ShowProfileFetchError
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsValidationError.MaxLengthExceeded
-import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
-import com.passbolt.mobile.android.mappers.AccountModelMapper
+import net.svaroh.passly.common.validation.StringMaxLength
+import net.svaroh.passly.common.validation.StringNotBlank
+import net.svaroh.passly.common.validation.validation
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.UpdateAccountDataUseCase
+import net.svaroh.passly.domain.users.profile.UserProfileInteractor
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.GoBack
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.SaveChanges
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.StartTransferAccount
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.UpdateLabel
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.NavigateToTransferAccount
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.NavigateUp
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.ShowProfileFetchError
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsValidationError.MaxLengthExceeded
+import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
+import net.svaroh.passly.mappers.AccountModelMapper
 import kotlinx.coroutines.launch
 
 internal class AccountDetailsViewModel(

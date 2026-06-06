@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.data.accounts.datasource.local
+package net.svaroh.passly.data.accounts.datasource.local
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.passbolt.mobile.android.domain.accounts.datasource.AccountsLocalDataSource
+import net.svaroh.passly.domain.accounts.datasource.AccountsLocalDataSource
 import timber.log.Timber
 
 /**

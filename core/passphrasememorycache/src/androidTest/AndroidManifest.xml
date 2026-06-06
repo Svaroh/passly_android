@@ -7,6 +7,6 @@
         <uses-library android:name="android.test.base" />
         <uses-library android:name="android.test.mock" />
 
-        <activity android:name="com.passbolt.mobile.android.core.dummy.TestActivity" />
+        <activity android:name="net.svaroh.passly.core.dummy.TestActivity" />
     </application>
 </manifest>

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.auth.challenge
+package net.svaroh.passly.feature.authentication.auth.challenge
 
 class TrailingSlashDomainComparator : DomainComparator {
     override fun matches(

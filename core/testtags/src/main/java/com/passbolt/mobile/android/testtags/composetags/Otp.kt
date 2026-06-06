@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.testtags.composetags
+package net.svaroh.passly.testtags.composetags
 
 object Otp {
     const val SCREEN = "OtpScreen"

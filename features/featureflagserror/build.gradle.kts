@@ -24,7 +24,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.flagserror"
+    namespace = "net.svaroh.passly.feature.flagserror"
     buildFeatures {
         compose = true
     }

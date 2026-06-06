@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.mvp.coroutinecontext
+package net.svaroh.passly.core.mvp.coroutinecontext
 
 import kotlin.coroutines.CoroutineContext
 

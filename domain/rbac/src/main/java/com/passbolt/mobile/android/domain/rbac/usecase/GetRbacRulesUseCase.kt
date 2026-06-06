@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.rbac.usecase
+package net.svaroh.passly.domain.rbac.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.rbac.RbacRepository
-import com.passbolt.mobile.android.domain.rbac.mapper.toUiModel
-import com.passbolt.mobile.android.domain.rbac.model.Rbac
-import com.passbolt.mobile.android.ui.RbacModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.rbac.RbacRepository
+import net.svaroh.passly.domain.rbac.mapper.toUiModel
+import net.svaroh.passly.domain.rbac.model.Rbac
+import net.svaroh.passly.ui.RbacModel
 
 class GetRbacRulesUseCase(
     private val rbacRepository: RbacRepository,

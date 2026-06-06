@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.domain.permissionsconfirmation
+package net.svaroh.passly.domain.permissionsconfirmation
 
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

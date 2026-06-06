@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.autofill.system
+package net.svaroh.passly.core.autofill.system
 
 import android.view.autofill.AutofillId
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.ui.ParsedStructure
+import net.svaroh.passly.ui.ParsedStructure
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock

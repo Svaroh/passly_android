@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.folders.usecase
+package net.svaroh.passly.domain.folders.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.domain.folders.FoldersRepository
-import com.passbolt.mobile.android.domain.folders.model.FolderModel
-import com.passbolt.mobile.android.domain.folders.model.FolderModelWithAttributes
-import com.passbolt.mobile.android.domain.folders.model.FoldersPage
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.domain.folders.FoldersRepository
+import net.svaroh.passly.domain.folders.model.FolderModel
+import net.svaroh.passly.domain.folders.model.FolderModelWithAttributes
+import net.svaroh.passly.domain.folders.model.FoldersPage
+import net.svaroh.passly.ui.ResourcePermission
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule

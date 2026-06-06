@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android
+package net.svaroh.passly
 
-import com.passbolt.mobile.android.helpmenu.helpMenuModule
+import net.svaroh.passly.helpmenu.helpMenuModule
 import org.koin.dsl.module
 
 /**

@@ -21,20 +21,20 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.preferences.datasource.local
+package net.svaroh.passly.data.preferences.datasource.local
 
 import androidx.core.content.edit
-import com.passbolt.mobile.android.data.preferences.AccountPreferencesFileName
-import com.passbolt.mobile.android.data.preferences.KEY_CHROME_NATIVE_AUTOFILL_DIALOG_SHOWN
-import com.passbolt.mobile.android.data.preferences.KEY_LAST_USED_HOME_VIEW_ID
-import com.passbolt.mobile.android.data.preferences.KEY_USER_SET_HOME_VIEW_ID
-import com.passbolt.mobile.android.domain.preferences.AccountFlagsUpdate
-import com.passbolt.mobile.android.domain.preferences.AccountPreferencesLocalDataSource
-import com.passbolt.mobile.android.domain.preferences.HomeDisplayViewPreferencesUpdate
-import com.passbolt.mobile.android.domain.preferences.PreferencesDefaults
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
-import com.passbolt.mobile.android.ui.AccountFlagsUiModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewPreferencesUiModel
+import net.svaroh.passly.data.preferences.AccountPreferencesFileName
+import net.svaroh.passly.data.preferences.KEY_CHROME_NATIVE_AUTOFILL_DIALOG_SHOWN
+import net.svaroh.passly.data.preferences.KEY_LAST_USED_HOME_VIEW_ID
+import net.svaroh.passly.data.preferences.KEY_USER_SET_HOME_VIEW_ID
+import net.svaroh.passly.domain.preferences.AccountFlagsUpdate
+import net.svaroh.passly.domain.preferences.AccountPreferencesLocalDataSource
+import net.svaroh.passly.domain.preferences.HomeDisplayViewPreferencesUpdate
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.ui.AccountFlagsUiModel
+import net.svaroh.passly.ui.HomeDisplayViewPreferencesUiModel
 import timber.log.Timber
 
 internal class AccountPreferencesLocalDataSourceImpl(

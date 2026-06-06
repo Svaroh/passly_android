@@ -1,20 +1,20 @@
-package com.passbolt.mobile.android.domain.auth
+package net.svaroh.passly.domain.auth
 
-import com.passbolt.mobile.android.domain.auth.usecase.CheckIfPassphraseFileExistsUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.FetchServerPublicPgpKeyUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.GetPassphraseUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.GetResourcesDatabasePassphraseUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.GetServerPublicRsaKeyUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.RemoveAllAccountsPassphrasesUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.RemovePassphraseUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.RemoveServerPublicRsaKeyUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.SaveMfaTokenUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.SavePassphraseUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.SaveResourcesDatabasePassphraseUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.SaveServerPublicRsaKeyUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.SaveSessionUseCase
+import net.svaroh.passly.domain.auth.usecase.CheckIfPassphraseFileExistsUseCase
+import net.svaroh.passly.domain.auth.usecase.FetchServerPublicPgpKeyUseCase
+import net.svaroh.passly.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
+import net.svaroh.passly.domain.auth.usecase.GetPassphraseUseCase
+import net.svaroh.passly.domain.auth.usecase.GetResourcesDatabasePassphraseUseCase
+import net.svaroh.passly.domain.auth.usecase.GetServerPublicRsaKeyUseCase
+import net.svaroh.passly.domain.auth.usecase.GetSessionUseCase
+import net.svaroh.passly.domain.auth.usecase.RemoveAllAccountsPassphrasesUseCase
+import net.svaroh.passly.domain.auth.usecase.RemovePassphraseUseCase
+import net.svaroh.passly.domain.auth.usecase.RemoveServerPublicRsaKeyUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveMfaTokenUseCase
+import net.svaroh.passly.domain.auth.usecase.SavePassphraseUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveResourcesDatabasePassphraseUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveServerPublicRsaKeyUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveSessionUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

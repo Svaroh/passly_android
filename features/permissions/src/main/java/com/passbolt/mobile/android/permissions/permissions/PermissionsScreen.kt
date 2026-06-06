@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissions
+package net.svaroh.passly.permissions.permissions
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,32 +42,32 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.GroupPermissionDetails
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.UserPermissionDetails
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.GoBack
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.MainButtonIntent
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.SeePermission
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateBack
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToGroupPermissionDetails
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToHome
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToShareResource
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToUserPermissionDetails
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.ShowToast
-import com.passbolt.mobile.android.permissions.permissions.ui.EmptyPermissionsState
-import com.passbolt.mobile.android.permissions.permissions.ui.PermissionsList
-import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.GroupPermissionDetails
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.UserPermissionDetails
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.permissions.permissions.PermissionsIntent.GoBack
+import net.svaroh.passly.permissions.permissions.PermissionsIntent.MainButtonIntent
+import net.svaroh.passly.permissions.permissions.PermissionsIntent.SeePermission
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateBack
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToGroupPermissionDetails
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToHome
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToShareResource
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToUserPermissionDetails
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.ShowToast
+import net.svaroh.passly.permissions.permissions.ui.EmptyPermissionsState
+import net.svaroh.passly.permissions.permissions.ui.PermissionsList
+import net.svaroh.passly.ui.ConfirmPermissionsMode
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun PermissionsScreen(

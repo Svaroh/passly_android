@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.passwordpolicies
+package net.svaroh.passly.domain.passwordpolicies
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordPolicies
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordPolicies
 
 interface PasswordPoliciesRepository {
     suspend fun getPasswordPolicies(userId: String): DomainResult<PasswordPolicies>

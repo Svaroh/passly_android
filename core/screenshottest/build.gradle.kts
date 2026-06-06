@@ -15,7 +15,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.screenshottest"
+    namespace = "net.svaroh.passly.core.screenshottest"
     buildFeatures {
         compose = true
     }

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.folders.model
+package net.svaroh.passly.domain.folders.model
 
 /**
  * Identifies the newly created item (resource or folder) whose own permission for the current user

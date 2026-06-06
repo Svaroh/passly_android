@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.navigation.constants
+package net.svaroh.passly.core.navigation.constants
 
 internal object Startup {
     internal const val START_UP_ACTIVITY: String =
-        "com.passbolt.mobile.android.feature.startup.StartUpActivity"
+        "net.svaroh.passly.feature.startup.StartUpActivity"
 }

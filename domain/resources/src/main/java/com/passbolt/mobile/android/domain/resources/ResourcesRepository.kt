@@ -20,19 +20,19 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.domain.resources
+package net.svaroh.passly.domain.resources
 
 import androidx.paging.PagingData
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.resources.model.Resource
-import com.passbolt.mobile.android.domain.resources.model.ResourceWithAttributes
-import com.passbolt.mobile.android.domain.resources.model.ResourcesPage
-import com.passbolt.mobile.android.dto.request.CreateResourceDto
-import com.passbolt.mobile.android.entity.resource.ResourceUpdateState
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
-import com.passbolt.mobile.android.ui.PermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.TagModel
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.resources.model.Resource
+import net.svaroh.passly.domain.resources.model.ResourceWithAttributes
+import net.svaroh.passly.domain.resources.model.ResourcesPage
+import net.svaroh.passly.dto.request.CreateResourceDto
+import net.svaroh.passly.entity.resource.ResourceUpdateState
+import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.PermissionModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.TagModel
 import kotlinx.coroutines.flow.Flow
 
 @Suppress("TooManyFunctions")

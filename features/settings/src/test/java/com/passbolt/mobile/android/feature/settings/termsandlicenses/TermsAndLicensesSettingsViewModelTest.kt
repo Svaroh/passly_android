@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.termsandlicenses
+package net.svaroh.passly.feature.settings.termsandlicenses
 
 /**
  * Passbolt - Open source password manager for teams
@@ -23,9 +23,9 @@ package com.passbolt.mobile.android.feature.settings.termsandlicenses
  * @since v1.0
  */
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsViewModel
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
+import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsViewModel
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop

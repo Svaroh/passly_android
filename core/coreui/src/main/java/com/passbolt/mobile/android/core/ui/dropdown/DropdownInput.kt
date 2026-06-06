@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.dropdown
+package net.svaroh.passly.core.ui.dropdown
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -48,8 +48,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.ui.R
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.ui.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

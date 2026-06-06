@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcemoremenu
+package net.svaroh.passly.resourcemoremenu
 
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel
+import net.svaroh.passly.ui.ResourceMoreMenuModel
 
 sealed interface ResourceMoreMenuBottomSheetSideEffect {
     data object Dismiss : ResourceMoreMenuBottomSheetSideEffect

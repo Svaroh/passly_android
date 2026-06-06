@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.inappreview
+package net.svaroh.passly.domain.inappreview
 
-import com.passbolt.mobile.android.domain.inappreview.usecase.InAppReviewInteractor
+import net.svaroh.passly.domain.inappreview.usecase.InAppReviewInteractor
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import java.time.Clock

@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses
+package net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses
 
-import com.passbolt.mobile.android.ui.OpenSourceLicensesModel
+import net.svaroh.passly.ui.OpenSourceLicensesModel
 
 data class LicensesState(
     val openSourceLicensesModel: OpenSourceLicensesModel = OpenSourceLicensesModel(),

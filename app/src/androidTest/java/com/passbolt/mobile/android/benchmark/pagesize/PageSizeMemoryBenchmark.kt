@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize
+package net.svaroh.passly.benchmark.pagesize
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.passbolt.mobile.android.benchmark.pagesize.fixture.MetadataProfile
-import com.passbolt.mobile.android.benchmark.pagesize.harness.PageSizeMemoryBenchmarkHarness
-import com.passbolt.mobile.android.benchmark.pagesize.harness.benchmarkSetupRule
+import net.svaroh.passly.benchmark.pagesize.fixture.MetadataProfile
+import net.svaroh.passly.benchmark.pagesize.harness.PageSizeMemoryBenchmarkHarness
+import net.svaroh.passly.benchmark.pagesize.harness.benchmarkSetupRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

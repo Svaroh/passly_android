@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.common.device
+package net.svaroh.passly.common.device
 
 data class DevicePerformanceFingerprint(
     val isLowRamDevice: Boolean,

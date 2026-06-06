@@ -11,5 +11,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.notifications"
+    namespace = "net.svaroh.passly.core.notifications"
 }

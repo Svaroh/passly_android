@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android
+package net.svaroh.passly
 
-import com.passbolt.mobile.android.resourcemoremenu.resourceMoreMenuModule
-import com.passbolt.mobile.android.resourcemoremenu.usecase.CreateResourceMoreMenuModelUseCase
+import net.svaroh.passly.resourcemoremenu.resourceMoreMenuModule
+import net.svaroh.passly.resourcemoremenu.usecase.CreateResourceMoreMenuModelUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

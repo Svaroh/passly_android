@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.header
+package net.svaroh.passly.core.ui.header
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
@@ -10,8 +10,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun ActionIconButton(

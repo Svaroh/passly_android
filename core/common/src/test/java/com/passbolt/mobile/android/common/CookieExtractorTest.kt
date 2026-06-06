@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.common
+package net.svaroh.passly.common
 
 import com.google.common.truth.Truth.assertThat
 import okhttp3.Cookie

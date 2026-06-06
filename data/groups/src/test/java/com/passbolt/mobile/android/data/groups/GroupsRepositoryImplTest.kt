@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.groups
+package net.svaroh.passly.data.groups
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.domain.groups.datasource.GroupsLocalDataSource
-import com.passbolt.mobile.android.domain.groups.datasource.GroupsRemoteDataSource
-import com.passbolt.mobile.android.domain.groups.model.Group
-import com.passbolt.mobile.android.domain.groups.model.GroupMember
-import com.passbolt.mobile.android.domain.groups.model.GroupWithMembers
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.domain.groups.datasource.GroupsLocalDataSource
+import net.svaroh.passly.domain.groups.datasource.GroupsRemoteDataSource
+import net.svaroh.passly.domain.groups.model.Group
+import net.svaroh.passly.domain.groups.model.GroupMember
+import net.svaroh.passly.domain.groups.model.GroupWithMembers
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule

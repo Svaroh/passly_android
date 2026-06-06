@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.gson.validation
+package net.svaroh.passly.serializers.gson.validation
 
-import com.passbolt.mobile.android.serializers.jsonschema.schamarepository.JsonSchemaValidator
+import net.svaroh.passly.serializers.jsonschema.schamarepository.JsonSchemaValidator
 
 class JsonSchemaValidationRunner(
     private val jsonSchemaValidator: JsonSchemaValidator,

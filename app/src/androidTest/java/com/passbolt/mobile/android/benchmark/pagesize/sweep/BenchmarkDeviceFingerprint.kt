@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.sweep
+package net.svaroh.passly.benchmark.pagesize.sweep
 
 import android.app.ActivityManager
 import android.content.Context
 import android.os.Build
-import com.passbolt.mobile.android.common.device.DevicePerformanceFingerprint
-import com.passbolt.mobile.android.common.device.DevicePerformanceTier
-import com.passbolt.mobile.android.common.device.classifyDevicePerformanceTier
+import net.svaroh.passly.common.device.DevicePerformanceFingerprint
+import net.svaroh.passly.common.device.DevicePerformanceTier
+import net.svaroh.passly.common.device.classifyDevicePerformanceTier
 
 data class BenchmarkDeviceFingerprint(
     val manufacturer: String,

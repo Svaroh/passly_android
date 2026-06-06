@@ -21,22 +21,22 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.folders.datasource.remote
+package net.svaroh.passly.data.folders.datasource.remote
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.folders.datasource.remote.api.FoldersApi
-import com.passbolt.mobile.android.data.folders.mapper.toFolderModelWithAttributes
-import com.passbolt.mobile.android.data.folders.mapper.toFoldersPage
-import com.passbolt.mobile.android.domain.folders.datasource.FoldersRemoteDataSource
-import com.passbolt.mobile.android.domain.folders.model.FolderModelWithAttributes
-import com.passbolt.mobile.android.domain.folders.model.FoldersPage
-import com.passbolt.mobile.android.dto.request.CreateFolderRequestDto
-import com.passbolt.mobile.android.mappers.PermissionsModelMapper
-import com.passbolt.mobile.android.ui.PermissionModel
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.folders.datasource.remote.api.FoldersApi
+import net.svaroh.passly.data.folders.mapper.toFolderModelWithAttributes
+import net.svaroh.passly.data.folders.mapper.toFoldersPage
+import net.svaroh.passly.domain.folders.datasource.FoldersRemoteDataSource
+import net.svaroh.passly.domain.folders.model.FolderModelWithAttributes
+import net.svaroh.passly.domain.folders.model.FoldersPage
+import net.svaroh.passly.dto.request.CreateFolderRequestDto
+import net.svaroh.passly.mappers.PermissionsModelMapper
+import net.svaroh.passly.ui.PermissionModel
 
 internal class FoldersRemoteDataSourceImpl(
     private val foldersApi: FoldersApi,

@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.accounts
+package net.svaroh.passly.domain.accounts
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.mockito.kotlin.doReturn

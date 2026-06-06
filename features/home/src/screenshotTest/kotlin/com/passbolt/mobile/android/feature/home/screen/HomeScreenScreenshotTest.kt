@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.home.screen
+package net.svaroh.passly.feature.home.screen
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.material3.SnackbarHostState
@@ -6,14 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.android.tools.screenshot.PreviewTest
-import com.passbolt.mobile.android.common.ExternalDeeplinkHandler
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.ui.screenshot.PassboltEdgeToEdgePreviewWrapper
-import com.passbolt.mobile.android.core.ui.screenshot.ensureScreenshotKoinStarted
-import com.passbolt.mobile.android.domain.resources.resourceicon.ResourceIconProvider
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.common.ExternalDeeplinkHandler
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.ui.screenshot.PassboltEdgeToEdgePreviewWrapper
+import net.svaroh.passly.core.ui.screenshot.ensureScreenshotKoinStarted
+import net.svaroh.passly.domain.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.ui.ResourceUiModel
 import org.koin.dsl.module
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext

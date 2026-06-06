@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.accounts
+package net.svaroh.passly.feature.settings.screen.accounts
 
 internal sealed interface AccountsSettingsIntent {
     object GoBack : AccountsSettingsIntent

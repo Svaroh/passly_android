@@ -21,32 +21,32 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.folders.datasource.local
+package net.svaroh.passly.data.folders.datasource.local
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.passbolt.mobile.android.data.folders.mapper.toDomain
-import com.passbolt.mobile.android.data.folders.mapper.toEntity
-import com.passbolt.mobile.android.database.DatabaseProvider
-import com.passbolt.mobile.android.database.QuerySanitizer
-import com.passbolt.mobile.android.domain.folders.datasource.FoldersLocalDataSource
-import com.passbolt.mobile.android.domain.folders.model.FolderModel
-import com.passbolt.mobile.android.domain.folders.model.FolderModelWithAttributes
-import com.passbolt.mobile.android.domain.folders.model.FolderUpdateState
-import com.passbolt.mobile.android.domain.folders.model.FolderWithCountAndPath
-import com.passbolt.mobile.android.domain.folders.model.ParentPermissionItemId
-import com.passbolt.mobile.android.entity.folder.FolderAndUsersCrossRef
-import com.passbolt.mobile.android.entity.group.FolderAndGroupsCrossRef
-import com.passbolt.mobile.android.mappers.PermissionsModelMapper
-import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper
-import com.passbolt.mobile.android.ui.Folder
-import com.passbolt.mobile.android.ui.PermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.data.folders.mapper.toDomain
+import net.svaroh.passly.data.folders.mapper.toEntity
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.database.QuerySanitizer
+import net.svaroh.passly.domain.folders.datasource.FoldersLocalDataSource
+import net.svaroh.passly.domain.folders.model.FolderModel
+import net.svaroh.passly.domain.folders.model.FolderModelWithAttributes
+import net.svaroh.passly.domain.folders.model.FolderUpdateState
+import net.svaroh.passly.domain.folders.model.FolderWithCountAndPath
+import net.svaroh.passly.domain.folders.model.ParentPermissionItemId
+import net.svaroh.passly.entity.folder.FolderAndUsersCrossRef
+import net.svaroh.passly.entity.group.FolderAndGroupsCrossRef
+import net.svaroh.passly.mappers.PermissionsModelMapper
+import net.svaroh.passly.mappers.SharePermissionsModelMapper
+import net.svaroh.passly.ui.Folder
+import net.svaroh.passly.ui.PermissionModel
+import net.svaroh.passly.ui.PermissionModelUi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import com.passbolt.mobile.android.domain.folders.model.FolderUpdateState.UPDATED as DOMAIN_UPDATED
+import net.svaroh.passly.domain.folders.model.FolderUpdateState.UPDATED as DOMAIN_UPDATED
 
 internal class FoldersLocalDataSourceImpl(
     private val databaseProvider: DatabaseProvider,

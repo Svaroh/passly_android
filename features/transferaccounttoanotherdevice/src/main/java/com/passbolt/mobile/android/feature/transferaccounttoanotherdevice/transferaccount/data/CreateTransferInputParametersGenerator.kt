@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.data
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data
 
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
-import com.passbolt.mobile.android.dto.response.qrcode.AssembledKeyDto
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.data.QrGenerationConstants.MAX_QR_DATA_BYTES
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.data.QrGenerationConstants.RESERVED_BYTES_COUNT
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
+import net.svaroh.passly.dto.response.qrcode.AssembledKeyDto
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data.QrGenerationConstants.MAX_QR_DATA_BYTES
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data.QrGenerationConstants.RESERVED_BYTES_COUNT
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import kotlinx.serialization.json.Json
 import okio.Buffer
 import timber.log.Timber

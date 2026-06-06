@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.pwnedpasswordsapi
+package net.svaroh.passly.pwnedpasswordsapi
 
-import com.passbolt.mobile.android.pwnedpasswordsapi.range.PwnedPasswordDataSource
-import com.passbolt.mobile.android.pwnedpasswordsapi.range.PwnedPasswordRemoteDataSource
-import com.passbolt.mobile.android.pwnedpasswordsapi.range.PwnedPasswordRepository
-import com.passbolt.mobile.android.pwnedpasswordsapi.range.PwnedPasswordsApi
+import net.svaroh.passly.pwnedpasswordsapi.range.PwnedPasswordDataSource
+import net.svaroh.passly.pwnedpasswordsapi.range.PwnedPasswordRemoteDataSource
+import net.svaroh.passly.pwnedpasswordsapi.range.PwnedPasswordRepository
+import net.svaroh.passly.pwnedpasswordsapi.range.PwnedPasswordsApi
 import okhttp3.OkHttpClient
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named

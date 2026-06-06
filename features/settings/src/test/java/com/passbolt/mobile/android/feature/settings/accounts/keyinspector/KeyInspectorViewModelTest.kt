@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.accounts.keyinspector
+package net.svaroh.passly.feature.settings.accounts.keyinspector
 
 /**
  * Passbolt - Open source password manager for teams
@@ -24,28 +24,28 @@ package com.passbolt.mobile.android.feature.settings.accounts.keyinspector
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.core.formatter.DateFormatter
-import com.passbolt.mobile.android.core.formatter.FingerprintFormatter
-import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackingFlow
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.users.usecase.FetchCurrentUserUseCase
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetSessionExpiryUseCase
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetSessionExpiryUseCase.Output.JwtWillExpire
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CopyFingerprint
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CopyUid
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.AddFingerprintToClipboard
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.AddUidToClipboard
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ErrorSnackbarType.FAILED_TO_FETCH_KEY
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorViewModel
-import com.passbolt.mobile.android.ui.GpgKeyUiModel
-import com.passbolt.mobile.android.ui.UserProfileUiModel
-import com.passbolt.mobile.android.ui.UserUiModel
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.core.formatter.DateFormatter
+import net.svaroh.passly.core.formatter.FingerprintFormatter
+import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.users.usecase.FetchCurrentUserUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase.Output.JwtWillExpire
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CopyFingerprint
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CopyUid
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.AddFingerprintToClipboard
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.AddUidToClipboard
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ErrorSnackbarType.FAILED_TO_FETCH_KEY
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorViewModel
+import net.svaroh.passly.ui.GpgKeyUiModel
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

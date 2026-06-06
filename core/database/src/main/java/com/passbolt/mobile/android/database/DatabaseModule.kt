@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.database
+package net.svaroh.passly.database
 
-import com.passbolt.mobile.android.common.transaction.DatabaseTransactionRunner
-import com.passbolt.mobile.android.database.snapshot.ResourcesSnapshot
+import net.svaroh.passly.common.transaction.DatabaseTransactionRunner
+import net.svaroh.passly.database.snapshot.ResourcesSnapshot
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

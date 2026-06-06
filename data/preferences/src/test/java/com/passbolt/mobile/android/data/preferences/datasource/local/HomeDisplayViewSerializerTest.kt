@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.preferences.datasource.local
+package net.svaroh.passly.data.preferences.datasource.local
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.ui.HomeDisplayViewUiModel
+import net.svaroh.passly.ui.HomeDisplayViewUiModel
 import org.junit.Test
 
 class HomeDisplayViewSerializerTest {

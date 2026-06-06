@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.users
+package net.svaroh.passly.domain.users
 
-import com.passbolt.mobile.android.domain.users.profile.UserProfileInteractor
-import com.passbolt.mobile.android.domain.users.profile.UserProfileRefreshTrackingFlow
-import com.passbolt.mobile.android.domain.users.usecase.FetchCurrentUserUseCase
-import com.passbolt.mobile.android.domain.users.usecase.FetchUsersByIdsUseCase
-import com.passbolt.mobile.android.domain.users.usecase.FetchUsersUseCase
-import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
-import com.passbolt.mobile.android.domain.users.usecase.GetLocalUserUseCase
-import com.passbolt.mobile.android.domain.users.usecase.GetLocalUsersUseCase
-import com.passbolt.mobile.android.domain.users.usecase.UsersInteractor
+import net.svaroh.passly.domain.users.profile.UserProfileInteractor
+import net.svaroh.passly.domain.users.profile.UserProfileRefreshTrackingFlow
+import net.svaroh.passly.domain.users.usecase.FetchCurrentUserUseCase
+import net.svaroh.passly.domain.users.usecase.FetchUsersByIdsUseCase
+import net.svaroh.passly.domain.users.usecase.FetchUsersUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalCurrentUserUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalUserUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalUsersUseCase
+import net.svaroh.passly.domain.users.usecase.UsersInteractor
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

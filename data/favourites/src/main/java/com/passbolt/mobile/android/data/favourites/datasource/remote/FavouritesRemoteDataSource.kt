@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.data.favourites.datasource.remote
+package net.svaroh.passly.data.favourites.datasource.remote
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.favourites.datasource.remote.api.FavouritesApi
-import com.passbolt.mobile.android.domain.favourites.FavouritesDataSource
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.favourites.datasource.remote.api.FavouritesApi
+import net.svaroh.passly.domain.favourites.FavouritesDataSource
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.rbac.mapper
+package net.svaroh.passly.data.rbac.mapper
 
-import com.passbolt.mobile.android.domain.rbac.model.Rbac
-import com.passbolt.mobile.android.domain.rbac.model.RbacRule
-import com.passbolt.mobile.android.domain.rbac.model.RbacRule.ALLOW
-import com.passbolt.mobile.android.domain.rbac.model.RbacRule.DENY
-import com.passbolt.mobile.android.domain.rbac.model.RbacRule.UNSUPPORTED_RULE
-import com.passbolt.mobile.android.dto.response.RbacPermissionDto
+import net.svaroh.passly.domain.rbac.model.Rbac
+import net.svaroh.passly.domain.rbac.model.RbacRule
+import net.svaroh.passly.domain.rbac.model.RbacRule.ALLOW
+import net.svaroh.passly.domain.rbac.model.RbacRule.DENY
+import net.svaroh.passly.domain.rbac.model.RbacRule.UNSUPPORTED_RULE
+import net.svaroh.passly.dto.response.RbacPermissionDto
 
 fun List<RbacPermissionDto>.toDomain(): Rbac =
     Rbac(

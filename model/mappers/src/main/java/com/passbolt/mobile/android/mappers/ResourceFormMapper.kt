@@ -1,24 +1,24 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldType.BOOLEAN
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldType.NUMBER
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldType.PASSWORD
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldType.TEXT
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldType.URI
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldsModel
-import com.passbolt.mobile.android.jsonmodel.delegates.TotpSecret
-import com.passbolt.mobile.android.ui.CustomFieldModel
-import com.passbolt.mobile.android.ui.CustomFieldType
-import com.passbolt.mobile.android.ui.CustomFieldUiModel
-import com.passbolt.mobile.android.ui.CustomFieldsModel
-import com.passbolt.mobile.android.ui.CustomFieldsUiModel
-import com.passbolt.mobile.android.ui.MetadataCustomFieldsModel
-import com.passbolt.mobile.android.ui.MetadataIconModel
-import com.passbolt.mobile.android.ui.PasswordUiModel
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel.Companion.ICON_TYPE_KEEPASS
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel.Companion.ICON_TYPE_PASSBOLT
-import com.passbolt.mobile.android.ui.TotpUiModel
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.BOOLEAN
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.NUMBER
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.PASSWORD
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.TEXT
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.URI
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldsModel
+import net.svaroh.passly.jsonmodel.delegates.TotpSecret
+import net.svaroh.passly.ui.CustomFieldModel
+import net.svaroh.passly.ui.CustomFieldType
+import net.svaroh.passly.ui.CustomFieldUiModel
+import net.svaroh.passly.ui.CustomFieldsModel
+import net.svaroh.passly.ui.CustomFieldsUiModel
+import net.svaroh.passly.ui.MetadataCustomFieldsModel
+import net.svaroh.passly.ui.MetadataIconModel
+import net.svaroh.passly.ui.PasswordUiModel
+import net.svaroh.passly.ui.ResourceAppearanceModel
+import net.svaroh.passly.ui.ResourceAppearanceModel.Companion.ICON_TYPE_KEEPASS
+import net.svaroh.passly.ui.ResourceAppearanceModel.Companion.ICON_TYPE_PASSBOLT
+import net.svaroh.passly.ui.TotpUiModel
 
 /**
  * Passbolt - Open source password manager for teams

@@ -65,7 +65,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.authentication"
+    namespace = "net.svaroh.passly.feature.authentication"
     buildFeatures {
         compose = true
     }

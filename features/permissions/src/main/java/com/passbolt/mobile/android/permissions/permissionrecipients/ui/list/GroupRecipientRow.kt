@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.permissions.permissionrecipients.ui.list
+package net.svaroh.passly.permissions.permissionrecipients.ui.list
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -19,9 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.ui.GroupModel
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.ui.GroupModel
 
 @Composable
 internal fun GroupRecipientRow(

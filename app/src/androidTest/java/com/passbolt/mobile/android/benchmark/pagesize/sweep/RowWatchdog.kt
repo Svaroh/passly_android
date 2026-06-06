@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.sweep
+package net.svaroh.passly.benchmark.pagesize.sweep
 
 class RowWatchdog(
     private val stallTimeoutMs: Long = DEFAULT_STALL_TIMEOUT_MS,

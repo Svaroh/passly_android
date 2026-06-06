@@ -36,9 +36,9 @@ val projectVersionCode: Int by rootProject.extra
 fun getVersionCode(): Int = System.getenv("GITLAB_BUILD_NUMBER")?.toInt() ?: projectVersionCode
 
 android {
-    namespace = "com.passbolt.mobile.android"
+    namespace = "net.svaroh.passly"
     defaultConfig {
-        applicationId = "com.svaroh.passly.android"
+        applicationId = "net.svaroh.passly"
         versionCode = getVersionCode()
         versionName = projectVersionName
     }

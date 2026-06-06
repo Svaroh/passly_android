@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.otpcore
+package net.svaroh.passly.core.otpcore
 
 import dev.turingcomplete.kotlinonetimepassword.TimeBasedOneTimePasswordConfig
 import dev.turingcomplete.kotlinonetimepassword.TimeBasedOneTimePasswordGenerator

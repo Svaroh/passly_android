@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.logs
+package net.svaroh.passly.logs
 
 /**
  * Passbolt - Open source password manager for teams
@@ -23,8 +23,8 @@ package com.passbolt.mobile.android.logs
  * @since v1.0
  */
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.logs.reader.LogsFileReader
-import com.passbolt.mobile.android.logs.reader.LogsReader
+import net.svaroh.passly.logs.reader.LogsFileReader
+import net.svaroh.passly.logs.reader.LogsReader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop

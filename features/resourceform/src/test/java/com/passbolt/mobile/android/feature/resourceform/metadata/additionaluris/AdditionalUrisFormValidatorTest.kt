@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris
+package net.svaroh.passly.feature.resourceform.metadata.additionaluris
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormValidator.Companion.URI_MAX_LENGTH
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormValidator.Companion.URI_MAX_LENGTH
 import org.junit.Before
 import org.junit.Test
 import java.util.UUID

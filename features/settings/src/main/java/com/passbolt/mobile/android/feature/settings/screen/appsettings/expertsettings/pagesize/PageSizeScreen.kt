@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize
+package net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
@@ -58,26 +58,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.ui.banner.WarningBanner
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.PageSizeChanged
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.RestoreDefaultsClick
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.SaveClick
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeSideEffect.NavigateBack
-import com.passbolt.mobile.android.testtags.composetags.PageSize
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.ui.banner.WarningBanner
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.PageSizeChanged
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.RestoreDefaultsClick
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.SaveClick
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeSideEffect.NavigateBack
+import net.svaroh.passly.testtags.composetags.PageSize
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import java.text.NumberFormat
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.roundToInt
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 private const val INACTIVE_TRACK_ALPHA = 0.38f
 private val TRACK_HEIGHT = 8.dp

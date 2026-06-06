@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.core.navigation.compose.results
+package net.svaroh.passly.core.navigation.compose.results
 
-import com.passbolt.mobile.android.ui.OtpParseResult
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.ui.OtpParseResult
+import net.svaroh.passly.ui.ResourceUiModel
 
 data class OtpScanCompleteResult(
     val otpCreated: Boolean,

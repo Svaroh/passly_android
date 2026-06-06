@@ -40,7 +40,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.resourcemoremenu"
+    namespace = "net.svaroh.passly.feature.resourcemoremenu"
     buildFeatures {
         compose = true
     }

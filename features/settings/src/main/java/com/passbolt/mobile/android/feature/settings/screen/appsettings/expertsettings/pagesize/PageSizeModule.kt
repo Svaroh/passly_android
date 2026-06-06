@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize
+package net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

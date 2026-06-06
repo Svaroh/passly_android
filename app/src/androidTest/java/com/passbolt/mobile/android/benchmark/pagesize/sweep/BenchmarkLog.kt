@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.sweep
+package net.svaroh.passly.benchmark.pagesize.sweep
 
 private const val LIVE_TAG = "pagesize-benchmark:"
 

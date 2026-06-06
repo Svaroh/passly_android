@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.main.ui
+package net.svaroh.passly.feature.resourceform.main.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,14 +43,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.section.Section
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.LearnMoreAboutUpgrade
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.UpgradeResource
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.section.Section
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.LearnMoreAboutUpgrade
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.UpgradeResource
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun UpgradeAvailableSection(

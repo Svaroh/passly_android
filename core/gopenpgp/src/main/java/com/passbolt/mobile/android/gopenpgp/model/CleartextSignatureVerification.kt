@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.gopenpgp.model
+package net.svaroh.passly.gopenpgp.model
 
 data class CleartextSignatureVerification(
     val isSignatureVerified: Boolean,

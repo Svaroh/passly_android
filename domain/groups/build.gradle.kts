@@ -17,5 +17,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.domain.groups"
+    namespace = "net.svaroh.passly.domain.groups"
 }

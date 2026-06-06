@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.testtags.composetags
+package net.svaroh.passly.testtags.composetags
 
 object Setup {
     const val LOGO_IMAGE = "WelcomeLogoImage"

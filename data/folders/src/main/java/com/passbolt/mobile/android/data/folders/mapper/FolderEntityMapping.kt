@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.folders.mapper
+package net.svaroh.passly.data.folders.mapper
 
-import com.passbolt.mobile.android.domain.folders.model.FolderModel
-import com.passbolt.mobile.android.domain.folders.model.FolderUpdateState
-import com.passbolt.mobile.android.domain.folders.model.FolderWithCountAndPath
-import com.passbolt.mobile.android.entity.folder.Folder
-import com.passbolt.mobile.android.entity.folder.FolderWithChildItemsCountAndPath
-import com.passbolt.mobile.android.mappers.PermissionsModelMapper
-import com.passbolt.mobile.android.entity.folder.FolderUpdateState as EntityFolderUpdateState
+import net.svaroh.passly.domain.folders.model.FolderModel
+import net.svaroh.passly.domain.folders.model.FolderUpdateState
+import net.svaroh.passly.domain.folders.model.FolderWithCountAndPath
+import net.svaroh.passly.entity.folder.Folder
+import net.svaroh.passly.entity.folder.FolderWithChildItemsCountAndPath
+import net.svaroh.passly.mappers.PermissionsModelMapper
+import net.svaroh.passly.entity.folder.FolderUpdateState as EntityFolderUpdateState
 
 internal fun FolderModel.toEntity(
     updateState: EntityFolderUpdateState,

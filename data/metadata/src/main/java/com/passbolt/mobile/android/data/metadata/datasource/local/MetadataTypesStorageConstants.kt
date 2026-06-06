@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.metadata.datasource.local
+package net.svaroh.passly.data.metadata.datasource.local
 
 internal object MetadataTypesStorageConstants {
     internal const val DEFAULT_METADATA_TYPE = "DEFAULT_METADATA_TYPE"

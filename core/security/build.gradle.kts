@@ -18,7 +18,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.security"
+    namespace = "net.svaroh.passly.core.security"
     buildFeatures {
         buildConfig = true
         compose = true

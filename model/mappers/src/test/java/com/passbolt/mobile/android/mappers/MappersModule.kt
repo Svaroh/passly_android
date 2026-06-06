@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
 import org.koin.dsl.module
 

@@ -46,7 +46,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.tagsdetails"
+    namespace = "net.svaroh.passly.feature.tagsdetails"
     buildFeatures {
         compose = true
     }

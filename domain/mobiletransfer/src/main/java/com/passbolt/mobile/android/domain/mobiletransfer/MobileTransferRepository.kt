@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.mobiletransfer
+package net.svaroh.passly.domain.mobiletransfer
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.mobiletransfer.model.CreateTransferModel
-import com.passbolt.mobile.android.domain.mobiletransfer.model.TransferModel
-import com.passbolt.mobile.android.domain.mobiletransfer.model.UpdateTransferModel
-import com.passbolt.mobile.android.dto.request.BrowserFirstLoginAccountRequestDto
-import com.passbolt.mobile.android.dto.request.BrowserFirstLoginResponseRequestDto
-import com.passbolt.mobile.android.dto.response.BrowserFirstLoginRequestResponseDto
-import com.passbolt.mobile.android.ui.Status
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.mobiletransfer.model.CreateTransferModel
+import net.svaroh.passly.domain.mobiletransfer.model.TransferModel
+import net.svaroh.passly.domain.mobiletransfer.model.UpdateTransferModel
+import net.svaroh.passly.dto.request.BrowserFirstLoginAccountRequestDto
+import net.svaroh.passly.dto.request.BrowserFirstLoginResponseRequestDto
+import net.svaroh.passly.dto.response.BrowserFirstLoginRequestResponseDto
+import net.svaroh.passly.ui.Status
 
 interface MobileTransferRepository {
     suspend fun turnPage(

@@ -21,20 +21,20 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.metadata.mapper
+package net.svaroh.passly.data.metadata.mapper
 
-import com.passbolt.mobile.android.domain.metadata.model.MetadataKey
-import com.passbolt.mobile.android.domain.metadata.model.MetadataKeysSettings
-import com.passbolt.mobile.android.domain.metadata.model.MetadataPrivateKey
-import com.passbolt.mobile.android.domain.metadata.model.MetadataSessionKeysBundle
-import com.passbolt.mobile.android.domain.metadata.model.MetadataType
-import com.passbolt.mobile.android.domain.metadata.model.MetadataTypesSettings
-import com.passbolt.mobile.android.dto.response.MetadataKeysResponseDto
-import com.passbolt.mobile.android.dto.response.MetadataKeysSettingsResponseDto
-import com.passbolt.mobile.android.dto.response.MetadataPrivateKeyDto
-import com.passbolt.mobile.android.dto.response.MetadataSessionKeyResponseDto
-import com.passbolt.mobile.android.dto.response.MetadataTypeDto
-import com.passbolt.mobile.android.dto.response.MetadataTypesSettingsResponseDto
+import net.svaroh.passly.domain.metadata.model.MetadataKey
+import net.svaroh.passly.domain.metadata.model.MetadataKeysSettings
+import net.svaroh.passly.domain.metadata.model.MetadataPrivateKey
+import net.svaroh.passly.domain.metadata.model.MetadataSessionKeysBundle
+import net.svaroh.passly.domain.metadata.model.MetadataType
+import net.svaroh.passly.domain.metadata.model.MetadataTypesSettings
+import net.svaroh.passly.dto.response.MetadataKeysResponseDto
+import net.svaroh.passly.dto.response.MetadataKeysSettingsResponseDto
+import net.svaroh.passly.dto.response.MetadataPrivateKeyDto
+import net.svaroh.passly.dto.response.MetadataSessionKeyResponseDto
+import net.svaroh.passly.dto.response.MetadataTypeDto
+import net.svaroh.passly.dto.response.MetadataTypesSettingsResponseDto
 import java.time.ZonedDateTime
 
 internal fun MetadataKeysResponseDto.toDomain(): MetadataKey =

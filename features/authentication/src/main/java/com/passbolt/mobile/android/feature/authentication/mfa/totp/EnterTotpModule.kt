@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.mfa.totp
+package net.svaroh.passly.feature.authentication.mfa.totp
 
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.VerifyTotpUseCase
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.compose.DigitsOnlySanitizer
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.compose.PinInputSanitizer
+import net.svaroh.passly.feature.authentication.auth.usecase.VerifyTotpUseCase
+import net.svaroh.passly.feature.authentication.mfa.totp.compose.DigitsOnlySanitizer
+import net.svaroh.passly.feature.authentication.mfa.totp.compose.PinInputSanitizer
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModel

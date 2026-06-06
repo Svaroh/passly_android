@@ -20,12 +20,12 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.domain.resources.usecase.db
+package net.svaroh.passly.domain.resources.usecase.db
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.resources.ResourcesRepository
-import com.passbolt.mobile.android.entity.resource.ResourceUpdateState
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.resources.ResourcesRepository
+import net.svaroh.passly.entity.resource.ResourceUpdateState
 
 class RemoveLocalResourcesWithUpdateStateUseCase(
     private val resourcesRepository: ResourcesRepository,

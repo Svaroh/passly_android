@@ -22,7 +22,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.metadatakeytrust"
+    namespace = "net.svaroh.passly.feature.metadatakeytrust"
     buildFeatures {
         compose = true
     }

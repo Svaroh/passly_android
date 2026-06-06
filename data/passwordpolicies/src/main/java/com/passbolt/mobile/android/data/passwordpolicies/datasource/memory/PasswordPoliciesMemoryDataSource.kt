@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.data.passwordpolicies.datasource.memory
+package net.svaroh.passly.data.passwordpolicies.datasource.memory
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.passwordpolicies.PasswordPoliciesLocalDataSource
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordPolicies
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.passwordpolicies.PasswordPoliciesLocalDataSource
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordPolicies
 
 /**
  * Passbolt - Open source password manager for teams

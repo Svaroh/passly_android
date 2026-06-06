@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.data.auth.datasource.local
+package net.svaroh.passly.data.auth.datasource.local
 
 internal object Constants {
     const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"

@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings
+package net.svaroh.passly.feature.settings.screen.appsettings.expertsettings
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
-import com.passbolt.mobile.android.domain.preferences.usecase.GetGlobalPreferencesUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.GoToPageSize
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleAuthRequiredOnEveryEntry
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleHideRootWarning
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreenSideEffect.NavigateToPageSize
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreenSideEffect.NavigateUp
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.GoToPageSize
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleAuthRequiredOnEveryEntry
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleHideRootWarning
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreenSideEffect.NavigateToPageSize
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreenSideEffect.NavigateUp
 
 internal class ExpertSettingsViewModel(
     private val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase,

@@ -20,10 +20,10 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.database
+package net.svaroh.passly.database
 
-import com.passbolt.mobile.android.common.transaction.DatabaseTransactionRunner
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.common.transaction.DatabaseTransactionRunner
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 
 internal class DatabaseTransactionRunnerImpl(
     private val databaseProvider: DatabaseProvider,

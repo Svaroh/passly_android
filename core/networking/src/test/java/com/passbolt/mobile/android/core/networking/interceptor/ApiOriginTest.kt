@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.networking.interceptor
+package net.svaroh.passly.core.networking.interceptor
 
 import com.google.common.truth.Truth.assertThat
 import okhttp3.HttpUrl.Companion.toHttpUrl

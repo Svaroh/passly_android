@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode
+package net.svaroh.passly.feature.resourceform.additionalsecrets.pincode
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -53,41 +53,41 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.PinCodeAdvancedGenerationForm
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
-import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.button.SecondaryIconButton
-import com.passbolt.mobile.android.core.ui.text.PasswordInput
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Default
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Error
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.AdvancedGenerationResult
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.Generate
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.OpenAdvancedGeneration
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.PinCodeChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.RemovePinCode
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.NavigateToAdvancedGeneration
-import com.passbolt.mobile.android.feature.resourceform.navigation.PinCodeAdvancedGenerationFormResult
-import com.passbolt.mobile.android.feature.resourceform.navigation.PinCodeFormResult
-import com.passbolt.mobile.android.ui.LeadingContentType
-import com.passbolt.mobile.android.ui.PinCodeUiModel
-import com.passbolt.mobile.android.ui.ResourceFormMode
-import com.passbolt.mobile.android.ui.ResourceFormMode.Create
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.PinCodeAdvancedGenerationForm
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.navigation.compose.results.ResultEffect
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.button.SecondaryIconButton
+import net.svaroh.passly.core.ui.text.PasswordInput
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Default
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Error
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.AdvancedGenerationResult
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.Generate
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.OpenAdvancedGeneration
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.PinCodeChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.RemovePinCode
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.NavigateBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.NavigateToAdvancedGeneration
+import net.svaroh.passly.feature.resourceform.navigation.PinCodeAdvancedGenerationFormResult
+import net.svaroh.passly.feature.resourceform.navigation.PinCodeFormResult
+import net.svaroh.passly.ui.LeadingContentType
+import net.svaroh.passly.ui.PinCodeUiModel
+import net.svaroh.passly.ui.ResourceFormMode
+import net.svaroh.passly.ui.ResourceFormMode.Create
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun PinCodeFormScreen(

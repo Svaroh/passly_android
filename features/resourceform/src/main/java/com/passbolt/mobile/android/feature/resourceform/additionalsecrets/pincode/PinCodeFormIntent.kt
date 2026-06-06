@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode
+package net.svaroh.passly.feature.resourceform.additionalsecrets.pincode
 
-import com.passbolt.mobile.android.ui.PinCodeUiModel
+import net.svaroh.passly.ui.PinCodeUiModel
 
 internal sealed interface PinCodeFormIntent {
     data class PinCodeChanged(

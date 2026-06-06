@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.preferences.datasource.local
+package net.svaroh.passly.data.preferences.datasource.local
 
-import com.passbolt.mobile.android.ui.DefaultFilterUiModel
+import net.svaroh.passly.ui.DefaultFilterUiModel
 
 internal class DefaultFilterSerializer {
     fun serialize(defaultFilter: DefaultFilterUiModel): String =

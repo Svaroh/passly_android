@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.database.impl.metadata
+package net.svaroh.passly.database.impl.metadata
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
-import com.passbolt.mobile.android.database.impl.base.BaseDao
-import com.passbolt.mobile.android.entity.metadata.MetadataKey
-import com.passbolt.mobile.android.entity.metadata.MetadataKeyWithPrivateKeys
+import net.svaroh.passly.database.impl.base.BaseDao
+import net.svaroh.passly.entity.metadata.MetadataKey
+import net.svaroh.passly.entity.metadata.MetadataKeyWithPrivateKeys
 
 /**
  * Passbolt - Open source password manager for teams

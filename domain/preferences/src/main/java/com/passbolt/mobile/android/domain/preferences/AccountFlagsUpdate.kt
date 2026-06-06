@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.preferences
+package net.svaroh.passly.domain.preferences
 
 data class AccountFlagsUpdate(
     val wasChromeNativeAutofillDialogShown: Boolean? = null,

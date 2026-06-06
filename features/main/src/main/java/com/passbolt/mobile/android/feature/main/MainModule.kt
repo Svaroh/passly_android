@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.feature.main
+package net.svaroh.passly.feature.main
 
-import com.passbolt.mobile.android.feature.main.mainscreen.encouragements.encouragementsModule
-import com.passbolt.mobile.android.feature.main.mainscreen.mainModule
+import net.svaroh.passly.feature.main.mainscreen.encouragements.encouragementsModule
+import net.svaroh.passly.feature.main.mainscreen.mainModule
 import org.koin.dsl.module
 
 /**

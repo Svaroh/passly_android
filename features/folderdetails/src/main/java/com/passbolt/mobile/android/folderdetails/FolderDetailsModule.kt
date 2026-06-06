@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.folderdetails
+package net.svaroh.passly.folderdetails
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel

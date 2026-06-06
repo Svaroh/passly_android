@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.domain.permissionsconfirmation.usecase
+package net.svaroh.passly.domain.permissionsconfirmation.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.domain.permissionsconfirmation.PermissionsSnapshotRepository
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.domain.permissionsconfirmation.PermissionsSnapshotRepository
 
 /**
  * Passbolt - Open source password manager for teams

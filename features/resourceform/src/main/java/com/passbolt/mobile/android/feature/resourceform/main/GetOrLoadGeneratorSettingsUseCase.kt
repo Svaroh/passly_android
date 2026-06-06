@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.resourceform.main
+package net.svaroh.passly.feature.resourceform.main
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.domain.passwordpolicies.usecase.GetPasswordPoliciesUseCase
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.domain.passwordpolicies.usecase.GetPasswordPoliciesUseCase
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
 
 class GetOrLoadGeneratorSettingsUseCase(
     private val getPasswordPoliciesUseCase: GetPasswordPoliciesUseCase,

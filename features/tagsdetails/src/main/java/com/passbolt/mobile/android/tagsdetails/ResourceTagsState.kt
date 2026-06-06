@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.tagsdetails
+package net.svaroh.passly.tagsdetails
 
-import com.passbolt.mobile.android.ui.ResourceUiModel
-import com.passbolt.mobile.android.ui.TagModel
+import net.svaroh.passly.ui.ResourceUiModel
+import net.svaroh.passly.ui.TagModel
 
 data class ResourceTagsState(
     val resourceModel: ResourceUiModel? = null,

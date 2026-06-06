@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.preferences.usecase
+package net.svaroh.passly.domain.preferences.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesRepository
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
-import com.passbolt.mobile.android.ui.GlobalPreferencesUiModel
+import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor

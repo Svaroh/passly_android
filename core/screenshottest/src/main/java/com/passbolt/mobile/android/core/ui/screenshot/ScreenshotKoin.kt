@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.screenshot
+package net.svaroh.passly.core.ui.screenshot
 
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin

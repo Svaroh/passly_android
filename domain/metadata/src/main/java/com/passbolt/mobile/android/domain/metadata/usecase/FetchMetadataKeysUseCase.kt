@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.metadata.usecase
+package net.svaroh.passly.domain.metadata.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.CompleteAuthenticatedOutput
-import com.passbolt.mobile.android.core.mvp.authentication.IncompleteAuthenticatedOutput
-import com.passbolt.mobile.android.domain.metadata.MetadataRemoteRepository
-import com.passbolt.mobile.android.domain.metadata.mapper.toUiModel
-import com.passbolt.mobile.android.ui.MetadataKeyModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
+import net.svaroh.passly.core.mvp.authentication.IncompleteAuthenticatedOutput
+import net.svaroh.passly.domain.metadata.MetadataRemoteRepository
+import net.svaroh.passly.domain.metadata.mapper.toUiModel
+import net.svaroh.passly.ui.MetadataKeyModel
 
 class FetchMetadataKeysUseCase(
     private val metadataRemoteRepository: MetadataRemoteRepository,

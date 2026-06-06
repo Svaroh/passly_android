@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.featureflags
+package net.svaroh.passly.featureflags
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.featureflags.model.FeatureFlags
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.featureflags.model.FeatureFlags
 
 interface FeatureFlagsRepository {
     suspend fun getFeatureFlags(userId: String): DomainResult<FeatureFlags>

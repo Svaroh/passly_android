@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.intents
+package net.svaroh.passly.intents
 
 import android.content.Context
 import android.content.Intent
 import android.util.Base64
-import com.passbolt.mobile.android.BuildConfig
-import com.passbolt.mobile.android.feature.startup.StartUpActivity
+import net.svaroh.passly.BuildConfig
+import net.svaroh.passly.feature.startup.StartUpActivity
 import java.util.Properties
 
 /**
@@ -87,7 +87,7 @@ class ManagedAccountIntentCreator {
     fun getUserLocalId(): String = accountProperties.getProperty(PROPERTY_LOCAL_USER_UUID)
 
     private companion object {
-        const val ACTION_MANAGED_PROFILE = "com.passbolt.mobile.android.MANAGED_PROFILE"
+        const val ACTION_MANAGED_PROFILE = "net.svaroh.passly.MANAGED_PROFILE"
 
         const val EXTRA_USER_ID = "USER_ID"
         const val EXTRA_USERNAME = "USERNAME"

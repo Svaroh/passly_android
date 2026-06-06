@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.fixture
+package net.svaroh.passly.benchmark.pagesize.fixture
 
 import com.proton.gopenpgp.constants.Constants.AES256
 import com.proton.gopenpgp.crypto.Crypto

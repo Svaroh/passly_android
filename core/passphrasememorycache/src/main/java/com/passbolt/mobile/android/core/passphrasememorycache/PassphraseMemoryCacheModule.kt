@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.passphrasememorycache
+package net.svaroh.passly.core.passphrasememorycache
 
 import androidx.lifecycle.ProcessLifecycleOwner
 import org.koin.core.qualifier.named

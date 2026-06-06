@@ -21,37 +21,37 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissions
+package net.svaroh.passly.permissions.permissions
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderDetailsUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.metadata.interactor.ResourceAccessInteractor
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceUseCase
-import com.passbolt.mobile.android.permissions.common.PermissionsListMapper
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.GoBack
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.MainButtonIntent
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.SeePermission
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateBack
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToGroupPermissionDetails
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToHome
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToShareResource
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToUserPermissionDetails
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.ShowToast
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.CANNOT_SHARE_RESOURCE
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.DATA_REFRESH_ERROR
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
-import com.passbolt.mobile.android.ui.PermissionsItem
-import com.passbolt.mobile.android.ui.PermissionsMode
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderPermissionsUseCase
+import net.svaroh.passly.domain.metadata.interactor.ResourceAccessInteractor
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.permissions.common.PermissionsListMapper
+import net.svaroh.passly.permissions.permissions.PermissionsIntent.GoBack
+import net.svaroh.passly.permissions.permissions.PermissionsIntent.MainButtonIntent
+import net.svaroh.passly.permissions.permissions.PermissionsIntent.SeePermission
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateBack
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToGroupPermissionDetails
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToHome
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToShareResource
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToUserPermissionDetails
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.ShowToast
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.CANNOT_SHARE_RESOURCE
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.DATA_REFRESH_ERROR
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionModelUi.GroupPermissionModel
+import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
+import net.svaroh.passly.ui.PermissionsItem
+import net.svaroh.passly.ui.PermissionsMode
+import net.svaroh.passly.ui.ResourcePermission
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 

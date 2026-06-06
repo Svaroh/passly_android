@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.core.networking.interceptor
+package net.svaroh.passly.core.networking.interceptor
 
-import com.passbolt.mobile.android.core.networking.AuthPaths
-import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
+import net.svaroh.passly.core.networking.AuthPaths
+import net.svaroh.passly.domain.auth.usecase.GetSessionUseCase
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response

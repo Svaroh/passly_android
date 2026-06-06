@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.jsonmodel.delegates
+package net.svaroh.passly.jsonmodel.delegates
 
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.passbolt.mobile.android.jsonmodel.JsonModel
+import net.svaroh.passly.jsonmodel.JsonModel
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level

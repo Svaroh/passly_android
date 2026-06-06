@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.core.security.flagsecure
+package net.svaroh.passly.core.security.flagsecure
 
 import android.app.Activity
 import android.view.WindowManager
-import com.passbolt.mobile.android.core.security.BuildConfig
-import com.passbolt.mobile.android.core.security.flagsecure.WindowFlagAction.APPLY_FLAG
-import com.passbolt.mobile.android.core.security.flagsecure.WindowFlagAction.CLEAR_FLAG
+import net.svaroh.passly.core.security.BuildConfig
+import net.svaroh.passly.core.security.flagsecure.WindowFlagAction.APPLY_FLAG
+import net.svaroh.passly.core.security.flagsecure.WindowFlagAction.CLEAR_FLAG
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.confirmpermissions
+package net.svaroh.passly.permissions.confirmpermissions
 
 sealed interface IndirectAccessWarning {
     data class SingleUser(

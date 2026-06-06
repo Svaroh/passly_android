@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.server
+package net.svaroh.passly.benchmark.pagesize.server
 
-import com.passbolt.mobile.android.benchmark.pagesize.fixture.ResourceCorpus
-import com.passbolt.mobile.android.benchmark.pagesize.fixture.ResourcePagePayloadFactory
+import net.svaroh.passly.benchmark.pagesize.fixture.ResourceCorpus
+import net.svaroh.passly.benchmark.pagesize.fixture.ResourcePagePayloadFactory
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.RecordedRequest

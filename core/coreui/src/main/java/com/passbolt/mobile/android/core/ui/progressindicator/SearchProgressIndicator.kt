@@ -20,7 +20,7 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.ui.progressindicator
+package net.svaroh.passly.core.ui.progressindicator
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,9 +35,9 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 fun SearchProgressIndicator(modifier: Modifier = Modifier) {

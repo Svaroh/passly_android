@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.rbac.mapper
+package net.svaroh.passly.domain.rbac.mapper
 
-import com.passbolt.mobile.android.domain.rbac.model.Rbac
-import com.passbolt.mobile.android.domain.rbac.model.RbacRule
-import com.passbolt.mobile.android.ui.RbacModel
-import com.passbolt.mobile.android.ui.RbacRuleModel
+import net.svaroh.passly.domain.rbac.model.Rbac
+import net.svaroh.passly.domain.rbac.model.RbacRule
+import net.svaroh.passly.ui.RbacModel
+import net.svaroh.passly.ui.RbacRuleModel
 
 fun Rbac.toUiModel(): RbacModel =
     RbacModel(

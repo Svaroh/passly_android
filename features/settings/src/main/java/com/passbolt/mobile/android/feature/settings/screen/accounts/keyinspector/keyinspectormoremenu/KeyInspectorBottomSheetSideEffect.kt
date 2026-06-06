@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu
+package net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu
 
 /**
  * Passbolt - Open source password manager for teams

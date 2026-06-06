@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.data.auth.datasource.local
+package net.svaroh.passly.data.auth.datasource.local
 
 import androidx.core.content.edit
-import com.passbolt.mobile.android.domain.auth.datasource.SessionLocalDataSource
-import com.passbolt.mobile.android.domain.auth.model.Session
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.domain.auth.datasource.SessionLocalDataSource
+import net.svaroh.passly.domain.auth.model.Session
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
 import timber.log.Timber
 
 /**

@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.secrets.parser
+package net.svaroh.passly.domain.secrets.parser
 
-import com.passbolt.mobile.android.domain.secrets.model.SecretJsonModel
-import com.passbolt.mobile.android.serializers.gson.validation.JsonSchemaValidationRunner
-import com.passbolt.mobile.android.serializers.validationwrapper.PlainSecretValidationWrapper
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
-import com.passbolt.mobile.android.ui.DecryptedSecretOrError
+import net.svaroh.passly.domain.secrets.model.SecretJsonModel
+import net.svaroh.passly.serializers.gson.validation.JsonSchemaValidationRunner
+import net.svaroh.passly.serializers.validationwrapper.PlainSecretValidationWrapper
+import net.svaroh.passly.supportedresourceTypes.ContentType
+import net.svaroh.passly.ui.DecryptedSecretOrError
 import timber.log.Timber
 
 class SecretParser(

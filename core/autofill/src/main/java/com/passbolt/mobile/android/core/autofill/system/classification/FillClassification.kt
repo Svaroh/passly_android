@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.core.autofill.system.classification
+package net.svaroh.passly.core.autofill.system.classification
 
-import com.passbolt.mobile.android.core.navigation.AutofillType
-import com.passbolt.mobile.android.ui.ParsedStructure
+import net.svaroh.passly.core.navigation.AutofillType
+import net.svaroh.passly.ui.ParsedStructure
 
 sealed class FillClassification {
     abstract val type: AutofillType

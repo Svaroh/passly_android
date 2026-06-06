@@ -1,25 +1,25 @@
-package com.passbolt.mobile.android.core.navigation.compose
+package net.svaroh.passly.core.navigation.compose
 
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.ACCOUNT_DETAILS
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.AUTHENTICATION
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.AUTOFILL_ENCOURAGEMENTS
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.CREATE_FOLDER
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.FOLDER_DETAILS
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.GROUP_DETAILS
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.HOME
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.LOCATION_DETAILS
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.LOGS
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.OTP
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.PERMISSIONS
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.RESOURCE_DETAILS
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.RESOURCE_FORM
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.RESOURCE_PICKER
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.SCAN_OTP
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.SETTINGS
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.SETUP
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.TAGS_DETAILS
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.TRANSFER_ACCOUNT_TO_ANOTHER_DEVICE
+import net.svaroh.passly.core.navigation.compose.base.Feature
+import net.svaroh.passly.core.navigation.compose.base.Feature.ACCOUNT_DETAILS
+import net.svaroh.passly.core.navigation.compose.base.Feature.AUTHENTICATION
+import net.svaroh.passly.core.navigation.compose.base.Feature.AUTOFILL_ENCOURAGEMENTS
+import net.svaroh.passly.core.navigation.compose.base.Feature.CREATE_FOLDER
+import net.svaroh.passly.core.navigation.compose.base.Feature.FOLDER_DETAILS
+import net.svaroh.passly.core.navigation.compose.base.Feature.GROUP_DETAILS
+import net.svaroh.passly.core.navigation.compose.base.Feature.HOME
+import net.svaroh.passly.core.navigation.compose.base.Feature.LOCATION_DETAILS
+import net.svaroh.passly.core.navigation.compose.base.Feature.LOGS
+import net.svaroh.passly.core.navigation.compose.base.Feature.OTP
+import net.svaroh.passly.core.navigation.compose.base.Feature.PERMISSIONS
+import net.svaroh.passly.core.navigation.compose.base.Feature.RESOURCE_DETAILS
+import net.svaroh.passly.core.navigation.compose.base.Feature.RESOURCE_FORM
+import net.svaroh.passly.core.navigation.compose.base.Feature.RESOURCE_PICKER
+import net.svaroh.passly.core.navigation.compose.base.Feature.SCAN_OTP
+import net.svaroh.passly.core.navigation.compose.base.Feature.SETTINGS
+import net.svaroh.passly.core.navigation.compose.base.Feature.SETUP
+import net.svaroh.passly.core.navigation.compose.base.Feature.TAGS_DETAILS
+import net.svaroh.passly.core.navigation.compose.base.Feature.TRANSFER_ACCOUNT_TO_ANOTHER_DEVICE
 
 /**
  * Passbolt - Open source password manager for teams

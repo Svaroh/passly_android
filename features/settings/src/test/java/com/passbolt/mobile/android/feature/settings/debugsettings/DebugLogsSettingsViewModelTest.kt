@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.debugsettings
+package net.svaroh.passly.feature.settings.debugsettings
 
 /**
  * Passbolt - Open source password manager for teams
@@ -23,14 +23,14 @@ package com.passbolt.mobile.android.feature.settings.debugsettings
  * @since v1.0
  */
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.logger.FileLoggingTree
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
-import com.passbolt.mobile.android.domain.preferences.PreferencesDefaults
-import com.passbolt.mobile.android.domain.preferences.usecase.GetGlobalPreferencesUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
-import com.passbolt.mobile.android.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.ToggleDebugLogs
-import com.passbolt.mobile.android.feature.settings.screen.debuglogssettings.DebugLogsSettingsViewModel
-import com.passbolt.mobile.android.ui.GlobalPreferencesUiModel
+import net.svaroh.passly.core.logger.FileLoggingTree
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.ToggleDebugLogs
+import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsViewModel
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

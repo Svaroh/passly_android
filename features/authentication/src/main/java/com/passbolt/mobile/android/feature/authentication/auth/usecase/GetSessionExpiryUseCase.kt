@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.auth.SessionRepository
-import com.passbolt.mobile.android.domain.auth.usecase.GetServerPublicRsaKeyUseCase
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.auth.SessionRepository
+import net.svaroh.passly.domain.auth.usecase.GetServerPublicRsaKeyUseCase
 import io.fusionauth.jwt.JWTExpiredException
 import io.fusionauth.jwt.Verifier
 import io.fusionauth.jwt.domain.JWT

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissions.ui
+package net.svaroh.passly.permissions.permissions.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,8 +31,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.localization.R
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.localization.R
 
 @Composable
 internal fun EmptyPermissionsState(modifier: Modifier = Modifier) {

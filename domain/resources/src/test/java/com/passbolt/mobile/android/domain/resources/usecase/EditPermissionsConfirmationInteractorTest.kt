@@ -21,19 +21,19 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.usecase
+package net.svaroh.passly.domain.resources.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.commontest.session.validSessionTestModule
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.PermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.UserWithAvatar
+import net.svaroh.passly.commontest.session.validSessionTestModule
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.PermissionModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.UserWithAvatar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

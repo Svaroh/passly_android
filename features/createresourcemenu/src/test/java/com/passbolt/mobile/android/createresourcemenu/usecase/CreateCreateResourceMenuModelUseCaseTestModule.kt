@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.createresourcemenu.usecase
+package net.svaroh.passly.createresourcemenu.usecase
 
-import com.passbolt.mobile.android.domain.metadata.usecase.GetMetadataTypesSettingsUseCase
-import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
+import net.svaroh.passly.domain.metadata.usecase.GetMetadataTypesSettingsUseCase
+import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import org.koin.dsl.module
 import org.mockito.kotlin.mock
 

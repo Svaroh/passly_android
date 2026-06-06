@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.privatekey.model
+package net.svaroh.passly.domain.privatekey.model
 
 data class PrivateKey(
     val armoredKey: String,

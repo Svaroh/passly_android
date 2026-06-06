@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.testtags.composetags
+package net.svaroh.passly.testtags.composetags
 
 object PageSize {
     // the slider carries no text; it is driven through the SetProgress semantics action

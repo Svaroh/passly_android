@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.folders.datasource
+package net.svaroh.passly.domain.folders.datasource
 
 import androidx.paging.PagingData
-import com.passbolt.mobile.android.domain.folders.model.FolderModel
-import com.passbolt.mobile.android.domain.folders.model.FolderModelWithAttributes
-import com.passbolt.mobile.android.domain.folders.model.FolderUpdateState
-import com.passbolt.mobile.android.domain.folders.model.FolderWithCountAndPath
-import com.passbolt.mobile.android.domain.folders.model.ParentPermissionItemId
-import com.passbolt.mobile.android.ui.Folder
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.domain.folders.model.FolderModel
+import net.svaroh.passly.domain.folders.model.FolderModelWithAttributes
+import net.svaroh.passly.domain.folders.model.FolderUpdateState
+import net.svaroh.passly.domain.folders.model.FolderWithCountAndPath
+import net.svaroh.passly.domain.folders.model.ParentPermissionItemId
+import net.svaroh.passly.ui.Folder
+import net.svaroh.passly.ui.PermissionModelUi
 import kotlinx.coroutines.flow.Flow
 
 interface FoldersLocalDataSource {

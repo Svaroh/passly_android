@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.domain.tags.datasource
+package net.svaroh.passly.domain.tags.datasource
 
 import androidx.paging.PagingData
-import com.passbolt.mobile.android.ui.ResourceUiModelWithAttributes
-import com.passbolt.mobile.android.ui.TagWithCount
+import net.svaroh.passly.ui.ResourceUiModelWithAttributes
+import net.svaroh.passly.ui.TagWithCount
 import kotlinx.coroutines.flow.Flow
 
 /**

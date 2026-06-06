@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.preferences
+package net.svaroh.passly.domain.preferences
 
 import java.time.LocalDateTime
 

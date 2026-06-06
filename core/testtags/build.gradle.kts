@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.testtags"
+    namespace = "net.svaroh.passly.core.testtags"
 }

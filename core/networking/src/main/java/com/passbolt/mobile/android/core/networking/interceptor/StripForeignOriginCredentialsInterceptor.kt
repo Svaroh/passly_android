@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.networking.interceptor
+package net.svaroh.passly.core.networking.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Request

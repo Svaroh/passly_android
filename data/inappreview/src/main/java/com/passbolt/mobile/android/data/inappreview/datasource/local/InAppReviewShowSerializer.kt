@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.inappreview.datasource.local
+package net.svaroh.passly.data.inappreview.datasource.local
 
-import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewShowMode
+import net.svaroh.passly.domain.inappreview.model.InAppReviewShowMode
 
 internal class InAppReviewShowSerializer {
     fun serialize(model: InAppReviewShowMode): String =

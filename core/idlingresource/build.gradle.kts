@@ -9,5 +9,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.idlingresource"
+    namespace = "net.svaroh.passly.core.idlingresource"
 }

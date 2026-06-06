@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resourcetypes.usecase
+package net.svaroh.passly.domain.resourcetypes.usecase
 
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import java.util.UUID
 
 class ResourceTypeIdToSlugMappingProvider(

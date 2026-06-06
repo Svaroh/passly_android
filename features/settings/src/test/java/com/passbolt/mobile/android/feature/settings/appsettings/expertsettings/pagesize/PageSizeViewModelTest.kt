@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.appsettings.expertsettings.pagesize
+package net.svaroh.passly.feature.settings.appsettings.expertsettings.pagesize
 
 /**
  * Passbolt - Open source password manager for teams
@@ -24,18 +24,18 @@ package com.passbolt.mobile.android.feature.settings.appsettings.expertsettings.
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
-import com.passbolt.mobile.android.domain.preferences.PreferencesDefaults
-import com.passbolt.mobile.android.domain.preferences.usecase.GetAutomaticPageSizeUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.GetGlobalPreferencesUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.PageSizeChanged
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.RestoreDefaultsClick
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.SaveClick
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeViewModel
-import com.passbolt.mobile.android.ui.GlobalPreferencesUiModel
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.domain.preferences.usecase.GetAutomaticPageSizeUseCase
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.PageSizeChanged
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.RestoreDefaultsClick
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeIntent.SaveClick
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeSideEffect.NavigateBack
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeViewModel
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

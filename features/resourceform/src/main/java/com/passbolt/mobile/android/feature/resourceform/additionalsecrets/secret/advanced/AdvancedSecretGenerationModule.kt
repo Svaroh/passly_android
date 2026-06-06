@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel

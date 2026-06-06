@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.rbac
+package net.svaroh.passly.domain.rbac
 
-import com.passbolt.mobile.android.domain.rbac.usecase.GetRbacRulesUseCase
-import com.passbolt.mobile.android.domain.rbac.usecase.RbacInteractor
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.rbac.usecase.RbacInteractor
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

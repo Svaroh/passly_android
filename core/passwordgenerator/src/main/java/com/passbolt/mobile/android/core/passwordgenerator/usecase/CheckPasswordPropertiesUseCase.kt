@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.core.passwordgenerator.usecase
+package net.svaroh.passly.core.passwordgenerator.usecase
 
-import com.passbolt.mobile.android.common.hash.MessageDigestHash
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.core.passwordgenerator.entropy.EntropyCalculator
-import com.passbolt.mobile.android.pwnedpasswordsapi.range.PwnedPasswordRepository
-import com.passbolt.mobile.android.pwnedpasswordsapi.range.PwnedPasswordsApi
+import net.svaroh.passly.common.hash.MessageDigestHash
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.core.passwordgenerator.entropy.EntropyCalculator
+import net.svaroh.passly.pwnedpasswordsapi.range.PwnedPasswordRepository
+import net.svaroh.passly.pwnedpasswordsapi.range.PwnedPasswordsApi
 
 /**
  * Passbolt - Open source password manager for teams

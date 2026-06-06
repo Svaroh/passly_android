@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.passwordpolicies
+package net.svaroh.passly.data.passwordpolicies
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.domain.passwordpolicies.PasswordPoliciesLocalDataSource
-import com.passbolt.mobile.android.domain.passwordpolicies.PasswordPoliciesRemoteDataSource
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordPolicies
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.domain.passwordpolicies.PasswordPoliciesLocalDataSource
+import net.svaroh.passly.domain.passwordpolicies.PasswordPoliciesRemoteDataSource
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordPolicies
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule

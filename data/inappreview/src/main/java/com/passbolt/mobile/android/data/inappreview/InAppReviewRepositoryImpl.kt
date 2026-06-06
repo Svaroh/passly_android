@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.inappreview
+package net.svaroh.passly.data.inappreview
 
-import com.passbolt.mobile.android.domain.inappreview.InAppReviewLocalDataSource
-import com.passbolt.mobile.android.domain.inappreview.InAppReviewRepository
-import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewParameters
-import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewShowMode
+import net.svaroh.passly.domain.inappreview.InAppReviewLocalDataSource
+import net.svaroh.passly.domain.inappreview.InAppReviewRepository
+import net.svaroh.passly.domain.inappreview.model.InAppReviewParameters
+import net.svaroh.passly.domain.inappreview.model.InAppReviewShowMode
 
 internal class InAppReviewRepositoryImpl(
     private val localDataSource: InAppReviewLocalDataSource,

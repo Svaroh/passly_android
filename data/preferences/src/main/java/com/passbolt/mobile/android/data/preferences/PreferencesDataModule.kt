@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.preferences
+package net.svaroh.passly.data.preferences
 
 import android.app.ActivityManager
-import com.passbolt.mobile.android.data.preferences.datasource.local.AccountPreferencesLocalDataSourceImpl
-import com.passbolt.mobile.android.data.preferences.datasource.local.DefaultFilterSerializer
-import com.passbolt.mobile.android.data.preferences.datasource.local.GlobalPreferencesLocalDataSourceImpl
-import com.passbolt.mobile.android.data.preferences.datasource.local.HomeDisplayViewSerializer
-import com.passbolt.mobile.android.domain.preferences.AccountPreferencesLocalDataSource
-import com.passbolt.mobile.android.domain.preferences.AccountPreferencesRepository
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesLocalDataSource
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesRepository
-import com.passbolt.mobile.android.domain.preferences.pagesize.DevicePerformanceFingerprintProvider
+import net.svaroh.passly.data.preferences.datasource.local.AccountPreferencesLocalDataSourceImpl
+import net.svaroh.passly.data.preferences.datasource.local.DefaultFilterSerializer
+import net.svaroh.passly.data.preferences.datasource.local.GlobalPreferencesLocalDataSourceImpl
+import net.svaroh.passly.data.preferences.datasource.local.HomeDisplayViewSerializer
+import net.svaroh.passly.domain.preferences.AccountPreferencesLocalDataSource
+import net.svaroh.passly.domain.preferences.AccountPreferencesRepository
+import net.svaroh.passly.domain.preferences.GlobalPreferencesLocalDataSource
+import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
+import net.svaroh.passly.domain.preferences.pagesize.DevicePerformanceFingerprintProvider
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

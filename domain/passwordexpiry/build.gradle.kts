@@ -12,5 +12,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.domain.passwordexpiry"
+    namespace = "net.svaroh.passly.domain.passwordexpiry"
 }

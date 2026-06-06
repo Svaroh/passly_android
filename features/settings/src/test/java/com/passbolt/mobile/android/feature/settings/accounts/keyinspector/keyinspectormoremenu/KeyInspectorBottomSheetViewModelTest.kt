@@ -21,29 +21,29 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.accounts.keyinspector.keyinspectormoremenu
+package net.svaroh.passly.feature.settings.accounts.keyinspector.keyinspectormoremenu
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.privatekey.model.PrivateKey
-import com.passbolt.mobile.android.domain.privatekey.usecase.GetPrivateKeyUseCase
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.ExportPrivateKey
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.ExportPublicKey
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.RefreshedPassphrase
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ConfirmPassphrase
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.Dismiss
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ErrorSnackbarType.FAILED_TO_GENERATE_PUBLIC_KEY
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ShowTextShareSheet
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetViewModel
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpError
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpFailure
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.privatekey.model.PrivateKey
+import net.svaroh.passly.domain.privatekey.usecase.GetPrivateKeyUseCase
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.ExportPrivateKey
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.ExportPublicKey
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.RefreshedPassphrase
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ConfirmPassphrase
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.Dismiss
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ErrorSnackbarType.FAILED_TO_GENERATE_PUBLIC_KEY
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ShowTextShareSheet
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetViewModel
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.OpenPgpError
+import net.svaroh.passly.gopenpgp.exception.OpenPgpFailure
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

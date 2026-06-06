@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers
+package net.svaroh.passly.serializers
 
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.GsonBuilder
-import com.passbolt.mobile.android.serializers.gson.LongStrictTypeAdapter
+import net.svaroh.passly.serializers.gson.LongStrictTypeAdapter
 import org.junit.Assert.assertThrows
 import org.junit.Test
 

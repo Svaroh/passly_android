@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.entity.folder
+package net.svaroh.passly.entity.folder
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.Index.Order.ASC
 import androidx.room.Index.Order.DESC
 import androidx.room.PrimaryKey
-import com.passbolt.mobile.android.entity.resource.Permission
+import net.svaroh.passly.entity.resource.Permission
 import java.time.ZonedDateTime
 
 /**

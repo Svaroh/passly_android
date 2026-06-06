@@ -21,24 +21,24 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.preferences.datasource.local
+package net.svaroh.passly.data.preferences.datasource.local
 
 import androidx.core.content.edit
-import com.passbolt.mobile.android.data.preferences.GLOBAL_PREFERENCES_FILE_NAME
-import com.passbolt.mobile.android.data.preferences.KEY_ACCESSIBILITY_POLICIES_CONSENT_GIVEN
-import com.passbolt.mobile.android.data.preferences.KEY_API_FETCH_PAGE_SIZE
-import com.passbolt.mobile.android.data.preferences.KEY_API_FETCH_PAGE_SIZE_MANUAL
-import com.passbolt.mobile.android.data.preferences.KEY_DEBUG_LOGS_ENABLED
-import com.passbolt.mobile.android.data.preferences.KEY_DEBUG_LOGS_FILE_CREATION_DATE_TIME
-import com.passbolt.mobile.android.data.preferences.KEY_DEBUG_LOGS_LAST_APP_VERSION
-import com.passbolt.mobile.android.data.preferences.KEY_DEPRECATED_OS_WARNING_HIDDEN_FOR_SDK
-import com.passbolt.mobile.android.data.preferences.KEY_IS_AUTH_REQUIRED_ON_EVERY_ENTRY
-import com.passbolt.mobile.android.data.preferences.KEY_IS_HIDE_ROOT_DIALOG_ENABLED
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesLocalDataSource
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
-import com.passbolt.mobile.android.domain.preferences.PreferencesDefaults
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
-import com.passbolt.mobile.android.ui.GlobalPreferencesUiModel
+import net.svaroh.passly.data.preferences.GLOBAL_PREFERENCES_FILE_NAME
+import net.svaroh.passly.data.preferences.KEY_ACCESSIBILITY_POLICIES_CONSENT_GIVEN
+import net.svaroh.passly.data.preferences.KEY_API_FETCH_PAGE_SIZE
+import net.svaroh.passly.data.preferences.KEY_API_FETCH_PAGE_SIZE_MANUAL
+import net.svaroh.passly.data.preferences.KEY_DEBUG_LOGS_ENABLED
+import net.svaroh.passly.data.preferences.KEY_DEBUG_LOGS_FILE_CREATION_DATE_TIME
+import net.svaroh.passly.data.preferences.KEY_DEBUG_LOGS_LAST_APP_VERSION
+import net.svaroh.passly.data.preferences.KEY_DEPRECATED_OS_WARNING_HIDDEN_FOR_SDK
+import net.svaroh.passly.data.preferences.KEY_IS_AUTH_REQUIRED_ON_EVERY_ENTRY
+import net.svaroh.passly.data.preferences.KEY_IS_HIDE_ROOT_DIALOG_ENABLED
+import net.svaroh.passly.domain.preferences.GlobalPreferencesLocalDataSource
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 

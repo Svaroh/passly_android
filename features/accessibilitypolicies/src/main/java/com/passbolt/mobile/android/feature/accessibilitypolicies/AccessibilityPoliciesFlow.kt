@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.accessibilitypolicies
+package net.svaroh.passly.feature.accessibilitypolicies
 
 enum class AccessibilityPoliciesFlow {
     SETUP,

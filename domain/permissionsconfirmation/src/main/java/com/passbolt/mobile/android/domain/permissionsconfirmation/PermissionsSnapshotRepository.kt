@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.domain.permissionsconfirmation
+package net.svaroh.passly.domain.permissionsconfirmation
 
-import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
+import net.svaroh.passly.domain.permissionsconfirmation.model.PermissionsSnapshot
 
 /**
  * Passbolt - Open source password manager for teams

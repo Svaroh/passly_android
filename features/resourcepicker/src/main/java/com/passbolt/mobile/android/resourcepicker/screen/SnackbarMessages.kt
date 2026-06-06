@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.resourcepicker.screen
+package net.svaroh.passly.resourcepicker.screen
 
 import android.content.Context
-import com.passbolt.mobile.android.resourcepicker.screen.SnackbarErrorType.FAILED_TO_REFRESH_DATA
-import com.passbolt.mobile.android.resourcepicker.screen.SnackbarErrorType.NO_PERMISSION
-import com.passbolt.mobile.android.resourcepicker.screen.SnackbarErrorType.UNSUPPORTED_RESOURCE_TYPE
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.resourcepicker.screen.SnackbarErrorType.FAILED_TO_REFRESH_DATA
+import net.svaroh.passly.resourcepicker.screen.SnackbarErrorType.NO_PERMISSION
+import net.svaroh.passly.resourcepicker.screen.SnackbarErrorType.UNSUPPORTED_RESOURCE_TYPE
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getErrorMessage(
     context: Context,

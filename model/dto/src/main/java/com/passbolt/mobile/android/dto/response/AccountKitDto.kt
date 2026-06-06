@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.dto.response
+package net.svaroh.passly.dto.response
 
 import android.annotation.SuppressLint
-import com.passbolt.mobile.android.dto.response.qrcode.UUIDSerializer
+import net.svaroh.passly.dto.response.qrcode.UUIDSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.UUID

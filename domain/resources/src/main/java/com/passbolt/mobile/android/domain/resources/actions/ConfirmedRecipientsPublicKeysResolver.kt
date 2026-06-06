@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.actions
+package net.svaroh.passly.domain.resources.actions
 
-import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.users.usecase.GetLocalUserUseCase
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.domain.groups.usecase.GetGroupWithUsersUseCase
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalUserUseCase
+import net.svaroh.passly.ui.PermissionModelUi
 import timber.log.Timber
 
 class ConfirmedRecipientsPublicKeysResolver(

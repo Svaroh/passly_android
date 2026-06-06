@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.domain.auth.datasource
+package net.svaroh.passly.domain.auth.datasource
 
 /**
  * Passbolt - Open source password manager for teams

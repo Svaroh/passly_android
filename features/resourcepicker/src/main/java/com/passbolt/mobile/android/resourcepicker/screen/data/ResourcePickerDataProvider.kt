@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.screen.data
+package net.svaroh.passly.resourcepicker.screen.data
 
 import androidx.paging.PagingData
 import androidx.paging.filter
 import androidx.paging.map
-import com.passbolt.mobile.android.common.urimatcher.AutofillUriMatcher
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcesPaginatedUseCase
-import com.passbolt.mobile.android.mappers.ResourcePickerMapper
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerViewModel.Companion.SELECTABLE_RESOURCE_TYPES_SLUGS
-import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes.allSlugs
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.common.urimatcher.AutofillUriMatcher
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesPaginatedUseCase
+import net.svaroh.passly.mappers.ResourcePickerMapper
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerViewModel.Companion.SELECTABLE_RESOURCE_TYPES_SLUGS
+import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.allSlugs
+import net.svaroh.passly.ui.ResourceUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

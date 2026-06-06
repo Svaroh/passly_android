@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.resourcetypes.mapper
+package net.svaroh.passly.data.resourcetypes.mapper
 
-import com.passbolt.mobile.android.domain.resourcetypes.model.ResourceType
+import net.svaroh.passly.domain.resourcetypes.model.ResourceType
 import java.util.UUID
-import com.passbolt.mobile.android.entity.resource.ResourceType as ResourceTypeEntity
+import net.svaroh.passly.entity.resource.ResourceType as ResourceTypeEntity
 
 fun ResourceType.toEntity(): ResourceTypeEntity =
     ResourceTypeEntity(

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common.coroutinetimer
+package net.svaroh.passly.common.coroutinetimer
 
 import app.cash.turbine.test
 import kotlinx.coroutines.runBlocking

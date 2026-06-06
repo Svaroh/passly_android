@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.core.ui.screenshot
+package net.svaroh.passly.core.ui.screenshot
 
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.ResourcePermission.READ
-import com.passbolt.mobile.android.ui.UserWithAvatar
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.PermissionModelUi.GroupPermissionModel
+import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.ResourcePermission.READ
+import net.svaroh.passly.ui.UserWithAvatar
 
 internal fun userPermission(
     id: String = "1",

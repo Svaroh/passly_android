@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.core.navigation.compose
+package net.svaroh.passly.core.navigation.compose
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.Welcome
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.Welcome
 import org.koin.compose.koinInject
 
 @Composable

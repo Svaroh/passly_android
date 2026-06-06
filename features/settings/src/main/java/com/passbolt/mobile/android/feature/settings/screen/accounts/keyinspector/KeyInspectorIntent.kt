@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector
+package net.svaroh.passly.feature.settings.screen.accounts.keyinspector
 
 sealed interface KeyInspectorIntent {
     object GoBack : KeyInspectorIntent

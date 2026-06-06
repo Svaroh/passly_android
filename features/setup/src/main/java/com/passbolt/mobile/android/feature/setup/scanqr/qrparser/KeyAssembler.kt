@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.setup.scanqr.qrparser
+package net.svaroh.passly.feature.setup.scanqr.qrparser
 
-import com.passbolt.mobile.android.dto.response.qrcode.AssembledKeyDto
+import net.svaroh.passly.dto.response.qrcode.AssembledKeyDto
 import kotlinx.serialization.json.Json
 import okio.Buffer
 

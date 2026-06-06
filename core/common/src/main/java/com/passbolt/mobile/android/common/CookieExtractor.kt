@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common
+package net.svaroh.passly.common
 
 import okhttp3.Cookie
 import retrofit2.Response

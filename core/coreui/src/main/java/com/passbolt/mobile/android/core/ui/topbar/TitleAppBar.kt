@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.topbar
+package net.svaroh.passly.core.ui.topbar
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import com.passbolt.mobile.android.core.ui.progressindicator.DataRefreshProgressIndicator
+import net.svaroh.passly.core.ui.progressindicator.DataRefreshProgressIndicator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

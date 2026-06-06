@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.domain.auth.datasource
+package net.svaroh.passly.domain.auth.datasource
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.auth.model.RefreshedSession
-import com.passbolt.mobile.android.domain.auth.model.ServerPgpKey
-import com.passbolt.mobile.android.domain.auth.model.ServerRsaKey
-import com.passbolt.mobile.android.domain.auth.model.SignInResult
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.auth.model.RefreshedSession
+import net.svaroh.passly.domain.auth.model.ServerPgpKey
+import net.svaroh.passly.domain.auth.model.ServerRsaKey
+import net.svaroh.passly.domain.auth.model.SignInResult
 
 /**
  * Passbolt - Open source password manager for teams

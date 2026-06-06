@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.RefreshSessionUseCase.Output
+import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase.Output
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock

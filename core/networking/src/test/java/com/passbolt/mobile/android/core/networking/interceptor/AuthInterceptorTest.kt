@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.networking.interceptor
+package net.svaroh.passly.core.networking.interceptor
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.networking.AuthPaths
-import com.passbolt.mobile.android.core.networking.PLACEHOLDER_BASE_URL
-import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
+import net.svaroh.passly.core.networking.AuthPaths
+import net.svaroh.passly.core.networking.PLACEHOLDER_BASE_URL
+import net.svaroh.passly.domain.auth.usecase.GetSessionUseCase
 import okhttp3.Interceptor
 import okhttp3.Protocol
 import okhttp3.Request

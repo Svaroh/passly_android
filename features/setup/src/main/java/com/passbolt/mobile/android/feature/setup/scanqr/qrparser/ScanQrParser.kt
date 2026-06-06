@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.feature.setup.scanqr.qrparser
+package net.svaroh.passly.feature.setup.scanqr.qrparser
 
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asStateFlow

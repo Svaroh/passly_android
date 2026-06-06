@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.navigation.compose.base
+package net.svaroh.passly.core.navigation.compose.base
 
 /**
  * Passbolt - Open source password manager for teams

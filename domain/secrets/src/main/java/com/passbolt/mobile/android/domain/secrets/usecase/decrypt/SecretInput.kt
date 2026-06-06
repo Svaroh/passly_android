@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.secrets.usecase.decrypt
+package net.svaroh.passly.domain.secrets.usecase.decrypt
 
-import com.passbolt.mobile.android.domain.secrets.model.SecretJsonModel
+import net.svaroh.passly.domain.secrets.model.SecretJsonModel
 
 data class SecretInput(
     val secretJsonModel: SecretJsonModel,

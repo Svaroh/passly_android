@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.summary
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.GoBack
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.Initialize
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.PrimaryAction
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.TryAgain
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummarySideEffect.NavigateToMyAccount
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummarySideEffect.NavigateToTransferAccountStart
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.GoBack
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.Initialize
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.PrimaryAction
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.TryAgain
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummarySideEffect.NavigateToMyAccount
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummarySideEffect.NavigateToTransferAccountStart
 
 /**
  * Passbolt - Open source password manager for teams

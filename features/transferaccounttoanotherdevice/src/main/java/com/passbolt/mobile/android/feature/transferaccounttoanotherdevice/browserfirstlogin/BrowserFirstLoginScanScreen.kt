@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin
 
 import androidx.activity.compose.BackHandler
 import androidx.camera.view.PreviewView
@@ -30,26 +30,26 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.TransferStatus
-import com.passbolt.mobile.android.core.qrscan.SCAN_MANAGER_SCOPE
-import com.passbolt.mobile.android.core.qrscan.manager.ScanManager
-import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.core.ui.progresstoolbar.ProgressToolbar
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanIntent.GoBack
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanIntent.Initialize
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanSideEffect.NavigateToResult
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.TransferStatus
+import net.svaroh.passly.core.qrscan.SCAN_MANAGER_SCOPE
+import net.svaroh.passly.core.qrscan.manager.ScanManager
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.progresstoolbar.ProgressToolbar
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanIntent.GoBack
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanIntent.Initialize
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanSideEffect.NavigateBack
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanSideEffect.NavigateToResult
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanSideEffect.ShowErrorSnackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.compose.scope.KoinScope
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.qualifier.named
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable

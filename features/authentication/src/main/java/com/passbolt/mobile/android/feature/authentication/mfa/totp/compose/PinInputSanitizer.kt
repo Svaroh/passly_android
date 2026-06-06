@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.totp.compose
+package net.svaroh.passly.feature.authentication.mfa.totp.compose
 
 fun interface PinInputSanitizer {
     fun sanitize(input: String): String

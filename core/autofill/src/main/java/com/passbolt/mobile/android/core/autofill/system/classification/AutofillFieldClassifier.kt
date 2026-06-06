@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.autofill.system.classification
+package net.svaroh.passly.core.autofill.system.classification
 
-import com.passbolt.mobile.android.core.autofill.system.AutofillField
-import com.passbolt.mobile.android.core.autofill.system.FillableInputsFinder
-import com.passbolt.mobile.android.core.autofill.system.classification.FillClassification.Credentials
-import com.passbolt.mobile.android.core.autofill.system.classification.FillClassification.CredentialsAndTotp
-import com.passbolt.mobile.android.core.autofill.system.classification.FillClassification.Totp
-import com.passbolt.mobile.android.ui.ParsedStructure
+import net.svaroh.passly.core.autofill.system.AutofillField
+import net.svaroh.passly.core.autofill.system.FillableInputsFinder
+import net.svaroh.passly.core.autofill.system.classification.FillClassification.Credentials
+import net.svaroh.passly.core.autofill.system.classification.FillClassification.CredentialsAndTotp
+import net.svaroh.passly.core.autofill.system.classification.FillClassification.Totp
+import net.svaroh.passly.ui.ParsedStructure
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 

@@ -21,24 +21,24 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris
+package net.svaroh.passly.feature.resourceform.metadata.additionaluris
 
-import com.passbolt.mobile.android.common.UuidProvider
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.AddAdditionalUri
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.AdditionalUriChanged
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.Initialize
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.MainUriChanged
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.RemoveAdditionalUri
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.NavigateUp
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.ScrollToItem
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult.CanAdd
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult.LimitReached
-import com.passbolt.mobile.android.ui.AdditionalUrisUiModel
+import net.svaroh.passly.common.UuidProvider
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.AddAdditionalUri
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.AdditionalUriChanged
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.Initialize
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.MainUriChanged
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.RemoveAdditionalUri
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.NavigateUp
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.ScrollToItem
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult.CanAdd
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult.LimitReached
+import net.svaroh.passly.ui.AdditionalUrisUiModel
 import java.util.UUID
 
 internal class AdditionalUrisFormViewModel(

@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.data.accounts.datasource.local
+package net.svaroh.passly.data.accounts.datasource.local
 
 import android.content.SharedPreferences
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock

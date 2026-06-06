@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.core.navigation.compose
+package net.svaroh.passly.core.navigation.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.passbolt.mobile.android.core.navigation.compose.keys.HomeNavigationKey.Home
-import com.passbolt.mobile.android.core.navigation.compose.results.ResultEventBus
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
+import net.svaroh.passly.core.navigation.compose.keys.HomeNavigationKey.Home
+import net.svaroh.passly.core.navigation.compose.results.ResultEventBus
+import net.svaroh.passly.ui.HomeDisplayViewModel
 import org.koin.compose.koinInject
 
 @Composable

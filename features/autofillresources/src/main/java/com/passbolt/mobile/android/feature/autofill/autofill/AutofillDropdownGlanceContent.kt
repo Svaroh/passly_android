@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.autofill.autofill
+package net.svaroh.passly.feature.autofill.autofill
 
 import android.content.Context
 import android.widget.RemoteViews
@@ -22,8 +22,8 @@ import androidx.glance.layout.padding
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import com.passbolt.mobile.android.core.compose.PassboltGlanceColorScheme
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.compose.PassboltGlanceColorScheme
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun AutofillDropdownGlanceContent(

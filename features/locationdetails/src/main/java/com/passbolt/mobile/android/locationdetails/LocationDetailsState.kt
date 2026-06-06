@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.locationdetails
+package net.svaroh.passly.locationdetails
 
-import com.passbolt.mobile.android.domain.folders.model.FolderModel
-import com.passbolt.mobile.android.locationdetails.data.ExpandableFolderTree
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.domain.folders.model.FolderModel
+import net.svaroh.passly.locationdetails.data.ExpandableFolderTree
+import net.svaroh.passly.ui.ResourceUiModel
 
 data class LocationDetailsState(
     val isRefreshing: Boolean = false,

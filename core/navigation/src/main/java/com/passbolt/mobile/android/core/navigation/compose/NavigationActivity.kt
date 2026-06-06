@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.core.navigation.compose
+package net.svaroh.passly.core.navigation.compose
 
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.ui.AccountSetupDataModel
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.ui.AccountSetupDataModel
 
 sealed interface NavigationActivity {
     data class AuthenticationStartUp(

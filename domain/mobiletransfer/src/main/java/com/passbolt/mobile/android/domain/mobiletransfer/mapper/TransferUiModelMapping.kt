@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.mobiletransfer.mapper
+package net.svaroh.passly.domain.mobiletransfer.mapper
 
-import com.passbolt.mobile.android.domain.mobiletransfer.model.CreateTransferModel
-import com.passbolt.mobile.android.domain.mobiletransfer.model.TransferModel
-import com.passbolt.mobile.android.domain.mobiletransfer.model.UpdateTransferModel
-import com.passbolt.mobile.android.ui.CreateTransferUiModel
-import com.passbolt.mobile.android.ui.TransferUiModel
-import com.passbolt.mobile.android.ui.UpdateTransferUiModel
+import net.svaroh.passly.domain.mobiletransfer.model.CreateTransferModel
+import net.svaroh.passly.domain.mobiletransfer.model.TransferModel
+import net.svaroh.passly.domain.mobiletransfer.model.UpdateTransferModel
+import net.svaroh.passly.ui.CreateTransferUiModel
+import net.svaroh.passly.ui.TransferUiModel
+import net.svaroh.passly.ui.UpdateTransferUiModel
 
 fun TransferModel.toUiModel(): TransferUiModel =
     TransferUiModel(

@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp
+package net.svaroh.passly.feature.resourceform.additionalsecrets.totp
 
-import com.passbolt.mobile.android.ui.OtpParseResult.OtpQr.TotpQr
-import com.passbolt.mobile.android.ui.TotpUiModel
+import net.svaroh.passly.ui.OtpParseResult.OtpQr.TotpQr
+import net.svaroh.passly.ui.TotpUiModel
 
 internal sealed interface TotpFormIntent {
     data class SecretChanged(

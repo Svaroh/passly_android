@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode
+package net.svaroh.passly.feature.resourceform.additionalsecrets.pincode
 
 import android.content.Context
-import com.passbolt.mobile.android.ui.ResourceFormMode
-import com.passbolt.mobile.android.ui.ResourceFormMode.Create
-import com.passbolt.mobile.android.ui.ResourceFormMode.Edit
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.ui.ResourceFormMode
+import net.svaroh.passly.ui.ResourceFormMode.Create
+import net.svaroh.passly.ui.ResourceFormMode.Edit
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getScreenTitle(
     context: Context,

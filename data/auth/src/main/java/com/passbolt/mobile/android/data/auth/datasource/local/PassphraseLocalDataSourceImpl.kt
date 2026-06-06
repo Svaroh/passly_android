@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.data.auth.datasource.local
+package net.svaroh.passly.data.auth.datasource.local
 
 import android.content.Context
 import android.security.keystore.UserNotAuthenticatedException
-import com.passbolt.mobile.android.common.extension.erase
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
-import com.passbolt.mobile.android.domain.auth.datasource.PassphraseLocalDataSource
-import com.passbolt.mobile.android.encryptedstorage.EncryptedFileBaseDirectory
-import com.passbolt.mobile.android.encryptedstorage.biometric.BiometricCrypto
+import net.svaroh.passly.common.extension.erase
+import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
+import net.svaroh.passly.domain.auth.datasource.PassphraseLocalDataSource
+import net.svaroh.passly.encryptedstorage.EncryptedFileBaseDirectory
+import net.svaroh.passly.encryptedstorage.biometric.BiometricCrypto
 import timber.log.Timber
 import java.io.File
 import javax.crypto.Cipher

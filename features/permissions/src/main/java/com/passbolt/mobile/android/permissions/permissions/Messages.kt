@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissions
+package net.svaroh.passly.permissions.permissions
 
 import android.content.Context
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.CANNOT_SHARE_RESOURCE
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.DATA_REFRESH_ERROR
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.CANNOT_SHARE_RESOURCE
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.DATA_REFRESH_ERROR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getErrorMessage(
     context: Context,

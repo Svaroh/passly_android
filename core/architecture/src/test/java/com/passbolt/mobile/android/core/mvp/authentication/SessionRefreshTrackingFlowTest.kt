@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.core.mvp.authentication
+package net.svaroh.passly.core.mvp.authentication
 
 import app.cash.turbine.test
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider.TOTP
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Passphrase
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Session
-import com.passbolt.mobile.android.core.mvp.authentication.SessionState.NeedsRefresh
-import com.passbolt.mobile.android.core.mvp.authentication.SessionState.Valid
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider.TOTP
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Passphrase
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Session
+import net.svaroh.passly.core.mvp.authentication.SessionState.NeedsRefresh
+import net.svaroh.passly.core.mvp.authentication.SessionState.Valid
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

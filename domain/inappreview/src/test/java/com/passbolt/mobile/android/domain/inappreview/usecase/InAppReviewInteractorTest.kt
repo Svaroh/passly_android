@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.inappreview.usecase
+package net.svaroh.passly.domain.inappreview.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.inappreview.InAppReviewRepository
-import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewParameters
-import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewShowMode
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.inappreview.InAppReviewRepository
+import net.svaroh.passly.domain.inappreview.model.InAppReviewParameters
+import net.svaroh.passly.domain.inappreview.model.InAppReviewShowMode
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -21,19 +21,19 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.gopenpgp
+package net.svaroh.passly.gopenpgp
 
 import androidx.annotation.VisibleForTesting
-import com.passbolt.mobile.android.common.extension.decodeHex
-import com.passbolt.mobile.android.common.extension.encodeHex
-import com.passbolt.mobile.android.common.extension.erase
-import com.passbolt.mobile.android.gopenpgp.exception.GopenPgpExceptionParser
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpError
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpFailure
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
-import com.passbolt.mobile.android.gopenpgp.model.CleartextSignatureVerification
-import com.passbolt.mobile.android.gopenpgp.model.DecryptedMessageAndSessionKey
-import com.passbolt.mobile.android.gopenpgp.model.VerifiedMessage
+import net.svaroh.passly.common.extension.decodeHex
+import net.svaroh.passly.common.extension.encodeHex
+import net.svaroh.passly.common.extension.erase
+import net.svaroh.passly.gopenpgp.exception.GopenPgpExceptionParser
+import net.svaroh.passly.gopenpgp.exception.OpenPgpError
+import net.svaroh.passly.gopenpgp.exception.OpenPgpFailure
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.gopenpgp.model.CleartextSignatureVerification
+import net.svaroh.passly.gopenpgp.model.DecryptedMessageAndSessionKey
+import net.svaroh.passly.gopenpgp.model.VerifiedMessage
 import com.proton.gopenpgp.constants.Constants.AES256
 import com.proton.gopenpgp.crypto.Crypto
 import com.proton.gopenpgp.crypto.Key

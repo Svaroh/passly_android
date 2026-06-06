@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.topbar
+package net.svaroh.passly.core.ui.topbar
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -7,9 +7,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.android.tools.screenshot.PreviewTest
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.screenshot.PassboltEdgeToEdgePreviewWrapper
-import com.passbolt.mobile.android.core.ui.screenshot.PassboltRtlPreviewWrapper
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.screenshot.PassboltEdgeToEdgePreviewWrapper
+import net.svaroh.passly.core.ui.screenshot.PassboltRtlPreviewWrapper
 
 @PreviewTest
 @Preview(showBackground = true)

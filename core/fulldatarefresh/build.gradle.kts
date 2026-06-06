@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.fulldatarefresh"
+    namespace = "net.svaroh.passly.core.fulldatarefresh"
 }
 
 dependencies {

@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.biometrickey
+package net.svaroh.passly.domain.biometrickey
 
-import com.passbolt.mobile.android.domain.biometrickey.model.BiometricKey
+import net.svaroh.passly.domain.biometrickey.model.BiometricKey
 
 interface BiometricKeyLocalDataSource {
     fun getBiometricKey(userId: String): BiometricKey

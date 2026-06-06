@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.home.navigation
+package net.svaroh.passly.feature.home.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.passbolt.mobile.android.core.navigation.compose.HomeNavigation
-import com.passbolt.mobile.android.domain.preferences.mapper.toHomeDisplayViewModel
-import com.passbolt.mobile.android.domain.preferences.usecase.GetHomeDisplayViewPreferencesUseCase
+import net.svaroh.passly.core.navigation.compose.HomeNavigation
+import net.svaroh.passly.domain.preferences.mapper.toHomeDisplayViewModel
+import net.svaroh.passly.domain.preferences.usecase.GetHomeDisplayViewPreferencesUseCase
 import org.koin.compose.koinInject
 
 @Composable

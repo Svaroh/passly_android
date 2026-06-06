@@ -21,19 +21,19 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.preferences.validation
+package net.svaroh.passly.domain.preferences.validation
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.rbac.usecase.GetRbacRulesUseCase
-import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
-import com.passbolt.mobile.android.ui.DefaultFilterUiModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewPreferencesUiModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewUiModel
-import com.passbolt.mobile.android.ui.RbacModel
-import com.passbolt.mobile.android.ui.RbacRuleModel
-import com.passbolt.mobile.android.ui.RbacRuleModel.ALLOW
-import com.passbolt.mobile.android.ui.RbacRuleModel.DENY
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
+import net.svaroh.passly.ui.DefaultFilterUiModel
+import net.svaroh.passly.ui.HomeDisplayViewPreferencesUiModel
+import net.svaroh.passly.ui.HomeDisplayViewUiModel
+import net.svaroh.passly.ui.RbacModel
+import net.svaroh.passly.ui.RbacRuleModel
+import net.svaroh.passly.ui.RbacRuleModel.ALLOW
+import net.svaroh.passly.ui.RbacRuleModel.DENY
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.secrets.model
+package net.svaroh.passly.domain.secrets.model
 
 data class EncryptedSecret(
     val data: String,

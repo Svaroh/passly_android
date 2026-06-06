@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.secrets.datasource
+package net.svaroh.passly.domain.secrets.datasource
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.secrets.model.EncryptedSecret
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.secrets.model.EncryptedSecret
 
 interface SecretsRemoteDataSource {
     suspend fun getSecret(resourceId: String): DomainResult<EncryptedSecret>

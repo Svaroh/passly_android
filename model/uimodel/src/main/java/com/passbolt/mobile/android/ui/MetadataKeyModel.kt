@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
 import com.google.gson.annotations.SerializedName
 import java.time.ZonedDateTime

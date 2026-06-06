@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.feature.home
+package net.svaroh.passly.feature.home
 
-import com.passbolt.mobile.android.feature.home.filtersmenu.filtersMenuModule
-import com.passbolt.mobile.android.feature.home.screen.homeModule
-import com.passbolt.mobile.android.feature.home.switchaccount.switchAccountModule
+import net.svaroh.passly.feature.home.filtersmenu.filtersMenuModule
+import net.svaroh.passly.feature.home.screen.homeModule
+import net.svaroh.passly.feature.home.switchaccount.switchAccountModule
 import org.koin.dsl.module
 
 /**

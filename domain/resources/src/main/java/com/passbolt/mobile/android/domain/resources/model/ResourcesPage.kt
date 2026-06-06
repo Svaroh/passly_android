@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.model
+package net.svaroh.passly.domain.resources.model
 
 data class ResourcesPage(
     val totalCount: Int,

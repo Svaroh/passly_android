@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.database.impl.folders
+package net.svaroh.passly.database.impl.folders
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
-import com.passbolt.mobile.android.database.impl.base.BaseDao
-import com.passbolt.mobile.android.entity.folder.Folder
-import com.passbolt.mobile.android.entity.folder.FolderUpdateState
-import com.passbolt.mobile.android.entity.folder.FolderWithChildItemsCountAndPath
-import com.passbolt.mobile.android.entity.permission.GroupPermission
-import com.passbolt.mobile.android.entity.permission.UserPermission
+import net.svaroh.passly.database.impl.base.BaseDao
+import net.svaroh.passly.entity.folder.Folder
+import net.svaroh.passly.entity.folder.FolderUpdateState
+import net.svaroh.passly.entity.folder.FolderWithChildItemsCountAndPath
+import net.svaroh.passly.entity.permission.GroupPermission
+import net.svaroh.passly.entity.permission.UserPermission
 
 /**
  * Passbolt - Open source password manager for teams

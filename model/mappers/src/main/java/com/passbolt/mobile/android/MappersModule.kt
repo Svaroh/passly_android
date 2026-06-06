@@ -21,19 +21,19 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android
+package net.svaroh.passly
 
-import com.passbolt.mobile.android.mappers.AccountModelMapper
-import com.passbolt.mobile.android.mappers.GroupsModelMapper
-import com.passbolt.mobile.android.mappers.MetadataMapper
-import com.passbolt.mobile.android.mappers.PermissionsModelMapper
-import com.passbolt.mobile.android.mappers.ResourceFormMapper
-import com.passbolt.mobile.android.mappers.ResourceModelMapper
-import com.passbolt.mobile.android.mappers.ResourcePickerMapper
-import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper
-import com.passbolt.mobile.android.mappers.SwitchAccountModelMapper
-import com.passbolt.mobile.android.mappers.UsersModelMapper
-import com.passbolt.mobile.android.mappers.comparator.SwitchAccountUiModelComparator
+import net.svaroh.passly.mappers.AccountModelMapper
+import net.svaroh.passly.mappers.GroupsModelMapper
+import net.svaroh.passly.mappers.MetadataMapper
+import net.svaroh.passly.mappers.PermissionsModelMapper
+import net.svaroh.passly.mappers.ResourceFormMapper
+import net.svaroh.passly.mappers.ResourceModelMapper
+import net.svaroh.passly.mappers.ResourcePickerMapper
+import net.svaroh.passly.mappers.SharePermissionsModelMapper
+import net.svaroh.passly.mappers.SwitchAccountModelMapper
+import net.svaroh.passly.mappers.UsersModelMapper
+import net.svaroh.passly.mappers.comparator.SwitchAccountUiModelComparator
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

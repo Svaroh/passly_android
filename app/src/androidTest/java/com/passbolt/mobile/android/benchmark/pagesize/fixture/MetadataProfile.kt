@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.fixture
+package net.svaroh.passly.benchmark.pagesize.fixture
 
 data class MetadataProfile(
     val name: String,

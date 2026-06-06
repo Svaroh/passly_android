@@ -29,7 +29,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.accessibilitypolicies"
+    namespace = "net.svaroh.passly.feature.accessibilitypolicies"
     buildFeatures {
         compose = true
     }

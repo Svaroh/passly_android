@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.permissions.grouppermissionsdetails
+package net.svaroh.passly.permissions.grouppermissionsdetails
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel

@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resourcetypes.mapper
+package net.svaroh.passly.domain.resourcetypes.mapper
 
-import com.passbolt.mobile.android.domain.resourcetypes.model.ResourceType
-import com.passbolt.mobile.android.ui.ResourceTypeModel
+import net.svaroh.passly.domain.resourcetypes.model.ResourceType
+import net.svaroh.passly.ui.ResourceTypeModel
 
 fun ResourceType.toUiModel(): ResourceTypeModel =
     ResourceTypeModel(

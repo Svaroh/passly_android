@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourcedetails.details
+package net.svaroh.passly.feature.resourcedetails.details
 
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.ui.ResourceMoreMenuModel
+import net.svaroh.passly.ui.ResourceUiModel
 import java.util.UUID
 
 sealed class ResourceDetailsIntent {

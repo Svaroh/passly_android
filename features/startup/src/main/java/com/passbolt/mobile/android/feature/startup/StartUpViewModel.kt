@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.feature.startup
+package net.svaroh.passly.feature.startup
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountsUseCase
-import com.passbolt.mobile.android.feature.startup.StartUpIntent.AcknowledgeDeprecatedOsWarning
-import com.passbolt.mobile.android.feature.startup.StartUpIntent.HideDeprecatedOsWarning
-import com.passbolt.mobile.android.feature.startup.StartUpSideEffect.NavigateToSetup
-import com.passbolt.mobile.android.feature.startup.StartUpSideEffect.NavigateToSignIn
-import com.passbolt.mobile.android.feature.startup.deprecatedoswarning.DeprecatedOsWarningInteractor
-import com.passbolt.mobile.android.ui.AccountSetupDataModel
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.domain.accounts.usecase.GetAccountsUseCase
+import net.svaroh.passly.feature.startup.StartUpIntent.AcknowledgeDeprecatedOsWarning
+import net.svaroh.passly.feature.startup.StartUpIntent.HideDeprecatedOsWarning
+import net.svaroh.passly.feature.startup.StartUpSideEffect.NavigateToSetup
+import net.svaroh.passly.feature.startup.StartUpSideEffect.NavigateToSignIn
+import net.svaroh.passly.feature.startup.deprecatedoswarning.DeprecatedOsWarningInteractor
+import net.svaroh.passly.ui.AccountSetupDataModel
 
 class StartUpViewModel(
     private val accountSetupDataModel: AccountSetupDataModel?,

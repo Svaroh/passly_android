@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.domain.biometrickey
+package net.svaroh.passly.domain.biometrickey
 
-import com.passbolt.mobile.android.domain.biometrickey.usecase.SaveBiometricKeyUseCase
+import net.svaroh.passly.domain.biometrickey.usecase.SaveBiometricKeyUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.rbac.model
+package net.svaroh.passly.domain.rbac.model
 
 data class Rbac(
     val passwordPreviewRule: RbacRule,

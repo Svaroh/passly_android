@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.actions
+package net.svaroh.passly.domain.resources.actions
 
-import com.passbolt.mobile.android.serializers.jsonschema.SchemaEntity
-import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
-import com.passbolt.mobile.android.ui.TrustedKeyDeletedModel
+import net.svaroh.passly.serializers.jsonschema.SchemaEntity
+import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
+import net.svaroh.passly.ui.TrustedKeyDeletedModel
 
 sealed class ResourceUpdateActionResult {
     data class Success(

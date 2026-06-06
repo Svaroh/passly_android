@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.security.flagsecure
+package net.svaroh.passly.core.security.flagsecure
 
 enum class WindowFlagAction {
     APPLY_FLAG,

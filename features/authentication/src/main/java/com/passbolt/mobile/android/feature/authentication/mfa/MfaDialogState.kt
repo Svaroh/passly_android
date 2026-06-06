@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.authentication.mfa
+package net.svaroh.passly.feature.authentication.mfa
 
 sealed interface MfaDialogState {
     data class Totp(

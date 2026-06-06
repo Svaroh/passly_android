@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.circularimage
+package net.svaroh.passly.core.ui.circularimage
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -17,8 +17,8 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.request.error
 import coil3.request.placeholder
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.extensions.optionalTestTag
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.extensions.optionalTestTag
 
 @Composable
 fun CircularProfileImage(

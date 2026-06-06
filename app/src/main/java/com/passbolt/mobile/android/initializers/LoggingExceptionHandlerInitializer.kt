@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.initializers
+package net.svaroh.passly.initializers
 
 import android.content.Context
 import androidx.startup.Initializer
-import com.passbolt.mobile.android.core.logger.exceptionhandler.LoggingExceptionHandler
+import net.svaroh.passly.core.logger.exceptionhandler.LoggingExceptionHandler
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf

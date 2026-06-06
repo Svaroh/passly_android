@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.OpenPgp
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

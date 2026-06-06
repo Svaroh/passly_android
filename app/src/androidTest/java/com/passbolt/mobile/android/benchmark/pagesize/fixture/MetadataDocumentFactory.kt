@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.fixture
+package net.svaroh.passly.benchmark.pagesize.fixture
 
 import com.google.gson.Gson
 import java.util.UUID

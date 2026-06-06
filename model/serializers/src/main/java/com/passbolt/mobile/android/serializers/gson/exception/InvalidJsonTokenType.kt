@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.gson.exception
+package net.svaroh.passly.serializers.gson.exception
 
 import java.io.IOException
 

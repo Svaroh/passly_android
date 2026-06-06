@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.autofill.resources
+package net.svaroh.passly.feature.autofill.resources
 
-import com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy.AutofillPayload
+import net.svaroh.passly.feature.autofill.resources.datasetstrategy.AutofillPayload
 
 sealed interface AutofillResourcesSideEffect {
     data object NavigateToAuth : AutofillResourcesSideEffect

@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.users.mapper
+package net.svaroh.passly.domain.users.mapper
 
-import com.passbolt.mobile.android.domain.users.model.GpgKey
-import com.passbolt.mobile.android.domain.users.model.UserProfile
-import com.passbolt.mobile.android.ui.GpgKeyUiModel
-import com.passbolt.mobile.android.ui.UserProfileUiModel
-import com.passbolt.mobile.android.ui.UserUiModel
+import net.svaroh.passly.domain.users.model.GpgKey
+import net.svaroh.passly.domain.users.model.UserProfile
+import net.svaroh.passly.ui.GpgKeyUiModel
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
 
 fun UserProfile.toUiModel(): UserProfileUiModel =
     UserProfileUiModel(

@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.domain.privatekey
+package net.svaroh.passly.domain.privatekey
 
-import com.passbolt.mobile.android.domain.privatekey.usecase.GetPrivateKeyUseCase
-import com.passbolt.mobile.android.domain.privatekey.usecase.SavePrivateKeyUseCase
+import net.svaroh.passly.domain.privatekey.usecase.GetPrivateKeyUseCase
+import net.svaroh.passly.domain.privatekey.usecase.SavePrivateKeyUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

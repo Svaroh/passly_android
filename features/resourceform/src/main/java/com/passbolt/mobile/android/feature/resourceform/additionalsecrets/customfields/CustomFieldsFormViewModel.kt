@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.customfields
+package net.svaroh.passly.feature.resourceform.additionalsecrets.customfields
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.customfields.CustomFieldsFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.customfields.CustomFieldsFormSideEffect.NavigateUp
-import com.passbolt.mobile.android.ui.CustomFieldsUiModel
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.resourceform.additionalsecrets.customfields.CustomFieldsFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.customfields.CustomFieldsFormSideEffect.NavigateUp
+import net.svaroh.passly.ui.CustomFieldsUiModel
 
 internal class CustomFieldsFormViewModel(
     model: CustomFieldsUiModel,

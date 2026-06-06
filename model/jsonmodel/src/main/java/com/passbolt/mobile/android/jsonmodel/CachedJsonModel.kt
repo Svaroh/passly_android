@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.jsonmodel
+package net.svaroh.passly.jsonmodel
 
 interface CachedJsonModel : JsonModel {
     var parsedCache: ParsedJson?

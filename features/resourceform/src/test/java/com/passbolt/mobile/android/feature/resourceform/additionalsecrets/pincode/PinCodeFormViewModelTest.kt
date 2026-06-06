@@ -21,24 +21,24 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode
+package net.svaroh.passly.feature.resourceform.additionalsecrets.pincode
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.passwordgenerator.PinCodeGenerator
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.AdvancedGenerationResult
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.Generate
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.OpenAdvancedGeneration
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.PinCodeChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.RemovePinCode
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.NavigateToAdvancedGeneration
-import com.passbolt.mobile.android.ui.LeadingContentType.PIN_CODE
-import com.passbolt.mobile.android.ui.PinCodeUiModel
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.core.passwordgenerator.PinCodeGenerator
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.AdvancedGenerationResult
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.Generate
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.OpenAdvancedGeneration
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.PinCodeChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.RemovePinCode
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.NavigateBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.NavigateToAdvancedGeneration
+import net.svaroh.passly.ui.LeadingContentType.PIN_CODE
+import net.svaroh.passly.ui.PinCodeUiModel
+import net.svaroh.passly.ui.ResourceFormMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

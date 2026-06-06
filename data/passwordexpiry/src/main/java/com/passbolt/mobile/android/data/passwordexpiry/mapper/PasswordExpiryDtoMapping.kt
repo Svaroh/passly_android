@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.passwordexpiry.mapper
+package net.svaroh.passly.data.passwordexpiry.mapper
 
-import com.passbolt.mobile.android.domain.passwordexpiry.model.PasswordExpirySettings
-import com.passbolt.mobile.android.dto.response.PasswordExpirySettingsDto
+import net.svaroh.passly.domain.passwordexpiry.model.PasswordExpirySettings
+import net.svaroh.passly.dto.response.PasswordExpirySettingsDto
 
 fun PasswordExpirySettingsDto.toDomain(): PasswordExpirySettings =
     PasswordExpirySettings(

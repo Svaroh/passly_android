@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.preferences.usecase
+package net.svaroh.passly.domain.preferences.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.preferences.pagesize.DevicePerformanceFingerprint
-import com.passbolt.mobile.android.domain.preferences.pagesize.DevicePerformanceFingerprintProvider
-import com.passbolt.mobile.android.domain.preferences.pagesize.DeviceTierClassifier
+import net.svaroh.passly.domain.preferences.pagesize.DevicePerformanceFingerprint
+import net.svaroh.passly.domain.preferences.pagesize.DevicePerformanceFingerprintProvider
+import net.svaroh.passly.domain.preferences.pagesize.DeviceTierClassifier
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock

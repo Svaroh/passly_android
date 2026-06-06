@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.core.passwordgenerator
+package net.svaroh.passly.core.passwordgenerator
 
-import com.passbolt.mobile.android.common.hash.MessageDigestHash
-import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.passwordgenerator.dice.Dice
-import com.passbolt.mobile.android.core.passwordgenerator.entropy.EntropyCalculator
-import com.passbolt.mobile.android.core.passwordgenerator.usecase.CheckPasswordPropertiesUseCase
-import com.passbolt.mobile.android.pwnedpasswordsapi.range.PwnedPasswordRepository
+import net.svaroh.passly.common.hash.MessageDigestHash
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.passwordgenerator.dice.Dice
+import net.svaroh.passly.core.passwordgenerator.entropy.EntropyCalculator
+import net.svaroh.passly.core.passwordgenerator.usecase.CheckPasswordPropertiesUseCase
+import net.svaroh.passly.pwnedpasswordsapi.range.PwnedPasswordRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.koin.core.module.dsl.singleOf

@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.domain.resourcetypes
+package net.svaroh.passly.domain.resourcetypes
 
-import com.passbolt.mobile.android.domain.resourcetypes.usecase.GetLocalResourceTypesUseCase
-import com.passbolt.mobile.android.domain.resourcetypes.usecase.GetResourceTypeIdToSlugMappingUseCase
-import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
-import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypesInteractor
+import net.svaroh.passly.domain.resourcetypes.usecase.GetLocalResourceTypesUseCase
+import net.svaroh.passly.domain.resourcetypes.usecase.GetResourceTypeIdToSlugMappingUseCase
+import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypesInteractor
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

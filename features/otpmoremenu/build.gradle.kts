@@ -31,7 +31,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.otpmoremenu"
+    namespace = "net.svaroh.passly.feature.otpmoremenu"
     buildFeatures {
         compose = true
     }

@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.feature.setup.scanqr.parser
+package net.svaroh.passly.feature.setup.scanqr.parser
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.qrscan.analyzer.BarcodeScanResult
-import com.passbolt.mobile.android.core.qrscan.analyzer.BarcodeScanResult.NoBarcodeInRange
-import com.passbolt.mobile.android.core.qrscan.analyzer.BarcodeScanResult.SingleBarcode
-import com.passbolt.mobile.android.feature.setup.di.testModule
-import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.ParseResult
-import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.ScanQrParser
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult.NoBarcodeInRange
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult.SingleBarcode
+import net.svaroh.passly.feature.setup.di.testModule
+import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult
+import net.svaroh.passly.feature.setup.scanqr.qrparser.ScanQrParser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow

@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.startup
+package net.svaroh.passly.feature.startup
 
-import com.passbolt.mobile.android.feature.startup.deprecatedoswarning.deprecatedOsWarningModule
+import net.svaroh.passly.feature.startup.deprecatedoswarning.deprecatedOsWarningModule
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module

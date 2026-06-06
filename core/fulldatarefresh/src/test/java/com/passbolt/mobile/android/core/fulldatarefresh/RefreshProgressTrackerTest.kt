@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.fulldatarefresh
+package net.svaroh.passly.core.fulldatarefresh
 
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest

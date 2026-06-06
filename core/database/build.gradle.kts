@@ -31,7 +31,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.database"
+    namespace = "net.svaroh.passly.core.database"
 
     sourceSets {
         getByName("androidTest").assets.directories.add("$projectDir/schemas")

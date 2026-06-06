@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.home.screen
+package net.svaroh.passly.feature.home.screen
 
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.FavouriteOption
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption
+import net.svaroh.passly.ui.ResourceUiModel
 
 sealed interface HomeIntent {
     // screen

@@ -1,15 +1,15 @@
-package com.passbolt.mobile.android.domain.resources.usecase
+package net.svaroh.passly.domain.resources.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.displayMessage
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.CompleteAuthenticatedOutput
-import com.passbolt.mobile.android.core.mvp.authentication.IncompleteAuthenticatedOutput
-import com.passbolt.mobile.android.domain.share.ShareRepository
-import com.passbolt.mobile.android.domain.share.model.EncryptedSecret
-import com.passbolt.mobile.android.domain.share.model.SharePermission
-import com.passbolt.mobile.android.ui.EncryptedSecretOrError
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.displayMessage
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
+import net.svaroh.passly.core.mvp.authentication.IncompleteAuthenticatedOutput
+import net.svaroh.passly.domain.share.ShareRepository
+import net.svaroh.passly.domain.share.model.EncryptedSecret
+import net.svaroh.passly.domain.share.model.SharePermission
+import net.svaroh.passly.ui.EncryptedSecretOrError
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.users.datasource.remote
+package net.svaroh.passly.data.users.datasource.remote
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.users.datasource.remote.api.UsersApi
-import com.passbolt.mobile.android.data.users.mapper.toDomain
-import com.passbolt.mobile.android.domain.users.UsersDataSource
-import com.passbolt.mobile.android.domain.users.model.UserProfile
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.users.datasource.remote.api.UsersApi
+import net.svaroh.passly.data.users.mapper.toDomain
+import net.svaroh.passly.domain.users.UsersDataSource
+import net.svaroh.passly.domain.users.model.UserProfile
 
 internal class UsersRemoteDataSource(
     private val usersApi: UsersApi,

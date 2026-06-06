@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.otpcore
+package net.svaroh.passly.core.otpcore
 
 import dev.turingcomplete.kotlinonetimepassword.HmacAlgorithm
 

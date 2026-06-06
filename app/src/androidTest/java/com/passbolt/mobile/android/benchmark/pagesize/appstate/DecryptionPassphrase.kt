@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.appstate
+package net.svaroh.passly.benchmark.pagesize.appstate
 
-import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
+import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
 
 class DecryptionPassphrase(
     private val passphraseMemoryCache: PassphraseMemoryCache,

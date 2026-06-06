@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.accounts.usecase
+package net.svaroh.passly.domain.accounts.usecase
 
-import com.passbolt.mobile.android.common.HttpsVerifier
-import com.passbolt.mobile.android.common.UuidProvider
-import com.passbolt.mobile.android.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ACCOUNT_ALREADY_LINKED
-import com.passbolt.mobile.android.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ERROR_NON_HTTPS_DOMAIN
-import com.passbolt.mobile.android.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ERROR_WHEN_SAVING_PRIVATE_KEY
-import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
-import com.passbolt.mobile.android.domain.privatekey.model.PrivateKey
-import com.passbolt.mobile.android.ui.AccountSetupDataModel
+import net.svaroh.passly.common.HttpsVerifier
+import net.svaroh.passly.common.UuidProvider
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ACCOUNT_ALREADY_LINKED
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ERROR_NON_HTTPS_DOMAIN
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ERROR_WHEN_SAVING_PRIVATE_KEY
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
+import net.svaroh.passly.domain.privatekey.model.PrivateKey
+import net.svaroh.passly.ui.AccountSetupDataModel
 
 typealias UserId = String
 

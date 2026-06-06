@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.gson
+package net.svaroh.passly.serializers.gson
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
-import com.passbolt.mobile.android.dto.response.ResourceTypeDto
-import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes.allSlugs
+import net.svaroh.passly.dto.response.ResourceTypeDto
+import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.allSlugs
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 import java.lang.reflect.Type

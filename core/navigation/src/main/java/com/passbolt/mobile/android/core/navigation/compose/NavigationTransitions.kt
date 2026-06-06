@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.navigation.compose
+package net.svaroh.passly.core.navigation.compose
 
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.slideInHorizontally

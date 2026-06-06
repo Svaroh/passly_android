@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.scenarios.setup.autofill
+package net.svaroh.passly.scenarios.setup.autofill
 
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.NOT_SUPPORTED
+import net.svaroh.passly.core.autofill.AutofillInformationProvider
+import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.NOT_SUPPORTED
 import org.koin.dsl.module
 
 val autofillNotConfiguredModuleTests =

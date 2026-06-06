@@ -1,16 +1,16 @@
-package com.passbolt.mobile.android.data.accounts
+package net.svaroh.passly.data.accounts
 
 import android.content.Context
-import com.passbolt.mobile.android.data.accounts.datasource.local.AccountDataLocalDataSourceImpl
-import com.passbolt.mobile.android.data.accounts.datasource.local.AccountsLocalDataSourceImpl
-import com.passbolt.mobile.android.data.accounts.datasource.local.Constants
-import com.passbolt.mobile.android.data.accounts.datasource.local.SelectedAccountLocalDataSourceImpl
-import com.passbolt.mobile.android.domain.accounts.AccountDataRepository
-import com.passbolt.mobile.android.domain.accounts.AccountsRepository
-import com.passbolt.mobile.android.domain.accounts.SelectedAccountRepository
-import com.passbolt.mobile.android.domain.accounts.datasource.AccountDataLocalDataSource
-import com.passbolt.mobile.android.domain.accounts.datasource.AccountsLocalDataSource
-import com.passbolt.mobile.android.domain.accounts.datasource.SelectedAccountLocalDataSource
+import net.svaroh.passly.data.accounts.datasource.local.AccountDataLocalDataSourceImpl
+import net.svaroh.passly.data.accounts.datasource.local.AccountsLocalDataSourceImpl
+import net.svaroh.passly.data.accounts.datasource.local.Constants
+import net.svaroh.passly.data.accounts.datasource.local.SelectedAccountLocalDataSourceImpl
+import net.svaroh.passly.domain.accounts.AccountDataRepository
+import net.svaroh.passly.domain.accounts.AccountsRepository
+import net.svaroh.passly.domain.accounts.SelectedAccountRepository
+import net.svaroh.passly.domain.accounts.datasource.AccountDataLocalDataSource
+import net.svaroh.passly.domain.accounts.datasource.AccountsLocalDataSource
+import net.svaroh.passly.domain.accounts.datasource.SelectedAccountLocalDataSource
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

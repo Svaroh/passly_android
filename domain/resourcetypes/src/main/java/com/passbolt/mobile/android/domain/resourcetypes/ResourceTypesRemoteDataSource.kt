@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resourcetypes
+package net.svaroh.passly.domain.resourcetypes
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.resourcetypes.model.ResourceType
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.resourcetypes.model.ResourceType
 
 interface ResourceTypesRemoteDataSource {
     suspend fun getResourceTypes(): DomainResult<List<ResourceType>>

@@ -20,7 +20,7 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.jsonmodel.delegates
+package net.svaroh.passly.jsonmodel.delegates
 
 import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName

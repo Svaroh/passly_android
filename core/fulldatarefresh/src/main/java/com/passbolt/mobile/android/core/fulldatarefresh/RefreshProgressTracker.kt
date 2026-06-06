@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.fulldatarefresh
+package net.svaroh.passly.core.fulldatarefresh
 
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock

@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced
 
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
 
 internal data class AdvancedSecretGenerationState(
     val selectedTab: PasswordGeneratorTypeUiModel,

@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.resourcetypeslistdeserializer
+package net.svaroh.passly.serializers.resourcetypeslistdeserializer
 
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.passbolt.mobile.android.dto.response.ResourceTypeDto
-import com.passbolt.mobile.android.serializers.gson.ResourceTypesListDeserializer
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
+import net.svaroh.passly.dto.response.ResourceTypeDto
+import net.svaroh.passly.serializers.gson.ResourceTypesListDeserializer
+import net.svaroh.passly.supportedresourceTypes.ContentType
 import org.junit.Test
 import org.koin.test.KoinTest
 import java.util.UUID

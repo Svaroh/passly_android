@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.otp.screen.ui
+package net.svaroh.passly.feature.otp.screen.ui
 
 internal sealed interface ProgressSource {
     val remainingSeconds: Long

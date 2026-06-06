@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.users
+package net.svaroh.passly.domain.users
 
-import com.passbolt.mobile.android.domain.users.model.UserProfile
+import net.svaroh.passly.domain.users.model.UserProfile
 
 interface UsersLocalDataSource {
     suspend fun getUser(

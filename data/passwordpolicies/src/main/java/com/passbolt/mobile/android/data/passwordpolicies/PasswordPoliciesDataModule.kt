@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.passwordpolicies
+package net.svaroh.passly.data.passwordpolicies
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.passwordpolicies.datasource.memory.PasswordPoliciesMemoryDataSource
-import com.passbolt.mobile.android.data.passwordpolicies.datasource.remote.PasswordPoliciesRemoteDataSourceImpl
-import com.passbolt.mobile.android.data.passwordpolicies.datasource.remote.api.PasswordPoliciesApi
-import com.passbolt.mobile.android.domain.passwordpolicies.PasswordPoliciesLocalDataSource
-import com.passbolt.mobile.android.domain.passwordpolicies.PasswordPoliciesRemoteDataSource
-import com.passbolt.mobile.android.domain.passwordpolicies.PasswordPoliciesRepository
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.passwordpolicies.datasource.memory.PasswordPoliciesMemoryDataSource
+import net.svaroh.passly.data.passwordpolicies.datasource.remote.PasswordPoliciesRemoteDataSourceImpl
+import net.svaroh.passly.data.passwordpolicies.datasource.remote.api.PasswordPoliciesApi
+import net.svaroh.passly.domain.passwordpolicies.PasswordPoliciesLocalDataSource
+import net.svaroh.passly.domain.passwordpolicies.PasswordPoliciesRemoteDataSource
+import net.svaroh.passly.domain.passwordpolicies.PasswordPoliciesRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.pagesize
+package net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize
 
 @Suppress("MagicNumber")
 internal val ALLOWED_PAGE_SIZES = listOf(250, 500, 1_000, 2_000, 3_000, 5_000, 10_000)

@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.entity.user.User
-import com.passbolt.mobile.android.entity.user.UserGpgKey
-import com.passbolt.mobile.android.entity.user.UserProfile
-import com.passbolt.mobile.android.entity.user.UserUpdateState
-import com.passbolt.mobile.android.ui.GpgKeyUiModel
-import com.passbolt.mobile.android.ui.UserProfileUiModel
-import com.passbolt.mobile.android.ui.UserUiModel
-import com.passbolt.mobile.android.ui.UserWithAvatar
+import net.svaroh.passly.entity.user.User
+import net.svaroh.passly.entity.user.UserGpgKey
+import net.svaroh.passly.entity.user.UserProfile
+import net.svaroh.passly.entity.user.UserUpdateState
+import net.svaroh.passly.ui.GpgKeyUiModel
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
+import net.svaroh.passly.ui.UserWithAvatar
 
 class UsersModelMapper {
     fun map(input: UserUiModel) =

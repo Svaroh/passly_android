@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.otp.screen
+package net.svaroh.passly.feature.otp.screen
 
-import com.passbolt.mobile.android.ui.LeadingContentType
+import net.svaroh.passly.ui.LeadingContentType
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.description
+package net.svaroh.passly.feature.resourceform.metadata.description
 
 internal sealed interface DescriptionFormIntent {
     data object GoBack : DescriptionFormIntent

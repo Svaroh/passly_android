@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.passwordgenerator.usecase
+package net.svaroh.passly.core.passwordgenerator.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.core.passwordgenerator.mockPwnedPasswordRepository
-import com.passbolt.mobile.android.core.passwordgenerator.passwordGeneratorTestModule
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.core.passwordgenerator.mockPwnedPasswordRepository
+import net.svaroh.passly.core.passwordgenerator.passwordGeneratorTestModule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule

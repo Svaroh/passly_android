@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.biometrickey.model
+package net.svaroh.passly.domain.biometrickey.model
 
 /**
  * Persisted material of the account's biometric key. The symmetric key itself lives in the Android Keystore; the only

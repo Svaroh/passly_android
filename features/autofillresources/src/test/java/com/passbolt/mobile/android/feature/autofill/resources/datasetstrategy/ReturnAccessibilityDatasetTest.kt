@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy
+package net.svaroh.passly.feature.autofill.resources.datasetstrategy
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.autofill.accessibility.AccessibilityCommunicator
+import net.svaroh.passly.core.autofill.accessibility.AccessibilityCommunicator
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify

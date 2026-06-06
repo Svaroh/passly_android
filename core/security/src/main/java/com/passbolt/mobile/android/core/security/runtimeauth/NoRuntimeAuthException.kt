@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.security.runtimeauth
+package net.svaroh.passly.core.security.runtimeauth
 
 /**
  * Passbolt - Open source password manager for teams

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
 /**
  * Passbolt - Open source password manager for teams

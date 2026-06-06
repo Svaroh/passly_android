@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.domain.resources.resourceicon
+package net.svaroh.passly.domain.resources.resourceicon
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,25 +11,25 @@ import android.view.Gravity
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAndDescription
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordDescriptionTotp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordString
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.Totp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5CustomFields
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Default
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5DefaultWithTotp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Note
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5PasswordString
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5PinCodeStandalone
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5TotpStandalone
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel.Companion.DEFAULT_BACKGROUND_COLOR_HEX_STRING
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel.Companion.ICON_TYPE_KEEPASS
-import com.passbolt.mobile.android.ui.ResourceUiModel
-import com.passbolt.mobile.android.ui.contentType
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordAndDescription
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordDescriptionTotp
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.Totp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5PinCodeStandalone
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
+import net.svaroh.passly.ui.ResourceAppearanceModel.Companion.DEFAULT_BACKGROUND_COLOR_HEX_STRING
+import net.svaroh.passly.ui.ResourceAppearanceModel.Companion.ICON_TYPE_KEEPASS
+import net.svaroh.passly.ui.ResourceUiModel
+import net.svaroh.passly.ui.contentType
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 /**
  * Passbolt - Open source password manager for teams

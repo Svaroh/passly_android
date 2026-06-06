@@ -17,5 +17,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.uimodel"
+    namespace = "net.svaroh.passly.uimodel"
 }

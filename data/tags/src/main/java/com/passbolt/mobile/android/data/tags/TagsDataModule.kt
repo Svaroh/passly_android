@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.data.tags
+package net.svaroh.passly.data.tags
 
-import com.passbolt.mobile.android.data.tags.datasource.local.TagsLocalDataSourceImpl
-import com.passbolt.mobile.android.domain.tags.TagsRepository
-import com.passbolt.mobile.android.domain.tags.datasource.TagsLocalDataSource
+import net.svaroh.passly.data.tags.datasource.local.TagsLocalDataSourceImpl
+import net.svaroh.passly.domain.tags.TagsRepository
+import net.svaroh.passly.domain.tags.datasource.TagsLocalDataSource
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

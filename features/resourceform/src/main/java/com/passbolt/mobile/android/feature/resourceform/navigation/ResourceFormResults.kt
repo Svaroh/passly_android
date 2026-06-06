@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.feature.resourceform.navigation
+package net.svaroh.passly.feature.resourceform.navigation
 
-import com.passbolt.mobile.android.ui.AdditionalUrisUiModel
-import com.passbolt.mobile.android.ui.CustomFieldsUiModel
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
-import com.passbolt.mobile.android.ui.PasswordUiModel
-import com.passbolt.mobile.android.ui.PinCodeUiModel
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel
-import com.passbolt.mobile.android.ui.TotpUiModel
+import net.svaroh.passly.ui.AdditionalUrisUiModel
+import net.svaroh.passly.ui.CustomFieldsUiModel
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
+import net.svaroh.passly.ui.PasswordUiModel
+import net.svaroh.passly.ui.PinCodeUiModel
+import net.svaroh.passly.ui.ResourceAppearanceModel
+import net.svaroh.passly.ui.TotpUiModel
 
 data class PasswordFormResult(
     val model: PasswordUiModel,

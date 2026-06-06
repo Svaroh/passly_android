@@ -1,23 +1,23 @@
-package com.passbolt.mobile.android.domain.resources.usecase
+package net.svaroh.passly.domain.resources.usecase
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.displayMessage
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.mvp.authentication.UnauthenticatedReason
-import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
-import com.passbolt.mobile.android.domain.secrets.usecase.decrypt.SecretInteractor
-import com.passbolt.mobile.android.domain.share.model.ShareRecipient
-import com.passbolt.mobile.android.domain.users.usecase.GetLocalUserUseCase
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
-import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper
-import com.passbolt.mobile.android.ui.EncryptedSecretOrError
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.displayMessage
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.mvp.authentication.UnauthenticatedReason
+import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
+import net.svaroh.passly.core.passphrasememorycache.usePassphraseCopy
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
+import net.svaroh.passly.domain.secrets.usecase.decrypt.SecretInteractor
+import net.svaroh.passly.domain.share.model.ShareRecipient
+import net.svaroh.passly.domain.users.usecase.GetLocalUserUseCase
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.mappers.SharePermissionsModelMapper
+import net.svaroh.passly.ui.EncryptedSecretOrError
+import net.svaroh.passly.ui.PermissionModelUi
 import timber.log.Timber
 
 /**

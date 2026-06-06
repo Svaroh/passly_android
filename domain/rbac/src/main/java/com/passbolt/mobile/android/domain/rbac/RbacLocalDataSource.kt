@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.rbac
+package net.svaroh.passly.domain.rbac
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.rbac.model.Rbac
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.rbac.model.Rbac
 
 interface RbacLocalDataSource {
     suspend fun getRbac(userId: String): DomainResult<Rbac>

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.scenarios.welcome
+package net.svaroh.passly.scenarios.welcome
 
 import android.content.Intent
 import androidx.compose.ui.test.assertIsDisplayed
@@ -35,20 +35,20 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import com.passbolt.mobile.android.feature.setup.SetUpActivity
-import com.passbolt.mobile.android.helpers.getString
-import com.passbolt.mobile.android.instrumentationTestsModule
-import com.passbolt.mobile.android.rules.lazyActivityScenarioRule
-import com.passbolt.mobile.android.testtags.composetags.BackNavigation
-import com.passbolt.mobile.android.testtags.composetags.Setup.APPS_IMAGE
-import com.passbolt.mobile.android.testtags.composetags.Setup.HELP_BUTTON
-import com.passbolt.mobile.android.testtags.composetags.Setup.LOGO_IMAGE
+import net.svaroh.passly.feature.setup.SetUpActivity
+import net.svaroh.passly.helpers.getString
+import net.svaroh.passly.instrumentationTestsModule
+import net.svaroh.passly.rules.lazyActivityScenarioRule
+import net.svaroh.passly.testtags.composetags.BackNavigation
+import net.svaroh.passly.testtags.composetags.Setup.APPS_IMAGE
+import net.svaroh.passly.testtags.composetags.Setup.HELP_BUTTON
+import net.svaroh.passly.testtags.composetags.Setup.LOGO_IMAGE
 import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.test.KoinTest
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @RunWith(AndroidJUnit4::class)
 @MediumTest

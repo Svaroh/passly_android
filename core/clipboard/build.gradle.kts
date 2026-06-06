@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.clipboard"
+    namespace = "net.svaroh.passly.core.clipboard"
 }
 
 dependencies {

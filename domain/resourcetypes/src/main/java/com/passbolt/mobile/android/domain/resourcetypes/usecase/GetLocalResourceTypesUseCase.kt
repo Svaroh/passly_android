@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resourcetypes.usecase
+package net.svaroh.passly.domain.resourcetypes.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.resourcetypes.ResourceTypesRepository
-import com.passbolt.mobile.android.domain.resourcetypes.mapper.toUiModel
-import com.passbolt.mobile.android.ui.ResourceTypeModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.resourcetypes.ResourceTypesRepository
+import net.svaroh.passly.domain.resourcetypes.mapper.toUiModel
+import net.svaroh.passly.ui.ResourceTypeModel
 
 class GetLocalResourceTypesUseCase(
     private val resourceTypesRepository: ResourceTypesRepository,

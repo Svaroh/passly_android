@@ -21,20 +21,20 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.gson
+package net.svaroh.passly.serializers.gson
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.mapAsyncNotNull
-import com.passbolt.mobile.android.database.snapshot.ResourcesSnapshot
-import com.passbolt.mobile.android.domain.metadata.model.MetadataKeyPurpose.DECRYPT
-import com.passbolt.mobile.android.domain.metadata.usecase.db.GetLocalMetadataKeysUseCase
-import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
-import com.passbolt.mobile.android.dto.response.ResourceResponseDto
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes.allSlugs
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.mvp.coroutinecontext.mapAsyncNotNull
+import net.svaroh.passly.database.snapshot.ResourcesSnapshot
+import net.svaroh.passly.domain.metadata.model.MetadataKeyPurpose.DECRYPT
+import net.svaroh.passly.domain.metadata.usecase.db.GetLocalMetadataKeysUseCase
+import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.dto.response.ResourceResponseDto
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.allSlugs
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get

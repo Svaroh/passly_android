@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccountonboarding
 
 /**
  * Passbolt - Open source password manager for teams

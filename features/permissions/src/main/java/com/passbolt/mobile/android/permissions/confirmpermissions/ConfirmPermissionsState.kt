@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.confirmpermissions
+package net.svaroh.passly.permissions.confirmpermissions
 
-import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.TrustedKeyDeletedModel
+import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.TrustedKeyDeletedModel
 
 data class ConfirmPermissionsState(
     val permissions: List<PermissionModelUi> = emptyList(),

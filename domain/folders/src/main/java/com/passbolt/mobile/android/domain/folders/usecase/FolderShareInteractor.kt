@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.folders.usecase
+package net.svaroh.passly.domain.folders.usecase
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.displayMessage
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.mvp.authentication.UnauthenticatedReason
-import com.passbolt.mobile.android.domain.share.usecase.ShareFolderUseCase
-import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.displayMessage
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.mvp.authentication.UnauthenticatedReason
+import net.svaroh.passly.domain.share.usecase.ShareFolderUseCase
+import net.svaroh.passly.mappers.SharePermissionsModelMapper
+import net.svaroh.passly.ui.PermissionModelUi
 
 class FolderShareInteractor(
     private val shareFolderUseCase: ShareFolderUseCase,

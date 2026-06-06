@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common.validation
+package net.svaroh.passly.common.validation
 
 fun validation(block: Validation.() -> Unit) = Validation().apply(block).run()
 

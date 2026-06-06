@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.data.auth.mapper
+package net.svaroh.passly.data.auth.mapper
 
-import com.passbolt.mobile.android.domain.auth.model.ServerPgpKey
-import com.passbolt.mobile.android.domain.auth.model.ServerRsaKey
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.ServerPgpResponseDto
-import com.passbolt.mobile.android.dto.response.ServerRsaResponseDto
+import net.svaroh.passly.domain.auth.model.ServerPgpKey
+import net.svaroh.passly.domain.auth.model.ServerRsaKey
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.ServerPgpResponseDto
+import net.svaroh.passly.dto.response.ServerRsaResponseDto
 
 /**
  * Passbolt - Open source password manager for teams

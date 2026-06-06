@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.jsonmodel
+package net.svaroh.passly.jsonmodel
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.jsonmodel.delegates.RootRelativeJsonPathNullableStringDelegate
-import com.passbolt.mobile.android.jsonmodel.delegates.RootRelativeJsonPathStringDelegate
-import com.passbolt.mobile.android.jsonmodel.delegates.jsonPathDelegatesTestModule
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathNullableStringDelegate
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathStringDelegate
+import net.svaroh.passly.jsonmodel.delegates.jsonPathDelegatesTestModule
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level

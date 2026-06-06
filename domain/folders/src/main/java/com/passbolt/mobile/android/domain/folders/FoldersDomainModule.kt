@@ -21,27 +21,27 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.folders
+package net.svaroh.passly.domain.folders
 
-import com.passbolt.mobile.android.domain.folders.usecase.AddLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.AddLocalFolderUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.CreateFolderUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.FetchFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.FolderShareInteractor
-import com.passbolt.mobile.android.domain.folders.usecase.FoldersInteractor
-import com.passbolt.mobile.android.domain.folders.usecase.GetFoldersPaginatedUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalDirectChildFoldersPaginatedUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderDetailsUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderLocationUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalParentFolderPermissionsToApplyToNewItemUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalSubFoldersForFolderPaginatedUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalSubFoldersForFolderUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.RemoveLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.RemoveLocalFoldersWithUpdateStateUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.SetLocalFoldersUpdateStateUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.UpdateLocalFoldersIsSharedUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.UpsertLocalFoldersUseCase
+import net.svaroh.passly.domain.folders.usecase.AddLocalFolderPermissionsUseCase
+import net.svaroh.passly.domain.folders.usecase.AddLocalFolderUseCase
+import net.svaroh.passly.domain.folders.usecase.CreateFolderUseCase
+import net.svaroh.passly.domain.folders.usecase.FetchFolderPermissionsUseCase
+import net.svaroh.passly.domain.folders.usecase.FolderShareInteractor
+import net.svaroh.passly.domain.folders.usecase.FoldersInteractor
+import net.svaroh.passly.domain.folders.usecase.GetFoldersPaginatedUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalDirectChildFoldersPaginatedUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderLocationUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderPermissionsUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalParentFolderPermissionsToApplyToNewItemUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalSubFoldersForFolderPaginatedUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalSubFoldersForFolderUseCase
+import net.svaroh.passly.domain.folders.usecase.RemoveLocalFolderPermissionsUseCase
+import net.svaroh.passly.domain.folders.usecase.RemoveLocalFoldersWithUpdateStateUseCase
+import net.svaroh.passly.domain.folders.usecase.SetLocalFoldersUpdateStateUseCase
+import net.svaroh.passly.domain.folders.usecase.UpdateLocalFoldersIsSharedUseCase
+import net.svaroh.passly.domain.folders.usecase.UpsertLocalFoldersUseCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

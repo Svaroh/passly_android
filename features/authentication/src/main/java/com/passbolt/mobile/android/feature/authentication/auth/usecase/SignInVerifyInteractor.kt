@@ -1,15 +1,15 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountDataUseCase
-import com.passbolt.mobile.android.domain.auth.model.SignInFailureType
-import com.passbolt.mobile.android.domain.auth.model.SignInResult
-import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
-import com.passbolt.mobile.android.dto.response.ChallengeResponseDto
-import com.passbolt.mobile.android.feature.authentication.auth.challenge.ChallengeDecryptor
-import com.passbolt.mobile.android.feature.authentication.auth.challenge.ChallengeProvider
-import com.passbolt.mobile.android.feature.authentication.auth.challenge.ChallengeVerifier
-import com.passbolt.mobile.android.mappers.AccountModelMapper
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
+import net.svaroh.passly.domain.auth.model.SignInFailureType
+import net.svaroh.passly.domain.auth.model.SignInResult
+import net.svaroh.passly.domain.auth.usecase.GetSessionUseCase
+import net.svaroh.passly.dto.response.ChallengeResponseDto
+import net.svaroh.passly.feature.authentication.auth.challenge.ChallengeDecryptor
+import net.svaroh.passly.feature.authentication.auth.challenge.ChallengeProvider
+import net.svaroh.passly.feature.authentication.auth.challenge.ChallengeVerifier
+import net.svaroh.passly.mappers.AccountModelMapper
 import timber.log.Timber
 
 class SignInVerifyInteractor(

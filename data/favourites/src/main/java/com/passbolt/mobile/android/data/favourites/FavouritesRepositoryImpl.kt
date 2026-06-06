@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.favourites
+package net.svaroh.passly.data.favourites
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.favourites.FavouritesDataSource
-import com.passbolt.mobile.android.domain.favourites.FavouritesRepository
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.favourites.FavouritesDataSource
+import net.svaroh.passly.domain.favourites.FavouritesRepository
 
 internal class FavouritesRepositoryImpl(
     private val remoteDataSource: FavouritesDataSource,

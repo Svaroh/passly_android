@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.domain.tags
+package net.svaroh.passly.domain.tags
 
-import com.passbolt.mobile.android.domain.tags.usecase.AddLocalTagsUseCase
-import com.passbolt.mobile.android.domain.tags.usecase.GetLocalTagsPaginatedUseCase
-import com.passbolt.mobile.android.domain.tags.usecase.GetLocalTagsUseCase
-import com.passbolt.mobile.android.domain.tags.usecase.RemoveLocalTagsUseCase
+import net.svaroh.passly.domain.tags.usecase.AddLocalTagsUseCase
+import net.svaroh.passly.domain.tags.usecase.GetLocalTagsPaginatedUseCase
+import net.svaroh.passly.domain.tags.usecase.GetLocalTagsUseCase
+import net.svaroh.passly.domain.tags.usecase.RemoveLocalTagsUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

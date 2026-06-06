@@ -10,5 +10,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.otp"
+    namespace = "net.svaroh.passly.core.otp"
 }

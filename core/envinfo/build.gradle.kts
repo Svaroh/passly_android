@@ -8,5 +8,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.envinfo"
+    namespace = "net.svaroh.passly.core.envinfo"
 }

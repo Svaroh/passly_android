@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.database.indexbenchmark
+package net.svaroh.passly.database.indexbenchmark
 
-import com.passbolt.mobile.android.entity.folder.Folder
-import com.passbolt.mobile.android.entity.folder.FolderUpdateState
-import com.passbolt.mobile.android.entity.resource.Permission
-import com.passbolt.mobile.android.entity.resource.Resource
+import net.svaroh.passly.entity.folder.Folder
+import net.svaroh.passly.entity.folder.FolderUpdateState
+import net.svaroh.passly.entity.resource.Permission
+import net.svaroh.passly.entity.resource.Resource
 import java.time.ZonedDateTime
 
 /**

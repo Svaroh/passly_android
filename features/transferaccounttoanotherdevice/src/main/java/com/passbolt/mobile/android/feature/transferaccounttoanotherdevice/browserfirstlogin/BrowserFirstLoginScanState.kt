@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin
 
 internal data class BrowserFirstLoginScanState(
     val showProgress: Boolean = false,

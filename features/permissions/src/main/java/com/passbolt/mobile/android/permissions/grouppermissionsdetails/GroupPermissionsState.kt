@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.permissions.grouppermissionsdetails
+package net.svaroh.passly.permissions.grouppermissionsdetails
 
-import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
-import com.passbolt.mobile.android.ui.UserUiModel
+import net.svaroh.passly.ui.PermissionModelUi.GroupPermissionModel
+import net.svaroh.passly.ui.UserUiModel
 
 data class GroupPermissionsState(
     val groupPermission: GroupPermissionModel,

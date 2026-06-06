@@ -1,17 +1,17 @@
-package com.passbolt.mobile.android.feature.autofill.informationprovider
+package net.svaroh.passly.feature.autofill.informationprovider
 
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.Settings
 import android.view.autofill.AutofillManager
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.DISABLED
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.ENABLED
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.NOT_SUPPORTED
-import com.passbolt.mobile.android.feature.autofill.accessibility.AccessibilityService
-import com.passbolt.mobile.android.core.common.R as CommonR
+import net.svaroh.passly.core.autofill.AutofillInformationProvider
+import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus
+import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.DISABLED
+import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.ENABLED
+import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.NOT_SUPPORTED
+import net.svaroh.passly.feature.autofill.accessibility.AccessibilityService
+import net.svaroh.passly.core.common.R as CommonR
 
 /**
  * Passbolt - Open source password manager for teams

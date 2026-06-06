@@ -22,5 +22,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.resourcetypes"
+    namespace = "net.svaroh.passly.core.resourcetypes"
 }

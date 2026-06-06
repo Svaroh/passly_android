@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.gson.serializer
+package net.svaroh.passly.serializers.gson.serializer
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive

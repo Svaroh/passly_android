@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.passphrasememorycache
+package net.svaroh.passly.core.passphrasememorycache
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.sweep
+package net.svaroh.passly.benchmark.pagesize.sweep
 
-import com.passbolt.mobile.android.benchmark.pagesize.appstate.LocalResourceStore
-import com.passbolt.mobile.android.domain.resources.usecase.ResourceInteractor
+import net.svaroh.passly.benchmark.pagesize.appstate.LocalResourceStore
+import net.svaroh.passly.domain.resources.usecase.ResourceInteractor
 
 class PipelineWarmUp(
     private val measuredResourceRefresh: MeasuredResourceRefresh,

@@ -20,9 +20,9 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.commontest.transaction
+package net.svaroh.passly.commontest.transaction
 
-import com.passbolt.mobile.android.common.transaction.DatabaseTransactionRunner
+import net.svaroh.passly.common.transaction.DatabaseTransactionRunner
 
 /**
  * Test [DatabaseTransactionRunner] that runs the block inline without opening a real transaction.

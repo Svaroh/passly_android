@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers
+package net.svaroh.passly.serializers
 
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.GsonBuilder
-import com.passbolt.mobile.android.dto.request.CreateResourceDto
-import com.passbolt.mobile.android.dto.request.CreateV4ResourceDto
-import com.passbolt.mobile.android.dto.request.CreateV5ResourceDto
-import com.passbolt.mobile.android.dto.request.EncryptedSecret
-import com.passbolt.mobile.android.dto.response.MetadataKeyTypeDto
-import com.passbolt.mobile.android.serializers.gson.CreateResourceModelSerializer
+import net.svaroh.passly.dto.request.CreateResourceDto
+import net.svaroh.passly.dto.request.CreateV4ResourceDto
+import net.svaroh.passly.dto.request.CreateV5ResourceDto
+import net.svaroh.passly.dto.request.EncryptedSecret
+import net.svaroh.passly.dto.response.MetadataKeyTypeDto
+import net.svaroh.passly.serializers.gson.CreateResourceModelSerializer
 import org.junit.Test
 
 class CreateResourceModelSerializerTest {

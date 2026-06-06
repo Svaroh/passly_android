@@ -21,21 +21,21 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.appearance
+package net.svaroh.passly.feature.resourceform.metadata.appearance
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetCustomIconBackgroundColor
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetKeepassIcon
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.ToggleDefaultColor
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.ToggleDefaultIcon
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.mappers.ResourceFormMapper
-import com.passbolt.mobile.android.ui.LeadingContentType
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel.Companion.DEFAULT_BACKGROUND_COLOR_HEX_STRING
-import com.passbolt.mobile.android.ui.ResourceFormMode.Create
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetCustomIconBackgroundColor
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetKeepassIcon
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.ToggleDefaultColor
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.ToggleDefaultIcon
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.mappers.ResourceFormMapper
+import net.svaroh.passly.ui.LeadingContentType
+import net.svaroh.passly.ui.ResourceAppearanceModel
+import net.svaroh.passly.ui.ResourceAppearanceModel.Companion.DEFAULT_BACKGROUND_COLOR_HEX_STRING
+import net.svaroh.passly.ui.ResourceFormMode.Create
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

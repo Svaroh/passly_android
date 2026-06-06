@@ -20,14 +20,14 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.domain.resources.usecase.db
+package net.svaroh.passly.domain.resources.usecase.db
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.resources.ResourcesRepository
-import com.passbolt.mobile.android.domain.resources.mapper.toUiModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.resources.ResourcesRepository
+import net.svaroh.passly.domain.resources.mapper.toUiModel
+import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.ResourceUiModel
 
 @Deprecated("Use GetLocalResourcesPaginatedUseCase")
 class GetLocalResourcesUseCase(

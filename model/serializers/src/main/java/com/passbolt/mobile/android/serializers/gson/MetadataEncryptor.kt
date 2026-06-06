@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.serializers.gson
+package net.svaroh.passly.serializers.gson
 
-import com.passbolt.mobile.android.common.extension.erase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.metadata.usecase.db.GetLocalMetadataKeyUseCase
-import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
-import com.passbolt.mobile.android.ui.MetadataKeyTypeModel
+import net.svaroh.passly.common.extension.erase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.metadata.usecase.db.GetLocalMetadataKeyUseCase
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.ui.MetadataKeyTypeModel
 import timber.log.Timber
 
 class MetadataEncryptor(

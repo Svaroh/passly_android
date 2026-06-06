@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.metadata.model
+package net.svaroh.passly.domain.metadata.model
 
 enum class MetadataKeyPurpose {
     /**

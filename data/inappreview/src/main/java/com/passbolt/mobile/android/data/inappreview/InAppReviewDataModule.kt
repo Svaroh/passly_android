@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.inappreview
+package net.svaroh.passly.data.inappreview
 
-import com.passbolt.mobile.android.data.inappreview.datasource.local.InAppReviewLocalDataSourceImpl
-import com.passbolt.mobile.android.data.inappreview.datasource.local.InAppReviewShowSerializer
-import com.passbolt.mobile.android.domain.inappreview.InAppReviewLocalDataSource
-import com.passbolt.mobile.android.domain.inappreview.InAppReviewRepository
+import net.svaroh.passly.data.inappreview.datasource.local.InAppReviewLocalDataSourceImpl
+import net.svaroh.passly.data.inappreview.datasource.local.InAppReviewShowSerializer
+import net.svaroh.passly.domain.inappreview.InAppReviewLocalDataSource
+import net.svaroh.passly.domain.inappreview.InAppReviewRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

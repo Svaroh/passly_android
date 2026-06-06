@@ -1,18 +1,18 @@
-package com.passbolt.mobile.android.data.accounts.datasource.local
+package net.svaroh.passly.data.accounts.datasource.local
 
 import androidx.core.content.edit
-import com.passbolt.mobile.android.data.accounts.datasource.local.Constants.AVATAR_URL_KEY
-import com.passbolt.mobile.android.data.accounts.datasource.local.Constants.EMAIL_KEY
-import com.passbolt.mobile.android.data.accounts.datasource.local.Constants.ROLE_KEY
-import com.passbolt.mobile.android.data.accounts.datasource.local.Constants.SERVER_ID_KEY
-import com.passbolt.mobile.android.data.accounts.datasource.local.Constants.URL_KEY
-import com.passbolt.mobile.android.data.accounts.datasource.local.Constants.USER_FIRST_NAME_KEY
-import com.passbolt.mobile.android.data.accounts.datasource.local.Constants.USER_LABEL_KEY
-import com.passbolt.mobile.android.data.accounts.datasource.local.Constants.USER_LAST_NAME_KEY
-import com.passbolt.mobile.android.domain.accounts.datasource.AccountDataLocalDataSource
-import com.passbolt.mobile.android.domain.accounts.model.AccountData
-import com.passbolt.mobile.android.domain.accounts.model.AccountDataUpdate
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.data.accounts.datasource.local.Constants.AVATAR_URL_KEY
+import net.svaroh.passly.data.accounts.datasource.local.Constants.EMAIL_KEY
+import net.svaroh.passly.data.accounts.datasource.local.Constants.ROLE_KEY
+import net.svaroh.passly.data.accounts.datasource.local.Constants.SERVER_ID_KEY
+import net.svaroh.passly.data.accounts.datasource.local.Constants.URL_KEY
+import net.svaroh.passly.data.accounts.datasource.local.Constants.USER_FIRST_NAME_KEY
+import net.svaroh.passly.data.accounts.datasource.local.Constants.USER_LABEL_KEY
+import net.svaroh.passly.data.accounts.datasource.local.Constants.USER_LAST_NAME_KEY
+import net.svaroh.passly.domain.accounts.datasource.AccountDataLocalDataSource
+import net.svaroh.passly.domain.accounts.model.AccountData
+import net.svaroh.passly.domain.accounts.model.AccountDataUpdate
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
 
 /**
  * Passbolt - Open source password manager for teams

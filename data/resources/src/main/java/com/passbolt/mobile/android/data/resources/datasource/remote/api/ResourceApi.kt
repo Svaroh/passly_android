@@ -20,12 +20,12 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.data.resources.datasource.remote.api
+package net.svaroh.passly.data.resources.datasource.remote.api
 
-import com.passbolt.mobile.android.dto.request.CreateResourceDto
-import com.passbolt.mobile.android.dto.response.BasePaginatedResponse
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.ResourceResponseDto
+import net.svaroh.passly.dto.request.CreateResourceDto
+import net.svaroh.passly.dto.response.BasePaginatedResponse
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.ResourceResponseDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

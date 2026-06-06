@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.preferences
+package net.svaroh.passly.domain.preferences
 
-import com.passbolt.mobile.android.ui.AccountFlagsUiModel
-import com.passbolt.mobile.android.ui.DefaultFilterUiModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewPreferencesUiModel
+import net.svaroh.passly.ui.AccountFlagsUiModel
+import net.svaroh.passly.ui.DefaultFilterUiModel
+import net.svaroh.passly.ui.HomeDisplayViewPreferencesUiModel
 
 interface AccountPreferencesRepository {
     fun getHomeDisplayViewPreferences(userId: String): HomeDisplayViewPreferencesUiModel

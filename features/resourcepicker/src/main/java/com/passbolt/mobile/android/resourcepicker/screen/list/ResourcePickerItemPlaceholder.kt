@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.screen.list
+package net.svaroh.passly.resourcepicker.screen.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

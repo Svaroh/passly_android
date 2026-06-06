@@ -1,27 +1,27 @@
-package com.passbolt.mobile.android.permissions.navigation
+package net.svaroh.passly.permissions.navigation
 
 import androidx.compose.runtime.Composable
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.GroupPermissionDetails
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.PermissionRecipients
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.UserPermissionDetails
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsScreen
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsViewModel
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsScreen
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsScreen
-import com.passbolt.mobile.android.permissions.permissions.PermissionsScreen
-import com.passbolt.mobile.android.permissions.permissions.PermissionsViewModel
-import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsScreen
-import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
-import com.passbolt.mobile.android.ui.PermissionsItem
-import com.passbolt.mobile.android.ui.PermissionsMode
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.GroupPermissionDetails
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.PermissionRecipients
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.UserPermissionDetails
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsScreen
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsViewModel
+import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsScreen
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsScreen
+import net.svaroh.passly.permissions.permissions.PermissionsScreen
+import net.svaroh.passly.permissions.permissions.PermissionsViewModel
+import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsScreen
+import net.svaroh.passly.ui.ConfirmPermissionsMode
+import net.svaroh.passly.ui.PermissionsItem
+import net.svaroh.passly.ui.PermissionsMode
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent as ConfirmPermissionsIntent
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsIntent as ConfirmPermissionsIntent
 
 class PermissionsFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =

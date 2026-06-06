@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.startup.deprecatedoswarning
+package net.svaroh.passly.feature.startup.deprecatedoswarning
 
-import com.passbolt.mobile.android.core.envinfo.EnvInfoProvider
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
-import com.passbolt.mobile.android.domain.preferences.usecase.GetGlobalPreferencesUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
-import com.passbolt.mobile.android.feature.startup.BuildConfig
+import net.svaroh.passly.core.envinfo.EnvInfoProvider
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.feature.startup.BuildConfig
 import timber.log.Timber
 
 class DeprecatedOsWarningInteractor(

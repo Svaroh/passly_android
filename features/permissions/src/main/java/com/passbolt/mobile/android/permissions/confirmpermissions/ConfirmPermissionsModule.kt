@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.confirmpermissions
+package net.svaroh.passly.permissions.confirmpermissions
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel

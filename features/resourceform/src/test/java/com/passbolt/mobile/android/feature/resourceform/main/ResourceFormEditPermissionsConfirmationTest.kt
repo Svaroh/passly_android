@@ -21,19 +21,19 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.main
+package net.svaroh.passly.feature.resourceform.main
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionResult
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.ConfirmedPermissionsResult
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.NoteChanged
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.UpdateResource
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateBackWithEditSuccess
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToConfirmPermissions
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.ShowSnackbar
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
-import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
+import net.svaroh.passly.domain.resources.actions.ResourceUpdateActionResult
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.ConfirmedPermissionsResult
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.NoteChanged
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.UpdateResource
+import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateBackWithEditSuccess
+import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToConfirmPermissions
+import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.ShowSnackbar
+import net.svaroh.passly.supportedresourceTypes.ContentType
+import net.svaroh.passly.ui.ConfirmPermissionsMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest

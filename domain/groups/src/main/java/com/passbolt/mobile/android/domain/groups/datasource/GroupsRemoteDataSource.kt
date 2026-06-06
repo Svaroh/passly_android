@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.groups.datasource
+package net.svaroh.passly.domain.groups.datasource
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.groups.model.GroupWithMembers
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.groups.model.GroupWithMembers
 
 interface GroupsRemoteDataSource {
     suspend fun getGroups(): DomainResult<List<GroupWithMembers>>

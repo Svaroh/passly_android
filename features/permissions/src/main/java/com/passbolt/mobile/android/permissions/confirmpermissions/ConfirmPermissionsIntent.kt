@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.confirmpermissions
+package net.svaroh.passly.permissions.confirmpermissions
 
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionModelUi
 
 sealed interface ConfirmPermissionsIntent {
     data object GoBack : ConfirmPermissionsIntent

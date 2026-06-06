@@ -62,7 +62,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.otp"
+    namespace = "net.svaroh.passly.feature.otp"
     buildFeatures {
         compose = true
     }

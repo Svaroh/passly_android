@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.autofill.resources
+package net.svaroh.passly.feature.autofill.resources
 
 data class AutofillResourcesState(
     val showHome: Boolean = false,

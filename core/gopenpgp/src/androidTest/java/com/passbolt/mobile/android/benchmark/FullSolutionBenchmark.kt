@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.benchmark
+package net.svaroh.passly.benchmark
 
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.passbolt.mobile.android.core.gopenpgp.test.R
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.gopenpgp.exception.GopenPgpExceptionParser
-import com.passbolt.mobile.android.serializers.gson.strictTypeAdapters
+import net.svaroh.passly.core.gopenpgp.test.R
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.GopenPgpExceptionParser
+import net.svaroh.passly.serializers.gson.strictTypeAdapters
 import com.proton.gopenpgp.constants.Constants.AES256
 import com.proton.gopenpgp.crypto.Crypto
 import com.proton.gopenpgp.crypto.PGPHandle

@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.preferences
+package net.svaroh.passly.domain.preferences
 
-import com.passbolt.mobile.android.ui.DefaultFilterUiModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewUiModel
+import net.svaroh.passly.ui.DefaultFilterUiModel
+import net.svaroh.passly.ui.HomeDisplayViewUiModel
 
 data class HomeDisplayViewPreferencesUpdate(
     val lastUsedHomeView: HomeDisplayViewUiModel? = null,

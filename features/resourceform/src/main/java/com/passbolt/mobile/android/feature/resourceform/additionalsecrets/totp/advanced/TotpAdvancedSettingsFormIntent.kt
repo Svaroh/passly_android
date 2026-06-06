@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced
 
 internal sealed interface TotpAdvancedSettingsFormIntent {
     data class PeriodChanged(

@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.actions
+package net.svaroh.passly.domain.resources.actions
 
-import com.passbolt.mobile.android.domain.favourites.FavouritesInteractor
-import com.passbolt.mobile.android.domain.resources.usecase.DeleteResourceUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.db.UpdateLocalResourceUseCase
-import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.FavouriteOption
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.FavouriteOption.REMOVE_FROM_FAVOURITES
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.domain.favourites.FavouritesInteractor
+import net.svaroh.passly.domain.resources.usecase.DeleteResourceUseCase
+import net.svaroh.passly.domain.resources.usecase.db.UpdateLocalResourceUseCase
+import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
+import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption
+import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
+import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.REMOVE_FROM_FAVOURITES
+import net.svaroh.passly.ui.ResourceUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single

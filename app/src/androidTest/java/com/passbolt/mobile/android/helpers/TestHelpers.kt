@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.helpers
+package net.svaroh.passly.helpers
 
 import android.util.Log
 import androidx.annotation.StringRes
@@ -39,12 +39,12 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.platform.app.InstrumentationRegistry
-import com.passbolt.mobile.android.testtags.composetags.Auth
-import com.passbolt.mobile.android.testtags.composetags.FiltersMenu
-import com.passbolt.mobile.android.testtags.composetags.Home
-import com.passbolt.mobile.android.testtags.composetags.ResourceForm
-import com.passbolt.mobile.android.testtags.composetags.SearchField
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.testtags.composetags.Auth
+import net.svaroh.passly.testtags.composetags.FiltersMenu
+import net.svaroh.passly.testtags.composetags.Home
+import net.svaroh.passly.testtags.composetags.ResourceForm
+import net.svaroh.passly.testtags.composetags.SearchField
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getString(
     @StringRes stringResId: Int,

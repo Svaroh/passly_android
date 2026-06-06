@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.sweep
+package net.svaroh.passly.benchmark.pagesize.sweep
 
-import com.passbolt.mobile.android.benchmark.pagesize.appstate.DecryptionPassphrase
-import com.passbolt.mobile.android.benchmark.pagesize.appstate.LocalResourceStore
-import com.passbolt.mobile.android.benchmark.pagesize.fixture.ResourceCorpus
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
-import com.passbolt.mobile.android.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.ResourceInteractor
+import net.svaroh.passly.benchmark.pagesize.appstate.DecryptionPassphrase
+import net.svaroh.passly.benchmark.pagesize.appstate.LocalResourceStore
+import net.svaroh.passly.benchmark.pagesize.fixture.ResourceCorpus
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.domain.resources.usecase.ResourceInteractor
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.runBlocking

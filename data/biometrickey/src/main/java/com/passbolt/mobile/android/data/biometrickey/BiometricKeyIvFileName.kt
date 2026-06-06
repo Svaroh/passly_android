@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.biometrickey
+package net.svaroh.passly.data.biometrickey
 
 internal class BiometricKeyIvFileName(
     userId: String,

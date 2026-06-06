@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.data.passwordpolicies.datasource.remote.api
+package net.svaroh.passly.data.passwordpolicies.datasource.remote.api
 
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.PasswordPoliciesDto
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.PasswordPoliciesDto
 import retrofit2.http.GET
 
 /**

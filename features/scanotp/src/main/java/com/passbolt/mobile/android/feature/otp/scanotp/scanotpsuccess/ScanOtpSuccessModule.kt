@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess
+package net.svaroh.passly.feature.otp.scanotp.scanotpsuccess
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel

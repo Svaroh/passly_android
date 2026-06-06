@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.metadata.datasource.local
+package net.svaroh.passly.data.metadata.datasource.local
 
 internal class TrustedMetadataKeyFileName(
     userId: String,

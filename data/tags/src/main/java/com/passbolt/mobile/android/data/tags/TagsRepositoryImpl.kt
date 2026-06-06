@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.data.tags
+package net.svaroh.passly.data.tags
 
 import androidx.paging.PagingData
-import com.passbolt.mobile.android.domain.tags.TagsRepository
-import com.passbolt.mobile.android.domain.tags.datasource.TagsLocalDataSource
-import com.passbolt.mobile.android.ui.ResourceUiModelWithAttributes
-import com.passbolt.mobile.android.ui.TagWithCount
+import net.svaroh.passly.domain.tags.TagsRepository
+import net.svaroh.passly.domain.tags.datasource.TagsLocalDataSource
+import net.svaroh.passly.ui.ResourceUiModelWithAttributes
+import net.svaroh.passly.ui.TagWithCount
 import kotlinx.coroutines.flow.Flow
 
 /**

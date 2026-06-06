@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.mobiletransfer
+package net.svaroh.passly.data.mobiletransfer
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.mobiletransfer.datasource.remote.MobileTransferRemoteDataSource
-import com.passbolt.mobile.android.data.mobiletransfer.datasource.remote.api.MobileTransferApi
-import com.passbolt.mobile.android.domain.mobiletransfer.MobileTransferDataSource
-import com.passbolt.mobile.android.domain.mobiletransfer.MobileTransferRepository
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.mobiletransfer.datasource.remote.MobileTransferRemoteDataSource
+import net.svaroh.passly.data.mobiletransfer.datasource.remote.api.MobileTransferApi
+import net.svaroh.passly.domain.mobiletransfer.MobileTransferDataSource
+import net.svaroh.passly.domain.mobiletransfer.MobileTransferRepository
 import org.koin.dsl.module
 
 val mobileTransferDataModule =

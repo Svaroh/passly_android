@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.preferences.usecase
+package net.svaroh.passly.domain.preferences.usecase
 
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.domain.preferences.pagesize.DevicePerformanceFingerprintProvider
-import com.passbolt.mobile.android.domain.preferences.pagesize.DeviceTier.HIGH
-import com.passbolt.mobile.android.domain.preferences.pagesize.DeviceTier.LOW
-import com.passbolt.mobile.android.domain.preferences.pagesize.DeviceTier.MEDIUM
-import com.passbolt.mobile.android.domain.preferences.pagesize.DeviceTierClassifier
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.domain.preferences.pagesize.DevicePerformanceFingerprintProvider
+import net.svaroh.passly.domain.preferences.pagesize.DeviceTier.HIGH
+import net.svaroh.passly.domain.preferences.pagesize.DeviceTier.LOW
+import net.svaroh.passly.domain.preferences.pagesize.DeviceTier.MEDIUM
+import net.svaroh.passly.domain.preferences.pagesize.DeviceTierClassifier
 import timber.log.Timber
 
 class GetAutomaticPageSizeUseCase(

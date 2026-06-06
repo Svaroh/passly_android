@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin
 
 import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.json.Json
@@ -36,7 +36,7 @@ class BrowserFirstLoginQrParserTest {
                     "&domain=https%3A%2F%2Fpass.66ton99.org.ua" +
                     "&request_id=79dce172-8b3c-4be5-a258-3129230996dd" +
                     "&secret=pairing-secret" +
-                    "#Intent;scheme=passbolt;package=com.passbolt.mobile.android;" +
+                    "#Intent;scheme=passbolt;package=net.svaroh.passly;" +
                     "S.browser_fallback_url=https%3A%2F%2Fpass.66ton99.org.ua;end",
             )
 

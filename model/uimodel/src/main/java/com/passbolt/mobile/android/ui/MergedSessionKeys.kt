@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
 import java.time.ZonedDateTime
 import java.util.concurrent.ConcurrentHashMap

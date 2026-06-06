@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.permissions.common
+package net.svaroh.passly.permissions.common
 
-import com.passbolt.mobile.android.permissions.permissions.PermissionModelUiComparator
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
+import net.svaroh.passly.permissions.permissions.PermissionModelUiComparator
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionModelUi.GroupPermissionModel
+import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
 
 /**
  * Passbolt - Open source password manager for teams

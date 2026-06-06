@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.scanqr
+package net.svaroh.passly.feature.setup.scanqr
 
-import com.passbolt.mobile.android.ui.ResultStatus
+import net.svaroh.passly.ui.ResultStatus
 
 internal sealed interface ScanQrSideEffect {
     data object NavigateBack : ScanQrSideEffect

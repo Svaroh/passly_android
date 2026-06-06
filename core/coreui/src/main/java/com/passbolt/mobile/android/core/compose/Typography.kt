@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.compose
+package net.svaroh.passly.core.compose
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.passbolt.mobile.android.core.ui.R
+import net.svaroh.passly.core.ui.R
 
 val Inter =
     FontFamily(

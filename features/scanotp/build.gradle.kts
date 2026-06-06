@@ -48,7 +48,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.scanotp"
+    namespace = "net.svaroh.passly.feature.scanotp"
     buildFeatures {
         compose = true
     }

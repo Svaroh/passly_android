@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.parser
+package net.svaroh.passly.feature.otp.scanotp.parser
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.qrscan.analyzer.BarcodeScanResult
-import com.passbolt.mobile.android.ui.OtpParseResult
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.ui.OtpParseResult
 import org.junit.Test
 import java.io.IOException
 

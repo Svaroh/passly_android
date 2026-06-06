@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.navigation"
+    namespace = "net.svaroh.passly.core.navigation"
     buildFeatures {
         compose = true
     }

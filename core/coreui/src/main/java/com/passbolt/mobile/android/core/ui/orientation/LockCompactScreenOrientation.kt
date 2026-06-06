@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.orientation
+package net.svaroh.passly.core.ui.orientation
 
 import android.content.pm.ActivityInfo
 import androidx.activity.compose.LocalActivity

@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.groups.model
+package net.svaroh.passly.domain.groups.model
 
-import com.passbolt.mobile.android.domain.users.model.UserProfile
+import net.svaroh.passly.domain.users.model.UserProfile
 
 data class GroupWithUsers(
     val group: Group,

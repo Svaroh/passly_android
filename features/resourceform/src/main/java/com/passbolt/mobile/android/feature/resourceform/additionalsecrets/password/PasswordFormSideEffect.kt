@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password
+package net.svaroh.passly.feature.resourceform.additionalsecrets.password
 
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
-import com.passbolt.mobile.android.ui.PasswordUiModel
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
+import net.svaroh.passly.ui.PasswordUiModel
 
 internal sealed interface PasswordFormSideEffect {
     data object NavigateBack : PasswordFormSideEffect

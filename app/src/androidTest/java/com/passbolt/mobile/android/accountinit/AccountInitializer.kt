@@ -1,17 +1,17 @@
-package com.passbolt.mobile.android.accountinit
+package net.svaroh.passly.accountinit
 
 import android.os.Build
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.domain.accounts.usecase.SaveAccountUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.SaveCurrentApiUrlUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.SaveSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.UpdateAccountDataUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.SaveResourcesDatabasePassphraseUseCase
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesRepository
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
-import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
-import com.passbolt.mobile.android.domain.privatekey.model.PrivateKey
-import com.passbolt.mobile.android.intents.ManagedAccountIntentCreator
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.domain.accounts.usecase.SaveAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveCurrentApiUrlUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.UpdateAccountDataUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveResourcesDatabasePassphraseUseCase
+import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
+import net.svaroh.passly.domain.privatekey.model.PrivateKey
+import net.svaroh.passly.intents.ManagedAccountIntentCreator
 import org.koin.core.component.KoinComponent
 
 class AccountInitializer(

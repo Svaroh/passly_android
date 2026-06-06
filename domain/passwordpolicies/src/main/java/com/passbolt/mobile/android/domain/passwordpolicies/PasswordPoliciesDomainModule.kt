@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.passwordpolicies
+package net.svaroh.passly.domain.passwordpolicies
 
-import com.passbolt.mobile.android.domain.passwordpolicies.usecase.GetPasswordPoliciesUseCase
-import com.passbolt.mobile.android.domain.passwordpolicies.usecase.PasswordPoliciesInteractor
-import com.passbolt.mobile.android.domain.passwordpolicies.validation.PasswordPoliciesValidator
+import net.svaroh.passly.domain.passwordpolicies.usecase.GetPasswordPoliciesUseCase
+import net.svaroh.passly.domain.passwordpolicies.usecase.PasswordPoliciesInteractor
+import net.svaroh.passly.domain.passwordpolicies.validation.PasswordPoliciesValidator
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

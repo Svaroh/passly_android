@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.share
+package net.svaroh.passly.data.share
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.share.ShareDataSource
-import com.passbolt.mobile.android.domain.share.model.EncryptedSecret
-import com.passbolt.mobile.android.domain.share.model.ShareChanges
-import com.passbolt.mobile.android.domain.share.model.SharePermission
-import com.passbolt.mobile.android.domain.share.model.ShareRecipient
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.share.ShareDataSource
+import net.svaroh.passly.domain.share.model.EncryptedSecret
+import net.svaroh.passly.domain.share.model.ShareChanges
+import net.svaroh.passly.domain.share.model.SharePermission
+import net.svaroh.passly.domain.share.model.ShareRecipient
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule

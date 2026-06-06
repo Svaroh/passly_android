@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced
 
-import com.passbolt.mobile.android.ui.CaseTypeUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
+import net.svaroh.passly.ui.CaseTypeUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
 
 internal sealed interface AdvancedSecretGenerationIntent {
     data object GoBack : AdvancedSecretGenerationIntent

@@ -20,7 +20,7 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.ui.bottomsheet
+package net.svaroh.passly.core.ui.bottomsheet
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -40,9 +40,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.common.extension.toSingleLine
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.testtags.composetags.BottomSheet
+import net.svaroh.passly.common.extension.toSingleLine
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.testtags.composetags.BottomSheet
 
 @Composable
 fun BottomSheetHeader(

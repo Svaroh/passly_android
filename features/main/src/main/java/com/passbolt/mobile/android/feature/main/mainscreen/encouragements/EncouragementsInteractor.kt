@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.main.mainscreen.encouragements
+package net.svaroh.passly.feature.main.mainscreen.encouragements
 
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.DISABLED
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.preferences.AccountFlagsUpdate
-import com.passbolt.mobile.android.domain.preferences.AccountPreferencesRepository
+import net.svaroh.passly.core.autofill.AutofillInformationProvider
+import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.DISABLED
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.preferences.AccountFlagsUpdate
+import net.svaroh.passly.domain.preferences.AccountPreferencesRepository
 
 class EncouragementsInteractor(
     private val accountPreferencesRepository: AccountPreferencesRepository,

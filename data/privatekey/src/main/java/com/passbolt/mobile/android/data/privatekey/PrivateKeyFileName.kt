@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.privatekey
+package net.svaroh.passly.data.privatekey
 
 internal class PrivateKeyFileName(
     userId: String,

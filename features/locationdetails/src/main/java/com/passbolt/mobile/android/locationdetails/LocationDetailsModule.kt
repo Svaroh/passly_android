@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.locationdetails
+package net.svaroh.passly.locationdetails
 
-import com.passbolt.mobile.android.locationdetails.data.ExpandableFolderTreeCreator
+import net.svaroh.passly.locationdetails.data.ExpandableFolderTreeCreator
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 /**
  * Passbolt - Open source password manager for teams

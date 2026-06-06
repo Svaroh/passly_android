@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.secrets
+package net.svaroh.passly.data.secrets
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.secrets.datasource.remote.SecretsRemoteDataSourceImpl
-import com.passbolt.mobile.android.data.secrets.datasource.remote.api.SecretsApi
-import com.passbolt.mobile.android.domain.secrets.SecretsRepository
-import com.passbolt.mobile.android.domain.secrets.datasource.SecretsRemoteDataSource
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.secrets.datasource.remote.SecretsRemoteDataSourceImpl
+import net.svaroh.passly.data.secrets.datasource.remote.api.SecretsApi
+import net.svaroh.passly.domain.secrets.SecretsRepository
+import net.svaroh.passly.domain.secrets.datasource.SecretsRemoteDataSource
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

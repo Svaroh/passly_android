@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris
+package net.svaroh.passly.feature.resourceform.metadata.additionaluris
 
-import com.passbolt.mobile.android.ui.AdditionalUrisUiModel
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.ui.AdditionalUrisUiModel
+import net.svaroh.passly.ui.ResourceFormMode
 import java.util.UUID
 
 internal sealed interface AdditionalUrisFormIntent {

@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.core.logger
+package net.svaroh.passly.core.logger
 
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountDataUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountsUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetAccountsUseCase
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream

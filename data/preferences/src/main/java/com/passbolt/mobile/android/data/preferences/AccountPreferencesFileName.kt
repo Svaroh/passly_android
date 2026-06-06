@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.preferences
+package net.svaroh.passly.data.preferences
 
 internal class AccountPreferencesFileName(
     userId: String,

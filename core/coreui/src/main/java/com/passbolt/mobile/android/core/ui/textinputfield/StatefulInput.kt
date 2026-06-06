@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.textinputfield
+package net.svaroh.passly.core.ui.textinputfield
 
 /**
  * Passbolt - Open source password manager for teams

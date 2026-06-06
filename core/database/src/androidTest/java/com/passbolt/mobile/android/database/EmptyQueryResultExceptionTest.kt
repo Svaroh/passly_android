@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.database
+package net.svaroh.passly.database
 
 import android.content.Context
 import androidx.room.Room

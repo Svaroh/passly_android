@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.actions
+package net.svaroh.passly.domain.resources.actions
 
-import com.passbolt.mobile.android.common.types.ClipboardLabel
+import net.svaroh.passly.common.types.ClipboardLabel
 
 data class ResourcePropertyActionResult<T>(
     val label: ClipboardLabel,

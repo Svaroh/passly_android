@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.preferences
+package net.svaroh.passly.data.preferences
 
-import com.passbolt.mobile.android.domain.preferences.AccountFlagsUpdate
-import com.passbolt.mobile.android.domain.preferences.AccountPreferencesLocalDataSource
-import com.passbolt.mobile.android.domain.preferences.AccountPreferencesRepository
-import com.passbolt.mobile.android.domain.preferences.HomeDisplayViewPreferencesUpdate
-import com.passbolt.mobile.android.domain.preferences.validation.HomeDisplayViewPrefsValidator
-import com.passbolt.mobile.android.ui.AccountFlagsUiModel
-import com.passbolt.mobile.android.ui.DefaultFilterUiModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewPreferencesUiModel
+import net.svaroh.passly.domain.preferences.AccountFlagsUpdate
+import net.svaroh.passly.domain.preferences.AccountPreferencesLocalDataSource
+import net.svaroh.passly.domain.preferences.AccountPreferencesRepository
+import net.svaroh.passly.domain.preferences.HomeDisplayViewPreferencesUpdate
+import net.svaroh.passly.domain.preferences.validation.HomeDisplayViewPrefsValidator
+import net.svaroh.passly.ui.AccountFlagsUiModel
+import net.svaroh.passly.ui.DefaultFilterUiModel
+import net.svaroh.passly.ui.HomeDisplayViewPreferencesUiModel
 
 internal class AccountPreferencesRepositoryImpl(
     private val localDataSource: AccountPreferencesLocalDataSource,

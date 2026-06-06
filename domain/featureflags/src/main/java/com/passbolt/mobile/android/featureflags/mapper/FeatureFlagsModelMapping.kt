@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.featureflags.mapper
+package net.svaroh.passly.featureflags.mapper
 
-import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
-import com.passbolt.mobile.android.featureflags.model.FeatureFlags
+import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
+import net.svaroh.passly.featureflags.model.FeatureFlags
 
 fun FeatureFlags.toFeatureFlagsModel(): FeatureFlagsModel =
     FeatureFlagsModel(

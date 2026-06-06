@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
-import com.passbolt.mobile.android.common.extension.isInFuture
-import com.passbolt.mobile.android.jsonmodel.CachedJsonModel
-import com.passbolt.mobile.android.jsonmodel.ParsedJson
-import com.passbolt.mobile.android.jsonmodel.delegates.RootRelativeJsonPathNullableStringDelegate
-import com.passbolt.mobile.android.jsonmodel.delegates.RootRelativeJsonPathNullableStringListDelegate
-import com.passbolt.mobile.android.jsonmodel.delegates.RootRelativeJsonPathStringDelegate
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
+import net.svaroh.passly.common.extension.isInFuture
+import net.svaroh.passly.jsonmodel.CachedJsonModel
+import net.svaroh.passly.jsonmodel.ParsedJson
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathNullableStringDelegate
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathNullableStringListDelegate
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathStringDelegate
+import net.svaroh.passly.supportedresourceTypes.ContentType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.time.ZonedDateTime

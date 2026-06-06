@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.groups.datasource.remote
+package net.svaroh.passly.data.groups.datasource.remote
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.groups.datasource.remote.api.GroupsApi
-import com.passbolt.mobile.android.data.groups.mapper.toDomain
-import com.passbolt.mobile.android.domain.groups.datasource.GroupsRemoteDataSource
-import com.passbolt.mobile.android.domain.groups.model.GroupWithMembers
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.groups.datasource.remote.api.GroupsApi
+import net.svaroh.passly.data.groups.mapper.toDomain
+import net.svaroh.passly.domain.groups.datasource.GroupsRemoteDataSource
+import net.svaroh.passly.domain.groups.model.GroupWithMembers
 
 internal class GroupsRemoteDataSourceImpl(
     private val groupsApi: GroupsApi,

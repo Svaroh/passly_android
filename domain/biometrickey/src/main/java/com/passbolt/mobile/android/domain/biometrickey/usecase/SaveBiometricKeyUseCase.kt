@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.domain.biometrickey.usecase
+package net.svaroh.passly.domain.biometrickey.usecase
 
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.biometrickey.BiometricKeyRepository
-import com.passbolt.mobile.android.domain.biometrickey.model.BiometricKey
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.biometrickey.BiometricKeyRepository
+import net.svaroh.passly.domain.biometrickey.model.BiometricKey
 
 /**
  * Passbolt - Open source password manager for teams

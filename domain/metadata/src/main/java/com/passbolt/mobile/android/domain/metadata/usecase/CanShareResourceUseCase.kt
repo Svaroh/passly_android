@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.metadata.usecase
+package net.svaroh.passly.domain.metadata.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.domain.metadata.model.MetadataKeyPurpose.ENCRYPT
-import com.passbolt.mobile.android.domain.metadata.usecase.db.GetLocalMetadataKeysUseCase
-import com.passbolt.mobile.android.ui.MetadataTypeModel.V4
-import com.passbolt.mobile.android.ui.MetadataTypeModel.V5
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.domain.metadata.model.MetadataKeyPurpose.ENCRYPT
+import net.svaroh.passly.domain.metadata.usecase.db.GetLocalMetadataKeysUseCase
+import net.svaroh.passly.ui.MetadataTypeModel.V4
+import net.svaroh.passly.ui.MetadataTypeModel.V5
 
 class CanShareResourceUseCase(
     private val getMetadataTypesSettingsUseCase: GetMetadataTypesSettingsUseCase,

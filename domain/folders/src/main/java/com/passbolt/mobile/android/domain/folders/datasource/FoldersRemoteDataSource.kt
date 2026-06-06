@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.folders.datasource
+package net.svaroh.passly.domain.folders.datasource
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.folders.model.FolderModelWithAttributes
-import com.passbolt.mobile.android.domain.folders.model.FoldersPage
-import com.passbolt.mobile.android.ui.PermissionModel
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.folders.model.FolderModelWithAttributes
+import net.svaroh.passly.domain.folders.model.FoldersPage
+import net.svaroh.passly.ui.PermissionModel
 
 interface FoldersRemoteDataSource {
     suspend fun getFoldersPage(

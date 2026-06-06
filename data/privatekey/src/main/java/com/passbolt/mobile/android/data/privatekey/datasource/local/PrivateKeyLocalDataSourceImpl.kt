@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.privatekey.datasource.local
+package net.svaroh.passly.data.privatekey.datasource.local
 
 import android.content.Context
-import com.passbolt.mobile.android.data.privatekey.PrivateKeyFileName
-import com.passbolt.mobile.android.domain.privatekey.datasource.PrivateKeyLocalDataSource
-import com.passbolt.mobile.android.domain.privatekey.model.PrivateKey
-import com.passbolt.mobile.android.encryptedstorage.EncryptedFileBaseDirectory
-import com.passbolt.mobile.android.encryptedstorage.EncryptedFileFactory
+import net.svaroh.passly.data.privatekey.PrivateKeyFileName
+import net.svaroh.passly.domain.privatekey.datasource.PrivateKeyLocalDataSource
+import net.svaroh.passly.domain.privatekey.model.PrivateKey
+import net.svaroh.passly.encryptedstorage.EncryptedFileBaseDirectory
+import net.svaroh.passly.encryptedstorage.EncryptedFileFactory
 import timber.log.Timber
 import java.io.File
 import java.io.IOException

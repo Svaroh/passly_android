@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.featureflags.model
+package net.svaroh.passly.featureflags.model
 
 data class FeatureFlags(
     val privacyPolicyUrl: String?,

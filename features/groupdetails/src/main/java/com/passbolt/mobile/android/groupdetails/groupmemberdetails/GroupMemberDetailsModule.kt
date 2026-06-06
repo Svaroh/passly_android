@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.groupdetails.groupmemberdetails
+package net.svaroh.passly.groupdetails.groupmemberdetails
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

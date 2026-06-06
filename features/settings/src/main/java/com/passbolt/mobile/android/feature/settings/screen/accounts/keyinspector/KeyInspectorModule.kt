@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector
+package net.svaroh.passly.feature.settings.screen.accounts.keyinspector
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

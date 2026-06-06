@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses
+package net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses
 
 /**
  * Passbolt - Open source password manager for teams

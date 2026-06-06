@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.folders.usecase
+package net.svaroh.passly.domain.folders.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.folders.FoldersRepository
-import com.passbolt.mobile.android.domain.folders.model.FolderWithCountAndPath
-import com.passbolt.mobile.android.ui.Folder
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.folders.FoldersRepository
+import net.svaroh.passly.domain.folders.model.FolderWithCountAndPath
+import net.svaroh.passly.ui.Folder
 
 class GetLocalSubFoldersForFolderUseCase(
     private val foldersRepository: FoldersRepository,

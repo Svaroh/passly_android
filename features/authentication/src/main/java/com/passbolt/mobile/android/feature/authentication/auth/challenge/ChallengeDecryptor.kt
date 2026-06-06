@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.feature.authentication.auth.challenge
+package net.svaroh.passly.feature.authentication.auth.challenge
 
 import com.google.gson.Gson
-import com.passbolt.mobile.android.common.extension.erase
-import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
-import com.passbolt.mobile.android.dto.response.ChallengeResponseDto
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpFailure
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.common.extension.erase
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
+import net.svaroh.passly.dto.response.ChallengeResponseDto
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.OpenPgpFailure
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 
 /**
  * Passbolt - Open source password manager for teams

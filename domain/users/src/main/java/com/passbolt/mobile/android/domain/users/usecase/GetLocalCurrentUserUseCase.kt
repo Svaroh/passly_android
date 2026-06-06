@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.users.usecase
+package net.svaroh.passly.domain.users.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.users.UsersRepository
-import com.passbolt.mobile.android.domain.users.mapper.toUserModel
-import com.passbolt.mobile.android.ui.UserUiModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.users.UsersRepository
+import net.svaroh.passly.domain.users.mapper.toUserModel
+import net.svaroh.passly.ui.UserUiModel
 
 class GetLocalCurrentUserUseCase(
     private val usersRepository: UsersRepository,

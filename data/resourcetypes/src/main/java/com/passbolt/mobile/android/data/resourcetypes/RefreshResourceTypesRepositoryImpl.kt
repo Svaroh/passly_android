@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.resourcetypes
+package net.svaroh.passly.data.resourcetypes
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.resourcetypes.RefreshResourceTypesRepository
-import com.passbolt.mobile.android.domain.resourcetypes.ResourceTypesLocalDataSource
-import com.passbolt.mobile.android.domain.resourcetypes.ResourceTypesRemoteDataSource
-import com.passbolt.mobile.android.domain.resourcetypes.model.ResourceType
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.resourcetypes.RefreshResourceTypesRepository
+import net.svaroh.passly.domain.resourcetypes.ResourceTypesLocalDataSource
+import net.svaroh.passly.domain.resourcetypes.ResourceTypesRemoteDataSource
+import net.svaroh.passly.domain.resourcetypes.model.ResourceType
 
 internal class RefreshResourceTypesRepositoryImpl(
     private val localDataSource: ResourceTypesLocalDataSource,

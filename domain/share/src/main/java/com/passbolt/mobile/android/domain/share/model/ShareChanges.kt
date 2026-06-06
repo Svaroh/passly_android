@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.share.model
+package net.svaroh.passly.domain.share.model
 
 data class ShareChanges(
     val added: List<ShareRecipient>,

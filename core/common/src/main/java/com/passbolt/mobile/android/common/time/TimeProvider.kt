@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.common.time
+package net.svaroh.passly.common.time
 
 interface TimeProvider {
     fun getCurrentEpochSeconds(): Long

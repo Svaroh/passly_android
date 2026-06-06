@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.header
+package net.svaroh.passly.core.ui.header
 
 enum class ActionIcon {
     NONE,

@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.resourcetypes.datasource.remote.api
+package net.svaroh.passly.data.resourcetypes.datasource.remote.api
 
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.ResourceTypeDto
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.ResourceTypeDto
 import retrofit2.http.GET
 
 internal interface ResourceTypesApi {

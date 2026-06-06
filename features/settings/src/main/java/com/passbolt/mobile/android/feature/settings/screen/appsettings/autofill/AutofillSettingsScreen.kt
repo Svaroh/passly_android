@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill
+package net.svaroh.passly.feature.settings.screen.appsettings.autofill
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -56,36 +56,36 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.AccessibilityPoliciesConsent
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.AutofillEnabled
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.EncourageAccessibilityAutofill
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.EncourageNativeAutofill
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.switch.SwitchWithDescriptionItem
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.ErrorSnackbarType.NATIVE_AUTOFILL_NOT_SUPPORTED
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToAccessibilityPoliciesConsent
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToAutofillEnabled
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToChromeNativeAutofill
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToEncourageAccessibilityAutofill
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToEncourageNativeAutofill
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateUp
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.ShowErrorSnackBar
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.ToggleAccessibilityAutofill
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.ToggleChromeNativeAutofill
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.ToggleNativeAutofill
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.UpdateAutofillState
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.conflict.AutofillConflictBanner
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.AccessibilityPoliciesConsent
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.AutofillEnabled
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.EncourageAccessibilityAutofill
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.EncourageNativeAutofill
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.switch.SwitchWithDescriptionItem
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.ErrorSnackbarType.NATIVE_AUTOFILL_NOT_SUPPORTED
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToAccessibilityPoliciesConsent
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToAutofillEnabled
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToChromeNativeAutofill
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToEncourageAccessibilityAutofill
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToEncourageNativeAutofill
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateUp
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.ShowErrorSnackBar
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.ToggleAccessibilityAutofill
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.ToggleChromeNativeAutofill
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.ToggleNativeAutofill
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.UpdateAutofillState
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.conflict.AutofillConflictBanner
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun AutofillSettingsScreen(

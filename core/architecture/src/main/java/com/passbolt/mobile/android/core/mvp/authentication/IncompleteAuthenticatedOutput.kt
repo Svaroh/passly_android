@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.mvp.authentication
+package net.svaroh.passly.core.mvp.authentication
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Passphrase
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Session
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Passphrase
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Session
 
 interface IncompleteAuthenticatedOutput : AuthenticatedUseCaseOutput {
     val incomplete: DomainResult.Incomplete

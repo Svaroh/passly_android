@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.data.favourites.datasource.remote.api
+package net.svaroh.passly.data.favourites.datasource.remote.api
 
-import com.passbolt.mobile.android.dto.response.AddToFavouritesResponseDto
-import com.passbolt.mobile.android.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.AddToFavouritesResponseDto
+import net.svaroh.passly.dto.response.BaseResponse
 import retrofit2.http.DELETE
 import retrofit2.http.POST
 import retrofit2.http.Path

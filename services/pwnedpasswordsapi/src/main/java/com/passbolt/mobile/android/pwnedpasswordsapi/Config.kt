@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.pwnedpasswordsapi
+package net.svaroh.passly.pwnedpasswordsapi
 
 object Config {
     const val API_BASE_URL = "https://api.pwnedpasswords.com"

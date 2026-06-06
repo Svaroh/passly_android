@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link https://www.passbolt.com Passbolt (tm)
  */
-package com.passbolt.mobile.android.dto.response
+package net.svaroh.passly.dto.response
 
 import com.google.gson.annotations.SerializedName
 import java.util.UUID

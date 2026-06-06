@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.feature.authentication.auth.challenge
+package net.svaroh.passly.feature.authentication.auth.challenge
 
-import com.passbolt.mobile.android.domain.privatekey.model.PrivateKey
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpError
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpFailure
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.domain.privatekey.model.PrivateKey
+import net.svaroh.passly.gopenpgp.exception.OpenPgpError
+import net.svaroh.passly.gopenpgp.exception.OpenPgpFailure
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule

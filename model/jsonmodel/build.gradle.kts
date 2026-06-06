@@ -10,5 +10,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.domain.jsonmodel"
+    namespace = "net.svaroh.passly.domain.jsonmodel"
 }

@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.createresourcemenu
+package net.svaroh.passly.createresourcemenu
 
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.ui.HomeDisplayViewModel
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.resourcetypes
+package net.svaroh.passly.data.resourcetypes
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.resourcetypes.ResourceTypesLocalDataSource
-import com.passbolt.mobile.android.domain.resourcetypes.ResourceTypesRepository
-import com.passbolt.mobile.android.domain.resourcetypes.model.ResourceType
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.resourcetypes.ResourceTypesLocalDataSource
+import net.svaroh.passly.domain.resourcetypes.ResourceTypesRepository
+import net.svaroh.passly.domain.resourcetypes.model.ResourceType
 import java.util.UUID
 
 internal class ResourceTypesRepositoryImpl(

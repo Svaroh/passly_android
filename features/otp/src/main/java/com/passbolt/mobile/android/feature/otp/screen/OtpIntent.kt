@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.otp.screen
+package net.svaroh.passly.feature.otp.screen
 
-import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
-import com.passbolt.mobile.android.ui.OtpItemWrapper
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
+import net.svaroh.passly.ui.OtpItemWrapper
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourceUiModel
 
 sealed interface OtpIntent {
     // screen

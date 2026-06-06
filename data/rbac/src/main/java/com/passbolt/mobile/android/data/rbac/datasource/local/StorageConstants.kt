@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.rbac.datasource.local
+package net.svaroh.passly.data.rbac.datasource.local
 
 internal const val KEY_PREVIEW_PASSWORD = "PREVIEW_PASSWORD"
 internal const val KEY_COPY_PASSWORD = "COPY_PASSWORD"

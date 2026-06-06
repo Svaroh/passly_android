@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.common.time.TimeProvider
-import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
-import com.passbolt.mobile.android.domain.auth.usecase.FetchServerPublicPgpKeyUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
+import net.svaroh.passly.common.time.TimeProvider
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.domain.auth.usecase.FetchServerPublicPgpKeyUseCase
+import net.svaroh.passly.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

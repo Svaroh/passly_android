@@ -1,20 +1,20 @@
-package com.passbolt.mobile.android.domain.resources.usecase
+package net.svaroh.passly.domain.resources.usecase
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.displayMessage
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.CompleteAuthenticatedOutput
-import com.passbolt.mobile.android.core.mvp.authentication.IncompleteAuthenticatedOutput
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.FetchFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.groups.model.GroupWithMembers
-import com.passbolt.mobile.android.domain.groups.usecase.FetchGroupsByIdsUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.PermissionsSnapshotRepository
-import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
-import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot.DriftResult
-import com.passbolt.mobile.android.domain.users.model.UserProfile
-import com.passbolt.mobile.android.domain.users.usecase.FetchUsersByIdsUseCase
-import com.passbolt.mobile.android.ui.PermissionModel
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.displayMessage
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
+import net.svaroh.passly.core.mvp.authentication.IncompleteAuthenticatedOutput
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.folders.usecase.FetchFolderPermissionsUseCase
+import net.svaroh.passly.domain.groups.model.GroupWithMembers
+import net.svaroh.passly.domain.groups.usecase.FetchGroupsByIdsUseCase
+import net.svaroh.passly.domain.permissionsconfirmation.PermissionsSnapshotRepository
+import net.svaroh.passly.domain.permissionsconfirmation.model.PermissionsSnapshot
+import net.svaroh.passly.domain.permissionsconfirmation.model.PermissionsSnapshot.DriftResult
+import net.svaroh.passly.domain.users.model.UserProfile
+import net.svaroh.passly.domain.users.usecase.FetchUsersByIdsUseCase
+import net.svaroh.passly.ui.PermissionModel
 import timber.log.Timber
 import java.time.ZonedDateTime
 

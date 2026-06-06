@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.networking
+package net.svaroh.passly.core.networking
 
 import okhttp3.OkHttpClient
 import retrofit2.Converter

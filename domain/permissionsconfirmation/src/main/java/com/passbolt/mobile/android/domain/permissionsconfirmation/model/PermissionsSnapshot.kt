@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.domain.permissionsconfirmation.model
+package net.svaroh.passly.domain.permissionsconfirmation.model
 
-import com.passbolt.mobile.android.domain.users.model.UserProfile
-import com.passbolt.mobile.android.ui.PermissionModel
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.domain.users.model.UserProfile
+import net.svaroh.passly.ui.PermissionModel
+import net.svaroh.passly.ui.ResourcePermission
 import java.time.ZonedDateTime
 
 /**

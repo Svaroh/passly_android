@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.inappreview.datasource.local
+package net.svaroh.passly.data.inappreview.datasource.local
 
 internal class InAppReviewFileName(
     userId: String,

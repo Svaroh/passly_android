@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.domain.tags.usecase
+package net.svaroh.passly.domain.tags.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.domain.tags.TagsRepository
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.domain.tags.TagsRepository
 
 /**
  * Passbolt - Open source password manager for teams

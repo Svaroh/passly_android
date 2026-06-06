@@ -21,27 +21,27 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode
+package net.svaroh.passly.feature.resourceform.additionalsecrets.pincode
 
-import com.passbolt.mobile.android.common.validation.StringMaxLength
-import com.passbolt.mobile.android.common.validation.StringMinLength
-import com.passbolt.mobile.android.common.validation.validation
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.passwordgenerator.PinCodeGenerator
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.AdvancedGenerationResult
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.Generate
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.OpenAdvancedGeneration
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.PinCodeChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.RemovePinCode
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.NavigateToAdvancedGeneration
-import com.passbolt.mobile.android.ui.PinCodeUiModel
-import com.passbolt.mobile.android.ui.PinCodeUiModel.Companion.MAX_LENGTH
-import com.passbolt.mobile.android.ui.PinCodeUiModel.Companion.MIN_LENGTH
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.common.validation.StringMaxLength
+import net.svaroh.passly.common.validation.StringMinLength
+import net.svaroh.passly.common.validation.validation
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.passwordgenerator.PinCodeGenerator
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.AdvancedGenerationResult
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.Generate
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.OpenAdvancedGeneration
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.PinCodeChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.RemovePinCode
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.NavigateBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormSideEffect.NavigateToAdvancedGeneration
+import net.svaroh.passly.ui.PinCodeUiModel
+import net.svaroh.passly.ui.PinCodeUiModel.Companion.MAX_LENGTH
+import net.svaroh.passly.ui.PinCodeUiModel.Companion.MIN_LENGTH
+import net.svaroh.passly.ui.ResourceFormMode
 
 internal class PinCodeFormViewModel(
     mode: ResourceFormMode,

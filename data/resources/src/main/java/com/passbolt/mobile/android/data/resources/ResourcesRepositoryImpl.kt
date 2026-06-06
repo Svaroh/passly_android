@@ -20,16 +20,16 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.data.resources
+package net.svaroh.passly.data.resources
 
-import com.passbolt.mobile.android.domain.resources.ResourcesLocalDataSource
-import com.passbolt.mobile.android.domain.resources.ResourcesRemoteDataSource
-import com.passbolt.mobile.android.domain.resources.ResourcesRepository
-import com.passbolt.mobile.android.domain.resources.model.Resource
-import com.passbolt.mobile.android.domain.resources.model.ResourceWithAttributes
-import com.passbolt.mobile.android.dto.request.CreateResourceDto
-import com.passbolt.mobile.android.entity.resource.ResourceUpdateState
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
+import net.svaroh.passly.domain.resources.ResourcesLocalDataSource
+import net.svaroh.passly.domain.resources.ResourcesRemoteDataSource
+import net.svaroh.passly.domain.resources.ResourcesRepository
+import net.svaroh.passly.domain.resources.model.Resource
+import net.svaroh.passly.domain.resources.model.ResourceWithAttributes
+import net.svaroh.passly.dto.request.CreateResourceDto
+import net.svaroh.passly.entity.resource.ResourceUpdateState
+import net.svaroh.passly.ui.HomeDisplayViewModel
 
 @Suppress("TooManyFunctions")
 internal class ResourcesRepositoryImpl(

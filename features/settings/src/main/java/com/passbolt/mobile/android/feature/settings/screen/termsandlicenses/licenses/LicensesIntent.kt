@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses
+package net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses
 
 sealed interface LicensesIntent {
     object GoBack : LicensesIntent

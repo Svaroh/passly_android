@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess
+package net.svaroh.passly.feature.otp.scanotp.scanotpsuccess
 
 import androidx.compose.runtime.Composable
-import com.passbolt.mobile.android.feature.metadatakeytrust.NewMetadataKeyTrustDialog
-import com.passbolt.mobile.android.feature.metadatakeytrust.TrustedMetadataKeyDeletedDialog
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.DismissNewMetadataTrustDialog
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.DismissTrustedMetadataKeyDeletedDialog
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.TrustNewMetadataKey
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.TrustedMetadataKeyDeleted
+import net.svaroh.passly.feature.metadatakeytrust.NewMetadataKeyTrustDialog
+import net.svaroh.passly.feature.metadatakeytrust.TrustedMetadataKeyDeletedDialog
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.DismissNewMetadataTrustDialog
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.DismissTrustedMetadataKeyDeletedDialog
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.TrustNewMetadataKey
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.TrustedMetadataKeyDeleted
 
 @Composable
 internal fun MetadataKeyDialogs(

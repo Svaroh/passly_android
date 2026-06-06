@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen
+package net.svaroh.passly.feature.settings.screen
 
 import android.content.Context
-import com.passbolt.mobile.android.feature.settings.screen.ToastType.SERVER_SIGN_OUT_FAILED
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.feature.settings.screen.ToastType.SERVER_SIGN_OUT_FAILED
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getToastMessage(
     context: Context,

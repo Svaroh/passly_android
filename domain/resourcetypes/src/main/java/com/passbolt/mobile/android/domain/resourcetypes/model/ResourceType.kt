@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resourcetypes.model
+package net.svaroh.passly.domain.resourcetypes.model
 
 import java.time.ZonedDateTime
 import java.util.UUID

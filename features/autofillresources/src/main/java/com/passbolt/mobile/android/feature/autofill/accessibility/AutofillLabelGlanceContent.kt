@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.autofill.accessibility
+package net.svaroh.passly.feature.autofill.accessibility
 
 import android.content.Context
 import android.view.View
@@ -26,10 +26,10 @@ import androidx.glance.layout.width
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import com.passbolt.mobile.android.core.compose.PassboltGlanceColorScheme
-import com.passbolt.mobile.android.feature.autofill.R
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.compose.PassboltGlanceColorScheme
+import net.svaroh.passly.feature.autofill.R
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun AutofillLabelContent(

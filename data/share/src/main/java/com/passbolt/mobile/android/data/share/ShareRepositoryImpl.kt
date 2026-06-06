@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.share
+package net.svaroh.passly.data.share
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.share.ShareDataSource
-import com.passbolt.mobile.android.domain.share.ShareRepository
-import com.passbolt.mobile.android.domain.share.model.EncryptedSecret
-import com.passbolt.mobile.android.domain.share.model.ShareChanges
-import com.passbolt.mobile.android.domain.share.model.SharePermission
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.share.ShareDataSource
+import net.svaroh.passly.domain.share.ShareRepository
+import net.svaroh.passly.domain.share.model.EncryptedSecret
+import net.svaroh.passly.domain.share.model.ShareChanges
+import net.svaroh.passly.domain.share.model.SharePermission
 
 internal class ShareRepositoryImpl(
     private val remoteDataSource: ShareDataSource,

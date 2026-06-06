@@ -35,5 +35,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.domain.metadata"
+    namespace = "net.svaroh.passly.domain.metadata"
 }

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.controller
+package net.svaroh.passly.core.ui.controller
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import com.passbolt.mobile.android.core.ui.R
+import net.svaroh.passly.core.ui.R
 
 class TotpComposeController {
     data class TotpColors(

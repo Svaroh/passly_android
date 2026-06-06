@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.passwordpolicies.mapper
+package net.svaroh.passly.domain.passwordpolicies.mapper
 
-import com.passbolt.mobile.android.domain.passwordpolicies.model.CaseType
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PassphraseGeneratorSettings
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordGeneratorSettings
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordGeneratorType
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordPolicies
-import com.passbolt.mobile.android.ui.CaseTypeUiModel
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
-import com.passbolt.mobile.android.ui.PasswordPoliciesUiModel
+import net.svaroh.passly.domain.passwordpolicies.model.CaseType
+import net.svaroh.passly.domain.passwordpolicies.model.PassphraseGeneratorSettings
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordGeneratorSettings
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordGeneratorType
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordPolicies
+import net.svaroh.passly.ui.CaseTypeUiModel
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
+import net.svaroh.passly.ui.PasswordPoliciesUiModel
 
 fun PasswordPolicies.toUiModel(): PasswordPoliciesUiModel =
     PasswordPoliciesUiModel(

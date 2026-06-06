@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.home.screen.list
+package net.svaroh.passly.feature.home.screen.list
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -17,8 +17,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.ui.TagWithCount
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.ui.TagWithCount
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 /**
  * Passbolt - Open source password manager for teams

@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.authentication
+package net.svaroh.passly.feature.authentication
 
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig
-import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountDataUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.SaveCurrentApiUrlUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig
+import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveCurrentApiUrlUseCase
 
 class AuthenticationStartUpResolver(
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,

@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.groups.mapper
+package net.svaroh.passly.domain.groups.mapper
 
-import com.passbolt.mobile.android.domain.groups.model.Group
-import com.passbolt.mobile.android.domain.groups.model.GroupWithItemsCount
-import com.passbolt.mobile.android.domain.groups.model.GroupWithUsers
-import com.passbolt.mobile.android.domain.users.mapper.toUserModel
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.GroupWithCount
-import com.passbolt.mobile.android.ui.GroupWithUsersModel
+import net.svaroh.passly.domain.groups.model.Group
+import net.svaroh.passly.domain.groups.model.GroupWithItemsCount
+import net.svaroh.passly.domain.groups.model.GroupWithUsers
+import net.svaroh.passly.domain.users.mapper.toUserModel
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.GroupWithCount
+import net.svaroh.passly.ui.GroupWithUsersModel
 
 fun Group.toUiModel(): GroupModel =
     GroupModel(

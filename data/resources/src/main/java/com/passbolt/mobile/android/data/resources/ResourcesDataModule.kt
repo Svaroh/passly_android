@@ -20,15 +20,15 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.data.resources
+package net.svaroh.passly.data.resources
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.resources.datasource.local.ResourcesLocalDataSourceImpl
-import com.passbolt.mobile.android.data.resources.datasource.remote.ResourcesRemoteDataSourceImpl
-import com.passbolt.mobile.android.data.resources.datasource.remote.api.ResourceApi
-import com.passbolt.mobile.android.domain.resources.ResourcesLocalDataSource
-import com.passbolt.mobile.android.domain.resources.ResourcesRemoteDataSource
-import com.passbolt.mobile.android.domain.resources.ResourcesRepository
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.resources.datasource.local.ResourcesLocalDataSourceImpl
+import net.svaroh.passly.data.resources.datasource.remote.ResourcesRemoteDataSourceImpl
+import net.svaroh.passly.data.resources.datasource.remote.api.ResourceApi
+import net.svaroh.passly.domain.resources.ResourcesLocalDataSource
+import net.svaroh.passly.domain.resources.ResourcesRemoteDataSource
+import net.svaroh.passly.domain.resources.ResourcesRepository
 import org.koin.dsl.module
 
 val resourcesDataModule =

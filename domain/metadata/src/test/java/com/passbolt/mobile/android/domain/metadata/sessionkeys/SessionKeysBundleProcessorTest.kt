@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.metadata.sessionkeys
+package net.svaroh.passly.domain.metadata.sessionkeys
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

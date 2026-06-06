@@ -14,5 +14,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.data.mobiletransfer"
+    namespace = "net.svaroh.passly.data.mobiletransfer"
 }

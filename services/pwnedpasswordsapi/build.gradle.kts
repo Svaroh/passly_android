@@ -12,5 +12,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.services.pwnedpasswordsapi"
+    namespace = "net.svaroh.passly.services.pwnedpasswordsapi"
 }

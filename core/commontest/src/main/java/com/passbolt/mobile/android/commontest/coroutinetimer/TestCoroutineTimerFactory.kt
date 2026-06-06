@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.commontest.coroutinetimer
+package net.svaroh.passly.commontest.coroutinetimer
 
-import com.passbolt.mobile.android.common.coroutinetimer.TimerFactory
+import net.svaroh.passly.common.coroutinetimer.TimerFactory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.inappreview
+package net.svaroh.passly.domain.inappreview
 
-import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewParameters
-import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewShowMode
+import net.svaroh.passly.domain.inappreview.model.InAppReviewParameters
+import net.svaroh.passly.domain.inappreview.model.InAppReviewShowMode
 
 interface InAppReviewLocalDataSource {
     fun getInAppReviewParameters(userId: String): InAppReviewParameters

@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.preferences
+package net.svaroh.passly.domain.preferences
 
-import com.passbolt.mobile.android.domain.preferences.pagesize.DeviceTierClassifier
-import com.passbolt.mobile.android.domain.preferences.usecase.ApplyAutomaticPageSizeUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.GetAutomaticPageSizeUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.GetAvailableDefaultFiltersUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.GetGlobalPreferencesUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.GetHomeDisplayViewPreferencesUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.UpdateHomeDisplayViewPreferencesUseCase
-import com.passbolt.mobile.android.domain.preferences.validation.HomeDisplayViewPrefsValidator
+import net.svaroh.passly.domain.preferences.pagesize.DeviceTierClassifier
+import net.svaroh.passly.domain.preferences.usecase.ApplyAutomaticPageSizeUseCase
+import net.svaroh.passly.domain.preferences.usecase.GetAutomaticPageSizeUseCase
+import net.svaroh.passly.domain.preferences.usecase.GetAvailableDefaultFiltersUseCase
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.GetHomeDisplayViewPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateHomeDisplayViewPreferencesUseCase
+import net.svaroh.passly.domain.preferences.validation.HomeDisplayViewPrefsValidator
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

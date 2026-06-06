@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.entity.account.Account
-import com.passbolt.mobile.android.mappers.comparator.SwitchAccountUiModelComparator
-import com.passbolt.mobile.android.ui.SwitchAccountUiModel
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.entity.account.Account
+import net.svaroh.passly.mappers.comparator.SwitchAccountUiModelComparator
+import net.svaroh.passly.ui.SwitchAccountUiModel
 
 /**
  * Passbolt - Open source password manager for teams

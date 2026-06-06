@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.common.datarefresh
+package net.svaroh.passly.common.datarefresh
 
 /**
  * Class representing status of all home data refresh.

@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.entity.group
+package net.svaroh.passly.entity.group
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
-import com.passbolt.mobile.android.entity.folder.Folder
-import com.passbolt.mobile.android.entity.resource.Permission
+import net.svaroh.passly.entity.folder.Folder
+import net.svaroh.passly.entity.resource.Permission
 
 @Entity(
     primaryKeys = ["folderId", "groupId"],

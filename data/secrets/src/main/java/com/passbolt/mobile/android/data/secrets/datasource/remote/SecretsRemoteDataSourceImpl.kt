@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.secrets.datasource.remote
+package net.svaroh.passly.data.secrets.datasource.remote
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.secrets.datasource.remote.api.SecretsApi
-import com.passbolt.mobile.android.data.secrets.mapper.toDomain
-import com.passbolt.mobile.android.domain.secrets.datasource.SecretsRemoteDataSource
-import com.passbolt.mobile.android.domain.secrets.model.EncryptedSecret
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.secrets.datasource.remote.api.SecretsApi
+import net.svaroh.passly.data.secrets.mapper.toDomain
+import net.svaroh.passly.domain.secrets.datasource.SecretsRemoteDataSource
+import net.svaroh.passly.domain.secrets.model.EncryptedSecret
 
 internal class SecretsRemoteDataSourceImpl(
     private val secretsApi: SecretsApi,

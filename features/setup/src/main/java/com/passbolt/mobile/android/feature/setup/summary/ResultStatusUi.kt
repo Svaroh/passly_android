@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.setup.summary
+package net.svaroh.passly.feature.setup.summary
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

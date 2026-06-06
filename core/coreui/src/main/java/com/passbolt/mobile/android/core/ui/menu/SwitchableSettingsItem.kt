@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.menu
+package net.svaroh.passly.core.ui.menu
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
@@ -23,9 +23,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.AppTypography
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.testtags.composetags.SwitchableSetting
+import net.svaroh.passly.core.compose.AppTypography
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.testtags.composetags.SwitchableSetting
 
 @Composable
 fun SwitchableSettingsItem(

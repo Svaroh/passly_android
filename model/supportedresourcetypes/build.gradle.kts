@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.domain.supportedresourcetypes"
+    namespace = "net.svaroh.passly.domain.supportedresourcetypes"
 }

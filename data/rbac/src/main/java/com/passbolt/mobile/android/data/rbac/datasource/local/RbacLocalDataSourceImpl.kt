@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.rbac.datasource.local
+package net.svaroh.passly.data.rbac.datasource.local
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.rbac.RbacLocalDataSource
-import com.passbolt.mobile.android.domain.rbac.model.Rbac
-import com.passbolt.mobile.android.domain.rbac.model.RbacRule
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.rbac.RbacLocalDataSource
+import net.svaroh.passly.domain.rbac.model.Rbac
+import net.svaroh.passly.domain.rbac.model.RbacRule
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
 
 internal class RbacLocalDataSourceImpl(
     private val encryptedSharedPreferencesFactory: EncryptedSharedPreferencesFactory,

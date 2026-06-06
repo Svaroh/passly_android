@@ -13,5 +13,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.domain.tags"
+    namespace = "net.svaroh.passly.domain.tags"
 }

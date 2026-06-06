@@ -21,26 +21,26 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers
+package net.svaroh.passly.serializers
 
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.passbolt.mobile.android.database.snapshot.ResourcesSnapshot
-import com.passbolt.mobile.android.dto.request.CreateResourceDto
-import com.passbolt.mobile.android.dto.response.ResourceResponseDto
-import com.passbolt.mobile.android.dto.response.ResourceTypeDto
-import com.passbolt.mobile.android.serializers.gson.CreateResourceModelSerializer
-import com.passbolt.mobile.android.serializers.gson.MetadataDecryptor
-import com.passbolt.mobile.android.serializers.gson.MetadataEncryptor
-import com.passbolt.mobile.android.serializers.gson.ResourceListDeserializer
-import com.passbolt.mobile.android.serializers.gson.ResourceListItemDeserializer
-import com.passbolt.mobile.android.serializers.gson.ResourceTypesListDeserializer
-import com.passbolt.mobile.android.serializers.gson.SingleResourceDeserializer
-import com.passbolt.mobile.android.serializers.gson.serializer.ZonedDateTimeSerializer
-import com.passbolt.mobile.android.serializers.gson.strictTypeAdapters
-import com.passbolt.mobile.android.serializers.gson.validation.JsonSchemaValidationRunner
-import com.passbolt.mobile.android.serializers.jsonschema.jsonSchemaModule
-import com.passbolt.mobile.android.ui.ParsedMetadataKeyModel
+import net.svaroh.passly.database.snapshot.ResourcesSnapshot
+import net.svaroh.passly.dto.request.CreateResourceDto
+import net.svaroh.passly.dto.response.ResourceResponseDto
+import net.svaroh.passly.dto.response.ResourceTypeDto
+import net.svaroh.passly.serializers.gson.CreateResourceModelSerializer
+import net.svaroh.passly.serializers.gson.MetadataDecryptor
+import net.svaroh.passly.serializers.gson.MetadataEncryptor
+import net.svaroh.passly.serializers.gson.ResourceListDeserializer
+import net.svaroh.passly.serializers.gson.ResourceListItemDeserializer
+import net.svaroh.passly.serializers.gson.ResourceTypesListDeserializer
+import net.svaroh.passly.serializers.gson.SingleResourceDeserializer
+import net.svaroh.passly.serializers.gson.serializer.ZonedDateTimeSerializer
+import net.svaroh.passly.serializers.gson.strictTypeAdapters
+import net.svaroh.passly.serializers.gson.validation.JsonSchemaValidationRunner
+import net.svaroh.passly.serializers.jsonschema.jsonSchemaModule
+import net.svaroh.passly.ui.ParsedMetadataKeyModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.parameter.parametersOf

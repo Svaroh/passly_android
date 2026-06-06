@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.main
+package net.svaroh.passly.feature.resourceform.main
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.ConfirmedPermissionsResult
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.CreateResource
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateBackWithCreateSuccess
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToConfirmPermissions
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.ShowToast
-import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
+import net.svaroh.passly.domain.resources.actions.ResourceCreateActionResult
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.ConfirmedPermissionsResult
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.CreateResource
+import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateBackWithCreateSuccess
+import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToConfirmPermissions
+import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.ShowToast
+import net.svaroh.passly.ui.ConfirmPermissionsMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest

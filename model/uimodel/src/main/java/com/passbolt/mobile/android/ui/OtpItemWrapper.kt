@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
 data class OtpItemWrapper(
     val resource: ResourceUiModel,

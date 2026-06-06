@@ -21,20 +21,20 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.transferaccounttodevice.summary
+package net.svaroh.passly.feature.transferaccounttodevice.summary
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.GoBack
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.Initialize
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.PrimaryAction
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.TryAgain
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummarySideEffect.NavigateToMyAccount
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummarySideEffect.NavigateToTransferAccountStart
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryViewModel
-import com.passbolt.mobile.android.ui.TransferAccountStatusType
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.GoBack
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.Initialize
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.PrimaryAction
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.TryAgain
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummarySideEffect.NavigateToMyAccount
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummarySideEffect.NavigateToTransferAccountStart
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryViewModel
+import net.svaroh.passly.ui.TransferAccountStatusType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.compose
+package net.svaroh.passly.core.compose
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

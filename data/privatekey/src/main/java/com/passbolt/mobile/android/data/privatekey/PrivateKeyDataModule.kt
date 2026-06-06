@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.privatekey
+package net.svaroh.passly.data.privatekey
 
-import com.passbolt.mobile.android.data.privatekey.datasource.local.PrivateKeyLocalDataSourceImpl
-import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
-import com.passbolt.mobile.android.domain.privatekey.datasource.PrivateKeyLocalDataSource
+import net.svaroh.passly.data.privatekey.datasource.local.PrivateKeyLocalDataSourceImpl
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
+import net.svaroh.passly.domain.privatekey.datasource.PrivateKeyLocalDataSource
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

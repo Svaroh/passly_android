@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.resourcemoremenu
+package net.svaroh.passly.resourcemoremenu
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

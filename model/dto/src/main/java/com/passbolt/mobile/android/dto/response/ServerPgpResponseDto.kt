@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.dto.response
+package net.svaroh.passly.dto.response
 
 /**
  * Passbolt - Open source password manager for teams

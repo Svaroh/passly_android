@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.accounts
+package net.svaroh.passly.feature.settings.screen.accounts
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,29 +35,29 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.AuthenticationManageAccounts
-import com.passbolt.mobile.android.core.navigation.compose.keys.AccountDetailsNavigationKey.AccountDetails
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.KeyInspector
-import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Onboarding
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.menu.OpenableSettingsItem
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToAccountDetails
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToKeyInspector
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToManageAccounts
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToTransferAccount
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsSettingsIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsSettingsIntent.GoToAccountDetails
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsSettingsIntent.GoToKeyInspector
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsSettingsIntent.GoToManageAccounts
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsSettingsIntent.GoToTransferAccount
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.AuthenticationManageAccounts
+import net.svaroh.passly.core.navigation.compose.keys.AccountDetailsNavigationKey.AccountDetails
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.KeyInspector
+import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Onboarding
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.menu.OpenableSettingsItem
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateBack
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToAccountDetails
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToKeyInspector
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToManageAccounts
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsScreenSideEffect.NavigateToTransferAccount
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsSettingsIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsSettingsIntent.GoToAccountDetails
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsSettingsIntent.GoToKeyInspector
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsSettingsIntent.GoToManageAccounts
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsSettingsIntent.GoToTransferAccount
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun AccountsSettingsScreen(

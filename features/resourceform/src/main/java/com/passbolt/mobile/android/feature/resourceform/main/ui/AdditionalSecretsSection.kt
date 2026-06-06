@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourceform.main.ui
+package net.svaroh.passly.feature.resourceform.main.ui
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
@@ -8,22 +8,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.ui.section.Section
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.GoToAdditionalNote
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.GoToAdditionalPassword
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.GoToAdditionalPinCode
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.GoToAdditionalTotp
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.GoToCustomFields
-import com.passbolt.mobile.android.ui.ResourceFormUiModel
-import com.passbolt.mobile.android.ui.ResourceFormUiModel.Secret.CUSTOM_FIELDS
-import com.passbolt.mobile.android.ui.ResourceFormUiModel.Secret.NOTE
-import com.passbolt.mobile.android.ui.ResourceFormUiModel.Secret.PASSWORD
-import com.passbolt.mobile.android.ui.ResourceFormUiModel.Secret.PIN_CODE
-import com.passbolt.mobile.android.ui.ResourceFormUiModel.Secret.TOTP
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.ui.section.Section
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoToAdditionalNote
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoToAdditionalPassword
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoToAdditionalPinCode
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoToAdditionalTotp
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoToCustomFields
+import net.svaroh.passly.ui.ResourceFormUiModel
+import net.svaroh.passly.ui.ResourceFormUiModel.Secret.CUSTOM_FIELDS
+import net.svaroh.passly.ui.ResourceFormUiModel.Secret.NOTE
+import net.svaroh.passly.ui.ResourceFormUiModel.Secret.PASSWORD
+import net.svaroh.passly.ui.ResourceFormUiModel.Secret.PIN_CODE
+import net.svaroh.passly.ui.ResourceFormUiModel.Secret.TOTP
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun AdditionalSecretsSection(

@@ -21,8 +21,8 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.idlingresource
+package net.svaroh.passly.core.idlingresource
 
-import com.passbolt.mobile.android.core.idlingresource.base.FlaggedIdlingResource
+import net.svaroh.passly.core.idlingresource.base.FlaggedIdlingResource
 
 class TransferAccountIdlingResource : FlaggedIdlingResource()

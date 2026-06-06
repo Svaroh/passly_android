@@ -21,21 +21,21 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.actions
+package net.svaroh.passly.domain.resources.actions
 
-import com.passbolt.mobile.android.core.architecture.result.displayMessage
-import com.passbolt.mobile.android.domain.permissionsconfirmation.mapper.toEditModePermissions
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
-import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor.DriftOutput
-import com.passbolt.mobile.android.domain.resources.usecase.ResourceShareInteractor
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceUseCase
-import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
-import com.passbolt.mobile.android.serializers.jsonschema.SchemaEntity
-import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.TrustedKeyDeletedModel
-import com.passbolt.mobile.android.ui.contentType
+import net.svaroh.passly.core.architecture.result.displayMessage
+import net.svaroh.passly.domain.permissionsconfirmation.mapper.toEditModePermissions
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
+import net.svaroh.passly.domain.resources.usecase.CreatePermissionsSnapshotInteractor
+import net.svaroh.passly.domain.resources.usecase.CreatePermissionsSnapshotInteractor.DriftOutput
+import net.svaroh.passly.domain.resources.usecase.ResourceShareInteractor
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
+import net.svaroh.passly.serializers.jsonschema.SchemaEntity
+import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.TrustedKeyDeletedModel
+import net.svaroh.passly.ui.contentType
 import kotlinx.coroutines.flow.single
 import timber.log.Timber
 

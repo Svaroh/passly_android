@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.domain.auth
+package net.svaroh.passly.domain.auth
 
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
+import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
 import javax.crypto.Cipher
 
 /**

@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.architecture.result
+package net.svaroh.passly.core.architecture.result
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.SERVER
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.SERVER
 import org.junit.Test
 import kotlin.test.assertEquals
 

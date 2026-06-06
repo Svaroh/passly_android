@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.dto.response.qrcode
+package net.svaroh.passly.dto.response.qrcode
 
 import android.annotation.SuppressLint
 import kotlinx.serialization.SerialName

@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.metadata.interactor
+package net.svaroh.passly.domain.metadata.interactor
 
-import com.passbolt.mobile.android.domain.metadata.usecase.CanCreateResourceUseCase
-import com.passbolt.mobile.android.domain.metadata.usecase.CanShareResourceUseCase
+import net.svaroh.passly.domain.metadata.usecase.CanCreateResourceUseCase
+import net.svaroh.passly.domain.metadata.usecase.CanShareResourceUseCase
 
 class ResourceAccessInteractor(
     private val canCreateResourceUseCase: CanCreateResourceUseCase,

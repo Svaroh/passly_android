@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.setup.transferdetails
+package net.svaroh.passly.feature.setup.transferdetails
 
 /**
  * Passbolt - Open source password manager for teams
@@ -24,18 +24,18 @@ package com.passbolt.mobile.android.feature.setup.transferdetails
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.qrscan.CameraInformationProvider
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.DismissCameraPermissionRequiredDialog
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.DismissCameraRequiredDialog
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.GoBack
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.GoToSettings
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.GrantCameraPermission
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.RejectCameraPermission
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.StartQrCodeScanning
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateToAppSettings
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateToScanQr
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsSideEffect.RequestCameraPermission
+import net.svaroh.passly.core.qrscan.CameraInformationProvider
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.DismissCameraPermissionRequiredDialog
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.DismissCameraRequiredDialog
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.GoBack
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.GoToSettings
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.GrantCameraPermission
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.RejectCameraPermission
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.StartQrCodeScanning
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateBack
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateToAppSettings
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateToScanQr
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsSideEffect.RequestCameraPermission
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop

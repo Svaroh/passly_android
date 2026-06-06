@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.mfa
+package net.svaroh.passly.data.mfa
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.mfa.MfaDataSource
-import com.passbolt.mobile.android.domain.mfa.MfaRepository
-import com.passbolt.mobile.android.domain.mfa.model.DuoPrompt
-import com.passbolt.mobile.android.domain.mfa.model.DuoVerification
-import com.passbolt.mobile.android.domain.mfa.model.TotpVerification
-import com.passbolt.mobile.android.domain.mfa.model.YubikeyVerification
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.mfa.MfaDataSource
+import net.svaroh.passly.domain.mfa.MfaRepository
+import net.svaroh.passly.domain.mfa.model.DuoPrompt
+import net.svaroh.passly.domain.mfa.model.DuoVerification
+import net.svaroh.passly.domain.mfa.model.TotpVerification
+import net.svaroh.passly.domain.mfa.model.YubikeyVerification
 
 internal class MfaRepositoryImpl(
     private val remoteDataSource: MfaDataSource,

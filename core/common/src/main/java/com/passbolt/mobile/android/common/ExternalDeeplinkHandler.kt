@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common
+package net.svaroh.passly.common
 
 import android.content.Context
 import android.content.Intent
@@ -7,8 +7,8 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.core.net.toUri
 import timber.log.Timber
-import com.passbolt.mobile.android.core.common.R as CommonR
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.common.R as CommonR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 /**
  * Passbolt - Open source password manager for teams

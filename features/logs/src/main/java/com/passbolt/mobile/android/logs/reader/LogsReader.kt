@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.logs.reader
+package net.svaroh.passly.logs.reader
 
 /**
  * Passbolt - Open source password manager for teams

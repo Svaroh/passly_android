@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.permissions.navigation
+package net.svaroh.passly.permissions.navigation
 
 import androidx.compose.runtime.Composable
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.navigation.compose.results.ResultEffect
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionModelUi.GroupPermissionModel
+import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
 
 /**
  * Passbolt - Open source password manager for teams

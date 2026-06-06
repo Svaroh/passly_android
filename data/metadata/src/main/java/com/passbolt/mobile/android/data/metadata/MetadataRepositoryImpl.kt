@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.metadata
+package net.svaroh.passly.data.metadata
 
-import com.passbolt.mobile.android.domain.metadata.MetadataRepository
-import com.passbolt.mobile.android.domain.metadata.datasource.MetadataKeysLocalDataSource
-import com.passbolt.mobile.android.domain.metadata.datasource.MetadataSettingsLocalDataSource
-import com.passbolt.mobile.android.domain.metadata.model.MetadataKeyPurpose
-import com.passbolt.mobile.android.domain.metadata.model.MetadataKeysSettings
-import com.passbolt.mobile.android.domain.metadata.model.MetadataTypesSettings
-import com.passbolt.mobile.android.domain.metadata.model.ParsedMetadataKey
-import com.passbolt.mobile.android.domain.metadata.model.TrustedMetadataKey
+import net.svaroh.passly.domain.metadata.MetadataRepository
+import net.svaroh.passly.domain.metadata.datasource.MetadataKeysLocalDataSource
+import net.svaroh.passly.domain.metadata.datasource.MetadataSettingsLocalDataSource
+import net.svaroh.passly.domain.metadata.model.MetadataKeyPurpose
+import net.svaroh.passly.domain.metadata.model.MetadataKeysSettings
+import net.svaroh.passly.domain.metadata.model.MetadataTypesSettings
+import net.svaroh.passly.domain.metadata.model.ParsedMetadataKey
+import net.svaroh.passly.domain.metadata.model.TrustedMetadataKey
 
 internal class MetadataRepositoryImpl(
     private val settingsLocalDataSource: MetadataSettingsLocalDataSource,

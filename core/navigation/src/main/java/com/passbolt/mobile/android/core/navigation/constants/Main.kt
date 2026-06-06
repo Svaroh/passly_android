@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.navigation.constants
+package net.svaroh.passly.core.navigation.constants
 
 internal object Main {
     internal const val MAIN_ACTIVITY: String =
-        "com.passbolt.mobile.android.feature.main.mainscreen.MainActivity"
+        "net.svaroh.passly.feature.main.mainscreen.MainActivity"
 }

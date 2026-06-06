@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced
 
-import com.passbolt.mobile.android.ui.PinCodeUiModel
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.ui.PinCodeUiModel
+import net.svaroh.passly.ui.ResourceFormMode
 
 internal data class PinCodeAdvancedGenerationFormState(
     val resourceFormMode: ResourceFormMode? = null,

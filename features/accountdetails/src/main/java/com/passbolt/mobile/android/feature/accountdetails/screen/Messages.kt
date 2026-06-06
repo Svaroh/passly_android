@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.feature.accountdetails.screen
+package net.svaroh.passly.feature.accountdetails.screen
 
 import android.content.Context
-import com.passbolt.mobile.android.core.localization.R
+import net.svaroh.passly.core.localization.R
 
 internal fun getProfileFetchErrorMessage(
     context: Context,

@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.rbac
+package net.svaroh.passly.data.rbac
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.rbac.datasource.local.RbacLocalDataSourceImpl
-import com.passbolt.mobile.android.data.rbac.datasource.remote.RbacRemoteDataSourceImpl
-import com.passbolt.mobile.android.data.rbac.datasource.remote.api.RbacApi
-import com.passbolt.mobile.android.domain.rbac.RbacLocalDataSource
-import com.passbolt.mobile.android.domain.rbac.RbacRemoteDataSource
-import com.passbolt.mobile.android.domain.rbac.RbacRepository
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.rbac.datasource.local.RbacLocalDataSourceImpl
+import net.svaroh.passly.data.rbac.datasource.remote.RbacRemoteDataSourceImpl
+import net.svaroh.passly.data.rbac.datasource.remote.api.RbacApi
+import net.svaroh.passly.domain.rbac.RbacLocalDataSource
+import net.svaroh.passly.domain.rbac.RbacRemoteDataSource
+import net.svaroh.passly.domain.rbac.RbacRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

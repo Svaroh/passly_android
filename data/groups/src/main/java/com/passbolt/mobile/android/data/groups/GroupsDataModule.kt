@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.groups
+package net.svaroh.passly.data.groups
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.groups.datasource.local.GroupsLocalDataSourceImpl
-import com.passbolt.mobile.android.data.groups.datasource.remote.GroupsRemoteDataSourceImpl
-import com.passbolt.mobile.android.data.groups.datasource.remote.api.GroupsApi
-import com.passbolt.mobile.android.domain.groups.GroupsRepository
-import com.passbolt.mobile.android.domain.groups.datasource.GroupsLocalDataSource
-import com.passbolt.mobile.android.domain.groups.datasource.GroupsRemoteDataSource
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.groups.datasource.local.GroupsLocalDataSourceImpl
+import net.svaroh.passly.data.groups.datasource.remote.GroupsRemoteDataSourceImpl
+import net.svaroh.passly.data.groups.datasource.remote.api.GroupsApi
+import net.svaroh.passly.domain.groups.GroupsRepository
+import net.svaroh.passly.domain.groups.datasource.GroupsLocalDataSource
+import net.svaroh.passly.domain.groups.datasource.GroupsRemoteDataSource
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

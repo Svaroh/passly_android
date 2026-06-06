@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.appstate
+package net.svaroh.passly.benchmark.pagesize.appstate
 
-import com.passbolt.mobile.android.domain.metadata.sessionkeys.ForeignModel.RESOURCE
-import com.passbolt.mobile.android.domain.metadata.sessionkeys.SessionKeysMemoryCache
-import com.passbolt.mobile.android.ui.MergedSessionKeys
+import net.svaroh.passly.domain.metadata.sessionkeys.ForeignModel.RESOURCE
+import net.svaroh.passly.domain.metadata.sessionkeys.SessionKeysMemoryCache
+import net.svaroh.passly.ui.MergedSessionKeys
 import java.util.UUID
 
 // mirrors the production warm path (HomeDataInteractor fetches the session keys bundle before resources) so the real

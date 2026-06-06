@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.domain.resources.actions
+package net.svaroh.passly.domain.resources.actions
 
 import androidx.annotation.VisibleForTesting
-import com.passbolt.mobile.android.ui.ResourceUiModel
-import com.passbolt.mobile.android.ui.contentType
+import net.svaroh.passly.ui.ResourceUiModel
+import net.svaroh.passly.ui.contentType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single

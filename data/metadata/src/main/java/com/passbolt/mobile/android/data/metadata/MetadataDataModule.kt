@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.metadata
+package net.svaroh.passly.data.metadata
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.metadata.datasource.local.MetadataKeysLocalDataSourceImpl
-import com.passbolt.mobile.android.data.metadata.datasource.local.MetadataSettingsLocalDataSourceImpl
-import com.passbolt.mobile.android.data.metadata.datasource.remote.MetadataRemoteDataSourceImpl
-import com.passbolt.mobile.android.data.metadata.datasource.remote.api.MetadataApi
-import com.passbolt.mobile.android.domain.metadata.MetadataRemoteRepository
-import com.passbolt.mobile.android.domain.metadata.MetadataRepository
-import com.passbolt.mobile.android.domain.metadata.datasource.MetadataKeysLocalDataSource
-import com.passbolt.mobile.android.domain.metadata.datasource.MetadataRemoteDataSource
-import com.passbolt.mobile.android.domain.metadata.datasource.MetadataSettingsLocalDataSource
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.metadata.datasource.local.MetadataKeysLocalDataSourceImpl
+import net.svaroh.passly.data.metadata.datasource.local.MetadataSettingsLocalDataSourceImpl
+import net.svaroh.passly.data.metadata.datasource.remote.MetadataRemoteDataSourceImpl
+import net.svaroh.passly.data.metadata.datasource.remote.api.MetadataApi
+import net.svaroh.passly.domain.metadata.MetadataRemoteRepository
+import net.svaroh.passly.domain.metadata.MetadataRepository
+import net.svaroh.passly.domain.metadata.datasource.MetadataKeysLocalDataSource
+import net.svaroh.passly.domain.metadata.datasource.MetadataRemoteDataSource
+import net.svaroh.passly.domain.metadata.datasource.MetadataSettingsLocalDataSource
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

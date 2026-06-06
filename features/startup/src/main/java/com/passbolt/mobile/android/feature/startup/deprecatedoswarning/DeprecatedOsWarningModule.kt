@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.startup.deprecatedoswarning
+package net.svaroh.passly.feature.startup.deprecatedoswarning
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf

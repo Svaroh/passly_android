@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.secrets
+package net.svaroh.passly.data.secrets
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.secrets.SecretsRepository
-import com.passbolt.mobile.android.domain.secrets.datasource.SecretsRemoteDataSource
-import com.passbolt.mobile.android.domain.secrets.model.EncryptedSecret
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.secrets.SecretsRepository
+import net.svaroh.passly.domain.secrets.datasource.SecretsRemoteDataSource
+import net.svaroh.passly.domain.secrets.model.EncryptedSecret
 
 internal class SecretsRepositoryImpl(
     private val remoteDataSource: SecretsRemoteDataSource,

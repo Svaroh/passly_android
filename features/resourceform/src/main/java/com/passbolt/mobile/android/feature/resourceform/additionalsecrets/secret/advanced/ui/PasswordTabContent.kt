@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.ui
+package net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.ui
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -36,26 +36,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_DIGIT
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_EMOJI
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_LOWER
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_PARENTHESIS
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR1
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR2
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR3
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR4
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR5
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets.MASK_UPPER
-import com.passbolt.mobile.android.core.ui.chip.SelectableChipCloud
-import com.passbolt.mobile.android.core.ui.chip.SelectableChipItemModel
-import com.passbolt.mobile.android.core.ui.slider.LabelledSlider
-import com.passbolt.mobile.android.core.ui.switchwithdescription.SwitchWithDescriptionItem
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PasswordCharacterSetToggled
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PasswordExcludeLookAlikeChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PasswordLengthChanged
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsUiModel
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_DIGIT
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_EMOJI
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_LOWER
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_PARENTHESIS
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR1
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR2
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR3
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR4
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_SPECIAL_CHAR5
+import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_UPPER
+import net.svaroh.passly.core.ui.chip.SelectableChipCloud
+import net.svaroh.passly.core.ui.chip.SelectableChipItemModel
+import net.svaroh.passly.core.ui.slider.LabelledSlider
+import net.svaroh.passly.core.ui.switchwithdescription.SwitchWithDescriptionItem
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PasswordCharacterSetToggled
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PasswordExcludeLookAlikeChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PasswordLengthChanged
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 private const val PASSWORD_LENGTH_MIN = 8
 private const val PASSWORD_LENGTH_MAX = 128

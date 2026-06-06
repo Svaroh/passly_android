@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.share
+package net.svaroh.passly.domain.share
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.share.model.EncryptedSecret
-import com.passbolt.mobile.android.domain.share.model.ShareChanges
-import com.passbolt.mobile.android.domain.share.model.SharePermission
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.share.model.EncryptedSecret
+import net.svaroh.passly.domain.share.model.ShareChanges
+import net.svaroh.passly.domain.share.model.SharePermission
 
 interface ShareRepository {
     suspend fun simulateShareResource(

@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.autofill.accessibility
+package net.svaroh.passly.core.autofill.accessibility
 
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.common.ResourceDimenProvider
-import com.passbolt.mobile.android.core.autofill.system.AutofillField
-import com.passbolt.mobile.android.core.autofill.system.AutofillHintsFactory
-import com.passbolt.mobile.android.core.navigation.AutofillType
+import net.svaroh.passly.common.ResourceDimenProvider
+import net.svaroh.passly.core.autofill.system.AutofillField
+import net.svaroh.passly.core.autofill.system.AutofillHintsFactory
+import net.svaroh.passly.core.navigation.AutofillType
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.doReturn

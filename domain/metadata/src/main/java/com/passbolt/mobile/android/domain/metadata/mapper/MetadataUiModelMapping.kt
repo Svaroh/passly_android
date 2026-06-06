@@ -21,24 +21,24 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.metadata.mapper
+package net.svaroh.passly.domain.metadata.mapper
 
-import com.passbolt.mobile.android.domain.metadata.model.MetadataKey
-import com.passbolt.mobile.android.domain.metadata.model.MetadataKeysSettings
-import com.passbolt.mobile.android.domain.metadata.model.MetadataPrivateKey
-import com.passbolt.mobile.android.domain.metadata.model.MetadataSessionKeysBundle
-import com.passbolt.mobile.android.domain.metadata.model.MetadataType
-import com.passbolt.mobile.android.domain.metadata.model.MetadataTypesSettings
-import com.passbolt.mobile.android.domain.metadata.model.ParsedMetadataKey
-import com.passbolt.mobile.android.domain.metadata.model.ParsedMetadataPrivateKey
-import com.passbolt.mobile.android.ui.MetadataKeyModel
-import com.passbolt.mobile.android.ui.MetadataKeysSettingsModel
-import com.passbolt.mobile.android.ui.MetadataPrivateKeyModel
-import com.passbolt.mobile.android.ui.MetadataSessionKeysBundleModel
-import com.passbolt.mobile.android.ui.MetadataTypeModel
-import com.passbolt.mobile.android.ui.MetadataTypesSettingsModel
-import com.passbolt.mobile.android.ui.ParsedMetadataKeyModel
-import com.passbolt.mobile.android.ui.ParsedMetadataPrivateKeyModel
+import net.svaroh.passly.domain.metadata.model.MetadataKey
+import net.svaroh.passly.domain.metadata.model.MetadataKeysSettings
+import net.svaroh.passly.domain.metadata.model.MetadataPrivateKey
+import net.svaroh.passly.domain.metadata.model.MetadataSessionKeysBundle
+import net.svaroh.passly.domain.metadata.model.MetadataType
+import net.svaroh.passly.domain.metadata.model.MetadataTypesSettings
+import net.svaroh.passly.domain.metadata.model.ParsedMetadataKey
+import net.svaroh.passly.domain.metadata.model.ParsedMetadataPrivateKey
+import net.svaroh.passly.ui.MetadataKeyModel
+import net.svaroh.passly.ui.MetadataKeysSettingsModel
+import net.svaroh.passly.ui.MetadataPrivateKeyModel
+import net.svaroh.passly.ui.MetadataSessionKeysBundleModel
+import net.svaroh.passly.ui.MetadataTypeModel
+import net.svaroh.passly.ui.MetadataTypesSettingsModel
+import net.svaroh.passly.ui.ParsedMetadataKeyModel
+import net.svaroh.passly.ui.ParsedMetadataPrivateKeyModel
 
 fun MetadataKeysSettings.toUiModel(): MetadataKeysSettingsModel =
     MetadataKeysSettingsModel(

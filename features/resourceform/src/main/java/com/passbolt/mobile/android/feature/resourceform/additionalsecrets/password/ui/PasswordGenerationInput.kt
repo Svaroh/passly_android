@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.ui
+package net.svaroh.passly.feature.resourceform.additionalsecrets.password.ui
 
 import android.content.Context
 import androidx.compose.foundation.border
@@ -26,18 +26,18 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.button.SecondaryIconButton
-import com.passbolt.mobile.android.core.ui.text.PasswordInput
-import com.passbolt.mobile.android.testtags.composetags.ResourceForm
-import com.passbolt.mobile.android.ui.PasswordStrength
-import com.passbolt.mobile.android.ui.PasswordStrength.Empty
-import com.passbolt.mobile.android.ui.PasswordStrength.Fair
-import com.passbolt.mobile.android.ui.PasswordStrength.Strong
-import com.passbolt.mobile.android.ui.PasswordStrength.VeryStrong
-import com.passbolt.mobile.android.ui.PasswordStrength.VeryWeak
-import com.passbolt.mobile.android.ui.PasswordStrength.Weak
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.button.SecondaryIconButton
+import net.svaroh.passly.core.ui.text.PasswordInput
+import net.svaroh.passly.testtags.composetags.ResourceForm
+import net.svaroh.passly.ui.PasswordStrength
+import net.svaroh.passly.ui.PasswordStrength.Empty
+import net.svaroh.passly.ui.PasswordStrength.Fair
+import net.svaroh.passly.ui.PasswordStrength.Strong
+import net.svaroh.passly.ui.PasswordStrength.VeryStrong
+import net.svaroh.passly.ui.PasswordStrength.VeryWeak
+import net.svaroh.passly.ui.PasswordStrength.Weak
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun PasswordGenerationInput(

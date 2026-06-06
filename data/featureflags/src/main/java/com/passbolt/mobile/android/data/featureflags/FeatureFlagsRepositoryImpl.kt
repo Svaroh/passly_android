@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.featureflags
+package net.svaroh.passly.data.featureflags
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.featureflags.FeatureFlagsLocalDataSource
-import com.passbolt.mobile.android.featureflags.FeatureFlagsRemoteDataSource
-import com.passbolt.mobile.android.featureflags.FeatureFlagsRepository
-import com.passbolt.mobile.android.featureflags.model.FeatureFlags
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.featureflags.FeatureFlagsLocalDataSource
+import net.svaroh.passly.featureflags.FeatureFlagsRemoteDataSource
+import net.svaroh.passly.featureflags.FeatureFlagsRepository
+import net.svaroh.passly.featureflags.model.FeatureFlags
 
 internal class FeatureFlagsRepositoryImpl(
     private val localDataSource: FeatureFlagsLocalDataSource,

@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.mobiletransfer.model
+package net.svaroh.passly.domain.mobiletransfer.model
 
-import com.passbolt.mobile.android.ui.Status
+import net.svaroh.passly.ui.Status
 
 data class TransferModel(
     val id: String,

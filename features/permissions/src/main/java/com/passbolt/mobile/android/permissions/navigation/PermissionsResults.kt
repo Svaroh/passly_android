@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.permissions.navigation
+package net.svaroh.passly.permissions.navigation
 
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionModelUi.GroupPermissionModel
+import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
 
 data class GroupPermissionModifiedResult(
     val permission: GroupPermissionModel,

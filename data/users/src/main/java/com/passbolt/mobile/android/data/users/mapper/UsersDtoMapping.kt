@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.users.mapper
+package net.svaroh.passly.data.users.mapper
 
-import com.passbolt.mobile.android.domain.users.model.GpgKey
-import com.passbolt.mobile.android.domain.users.model.UserProfile
-import com.passbolt.mobile.android.dto.response.GpgKeyDto
-import com.passbolt.mobile.android.dto.response.UserDto
+import net.svaroh.passly.domain.users.model.GpgKey
+import net.svaroh.passly.domain.users.model.UserProfile
+import net.svaroh.passly.dto.response.GpgKeyDto
+import net.svaroh.passly.dto.response.UserDto
 import java.time.ZonedDateTime
 
 fun List<UserDto>.toDomain(): List<UserProfile> =

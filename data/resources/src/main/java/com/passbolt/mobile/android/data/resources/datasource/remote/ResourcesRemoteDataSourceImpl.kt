@@ -20,26 +20,26 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.data.resources.datasource.remote
+package net.svaroh.passly.data.resources.datasource.remote
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.resources.datasource.remote.api.ResourceApi
-import com.passbolt.mobile.android.data.resources.mapper.toUiModel
-import com.passbolt.mobile.android.domain.resources.ResourcesRemoteDataSource
-import com.passbolt.mobile.android.domain.resources.mapper.toDomain
-import com.passbolt.mobile.android.domain.resources.model.Resource
-import com.passbolt.mobile.android.domain.resources.model.ResourceWithAttributes
-import com.passbolt.mobile.android.domain.resources.model.ResourcesPage
-import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
-import com.passbolt.mobile.android.dto.request.CreateResourceDto
-import com.passbolt.mobile.android.mappers.PermissionsModelMapper
-import com.passbolt.mobile.android.mappers.ResourceModelMapper
-import com.passbolt.mobile.android.ui.PermissionModel
-import com.passbolt.mobile.android.ui.ResourceUiModelWithAttributes
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.resources.datasource.remote.api.ResourceApi
+import net.svaroh.passly.data.resources.mapper.toUiModel
+import net.svaroh.passly.domain.resources.ResourcesRemoteDataSource
+import net.svaroh.passly.domain.resources.mapper.toDomain
+import net.svaroh.passly.domain.resources.model.Resource
+import net.svaroh.passly.domain.resources.model.ResourceWithAttributes
+import net.svaroh.passly.domain.resources.model.ResourcesPage
+import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.dto.request.CreateResourceDto
+import net.svaroh.passly.mappers.PermissionsModelMapper
+import net.svaroh.passly.mappers.ResourceModelMapper
+import net.svaroh.passly.ui.PermissionModel
+import net.svaroh.passly.ui.ResourceUiModelWithAttributes
 
 internal class ResourcesRemoteDataSourceImpl(
     private val resourceApi: ResourceApi,

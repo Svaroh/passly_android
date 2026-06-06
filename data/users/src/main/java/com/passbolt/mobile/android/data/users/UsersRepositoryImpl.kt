@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.users
+package net.svaroh.passly.data.users
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.users.UsersDataSource
-import com.passbolt.mobile.android.domain.users.UsersLocalDataSource
-import com.passbolt.mobile.android.domain.users.UsersRepository
-import com.passbolt.mobile.android.domain.users.model.UserProfile
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.users.UsersDataSource
+import net.svaroh.passly.domain.users.UsersLocalDataSource
+import net.svaroh.passly.domain.users.UsersRepository
+import net.svaroh.passly.domain.users.model.UserProfile
 
 internal class UsersRepositoryImpl(
     private val localDataSource: UsersLocalDataSource,

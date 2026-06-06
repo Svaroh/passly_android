@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.passwordexpiry
+package net.svaroh.passly.domain.passwordexpiry
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.passwordexpiry.model.PasswordExpirySettings
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.passwordexpiry.model.PasswordExpirySettings
 
 interface PasswordExpiryLocalDataSource {
     suspend fun getPasswordExpirySettings(userId: String): DomainResult<PasswordExpirySettings>

@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.share
+package net.svaroh.passly.domain.share
 
-import com.passbolt.mobile.android.domain.share.usecase.ShareFolderUseCase
+import net.svaroh.passly.domain.share.usecase.ShareFolderUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

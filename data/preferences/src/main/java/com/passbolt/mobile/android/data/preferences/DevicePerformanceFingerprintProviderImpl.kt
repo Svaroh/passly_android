@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.preferences
+package net.svaroh.passly.data.preferences
 
 import android.app.ActivityManager
-import com.passbolt.mobile.android.domain.preferences.pagesize.DevicePerformanceFingerprint
-import com.passbolt.mobile.android.domain.preferences.pagesize.DevicePerformanceFingerprintProvider
+import net.svaroh.passly.domain.preferences.pagesize.DevicePerformanceFingerprint
+import net.svaroh.passly.domain.preferences.pagesize.DevicePerformanceFingerprintProvider
 
 internal class DevicePerformanceFingerprintProviderImpl(
     private val activityManager: ActivityManager,

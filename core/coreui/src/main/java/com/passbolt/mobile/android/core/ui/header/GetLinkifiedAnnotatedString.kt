@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.header
+package net.svaroh.passly.core.ui.header
 
 import android.util.Patterns
 import androidx.compose.ui.graphics.Color

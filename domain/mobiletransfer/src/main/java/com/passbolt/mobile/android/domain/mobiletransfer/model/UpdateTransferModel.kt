@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.mobiletransfer.model
+package net.svaroh.passly.domain.mobiletransfer.model
 
 data class UpdateTransferModel(
     val id: String,

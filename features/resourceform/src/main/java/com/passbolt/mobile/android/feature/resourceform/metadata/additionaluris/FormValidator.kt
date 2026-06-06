@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris
+package net.svaroh.passly.feature.resourceform.metadata.additionaluris
 
 import androidx.annotation.VisibleForTesting
-import com.passbolt.mobile.android.common.validation.StringMaxLength
+import net.svaroh.passly.common.validation.StringMaxLength
 import java.util.UUID
 
 internal interface FormValidator<T> {

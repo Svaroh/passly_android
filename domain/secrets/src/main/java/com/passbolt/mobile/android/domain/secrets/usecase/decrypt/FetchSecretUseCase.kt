@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.secrets.usecase.decrypt
+package net.svaroh.passly.domain.secrets.usecase.decrypt
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.secrets.SecretsRepository
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.secrets.SecretsRepository
 import timber.log.Timber
 
 class FetchSecretUseCase(

@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.featureflags.datasource.remote
+package net.svaroh.passly.data.featureflags.datasource.remote
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.featureflags.datasource.remote.api.FeatureFlagsApi
-import com.passbolt.mobile.android.data.featureflags.mapper.toDomain
-import com.passbolt.mobile.android.featureflags.FeatureFlagsRemoteDataSource
-import com.passbolt.mobile.android.featureflags.model.FeatureFlags
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.featureflags.datasource.remote.api.FeatureFlagsApi
+import net.svaroh.passly.data.featureflags.mapper.toDomain
+import net.svaroh.passly.featureflags.FeatureFlagsRemoteDataSource
+import net.svaroh.passly.featureflags.model.FeatureFlags
 
 internal class FeatureFlagsRemoteDataSourceImpl(
     private val featureFlagsApi: FeatureFlagsApi,

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced
 
 internal sealed interface PinCodeAdvancedGenerationFormIntent {
     data class LengthChanged(

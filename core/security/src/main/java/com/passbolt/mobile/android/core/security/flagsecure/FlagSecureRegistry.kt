@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.security.flagsecure
+package net.svaroh.passly.core.security.flagsecure
 
 import android.app.Activity
-import com.passbolt.mobile.android.core.security.flagsecure.WindowFlagAction.APPLY_FLAG
-import com.passbolt.mobile.android.core.security.flagsecure.WindowFlagAction.CLEAR_FLAG
-import com.passbolt.mobile.android.core.security.flagsecure.WindowFlagAction.NO_ACTION_NEEDED
+import net.svaroh.passly.core.security.flagsecure.WindowFlagAction.APPLY_FLAG
+import net.svaroh.passly.core.security.flagsecure.WindowFlagAction.CLEAR_FLAG
+import net.svaroh.passly.core.security.flagsecure.WindowFlagAction.NO_ACTION_NEEDED
 import java.util.WeakHashMap
 
 class FlagSecureRegistry {

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.testtags.composetags
+package net.svaroh.passly.testtags.composetags
 
 object TransferAccount {
     const val SUMMARY_SCREEN = "TransferAccountSummaryScreen"

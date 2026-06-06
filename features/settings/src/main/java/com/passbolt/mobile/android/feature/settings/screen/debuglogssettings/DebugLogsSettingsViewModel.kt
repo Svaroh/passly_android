@@ -21,19 +21,19 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.debuglogssettings
+package net.svaroh.passly.feature.settings.screen.debuglogssettings
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.logger.FileLoggingTree
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
-import com.passbolt.mobile.android.domain.preferences.usecase.GetGlobalPreferencesUseCase
-import com.passbolt.mobile.android.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
-import com.passbolt.mobile.android.feature.settings.screen.debuglogssettings.DebugLogsScreenSideEffect.NavigateToLogs
-import com.passbolt.mobile.android.feature.settings.screen.debuglogssettings.DebugLogsScreenSideEffect.NavigateUp
-import com.passbolt.mobile.android.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.AccessLogs
-import com.passbolt.mobile.android.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.OpenHelpWebsite
-import com.passbolt.mobile.android.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.ToggleDebugLogs
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.logger.FileLoggingTree
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsScreenSideEffect.NavigateToLogs
+import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsScreenSideEffect.NavigateUp
+import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.AccessLogs
+import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.OpenHelpWebsite
+import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.ToggleDebugLogs
 import timber.log.Timber
 
 internal class DebugLogsSettingsViewModel(

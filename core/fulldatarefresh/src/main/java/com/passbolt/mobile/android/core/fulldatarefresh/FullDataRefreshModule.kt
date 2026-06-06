@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.fulldatarefresh
+package net.svaroh.passly.core.fulldatarefresh
 
-import com.passbolt.mobile.android.core.idlingresource.ResourcesFullRefreshIdlingResource
+import net.svaroh.passly.core.idlingresource.ResourcesFullRefreshIdlingResource
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

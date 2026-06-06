@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.createresourcemenu
+package net.svaroh.passly.createresourcemenu
 
 /**
  * Passbolt - Open source password manager for teams

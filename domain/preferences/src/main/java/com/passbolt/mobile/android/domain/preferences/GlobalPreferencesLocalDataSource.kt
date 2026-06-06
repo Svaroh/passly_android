@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.preferences
+package net.svaroh.passly.domain.preferences
 
-import com.passbolt.mobile.android.ui.GlobalPreferencesUiModel
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 
 interface GlobalPreferencesLocalDataSource {
     fun getGlobalPreferences(): GlobalPreferencesUiModel

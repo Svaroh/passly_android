@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.progressindicator
+package net.svaroh.passly.core.ui.progressindicator
 
 import androidx.annotation.FloatRange
 import androidx.compose.animation.core.animateFloatAsState
@@ -14,8 +14,8 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.ui.R
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.ui.R
 
 /**
  * Passbolt - Open source password manager for teams

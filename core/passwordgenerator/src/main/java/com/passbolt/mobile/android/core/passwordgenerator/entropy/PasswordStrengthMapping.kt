@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.passwordgenerator.entropy
+package net.svaroh.passly.core.passwordgenerator.entropy
 
-import com.passbolt.mobile.android.ui.Entropy
-import com.passbolt.mobile.android.ui.PasswordStrength
+import net.svaroh.passly.ui.Entropy
+import net.svaroh.passly.ui.PasswordStrength
 
 fun Entropy.toPasswordStrength(): PasswordStrength =
     when (this) {

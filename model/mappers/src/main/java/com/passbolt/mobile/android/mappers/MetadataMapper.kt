@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.dto.request.SessionKeyDto
-import com.passbolt.mobile.android.dto.request.SessionKeysBundleDto
-import com.passbolt.mobile.android.dto.response.DecryptedMetadataSessionKeysBundleModel
-import com.passbolt.mobile.android.dto.response.MetadataKeyTypeDto
-import com.passbolt.mobile.android.ui.MergedSessionKeys
-import com.passbolt.mobile.android.ui.MetadataKeyTypeModel
-import com.passbolt.mobile.android.ui.SessionKeyIdentifier
-import com.passbolt.mobile.android.ui.SessionKeyModel
+import net.svaroh.passly.dto.request.SessionKeyDto
+import net.svaroh.passly.dto.request.SessionKeysBundleDto
+import net.svaroh.passly.dto.response.DecryptedMetadataSessionKeysBundleModel
+import net.svaroh.passly.dto.response.MetadataKeyTypeDto
+import net.svaroh.passly.ui.MergedSessionKeys
+import net.svaroh.passly.ui.MetadataKeyTypeModel
+import net.svaroh.passly.ui.SessionKeyIdentifier
+import net.svaroh.passly.ui.SessionKeyModel
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID

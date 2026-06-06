@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.pincode.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced
 
-import com.passbolt.mobile.android.ui.PinCodeUiModel
+import net.svaroh.passly.ui.PinCodeUiModel
 
 internal sealed interface PinCodeAdvancedGenerationFormSideEffect {
     data object NavigateBack : PinCodeAdvancedGenerationFormSideEffect

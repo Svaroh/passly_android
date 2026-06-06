@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.jsonmodel.jsonpathops
+package net.svaroh.passly.jsonmodel.jsonpathops
 
 import com.google.gson.JsonElement
-import com.passbolt.mobile.android.jsonmodel.JsonModel
+import net.svaroh.passly.jsonmodel.JsonModel
 
 interface JsonPathsOps {
     fun read(

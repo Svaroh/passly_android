@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.share.mapper
+package net.svaroh.passly.data.share.mapper
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.share.model.EncryptedSecret
-import com.passbolt.mobile.android.domain.share.model.SharePermission
-import com.passbolt.mobile.android.dto.response.ShareChangeUser
-import com.passbolt.mobile.android.dto.response.ShareChangesDto
-import com.passbolt.mobile.android.dto.response.ShareRecipientDto
-import com.passbolt.mobile.android.dto.response.SimulateShareResponse
+import net.svaroh.passly.domain.share.model.EncryptedSecret
+import net.svaroh.passly.domain.share.model.SharePermission
+import net.svaroh.passly.dto.response.ShareChangeUser
+import net.svaroh.passly.dto.response.ShareChangesDto
+import net.svaroh.passly.dto.response.ShareRecipientDto
+import net.svaroh.passly.dto.response.SimulateShareResponse
 import org.junit.Test
 import java.util.UUID
-import com.passbolt.mobile.android.dto.request.SharePermission as SharePermissionDto
+import net.svaroh.passly.dto.request.SharePermission as SharePermissionDto
 
 class ShareDtoMappingTest {
     @Test

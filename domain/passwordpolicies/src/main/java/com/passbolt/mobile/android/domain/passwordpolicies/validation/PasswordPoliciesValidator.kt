@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.passwordpolicies.validation
+package net.svaroh.passly.domain.passwordpolicies.validation
 
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PassphraseGeneratorSettings
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordGeneratorSettings
-import com.passbolt.mobile.android.domain.passwordpolicies.model.PasswordPolicies
+import net.svaroh.passly.domain.passwordpolicies.model.PassphraseGeneratorSettings
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordGeneratorSettings
+import net.svaroh.passly.domain.passwordpolicies.model.PasswordPolicies
 
 class PasswordPoliciesValidator {
     fun arePasswordPoliciesValid(passwordPolicies: PasswordPolicies) =

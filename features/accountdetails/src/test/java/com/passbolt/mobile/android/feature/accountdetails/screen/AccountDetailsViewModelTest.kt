@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.accountdetails.screen
+package net.svaroh.passly.feature.accountdetails.screen
 
 /**
  * Passbolt - Open source password manager for teams
@@ -24,23 +24,23 @@ package com.passbolt.mobile.android.feature.accountdetails.screen
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
-import com.passbolt.mobile.android.commontest.session.validSessionTestModule
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackingFlow
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.UpdateAccountDataUseCase
-import com.passbolt.mobile.android.domain.users.profile.UserProfileInteractor
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsIntent.SaveChanges
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsIntent.StartTransferAccount
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsIntent.UpdateLabel
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsScreenSideEffect.NavigateUp
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsScreenSideEffect.ShowProfileFetchError
-import com.passbolt.mobile.android.feature.accountdetails.screen.AccountDetailsValidationError.MaxLengthExceeded
-import com.passbolt.mobile.android.mappers.AccountModelMapper
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.commontest.session.validSessionTestModule
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.UpdateAccountDataUseCase
+import net.svaroh.passly.domain.users.profile.UserProfileInteractor
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.SaveChanges
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.StartTransferAccount
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.UpdateLabel
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.NavigateUp
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.ShowProfileFetchError
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsValidationError.MaxLengthExceeded
+import net.svaroh.passly.mappers.AccountModelMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

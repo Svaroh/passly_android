@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.groups.mapper
+package net.svaroh.passly.data.groups.mapper
 
-import com.passbolt.mobile.android.domain.users.model.GpgKey
-import com.passbolt.mobile.android.domain.users.model.UserProfile
-import com.passbolt.mobile.android.entity.user.User
-import com.passbolt.mobile.android.entity.user.UserGpgKey
+import net.svaroh.passly.domain.users.model.GpgKey
+import net.svaroh.passly.domain.users.model.UserProfile
+import net.svaroh.passly.entity.user.User
+import net.svaroh.passly.entity.user.UserGpgKey
 
 internal fun User.toUserProfile(): UserProfile =
     UserProfile(

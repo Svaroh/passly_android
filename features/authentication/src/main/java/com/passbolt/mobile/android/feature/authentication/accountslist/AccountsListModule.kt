@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.accountslist
+package net.svaroh.passly.feature.authentication.accountslist
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel

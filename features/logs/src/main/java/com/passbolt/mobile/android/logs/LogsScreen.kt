@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.logs
+package net.svaroh.passly.logs
 
 import android.content.Context
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,21 +44,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.logs.LogsIntent.GoBack
-import com.passbolt.mobile.android.logs.LogsIntent.ShareLogs
-import com.passbolt.mobile.android.logs.LogsSideEffect.NavigateToLogsShareSheet
-import com.passbolt.mobile.android.logs.LogsSideEffect.NavigateUp
-import com.passbolt.mobile.android.logs.LogsSideEffect.ScrollLogsToLastLine
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.logs.LogsIntent.GoBack
+import net.svaroh.passly.logs.LogsIntent.ShareLogs
+import net.svaroh.passly.logs.LogsSideEffect.NavigateToLogsShareSheet
+import net.svaroh.passly.logs.LogsSideEffect.NavigateUp
+import net.svaroh.passly.logs.LogsSideEffect.ScrollLogsToLastLine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 private const val LOGS_MIME_TYPE = "text/plain"
 

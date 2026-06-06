@@ -33,7 +33,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.ui"
+    namespace = "net.svaroh.passly.core.ui"
     buildFeatures {
         compose = true
     }

@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.metadata.usecase
+package net.svaroh.passly.domain.metadata.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.metadata.MetadataRepository
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.metadata.MetadataRepository
 import java.time.ZonedDateTime
 import java.util.UUID
 

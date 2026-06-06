@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.customfields
+package net.svaroh.passly.feature.resourceform.additionalsecrets.customfields
 
 internal sealed interface CustomFieldsFormIntent {
     object GoBack : CustomFieldsFormIntent

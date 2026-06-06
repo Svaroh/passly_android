@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.compose
+package net.svaroh.passly.core.compose
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

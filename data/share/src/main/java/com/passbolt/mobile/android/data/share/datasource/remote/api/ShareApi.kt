@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.share.datasource.remote.api
+package net.svaroh.passly.data.share.datasource.remote.api
 
-import com.passbolt.mobile.android.dto.request.FolderShareRequest
-import com.passbolt.mobile.android.dto.request.ResourceShareRequest
-import com.passbolt.mobile.android.dto.request.SimulateShareRequest
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.SimulateShareResponse
+import net.svaroh.passly.dto.request.FolderShareRequest
+import net.svaroh.passly.dto.request.ResourceShareRequest
+import net.svaroh.passly.dto.request.SimulateShareRequest
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.SimulateShareResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.PUT

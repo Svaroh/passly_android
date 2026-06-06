@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.users.datasource.local
+package net.svaroh.passly.data.users.datasource.local
 
-import com.passbolt.mobile.android.data.users.mapper.toDomain
-import com.passbolt.mobile.android.data.users.mapper.toEntity
-import com.passbolt.mobile.android.database.DatabaseProvider
-import com.passbolt.mobile.android.domain.users.UsersLocalDataSource
-import com.passbolt.mobile.android.domain.users.model.UserProfile
-import com.passbolt.mobile.android.entity.user.UserUpdateState.PENDING
+import net.svaroh.passly.data.users.mapper.toDomain
+import net.svaroh.passly.data.users.mapper.toEntity
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.domain.users.UsersLocalDataSource
+import net.svaroh.passly.domain.users.model.UserProfile
+import net.svaroh.passly.entity.user.UserUpdateState.PENDING
 
 internal class UsersLocalDataSourceImpl(
     private val databaseProvider: DatabaseProvider,

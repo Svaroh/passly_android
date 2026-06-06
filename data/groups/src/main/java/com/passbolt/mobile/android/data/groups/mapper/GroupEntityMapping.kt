@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.groups.mapper
+package net.svaroh.passly.data.groups.mapper
 
-import com.passbolt.mobile.android.domain.groups.model.Group
-import com.passbolt.mobile.android.domain.groups.model.GroupWithItemsCount
-import com.passbolt.mobile.android.domain.groups.model.GroupWithUsers
-import com.passbolt.mobile.android.entity.group.GroupUpdateState
-import com.passbolt.mobile.android.entity.group.UsersGroup
-import com.passbolt.mobile.android.entity.group.UsersGroupWithChildItemsCount
-import com.passbolt.mobile.android.entity.group.GroupWithUsers as GroupWithUsersEntity
+import net.svaroh.passly.domain.groups.model.Group
+import net.svaroh.passly.domain.groups.model.GroupWithItemsCount
+import net.svaroh.passly.domain.groups.model.GroupWithUsers
+import net.svaroh.passly.entity.group.GroupUpdateState
+import net.svaroh.passly.entity.group.UsersGroup
+import net.svaroh.passly.entity.group.UsersGroupWithChildItemsCount
+import net.svaroh.passly.entity.group.GroupWithUsers as GroupWithUsersEntity
 
 internal fun UsersGroup.toDomain(): Group =
     Group(

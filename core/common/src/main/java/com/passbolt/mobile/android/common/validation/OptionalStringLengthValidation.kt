@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common.validation
+package net.svaroh.passly.common.validation
 
 class OptionalStringLengthValidation : (String?, MinLength, MaxLength) -> Boolean {
     override fun invoke(

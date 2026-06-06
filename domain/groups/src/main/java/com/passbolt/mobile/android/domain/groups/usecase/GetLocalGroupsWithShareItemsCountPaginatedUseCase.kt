@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.groups.usecase
+package net.svaroh.passly.domain.groups.usecase
 
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.groups.GroupsRepository
-import com.passbolt.mobile.android.domain.groups.mapper.toUiModel
-import com.passbolt.mobile.android.ui.GroupWithCount
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.groups.GroupsRepository
+import net.svaroh.passly.domain.groups.mapper.toUiModel
+import net.svaroh.passly.ui.GroupWithCount
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

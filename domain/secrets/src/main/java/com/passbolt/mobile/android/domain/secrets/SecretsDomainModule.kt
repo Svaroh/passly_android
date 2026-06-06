@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.secrets
+package net.svaroh.passly.domain.secrets
 
-import com.passbolt.mobile.android.domain.secrets.parser.SecretParser
-import com.passbolt.mobile.android.domain.secrets.usecase.decrypt.DecryptSecretUseCase
-import com.passbolt.mobile.android.domain.secrets.usecase.decrypt.FetchSecretUseCase
-import com.passbolt.mobile.android.domain.secrets.usecase.decrypt.SecretInteractor
+import net.svaroh.passly.domain.secrets.parser.SecretParser
+import net.svaroh.passly.domain.secrets.usecase.decrypt.DecryptSecretUseCase
+import net.svaroh.passly.domain.secrets.usecase.decrypt.FetchSecretUseCase
+import net.svaroh.passly.domain.secrets.usecase.decrypt.SecretInteractor
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

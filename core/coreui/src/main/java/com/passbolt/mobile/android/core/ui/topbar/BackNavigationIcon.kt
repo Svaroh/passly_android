@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.topbar
+package net.svaroh.passly.core.ui.topbar
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -7,7 +7,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import com.passbolt.mobile.android.testtags.composetags.BackNavigation
+import net.svaroh.passly.testtags.composetags.BackNavigation
 
 /**
  * Passbolt - Open source password manager for teams

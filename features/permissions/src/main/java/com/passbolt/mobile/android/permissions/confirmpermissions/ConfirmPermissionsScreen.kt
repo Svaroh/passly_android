@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.confirmpermissions
+package net.svaroh.passly.permissions.confirmpermissions
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -47,47 +47,47 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.fulldatarefresh.service.DataRefreshService
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.GroupPermissionDetails
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.PermissionRecipients
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.UserPermissionDetails
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.navigation.compose.results.PermissionsConfirmedResult
-import com.passbolt.mobile.android.core.navigation.compose.results.ShareCompleteResult
-import com.passbolt.mobile.android.core.ui.banner.WarningBanner
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.fab.AddFloatingActionButton
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.metadatakeytrust.NewMetadataKeyTrustDialog
-import com.passbolt.mobile.android.feature.metadatakeytrust.TrustedMetadataKeyDeletedDialog
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.AddPermission
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.Confirm
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.DismissMetadataKeyDeletedDialog
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.DismissMetadataKeyModifiedDialog
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.GoBack
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SeePermission
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.TrustNewMetadataKey
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.TrustedMetadataKeyDeleted
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithPermissionsConfirmed
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithShareSuccess
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateBack
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToGroupPermissionDetails
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToSelectShareRecipients
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToUserPermissionDetails
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowPermissionsDriftedSnackbar
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowSuccessSnackbar
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowToast
-import com.passbolt.mobile.android.permissions.permissions.ui.PermissionsList
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.fulldatarefresh.service.DataRefreshService
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.GroupPermissionDetails
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.PermissionRecipients
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.UserPermissionDetails
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.navigation.compose.results.PermissionsConfirmedResult
+import net.svaroh.passly.core.navigation.compose.results.ShareCompleteResult
+import net.svaroh.passly.core.ui.banner.WarningBanner
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.fab.AddFloatingActionButton
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.metadatakeytrust.NewMetadataKeyTrustDialog
+import net.svaroh.passly.feature.metadatakeytrust.TrustedMetadataKeyDeletedDialog
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsIntent.AddPermission
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsIntent.Confirm
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsIntent.DismissMetadataKeyDeletedDialog
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsIntent.DismissMetadataKeyModifiedDialog
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsIntent.GoBack
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsIntent.SeePermission
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsIntent.TrustNewMetadataKey
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsIntent.TrustedMetadataKeyDeleted
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithPermissionsConfirmed
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithShareSuccess
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateBack
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToGroupPermissionDetails
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToSelectShareRecipients
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToUserPermissionDetails
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowPermissionsDriftedSnackbar
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowSuccessSnackbar
+import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowToast
+import net.svaroh.passly.permissions.permissions.ui.PermissionsList
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun ConfirmPermissionsScreen(

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess
+package net.svaroh.passly.feature.otp.scanotp.scanotpsuccess
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -31,32 +31,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ResourcePicker
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.navigation.compose.results.OtpScanCompleteResult
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.CreateStandaloneOtpClick
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkToResourceClick
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToConfirmPermissions
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToOtpList
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToResourcePicker
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowSuccessSnackbar
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowToast
-import com.passbolt.mobile.android.ui.OtpParseResult
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ResourcePicker
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.navigation.compose.results.OtpScanCompleteResult
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.CreateStandaloneOtpClick
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkToResourceClick
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToConfirmPermissions
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToOtpList
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToResourcePicker
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowSuccessSnackbar
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowToast
+import net.svaroh.passly.ui.OtpParseResult
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun ScanOtpSuccessScreen(

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.navigation
+package net.svaroh.passly.core.navigation
 
 import android.app.Activity
 import android.app.Application

@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.domain.tags.usecase
+package net.svaroh.passly.domain.tags.usecase
 
 import androidx.paging.PagingData
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.tags.TagsRepository
-import com.passbolt.mobile.android.domain.tags.usecase.GetLocalTagsPaginatedUseCase.Output
-import com.passbolt.mobile.android.ui.TagWithCount
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.tags.TagsRepository
+import net.svaroh.passly.domain.tags.usecase.GetLocalTagsPaginatedUseCase.Output
+import net.svaroh.passly.ui.TagWithCount
 import kotlinx.coroutines.flow.Flow
 
 /**

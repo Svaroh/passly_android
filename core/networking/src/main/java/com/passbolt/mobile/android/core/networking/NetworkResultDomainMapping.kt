@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.networking
+package net.svaroh.passly.core.networking
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.SERVER
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.TIMEOUT
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.dto.PassphraseNotInCacheException
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.SERVER
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.TIMEOUT
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.dto.PassphraseNotInCacheException
 
 fun <T : Any> NetworkResult<T>.toDomainResult(): DomainResult<T> =
     when (this) {

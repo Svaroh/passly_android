@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.passwordgenerator.codepoints
+package net.svaroh.passly.core.passwordgenerator.codepoints
 
 /**
  * Passbolt - Open source password manager for teams

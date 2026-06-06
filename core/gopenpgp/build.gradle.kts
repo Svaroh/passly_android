@@ -22,7 +22,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.gopenpgp"
+    namespace = "net.svaroh.passly.core.gopenpgp"
 
     packaging {
         resources.excludes += "META-INF/{AL2.0,LGPL2.1}"

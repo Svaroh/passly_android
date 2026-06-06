@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.screen.data
+package net.svaroh.passly.resourcepicker.screen.data
 
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
-import com.passbolt.mobile.android.ui.ResourcePickerListItem
+import net.svaroh.passly.ui.ResourcePickerListItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

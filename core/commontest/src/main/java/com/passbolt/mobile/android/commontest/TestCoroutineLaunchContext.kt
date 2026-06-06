@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.commontest
+package net.svaroh.passly.commontest
 
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlin.coroutines.CoroutineContext

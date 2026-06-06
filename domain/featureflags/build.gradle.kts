@@ -13,5 +13,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.domain.featureflags"
+    namespace = "net.svaroh.passly.domain.featureflags"
 }

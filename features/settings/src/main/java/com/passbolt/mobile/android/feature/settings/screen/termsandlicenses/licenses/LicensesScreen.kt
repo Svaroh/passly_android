@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses
+package net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -50,22 +50,22 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.AppTypography
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses.LicensesIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses.LicensesIntent.GoToLicenseUrl
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses.LicensesSideEffect.NavigateToLicenseUrl
-import com.passbolt.mobile.android.ui.LicenseModelItem
-import com.passbolt.mobile.android.ui.OpenSourceLicensesModel
-import com.passbolt.mobile.android.ui.Scm
-import com.passbolt.mobile.android.ui.SpdxLicense
+import net.svaroh.passly.core.compose.AppTypography
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.LicensesIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.LicensesIntent.GoToLicenseUrl
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.LicensesSideEffect.NavigateToLicenseUrl
+import net.svaroh.passly.ui.LicenseModelItem
+import net.svaroh.passly.ui.OpenSourceLicensesModel
+import net.svaroh.passly.ui.Scm
+import net.svaroh.passly.ui.SpdxLicense
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun LicensesScreen(

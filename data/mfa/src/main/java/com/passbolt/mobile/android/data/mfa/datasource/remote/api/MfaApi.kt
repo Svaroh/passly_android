@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.mfa.datasource.remote.api
+package net.svaroh.passly.data.mfa.datasource.remote.api
 
-import com.passbolt.mobile.android.dto.request.HotpRequest
-import com.passbolt.mobile.android.dto.request.TotpRequest
+import net.svaroh.passly.dto.request.HotpRequest
+import net.svaroh.passly.dto.request.TotpRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

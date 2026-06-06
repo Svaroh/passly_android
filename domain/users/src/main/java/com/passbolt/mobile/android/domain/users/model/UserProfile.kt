@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.users.model
+package net.svaroh.passly.domain.users.model
 
 import java.time.ZonedDateTime
 

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.folders.model
+package net.svaroh.passly.domain.folders.model
 
 enum class FolderUpdateState {
     PENDING,

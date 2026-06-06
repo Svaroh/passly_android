@@ -21,31 +21,31 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.actions
+package net.svaroh.passly.domain.resources.actions
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.commontest.session.validSessionTestModule
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.core.architecture.result.displayMessage
-import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
-import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor.DriftOutput
-import com.passbolt.mobile.android.domain.resources.usecase.ResourceShareInteractor
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceUseCase
-import com.passbolt.mobile.android.domain.users.model.GpgKey
-import com.passbolt.mobile.android.domain.users.model.UserProfile
-import com.passbolt.mobile.android.jsonmodel.jsonModelModule
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAndDescription
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Default
-import com.passbolt.mobile.android.ui.MetadataJsonModel
-import com.passbolt.mobile.android.ui.MetadataKeyTypeModel.PERSONAL
-import com.passbolt.mobile.android.ui.PermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.ResourceUiModel
-import com.passbolt.mobile.android.ui.UserWithAvatar
+import net.svaroh.passly.commontest.session.validSessionTestModule
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.core.architecture.result.displayMessage
+import net.svaroh.passly.domain.permissionsconfirmation.model.PermissionsSnapshot
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
+import net.svaroh.passly.domain.resources.usecase.CreatePermissionsSnapshotInteractor
+import net.svaroh.passly.domain.resources.usecase.CreatePermissionsSnapshotInteractor.DriftOutput
+import net.svaroh.passly.domain.resources.usecase.ResourceShareInteractor
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.domain.users.model.GpgKey
+import net.svaroh.passly.domain.users.model.UserProfile
+import net.svaroh.passly.jsonmodel.jsonModelModule
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordAndDescription
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
+import net.svaroh.passly.ui.MetadataJsonModel
+import net.svaroh.passly.ui.MetadataKeyTypeModel.PERSONAL
+import net.svaroh.passly.ui.PermissionModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.ResourceUiModel
+import net.svaroh.passly.ui.UserWithAvatar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest

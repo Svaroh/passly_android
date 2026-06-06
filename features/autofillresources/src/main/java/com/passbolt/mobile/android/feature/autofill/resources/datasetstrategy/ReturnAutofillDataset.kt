@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy
+package net.svaroh.passly.feature.autofill.resources.datasetstrategy
 
 import android.app.Activity
 import android.content.Intent
@@ -8,11 +8,11 @@ import android.view.autofill.AutofillId
 import android.view.autofill.AutofillManager
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
-import com.passbolt.mobile.android.core.autofill.system.AssistStructureParser
-import com.passbolt.mobile.android.core.autofill.system.AutofillField
-import com.passbolt.mobile.android.core.autofill.system.FillableInputsFinder
-import com.passbolt.mobile.android.feature.autofill.autofill.RemoteViewsFactory
-import com.passbolt.mobile.android.ui.ParsedStructure
+import net.svaroh.passly.core.autofill.system.AssistStructureParser
+import net.svaroh.passly.core.autofill.system.AutofillField
+import net.svaroh.passly.core.autofill.system.FillableInputsFinder
+import net.svaroh.passly.feature.autofill.autofill.RemoteViewsFactory
+import net.svaroh.passly.ui.ParsedStructure
 import timber.log.Timber
 
 class ReturnAutofillDataset(

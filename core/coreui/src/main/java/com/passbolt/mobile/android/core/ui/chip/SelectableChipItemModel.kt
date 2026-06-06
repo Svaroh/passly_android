@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.chip
+package net.svaroh.passly.core.ui.chip
 
 data class SelectableChipItemModel(
     val id: String,

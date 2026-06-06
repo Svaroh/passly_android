@@ -16,5 +16,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.common"
+    namespace = "net.svaroh.passly.core.common"
 }

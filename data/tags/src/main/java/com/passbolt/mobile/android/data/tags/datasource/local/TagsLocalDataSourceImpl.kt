@@ -1,17 +1,17 @@
-package com.passbolt.mobile.android.data.tags.datasource.local
+package net.svaroh.passly.data.tags.datasource.local
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.passbolt.mobile.android.data.tags.mapper.toEntity
-import com.passbolt.mobile.android.data.tags.mapper.toUiModel
-import com.passbolt.mobile.android.database.DatabaseProvider
-import com.passbolt.mobile.android.database.QuerySanitizer
-import com.passbolt.mobile.android.domain.tags.datasource.TagsLocalDataSource
-import com.passbolt.mobile.android.entity.resource.ResourceAndTagsCrossRef
-import com.passbolt.mobile.android.ui.ResourceUiModelWithAttributes
-import com.passbolt.mobile.android.ui.TagWithCount
+import net.svaroh.passly.data.tags.mapper.toEntity
+import net.svaroh.passly.data.tags.mapper.toUiModel
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.database.QuerySanitizer
+import net.svaroh.passly.domain.tags.datasource.TagsLocalDataSource
+import net.svaroh.passly.entity.resource.ResourceAndTagsCrossRef
+import net.svaroh.passly.ui.ResourceUiModelWithAttributes
+import net.svaroh.passly.ui.TagWithCount
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

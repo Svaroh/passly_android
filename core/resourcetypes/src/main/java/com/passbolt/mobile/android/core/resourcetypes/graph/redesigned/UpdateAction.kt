@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.resourcetypes.graph.redesigned
+package net.svaroh.passly.core.resourcetypes.graph.redesigned
 
 enum class UpdateAction {
     /**

@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.passwordgenerator
+package net.svaroh.passly.core.passwordgenerator
 
-import com.passbolt.mobile.android.ui.PinCodeUiModel
+import net.svaroh.passly.ui.PinCodeUiModel
 import java.security.SecureRandom
 
 class PinCodeGenerator(

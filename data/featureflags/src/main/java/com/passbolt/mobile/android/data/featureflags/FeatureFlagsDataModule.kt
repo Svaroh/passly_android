@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.featureflags
+package net.svaroh.passly.data.featureflags
 
-import com.passbolt.mobile.android.core.networking.RestService
-import com.passbolt.mobile.android.data.featureflags.datasource.local.FeatureFlagsLocalDataSourceImpl
-import com.passbolt.mobile.android.data.featureflags.datasource.remote.FeatureFlagsRemoteDataSourceImpl
-import com.passbolt.mobile.android.data.featureflags.datasource.remote.api.FeatureFlagsApi
-import com.passbolt.mobile.android.featureflags.FeatureFlagsLocalDataSource
-import com.passbolt.mobile.android.featureflags.FeatureFlagsRemoteDataSource
-import com.passbolt.mobile.android.featureflags.FeatureFlagsRepository
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.data.featureflags.datasource.local.FeatureFlagsLocalDataSourceImpl
+import net.svaroh.passly.data.featureflags.datasource.remote.FeatureFlagsRemoteDataSourceImpl
+import net.svaroh.passly.data.featureflags.datasource.remote.api.FeatureFlagsApi
+import net.svaroh.passly.featureflags.FeatureFlagsLocalDataSource
+import net.svaroh.passly.featureflags.FeatureFlagsRemoteDataSource
+import net.svaroh.passly.featureflags.FeatureFlagsRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

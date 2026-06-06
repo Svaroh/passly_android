@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.rbac
+package net.svaroh.passly.data.rbac
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.domain.rbac.RbacLocalDataSource
-import com.passbolt.mobile.android.domain.rbac.RbacRemoteDataSource
-import com.passbolt.mobile.android.domain.rbac.RbacRepository
-import com.passbolt.mobile.android.domain.rbac.model.Rbac
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.rbac.RbacLocalDataSource
+import net.svaroh.passly.domain.rbac.RbacRemoteDataSource
+import net.svaroh.passly.domain.rbac.RbacRepository
+import net.svaroh.passly.domain.rbac.model.Rbac
 
 internal class RbacRepositoryImpl(
     private val localDataSource: RbacLocalDataSource,

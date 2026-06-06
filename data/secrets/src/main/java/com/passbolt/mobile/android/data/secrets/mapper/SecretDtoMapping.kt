@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.secrets.mapper
+package net.svaroh.passly.data.secrets.mapper
 
-import com.passbolt.mobile.android.domain.secrets.model.EncryptedSecret
-import com.passbolt.mobile.android.dto.response.SecretResponseDto
+import net.svaroh.passly.domain.secrets.model.EncryptedSecret
+import net.svaroh.passly.dto.response.SecretResponseDto
 
 internal fun SecretResponseDto.toDomain(): EncryptedSecret =
     EncryptedSecret(

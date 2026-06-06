@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.inappreview.datasource.local
+package net.svaroh.passly.data.inappreview.datasource.local
 
 internal const val KEY_IN_APP_REVIEW_INTERVAL_START_DATE = "IN_APP_REVIEW_INTERVAL_START_DATE"
 internal const val KEY_SIGN_IN_COUNT = "SIGN_IN_COUNT"

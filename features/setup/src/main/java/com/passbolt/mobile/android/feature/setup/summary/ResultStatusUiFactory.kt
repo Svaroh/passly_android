@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.feature.setup.summary
+package net.svaroh.passly.feature.setup.summary
 
-import com.passbolt.mobile.android.ui.ResultStatusType
-import com.passbolt.mobile.android.ui.ResultStatusType.ALREADY_LINKED
-import com.passbolt.mobile.android.ui.ResultStatusType.FAILURE
-import com.passbolt.mobile.android.ui.ResultStatusType.HTTP_NOT_SUPPORTED
-import com.passbolt.mobile.android.ui.ResultStatusType.NO_NETWORK
-import com.passbolt.mobile.android.ui.ResultStatusType.SUCCESS
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.ui.ResultStatusType
+import net.svaroh.passly.ui.ResultStatusType.ALREADY_LINKED
+import net.svaroh.passly.ui.ResultStatusType.FAILURE
+import net.svaroh.passly.ui.ResultStatusType.HTTP_NOT_SUPPORTED
+import net.svaroh.passly.ui.ResultStatusType.NO_NETWORK
+import net.svaroh.passly.ui.ResultStatusType.SUCCESS
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 /**
  * Passbolt - Open source password manager for teams

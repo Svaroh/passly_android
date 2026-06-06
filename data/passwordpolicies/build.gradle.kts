@@ -14,5 +14,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.data.passwordpolicies"
+    namespace = "net.svaroh.passly.data.passwordpolicies"
 }

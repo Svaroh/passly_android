@@ -21,24 +21,24 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resources.details
+package net.svaroh.passly.feature.resources.details
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.InProgress
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.domain.rbac.usecase.GetRbacRulesUseCase
-import com.passbolt.mobile.android.domain.resources.actions.SecretPropertiesActionsInteractor
-import com.passbolt.mobile.android.domain.resources.actions.SecretPropertyActionResult
-import com.passbolt.mobile.android.feature.resourcedetails.details.ErrorSnackbarType
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.CopyPassword
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.Initialize
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.TogglePasswordVisibility
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.AddToClipboard
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsViewModel
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
-import com.passbolt.mobile.android.ui.RbacRuleModel.DENY
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.SecretPropertyActionResult
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyPassword
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.Initialize
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.TogglePasswordVisibility
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.AddToClipboard
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsViewModel
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
+import net.svaroh.passly.ui.RbacRuleModel.DENY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop

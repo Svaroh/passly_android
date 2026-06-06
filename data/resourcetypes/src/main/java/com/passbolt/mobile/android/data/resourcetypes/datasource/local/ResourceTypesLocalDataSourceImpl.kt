@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.resourcetypes.datasource.local
+package net.svaroh.passly.data.resourcetypes.datasource.local
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.data.resourcetypes.mapper.toDomain
-import com.passbolt.mobile.android.data.resourcetypes.mapper.toEntity
-import com.passbolt.mobile.android.database.DatabaseProvider
-import com.passbolt.mobile.android.domain.resourcetypes.ResourceTypesLocalDataSource
-import com.passbolt.mobile.android.domain.resourcetypes.model.ResourceType
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.data.resourcetypes.mapper.toDomain
+import net.svaroh.passly.data.resourcetypes.mapper.toEntity
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.domain.resourcetypes.ResourceTypesLocalDataSource
+import net.svaroh.passly.domain.resourcetypes.model.ResourceType
 import java.util.UUID
 
 internal class ResourceTypesLocalDataSourceImpl(

@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.core.ui.permissions
+package net.svaroh.passly.core.ui.permissions
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.android.tools.screenshot.PreviewTest
-import com.passbolt.mobile.android.core.ui.screenshot.PassboltEdgeToEdgePreviewWrapper
-import com.passbolt.mobile.android.core.ui.screenshot.userPermission
-import com.passbolt.mobile.android.ui.ResourcePermission.OWNER
-import com.passbolt.mobile.android.ui.ResourcePermission.UPDATE
+import net.svaroh.passly.core.ui.screenshot.PassboltEdgeToEdgePreviewWrapper
+import net.svaroh.passly.core.ui.screenshot.userPermission
+import net.svaroh.passly.ui.ResourcePermission.OWNER
+import net.svaroh.passly.ui.ResourcePermission.UPDATE
 
 @PreviewTest
 @Preview(showBackground = true)

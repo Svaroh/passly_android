@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.compose
+package net.svaroh.passly.feature.otp.scanotp.compose
 
-import com.passbolt.mobile.android.feature.otp.scanotp.ScanOtpMode
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage.CENTER_CAMERA_ON_BARCODE
+import net.svaroh.passly.feature.otp.scanotp.ScanOtpMode
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage.CENTER_CAMERA_ON_BARCODE
 
 data class ScanOtpState(
     val mode: ScanOtpMode = ScanOtpMode.SCAN_FOR_RESULT,

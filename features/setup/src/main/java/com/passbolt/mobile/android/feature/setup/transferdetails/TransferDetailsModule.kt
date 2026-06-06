@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.setup.transferdetails
+package net.svaroh.passly.feature.setup.transferdetails
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

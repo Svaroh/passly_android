@@ -21,25 +21,25 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.featureflags.datasource.local
+package net.svaroh.passly.data.featureflags.datasource.local
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.FOLDERS_KEY
-import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.PASSWORD_EXPIRY_KEY
-import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.PASSWORD_POLICIES_KEY
-import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.PASSWORD_POLICIES_UPDATE_KEY
-import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.PREVIEW_PASSWORD_KEY
-import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.PRIVACY_POLICY_KEY
-import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.RBAC_KEY
-import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.TAGS_KEY
-import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.TERMS_AND_CONDITIONS_KEY
-import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.TOTP_KEY
-import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.V5_METADATA
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
-import com.passbolt.mobile.android.featureflags.FeatureFlagsLocalDataSource
-import com.passbolt.mobile.android.featureflags.model.FeatureFlags
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.data.featureflags.datasource.local.StorageConstants.FOLDERS_KEY
+import net.svaroh.passly.data.featureflags.datasource.local.StorageConstants.PASSWORD_EXPIRY_KEY
+import net.svaroh.passly.data.featureflags.datasource.local.StorageConstants.PASSWORD_POLICIES_KEY
+import net.svaroh.passly.data.featureflags.datasource.local.StorageConstants.PASSWORD_POLICIES_UPDATE_KEY
+import net.svaroh.passly.data.featureflags.datasource.local.StorageConstants.PREVIEW_PASSWORD_KEY
+import net.svaroh.passly.data.featureflags.datasource.local.StorageConstants.PRIVACY_POLICY_KEY
+import net.svaroh.passly.data.featureflags.datasource.local.StorageConstants.RBAC_KEY
+import net.svaroh.passly.data.featureflags.datasource.local.StorageConstants.TAGS_KEY
+import net.svaroh.passly.data.featureflags.datasource.local.StorageConstants.TERMS_AND_CONDITIONS_KEY
+import net.svaroh.passly.data.featureflags.datasource.local.StorageConstants.TOTP_KEY
+import net.svaroh.passly.data.featureflags.datasource.local.StorageConstants.V5_METADATA
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.featureflags.FeatureFlagsLocalDataSource
+import net.svaroh.passly.featureflags.model.FeatureFlags
 
 internal class FeatureFlagsLocalDataSourceImpl(
     private val encryptedSharedPreferencesFactory: EncryptedSharedPreferencesFactory,

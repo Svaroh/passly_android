@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common.time
+package net.svaroh.passly.common.time
 
 import java.time.Instant
 

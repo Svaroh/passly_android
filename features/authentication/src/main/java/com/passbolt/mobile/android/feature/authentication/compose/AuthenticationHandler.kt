@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.compose
+package net.svaroh.passly.feature.authentication.compose
 
 import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -32,25 +32,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import com.passbolt.mobile.android.core.compose.RepeatOnStartedEffect
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Passphrase
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Session
-import com.passbolt.mobile.android.core.mvp.authentication.MfaProvidersHandler
-import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackingFlow
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
-import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig.RefreshSession
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
-import com.passbolt.mobile.android.domain.auth.usecase.SaveMfaTokenUseCase
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaDialogState
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaResult
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoScreen
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpScreen
-import com.passbolt.mobile.android.feature.authentication.mfa.unknown.UnknownProviderScreen
-import com.passbolt.mobile.android.feature.authentication.mfa.yubikey.ScanYubikeyScreen
+import net.svaroh.passly.core.compose.RepeatOnStartedEffect
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Passphrase
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Session
+import net.svaroh.passly.core.mvp.authentication.MfaProvidersHandler
+import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.RefreshSession
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.auth.usecase.GetSessionUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveMfaTokenUseCase
+import net.svaroh.passly.feature.authentication.mfa.MfaDialogState
+import net.svaroh.passly.feature.authentication.mfa.MfaResult
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoScreen
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpScreen
+import net.svaroh.passly.feature.authentication.mfa.unknown.UnknownProviderScreen
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyScreen
 import org.koin.compose.koinInject
 
 /**

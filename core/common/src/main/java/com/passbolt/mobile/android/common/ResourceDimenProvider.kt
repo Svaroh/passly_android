@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common
+package net.svaroh.passly.common
 
 import android.content.res.Resources
 

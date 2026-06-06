@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.passwordexpiry.usecase
+package net.svaroh.passly.domain.passwordexpiry.usecase
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.CompleteAuthenticatedOutput
-import com.passbolt.mobile.android.core.mvp.authentication.IncompleteAuthenticatedOutput
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.passwordexpiry.PasswordExpiryRepository
-import com.passbolt.mobile.android.domain.passwordexpiry.model.PasswordExpirySettings
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
+import net.svaroh.passly.core.mvp.authentication.IncompleteAuthenticatedOutput
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.passwordexpiry.PasswordExpiryRepository
+import net.svaroh.passly.domain.passwordexpiry.model.PasswordExpirySettings
 
 class PasswordExpiryPoliciesInteractor(
     private val passwordExpiryRepository: PasswordExpiryRepository,

@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.rbac
+package net.svaroh.passly.data.rbac
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
-import com.passbolt.mobile.android.domain.rbac.RbacLocalDataSource
-import com.passbolt.mobile.android.domain.rbac.RbacRemoteDataSource
-import com.passbolt.mobile.android.domain.rbac.model.Rbac
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.domain.rbac.RbacLocalDataSource
+import net.svaroh.passly.domain.rbac.RbacRemoteDataSource
+import net.svaroh.passly.domain.rbac.model.Rbac
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule

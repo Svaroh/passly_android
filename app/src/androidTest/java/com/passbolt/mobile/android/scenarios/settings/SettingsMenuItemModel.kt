@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.scenarios.settings
+package net.svaroh.passly.scenarios.settings
 
 import androidx.annotation.StringRes
-import com.passbolt.mobile.android.testtags.composetags.OpenableSetting
-import com.passbolt.mobile.android.testtags.composetags.SwitchableSetting
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.testtags.composetags.OpenableSetting
+import net.svaroh.passly.testtags.composetags.SwitchableSetting
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 /**
  * Passbolt - Open source password manager for teams

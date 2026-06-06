@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android
+package net.svaroh.passly
 
-import com.passbolt.mobile.android.core.passphrasememorycache.AuthOnEveryEntryChecker
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesRepository
+import net.svaroh.passly.core.passphrasememorycache.AuthOnEveryEntryChecker
+import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
 
 class PreferencesAuthOnEveryEntryChecker(
     private val globalPreferencesRepository: GlobalPreferencesRepository,

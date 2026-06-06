@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.preferences
+package net.svaroh.passly.data.preferences
 
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesLocalDataSource
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesRepository
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesUpdate
-import com.passbolt.mobile.android.ui.GlobalPreferencesUiModel
+import net.svaroh.passly.domain.preferences.GlobalPreferencesLocalDataSource
+import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 
 internal class GlobalPreferencesRepositoryImpl(
     private val localDataSource: GlobalPreferencesLocalDataSource,

@@ -28,5 +28,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.domain.serializers"
+    namespace = "net.svaroh.passly.domain.serializers"
 }

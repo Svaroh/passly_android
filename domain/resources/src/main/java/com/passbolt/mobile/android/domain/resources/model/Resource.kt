@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.resources.model
+package net.svaroh.passly.domain.resources.model
 
-import com.passbolt.mobile.android.ui.MetadataJsonModel
-import com.passbolt.mobile.android.ui.MetadataKeyTypeModel
-import com.passbolt.mobile.android.ui.PermissionModel
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.TagModel
+import net.svaroh.passly.ui.MetadataJsonModel
+import net.svaroh.passly.ui.MetadataKeyTypeModel
+import net.svaroh.passly.ui.PermissionModel
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.TagModel
 import java.time.ZonedDateTime
 
 data class Resource(

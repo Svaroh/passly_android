@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.data.accounts
+package net.svaroh.passly.data.accounts
 
-import com.passbolt.mobile.android.domain.accounts.SelectedAccountRepository
-import com.passbolt.mobile.android.domain.accounts.datasource.SelectedAccountLocalDataSource
+import net.svaroh.passly.domain.accounts.SelectedAccountRepository
+import net.svaroh.passly.domain.accounts.datasource.SelectedAccountLocalDataSource
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.benchmark.pagesize.appstate
+package net.svaroh.passly.benchmark.pagesize.appstate
 
-import com.passbolt.mobile.android.domain.resourcetypes.ResourceTypesLocalDataSource
-import com.passbolt.mobile.android.domain.resourcetypes.model.ResourceType
-import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.domain.resourcetypes.ResourceTypesLocalDataSource
+import net.svaroh.passly.domain.resourcetypes.model.ResourceType
+import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
 import kotlinx.coroutines.runBlocking
 import java.util.UUID
 

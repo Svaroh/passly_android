@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.biometrickey.datasource.local
+package net.svaroh.passly.data.biometrickey.datasource.local
 
 import android.util.Base64
 import androidx.core.content.edit
-import com.passbolt.mobile.android.data.biometrickey.BiometricKeyIvFileName
-import com.passbolt.mobile.android.domain.biometrickey.BiometricKeyLocalDataSource
-import com.passbolt.mobile.android.domain.biometrickey.model.BiometricKey
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
-import com.passbolt.mobile.android.encryptedstorage.biometric.BiometricCrypto
-import com.passbolt.mobile.android.encryptedstorage.biometric.KeyStoreWrapper
+import net.svaroh.passly.data.biometrickey.BiometricKeyIvFileName
+import net.svaroh.passly.domain.biometrickey.BiometricKeyLocalDataSource
+import net.svaroh.passly.domain.biometrickey.model.BiometricKey
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.encryptedstorage.biometric.BiometricCrypto
+import net.svaroh.passly.encryptedstorage.biometric.KeyStoreWrapper
 
 internal class BiometricKeyLocalDataSourceImpl(
     private val encryptedSharedPreferencesFactory: EncryptedSharedPreferencesFactory,

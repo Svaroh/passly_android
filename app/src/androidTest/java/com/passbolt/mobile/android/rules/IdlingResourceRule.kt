@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.rules
+package net.svaroh.passly.rules
 
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource

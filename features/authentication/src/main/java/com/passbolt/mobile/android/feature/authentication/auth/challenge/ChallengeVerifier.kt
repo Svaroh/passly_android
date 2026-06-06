@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.authentication.auth.challenge
+package net.svaroh.passly.feature.authentication.auth.challenge
 
-import com.passbolt.mobile.android.dto.response.ChallengeResponseDto
+import net.svaroh.passly.dto.response.ChallengeResponseDto
 import io.fusionauth.jwt.InvalidJWTSignatureException
 import io.fusionauth.jwt.JWTExpiredException
 import io.fusionauth.jwt.Verifier

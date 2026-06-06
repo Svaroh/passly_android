@@ -21,24 +21,24 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.metadata.datasource.remote
+package net.svaroh.passly.data.metadata.datasource.remote
 
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.architecture.result.map
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.core.networking.toDomainResult
-import com.passbolt.mobile.android.data.metadata.datasource.remote.api.MetadataApi
-import com.passbolt.mobile.android.data.metadata.mapper.toDomain
-import com.passbolt.mobile.android.domain.metadata.UpdateMetadataSessionKeysResult
-import com.passbolt.mobile.android.domain.metadata.datasource.MetadataRemoteDataSource
-import com.passbolt.mobile.android.domain.metadata.model.MetadataKey
-import com.passbolt.mobile.android.domain.metadata.model.MetadataKeysSettings
-import com.passbolt.mobile.android.domain.metadata.model.MetadataSessionKeysBundle
-import com.passbolt.mobile.android.domain.metadata.model.MetadataTypesSettings
-import com.passbolt.mobile.android.dto.request.EncryptedDataAndModifiedRequest
-import com.passbolt.mobile.android.dto.request.EncryptedDataRequest
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.map
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.data.metadata.datasource.remote.api.MetadataApi
+import net.svaroh.passly.data.metadata.mapper.toDomain
+import net.svaroh.passly.domain.metadata.UpdateMetadataSessionKeysResult
+import net.svaroh.passly.domain.metadata.datasource.MetadataRemoteDataSource
+import net.svaroh.passly.domain.metadata.model.MetadataKey
+import net.svaroh.passly.domain.metadata.model.MetadataKeysSettings
+import net.svaroh.passly.domain.metadata.model.MetadataSessionKeysBundle
+import net.svaroh.passly.domain.metadata.model.MetadataTypesSettings
+import net.svaroh.passly.dto.request.EncryptedDataAndModifiedRequest
+import net.svaroh.passly.dto.request.EncryptedDataRequest
 import java.net.HttpURLConnection.HTTP_CONFLICT
 import java.time.ZonedDateTime
 

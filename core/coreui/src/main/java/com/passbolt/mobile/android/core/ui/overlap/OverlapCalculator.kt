@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.overlap
+package net.svaroh.passly.core.ui.overlap
 
 import kotlin.math.roundToInt
 

@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.jsonmodel.jsonpathops
+package net.svaroh.passly.jsonmodel.jsonpathops
 
 import com.google.gson.JsonElement
 import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.DocumentContext
 import com.jayway.jsonpath.JsonPath
 import com.jayway.jsonpath.PathNotFoundException
-import com.passbolt.mobile.android.jsonmodel.JsonModel
-import com.passbolt.mobile.android.jsonmodel.ParsedJson
+import net.svaroh.passly.jsonmodel.JsonModel
+import net.svaroh.passly.jsonmodel.ParsedJson
 
 class JsonPathJsonPathOps(
     jsonPathConfig: Configuration,

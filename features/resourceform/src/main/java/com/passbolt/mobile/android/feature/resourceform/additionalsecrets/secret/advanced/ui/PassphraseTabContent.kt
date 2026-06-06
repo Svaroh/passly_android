@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.ui
+package net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.ui
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -33,19 +33,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.dropdown.DropdownInput
-import com.passbolt.mobile.android.core.ui.slider.LabelledSlider
-import com.passbolt.mobile.android.core.ui.text.TextInput
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PassphraseWordCaseChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PassphraseWordSeparatorChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PassphraseWordsCountChanged
-import com.passbolt.mobile.android.ui.CaseTypeUiModel
-import com.passbolt.mobile.android.ui.CaseTypeUiModel.CAMELCASE
-import com.passbolt.mobile.android.ui.CaseTypeUiModel.LOWERCASE
-import com.passbolt.mobile.android.ui.CaseTypeUiModel.UPPERCASE
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsUiModel
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.dropdown.DropdownInput
+import net.svaroh.passly.core.ui.slider.LabelledSlider
+import net.svaroh.passly.core.ui.text.TextInput
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PassphraseWordCaseChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PassphraseWordSeparatorChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationIntent.PassphraseWordsCountChanged
+import net.svaroh.passly.ui.CaseTypeUiModel
+import net.svaroh.passly.ui.CaseTypeUiModel.CAMELCASE
+import net.svaroh.passly.ui.CaseTypeUiModel.LOWERCASE
+import net.svaroh.passly.ui.CaseTypeUiModel.UPPERCASE
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 private const val PASSPHRASE_WORDS_MIN = 4
 private const val PASSPHRASE_WORDS_MAX = 40

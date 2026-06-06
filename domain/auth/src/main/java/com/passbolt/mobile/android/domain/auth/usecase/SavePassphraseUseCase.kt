@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.domain.auth.usecase
+package net.svaroh.passly.domain.auth.usecase
 
 import android.security.keystore.UserNotAuthenticatedException
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.auth.PassphraseRepository
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.auth.PassphraseRepository
 import javax.crypto.Cipher
 
 /**

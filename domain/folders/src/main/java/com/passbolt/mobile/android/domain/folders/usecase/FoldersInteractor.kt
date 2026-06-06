@@ -21,20 +21,20 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.folders.usecase
+package net.svaroh.passly.domain.folders.usecase
 
 import android.database.SQLException
-import com.passbolt.mobile.android.common.transaction.DatabaseTransactionRunner
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.CompleteAuthenticatedOutput
-import com.passbolt.mobile.android.core.mvp.authentication.IncompleteAuthenticatedOutput
-import com.passbolt.mobile.android.domain.folders.model.FolderModelWithAttributes
-import com.passbolt.mobile.android.domain.folders.model.FolderUpdateState.PENDING
-import com.passbolt.mobile.android.domain.folders.usecase.GetFoldersPaginatedUseCase.Output.Failure
-import com.passbolt.mobile.android.domain.folders.usecase.GetFoldersPaginatedUseCase.Output.Success
-import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesRepository
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
+import net.svaroh.passly.common.transaction.DatabaseTransactionRunner
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
+import net.svaroh.passly.core.mvp.authentication.IncompleteAuthenticatedOutput
+import net.svaroh.passly.domain.folders.model.FolderModelWithAttributes
+import net.svaroh.passly.domain.folders.model.FolderUpdateState.PENDING
+import net.svaroh.passly.domain.folders.usecase.GetFoldersPaginatedUseCase.Output.Failure
+import net.svaroh.passly.domain.folders.usecase.GetFoldersPaginatedUseCase.Output.Success
+import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import timber.log.Timber
 import kotlin.math.ceil
 

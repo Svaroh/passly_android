@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.search
+package net.svaroh.passly.core.ui.search
 
 enum class SearchInputEndIconMode {
     NONE,

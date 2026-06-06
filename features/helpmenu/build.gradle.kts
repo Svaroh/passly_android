@@ -26,7 +26,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.helpmenu"
+    namespace = "net.svaroh.passly.feature.helpmenu"
     buildFeatures {
         compose = true
     }

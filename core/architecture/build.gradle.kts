@@ -9,7 +9,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.architecture"
+    namespace = "net.svaroh.passly.core.architecture"
     buildFeatures {
         viewBinding = true
     }

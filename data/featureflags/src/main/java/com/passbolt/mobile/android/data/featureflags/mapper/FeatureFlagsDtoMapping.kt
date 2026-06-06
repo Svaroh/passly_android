@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.featureflags.mapper
+package net.svaroh.passly.data.featureflags.mapper
 
-import com.passbolt.mobile.android.dto.response.SettingsResponseDto
-import com.passbolt.mobile.android.featureflags.model.FeatureFlags
+import net.svaroh.passly.dto.response.SettingsResponseDto
+import net.svaroh.passly.featureflags.model.FeatureFlags
 
 internal fun SettingsResponseDto.toDomain(): FeatureFlags {
     val defaults = FeatureFlags.defaults()

@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.feature.authentication.accountslist
+package net.svaroh.passly.feature.authentication.accountslist
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.android.tools.screenshot.PreviewTest
-import com.passbolt.mobile.android.core.ui.screenshot.PassboltEdgeToEdgePreviewWrapper
-import com.passbolt.mobile.android.ui.AccountModelUi.AccountModel
-import com.passbolt.mobile.android.ui.AccountModelUi.AddNewAccount
+import net.svaroh.passly.core.ui.screenshot.PassboltEdgeToEdgePreviewWrapper
+import net.svaroh.passly.ui.AccountModelUi.AccountModel
+import net.svaroh.passly.ui.AccountModelUi.AddNewAccount
 
 private const val SCREEN_WIDTH_DP = 360
 private const val SCREEN_HEIGHT_DP = 800

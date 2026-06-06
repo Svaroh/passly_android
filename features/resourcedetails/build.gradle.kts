@@ -72,7 +72,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.resources"
+    namespace = "net.svaroh.passly.feature.resources"
     buildFeatures {
         compose = true
     }

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.dummy
+package net.svaroh.passly.core.dummy
 
 import android.app.Activity
 

@@ -1,16 +1,16 @@
-package com.passbolt.mobile.android.feature.resourceform.main
+package net.svaroh.passly.feature.resourceform.main
 
-import com.passbolt.mobile.android.ui.AdditionalUrisUiModel
-import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
-import com.passbolt.mobile.android.ui.CustomFieldsUiModel
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsUiModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
-import com.passbolt.mobile.android.ui.PasswordUiModel
-import com.passbolt.mobile.android.ui.PinCodeUiModel
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel
-import com.passbolt.mobile.android.ui.ResourceFormMode
-import com.passbolt.mobile.android.ui.TotpUiModel
+import net.svaroh.passly.ui.AdditionalUrisUiModel
+import net.svaroh.passly.ui.ConfirmPermissionsMode
+import net.svaroh.passly.ui.CustomFieldsUiModel
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
+import net.svaroh.passly.ui.PasswordUiModel
+import net.svaroh.passly.ui.PinCodeUiModel
+import net.svaroh.passly.ui.ResourceAppearanceModel
+import net.svaroh.passly.ui.ResourceFormMode
+import net.svaroh.passly.ui.TotpUiModel
 
 sealed interface ResourceFormSideEffect {
     data class NavigateToPassword(

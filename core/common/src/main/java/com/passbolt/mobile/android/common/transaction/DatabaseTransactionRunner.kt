@@ -20,7 +20,7 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.common.transaction
+package net.svaroh.passly.common.transaction
 
 interface DatabaseTransactionRunner {
     suspend fun <T> runInTransaction(block: suspend () -> T): T

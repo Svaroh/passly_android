@@ -17,5 +17,5 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.passwordgenerator"
+    namespace = "net.svaroh.passly.core.passwordgenerator"
 }

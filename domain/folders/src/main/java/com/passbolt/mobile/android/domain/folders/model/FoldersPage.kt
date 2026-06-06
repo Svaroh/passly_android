@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.folders.model
+package net.svaroh.passly.domain.folders.model
 
 /**
  * A single page of folders fetched from the remote, carrying the total item count needed to drive

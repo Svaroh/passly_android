@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.domain.resources.actions
+package net.svaroh.passly.domain.resources.actions
 
-import com.passbolt.mobile.android.ui.ResourceUiModel
+import net.svaroh.passly.ui.ResourceUiModel
 
 fun interface SecretPropertiesActionsInteractorFactory {
     fun create(resource: ResourceUiModel): SecretPropertiesActionsInteractor

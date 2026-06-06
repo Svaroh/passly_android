@@ -20,36 +20,36 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.data.resources.datasource.local
+package net.svaroh.passly.data.resources.datasource.local
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.passbolt.mobile.android.data.resources.mapper.toResourceDatabaseView
-import com.passbolt.mobile.android.data.resources.mapper.toUiModel
-import com.passbolt.mobile.android.database.DatabaseProvider
-import com.passbolt.mobile.android.database.QuerySanitizer
-import com.passbolt.mobile.android.domain.resources.ResourcesLocalDataSource
-import com.passbolt.mobile.android.domain.resources.mapper.toDomain
-import com.passbolt.mobile.android.domain.resources.mapper.toUiModel
-import com.passbolt.mobile.android.domain.resources.model.Resource
-import com.passbolt.mobile.android.domain.resources.model.ResourceWithAttributes
-import com.passbolt.mobile.android.entity.group.ResourceAndGroupsCrossRef
-import com.passbolt.mobile.android.entity.resource.ResourceDatabaseView.ByModifiedDateDescending
-import com.passbolt.mobile.android.entity.resource.ResourceDatabaseView.ByNameAscending
-import com.passbolt.mobile.android.entity.resource.ResourceDatabaseView.HasExpiry
-import com.passbolt.mobile.android.entity.resource.ResourceDatabaseView.HasPermissions
-import com.passbolt.mobile.android.entity.resource.ResourceDatabaseView.IsFavourite
-import com.passbolt.mobile.android.entity.resource.ResourceUpdateState
-import com.passbolt.mobile.android.entity.resource.ResourceUpdateState.UPDATED
-import com.passbolt.mobile.android.entity.user.ResourceAndUsersCrossRef
-import com.passbolt.mobile.android.mappers.PermissionsModelMapper
-import com.passbolt.mobile.android.mappers.ResourceModelMapper
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
-import com.passbolt.mobile.android.ui.PermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.TagModel
+import net.svaroh.passly.data.resources.mapper.toResourceDatabaseView
+import net.svaroh.passly.data.resources.mapper.toUiModel
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.database.QuerySanitizer
+import net.svaroh.passly.domain.resources.ResourcesLocalDataSource
+import net.svaroh.passly.domain.resources.mapper.toDomain
+import net.svaroh.passly.domain.resources.mapper.toUiModel
+import net.svaroh.passly.domain.resources.model.Resource
+import net.svaroh.passly.domain.resources.model.ResourceWithAttributes
+import net.svaroh.passly.entity.group.ResourceAndGroupsCrossRef
+import net.svaroh.passly.entity.resource.ResourceDatabaseView.ByModifiedDateDescending
+import net.svaroh.passly.entity.resource.ResourceDatabaseView.ByNameAscending
+import net.svaroh.passly.entity.resource.ResourceDatabaseView.HasExpiry
+import net.svaroh.passly.entity.resource.ResourceDatabaseView.HasPermissions
+import net.svaroh.passly.entity.resource.ResourceDatabaseView.IsFavourite
+import net.svaroh.passly.entity.resource.ResourceUpdateState
+import net.svaroh.passly.entity.resource.ResourceUpdateState.UPDATED
+import net.svaroh.passly.entity.user.ResourceAndUsersCrossRef
+import net.svaroh.passly.mappers.PermissionsModelMapper
+import net.svaroh.passly.mappers.ResourceModelMapper
+import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.PermissionModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.TagModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
