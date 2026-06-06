@@ -1,8 +1,8 @@
 package net.svaroh.passly.core.accounts
 
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
 
 /**
  * Passbolt - Open source password manager for teams
