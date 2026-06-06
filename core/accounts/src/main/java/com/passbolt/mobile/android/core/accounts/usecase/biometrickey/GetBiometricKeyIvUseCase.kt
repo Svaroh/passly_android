@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.core.accounts.usecase.biometrickey
+package net.svaroh.passly.core.accounts.usecase.biometrickey
 
 import android.util.Base64
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.BiometricKeyIvFileName
-import com.passbolt.mobile.android.core.accounts.usecase.IV_KEY
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.BiometricKeyIvFileName
+import net.svaroh.passly.core.accounts.usecase.IV_KEY
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
 
 /**
  * Passbolt - Open source password manager for teams

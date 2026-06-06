@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.home.filtersmenu
+package net.svaroh.passly.feature.home.filtersmenu
 
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module

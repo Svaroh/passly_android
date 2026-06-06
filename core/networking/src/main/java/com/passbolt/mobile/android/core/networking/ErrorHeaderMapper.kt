@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.core.networking
+package net.svaroh.passly.core.networking
 
 import android.content.Context
 import com.google.gson.Gson
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
-import com.passbolt.mobile.android.dto.response.BaseResponse
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
+import net.svaroh.passly.dto.response.BaseResponse
 import okhttp3.ResponseBody
 import retrofit2.Response
 import timber.log.Timber
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 /**
  * Passbolt - Open source password manager for teams

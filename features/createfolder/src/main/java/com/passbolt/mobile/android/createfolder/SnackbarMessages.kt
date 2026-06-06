@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.createfolder
+package net.svaroh.passly.createfolder
 
 import android.content.Context
-import com.passbolt.mobile.android.createfolder.CreateFolderValidationError.MaxLengthExceeded
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.createfolder.CreateFolderValidationError.MaxLengthExceeded
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getErrorMessage(
     context: Context,

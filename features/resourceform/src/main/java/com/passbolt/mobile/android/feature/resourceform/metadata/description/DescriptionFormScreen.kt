@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.description
+package net.svaroh.passly.feature.resourceform.metadata.description
 
 import PassboltTheme
 import android.content.Context
@@ -42,28 +42,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.section.Section
-import com.passbolt.mobile.android.core.ui.text.TextInput
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.resourceform.metadata.description.DescriptionFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.metadata.description.DescriptionFormIntent.DescriptionChanged
-import com.passbolt.mobile.android.feature.resourceform.metadata.description.DescriptionFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.metadata.description.DescriptionFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.metadata.description.DescriptionFormSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.resourceform.navigation.DescriptionFormResult
-import com.passbolt.mobile.android.ui.LeadingContentType
-import com.passbolt.mobile.android.ui.ResourceFormMode
-import com.passbolt.mobile.android.ui.ResourceFormMode.Create
-import com.passbolt.mobile.android.ui.ResourceFormMode.Edit
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.section.Section
+import net.svaroh.passly.core.ui.text.TextInput
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormIntent.DescriptionChanged
+import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormSideEffect.NavigateBack
+import net.svaroh.passly.feature.resourceform.navigation.DescriptionFormResult
+import net.svaroh.passly.ui.LeadingContentType
+import net.svaroh.passly.ui.ResourceFormMode
+import net.svaroh.passly.ui.ResourceFormMode.Create
+import net.svaroh.passly.ui.ResourceFormMode.Edit
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun DescriptionFormScreen(

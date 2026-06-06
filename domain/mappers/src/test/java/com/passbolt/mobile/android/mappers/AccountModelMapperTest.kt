@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.entity.account.Account
-import com.passbolt.mobile.android.ui.AccountModelUi
+import net.svaroh.passly.entity.account.Account
+import net.svaroh.passly.ui.AccountModelUi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.Test

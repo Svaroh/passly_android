@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker
+package net.svaroh.passly.resourcepicker
 
-import com.passbolt.mobile.android.resourcepicker.model.ConfirmationModelFactory
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerViewModel
-import com.passbolt.mobile.android.resourcepicker.screen.data.ResourcePickerDataProvider
+import net.svaroh.passly.resourcepicker.model.ConfirmationModelFactory
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerViewModel
+import net.svaroh.passly.resourcepicker.screen.data.ResourcePickerDataProvider
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf

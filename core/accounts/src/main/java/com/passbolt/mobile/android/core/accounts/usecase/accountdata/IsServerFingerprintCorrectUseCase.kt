@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.accounts.usecase.accountdata
+package net.svaroh.passly.core.accounts.usecase.accountdata
 
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.core.accounts.usecase.SERVER_FINGERPRINT_KEY
-import com.passbolt.mobile.android.core.accounts.usecase.ServerFingerprintFileName
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.core.accounts.usecase.SERVER_FINGERPRINT_KEY
+import net.svaroh.passly.core.accounts.usecase.ServerFingerprintFileName
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
 
 /**
  * Passbolt - Open source password manager for teams

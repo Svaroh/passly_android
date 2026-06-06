@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.feature.authentication.auth
+package net.svaroh.passly.feature.authentication.auth
 
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import com.passbolt.mobile.android.ui.BiometricAuthError
+import net.svaroh.passly.ui.BiometricAuthError
 import timber.log.Timber
 import java.util.concurrent.Executor
 import javax.crypto.Cipher
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Suppress("LongParameterList")
 fun showBiometricPrompt(

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.encryptedstorage.biometric
+package net.svaroh.passly.encryptedstorage.biometric
 
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import javax.crypto.Cipher

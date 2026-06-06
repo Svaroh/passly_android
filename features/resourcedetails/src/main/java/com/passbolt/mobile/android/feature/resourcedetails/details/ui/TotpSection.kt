@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourcedetails.details.ui
+package net.svaroh.passly.feature.resourcedetails.details.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -21,13 +21,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.passbolt.mobile.android.core.compose.Inconsolata
-import com.passbolt.mobile.android.core.formatter.OtpFormatter
-import com.passbolt.mobile.android.core.localization.R
-import com.passbolt.mobile.android.core.ui.controller.TotpComposeController
-import com.passbolt.mobile.android.core.ui.section.Section
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent
-import com.passbolt.mobile.android.ui.OtpItemWrapper
+import net.svaroh.passly.core.compose.Inconsolata
+import net.svaroh.passly.core.formatter.OtpFormatter
+import net.svaroh.passly.core.localization.R
+import net.svaroh.passly.core.ui.controller.TotpComposeController
+import net.svaroh.passly.core.ui.section.Section
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent
+import net.svaroh.passly.ui.OtpItemWrapper
 import org.koin.compose.koinInject
 
 @Composable
@@ -79,7 +79,7 @@ internal fun TotpSection(
             when {
                 otpModel?.isRefreshing == true -> {
                     Icon(
-                        painter = painterResource(com.passbolt.mobile.android.core.ui.R.drawable.ic_refresh),
+                        painter = painterResource(net.svaroh.passly.core.ui.R.drawable.ic_refresh),
                         contentDescription = null,
                         modifier =
                             Modifier
@@ -108,9 +108,9 @@ internal fun TotpSection(
                     painter =
                         painterResource(
                             if (otpModel?.isVisible == true) {
-                                com.passbolt.mobile.android.core.ui.R.drawable.ic_eye_invisible
+                                net.svaroh.passly.core.ui.R.drawable.ic_eye_invisible
                             } else {
-                                com.passbolt.mobile.android.core.ui.R.drawable.ic_eye_visible
+                                net.svaroh.passly.core.ui.R.drawable.ic_eye_visible
                             },
                         ),
                     contentDescription = null,

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.circlestepsview
+package net.svaroh.passly.core.ui.circlestepsview
 
 import PassboltTheme
 import androidx.compose.foundation.background
@@ -44,7 +44,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.passbolt.mobile.android.core.ui.R
+import net.svaroh.passly.core.ui.R
 
 @Composable
 fun CircleStepsView(

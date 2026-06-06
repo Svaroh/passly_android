@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.common.CookieExtractor
-import com.passbolt.mobile.android.common.time.TimeProvider
-import com.passbolt.mobile.android.dto.request.SignInRequestDto
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.mappers.SignInMapper
-import com.passbolt.mobile.android.passboltapi.auth.AuthRepository
+import net.svaroh.passly.common.CookieExtractor
+import net.svaroh.passly.common.time.TimeProvider
+import net.svaroh.passly.dto.request.SignInRequestDto
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.mappers.SignInMapper
+import net.svaroh.passly.passboltapi.auth.AuthRepository
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris
+package net.svaroh.passly.feature.resourceform.metadata.additionaluris
 
 import androidx.annotation.VisibleForTesting
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult.CanAdd
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult.LimitReached
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult.CanAdd
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult.LimitReached
 
 internal interface LimitChecker {
     fun checkLimit(currentCount: Int): LimitCheckResult

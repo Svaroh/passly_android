@@ -1,20 +1,20 @@
-package com.passbolt.mobile.android.otpmoremenu
+package net.svaroh.passly.otpmoremenu
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuIntent.Close
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuIntent.CopyOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuIntent.DeleteOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuIntent.EditOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuIntent.Initialize
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuIntent.ShowOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.Dismiss
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeCopyOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeDeleteOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeEditOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeShowOtp
-import com.passbolt.mobile.android.otpmoremenu.usecase.CreateOtpMoreMenuModelUseCase
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.Close
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.CopyOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.DeleteOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.EditOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.Initialize
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.ShowOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.Dismiss
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeCopyOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeDeleteOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeEditOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeShowOtp
+import net.svaroh.passly.otpmoremenu.usecase.CreateOtpMoreMenuModelUseCase
 import kotlinx.coroutines.launch
 
 /**

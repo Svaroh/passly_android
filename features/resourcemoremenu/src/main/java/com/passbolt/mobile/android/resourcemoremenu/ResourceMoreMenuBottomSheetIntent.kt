@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcemoremenu
+package net.svaroh.passly.resourcemoremenu
 
 sealed interface ResourceMoreMenuBottomSheetIntent {
     data class Initialize(

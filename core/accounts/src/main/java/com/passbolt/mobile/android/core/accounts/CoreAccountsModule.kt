@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.accounts
+package net.svaroh.passly.core.accounts
 
 import android.content.Context
-import com.passbolt.mobile.android.core.accounts.usecase.BiometricCipherImpl
-import com.passbolt.mobile.android.core.accounts.usecase.account.accountModule
-import com.passbolt.mobile.android.core.accounts.usecase.accountdata.accountDataModule
-import com.passbolt.mobile.android.core.accounts.usecase.accounts.accountsModule
-import com.passbolt.mobile.android.core.accounts.usecase.biometrickey.biometricKeyIvModule
-import com.passbolt.mobile.android.core.accounts.usecase.privatekey.privateKeyModule
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.selectedAccountModule
-import com.passbolt.mobile.android.encryptedstorage.biometric.BiometricCipher
+import net.svaroh.passly.core.accounts.usecase.BiometricCipherImpl
+import net.svaroh.passly.core.accounts.usecase.account.accountModule
+import net.svaroh.passly.core.accounts.usecase.accountdata.accountDataModule
+import net.svaroh.passly.core.accounts.usecase.accounts.accountsModule
+import net.svaroh.passly.core.accounts.usecase.biometrickey.biometricKeyIvModule
+import net.svaroh.passly.core.accounts.usecase.privatekey.privateKeyModule
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.selectedAccountModule
+import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf

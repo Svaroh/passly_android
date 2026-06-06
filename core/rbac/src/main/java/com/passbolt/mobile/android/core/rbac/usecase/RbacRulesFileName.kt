@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.rbac.usecase
+package net.svaroh.passly.core.rbac.usecase
 
 class RbacRulesFileName(
     userId: String,

@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.tagsdetails
+package net.svaroh.passly.tagsdetails
 
 import android.content.Context
-import com.passbolt.mobile.android.tagsdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
-import com.passbolt.mobile.android.tagsdetails.ToastType.CONTENT_NOT_AVAILABLE
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.tagsdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
+import net.svaroh.passly.tagsdetails.ToastType.CONTENT_NOT_AVAILABLE
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getToastMessage(
     context: Context,

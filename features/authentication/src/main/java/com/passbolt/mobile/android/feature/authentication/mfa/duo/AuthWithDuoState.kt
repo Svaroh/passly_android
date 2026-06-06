@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.duo
+package net.svaroh.passly.feature.authentication.mfa.duo
 
 data class AuthWithDuoState(
     val showProgress: Boolean = false,

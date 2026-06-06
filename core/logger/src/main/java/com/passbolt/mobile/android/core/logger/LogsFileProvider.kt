@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.logger
+package net.svaroh.passly.core.logger
 
 import androidx.core.content.FileProvider
 

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.groupdetails.groupmemberdetails
+package net.svaroh.passly.groupdetails.groupmemberdetails
 
 import PassboltTheme
 import androidx.compose.foundation.layout.Column
@@ -42,18 +42,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.formatter.FingerprintFormatter
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.ui.circularimage.CircularProfileImage
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.GoBack
-import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.Initialize
-import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsSideEffect.NavigateUp
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.formatter.FingerprintFormatter
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.GoBack
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.Initialize
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsSideEffect.NavigateUp
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun GroupMemberDetailsScreen(

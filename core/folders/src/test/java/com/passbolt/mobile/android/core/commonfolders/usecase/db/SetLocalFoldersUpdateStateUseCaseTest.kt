@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.core.commonfolders.usecase.db
+package net.svaroh.passly.core.commonfolders.usecase.db
 
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.database.DatabaseProvider
-import com.passbolt.mobile.android.database.ResourceDatabase
-import com.passbolt.mobile.android.database.impl.folders.FoldersDao
-import com.passbolt.mobile.android.entity.folder.FolderUpdateState
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.database.ResourceDatabase
+import net.svaroh.passly.database.impl.folders.FoldersDao
+import net.svaroh.passly.entity.folder.FolderUpdateState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

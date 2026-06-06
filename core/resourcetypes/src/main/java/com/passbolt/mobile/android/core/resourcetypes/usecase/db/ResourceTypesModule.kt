@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.resourcetypes.usecase.db
+package net.svaroh.passly.core.resourcetypes.usecase.db
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf

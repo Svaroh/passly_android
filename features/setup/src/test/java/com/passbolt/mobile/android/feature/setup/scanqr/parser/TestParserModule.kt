@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.feature.setup.scanqr.parser
+package net.svaroh.passly.feature.setup.scanqr.parser
 
-import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.KeyAssembler
-import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.QrScanResultsMapper
-import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.ScanQrParser
+import net.svaroh.passly.feature.setup.scanqr.qrparser.KeyAssembler
+import net.svaroh.passly.feature.setup.scanqr.qrparser.QrScanResultsMapper
+import net.svaroh.passly.feature.setup.scanqr.qrparser.ScanQrParser
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 

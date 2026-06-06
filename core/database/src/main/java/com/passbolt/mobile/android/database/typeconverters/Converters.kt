@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.database.typeconverters
+package net.svaroh.passly.database.typeconverters
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encouragenativeautofill
+package net.svaroh.passly.feature.settings.screen.appsettings.autofill.encouragenativeautofill
 
 import PassboltTheme
 import android.content.Intent
@@ -36,28 +36,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior.NAVIGATE_BACK
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior.NAVIGATE_TO_ACCESSIBILITY_POLICIES
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.AccessibilityPolicies
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.circlestepsview.CircleStepIcon
-import com.passbolt.mobile.android.core.ui.circlestepsview.CircleStepItemModel
-import com.passbolt.mobile.android.core.ui.circlestepsview.CircleStepsView
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillIntent.Close
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillIntent.DismissAutofillNotSupported
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillIntent.EnableAutofillService
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillIntent.SettingsResult
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillIntent.Skip
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillSideEffect.AutofillEnabled
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillSideEffect.OpenAutofillSettings
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior.NAVIGATE_BACK
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior.NAVIGATE_TO_ACCESSIBILITY_POLICIES
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.AccessibilityPolicies
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.circlestepsview.CircleStepIcon
+import net.svaroh.passly.core.ui.circlestepsview.CircleStepItemModel
+import net.svaroh.passly.core.ui.circlestepsview.CircleStepsView
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillIntent.Close
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillIntent.DismissAutofillNotSupported
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillIntent.EnableAutofillService
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillIntent.SettingsResult
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillIntent.Skip
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillSideEffect.AutofillEnabled
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillSideEffect.NavigateBack
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillSideEffect.OpenAutofillSettings
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 private const val PACKAGE_URI_FORMAT = "package:%s"
 

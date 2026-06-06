@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.setup
+package net.svaroh.passly.feature.setup
 
-import com.passbolt.mobile.android.core.navigation.AccountSetupDataModel
+import net.svaroh.passly.core.navigation.AccountSetupDataModel
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,24 +21,24 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.createresourcemenu.usecase
+package net.svaroh.passly.createresourcemenu.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
-import com.passbolt.mobile.android.metadata.usecase.GetMetadataTypesSettingsUseCase
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAndDescription
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.Totp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Default
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Note
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5TotpStandalone
-import com.passbolt.mobile.android.ui.CreateResourceMenuModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Folders
-import com.passbolt.mobile.android.ui.MetadataTypeModel
-import com.passbolt.mobile.android.ui.MetadataTypeModel.V4
-import com.passbolt.mobile.android.ui.MetadataTypeModel.V5
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
+import net.svaroh.passly.metadata.usecase.GetMetadataTypesSettingsUseCase
+import net.svaroh.passly.supportedresourceTypes.ContentType
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordAndDescription
+import net.svaroh.passly.supportedresourceTypes.ContentType.Totp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
+import net.svaroh.passly.ui.CreateResourceMenuModel
+import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.HomeDisplayViewModel.Folders
+import net.svaroh.passly.ui.MetadataTypeModel
+import net.svaroh.passly.ui.MetadataTypeModel.V4
+import net.svaroh.passly.ui.MetadataTypeModel.V5
 
 class CreateCreateResourceMenuModelUseCase(
     private val getFeatureFlagsUseCase: GetFeatureFlagsUseCase,

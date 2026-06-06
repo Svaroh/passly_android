@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.scanqr
+package net.svaroh.passly.feature.setup.scanqr
 
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrState.TooltipMessage.CENTER_CAMERA_ON_BARCODE
+import net.svaroh.passly.feature.setup.scanqr.ScanQrState.TooltipMessage.CENTER_CAMERA_ON_BARCODE
 
 data class ScanQrState(
     val totalPages: Int = 0,

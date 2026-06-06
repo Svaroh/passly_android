@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.feature.startup
+package net.svaroh.passly.feature.startup
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.accounts.usecase.accounts.GetAccountsUseCase
-import com.passbolt.mobile.android.core.navigation.AccountSetupDataModel
-import com.passbolt.mobile.android.feature.startup.StartUpSideEffect.NavigateToSetup
-import com.passbolt.mobile.android.feature.startup.StartUpSideEffect.NavigateToSignIn
+import net.svaroh.passly.core.accounts.usecase.accounts.GetAccountsUseCase
+import net.svaroh.passly.core.navigation.AccountSetupDataModel
+import net.svaroh.passly.feature.startup.StartUpSideEffect.NavigateToSetup
+import net.svaroh.passly.feature.startup.StartUpSideEffect.NavigateToSignIn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

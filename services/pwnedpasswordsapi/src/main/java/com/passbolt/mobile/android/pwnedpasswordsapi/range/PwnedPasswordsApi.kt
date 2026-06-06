@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.pwnedpasswordsapi.range
+package net.svaroh.passly.pwnedpasswordsapi.range
 
 import retrofit2.http.GET
 import retrofit2.http.Path

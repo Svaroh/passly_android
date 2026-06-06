@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.resourcetypes.graph
+package net.svaroh.passly.core.resourcetypes.graph
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
-import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAction
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
+import net.svaroh.passly.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
+import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction
+import net.svaroh.passly.supportedresourceTypes.ContentType
 import org.junit.Test
 
 class ResourceTypesUpdatesAdjacencyGraphTest {

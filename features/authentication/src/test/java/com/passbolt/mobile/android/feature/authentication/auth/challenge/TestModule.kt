@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.authentication.auth.challenge
+package net.svaroh.passly.feature.authentication.auth.challenge
 
 import com.google.gson.Gson
-import com.passbolt.mobile.android.common.UuidProvider
-import com.passbolt.mobile.android.common.time.TimeProvider
-import com.passbolt.mobile.android.core.accounts.usecase.privatekey.GetPrivateKeyUseCase
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
+import net.svaroh.passly.common.UuidProvider
+import net.svaroh.passly.common.time.TimeProvider
+import net.svaroh.passly.core.accounts.usecase.privatekey.GetPrivateKeyUseCase
+import net.svaroh.passly.gopenpgp.OpenPgp
 import org.koin.dsl.module
 import org.mockito.kotlin.mock
 

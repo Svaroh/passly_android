@@ -5,7 +5,7 @@
 
     <application>
         <activity
-            android:name="com.passbolt.mobile.android.feature.startup.StartUpActivity"
+            android:name="net.svaroh.passly.feature.startup.StartUpActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.App.Starting"
@@ -16,7 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.passbolt.mobile.android.MANAGED_PROFILE" />
+                <action android:name="net.svaroh.passly.MANAGED_PROFILE" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

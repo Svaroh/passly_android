@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note
+package net.svaroh.passly.feature.resourceform.additionalsecrets.note
 
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.ui.ResourceFormMode
 
 internal data class NoteFormState(
     val resourceFormMode: ResourceFormMode? = null,

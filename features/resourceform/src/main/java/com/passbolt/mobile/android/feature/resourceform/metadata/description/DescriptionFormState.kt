@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.description
+package net.svaroh.passly.feature.resourceform.metadata.description
 
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.ui.ResourceFormMode
 
 internal data class DescriptionFormState(
     val resourceFormMode: ResourceFormMode,

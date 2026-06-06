@@ -21,26 +21,26 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.resourcelistdeserializer.caching
+package net.svaroh.passly.serializers.resourcelistdeserializer.caching
 
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.resourcetypes.usecase.db.GetLocalResourceTypesUseCase
-import com.passbolt.mobile.android.core.resourcetypes.usecase.db.GetResourceTypeIdToSlugMappingUseCase
-import com.passbolt.mobile.android.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
-import com.passbolt.mobile.android.database.snapshot.ResourcesSnapshot
-import com.passbolt.mobile.android.dto.response.ResourceResponseDto
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.metadata.usecase.db.GetLocalMetadataKeysUseCase
-import com.passbolt.mobile.android.serializers.STRICT_ADAPTERS_ONLY_GSON
-import com.passbolt.mobile.android.serializers.gson.MetadataDecryptor
-import com.passbolt.mobile.android.serializers.gson.ResourceListDeserializer
-import com.passbolt.mobile.android.serializers.gson.ResourceListItemDeserializer
-import com.passbolt.mobile.android.serializers.gson.strictTypeAdapters
-import com.passbolt.mobile.android.serializers.gson.validation.JsonSchemaValidationRunner
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.resourcetypes.usecase.db.GetLocalResourceTypesUseCase
+import net.svaroh.passly.core.resourcetypes.usecase.db.GetResourceTypeIdToSlugMappingUseCase
+import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.database.snapshot.ResourcesSnapshot
+import net.svaroh.passly.dto.response.ResourceResponseDto
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.metadata.usecase.db.GetLocalMetadataKeysUseCase
+import net.svaroh.passly.serializers.STRICT_ADAPTERS_ONLY_GSON
+import net.svaroh.passly.serializers.gson.MetadataDecryptor
+import net.svaroh.passly.serializers.gson.ResourceListDeserializer
+import net.svaroh.passly.serializers.gson.ResourceListItemDeserializer
+import net.svaroh.passly.serializers.gson.strictTypeAdapters
+import net.svaroh.passly.serializers.gson.validation.JsonSchemaValidationRunner
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.jimblackler.jsonschemafriend.Validator
 import org.koin.core.module.dsl.singleOf

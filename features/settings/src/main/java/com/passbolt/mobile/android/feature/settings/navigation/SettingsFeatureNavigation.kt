@@ -20,23 +20,23 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.feature.settings.navigation
+package net.svaroh.passly.feature.settings.navigation
 
 import PassboltTheme
-import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.SettingsMain
-import com.passbolt.mobile.android.feature.settings.screen.SettingsScreen
-import com.passbolt.mobile.android.feature.settings.screen.accounts.AccountsSettingsScreen
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreen
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsScreen
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.AutofillSettingsScreen
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.defaultfilter.DefaultFilterScreen
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreen
-import com.passbolt.mobile.android.feature.settings.screen.debuglogssettings.DebugLogsSettingsScreen
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.TermsAndLicensesScreen
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses.LicensesScreen
+import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.SettingsMain
+import net.svaroh.passly.feature.settings.screen.SettingsScreen
+import net.svaroh.passly.feature.settings.screen.accounts.AccountsSettingsScreen
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreen
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsScreen
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsScreen
+import net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter.DefaultFilterScreen
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreen
+import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsScreen
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesScreen
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.LicensesScreen
 
 class SettingsFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =

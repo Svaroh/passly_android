@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.logger
+package net.svaroh.passly.core.logger
 
 import android.content.Context
-import com.passbolt.mobile.android.core.envinfo.EnvInfoProvider
-import com.passbolt.mobile.android.core.preferences.usecase.GetGlobalPreferencesUseCase
-import com.passbolt.mobile.android.core.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.core.envinfo.EnvInfoProvider
+import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.core.preferences.usecase.UpdateGlobalPreferencesUseCase
 import java.io.File
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit

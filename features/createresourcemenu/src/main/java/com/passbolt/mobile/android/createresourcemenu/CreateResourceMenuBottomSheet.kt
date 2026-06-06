@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.createresourcemenu
+package net.svaroh.passly.createresourcemenu
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,24 +11,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.bottomsheet.BottomSheetHeader
-import com.passbolt.mobile.android.core.ui.menu.OpenableSettingsItem
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuIntent.Close
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuIntent.CreateFolder
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuIntent.CreateNote
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuIntent.CreatePassword
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuIntent.CreateTotp
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuSideEffect.Dismiss
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuSideEffect.InvokeCreateFolder
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuSideEffect.InvokeCreateNote
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuSideEffect.InvokeCreatePassword
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuSideEffect.InvokeCreateTotp
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.bottomsheet.BottomSheetHeader
+import net.svaroh.passly.core.ui.menu.OpenableSettingsItem
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.Close
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.CreateFolder
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.CreateNote
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.CreatePassword
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.CreateTotp
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuSideEffect.Dismiss
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuSideEffect.InvokeCreateFolder
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuSideEffect.InvokeCreateNote
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuSideEffect.InvokeCreatePassword
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuSideEffect.InvokeCreateTotp
+import net.svaroh.passly.ui.HomeDisplayViewModel
 import org.koin.androidx.compose.koinViewModel
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 /**
  * Passbolt - Open source password manager for teams

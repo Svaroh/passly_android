@@ -13,7 +13,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.inappreview"
+    namespace = "net.svaroh.passly.core.inappreview"
 }
 
 kotlin {

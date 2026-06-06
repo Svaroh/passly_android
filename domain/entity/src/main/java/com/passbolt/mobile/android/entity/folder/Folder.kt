@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.entity.folder
+package net.svaroh.passly.entity.folder
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.passbolt.mobile.android.entity.resource.Permission
+import net.svaroh.passly.entity.resource.Permission
 
 /**
  * Passbolt - Open source password manager for teams

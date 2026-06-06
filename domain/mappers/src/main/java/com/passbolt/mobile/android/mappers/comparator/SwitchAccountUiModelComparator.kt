@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.mappers.comparator
+package net.svaroh.passly.mappers.comparator
 
-import com.passbolt.mobile.android.ui.SwitchAccountUiModel
+import net.svaroh.passly.ui.SwitchAccountUiModel
 
 class SwitchAccountUiModelComparator : Comparator<SwitchAccountUiModel> {
     override fun compare(

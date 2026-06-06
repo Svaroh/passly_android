@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.core.navigation
+package net.svaroh.passly.core.navigation
 
 import android.content.Context
 import android.content.Intent
-import com.passbolt.mobile.android.core.navigation.constants.Authentication
-import com.passbolt.mobile.android.core.navigation.constants.Autofillresources
-import com.passbolt.mobile.android.core.navigation.constants.Main
-import com.passbolt.mobile.android.core.navigation.constants.Setup
-import com.passbolt.mobile.android.core.navigation.constants.Startup
+import net.svaroh.passly.core.navigation.constants.Authentication
+import net.svaroh.passly.core.navigation.constants.Autofillresources
+import net.svaroh.passly.core.navigation.constants.Main
+import net.svaroh.passly.core.navigation.constants.Setup
+import net.svaroh.passly.core.navigation.constants.Startup
 import java.io.Serializable
 
 /**

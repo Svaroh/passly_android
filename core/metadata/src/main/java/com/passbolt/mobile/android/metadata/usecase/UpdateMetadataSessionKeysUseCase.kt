@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.metadata.usecase
+package net.svaroh.passly.metadata.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.networking.MfaTypeProvider
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.dto.request.EncryptedDataAndModifiedRequest
-import com.passbolt.mobile.android.passboltapi.metadata.MetadataRepository
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.networking.MfaTypeProvider
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.dto.request.EncryptedDataAndModifiedRequest
+import net.svaroh.passly.passboltapi.metadata.MetadataRepository
 import retrofit2.HttpException
 import java.net.HttpURLConnection.HTTP_CONFLICT
 import java.time.ZonedDateTime

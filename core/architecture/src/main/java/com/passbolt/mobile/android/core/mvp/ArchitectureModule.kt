@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.mvp
+package net.svaroh.passly.core.mvp
 
-import com.passbolt.mobile.android.core.mvp.authentication.MfaProvidersHandler
-import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackingFlow
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.AppCoroutineContext
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.mvp.authentication.MfaProvidersHandler
+import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
+import net.svaroh.passly.core.mvp.coroutinecontext.AppCoroutineContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

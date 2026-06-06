@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissionrecipients
+package net.svaroh.passly.permissions.permissionrecipients
 
-import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode
-import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode.NONE
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.UserModel
+import net.svaroh.passly.core.ui.search.SearchInputEndIconMode
+import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.NONE
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.UserModel
 
 data class PermissionRecipientsState(
     val groups: List<GroupModel> = emptyList(),

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.compose
+package net.svaroh.passly.feature.otp.scanotp.compose
 
 import android.Manifest.permission.CAMERA
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -30,43 +30,43 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.Otp
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpSuccess
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.navigation.compose.results.OtpScanCompleteResult
-import com.passbolt.mobile.android.core.navigation.compose.results.ScanOtpResultEvent
-import com.passbolt.mobile.android.core.qrscan.SCAN_MANAGER_SCOPE
-import com.passbolt.mobile.android.core.qrscan.manager.ScanManager
-import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.dialogs.CameraPermissionRequiredAlertDialog
-import com.passbolt.mobile.android.core.ui.dialogs.CameraRequiredAlertDialog
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.otp.scanotp.ScanOtpMode
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpIntent.CreateTotpManually
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpIntent.DismissCameraPermissionRequiredDialog
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpIntent.DismissCameraRequiredDialog
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpIntent.GoBack
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpIntent.GoToSettings
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpIntent.Initialize
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpIntent.RejectCameraPermission
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpIntent.StartCameraError
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpSideEffect.NavigateToAppSettings
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpSideEffect.NavigateToSuccess
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpSideEffect.RequestCameraPermission
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpSideEffect.SetManualCreationResultAndNavigateBack
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpSideEffect.SetResultAndNavigateBack
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.Otp
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpSuccess
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.navigation.compose.results.OtpScanCompleteResult
+import net.svaroh.passly.core.navigation.compose.results.ScanOtpResultEvent
+import net.svaroh.passly.core.qrscan.SCAN_MANAGER_SCOPE
+import net.svaroh.passly.core.qrscan.manager.ScanManager
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.dialogs.CameraPermissionRequiredAlertDialog
+import net.svaroh.passly.core.ui.dialogs.CameraRequiredAlertDialog
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.otp.scanotp.ScanOtpMode
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.CreateTotpManually
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.DismissCameraPermissionRequiredDialog
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.DismissCameraRequiredDialog
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.GoBack
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.GoToSettings
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.Initialize
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.RejectCameraPermission
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.StartCameraError
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpSideEffect.NavigateBack
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpSideEffect.NavigateToAppSettings
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpSideEffect.NavigateToSuccess
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpSideEffect.RequestCameraPermission
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpSideEffect.SetManualCreationResultAndNavigateBack
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpSideEffect.SetResultAndNavigateBack
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.compose.scope.KoinScope
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.qualifier.named
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable

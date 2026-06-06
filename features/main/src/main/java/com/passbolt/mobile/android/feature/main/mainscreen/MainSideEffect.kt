@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.main.mainscreen
+package net.svaroh.passly.feature.main.mainscreen
 
 sealed interface MainSideEffect {
     data object CheckForAppUpdates : MainSideEffect

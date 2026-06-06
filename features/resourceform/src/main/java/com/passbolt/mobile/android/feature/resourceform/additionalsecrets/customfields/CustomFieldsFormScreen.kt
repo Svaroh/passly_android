@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.customfields
+package net.svaroh.passly.feature.resourceform.additionalsecrets.customfields
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -44,18 +44,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.customfields.CustomFieldsFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.customfields.CustomFieldsFormSideEffect.NavigateUp
-import com.passbolt.mobile.android.ui.CustomFieldsUiModel
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.resourceform.additionalsecrets.customfields.CustomFieldsFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.customfields.CustomFieldsFormSideEffect.NavigateUp
+import net.svaroh.passly.ui.CustomFieldsUiModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun CustomFieldsFormScreen(

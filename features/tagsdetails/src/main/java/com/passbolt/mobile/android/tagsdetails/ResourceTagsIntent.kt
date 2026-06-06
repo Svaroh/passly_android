@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.tagsdetails
+package net.svaroh.passly.tagsdetails
 
 internal sealed interface ResourceTagsIntent {
     data object GoBack : ResourceTagsIntent

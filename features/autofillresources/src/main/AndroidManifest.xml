@@ -38,6 +38,6 @@
                 Accessibility autofill is a users aware opt-in choice from the application settings." />
         </service>
 
-        <activity android:name="com.passbolt.mobile.android.feature.autofill.resources.AutofillResourcesActivity" />
+        <activity android:name="net.svaroh.passly.feature.autofill.resources.AutofillResourcesActivity" />
     </application>
 </manifest>

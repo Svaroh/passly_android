@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.passboltapi.users
+package net.svaroh.passly.passboltapi.users
 
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.UserDto
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.UserDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 

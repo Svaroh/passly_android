@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.welcome
+package net.svaroh.passly.feature.setup.welcome
 
 import PassboltTheme
 import androidx.activity.compose.LocalActivity
@@ -52,42 +52,42 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.LogsNavigationKey.Logs
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.ImportProfile
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.Summary
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.TransferDetails
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.dialogs.HowToCreateAccountDialog
-import com.passbolt.mobile.android.core.ui.dialogs.RootWarningAlertDialog
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeIntent.AccessLogs
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeIntent.AcknowledgeDeviceRooted
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeIntent.ConnectToExistingAccount
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeIntent.DismissHelpMenu
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeIntent.DismissNoAccountExplanation
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeIntent.GoUp
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeIntent.ImportProfileManually
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeIntent.Initialize
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeIntent.OpenHelpMenu
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeIntent.SeeNoAccountExplanation
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeIntent.SelectedAccountKit
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeSideEffect.NavigateToImportProfile
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeSideEffect.NavigateToLogs
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeSideEffect.NavigateToSummary
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeSideEffect.NavigateToTransferDetails
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeSideEffect.NavigateUp
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheet
-import com.passbolt.mobile.android.testtags.composetags.Setup.APPS_IMAGE
-import com.passbolt.mobile.android.testtags.composetags.Setup.HELP_BUTTON
-import com.passbolt.mobile.android.testtags.composetags.Setup.LOGO_IMAGE
-import com.passbolt.mobile.android.ui.HelpMenuModel
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.LogsNavigationKey.Logs
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.ImportProfile
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.Summary
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.TransferDetails
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.dialogs.HowToCreateAccountDialog
+import net.svaroh.passly.core.ui.dialogs.RootWarningAlertDialog
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.AccessLogs
+import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.AcknowledgeDeviceRooted
+import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.ConnectToExistingAccount
+import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.DismissHelpMenu
+import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.DismissNoAccountExplanation
+import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.GoUp
+import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.ImportProfileManually
+import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.Initialize
+import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.OpenHelpMenu
+import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.SeeNoAccountExplanation
+import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.SelectedAccountKit
+import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateToImportProfile
+import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateToLogs
+import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateToSummary
+import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateToTransferDetails
+import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateUp
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheet
+import net.svaroh.passly.testtags.composetags.Setup.APPS_IMAGE
+import net.svaroh.passly.testtags.composetags.Setup.HELP_BUTTON
+import net.svaroh.passly.testtags.composetags.Setup.LOGO_IMAGE
+import net.svaroh.passly.ui.HelpMenuModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun WelcomeScreen(

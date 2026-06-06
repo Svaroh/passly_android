@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.jsonschema
+package net.svaroh.passly.serializers.jsonschema
 
-import com.passbolt.mobile.android.serializers.jsonschema.schamarepository.JSFJsonSchemaValidator
-import com.passbolt.mobile.android.serializers.jsonschema.schamarepository.JSFSchemaRepository
-import com.passbolt.mobile.android.serializers.jsonschema.schamarepository.JsonSchemaRepository
-import com.passbolt.mobile.android.serializers.jsonschema.schamarepository.JsonSchemaValidator
+import net.svaroh.passly.serializers.jsonschema.schamarepository.JSFJsonSchemaValidator
+import net.svaroh.passly.serializers.jsonschema.schamarepository.JSFSchemaRepository
+import net.svaroh.passly.serializers.jsonschema.schamarepository.JsonSchemaRepository
+import net.svaroh.passly.serializers.jsonschema.schamarepository.JsonSchemaValidator
 import net.jimblackler.jsonschemafriend.Schema
 import net.jimblackler.jsonschemafriend.Validator
 import org.koin.android.ext.koin.androidContext

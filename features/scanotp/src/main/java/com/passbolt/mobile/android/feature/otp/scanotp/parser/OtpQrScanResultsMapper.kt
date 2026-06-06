@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.parser
+package net.svaroh.passly.feature.otp.scanotp.parser
 
 import android.net.Uri
-import com.passbolt.mobile.android.common.validation.UriIsOfAuthority
-import com.passbolt.mobile.android.common.validation.UriIsOfScheme
-import com.passbolt.mobile.android.common.validation.validation
-import com.passbolt.mobile.android.core.qrscan.analyzer.BarcodeScanResult
-import com.passbolt.mobile.android.ui.OtpParseResult
-import com.passbolt.mobile.android.ui.OtpParseResult.UserResolvableError.ErrorType.MULTIPLE_BARCODES
-import com.passbolt.mobile.android.ui.OtpParseResult.UserResolvableError.ErrorType.NOT_A_OTP_QR
-import com.passbolt.mobile.android.ui.OtpParseResult.UserResolvableError.ErrorType.NO_BARCODES_IN_RANGE
+import net.svaroh.passly.common.validation.UriIsOfAuthority
+import net.svaroh.passly.common.validation.UriIsOfScheme
+import net.svaroh.passly.common.validation.validation
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.ui.OtpParseResult
+import net.svaroh.passly.ui.OtpParseResult.UserResolvableError.ErrorType.MULTIPLE_BARCODES
+import net.svaroh.passly.ui.OtpParseResult.UserResolvableError.ErrorType.NOT_A_OTP_QR
+import net.svaroh.passly.ui.OtpParseResult.UserResolvableError.ErrorType.NO_BARCODES_IN_RANGE
 import timber.log.Timber
 import java.io.IOException
 import java.net.URI

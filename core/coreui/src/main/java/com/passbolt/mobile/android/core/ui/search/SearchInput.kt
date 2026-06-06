@@ -20,7 +20,7 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.ui.search
+package net.svaroh.passly.core.ui.search
 
 import PassboltTheme
 import androidx.compose.foundation.clickable
@@ -46,9 +46,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.circularimage.CircularProfileImage
-import com.passbolt.mobile.android.testtags.composetags.SearchField
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
+import net.svaroh.passly.testtags.composetags.SearchField
 
 @Composable
 fun SearchInput(

@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.core
+package net.svaroh.passly.core
 
-import com.passbolt.mobile.android.core.formatter.DateFormatter
-import com.passbolt.mobile.android.core.formatter.FingerprintFormatter
-import com.passbolt.mobile.android.core.formatter.OtpFormatter
+import net.svaroh.passly.core.formatter.DateFormatter
+import net.svaroh.passly.core.formatter.FingerprintFormatter
+import net.svaroh.passly.core.formatter.OtpFormatter
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import java.time.format.DateTimeFormatter

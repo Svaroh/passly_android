@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess
+package net.svaroh.passly.feature.otp.scanotp.scanotpsuccess
 
-import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
-import com.passbolt.mobile.android.ui.TrustedKeyDeletedModel
+import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
+import net.svaroh.passly.ui.TrustedKeyDeletedModel
 
 data class ScanOtpSuccessState(
     val showProgress: Boolean = false,

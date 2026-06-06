@@ -1,25 +1,25 @@
-package com.passbolt.mobile.android.feature.authentication.navigation
+package net.svaroh.passly.feature.authentication.navigation
 
 import PassboltTheme
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.LocalAuthenticationParams
-import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.AuthenticationNavigationKey.AccountsList
-import com.passbolt.mobile.android.core.navigation.compose.keys.AuthenticationNavigationKey.Auth
-import com.passbolt.mobile.android.core.navigation.compose.keys.AuthenticationNavigationKey.MfaDuo
-import com.passbolt.mobile.android.core.navigation.compose.keys.AuthenticationNavigationKey.MfaTotp
-import com.passbolt.mobile.android.core.navigation.compose.keys.AuthenticationNavigationKey.MfaUnknownProvider
-import com.passbolt.mobile.android.core.navigation.compose.keys.AuthenticationNavigationKey.MfaYubikey
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListScreen
-import com.passbolt.mobile.android.feature.authentication.auth.AuthScreen
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaDialogState
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaResult
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoScreen
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpScreen
-import com.passbolt.mobile.android.feature.authentication.mfa.unknown.UnknownProviderScreen
-import com.passbolt.mobile.android.feature.authentication.mfa.yubikey.ScanYubikeyScreen
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.LocalAuthenticationParams
+import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.navigation.compose.keys.AuthenticationNavigationKey.AccountsList
+import net.svaroh.passly.core.navigation.compose.keys.AuthenticationNavigationKey.Auth
+import net.svaroh.passly.core.navigation.compose.keys.AuthenticationNavigationKey.MfaDuo
+import net.svaroh.passly.core.navigation.compose.keys.AuthenticationNavigationKey.MfaTotp
+import net.svaroh.passly.core.navigation.compose.keys.AuthenticationNavigationKey.MfaUnknownProvider
+import net.svaroh.passly.core.navigation.compose.keys.AuthenticationNavigationKey.MfaYubikey
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListScreen
+import net.svaroh.passly.feature.authentication.auth.AuthScreen
+import net.svaroh.passly.feature.authentication.mfa.MfaDialogState
+import net.svaroh.passly.feature.authentication.mfa.MfaResult
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoScreen
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpScreen
+import net.svaroh.passly.feature.authentication.mfa.unknown.UnknownProviderScreen
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyScreen
 import org.koin.compose.koinInject
 
 class AuthenticationFeatureNavigation : FeatureModuleNavigation {

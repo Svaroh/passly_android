@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.resourcetypes.graph.base
+package net.svaroh.passly.core.resourcetypes.graph.base
 
 interface Vertex<T> {
     val contentType: T

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.accessibilitypolicies
+package net.svaroh.passly.feature.accessibilitypolicies
 
 sealed interface AccessibilityPoliciesIntent {
     data object Accept : AccessibilityPoliciesIntent

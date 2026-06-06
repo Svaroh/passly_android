@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.extensions
+package net.svaroh.passly.core.ui.extensions
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag

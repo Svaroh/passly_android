@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.core.accounts.usecase
+package net.svaroh.passly.core.accounts.usecase
 
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 

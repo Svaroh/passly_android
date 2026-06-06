@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.compose
+package net.svaroh.passly.feature.otp.scanotp.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage.CAMERA_ERROR
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage.CENTER_CAMERA_ON_BARCODE
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage.MULTIPLE_BARCODES
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage.NOT_A_OTP_QR
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage.SCAN_ERROR
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage.CAMERA_ERROR
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage.CENTER_CAMERA_ON_BARCODE
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage.MULTIPLE_BARCODES
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage.NOT_A_OTP_QR
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage.SCAN_ERROR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun getTooltipMessage(

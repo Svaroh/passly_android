@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.dto.response.UserDto
-import com.passbolt.mobile.android.entity.user.User
-import com.passbolt.mobile.android.entity.user.UserGpgKey
-import com.passbolt.mobile.android.entity.user.UserProfile
-import com.passbolt.mobile.android.ui.GpgKeyModel
-import com.passbolt.mobile.android.ui.UserModel
-import com.passbolt.mobile.android.ui.UserProfileModel
-import com.passbolt.mobile.android.ui.UserWithAvatar
+import net.svaroh.passly.dto.response.UserDto
+import net.svaroh.passly.entity.user.User
+import net.svaroh.passly.entity.user.UserGpgKey
+import net.svaroh.passly.entity.user.UserProfile
+import net.svaroh.passly.ui.GpgKeyModel
+import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserProfileModel
+import net.svaroh.passly.ui.UserWithAvatar
 import java.time.ZonedDateTime
 
 class UsersModelMapper {

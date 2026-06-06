@@ -1,28 +1,28 @@
-package com.passbolt.mobile.android.feature.home.screen
+package net.svaroh.passly.feature.home.screen
 
 import android.content.Context
-import com.passbolt.mobile.android.common.extension.toSingleLine
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.CANNOT_UPDATE_WITH_CURRENT_CONFIGURATION
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.DECRYPTION_FAILURE
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.ENCRYPTION_FAILURE
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.ERROR
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.FAILED_TO_DELETE_RESOURCE
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.FAILED_TO_REFRESH_DATA
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.FAILED_TO_TRUST_METADATA_KEY
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.FAILED_TO_VERIFY_METADATA_KEYS
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.FETCH_FAILURE
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.NO_SHARED_KEY_ACCESS
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.RESOURCE_SCHEMA_INVALID
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.SECRET_SCHEMA_INVALID
-import com.passbolt.mobile.android.feature.home.screen.SnackbarErrorType.TOGGLE_FAVOURITE_FAILURE
-import com.passbolt.mobile.android.feature.home.screen.SnackbarSuccessType.FOLDER_CREATED
-import com.passbolt.mobile.android.feature.home.screen.SnackbarSuccessType.METADATA_KEY_IS_TRUSTED
-import com.passbolt.mobile.android.feature.home.screen.SnackbarSuccessType.RESOURCE_CREATED
-import com.passbolt.mobile.android.feature.home.screen.SnackbarSuccessType.RESOURCE_DELETED
-import com.passbolt.mobile.android.feature.home.screen.SnackbarSuccessType.RESOURCE_EDITED
-import com.passbolt.mobile.android.feature.home.screen.SnackbarSuccessType.RESOURCE_SHARED
-import com.passbolt.mobile.android.feature.home.screen.ToastType.WAIT_FOR_DATA_REFRESH_FINISH
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.common.extension.toSingleLine
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.CANNOT_UPDATE_WITH_CURRENT_CONFIGURATION
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.DECRYPTION_FAILURE
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.ENCRYPTION_FAILURE
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.ERROR
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_DELETE_RESOURCE
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_REFRESH_DATA
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_TRUST_METADATA_KEY
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_VERIFY_METADATA_KEYS
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FETCH_FAILURE
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.NO_SHARED_KEY_ACCESS
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.RESOURCE_SCHEMA_INVALID
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.SECRET_SCHEMA_INVALID
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.TOGGLE_FAVOURITE_FAILURE
+import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.FOLDER_CREATED
+import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.METADATA_KEY_IS_TRUSTED
+import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_CREATED
+import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_DELETED
+import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_EDITED
+import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_SHARED
+import net.svaroh.passly.feature.home.screen.ToastType.WAIT_FOR_DATA_REFRESH_FINISH
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getToastMessage(
     context: Context,

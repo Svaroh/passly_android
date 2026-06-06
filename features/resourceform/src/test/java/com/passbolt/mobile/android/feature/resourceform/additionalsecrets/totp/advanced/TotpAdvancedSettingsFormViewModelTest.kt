@@ -21,21 +21,21 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormIntent.AlgorithmChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormIntent.DigitChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormIntent.PeriodChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormSideEffect.NavigateBack
-import com.passbolt.mobile.android.ui.LeadingContentType
-import com.passbolt.mobile.android.ui.OtpParseResult
-import com.passbolt.mobile.android.ui.ResourceFormMode
-import com.passbolt.mobile.android.ui.TotpUiModel
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormIntent.AlgorithmChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormIntent.DigitChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormIntent.PeriodChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormSideEffect.NavigateBack
+import net.svaroh.passly.ui.LeadingContentType
+import net.svaroh.passly.ui.OtpParseResult
+import net.svaroh.passly.ui.ResourceFormMode
+import net.svaroh.passly.ui.TotpUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

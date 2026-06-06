@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.inappreview.storage
+package net.svaroh.passly.core.inappreview.storage
 
-import com.passbolt.mobile.android.core.inappreview.InAppReviewShowMode
+import net.svaroh.passly.core.inappreview.InAppReviewShowMode
 
 /**
  * Passbolt - Open source password manager for teams

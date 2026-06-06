@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.locationdetails
+package net.svaroh.passly.locationdetails
 
 internal sealed interface LocationDetailsSideEffect {
     data object NavigateUp : LocationDetailsSideEffect

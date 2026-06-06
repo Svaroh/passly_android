@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.ui.ResourceModel
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.ResourcePickerListItem
-import com.passbolt.mobile.android.ui.ResourcePickerListItem.Selection.NOT_SELECTABLE_NO_PERMISSION
-import com.passbolt.mobile.android.ui.ResourcePickerListItem.Selection.NOT_SELECTABLE_UNSUPPORTED_RESOURCE_TYPE
-import com.passbolt.mobile.android.ui.ResourcePickerListItem.Selection.SELECTABLE
+import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.ResourcePickerListItem
+import net.svaroh.passly.ui.ResourcePickerListItem.Selection.NOT_SELECTABLE_NO_PERMISSION
+import net.svaroh.passly.ui.ResourcePickerListItem.Selection.NOT_SELECTABLE_UNSUPPORTED_RESOURCE_TYPE
+import net.svaroh.passly.ui.ResourcePickerListItem.Selection.SELECTABLE
 import java.util.UUID
 
 class ResourcePickerMapper {

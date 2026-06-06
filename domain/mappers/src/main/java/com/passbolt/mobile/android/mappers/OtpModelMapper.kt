@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.ui.OtpItemWrapper
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.ui.OtpItemWrapper
+import net.svaroh.passly.ui.ResourceModel
 
 class OtpModelMapper {
     fun map(otpModel: ResourceModel): OtpItemWrapper =

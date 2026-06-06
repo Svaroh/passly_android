@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.metadata.sessionkeys
+package net.svaroh.passly.metadata.sessionkeys
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
-import com.passbolt.mobile.android.dto.request.SessionKeyDto
-import com.passbolt.mobile.android.dto.request.SessionKeysBundleDto
-import com.passbolt.mobile.android.dto.response.DecryptedMetadataSessionKeysBundleModel
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.dto.request.SessionKeyDto
+import net.svaroh.passly.dto.request.SessionKeysBundleDto
+import net.svaroh.passly.dto.response.DecryptedMetadataSessionKeysBundleModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test

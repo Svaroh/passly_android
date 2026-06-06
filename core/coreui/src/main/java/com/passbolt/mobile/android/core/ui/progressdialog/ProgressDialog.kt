@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.progressdialog
+package net.svaroh.passly.core.ui.progressdialog
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.passbolt.mobile.android.core.ui.R
+import net.svaroh.passly.core.ui.R
 
 @Composable
 fun ProgressDialog(isVisible: Boolean) {

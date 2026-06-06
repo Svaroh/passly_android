@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.usecase
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.networking.MfaTypeProvider
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.mappers.TransferMapper
-import com.passbolt.mobile.android.passboltapi.registration.MobileTransferRepository
-import com.passbolt.mobile.android.ui.TransferModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.networking.MfaTypeProvider
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.mappers.TransferMapper
+import net.svaroh.passly.passboltapi.registration.MobileTransferRepository
+import net.svaroh.passly.ui.TransferModel
 import kotlinx.coroutines.withContext
 
 /**

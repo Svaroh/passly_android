@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.groupdetails.groupmembers
+package net.svaroh.passly.groupdetails.groupmembers
 
 /**
  * Passbolt - Open source password manager for teams
@@ -25,19 +25,19 @@ package com.passbolt.mobile.android.groupdetails.groupmembers
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
-import com.passbolt.mobile.android.core.commongroups.usecase.db.GetGroupWithUsersUseCase
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersIntent.GoBack
-import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersIntent.GoToMemberDetails
-import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersIntent.Initialize
-import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersSideEffect.NavigateToMemberDetails
-import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersSideEffect.NavigateUp
-import com.passbolt.mobile.android.ui.GpgKeyModel
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.GroupWithUsersModel
-import com.passbolt.mobile.android.ui.UserModel
-import com.passbolt.mobile.android.ui.UserProfileModel
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.commongroups.usecase.db.GetGroupWithUsersUseCase
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.GoBack
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.GoToMemberDetails
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.Initialize
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersSideEffect.NavigateToMemberDetails
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersSideEffect.NavigateUp
+import net.svaroh.passly.ui.GpgKeyModel
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.GroupWithUsersModel
+import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserProfileModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

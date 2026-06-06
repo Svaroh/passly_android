@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.topbar
+package net.svaroh.passly.core.ui.topbar
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.CenterAlignedTopAppBar

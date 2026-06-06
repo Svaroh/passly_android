@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.navigation
+package net.svaroh.passly.core.navigation
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

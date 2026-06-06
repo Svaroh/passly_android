@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.scanqr
+package net.svaroh.passly.feature.setup.scanqr
 
-import com.passbolt.mobile.android.core.navigation.AccountSetupDataModel
-import com.passbolt.mobile.android.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.core.navigation.AccountSetupDataModel
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import kotlinx.coroutines.flow.StateFlow
 
 sealed interface ScanQrIntent {

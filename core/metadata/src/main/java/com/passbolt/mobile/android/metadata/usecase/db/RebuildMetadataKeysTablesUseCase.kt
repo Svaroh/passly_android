@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.metadata.usecase.db
+package net.svaroh.passly.metadata.usecase.db
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.SelectedAccountUseCase
-import com.passbolt.mobile.android.ui.ParsedMetadataKeyModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase
+import net.svaroh.passly.ui.ParsedMetadataKeyModel
 
 class RebuildMetadataKeysTablesUseCase(
     private val removeLocalMetadataKeysUseCase: RemoveLocalMetadataKeysUseCase,

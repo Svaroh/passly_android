@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector
+package net.svaroh.passly.feature.settings.screen.accounts.keyinspector
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -55,29 +55,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.clipboard.ClipboardAccess
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.ui.circularimage.CircularProfileImage
-import com.passbolt.mobile.android.core.ui.labelledtext.LabelledText
-import com.passbolt.mobile.android.core.ui.labelledtext.LabelledTextEndAction
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CloseMoreMenu
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.OpenMoreMenu
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.AddFingerprintToClipboard
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.AddUidToClipboard
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ErrorSnackbarType.FAILED_TO_FETCH_KEY
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.NavigateUp
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheet
+import net.svaroh.passly.core.clipboard.ClipboardAccess
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
+import net.svaroh.passly.core.ui.labelledtext.LabelledText
+import net.svaroh.passly.core.ui.labelledtext.LabelledTextEndAction
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CloseMoreMenu
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.OpenMoreMenu
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.AddFingerprintToClipboard
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.AddUidToClipboard
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ErrorSnackbarType.FAILED_TO_FETCH_KEY
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.NavigateUp
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheet
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun KeyInspectorScreen(

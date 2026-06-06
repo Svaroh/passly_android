@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.autofill.resources
+package net.svaroh.passly.feature.autofill.resources
 
 import android.app.assist.AssistStructure
 import android.content.Intent
@@ -9,15 +9,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.remember
 import androidx.core.content.IntentCompat
-import com.passbolt.mobile.android.common.lifecycleawarelazy.lifecycleAwareLazy
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.AutofillMode
-import com.passbolt.mobile.android.core.navigation.compose.APP_NAVIGATOR_SCOPE
-import com.passbolt.mobile.android.feature.autofill.resources.AutofillResourcesIntent.NewResourceCreated
-import com.passbolt.mobile.android.feature.autofill.resources.AutofillResourcesIntent.SelectAutofillItem
-import com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy.AutofillCallback
-import com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy.ReturnAutofillDatasetStrategy
-import com.passbolt.mobile.android.feature.home.screen.ResourceHandlingStrategyProvider
+import net.svaroh.passly.common.lifecycleawarelazy.lifecycleAwareLazy
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.AutofillMode
+import net.svaroh.passly.core.navigation.compose.APP_NAVIGATOR_SCOPE
+import net.svaroh.passly.feature.autofill.resources.AutofillResourcesIntent.NewResourceCreated
+import net.svaroh.passly.feature.autofill.resources.AutofillResourcesIntent.SelectAutofillItem
+import net.svaroh.passly.feature.autofill.resources.datasetstrategy.AutofillCallback
+import net.svaroh.passly.feature.autofill.resources.datasetstrategy.ReturnAutofillDatasetStrategy
+import net.svaroh.passly.feature.home.screen.ResourceHandlingStrategyProvider
 import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.scope.activityScope

@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.passwordgenerator.entropy
+package net.svaroh.passly.core.passwordgenerator.entropy
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.passwordgenerator.Alphabets
-import com.passbolt.mobile.android.core.passwordgenerator.codepoints.CodepointSet
-import com.passbolt.mobile.android.core.passwordgenerator.codepoints.toCodepoints
-import com.passbolt.mobile.android.core.passwordgenerator.passwordGeneratorTestModule
+import net.svaroh.passly.core.passwordgenerator.Alphabets
+import net.svaroh.passly.core.passwordgenerator.codepoints.CodepointSet
+import net.svaroh.passly.core.passwordgenerator.codepoints.toCodepoints
+import net.svaroh.passly.core.passwordgenerator.passwordGeneratorTestModule
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

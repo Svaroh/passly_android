@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.common.urimatcher
+package net.svaroh.passly.common.urimatcher
 
-import com.passbolt.mobile.android.common.urimatcher.UrlMetadata.ProtocolValue
+import net.svaroh.passly.common.urimatcher.UrlMetadata.ProtocolValue
 import timber.log.Timber
 
 class AutofillUriMatcher {

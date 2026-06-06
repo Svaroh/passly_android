@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.dto.response.qrcode
+package net.svaroh.passly.dto.response.qrcode
 
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson

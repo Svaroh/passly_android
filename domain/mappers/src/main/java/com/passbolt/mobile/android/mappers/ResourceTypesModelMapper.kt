@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.dto.response.ResourceTypeDto
-import com.passbolt.mobile.android.entity.resource.ResourceType
-import com.passbolt.mobile.android.ui.ResourceTypeModel
+import net.svaroh.passly.dto.response.ResourceTypeDto
+import net.svaroh.passly.entity.resource.ResourceType
+import net.svaroh.passly.ui.ResourceTypeModel
 import java.time.ZonedDateTime
 import java.util.UUID
 

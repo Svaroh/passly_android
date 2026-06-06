@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encouragenativeautofill
+package net.svaroh.passly.feature.settings.screen.appsettings.autofill.encouragenativeautofill
 
 sealed interface EncourageNativeAutofillSideEffect {
     data object NavigateBack : EncourageNativeAutofillSideEffect

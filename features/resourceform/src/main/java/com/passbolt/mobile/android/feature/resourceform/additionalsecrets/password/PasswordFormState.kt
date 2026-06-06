@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password
+package net.svaroh.passly.feature.resourceform.additionalsecrets.password
 
-import com.passbolt.mobile.android.ui.PasswordStrength
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.ui.PasswordStrength
+import net.svaroh.passly.ui.ResourceFormMode
 
 internal data class PasswordFormState(
     val resourceFormMode: ResourceFormMode? = null,

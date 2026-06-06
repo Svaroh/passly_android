@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android
+package net.svaroh.passly
 
 import android.app.AlarmManager
 import android.content.ClipboardManager
@@ -8,11 +8,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import coil3.ImageLoader
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
-import com.passbolt.mobile.android.common.ExternalDeeplinkHandler
-import com.passbolt.mobile.android.common.HttpsVerifier
-import com.passbolt.mobile.android.common.UuidProvider
-import com.passbolt.mobile.android.core.navigation.AppForegroundListener
-import com.passbolt.mobile.android.core.networking.COIL_HTTP_CLIENT
+import net.svaroh.passly.common.ExternalDeeplinkHandler
+import net.svaroh.passly.common.HttpsVerifier
+import net.svaroh.passly.common.UuidProvider
+import net.svaroh.passly.core.navigation.AppForegroundListener
+import net.svaroh.passly.core.networking.COIL_HTTP_CLIENT
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext

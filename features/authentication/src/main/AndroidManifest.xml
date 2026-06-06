@@ -5,7 +5,7 @@
 
     <application>
         <activity
-            android:name="com.passbolt.mobile.android.feature.authentication.AuthenticationMainActivity"
+            android:name="net.svaroh.passly.feature.authentication.AuthenticationMainActivity"
             android:configChanges="keyboard|keyboardHidden"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"

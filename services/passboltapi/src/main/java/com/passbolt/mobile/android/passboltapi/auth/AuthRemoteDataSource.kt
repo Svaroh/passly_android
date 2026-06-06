@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.passboltapi.auth
+package net.svaroh.passly.passboltapi.auth
 
-import com.passbolt.mobile.android.dto.request.RefreshSessionRequest
-import com.passbolt.mobile.android.dto.request.SignInRequestDto
-import com.passbolt.mobile.android.dto.request.SignOutRequestDto
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.ServerPgpResponseDto
-import com.passbolt.mobile.android.dto.response.ServerRsaResponseDto
-import com.passbolt.mobile.android.dto.response.SignInResponseDto
+import net.svaroh.passly.dto.request.RefreshSessionRequest
+import net.svaroh.passly.dto.request.SignInRequestDto
+import net.svaroh.passly.dto.request.SignOutRequestDto
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.ServerPgpResponseDto
+import net.svaroh.passly.dto.response.ServerRsaResponseDto
+import net.svaroh.passly.dto.response.SignInResponseDto
 import retrofit2.Response
 
 /**

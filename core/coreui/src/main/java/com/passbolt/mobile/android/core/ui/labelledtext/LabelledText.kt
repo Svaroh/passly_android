@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.labelledtext
+package net.svaroh.passly.core.ui.labelledtext
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +20,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.passbolt.mobile.android.core.compose.Inconsolata
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.compose.Inconsolata
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun LabelledText(

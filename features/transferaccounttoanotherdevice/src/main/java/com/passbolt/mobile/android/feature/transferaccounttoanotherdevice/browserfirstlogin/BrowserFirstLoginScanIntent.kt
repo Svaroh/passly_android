@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin
 
-import com.passbolt.mobile.android.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import kotlinx.coroutines.flow.StateFlow
 
 internal sealed interface BrowserFirstLoginScanIntent {

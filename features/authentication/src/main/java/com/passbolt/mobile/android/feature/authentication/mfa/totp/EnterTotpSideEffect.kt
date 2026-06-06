@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.totp
+package net.svaroh.passly.feature.authentication.mfa.totp
 
 sealed interface EnterTotpSideEffect {
     data class NotifyVerificationSucceeded(

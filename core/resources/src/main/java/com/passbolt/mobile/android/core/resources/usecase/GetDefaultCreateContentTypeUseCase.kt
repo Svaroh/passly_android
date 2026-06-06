@@ -1,21 +1,21 @@
-package com.passbolt.mobile.android.core.resources.usecase
+package net.svaroh.passly.core.resources.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.metadata.usecase.GetMetadataTypesSettingsUseCase
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAndDescription
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.Totp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Default
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Note
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5TotpStandalone
-import com.passbolt.mobile.android.ui.LeadingContentType
-import com.passbolt.mobile.android.ui.LeadingContentType.CUSTOM_FIELDS
-import com.passbolt.mobile.android.ui.LeadingContentType.PASSWORD
-import com.passbolt.mobile.android.ui.LeadingContentType.STANDALONE_NOTE
-import com.passbolt.mobile.android.ui.LeadingContentType.TOTP
-import com.passbolt.mobile.android.ui.MetadataTypeModel
-import com.passbolt.mobile.android.ui.MetadataTypeModel.V4
-import com.passbolt.mobile.android.ui.MetadataTypeModel.V5
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.metadata.usecase.GetMetadataTypesSettingsUseCase
+import net.svaroh.passly.supportedresourceTypes.ContentType
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordAndDescription
+import net.svaroh.passly.supportedresourceTypes.ContentType.Totp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
+import net.svaroh.passly.ui.LeadingContentType
+import net.svaroh.passly.ui.LeadingContentType.CUSTOM_FIELDS
+import net.svaroh.passly.ui.LeadingContentType.PASSWORD
+import net.svaroh.passly.ui.LeadingContentType.STANDALONE_NOTE
+import net.svaroh.passly.ui.LeadingContentType.TOTP
+import net.svaroh.passly.ui.MetadataTypeModel
+import net.svaroh.passly.ui.MetadataTypeModel.V4
+import net.svaroh.passly.ui.MetadataTypeModel.V5
 import timber.log.Timber
 
 /**

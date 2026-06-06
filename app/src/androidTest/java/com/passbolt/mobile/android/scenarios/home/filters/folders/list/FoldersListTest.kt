@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.scenarios.home.filters.folders.list
+package net.svaroh.passly.scenarios.home.filters.folders.list
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
@@ -31,26 +31,26 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
-import com.passbolt.mobile.android.core.idlingresource.CreateFolderIdlingResource
-import com.passbolt.mobile.android.core.idlingresource.ResourcesFullRefreshIdlingResource
-import com.passbolt.mobile.android.core.idlingresource.SignInIdlingResource
-import com.passbolt.mobile.android.core.localization.R.string.filters_menu_folders
-import com.passbolt.mobile.android.core.localization.R.string.no_passwords
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.feature.authentication.AuthenticationMainActivity
-import com.passbolt.mobile.android.helpers.chooseFilter
-import com.passbolt.mobile.android.helpers.getString
-import com.passbolt.mobile.android.helpers.searchAndOpenFirstFolderByName
-import com.passbolt.mobile.android.helpers.signIn
-import com.passbolt.mobile.android.instrumentationTestsModule
-import com.passbolt.mobile.android.intents.ManagedAccountIntentCreator
-import com.passbolt.mobile.android.rules.IdlingResourceRule
-import com.passbolt.mobile.android.rules.lazyActivitySetupScenarioRule
-import com.passbolt.mobile.android.testtags.composetags.BackNavigation.ICON
-import com.passbolt.mobile.android.testtags.composetags.Home
-import com.passbolt.mobile.android.testtags.composetags.HomeAppBar
-import com.passbolt.mobile.android.testtags.composetags.SearchField
+import net.svaroh.passly.core.idlingresource.CreateFolderIdlingResource
+import net.svaroh.passly.core.idlingresource.ResourcesFullRefreshIdlingResource
+import net.svaroh.passly.core.idlingresource.SignInIdlingResource
+import net.svaroh.passly.core.localization.R.string.filters_menu_folders
+import net.svaroh.passly.core.localization.R.string.no_passwords
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.feature.authentication.AuthenticationMainActivity
+import net.svaroh.passly.helpers.chooseFilter
+import net.svaroh.passly.helpers.getString
+import net.svaroh.passly.helpers.searchAndOpenFirstFolderByName
+import net.svaroh.passly.helpers.signIn
+import net.svaroh.passly.instrumentationTestsModule
+import net.svaroh.passly.intents.ManagedAccountIntentCreator
+import net.svaroh.passly.rules.IdlingResourceRule
+import net.svaroh.passly.rules.lazyActivitySetupScenarioRule
+import net.svaroh.passly.testtags.composetags.BackNavigation.ICON
+import net.svaroh.passly.testtags.composetags.Home
+import net.svaroh.passly.testtags.composetags.HomeAppBar
+import net.svaroh.passly.testtags.composetags.SearchField
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

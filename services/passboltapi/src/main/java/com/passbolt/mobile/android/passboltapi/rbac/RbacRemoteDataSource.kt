@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.passboltapi.rbac
+package net.svaroh.passly.passboltapi.rbac
 
 internal class RbacRemoteDataSource(
     private val rbacApi: RbacApi,

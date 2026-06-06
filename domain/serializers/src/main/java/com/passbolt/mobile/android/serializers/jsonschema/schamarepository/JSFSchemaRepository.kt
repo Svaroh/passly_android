@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.jsonschema.schamarepository
+package net.svaroh.passly.serializers.jsonschema.schamarepository
 
 import android.content.Context
-import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes
+import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes
 import net.jimblackler.jsonschemafriend.Schema
 import net.jimblackler.jsonschemafriend.SchemaStore
 

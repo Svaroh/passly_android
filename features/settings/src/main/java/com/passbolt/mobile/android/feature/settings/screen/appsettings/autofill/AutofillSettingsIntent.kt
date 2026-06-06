@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill
+package net.svaroh.passly.feature.settings.screen.appsettings.autofill
 
 sealed interface AutofillSettingsIntent {
     data object GoBack : AutofillSettingsIntent

@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.folderdetails
+package net.svaroh.passly.folderdetails
 
 import android.content.Context
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getErrorMessage(
     context: Context,

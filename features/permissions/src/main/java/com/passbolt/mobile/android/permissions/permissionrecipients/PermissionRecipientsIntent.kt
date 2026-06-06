@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissionrecipients
+package net.svaroh.passly.permissions.permissionrecipients
 
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.UserModel
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.UserModel
 
 sealed interface PermissionRecipientsIntent {
     data object GoBack : PermissionRecipientsIntent

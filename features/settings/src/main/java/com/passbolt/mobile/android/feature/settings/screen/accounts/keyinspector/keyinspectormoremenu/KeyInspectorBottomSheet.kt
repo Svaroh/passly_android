@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu
+package net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu
 
 import android.app.Activity
 import android.content.Context
@@ -46,27 +46,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.bottomsheet.BottomSheetHeader
-import com.passbolt.mobile.android.core.ui.menu.OpenableSettingsItem
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.Close
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.ExportPrivateKey
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.ExportPublicKey
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.RefreshedPassphrase
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ConfirmPassphrase
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.Dismiss
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ErrorSnackbarType.FAILED_TO_GENERATE_PUBLIC_KEY
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ShowTextShareSheet
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.bottomsheet.BottomSheetHeader
+import net.svaroh.passly.core.ui.menu.OpenableSettingsItem
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.Close
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.ExportPrivateKey
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.ExportPublicKey
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.RefreshedPassphrase
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ConfirmPassphrase
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.Dismiss
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ErrorSnackbarType.FAILED_TO_GENERATE_PUBLIC_KEY
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ShowTextShareSheet
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun KeyInspectorBottomSheet(

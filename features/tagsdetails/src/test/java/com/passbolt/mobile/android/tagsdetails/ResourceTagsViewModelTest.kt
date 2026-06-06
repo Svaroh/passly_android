@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.tagsdetails
+package net.svaroh.passly.tagsdetails
 
 /**
  * Passbolt - Open source password manager for teams
@@ -29,26 +29,26 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.InProgress
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.resources.usecase.db.GetLocalResourceTagsUseCase
-import com.passbolt.mobile.android.core.resources.usecase.db.GetLocalResourceUseCase
-import com.passbolt.mobile.android.jsonmodel.jsonpathops.JsonPathJsonPathOps
-import com.passbolt.mobile.android.jsonmodel.jsonpathops.JsonPathsOps
-import com.passbolt.mobile.android.tagsdetails.ResourceTagsIntent.GoBack
-import com.passbolt.mobile.android.tagsdetails.ResourceTagsSideEffect.NavigateBack
-import com.passbolt.mobile.android.tagsdetails.ResourceTagsSideEffect.NavigateToHome
-import com.passbolt.mobile.android.tagsdetails.ResourceTagsSideEffect.ShowContentNotAvailable
-import com.passbolt.mobile.android.tagsdetails.ResourceTagsSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.tagsdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
-import com.passbolt.mobile.android.ui.MetadataJsonModel
-import com.passbolt.mobile.android.ui.ResourceModel
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.TagModel
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceTagsUseCase
+import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathJsonPathOps
+import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathsOps
+import net.svaroh.passly.tagsdetails.ResourceTagsIntent.GoBack
+import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.NavigateBack
+import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.NavigateToHome
+import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.ShowContentNotAvailable
+import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.tagsdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
+import net.svaroh.passly.ui.MetadataJsonModel
+import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.TagModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

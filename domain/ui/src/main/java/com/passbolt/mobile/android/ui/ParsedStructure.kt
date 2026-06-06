@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
 import android.os.Parcelable
 import android.view.autofill.AutofillId

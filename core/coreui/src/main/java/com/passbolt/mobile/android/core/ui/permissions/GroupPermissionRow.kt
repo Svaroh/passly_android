@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.permissions
+package net.svaroh.passly.core.ui.permissions
 
 import PassboltTheme
 import androidx.compose.foundation.Image
@@ -22,10 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourcePermission
 
 @Composable
 fun GroupPermissionRow(

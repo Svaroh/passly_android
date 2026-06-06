@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.yubikey
+package net.svaroh.passly.feature.authentication.mfa.yubikey
 
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.VerifyYubikeyUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.VerifyYubikeyUseCase
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModel

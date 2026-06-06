@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.accounts.usecase.privatekey
+package net.svaroh.passly.core.accounts.usecase.privatekey
 
 import android.content.Context
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.PrivateKeyFileName
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.PrivateKeyFileName
 import timber.log.Timber
 import java.io.File
 
@@ -36,7 +36,7 @@ class RemovePrivateKeyUseCase(
     override fun execute(input: UserIdInput) {
         val privateKeyFile =
             File(
-                com.passbolt.mobile.android.encryptedstorage
+                net.svaroh.passly.encryptedstorage
                     .EncryptedFileBaseDirectory(appContext)
                     .baseDirectory,
                 PrivateKeyFileName(input.userId).name,

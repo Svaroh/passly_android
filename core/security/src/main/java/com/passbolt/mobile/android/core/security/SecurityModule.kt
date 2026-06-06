@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.security
+package net.svaroh.passly.core.security
 
-import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureSetter
-import com.passbolt.mobile.android.core.security.rootdetection.RootDetector
-import com.passbolt.mobile.android.core.security.rootdetection.RootDetectorImpl
-import com.passbolt.mobile.android.core.security.runtimeauth.RuntimeAuthenticatedFlag
+import net.svaroh.passly.core.security.flagsecure.FlagSecureSetter
+import net.svaroh.passly.core.security.rootdetection.RootDetector
+import net.svaroh.passly.core.security.rootdetection.RootDetectorImpl
+import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
 import com.scottyab.rootbeer.RootBeer
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module

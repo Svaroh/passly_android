@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.unknown
+package net.svaroh.passly.feature.authentication.mfa.unknown
 
 import PassboltTheme
 import androidx.activity.compose.BackHandler
@@ -25,16 +25,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.Start
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.feature.authentication.mfa.unknown.UnknownProviderIntent.Close
-import com.passbolt.mobile.android.feature.authentication.mfa.unknown.UnknownProviderSideEffect.CloseAndNavigateToStartup
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.Start
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.feature.authentication.mfa.unknown.UnknownProviderIntent.Close
+import net.svaroh.passly.feature.authentication.mfa.unknown.UnknownProviderSideEffect.CloseAndNavigateToStartup
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun UnknownProviderScreen(

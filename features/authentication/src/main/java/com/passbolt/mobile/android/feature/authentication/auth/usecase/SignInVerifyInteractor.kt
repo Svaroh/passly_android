@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.accountdata.GetAccountDataUseCase
-import com.passbolt.mobile.android.core.authenticationcore.session.GetSessionUseCase
-import com.passbolt.mobile.android.dto.response.ChallengeResponseDto
-import com.passbolt.mobile.android.feature.authentication.auth.challenge.ChallengeDecryptor
-import com.passbolt.mobile.android.feature.authentication.auth.challenge.ChallengeProvider
-import com.passbolt.mobile.android.feature.authentication.auth.challenge.ChallengeVerifier
-import com.passbolt.mobile.android.mappers.AccountModelMapper
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.accountdata.GetAccountDataUseCase
+import net.svaroh.passly.core.authenticationcore.session.GetSessionUseCase
+import net.svaroh.passly.dto.response.ChallengeResponseDto
+import net.svaroh.passly.feature.authentication.auth.challenge.ChallengeDecryptor
+import net.svaroh.passly.feature.authentication.auth.challenge.ChallengeProvider
+import net.svaroh.passly.feature.authentication.auth.challenge.ChallengeVerifier
+import net.svaroh.passly.mappers.AccountModelMapper
 import timber.log.Timber
 
 /**

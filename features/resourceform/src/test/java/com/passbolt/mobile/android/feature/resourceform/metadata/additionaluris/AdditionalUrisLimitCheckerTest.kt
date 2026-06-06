@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris
+package net.svaroh.passly.feature.resourceform.metadata.additionaluris
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisLimitChecker.Companion.MAX_ADDITIONAL_URIS
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult.CanAdd
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult.LimitReached
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisLimitChecker.Companion.MAX_ADDITIONAL_URIS
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult.CanAdd
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.LimitChecker.LimitCheckResult.LimitReached
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertIs

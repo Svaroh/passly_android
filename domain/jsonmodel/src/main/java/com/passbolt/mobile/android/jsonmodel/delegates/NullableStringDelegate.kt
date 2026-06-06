@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.jsonmodel.delegates
+package net.svaroh.passly.jsonmodel.delegates
 
-import com.passbolt.mobile.android.jsonmodel.JsonModel
+import net.svaroh.passly.jsonmodel.JsonModel
 import org.koin.core.component.KoinComponent
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty

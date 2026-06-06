@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.resourcetypes.usecase.db
+package net.svaroh.passly.core.resourcetypes.usecase.db
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.SelectedAccountUseCase
-import com.passbolt.mobile.android.database.DatabaseProvider
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase
+import net.svaroh.passly.database.DatabaseProvider
 import java.util.UUID
 
 /**

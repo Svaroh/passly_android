@@ -1,20 +1,20 @@
-package com.passbolt.mobile.android.featureflags.usecase
+package net.svaroh.passly.featureflags.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.SelectedAccountUseCase
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
-import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
-import com.passbolt.mobile.android.featureflags.usecase.Constants.FOLDERS_KEY
-import com.passbolt.mobile.android.featureflags.usecase.Constants.PASSWORD_EXPIRY_KEY
-import com.passbolt.mobile.android.featureflags.usecase.Constants.PASSWORD_POLICIES_KEY
-import com.passbolt.mobile.android.featureflags.usecase.Constants.PASSWORD_POLICIES_UPDATE_KEY
-import com.passbolt.mobile.android.featureflags.usecase.Constants.PREVIEW_PASSWORD_KEY
-import com.passbolt.mobile.android.featureflags.usecase.Constants.PRIVACY_POLICY_KEY
-import com.passbolt.mobile.android.featureflags.usecase.Constants.RBAC_KEY
-import com.passbolt.mobile.android.featureflags.usecase.Constants.TAGS_KEY
-import com.passbolt.mobile.android.featureflags.usecase.Constants.TERMS_AND_CONDITIONS_KEY
-import com.passbolt.mobile.android.featureflags.usecase.Constants.TOTP_KEY
-import com.passbolt.mobile.android.featureflags.usecase.Constants.V5_METADATA
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
+import net.svaroh.passly.featureflags.usecase.Constants.FOLDERS_KEY
+import net.svaroh.passly.featureflags.usecase.Constants.PASSWORD_EXPIRY_KEY
+import net.svaroh.passly.featureflags.usecase.Constants.PASSWORD_POLICIES_KEY
+import net.svaroh.passly.featureflags.usecase.Constants.PASSWORD_POLICIES_UPDATE_KEY
+import net.svaroh.passly.featureflags.usecase.Constants.PREVIEW_PASSWORD_KEY
+import net.svaroh.passly.featureflags.usecase.Constants.PRIVACY_POLICY_KEY
+import net.svaroh.passly.featureflags.usecase.Constants.RBAC_KEY
+import net.svaroh.passly.featureflags.usecase.Constants.TAGS_KEY
+import net.svaroh.passly.featureflags.usecase.Constants.TERMS_AND_CONDITIONS_KEY
+import net.svaroh.passly.featureflags.usecase.Constants.TOTP_KEY
+import net.svaroh.passly.featureflags.usecase.Constants.V5_METADATA
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.policies.usecase
+package net.svaroh.passly.core.policies.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.mappers.PasswordExpiryMapper
-import com.passbolt.mobile.android.passboltapi.expiry.PasswordExpiryRepository
-import com.passbolt.mobile.android.ui.PasswordExpirySettings
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.mappers.PasswordExpiryMapper
+import net.svaroh.passly.passboltapi.expiry.PasswordExpiryRepository
+import net.svaroh.passly.ui.PasswordExpirySettings
 
 class FetchPasswordExpirySettingsUseCase(
     private val passwordExpiryRepository: PasswordExpiryRepository,

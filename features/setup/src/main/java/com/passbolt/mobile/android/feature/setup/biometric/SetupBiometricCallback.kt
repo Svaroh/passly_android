@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.setup.biometric
+package net.svaroh.passly.feature.setup.biometric
 
 import androidx.biometric.BiometricPrompt
 import androidx.biometric.BiometricPrompt.ERROR_LOCKOUT
@@ -7,7 +7,7 @@ import androidx.biometric.BiometricPrompt.ERROR_NEGATIVE_BUTTON
 import androidx.biometric.BiometricPrompt.ERROR_TIMEOUT
 import androidx.biometric.BiometricPrompt.ERROR_USER_CANCELED
 import javax.crypto.Cipher
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 /**
  * Passbolt - Open source password manager for teams

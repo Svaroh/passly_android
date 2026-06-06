@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common.validation
+package net.svaroh.passly.common.validation
 
 import java.net.MalformedURLException
 import java.net.URI

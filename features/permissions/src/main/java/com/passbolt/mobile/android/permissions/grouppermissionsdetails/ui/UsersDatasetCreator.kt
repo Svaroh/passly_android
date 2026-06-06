@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.permissions.grouppermissionsdetails.ui
+package net.svaroh.passly.permissions.grouppermissionsdetails.ui
 
-import com.passbolt.mobile.android.core.ui.overlap.OverlapCalculator
-import com.passbolt.mobile.android.ui.UserModel
+import net.svaroh.passly.core.ui.overlap.OverlapCalculator
+import net.svaroh.passly.ui.UserModel
 
 class UsersDatasetCreator(
     private val membersRecyclerWidth: Int,

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.accessibilitypolicies
+package net.svaroh.passly.feature.accessibilitypolicies
 
 import PassboltTheme
 import androidx.activity.compose.LocalActivity
@@ -60,19 +60,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.Home
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.EncourageAccessibilityAutofill
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesIntent.Accept
-import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesIntent.Decline
-import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToAcceptedScreen
-import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToDeclinedScreen
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.Home
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.EncourageAccessibilityAutofill
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesIntent.Accept
+import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesIntent.Decline
+import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToAcceptedScreen
+import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToDeclinedScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun AccessibilityPoliciesScreen(

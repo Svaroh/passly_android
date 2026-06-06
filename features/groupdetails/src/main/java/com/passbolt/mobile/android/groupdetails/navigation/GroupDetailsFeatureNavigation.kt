@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.groupdetails.navigation
+package net.svaroh.passly.groupdetails.navigation
 
 import PassboltTheme
-import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.GroupDetailsNavigationKey.GroupMemberDetails
-import com.passbolt.mobile.android.core.navigation.compose.keys.GroupDetailsNavigationKey.GroupMembers
-import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsScreen
-import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersScreen
+import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.navigation.compose.keys.GroupDetailsNavigationKey.GroupMemberDetails
+import net.svaroh.passly.core.navigation.compose.keys.GroupDetailsNavigationKey.GroupMembers
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsScreen
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersScreen
 
 class GroupDetailsFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =

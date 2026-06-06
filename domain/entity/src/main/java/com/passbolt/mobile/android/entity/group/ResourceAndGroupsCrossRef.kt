@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.entity.group
+package net.svaroh.passly.entity.group
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
-import com.passbolt.mobile.android.entity.resource.Permission
-import com.passbolt.mobile.android.entity.resource.Resource
+import net.svaroh.passly.entity.resource.Permission
+import net.svaroh.passly.entity.resource.Resource
 
 @Entity(
     primaryKeys = ["resourceId", "groupId"],

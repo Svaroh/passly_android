@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.dto.request.SignOutRequestDto
+import net.svaroh.passly.dto.request.SignOutRequestDto
 
 /**
  * Passbolt - Open source password manager for teams

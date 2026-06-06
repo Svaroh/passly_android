@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.jsonschema.schamarepository
+package net.svaroh.passly.serializers.jsonschema.schamarepository
 
 import net.jimblackler.jsonschemafriend.Schema
 import net.jimblackler.jsonschemafriend.Validator

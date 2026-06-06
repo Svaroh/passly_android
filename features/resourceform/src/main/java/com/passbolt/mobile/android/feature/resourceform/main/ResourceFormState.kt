@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.feature.resourceform.main
+package net.svaroh.passly.feature.resourceform.main
 
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note.NoteValidationError
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError
-import com.passbolt.mobile.android.ui.LeadingContentType
-import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
-import com.passbolt.mobile.android.ui.PasswordStrength
-import com.passbolt.mobile.android.ui.ResourceFormMode
-import com.passbolt.mobile.android.ui.ResourceFormUiModel
-import com.passbolt.mobile.android.ui.TotpUiModel
-import com.passbolt.mobile.android.ui.TrustedKeyDeletedModel
+import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteValidationError
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError
+import net.svaroh.passly.ui.LeadingContentType
+import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
+import net.svaroh.passly.ui.PasswordStrength
+import net.svaroh.passly.ui.ResourceFormMode
+import net.svaroh.passly.ui.ResourceFormUiModel
+import net.svaroh.passly.ui.TotpUiModel
+import net.svaroh.passly.ui.TrustedKeyDeletedModel
 
 data class ResourceFormState(
     val mode: ResourceFormMode? = null,

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.authentication.auth
+package net.svaroh.passly.feature.authentication.auth
 
 import PassboltTheme
 import androidx.activity.compose.BackHandler
@@ -33,11 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.passbolt.mobile.android.core.formatter.FingerprintFormatter
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.formatter.FingerprintFormatter
+import net.svaroh.passly.core.ui.button.PrimaryButton
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun ServerFingerprintChangedDialog(

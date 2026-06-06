@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.permissions.permissionrecipients.ui.list
+package net.svaroh.passly.permissions.permissionrecipients.ui.list
 
 import PassboltTheme
 import androidx.compose.foundation.clickable
@@ -20,11 +20,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.localization.R
-import com.passbolt.mobile.android.core.ui.circularimage.CircularProfileImage
-import com.passbolt.mobile.android.ui.GpgKeyModel
-import com.passbolt.mobile.android.ui.UserModel
-import com.passbolt.mobile.android.ui.UserProfileModel
+import net.svaroh.passly.core.localization.R
+import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
+import net.svaroh.passly.ui.GpgKeyModel
+import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserProfileModel
 
 @Composable
 internal fun UserRecipientRow(

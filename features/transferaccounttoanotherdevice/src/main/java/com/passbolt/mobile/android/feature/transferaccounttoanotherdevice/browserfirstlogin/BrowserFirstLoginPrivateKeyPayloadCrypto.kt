@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

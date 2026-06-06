@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.metadata.sessionkeys
+package net.svaroh.passly.metadata.sessionkeys
 
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.dto.response.DecryptedMetadataSessionKeysBundleModel
-import com.passbolt.mobile.android.ui.MergedSessionKeys
-import com.passbolt.mobile.android.ui.SessionKeyIdentifier
-import com.passbolt.mobile.android.ui.SessionKeyModel
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.dto.response.DecryptedMetadataSessionKeysBundleModel
+import net.svaroh.passly.ui.MergedSessionKeys
+import net.svaroh.passly.ui.SessionKeyIdentifier
+import net.svaroh.passly.ui.SessionKeyModel
 import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime
 import java.util.concurrent.ConcurrentHashMap

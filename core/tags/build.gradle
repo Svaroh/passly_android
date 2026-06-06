@@ -20,7 +20,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.tags"
+    namespace = "net.svaroh.passly.core.tags"
 }
 
 kotlin {

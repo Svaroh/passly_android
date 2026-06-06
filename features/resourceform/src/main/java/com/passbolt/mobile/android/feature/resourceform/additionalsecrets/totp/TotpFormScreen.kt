@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp
+package net.svaroh.passly.feature.resourceform.additionalsecrets.totp
 
 import PassboltTheme
 import android.content.Context
@@ -55,46 +55,46 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
-import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.TotpAdvancedSettingsForm
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
-import com.passbolt.mobile.android.core.navigation.compose.results.ScanOtpResultEvent
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.button.SecondaryIconButton
-import com.passbolt.mobile.android.core.ui.text.TextInput
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Default
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Error
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.AdvancedSettingsChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.IssuerChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.MoreSettingsClick
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.RemoveTotp
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.ScanTotpClick
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.SecretChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.TotpScanned
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.NavigateToAdvancedSettings
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.NavigateToScanTotp
-import com.passbolt.mobile.android.feature.resourceform.navigation.TotpAdvancedSettingsFormResult
-import com.passbolt.mobile.android.feature.resourceform.navigation.TotpFormResult
-import com.passbolt.mobile.android.ui.LeadingContentType
-import com.passbolt.mobile.android.ui.ResourceFormMode
-import com.passbolt.mobile.android.ui.ResourceFormMode.Create
-import com.passbolt.mobile.android.ui.ResourceFormMode.Edit
-import com.passbolt.mobile.android.ui.TotpUiModel
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
+import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.TotpAdvancedSettingsForm
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.navigation.compose.results.ResultEffect
+import net.svaroh.passly.core.navigation.compose.results.ScanOtpResultEvent
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.button.SecondaryIconButton
+import net.svaroh.passly.core.ui.text.TextInput
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Default
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Error
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.AdvancedSettingsChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.IssuerChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.MoreSettingsClick
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.RemoveTotp
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.ScanTotpClick
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.SecretChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.TotpScanned
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.NavigateBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.NavigateToAdvancedSettings
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.NavigateToScanTotp
+import net.svaroh.passly.feature.resourceform.navigation.TotpAdvancedSettingsFormResult
+import net.svaroh.passly.feature.resourceform.navigation.TotpFormResult
+import net.svaroh.passly.ui.LeadingContentType
+import net.svaroh.passly.ui.ResourceFormMode
+import net.svaroh.passly.ui.ResourceFormMode.Create
+import net.svaroh.passly.ui.ResourceFormMode.Edit
+import net.svaroh.passly.ui.TotpUiModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun TotpFormScreen(

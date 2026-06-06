@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourcedetails.details.ui
+package net.svaroh.passly.feature.resourcedetails.details.ui
 
 import PassboltTheme
 import androidx.compose.foundation.background
@@ -11,21 +11,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.header.ActionIcon
-import com.passbolt.mobile.android.core.ui.header.ItemWithHeader
-import com.passbolt.mobile.android.core.ui.header.ValueStyle
-import com.passbolt.mobile.android.core.ui.section.Section
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.CopyCustomField
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.ToggleCustomField
-import com.passbolt.mobile.android.ui.CustomFieldModel
-import com.passbolt.mobile.android.ui.CustomFieldModel.BooleanCustomField
-import com.passbolt.mobile.android.ui.CustomFieldModel.NumberCustomField
-import com.passbolt.mobile.android.ui.CustomFieldModel.PasswordCustomField
-import com.passbolt.mobile.android.ui.CustomFieldModel.TextCustomField
-import com.passbolt.mobile.android.ui.CustomFieldModel.UriCustomField
+import net.svaroh.passly.core.ui.header.ActionIcon
+import net.svaroh.passly.core.ui.header.ItemWithHeader
+import net.svaroh.passly.core.ui.header.ValueStyle
+import net.svaroh.passly.core.ui.section.Section
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyCustomField
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ToggleCustomField
+import net.svaroh.passly.ui.CustomFieldModel
+import net.svaroh.passly.ui.CustomFieldModel.BooleanCustomField
+import net.svaroh.passly.ui.CustomFieldModel.NumberCustomField
+import net.svaroh.passly.ui.CustomFieldModel.PasswordCustomField
+import net.svaroh.passly.ui.CustomFieldModel.TextCustomField
+import net.svaroh.passly.ui.CustomFieldModel.UriCustomField
 import java.util.UUID
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Suppress("CyclomaticComplexMethod")
 @Composable

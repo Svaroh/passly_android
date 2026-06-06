@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.users.profile
+package net.svaroh.passly.core.users.profile
 
 import org.koin.core.module.Module
 

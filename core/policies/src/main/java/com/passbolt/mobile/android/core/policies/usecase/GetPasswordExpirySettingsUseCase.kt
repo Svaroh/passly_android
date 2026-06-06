@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.policies.usecase
+package net.svaroh.passly.core.policies.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.SelectedAccountUseCase
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
-import com.passbolt.mobile.android.ui.PasswordExpirySettings
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.ui.PasswordExpirySettings
 
 class GetPasswordExpirySettingsUseCase(
     private val encryptedSharedPreferencesFactory: EncryptedSharedPreferencesFactory,

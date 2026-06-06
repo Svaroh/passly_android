@@ -20,17 +20,17 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.feature.home.screen
+package net.svaroh.passly.feature.home.screen
 
 import androidx.paging.compose.LazyPagingItems
-import com.passbolt.mobile.android.feature.home.screen.ShowSuggestedModel.Show
-import com.passbolt.mobile.android.feature.home.screen.data.HeaderSectionConfiguration
-import com.passbolt.mobile.android.ui.FolderWithCountAndPath
-import com.passbolt.mobile.android.ui.GroupWithCount
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Folders
-import com.passbolt.mobile.android.ui.ResourceModel
-import com.passbolt.mobile.android.ui.TagWithCount
+import net.svaroh.passly.feature.home.screen.ShowSuggestedModel.Show
+import net.svaroh.passly.feature.home.screen.data.HeaderSectionConfiguration
+import net.svaroh.passly.ui.FolderWithCountAndPath
+import net.svaroh.passly.ui.GroupWithCount
+import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.HomeDisplayViewModel.Folders
+import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.TagWithCount
 
 @Suppress("LongParameterList")
 internal fun getHeaderConfig(

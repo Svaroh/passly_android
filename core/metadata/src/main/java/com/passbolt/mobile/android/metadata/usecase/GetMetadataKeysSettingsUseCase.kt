@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.metadata.usecase
+package net.svaroh.passly.metadata.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.SelectedAccountUseCase
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.ALLOW_USAGE_OF_PERSONAL_KEYS
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.ZERO_KNOWLEDGE_KEY_SHARE
-import com.passbolt.mobile.android.ui.MetadataKeysSettingsModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.ALLOW_USAGE_OF_PERSONAL_KEYS
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.ZERO_KNOWLEDGE_KEY_SHARE
+import net.svaroh.passly.ui.MetadataKeysSettingsModel
 
 /**
  * Passbolt - Open source password manager for teams

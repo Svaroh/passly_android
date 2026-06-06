@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resources.details
+package net.svaroh.passly.feature.resources.details
 
-import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.MetadataJsonModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.RbacModel
-import com.passbolt.mobile.android.ui.RbacRuleModel.ALLOW
-import com.passbolt.mobile.android.ui.ResourceModel
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.TagModel
-import com.passbolt.mobile.android.ui.UserWithAvatar
+import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.MetadataJsonModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.RbacModel
+import net.svaroh.passly.ui.RbacRuleModel.ALLOW
+import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.TagModel
+import net.svaroh.passly.ui.UserWithAvatar
 import java.time.ZonedDateTime
 import java.util.UUID
 

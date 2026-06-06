@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.screen.data
+package net.svaroh.passly.resourcepicker.screen.data
 
-import com.passbolt.mobile.android.common.search.SearchableMatcher
-import com.passbolt.mobile.android.common.urimatcher.AutofillUriMatcher
-import com.passbolt.mobile.android.core.resources.usecase.db.GetLocalResourcesUseCase
-import com.passbolt.mobile.android.core.resourcetypes.usecase.db.GetResourceTypeIdToSlugMappingUseCase
-import com.passbolt.mobile.android.mappers.ResourcePickerMapper
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerViewModel.Companion.SELECTABLE_RESOURCE_TYPES_SLUGS
-import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes.allSlugs
+import net.svaroh.passly.common.search.SearchableMatcher
+import net.svaroh.passly.common.urimatcher.AutofillUriMatcher
+import net.svaroh.passly.core.resources.usecase.db.GetLocalResourcesUseCase
+import net.svaroh.passly.core.resourcetypes.usecase.db.GetResourceTypeIdToSlugMappingUseCase
+import net.svaroh.passly.mappers.ResourcePickerMapper
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerViewModel.Companion.SELECTABLE_RESOURCE_TYPES_SLUGS
+import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.allSlugs
 
 class ResourcePickerDataProvider(
     private val getLocalResourcesUseCase: GetLocalResourcesUseCase,

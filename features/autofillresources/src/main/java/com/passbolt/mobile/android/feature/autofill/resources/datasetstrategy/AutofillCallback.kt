@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy
+package net.svaroh.passly.feature.autofill.resources.datasetstrategy
 
 import android.app.assist.AssistStructure
 import android.content.Intent

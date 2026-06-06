@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.sharedwith
+package net.svaroh.passly.core.ui.sharedwith
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,9 +46,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.circularimage.CircularProfileImage
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun SharedWithSection(

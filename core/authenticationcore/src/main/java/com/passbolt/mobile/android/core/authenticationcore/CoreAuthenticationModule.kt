@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.authenticationcore
+package net.svaroh.passly.core.authenticationcore
 
-import com.passbolt.mobile.android.core.authenticationcore.passphrase.passphraseModule
-import com.passbolt.mobile.android.core.authenticationcore.session.sessionModule
+import net.svaroh.passly.core.authenticationcore.passphrase.passphraseModule
+import net.svaroh.passly.core.authenticationcore.session.sessionModule
 import org.koin.dsl.module
 
 val authenticationCoreModule =

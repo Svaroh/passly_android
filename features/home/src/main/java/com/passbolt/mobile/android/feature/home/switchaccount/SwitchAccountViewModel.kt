@@ -1,26 +1,26 @@
-package com.passbolt.mobile.android.feature.home.switchaccount
+package net.svaroh.passly.feature.home.switchaccount
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.accounts.GetAllAccountsDataUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.SaveSelectedAccountUseCase
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignOutUseCase
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.Close
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.CloseSignOutDialog
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.Initialize
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.ManageAccounts
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.SeeCurrentAccountDetails
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.SignOut
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.SignOutConfirmed
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.SwitchAccount
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToSignInForAccount
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToStartup
-import com.passbolt.mobile.android.mappers.SwitchAccountModelMapper
-import com.passbolt.mobile.android.ui.SwitchAccountUiModel.AccountItem
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.accounts.GetAllAccountsDataUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveSelectedAccountUseCase
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.Close
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.CloseSignOutDialog
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.Initialize
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.ManageAccounts
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.SeeCurrentAccountDetails
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.SignOut
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.SignOutConfirmed
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.SwitchAccount
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToSignInForAccount
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToStartup
+import net.svaroh.passly.mappers.SwitchAccountModelMapper
+import net.svaroh.passly.ui.SwitchAccountUiModel.AccountItem
 import kotlinx.coroutines.launch
 
 /**

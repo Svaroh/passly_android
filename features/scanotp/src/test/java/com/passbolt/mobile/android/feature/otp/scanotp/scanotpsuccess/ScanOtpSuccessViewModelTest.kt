@@ -1,16 +1,16 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess
+package net.svaroh.passly.feature.otp.scanotp.scanotpsuccess
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.resources.actions.ResourceCreateActionResult
-import com.passbolt.mobile.android.core.resources.actions.ResourceUpdateActionResult
-import com.passbolt.mobile.android.core.resources.usecase.GetDefaultCreateContentTypeUseCase
-import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAction
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
-import com.passbolt.mobile.android.ui.MetadataJsonModel
-import com.passbolt.mobile.android.ui.MetadataTypeModel
-import com.passbolt.mobile.android.ui.OtpParseResult
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.core.resources.actions.ResourceCreateActionResult
+import net.svaroh.passly.core.resources.actions.ResourceUpdateActionResult
+import net.svaroh.passly.core.resources.usecase.GetDefaultCreateContentTypeUseCase
+import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction
+import net.svaroh.passly.supportedresourceTypes.ContentType
+import net.svaroh.passly.ui.MetadataJsonModel
+import net.svaroh.passly.ui.MetadataTypeModel
+import net.svaroh.passly.ui.OtpParseResult
+import net.svaroh.passly.ui.ResourceModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf

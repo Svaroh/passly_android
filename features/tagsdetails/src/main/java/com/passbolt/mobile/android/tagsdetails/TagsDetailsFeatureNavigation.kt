@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.tagsdetails
+package net.svaroh.passly.tagsdetails
 
 import PassboltTheme
-import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.TagsDetailsNavigationKey.ResourceTags
+import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.navigation.compose.keys.TagsDetailsNavigationKey.ResourceTags
 
 class TagsDetailsFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =

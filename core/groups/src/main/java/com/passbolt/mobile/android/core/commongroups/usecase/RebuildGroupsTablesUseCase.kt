@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.core.commongroups.usecase
+package net.svaroh.passly.core.commongroups.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.core.commongroups.usecase.db.AddLocalGroupsUseCase
-import com.passbolt.mobile.android.core.commongroups.usecase.db.RemoveLocalGroupsUseCase
-import com.passbolt.mobile.android.ui.GroupModelWithUsers
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.core.commongroups.usecase.db.AddLocalGroupsUseCase
+import net.svaroh.passly.core.commongroups.usecase.db.RemoveLocalGroupsUseCase
+import net.svaroh.passly.ui.GroupModelWithUsers
 
 class RebuildGroupsTablesUseCase(
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.navigation.compose.results
+package net.svaroh.passly.core.navigation.compose.results
 
 data class ResourceDetailsCompleteResult(
     val resourceEdited: Boolean,

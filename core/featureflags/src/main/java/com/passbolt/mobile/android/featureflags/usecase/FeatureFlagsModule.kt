@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.featureflags.usecase
+package net.svaroh.passly.featureflags.usecase
 
 import org.koin.core.module.Module
 

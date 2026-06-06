@@ -21,22 +21,22 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.gson
+package net.svaroh.passly.serializers.gson
 
 import com.google.gson.Gson
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
-import com.passbolt.mobile.android.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
-import com.passbolt.mobile.android.dto.PassphraseNotInCacheException
-import com.passbolt.mobile.android.dto.response.ResourceResponseDto
-import com.passbolt.mobile.android.dto.response.ResourceResponseV4Dto
-import com.passbolt.mobile.android.dto.response.ResourceResponseV5Dto
-import com.passbolt.mobile.android.metadata.usecase.db.GetLocalMetadataKeysUseCase
-import com.passbolt.mobile.android.metadata.usecase.db.GetLocalMetadataKeysUseCase.MetadataKeyPurpose.DECRYPT
-import com.passbolt.mobile.android.serializers.gson.validation.JsonSchemaValidationRunner
-import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes
-import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes.allSlugs
+import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.dto.PassphraseNotInCacheException
+import net.svaroh.passly.dto.response.ResourceResponseDto
+import net.svaroh.passly.dto.response.ResourceResponseV4Dto
+import net.svaroh.passly.dto.response.ResourceResponseV5Dto
+import net.svaroh.passly.metadata.usecase.db.GetLocalMetadataKeysUseCase
+import net.svaroh.passly.metadata.usecase.db.GetLocalMetadataKeysUseCase.MetadataKeyPurpose.DECRYPT
+import net.svaroh.passly.serializers.gson.validation.JsonSchemaValidationRunner
+import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes
+import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.allSlugs
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get

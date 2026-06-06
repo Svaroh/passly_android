@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.groupdetails.groupmembers
+package net.svaroh.passly.groupdetails.groupmembers
 
 import PassboltTheme
 import androidx.compose.foundation.clickable
@@ -17,12 +17,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.circularimage.CircularProfileImage
-import com.passbolt.mobile.android.ui.GpgKeyModel
-import com.passbolt.mobile.android.ui.UserModel
-import com.passbolt.mobile.android.ui.UserProfileModel
+import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
+import net.svaroh.passly.ui.GpgKeyModel
+import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserProfileModel
 import java.time.ZonedDateTime
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun GroupMemberItem(

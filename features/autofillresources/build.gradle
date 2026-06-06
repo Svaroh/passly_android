@@ -45,7 +45,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.feature.autofill"
+    namespace = "net.svaroh.passly.feature.autofill"
     buildFeatures {
         compose true
         viewBinding true

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note
+package net.svaroh.passly.feature.resourceform.additionalsecrets.note
 
 internal sealed interface NoteFormSideEffect {
     data object NavigateBack : NoteFormSideEffect

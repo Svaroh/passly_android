@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.common.CookieExtractor
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.networking.ErrorHeaderMapper
-import com.passbolt.mobile.android.core.networking.MfaTypeProvider
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.dto.request.TotpRequest
-import com.passbolt.mobile.android.passboltapi.mfa.MfaRepository
+import net.svaroh.passly.common.CookieExtractor
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.networking.ErrorHeaderMapper
+import net.svaroh.passly.core.networking.MfaTypeProvider
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.dto.request.TotpRequest
+import net.svaroh.passly.passboltapi.mfa.MfaRepository
 import java.net.HttpURLConnection
 
 /**

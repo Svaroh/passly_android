@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu
+package net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu
 
 internal sealed interface KeyInspectorBottomSheetIntent {
     object Close : KeyInspectorBottomSheetIntent

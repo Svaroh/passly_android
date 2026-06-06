@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.groupdetails.groupmemberdetails
+package net.svaroh.passly.groupdetails.groupmemberdetails
 
 data class GroupMemberDetailsState(
     val userName: String = "",

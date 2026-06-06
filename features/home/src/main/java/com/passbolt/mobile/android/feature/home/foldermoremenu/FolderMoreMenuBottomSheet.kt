@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.home.foldermoremenu
+package net.svaroh.passly.feature.home.foldermoremenu
 
 import PassboltTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -8,10 +8,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.passbolt.mobile.android.core.ui.bottomsheet.BottomSheetHeader
-import com.passbolt.mobile.android.core.ui.menu.OpenableSettingsItem
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.bottomsheet.BottomSheetHeader
+import net.svaroh.passly.core.ui.menu.OpenableSettingsItem
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 /**
  * Passbolt - Open source password manager for teams

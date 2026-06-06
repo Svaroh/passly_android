@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.rules
+package net.svaroh.passly.rules
 
 import android.app.Activity
 import android.content.Intent
 import androidx.test.core.app.ActivityScenario
-import com.passbolt.mobile.android.accountinit.AccountInitializer
-import com.passbolt.mobile.android.initializers.KoinInitializer
+import net.svaroh.passly.accountinit.AccountInitializer
+import net.svaroh.passly.initializers.KoinInitializer
 import org.junit.rules.ExternalResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.serializers.gson
+package net.svaroh.passly.serializers.gson
 
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
-import com.passbolt.mobile.android.serializers.gson.exception.InvalidJsonTokenType
+import net.svaroh.passly.serializers.gson.exception.InvalidJsonTokenType
 import java.io.IOException
 
 class BooleanStrictTypeAdapter : TypeAdapter<Boolean?>() {

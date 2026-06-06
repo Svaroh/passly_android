@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.core.autofill
+package net.svaroh.passly.core.autofill
 
-import com.passbolt.mobile.android.common.autofill.DetectAutofillConflict
-import com.passbolt.mobile.android.core.autofill.accessibility.AccessibilityOperationsProvider
-import com.passbolt.mobile.android.core.autofill.conflict.DetectSystemAutofillConflict
-import com.passbolt.mobile.android.core.autofill.system.AutofillHintsFactory
-import com.passbolt.mobile.android.core.autofill.system.FillableInputsFinder
+import net.svaroh.passly.common.autofill.DetectAutofillConflict
+import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider
+import net.svaroh.passly.core.autofill.conflict.DetectSystemAutofillConflict
+import net.svaroh.passly.core.autofill.system.AutofillHintsFactory
+import net.svaroh.passly.core.autofill.system.FillableInputsFinder
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf

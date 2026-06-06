@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import timber.log.Timber
 
 /**

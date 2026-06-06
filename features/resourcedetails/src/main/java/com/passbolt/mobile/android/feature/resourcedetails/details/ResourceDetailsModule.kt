@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourcedetails.details
+package net.svaroh.passly.feature.resourcedetails.details
 
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module

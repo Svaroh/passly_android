@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.secrets.usecase.decrypt
+package net.svaroh.passly.core.secrets.usecase.decrypt
 
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.mvp.authentication.UnauthenticatedReason
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpError
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.mvp.authentication.UnauthenticatedReason
+import net.svaroh.passly.gopenpgp.exception.OpenPgpError
 import retrofit2.HttpException
 import java.net.HttpURLConnection
 

@@ -1,3 +1,3 @@
-package com.passbolt.mobile.android.feature.startup
+package net.svaroh.passly.feature.startup
 
 data object StartUpState

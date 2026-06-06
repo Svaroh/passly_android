@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.encryptedstorage
+package net.svaroh.passly.encryptedstorage
 
 import android.content.Context
 import androidx.security.crypto.EncryptedFile

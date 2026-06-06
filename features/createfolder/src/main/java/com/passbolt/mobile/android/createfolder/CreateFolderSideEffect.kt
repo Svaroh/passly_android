@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.createfolder
+package net.svaroh.passly.createfolder
 
 sealed class CreateFolderSideEffect {
     data object NavigateUp : CreateFolderSideEffect()

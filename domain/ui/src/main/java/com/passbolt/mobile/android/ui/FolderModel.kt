@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
-import com.passbolt.mobile.android.common.search.Searchable
+import net.svaroh.passly.common.search.Searchable
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.common.usecase
+package net.svaroh.passly.common.usecase
 
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.URL

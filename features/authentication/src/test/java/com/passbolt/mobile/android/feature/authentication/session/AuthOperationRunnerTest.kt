@@ -21,21 +21,21 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.session
+package net.svaroh.passly.feature.authentication.session
 
 import android.app.Activity
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Authenticated
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Passphrase
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Session
-import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackingFlow
-import com.passbolt.mobile.android.core.mvp.authentication.SessionState.NeedsRefresh
-import com.passbolt.mobile.android.core.navigation.AppForegroundListener
-import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetSessionExpiryUseCase
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.RefreshSessionUseCase
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Authenticated
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Passphrase
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Session
+import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
+import net.svaroh.passly.core.mvp.authentication.SessionState.NeedsRefresh
+import net.svaroh.passly.core.navigation.AppForegroundListener
+import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
+import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch

@@ -21,30 +21,30 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcemoremenu
+package net.svaroh.passly.resourcemoremenu
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.idlingresource.CreateMenuModelIdlingResource
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Close
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyMetadataDescription
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyNote
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyPassword
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyUrl
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyUsername
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Delete
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Edit
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Initialize
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.LaunchWebsite
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Share
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.ToggleFavourite
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.Dismiss
-import com.passbolt.mobile.android.resourcemoremenu.usecase.CreateResourceMoreMenuModelUseCase
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.DescriptionOption.HAS_METADATA_DESCRIPTION
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.DescriptionOption.HAS_NOTE
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.idlingresource.CreateMenuModelIdlingResource
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Close
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyMetadataDescription
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyNote
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyPassword
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyUrl
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyUsername
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Delete
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Edit
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Initialize
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.LaunchWebsite
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Share
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.ToggleFavourite
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.Dismiss
+import net.svaroh.passly.resourcemoremenu.usecase.CreateResourceMoreMenuModelUseCase
+import net.svaroh.passly.ui.ResourceMoreMenuModel
+import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_METADATA_DESCRIPTION
+import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_NOTE
 import kotlinx.coroutines.launch
 import timber.log.Timber
 

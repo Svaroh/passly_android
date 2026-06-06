@@ -21,27 +21,27 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector
+package net.svaroh.passly.feature.settings.screen.accounts.keyinspector
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.formatter.DateFormatter
-import com.passbolt.mobile.android.core.formatter.FingerprintFormatter
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.users.user.FetchCurrentUserUseCase
-import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CloseMoreMenu
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CopyFingerprint
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CopyUid
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.OpenMoreMenu
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.AddFingerprintToClipboard
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.AddUidToClipboard
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ErrorSnackbarType.FAILED_TO_FETCH_KEY
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.NavigateUp
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.mappers.AccountModelMapper
+import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.formatter.DateFormatter
+import net.svaroh.passly.core.formatter.FingerprintFormatter
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.users.user.FetchCurrentUserUseCase
+import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CloseMoreMenu
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CopyFingerprint
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CopyUid
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.OpenMoreMenu
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.AddFingerprintToClipboard
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.AddUidToClipboard
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ErrorSnackbarType.FAILED_TO_FETCH_KEY
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.NavigateUp
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.mappers.AccountModelMapper
 import kotlinx.coroutines.launch
 
 internal class KeyInspectorViewModel(

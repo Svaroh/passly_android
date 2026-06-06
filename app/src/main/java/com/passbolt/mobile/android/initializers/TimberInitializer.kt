@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.initializers
+package net.svaroh.passly.initializers
 
 import android.content.Context
 import androidx.startup.Initializer
-import com.passbolt.mobile.android.BuildConfig
-import com.passbolt.mobile.android.core.logger.FileLoggingTree
-import com.passbolt.mobile.android.core.logger.LogFilesManager
-import com.passbolt.mobile.android.core.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.BuildConfig
+import net.svaroh.passly.core.logger.FileLoggingTree
+import net.svaroh.passly.core.logger.LogFilesManager
+import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber

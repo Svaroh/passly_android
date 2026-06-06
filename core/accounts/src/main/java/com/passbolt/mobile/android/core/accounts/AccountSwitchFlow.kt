@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.accounts
+package net.svaroh.passly.core.accounts
 
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

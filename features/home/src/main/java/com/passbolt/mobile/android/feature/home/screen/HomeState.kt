@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.home.screen
+package net.svaroh.passly.feature.home.screen
 
-import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode
-import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode.AVATAR
-import com.passbolt.mobile.android.feature.home.screen.data.HomeData
-import com.passbolt.mobile.android.ui.Folder.Child
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Folders
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Groups
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Tags
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.core.ui.search.SearchInputEndIconMode
+import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.AVATAR
+import net.svaroh.passly.feature.home.screen.data.HomeData
+import net.svaroh.passly.ui.Folder.Child
+import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.HomeDisplayViewModel.Folders
+import net.svaroh.passly.ui.HomeDisplayViewModel.Groups
+import net.svaroh.passly.ui.HomeDisplayViewModel.Tags
+import net.svaroh.passly.ui.ResourceModel
 
 data class HomeState(
     val homeData: HomeData = HomeData(),

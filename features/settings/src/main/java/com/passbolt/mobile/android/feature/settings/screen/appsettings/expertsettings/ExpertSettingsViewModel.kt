@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings
+package net.svaroh.passly.feature.settings.screen.appsettings.expertsettings
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.preferences.usecase.GetGlobalPreferencesUseCase
-import com.passbolt.mobile.android.core.preferences.usecase.UpdateGlobalPreferencesUseCase
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleDeveloperMode
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleHideRootWarning
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreenSideEffect.NavigateUp
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.core.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleDeveloperMode
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleHideRootWarning
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreenSideEffect.NavigateUp
 
 internal class ExpertSettingsViewModel(
     private val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase,

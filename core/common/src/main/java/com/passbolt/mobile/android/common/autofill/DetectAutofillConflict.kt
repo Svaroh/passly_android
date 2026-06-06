@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common.autofill
+package net.svaroh.passly.common.autofill
 
 fun interface DetectAutofillConflict {
     operator fun invoke(): Boolean

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.main.mainscreen.bottomnavigation
+package net.svaroh.passly.feature.main.mainscreen.bottomnavigation
 
 data class MainBottomNavigationModel(
     val isOtpTabVisible: Boolean,

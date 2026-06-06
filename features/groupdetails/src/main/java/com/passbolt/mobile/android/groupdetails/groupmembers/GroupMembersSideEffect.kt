@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.groupdetails.groupmembers
+package net.svaroh.passly.groupdetails.groupmembers
 
 internal sealed interface GroupMembersSideEffect {
     data object NavigateUp : GroupMembersSideEffect

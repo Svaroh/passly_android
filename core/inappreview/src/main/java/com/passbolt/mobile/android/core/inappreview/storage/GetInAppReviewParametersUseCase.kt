@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.core.inappreview.storage
+package net.svaroh.passly.core.inappreview.storage
 
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
 import java.time.LocalDate
 
 /**

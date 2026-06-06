@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.feature.autofill.resources
+package net.svaroh.passly.feature.autofill.resources
 
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.feature.home.screen.ResourceHandlingStrategy
-import com.passbolt.mobile.android.feature.home.screen.ShowSuggestedModel
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.feature.home.screen.ResourceHandlingStrategy
+import net.svaroh.passly.feature.home.screen.ShowSuggestedModel
+import net.svaroh.passly.ui.ResourceModel
 
 class AutofillResourceHandlingStrategy(
     private val autofillUri: String?,

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.home.screen.data
+package net.svaroh.passly.feature.home.screen.data
 
 data class HeaderSectionConfiguration(
     val isInCurrentFolderSectionVisible: Boolean,

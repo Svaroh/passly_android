@@ -21,21 +21,21 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.secrets.usecase.decrypt.parser
+package net.svaroh.passly.core.secrets.usecase.decrypt.parser
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldType.BOOLEAN
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldType.NUMBER
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldType.PASSWORD
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldType.TEXT
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldType.URI
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAndDescription
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordDescriptionTotp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordString
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.Totp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5CustomFields
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Note
-import com.passbolt.mobile.android.ui.DecryptedSecretOrError
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.BOOLEAN
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.NUMBER
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.PASSWORD
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.TEXT
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.URI
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordAndDescription
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordDescriptionTotp
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.Totp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.ui.DecryptedSecretOrError
 import kotlinx.coroutines.test.runTest
 import net.jimblackler.jsonschemafriend.SchemaStore
 import org.junit.Before

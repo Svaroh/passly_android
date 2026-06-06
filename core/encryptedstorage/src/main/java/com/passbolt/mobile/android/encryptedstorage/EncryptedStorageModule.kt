@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.encryptedstorage
+package net.svaroh.passly.encryptedstorage
 
 import androidx.security.crypto.MasterKey
-import com.passbolt.mobile.android.encryptedstorage.biometric.cryptoModule
+import net.svaroh.passly.encryptedstorage.biometric.cryptoModule
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 

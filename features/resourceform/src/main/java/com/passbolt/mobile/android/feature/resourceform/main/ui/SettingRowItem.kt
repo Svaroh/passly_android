@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourceform.main.ui
+package net.svaroh.passly.feature.resourceform.main.ui
 
 import PassboltTheme
 import androidx.compose.foundation.clickable
@@ -20,7 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 internal data class SettingRowItem(
     val text: String,

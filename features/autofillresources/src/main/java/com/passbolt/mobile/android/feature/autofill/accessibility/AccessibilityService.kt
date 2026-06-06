@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.autofill.accessibility
+package net.svaroh.passly.feature.autofill.accessibility
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
@@ -9,22 +9,22 @@ import android.view.View
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import com.passbolt.mobile.android.core.autofill.accessibility.AccessibilityCommunicator
-import com.passbolt.mobile.android.core.autofill.accessibility.AccessibilityOperationsProvider
-import com.passbolt.mobile.android.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition
-import com.passbolt.mobile.android.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition.ForceBottom
-import com.passbolt.mobile.android.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition.InBoundsBottomAnchor
-import com.passbolt.mobile.android.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition.InBoundsTopAnchor
-import com.passbolt.mobile.android.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition.OutBoundsHide
-import com.passbolt.mobile.android.core.extension.gone
-import com.passbolt.mobile.android.core.extension.setDebouncingOnClick
-import com.passbolt.mobile.android.core.extension.visible
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.AutofillMode
-import com.passbolt.mobile.android.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory
-import com.passbolt.mobile.android.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory.Companion.ACCESSIBILITY_SERVICE_NOTIFICATION_ID
-import com.passbolt.mobile.android.feature.autofill.databinding.ViewAutofillLabelBinding
+import net.svaroh.passly.core.autofill.accessibility.AccessibilityCommunicator
+import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider
+import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition
+import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition.ForceBottom
+import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition.InBoundsBottomAnchor
+import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition.InBoundsTopAnchor
+import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition.OutBoundsHide
+import net.svaroh.passly.core.extension.gone
+import net.svaroh.passly.core.extension.setDebouncingOnClick
+import net.svaroh.passly.core.extension.visible
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.AutofillMode
+import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory
+import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory.Companion.ACCESSIBILITY_SERVICE_NOTIFICATION_ID
+import net.svaroh.passly.feature.autofill.databinding.ViewAutofillLabelBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -331,7 +331,7 @@ class AccessibilityService :
     }
 
     companion object {
-        private const val PASSBOLT_PACKAGE = "com.passbolt.mobile.android"
+        private const val PASSBOLT_PACKAGE = "net.svaroh.passly"
         private const val SYSTEM_UI_PACKAGE = "com.android.systemui"
         private const val CLEAR_CREDENTIALS_DELAY = 1000L
         private const val OBSERVE_POSITION_DELAY = 250L

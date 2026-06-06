@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.switch
+package net.svaroh.passly.core.ui.switch
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

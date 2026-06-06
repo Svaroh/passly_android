@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.autofill.autofill
+package net.svaroh.passly.feature.autofill.autofill
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
@@ -9,12 +9,12 @@ import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
 import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
-import com.passbolt.mobile.android.core.autofill.system.AssistStructureParser
-import com.passbolt.mobile.android.core.autofill.system.AutofillField
-import com.passbolt.mobile.android.core.autofill.system.FillableInputsFinder
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.AutofillMode
-import com.passbolt.mobile.android.ui.ParsedStructure
+import net.svaroh.passly.core.autofill.system.AssistStructureParser
+import net.svaroh.passly.core.autofill.system.AutofillField
+import net.svaroh.passly.core.autofill.system.FillableInputsFinder
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.AutofillMode
+import net.svaroh.passly.ui.ParsedStructure
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber

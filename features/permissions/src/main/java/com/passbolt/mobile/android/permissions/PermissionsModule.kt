@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.permissions
+package net.svaroh.passly.permissions
 
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.groupPermissionsModule
-import com.passbolt.mobile.android.permissions.navigation.PermissionsFeatureNavigation
-import com.passbolt.mobile.android.permissions.permissionrecipients.permissionRecipientsModule
-import com.passbolt.mobile.android.permissions.permissions.permissionsModule
-import com.passbolt.mobile.android.permissions.userpermissionsdetails.userPermissionsModule
+import net.svaroh.passly.core.navigation.compose.base.Feature
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.permissions.grouppermissionsdetails.groupPermissionsModule
+import net.svaroh.passly.permissions.navigation.PermissionsFeatureNavigation
+import net.svaroh.passly.permissions.permissionrecipients.permissionRecipientsModule
+import net.svaroh.passly.permissions.permissions.permissionsModule
+import net.svaroh.passly.permissions.userpermissionsdetails.userPermissionsModule
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

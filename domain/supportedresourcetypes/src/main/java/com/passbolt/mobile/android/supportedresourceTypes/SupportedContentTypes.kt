@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.supportedresourceTypes
+package net.svaroh.passly.supportedresourceTypes
 
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAndDescription
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordDescriptionTotp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordString
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.Totp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5CustomFields
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Default
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5DefaultWithTotp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Note
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5PasswordString
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5TotpStandalone
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordAndDescription
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordDescriptionTotp
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.Totp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 
 private const val PASSWORD_STRING_SLUG = "password-string"
 private const val PASSWORD_AND_DESCRIPTION_SLUG = "password-and-description"

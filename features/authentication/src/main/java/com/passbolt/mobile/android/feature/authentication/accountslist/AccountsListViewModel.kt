@@ -21,33 +21,33 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.accountslist
+package net.svaroh.passly.feature.authentication.accountslist
 
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.accounts.GetAllAccountsDataUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.SaveCurrentApiUrlUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.SaveSelectedAccountUseCase
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig
-import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig.ManageAccount
-import com.passbolt.mobile.android.database.DatabaseProvider
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.AddAccount
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.ConfirmRemoveAccount
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.DismissRemoveAccountDialog
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.EnterRemoveAccountMode
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.ExitRemoveAccountMode
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.GoBack
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.RemoveAccount
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.SelectAccount
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListSideEffect.NavigateToNewAccountSignIn
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListSideEffect.NavigateToSignIn
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListSideEffect.ShowSuccessSnackBar
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListSideEffect.SnackBarType.ACCOUNT_REMOVED
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.RemoveAllAccountDataUseCase
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignOutUseCase
-import com.passbolt.mobile.android.mappers.AccountModelMapper
-import com.passbolt.mobile.android.ui.AccountModelUi.AccountModel
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.accounts.GetAllAccountsDataUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveCurrentApiUrlUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveSelectedAccountUseCase
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.ManageAccount
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.AddAccount
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.ConfirmRemoveAccount
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.DismissRemoveAccountDialog
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.EnterRemoveAccountMode
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.ExitRemoveAccountMode
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.GoBack
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.RemoveAccount
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.SelectAccount
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListSideEffect.NavigateToNewAccountSignIn
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListSideEffect.NavigateToSignIn
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListSideEffect.ShowSuccessSnackBar
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListSideEffect.SnackBarType.ACCOUNT_REMOVED
+import net.svaroh.passly.feature.authentication.auth.usecase.RemoveAllAccountDataUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
+import net.svaroh.passly.mappers.AccountModelMapper
+import net.svaroh.passly.ui.AccountModelUi.AccountModel
 
 class AccountsListViewModel(
     private val authConfig: AuthConfig,

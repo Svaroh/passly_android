@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.otp.screen
+package net.svaroh.passly.feature.otp.screen
 
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
@@ -36,14 +36,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
-import com.passbolt.mobile.android.common.extension.toSingleLine
-import com.passbolt.mobile.android.core.compose.Inconsolata
-import com.passbolt.mobile.android.core.formatter.OtpFormatter
-import com.passbolt.mobile.android.core.resources.resourceicon.ResourceIconProvider
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.controller.TotpComposeController
-import com.passbolt.mobile.android.ui.OtpItemWrapper
-import com.passbolt.mobile.android.ui.isExpired
+import net.svaroh.passly.common.extension.toSingleLine
+import net.svaroh.passly.core.compose.Inconsolata
+import net.svaroh.passly.core.formatter.OtpFormatter
+import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.controller.TotpComposeController
+import net.svaroh.passly.ui.OtpItemWrapper
+import net.svaroh.passly.ui.isExpired
 import org.koin.compose.koinInject
 
 @Composable
@@ -130,7 +130,7 @@ internal fun OtpItem(
                                 otpItem.otpValue.orEmpty()
                             } else {
                                 stringResource(
-                                    com.passbolt.mobile.android.core.localization.R.string.otp_hide_otp,
+                                    net.svaroh.passly.core.localization.R.string.otp_hide_otp,
                                 )
                             },
                         ),

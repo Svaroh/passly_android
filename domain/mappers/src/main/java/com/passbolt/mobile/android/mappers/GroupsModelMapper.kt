@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.dto.response.GroupsResponseDto
-import com.passbolt.mobile.android.dto.response.PermissionGroupDto
-import com.passbolt.mobile.android.entity.group.UsersGroup
-import com.passbolt.mobile.android.entity.group.UsersGroupWithChildItemsCount
-import com.passbolt.mobile.android.entity.permission.GroupPermission
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.GroupModelWithUsers
-import com.passbolt.mobile.android.ui.GroupUser
-import com.passbolt.mobile.android.ui.GroupWithCount
+import net.svaroh.passly.dto.response.GroupsResponseDto
+import net.svaroh.passly.dto.response.PermissionGroupDto
+import net.svaroh.passly.entity.group.UsersGroup
+import net.svaroh.passly.entity.group.UsersGroupWithChildItemsCount
+import net.svaroh.passly.entity.permission.GroupPermission
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.GroupModelWithUsers
+import net.svaroh.passly.ui.GroupUser
+import net.svaroh.passly.ui.GroupWithCount
 
 /**
  * Passbolt - Open source password manager for teams

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.accounts.usecase.privatekey
+package net.svaroh.passly.core.accounts.usecase.privatekey
 
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module

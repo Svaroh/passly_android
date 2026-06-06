@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common.coroutinetimer
+package net.svaroh.passly.common.coroutinetimer
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow

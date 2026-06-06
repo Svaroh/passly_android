@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common.search
+package net.svaroh.passly.common.search
 
 import org.junit.Test
 import kotlin.test.assertFalse

@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced
 
-import com.passbolt.mobile.android.ui.TotpUiModel
+import net.svaroh.passly.ui.TotpUiModel
 
 internal sealed interface TotpAdvancedSettingsFormSideEffect {
     data object NavigateBack : TotpAdvancedSettingsFormSideEffect

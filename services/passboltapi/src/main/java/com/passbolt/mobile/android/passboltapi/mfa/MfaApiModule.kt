@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.passboltapi.mfa
+package net.svaroh.passly.passboltapi.mfa
 
-import com.passbolt.mobile.android.core.networking.NO_REDIRECT_RETROFIT_SERVICE
-import com.passbolt.mobile.android.core.networking.RestService
+import net.svaroh.passly.core.networking.NO_REDIRECT_RETROFIT_SERVICE
+import net.svaroh.passly.core.networking.RestService
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 

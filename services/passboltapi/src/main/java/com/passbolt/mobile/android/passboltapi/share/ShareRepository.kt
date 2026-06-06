@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.passboltapi.share
+package net.svaroh.passly.passboltapi.share
 
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.dto.request.FolderShareRequest
-import com.passbolt.mobile.android.dto.request.ResourceShareRequest
-import com.passbolt.mobile.android.dto.request.SimulateShareRequest
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.dto.request.FolderShareRequest
+import net.svaroh.passly.dto.request.ResourceShareRequest
+import net.svaroh.passly.dto.request.SimulateShareRequest
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.helpmenu
+package net.svaroh.passly.helpmenu
 
 data class HelpMenuBottomSheetState(
     val showScanQrCodesHelp: Boolean = false,

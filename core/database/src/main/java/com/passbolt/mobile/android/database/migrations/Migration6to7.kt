@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.database.migrations
+package net.svaroh.passly.database.migrations
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase

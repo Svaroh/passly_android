@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.core.authenticationcore.passphrase
+package net.svaroh.passly.core.authenticationcore.passphrase
 
 import android.content.Context
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.core.authenticationcore.PassphraseFileName
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
-import com.passbolt.mobile.android.encryptedstorage.biometric.BiometricCrypto
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.core.authenticationcore.PassphraseFileName
+import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
+import net.svaroh.passly.encryptedstorage.biometric.BiometricCrypto
 import java.io.File
 import javax.crypto.Cipher
 
@@ -39,7 +39,7 @@ class GetPassphraseUseCase(
         val fileName = PassphraseFileName(input.userId).name
         val file =
             File(
-                com.passbolt.mobile.android.encryptedstorage
+                net.svaroh.passly.encryptedstorage
                     .EncryptedFileBaseDirectory(appContext)
                     .baseDirectory,
                 fileName,

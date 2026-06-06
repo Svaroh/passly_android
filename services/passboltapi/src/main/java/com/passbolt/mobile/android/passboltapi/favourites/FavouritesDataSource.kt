@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.passboltapi.favourites
+package net.svaroh.passly.passboltapi.favourites
 
-import com.passbolt.mobile.android.dto.response.AddToFavouritesResponseDto
+import net.svaroh.passly.dto.response.AddToFavouritesResponseDto
 
 /**
  * Passbolt - Open source password manager for teams

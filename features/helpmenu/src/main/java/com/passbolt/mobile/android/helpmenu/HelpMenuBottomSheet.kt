@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.helpmenu
+package net.svaroh.passly.helpmenu
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,34 +38,34 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.bottomsheet.BottomSheetHeader
-import com.passbolt.mobile.android.core.ui.dialogs.QrCodesInformationDialog
-import com.passbolt.mobile.android.core.ui.menu.OpenableSettingsItem
-import com.passbolt.mobile.android.core.ui.menu.SwitchableSettingsItem
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.AccessLogs
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.AccountKitRead
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.Close
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.DismissQrCodesDialog
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.ImportAccountKit
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.ImportProfileManually
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.Initialize
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.SeeWhyQrCodesExplanation
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.ToggleEnableLogs
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.VisitHelpWebsite
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetSideEffect.Dismiss
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetSideEffect.NavigateToAccessLogs
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetSideEffect.NavigateToImportAccountKit
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetSideEffect.NavigateToImportProfileManually
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetSideEffect.NotifyAccountKitRead
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetSideEffect.OpenHelpWebsite
-import com.passbolt.mobile.android.ui.HelpMenuModel
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.bottomsheet.BottomSheetHeader
+import net.svaroh.passly.core.ui.dialogs.QrCodesInformationDialog
+import net.svaroh.passly.core.ui.menu.OpenableSettingsItem
+import net.svaroh.passly.core.ui.menu.SwitchableSettingsItem
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.AccessLogs
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.AccountKitRead
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.Close
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.DismissQrCodesDialog
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.ImportAccountKit
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.ImportProfileManually
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.Initialize
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.SeeWhyQrCodesExplanation
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.ToggleEnableLogs
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.VisitHelpWebsite
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetSideEffect.Dismiss
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetSideEffect.NavigateToAccessLogs
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetSideEffect.NavigateToImportAccountKit
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetSideEffect.NavigateToImportProfileManually
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetSideEffect.NotifyAccountKitRead
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetSideEffect.OpenHelpWebsite
+import net.svaroh.passly.ui.HelpMenuModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun HelpMenuBottomSheet(

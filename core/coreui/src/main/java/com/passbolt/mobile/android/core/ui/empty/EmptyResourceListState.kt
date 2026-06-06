@@ -20,7 +20,7 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.ui.empty
+package net.svaroh.passly.core.ui.empty
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -37,7 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.R
+import net.svaroh.passly.core.ui.R
 
 // needs to be lazy colum as it's used inside PullToRefresh
 // which requires scrollable container to trigger pull to refresh

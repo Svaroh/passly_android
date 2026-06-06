@@ -1,20 +1,20 @@
-package com.passbolt.mobile.android.feature.resourceform.main
+package net.svaroh.passly.feature.resourceform.main
 
 import android.content.Context
-import com.passbolt.mobile.android.common.extension.toSingleLine
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note.NoteValidationError
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note.NoteValidationError.MaxLengthExceeded
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError.MustBeBase32
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError.MustNotBeEmpty
-import com.passbolt.mobile.android.ui.LeadingContentType.CUSTOM_FIELDS
-import com.passbolt.mobile.android.ui.LeadingContentType.PASSWORD
-import com.passbolt.mobile.android.ui.LeadingContentType.STANDALONE_NOTE
-import com.passbolt.mobile.android.ui.LeadingContentType.TOTP
-import com.passbolt.mobile.android.ui.ResourceFormMode
-import com.passbolt.mobile.android.ui.ResourceFormMode.Create
-import com.passbolt.mobile.android.ui.ResourceFormMode.Edit
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.common.extension.toSingleLine
+import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteValidationError
+import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteValidationError.MaxLengthExceeded
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError.MustBeBase32
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError.MustNotBeEmpty
+import net.svaroh.passly.ui.LeadingContentType.CUSTOM_FIELDS
+import net.svaroh.passly.ui.LeadingContentType.PASSWORD
+import net.svaroh.passly.ui.LeadingContentType.STANDALONE_NOTE
+import net.svaroh.passly.ui.LeadingContentType.TOTP
+import net.svaroh.passly.ui.ResourceFormMode
+import net.svaroh.passly.ui.ResourceFormMode.Create
+import net.svaroh.passly.ui.ResourceFormMode.Edit
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getScreenTitle(
     context: Context,

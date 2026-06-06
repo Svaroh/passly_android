@@ -21,37 +21,37 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.policies.usecase
+package net.svaroh.passly.core.policies.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_DEFAULT_GENERATOR
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_EXTERNAL_DICTIONARY_CHECK_ENABLED
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSPHRASE_GENERATOR_CASE
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSPHRASE_GENERATOR_SEPARATOR
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSPHRASE_GENERATOR_WORDS_COUNT
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_EXCLUDE_LOOK_ALIKE_ENABLED
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_LENGTH
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_CHAR1_ENABLED
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_CHAR2_ENABLED
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_CHAR3_ENABLED
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_CHAR4_ENABLED
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_CHAR5_ENABLED
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_DIGIT_ENABLED
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_EMOJI_ENABLED
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_LOWER_ENABLED
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_PARENTHESIS_ENABLED
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_UPPER_ENABLED
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
-import com.passbolt.mobile.android.ui.CaseTypeModel
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeModel
-import com.passbolt.mobile.android.ui.PasswordPolicies
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_DEFAULT_GENERATOR
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_EXTERNAL_DICTIONARY_CHECK_ENABLED
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSPHRASE_GENERATOR_CASE
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSPHRASE_GENERATOR_SEPARATOR
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSPHRASE_GENERATOR_WORDS_COUNT
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_EXCLUDE_LOOK_ALIKE_ENABLED
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_LENGTH
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_CHAR1_ENABLED
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_CHAR2_ENABLED
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_CHAR3_ENABLED
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_CHAR4_ENABLED
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_CHAR5_ENABLED
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_DIGIT_ENABLED
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_EMOJI_ENABLED
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_LOWER_ENABLED
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_PARENTHESIS_ENABLED
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesFileName.Companion.KEY_PASSWORD_GENERATOR_MASK_UPPER_ENABLED
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.ui.CaseTypeModel
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeModel
+import net.svaroh.passly.ui.PasswordPolicies
 
 class GetPasswordPoliciesUseCase(
     private val encryptedSharedPreferencesFactory: EncryptedSharedPreferencesFactory,
 ) : AsyncUseCase<Unit, PasswordPolicies>,
-    com.passbolt.mobile.android.core.accounts.usecase.SelectedAccountUseCase {
+    net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase {
     @Suppress("LongMethod")
     override suspend fun execute(input: Unit): PasswordPolicies {
         val fileName = PasswordPoliciesFileName(selectedAccountId).name

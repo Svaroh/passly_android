@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.section
+package net.svaroh.passly.core.ui.section
 
 import PassboltTheme
 import androidx.compose.foundation.background
@@ -42,7 +42,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun Section(

@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.feature.settings.navigation
+package net.svaroh.passly.feature.settings.navigation
 
 import PassboltTheme
-import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey
-import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesFlow
-import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesScreen
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.autofillenabled.AutofillEnabledScreen
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityScreen
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillScreen
+import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey
+import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesFlow
+import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesScreen
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.autofillenabled.AutofillEnabledScreen
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityScreen
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillScreen
 
 class AutofillEncouragementsFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =

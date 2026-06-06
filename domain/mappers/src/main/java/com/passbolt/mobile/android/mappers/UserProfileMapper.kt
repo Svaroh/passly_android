@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.dto.response.UserProfileResponseDto
-import com.passbolt.mobile.android.ui.UserProfileModel
+import net.svaroh.passly.dto.response.UserProfileResponseDto
+import net.svaroh.passly.ui.UserProfileModel
 
 /**
  * Passbolt - Open source password manager for teams

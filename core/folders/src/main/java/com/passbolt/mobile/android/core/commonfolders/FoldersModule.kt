@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.core.commonfolders
+package net.svaroh.passly.core.commonfolders
 
-import com.passbolt.mobile.android.core.commonfolders.usecase.AddLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.core.commonfolders.usecase.CreateFolderUseCase
-import com.passbolt.mobile.android.core.commonfolders.usecase.FolderShareInteractor
-import com.passbolt.mobile.android.core.commonfolders.usecase.FoldersInteractor
-import com.passbolt.mobile.android.core.commonfolders.usecase.GetFoldersPaginatedUseCase
-import com.passbolt.mobile.android.core.commonfolders.usecase.RemoveLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.core.commonfolders.usecase.ShareFolderUseCase
-import com.passbolt.mobile.android.core.commonfolders.usecase.db.foldersDbModule
+import net.svaroh.passly.core.commonfolders.usecase.AddLocalFolderPermissionsUseCase
+import net.svaroh.passly.core.commonfolders.usecase.CreateFolderUseCase
+import net.svaroh.passly.core.commonfolders.usecase.FolderShareInteractor
+import net.svaroh.passly.core.commonfolders.usecase.FoldersInteractor
+import net.svaroh.passly.core.commonfolders.usecase.GetFoldersPaginatedUseCase
+import net.svaroh.passly.core.commonfolders.usecase.RemoveLocalFolderPermissionsUseCase
+import net.svaroh.passly.core.commonfolders.usecase.ShareFolderUseCase
+import net.svaroh.passly.core.commonfolders.usecase.db.foldersDbModule
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

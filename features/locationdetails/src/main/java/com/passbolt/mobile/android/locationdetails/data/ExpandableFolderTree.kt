@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.locationdetails.data
+package net.svaroh.passly.locationdetails.data
 
-import com.passbolt.mobile.android.ui.FolderModel
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.ui.FolderModel
+import net.svaroh.passly.ui.ResourcePermission
 
 data class ExpandableFolderNode(
     val id: String,

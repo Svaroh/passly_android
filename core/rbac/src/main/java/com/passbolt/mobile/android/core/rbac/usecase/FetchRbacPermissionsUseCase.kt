@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.rbac.usecase
+package net.svaroh.passly.core.rbac.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.mappers.RbacMapper
-import com.passbolt.mobile.android.passboltapi.rbac.RbacRepository
-import com.passbolt.mobile.android.ui.RbacModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.mappers.RbacMapper
+import net.svaroh.passly.passboltapi.rbac.RbacRepository
+import net.svaroh.passly.ui.RbacModel
 
 class FetchRbacPermissionsUseCase(
     private val rbacRepository: RbacRepository,

@@ -20,7 +20,7 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.ui.fab
+package net.svaroh.passly.core.ui.fab
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
@@ -31,8 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.testtags.composetags.Home
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.testtags.composetags.Home
 
 @Composable
 fun AddFloatingActionButton(

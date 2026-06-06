@@ -21,21 +21,21 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcemoremenu.usecase
+package net.svaroh.passly.resourcemoremenu.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.rbac.usecase.GetRbacRulesUseCase
-import com.passbolt.mobile.android.core.resources.usecase.db.GetLocalResourceUseCase
-import com.passbolt.mobile.android.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
-import com.passbolt.mobile.android.ui.RbacRuleModel.ALLOW
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.DescriptionOption.HAS_METADATA_DESCRIPTION
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.DescriptionOption.HAS_NOTE
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.FavouriteOption.REMOVE_FROM_FAVOURITES
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.isFavourite
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.supportedresourceTypes.ContentType
+import net.svaroh.passly.ui.RbacRuleModel.ALLOW
+import net.svaroh.passly.ui.ResourceMoreMenuModel
+import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_METADATA_DESCRIPTION
+import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_NOTE
+import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
+import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.REMOVE_FROM_FAVOURITES
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.isFavourite
 import java.util.UUID
 
 class CreateResourceMoreMenuModelUseCase(

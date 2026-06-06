@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.duo.duowebviewsheet
+package net.svaroh.passly.feature.authentication.mfa.duo.duowebviewsheet
 
 import android.webkit.WebResourceRequest
 import android.webkit.WebView

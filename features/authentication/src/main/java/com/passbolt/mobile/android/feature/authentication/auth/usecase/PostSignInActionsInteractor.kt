@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.core.policies.usecase.PasswordExpiryPoliciesInteractor
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesInteractor
-import com.passbolt.mobile.android.core.rbac.usecase.RbacInteractor
-import com.passbolt.mobile.android.core.users.profile.UserProfileInteractor
-import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
-import com.passbolt.mobile.android.featureflags.usecase.FeatureFlagsInteractor
-import com.passbolt.mobile.android.metadata.interactor.MetadataKeysSettingsInteractor
-import com.passbolt.mobile.android.metadata.interactor.MetadataTypesSettingsInteractor
+import net.svaroh.passly.core.policies.usecase.PasswordExpiryPoliciesInteractor
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesInteractor
+import net.svaroh.passly.core.rbac.usecase.RbacInteractor
+import net.svaroh.passly.core.users.profile.UserProfileInteractor
+import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
+import net.svaroh.passly.featureflags.usecase.FeatureFlagsInteractor
+import net.svaroh.passly.metadata.interactor.MetadataKeysSettingsInteractor
+import net.svaroh.passly.metadata.interactor.MetadataTypesSettingsInteractor
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope

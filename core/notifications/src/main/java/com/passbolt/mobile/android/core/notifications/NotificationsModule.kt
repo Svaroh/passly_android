@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.core.notifications
+package net.svaroh.passly.core.notifications
 
 import android.app.NotificationManager
-import com.passbolt.mobile.android.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory
+import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

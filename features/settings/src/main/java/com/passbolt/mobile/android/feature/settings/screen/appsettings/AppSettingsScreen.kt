@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings
+package net.svaroh.passly.feature.settings.screen.appsettings
 
 import android.app.Activity
 import android.content.Intent
@@ -51,53 +51,53 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.Autofill
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DefaultFilter
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.ExpertSettings
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.dialogs.CancelAccountTransferAlertDialog
-import com.passbolt.mobile.android.core.ui.dialogs.ConfigureBiometricAlertDialog
-import com.passbolt.mobile.android.core.ui.dialogs.DisableBiometricAlertDialog
-import com.passbolt.mobile.android.core.ui.menu.OpenableSettingsItem
-import com.passbolt.mobile.android.core.ui.menu.SwitchableSettingsItem
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.authentication.auth.showBiometricPrompt
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.CancelConfigureBiometric
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.CancelConfirmKeyChange
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.CancelDisableBiometric
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.CanceledBiometricAuth
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.ConfigureBiometric
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.ConfirmDisableBiometric
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.ConfirmKeyChangeClick
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.ErroredBiometricAuth
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.FinalizedBiometricAuth
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.GoToAutofill
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.GoToDefaultFilter
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.GoToExpertSettings
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.Initialize
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.InvalidateBiometricKeyPermanently
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.RefreshedPassphrase
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.ToggleBiometric
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToAutofill
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToDefaultFilter
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToExpertSettings
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToGetPassphrase
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToSystemSettings
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateUp
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.Autofill
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.DefaultFilter
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.ExpertSettings
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.dialogs.CancelAccountTransferAlertDialog
+import net.svaroh.passly.core.ui.dialogs.ConfigureBiometricAlertDialog
+import net.svaroh.passly.core.ui.dialogs.DisableBiometricAlertDialog
+import net.svaroh.passly.core.ui.menu.OpenableSettingsItem
+import net.svaroh.passly.core.ui.menu.SwitchableSettingsItem
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.authentication.auth.showBiometricPrompt
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.CancelConfigureBiometric
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.CancelConfirmKeyChange
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.CancelDisableBiometric
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.CanceledBiometricAuth
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.ConfigureBiometric
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.ConfirmDisableBiometric
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.ConfirmKeyChangeClick
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.ErroredBiometricAuth
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.FinalizedBiometricAuth
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.GoToAutofill
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.GoToDefaultFilter
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.GoToExpertSettings
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.Initialize
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.InvalidateBiometricKeyPermanently
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.RefreshedPassphrase
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.ToggleBiometric
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToAutofill
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToDefaultFilter
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToExpertSettings
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToGetPassphrase
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToSystemSettings
+import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateUp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.getKoin
 import org.koin.compose.koinInject
 import java.util.concurrent.Executor
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun AppSettingsScreen(

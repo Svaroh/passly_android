@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin
 
-import com.passbolt.mobile.android.ui.TransferAccountStatusType
+import net.svaroh.passly.ui.TransferAccountStatusType
 
 internal sealed interface BrowserFirstLoginScanSideEffect {
     data object NavigateBack : BrowserFirstLoginScanSideEffect

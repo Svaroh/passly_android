@@ -1,16 +1,16 @@
-package com.passbolt.mobile.android.core.tags.usecase.db
+package net.svaroh.passly.core.tags.usecase.db
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.core.tags.usecase.db.GetLocalTagsPaginatedUseCase.Output
-import com.passbolt.mobile.android.database.DatabaseProvider
-import com.passbolt.mobile.android.database.QuerySanitizer
-import com.passbolt.mobile.android.mappers.TagsModelMapper
-import com.passbolt.mobile.android.ui.TagWithCount
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.core.tags.usecase.db.GetLocalTagsPaginatedUseCase.Output
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.database.QuerySanitizer
+import net.svaroh.passly.mappers.TagsModelMapper
+import net.svaroh.passly.ui.TagWithCount
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.home.screen
+package net.svaroh.passly.feature.home.screen
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,29 +15,29 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.passbolt.mobile.android.core.compose.rememberDebouncedBoolean
-import com.passbolt.mobile.android.core.localization.R
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.HomeNavigationKey
-import com.passbolt.mobile.android.core.resources.resourceicon.ResourceIconProvider
-import com.passbolt.mobile.android.core.ui.empty.EmptyResourceListState
-import com.passbolt.mobile.android.core.ui.lists.HeaderItem
-import com.passbolt.mobile.android.feature.home.screen.HomeIntent.OpenResourceMenu
-import com.passbolt.mobile.android.feature.home.screen.data.HeaderSectionConfiguration
-import com.passbolt.mobile.android.feature.home.screen.list.FolderItem
-import com.passbolt.mobile.android.feature.home.screen.list.GroupItem
-import com.passbolt.mobile.android.feature.home.screen.list.ResourceItem
-import com.passbolt.mobile.android.feature.home.screen.list.TagItem
-import com.passbolt.mobile.android.ui.Folder.Child
-import com.passbolt.mobile.android.ui.FolderWithCountAndPath
-import com.passbolt.mobile.android.ui.GroupWithCount
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Folders
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Groups
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Tags
-import com.passbolt.mobile.android.ui.ResourceModel
-import com.passbolt.mobile.android.ui.TagWithCount
+import net.svaroh.passly.core.compose.rememberDebouncedBoolean
+import net.svaroh.passly.core.localization.R
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.HomeNavigationKey
+import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.core.ui.empty.EmptyResourceListState
+import net.svaroh.passly.core.ui.lists.HeaderItem
+import net.svaroh.passly.feature.home.screen.HomeIntent.OpenResourceMenu
+import net.svaroh.passly.feature.home.screen.data.HeaderSectionConfiguration
+import net.svaroh.passly.feature.home.screen.list.FolderItem
+import net.svaroh.passly.feature.home.screen.list.GroupItem
+import net.svaroh.passly.feature.home.screen.list.ResourceItem
+import net.svaroh.passly.feature.home.screen.list.TagItem
+import net.svaroh.passly.ui.Folder.Child
+import net.svaroh.passly.ui.FolderWithCountAndPath
+import net.svaroh.passly.ui.GroupWithCount
+import net.svaroh.passly.ui.HomeDisplayViewModel.Folders
+import net.svaroh.passly.ui.HomeDisplayViewModel.Groups
+import net.svaroh.passly.ui.HomeDisplayViewModel.Tags
+import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.TagWithCount
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Suppress("CyclomaticComplexMethod")
 @Composable

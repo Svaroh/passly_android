@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.screen
+package net.svaroh.passly.resourcepicker.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,32 +46,32 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.fulldatarefresh.service.DataRefreshService
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.navigation.compose.results.ResourcePickerResultEvent
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.dialogs.ConfirmAlertDialog
-import com.passbolt.mobile.android.core.ui.scaffold.HomeScaffold
-import com.passbolt.mobile.android.core.ui.search.SearchInput
-import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
-import com.passbolt.mobile.android.resourcepicker.model.ConfirmationModelFactory
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerIntent.CloseConfirmationDialog
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerIntent.ConfirmOtpLink
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerIntent.GoBack
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerIntent.Initialize
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerIntent.Search
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerIntent.SearchEndIconAction
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerSideEffect.NavigateBackWithResult
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerSideEffect.NavigateUp
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.resourcepicker.screen.list.ResourcePickerList
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.fulldatarefresh.service.DataRefreshService
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.navigation.compose.results.ResourcePickerResultEvent
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.dialogs.ConfirmAlertDialog
+import net.svaroh.passly.core.ui.scaffold.HomeScaffold
+import net.svaroh.passly.core.ui.search.SearchInput
+import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
+import net.svaroh.passly.resourcepicker.model.ConfirmationModelFactory
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.CloseConfirmationDialog
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.ConfirmOtpLink
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.GoBack
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.Initialize
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.Search
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.SearchEndIconAction
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerSideEffect.NavigateBackWithResult
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerSideEffect.NavigateUp
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.resourcepicker.screen.list.ResourcePickerList
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun ResourcePickerScreen(

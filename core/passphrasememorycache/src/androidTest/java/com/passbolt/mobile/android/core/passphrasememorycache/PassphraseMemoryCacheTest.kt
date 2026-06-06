@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.passphrasememorycache
+package net.svaroh.passly.core.passphrasememorycache
 
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
@@ -6,7 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.dummy.TestActivity
+import net.svaroh.passly.core.dummy.TestActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking

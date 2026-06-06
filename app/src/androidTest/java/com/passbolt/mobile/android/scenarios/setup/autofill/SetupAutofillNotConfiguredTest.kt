@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.scenarios.setup.autofill
+package net.svaroh.passly.scenarios.setup.autofill
 
 import android.provider.Settings
 import androidx.compose.ui.test.assertIsDisplayed
@@ -36,18 +36,18 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
-import com.passbolt.mobile.android.accountinit.AccountDataCleaner
-import com.passbolt.mobile.android.accountinit.AccountInitializer
-import com.passbolt.mobile.android.core.idlingresource.ResourcesFullRefreshIdlingResource
-import com.passbolt.mobile.android.core.idlingresource.SignInIdlingResource
-import com.passbolt.mobile.android.feature.startup.StartUpActivity
-import com.passbolt.mobile.android.helpers.getString
-import com.passbolt.mobile.android.instrumentationTestsModule
-import com.passbolt.mobile.android.intents.ManagedAccountIntentCreator
-import com.passbolt.mobile.android.rules.IdlingResourceRule
-import com.passbolt.mobile.android.rules.lazyActivityScenarioRule
-import com.passbolt.mobile.android.testtags.composetags.Auth
-import com.passbolt.mobile.android.testtags.composetags.Home
+import net.svaroh.passly.accountinit.AccountDataCleaner
+import net.svaroh.passly.accountinit.AccountInitializer
+import net.svaroh.passly.core.idlingresource.ResourcesFullRefreshIdlingResource
+import net.svaroh.passly.core.idlingresource.SignInIdlingResource
+import net.svaroh.passly.feature.startup.StartUpActivity
+import net.svaroh.passly.helpers.getString
+import net.svaroh.passly.instrumentationTestsModule
+import net.svaroh.passly.intents.ManagedAccountIntentCreator
+import net.svaroh.passly.rules.IdlingResourceRule
+import net.svaroh.passly.rules.lazyActivityScenarioRule
+import net.svaroh.passly.testtags.composetags.Auth
+import net.svaroh.passly.testtags.composetags.Home
 import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
@@ -56,7 +56,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @RunWith(AndroidJUnit4::class)
 @MediumTest

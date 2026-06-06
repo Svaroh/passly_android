@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.dto.response.CaseType
-import com.passbolt.mobile.android.dto.response.PassphraseGeneratorSettings
-import com.passbolt.mobile.android.dto.response.PasswordGeneratorSettings
-import com.passbolt.mobile.android.dto.response.PasswordGeneratorType
-import com.passbolt.mobile.android.dto.response.PasswordPoliciesDto
-import com.passbolt.mobile.android.ui.CaseTypeModel
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorTypeModel
-import com.passbolt.mobile.android.ui.PasswordPolicies
+import net.svaroh.passly.dto.response.CaseType
+import net.svaroh.passly.dto.response.PassphraseGeneratorSettings
+import net.svaroh.passly.dto.response.PasswordGeneratorSettings
+import net.svaroh.passly.dto.response.PasswordGeneratorType
+import net.svaroh.passly.dto.response.PasswordPoliciesDto
+import net.svaroh.passly.ui.CaseTypeModel
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeModel
+import net.svaroh.passly.ui.PasswordPolicies
 
 class PasswordPoliciesMapper {
     fun map(dto: PasswordPoliciesDto) =

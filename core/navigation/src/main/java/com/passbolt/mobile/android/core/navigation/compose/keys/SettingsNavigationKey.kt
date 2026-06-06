@@ -20,7 +20,7 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.navigation.compose.keys
+package net.svaroh.passly.core.navigation.compose.keys
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable

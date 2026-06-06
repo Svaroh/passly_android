@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.transferdetails
+package net.svaroh.passly.feature.setup.transferdetails
 
 import PassboltTheme
 import android.Manifest.permission.CAMERA
@@ -56,31 +56,31 @@ import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.ScanQrCodes
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.circlestepsview.CircleStepItemModel
-import com.passbolt.mobile.android.core.ui.circlestepsview.CircleStepsView
-import com.passbolt.mobile.android.core.ui.dialogs.CameraPermissionRequiredAlertDialog
-import com.passbolt.mobile.android.core.ui.dialogs.CameraRequiredAlertDialog
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.DismissCameraPermissionRequiredDialog
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.DismissCameraRequiredDialog
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.GoBack
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.GoToSettings
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.GrantCameraPermission
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.RejectCameraPermission
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsIntent.StartQrCodeScanning
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateToAppSettings
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateToScanQr
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsSideEffect.RequestCameraPermission
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.ScanQrCodes
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.circlestepsview.CircleStepItemModel
+import net.svaroh.passly.core.ui.circlestepsview.CircleStepsView
+import net.svaroh.passly.core.ui.dialogs.CameraPermissionRequiredAlertDialog
+import net.svaroh.passly.core.ui.dialogs.CameraRequiredAlertDialog
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.DismissCameraPermissionRequiredDialog
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.DismissCameraRequiredDialog
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.GoBack
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.GoToSettings
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.GrantCameraPermission
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.RejectCameraPermission
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.StartQrCodeScanning
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateBack
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateToAppSettings
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateToScanQr
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsSideEffect.RequestCameraPermission
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun TransferDetailsScreen(

@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.core.passwordgenerator
+package net.svaroh.passly.core.passwordgenerator
 
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.passwordgenerator.codepoints.Codepoint
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsModel
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.passwordgenerator.codepoints.Codepoint
+import net.svaroh.passly.ui.PasswordGeneratorSettingsModel
 import kotlinx.coroutines.withContext
 
 /**

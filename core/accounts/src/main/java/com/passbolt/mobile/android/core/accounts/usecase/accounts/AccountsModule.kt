@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.accounts.usecase.accounts
+package net.svaroh.passly.core.accounts.usecase.accounts
 
 import org.koin.core.module.Module
 

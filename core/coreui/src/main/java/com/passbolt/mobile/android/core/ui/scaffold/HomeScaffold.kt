@@ -20,7 +20,7 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.ui.scaffold
+package net.svaroh.passly.core.ui.scaffold
 
 import PassboltTheme
 import androidx.annotation.DrawableRes
@@ -66,11 +66,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.fab.AddFloatingActionButton
-import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
-import com.passbolt.mobile.android.testtags.composetags.BackNavigation
-import com.passbolt.mobile.android.testtags.composetags.HomeAppBar
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.fab.AddFloatingActionButton
+import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
+import net.svaroh.passly.testtags.composetags.BackNavigation
+import net.svaroh.passly.testtags.composetags.HomeAppBar
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

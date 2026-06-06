@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy
+package net.svaroh.passly.feature.autofill.resources.datasetstrategy
 
 interface ReturnAutofillDatasetStrategy {
     fun returnDataset(

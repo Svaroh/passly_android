@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.core.passwordgenerator
+package net.svaroh.passly.core.passwordgenerator
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.passwordgenerator.codepoints.CodepointSet
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsModel
+import net.svaroh.passly.core.passwordgenerator.codepoints.CodepointSet
+import net.svaroh.passly.ui.PasswordGeneratorSettingsModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.permissions.grouppermissionsdetails
+package net.svaroh.passly.permissions.grouppermissionsdetails
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -30,38 +30,38 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.GroupDetailsNavigationKey.GroupMembers
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.dialogs.PermissionDeleteAlertDialog
-import com.passbolt.mobile.android.core.ui.header.ItemWithHeader
-import com.passbolt.mobile.android.core.ui.permissions.PermissionLabel
-import com.passbolt.mobile.android.core.ui.permissions.PermissionSelector
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsIntent.CancelPermissionDelete
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsIntent.ConfirmPermissionDelete
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsIntent.DeletePermission
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsIntent.GoBack
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsIntent.Save
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsIntent.SeeGroupMembers
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsSideEffect.NavigateBack
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsSideEffect.NavigateToGroupMembers
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsSideEffect.SetDeletePermissionResult
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsSideEffect.SetUpdatedPermissionResult
-import com.passbolt.mobile.android.permissions.grouppermissionsdetails.ui.GroupMembersSection
-import com.passbolt.mobile.android.permissions.navigation.GroupPermissionDeletedResult
-import com.passbolt.mobile.android.permissions.navigation.GroupPermissionModifiedResult
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.PermissionsMode
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.GroupDetailsNavigationKey.GroupMembers
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.dialogs.PermissionDeleteAlertDialog
+import net.svaroh.passly.core.ui.header.ItemWithHeader
+import net.svaroh.passly.core.ui.permissions.PermissionLabel
+import net.svaroh.passly.core.ui.permissions.PermissionSelector
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsIntent.CancelPermissionDelete
+import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsIntent.ConfirmPermissionDelete
+import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsIntent.DeletePermission
+import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsIntent.GoBack
+import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsIntent.Save
+import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsIntent.SeeGroupMembers
+import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsSideEffect.NavigateBack
+import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsSideEffect.NavigateToGroupMembers
+import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsSideEffect.SetDeletePermissionResult
+import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsSideEffect.SetUpdatedPermissionResult
+import net.svaroh.passly.permissions.grouppermissionsdetails.ui.GroupMembersSection
+import net.svaroh.passly.permissions.navigation.GroupPermissionDeletedResult
+import net.svaroh.passly.permissions.navigation.GroupPermissionModifiedResult
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionsMode
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun GroupPermissionsScreen(

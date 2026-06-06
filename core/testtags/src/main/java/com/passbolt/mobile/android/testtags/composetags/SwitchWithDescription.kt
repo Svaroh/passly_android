@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.testtags.composetags
+package net.svaroh.passly.testtags.composetags
 
 object SwitchWithDescription {
     const val ITEM = "SwitchWithDescriptionItem"

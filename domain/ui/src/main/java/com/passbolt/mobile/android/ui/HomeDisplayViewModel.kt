@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
 import android.annotation.SuppressLint
 import android.os.Parcelable

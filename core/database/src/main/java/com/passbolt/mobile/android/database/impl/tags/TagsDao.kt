@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.database.impl.tags
+package net.svaroh.passly.database.impl.tags
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
-import com.passbolt.mobile.android.database.impl.base.BaseDao
-import com.passbolt.mobile.android.entity.resource.Tag
-import com.passbolt.mobile.android.entity.resource.TagWithTaggedItemsCount
+import net.svaroh.passly.database.impl.base.BaseDao
+import net.svaroh.passly.entity.resource.Tag
+import net.svaroh.passly.entity.resource.TagWithTaggedItemsCount
 
 /**
  * Passbolt - Open source password manager for teams

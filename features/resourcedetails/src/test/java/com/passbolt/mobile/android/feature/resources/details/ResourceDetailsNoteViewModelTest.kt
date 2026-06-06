@@ -21,19 +21,19 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resources.details
+package net.svaroh.passly.feature.resources.details
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.resources.actions.SecretPropertiesActionsInteractor
-import com.passbolt.mobile.android.core.resources.actions.SecretPropertyActionResult
-import com.passbolt.mobile.android.feature.resourcedetails.details.ErrorSnackbarType
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.CopyNote
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.Initialize
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.ToggleNoteVisibility
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.AddToClipboard
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsViewModel
+import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.core.resources.actions.SecretPropertyActionResult
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyNote
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.Initialize
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ToggleNoteVisibility
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.AddToClipboard
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop

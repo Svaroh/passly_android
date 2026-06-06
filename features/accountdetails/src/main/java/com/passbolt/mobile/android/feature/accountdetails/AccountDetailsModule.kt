@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.accountdetails
+package net.svaroh.passly.feature.accountdetails
 
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.feature.accountdetails.navigation.AccountDetailsFeatureNavigation
-import com.passbolt.mobile.android.feature.accountdetails.screen.accountDetailsModule
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.transferAccountOnboardingModule
+import net.svaroh.passly.core.navigation.compose.base.Feature
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.feature.accountdetails.navigation.AccountDetailsFeatureNavigation
+import net.svaroh.passly.feature.accountdetails.screen.accountDetailsModule
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccountonboarding.transferAccountOnboardingModule
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

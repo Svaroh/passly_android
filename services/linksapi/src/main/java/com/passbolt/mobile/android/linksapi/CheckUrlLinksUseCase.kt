@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.linksapi
+package net.svaroh.passly.linksapi
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.networking.NetworkResult
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.networking.NetworkResult
 
 /**
  * Passbolt - Open source password manager for teams

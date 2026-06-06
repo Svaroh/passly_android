@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.encryptedstorage.biometric
+package net.svaroh.passly.encryptedstorage.biometric
 
 import android.content.pm.PackageManager
 import android.os.Build

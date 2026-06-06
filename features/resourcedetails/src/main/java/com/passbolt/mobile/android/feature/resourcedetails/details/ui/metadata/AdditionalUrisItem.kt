@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourcedetails.details.ui.metadata
+package net.svaroh.passly.feature.resourcedetails.details.ui.metadata
 
 import PassboltTheme
 import androidx.compose.foundation.background
@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.passbolt.mobile.android.core.localization.R
-import com.passbolt.mobile.android.core.ui.header.ItemWithHeader
+import net.svaroh.passly.core.localization.R
+import net.svaroh.passly.core.ui.header.ItemWithHeader
 
 @Composable
 internal fun AdditionalUrisItem(

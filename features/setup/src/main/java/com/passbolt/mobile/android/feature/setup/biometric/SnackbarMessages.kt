@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.feature.setup.biometric
+package net.svaroh.passly.feature.setup.biometric
 
-import com.passbolt.mobile.android.core.localization.R
-import com.passbolt.mobile.android.feature.setup.biometric.SnackbarErrorType.AUTHENTICATION_GENERIC
-import com.passbolt.mobile.android.feature.setup.biometric.SnackbarErrorType.AUTHENTICATION_LOCKOUT
-import com.passbolt.mobile.android.feature.setup.biometric.SnackbarErrorType.AUTHENTICATION_LOCKOUT_PERMANENT
-import com.passbolt.mobile.android.feature.setup.biometric.SnackbarErrorType.BIOMETRIC_ENCRYPT_ERROR
-import com.passbolt.mobile.android.feature.setup.biometric.SnackbarErrorType.BIOMETRIC_NO_CRYPTO_CIPHER
-import com.passbolt.mobile.android.feature.setup.biometric.SnackbarErrorType.GENERIC_ERROR
+import net.svaroh.passly.core.localization.R
+import net.svaroh.passly.feature.setup.biometric.SnackbarErrorType.AUTHENTICATION_GENERIC
+import net.svaroh.passly.feature.setup.biometric.SnackbarErrorType.AUTHENTICATION_LOCKOUT
+import net.svaroh.passly.feature.setup.biometric.SnackbarErrorType.AUTHENTICATION_LOCKOUT_PERMANENT
+import net.svaroh.passly.feature.setup.biometric.SnackbarErrorType.BIOMETRIC_ENCRYPT_ERROR
+import net.svaroh.passly.feature.setup.biometric.SnackbarErrorType.BIOMETRIC_NO_CRYPTO_CIPHER
+import net.svaroh.passly.feature.setup.biometric.SnackbarErrorType.GENERIC_ERROR
 
 internal fun getSnackbarMessage(
     errorType: SnackbarErrorType,

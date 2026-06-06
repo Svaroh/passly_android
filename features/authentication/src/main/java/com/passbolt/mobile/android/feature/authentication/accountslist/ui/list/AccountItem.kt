@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.accountslist.ui.list
+package net.svaroh.passly.feature.authentication.accountslist.ui.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,9 +47,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.circularimage.CircularProfileImage
-import com.passbolt.mobile.android.ui.AccountModelUi.AccountModel
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
+import net.svaroh.passly.ui.AccountModelUi.AccountModel
 
 @Composable
 internal fun AccountItem(

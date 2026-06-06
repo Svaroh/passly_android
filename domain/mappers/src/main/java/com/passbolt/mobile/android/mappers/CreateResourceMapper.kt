@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
 import com.google.gson.Gson
-import com.passbolt.mobile.android.dto.request.SecretsDto
-import com.passbolt.mobile.android.dto.request.TotpSecretsDto
+import net.svaroh.passly.dto.request.SecretsDto
+import net.svaroh.passly.dto.request.TotpSecretsDto
 
 /**
  * Passbolt - Open source password manager for teams

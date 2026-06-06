@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.autofill.autofill
+package net.svaroh.passly.feature.autofill.autofill
 
 import android.content.Context
 import android.widget.RemoteViews
 import androidx.annotation.StringRes
-import com.passbolt.mobile.android.feature.autofill.R
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.feature.autofill.R
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 /**
  * Passbolt - Open source password manager for teams

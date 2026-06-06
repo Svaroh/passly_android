@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.feature.resourceform.main
+package net.svaroh.passly.feature.resourceform.main
 
-import com.passbolt.mobile.android.ui.AdditionalUrisUiModel
-import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
-import com.passbolt.mobile.android.ui.OtpParseResult
-import com.passbolt.mobile.android.ui.PasswordUiModel
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel
-import com.passbolt.mobile.android.ui.TotpUiModel
+import net.svaroh.passly.ui.AdditionalUrisUiModel
+import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
+import net.svaroh.passly.ui.OtpParseResult
+import net.svaroh.passly.ui.PasswordUiModel
+import net.svaroh.passly.ui.ResourceAppearanceModel
+import net.svaroh.passly.ui.TotpUiModel
 
 sealed interface ResourceFormIntent {
     data class NameTextChanged(

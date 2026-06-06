@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.dto.response.TagDto
-import com.passbolt.mobile.android.entity.resource.Tag
-import com.passbolt.mobile.android.entity.resource.TagWithTaggedItemsCount
-import com.passbolt.mobile.android.ui.TagModel
-import com.passbolt.mobile.android.ui.TagWithCount
+import net.svaroh.passly.dto.response.TagDto
+import net.svaroh.passly.entity.resource.Tag
+import net.svaroh.passly.entity.resource.TagWithTaggedItemsCount
+import net.svaroh.passly.ui.TagModel
+import net.svaroh.passly.ui.TagWithCount
 
 /**
  * Passbolt - Open source password manager for teams

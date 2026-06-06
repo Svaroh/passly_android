@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.groupdetails.groupmembers
+package net.svaroh.passly.groupdetails.groupmembers
 
 import PassboltTheme
 import androidx.compose.foundation.Image
@@ -44,24 +44,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.GroupDetailsNavigationKey.GroupMemberDetails
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersIntent.GoBack
-import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersIntent.GoToMemberDetails
-import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersIntent.Initialize
-import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersSideEffect.NavigateToMemberDetails
-import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersSideEffect.NavigateUp
-import com.passbolt.mobile.android.ui.GpgKeyModel
-import com.passbolt.mobile.android.ui.UserModel
-import com.passbolt.mobile.android.ui.UserProfileModel
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.GroupDetailsNavigationKey.GroupMemberDetails
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.GoBack
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.GoToMemberDetails
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.Initialize
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersSideEffect.NavigateToMemberDetails
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersSideEffect.NavigateUp
+import net.svaroh.passly.ui.GpgKeyModel
+import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserProfileModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import java.time.ZonedDateTime
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun GroupMembersScreen(

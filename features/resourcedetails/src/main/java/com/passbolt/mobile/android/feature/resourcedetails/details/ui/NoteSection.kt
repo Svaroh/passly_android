@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourcedetails.details.ui
+package net.svaroh.passly.feature.resourcedetails.details.ui
 
 import PassboltTheme
 import androidx.compose.foundation.background
@@ -9,15 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.passbolt.mobile.android.core.localization.R
-import com.passbolt.mobile.android.core.ui.header.ActionIcon
-import com.passbolt.mobile.android.core.ui.header.ItemWithHeader
-import com.passbolt.mobile.android.core.ui.header.ValueStyle
-import com.passbolt.mobile.android.core.ui.section.Section
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.CopyNote
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.ToggleNoteVisibility
-import com.passbolt.mobile.android.testtags.composetags.ResourceDetails
+import net.svaroh.passly.core.localization.R
+import net.svaroh.passly.core.ui.header.ActionIcon
+import net.svaroh.passly.core.ui.header.ItemWithHeader
+import net.svaroh.passly.core.ui.header.ValueStyle
+import net.svaroh.passly.core.ui.section.Section
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyNote
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ToggleNoteVisibility
+import net.svaroh.passly.testtags.composetags.ResourceDetails
 
 @Composable
 internal fun NoteSection(

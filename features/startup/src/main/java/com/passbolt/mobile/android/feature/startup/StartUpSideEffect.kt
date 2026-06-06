@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.startup
+package net.svaroh.passly.feature.startup
 
-import com.passbolt.mobile.android.core.navigation.AccountSetupDataModel
+import net.svaroh.passly.core.navigation.AccountSetupDataModel
 
 sealed class StartUpSideEffect {
     data class NavigateToSetup(

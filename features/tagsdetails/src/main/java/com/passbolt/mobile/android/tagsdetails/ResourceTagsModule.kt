@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.tagsdetails
+package net.svaroh.passly.tagsdetails
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.autofill
+package net.svaroh.passly.core.autofill
 
 /**
  * Passbolt - Open source password manager for teams

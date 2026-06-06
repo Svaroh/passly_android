@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.dto.request.SharePermission
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.UserWithAvatar
+import net.svaroh.passly.dto.request.SharePermission
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.UserWithAvatar
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level

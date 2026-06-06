@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.feature.setup.scanqr.usecase
+package net.svaroh.passly.feature.setup.scanqr.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.TransferResponseDto
-import com.passbolt.mobile.android.mappers.TransferMapper
-import com.passbolt.mobile.android.passboltapi.registration.MobileTransferRepository
-import com.passbolt.mobile.android.ui.Status
-import com.passbolt.mobile.android.ui.UpdateTransferModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.TransferResponseDto
+import net.svaroh.passly.mappers.TransferMapper
+import net.svaroh.passly.passboltapi.registration.MobileTransferRepository
+import net.svaroh.passly.ui.Status
+import net.svaroh.passly.ui.UpdateTransferModel
 import kotlinx.coroutines.withContext
 
 /**

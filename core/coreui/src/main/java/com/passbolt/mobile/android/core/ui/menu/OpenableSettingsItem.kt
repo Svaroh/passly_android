@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.menu
+package net.svaroh.passly.core.ui.menu
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -23,10 +23,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.AppTypography
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.testtags.composetags.OpenableSetting
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.compose.AppTypography
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.testtags.composetags.OpenableSetting
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun OpenableSettingsItem(

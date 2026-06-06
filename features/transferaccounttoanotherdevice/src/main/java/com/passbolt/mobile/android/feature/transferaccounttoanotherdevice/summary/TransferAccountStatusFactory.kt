@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.summary
 
-import com.passbolt.mobile.android.ui.TransferAccountStatusType
+import net.svaroh.passly.ui.TransferAccountStatusType
 
 class TransferAccountStatusFactory {
     fun create(type: TransferAccountStatusType): TransferAccountStatus =

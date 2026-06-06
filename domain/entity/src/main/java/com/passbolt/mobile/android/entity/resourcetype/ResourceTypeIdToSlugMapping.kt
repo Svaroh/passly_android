@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.entity.resourcetype
+package net.svaroh.passly.entity.resourcetype
 
 import androidx.room.Entity
 

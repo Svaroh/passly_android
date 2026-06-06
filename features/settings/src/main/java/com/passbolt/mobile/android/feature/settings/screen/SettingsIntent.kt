@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen
+package net.svaroh.passly.feature.settings.screen
 
 sealed interface SettingsIntent {
     object Initialize : SettingsIntent

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.setup.scanqr.parser
+package net.svaroh.passly.feature.setup.scanqr.parser
 
 /**
  * Passbolt - Open source password manager for teams

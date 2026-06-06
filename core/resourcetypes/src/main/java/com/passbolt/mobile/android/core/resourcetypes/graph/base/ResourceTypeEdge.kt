@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.resourcetypes.graph.base
+package net.svaroh.passly.core.resourcetypes.graph.base
 
-import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAction
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
+import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction
+import net.svaroh.passly.supportedresourceTypes.ContentType
 
 class ResourceTypeEdge(
     override val source: ResourceTypeVertex,

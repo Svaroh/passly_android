@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.accountslist
+package net.svaroh.passly.feature.authentication.accountslist
 
 import PassboltTheme
 import androidx.activity.compose.BackHandler
@@ -62,44 +62,44 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.Setup
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.Start
-import com.passbolt.mobile.android.core.navigation.compose.keys.AuthenticationNavigationKey.Auth
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.button.SecondaryButton
-import com.passbolt.mobile.android.core.ui.dialogs.ConfirmAlertDialog
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.AddAccount
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.ConfirmRemoveAccount
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.DismissRemoveAccountDialog
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.EnterRemoveAccountMode
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.ExitRemoveAccountMode
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.GoBack
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.RemoveAccount
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.SelectAccount
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListSideEffect.Finish
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListSideEffect.FinishAffinity
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListSideEffect.NavigateToNewAccountSignIn
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListSideEffect.NavigateToSetup
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListSideEffect.NavigateToSignIn
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListSideEffect.NavigateToStartUp
-import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListSideEffect.ShowSuccessSnackBar
-import com.passbolt.mobile.android.feature.authentication.accountslist.ui.list.AccountItem
-import com.passbolt.mobile.android.feature.authentication.accountslist.ui.list.AddNewAccountItem
-import com.passbolt.mobile.android.ui.AccountModelUi.AccountModel
-import com.passbolt.mobile.android.ui.AccountModelUi.AddNewAccount
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.Setup
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.Start
+import net.svaroh.passly.core.navigation.compose.keys.AuthenticationNavigationKey.Auth
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.button.SecondaryButton
+import net.svaroh.passly.core.ui.dialogs.ConfirmAlertDialog
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.AddAccount
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.ConfirmRemoveAccount
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.DismissRemoveAccountDialog
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.EnterRemoveAccountMode
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.ExitRemoveAccountMode
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.GoBack
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.RemoveAccount
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.SelectAccount
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListSideEffect.Finish
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListSideEffect.FinishAffinity
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListSideEffect.NavigateToNewAccountSignIn
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListSideEffect.NavigateToSetup
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListSideEffect.NavigateToSignIn
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListSideEffect.NavigateToStartUp
+import net.svaroh.passly.feature.authentication.accountslist.AccountsListSideEffect.ShowSuccessSnackBar
+import net.svaroh.passly.feature.authentication.accountslist.ui.list.AccountItem
+import net.svaroh.passly.feature.authentication.accountslist.ui.list.AddNewAccountItem
+import net.svaroh.passly.ui.AccountModelUi.AccountModel
+import net.svaroh.passly.ui.AccountModelUi.AddNewAccount
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun AccountsListScreen(

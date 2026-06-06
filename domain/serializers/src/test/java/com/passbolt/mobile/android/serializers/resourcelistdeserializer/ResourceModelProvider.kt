@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.resourcelistdeserializer
+package net.svaroh.passly.serializers.resourcelistdeserializer
 
-import com.passbolt.mobile.android.dto.response.PermissionDto
-import com.passbolt.mobile.android.dto.response.ResourceResponseV4Dto
+import net.svaroh.passly.dto.response.PermissionDto
+import net.svaroh.passly.dto.response.ResourceResponseV4Dto
 import java.util.UUID
 
 internal fun resourceWithNameOfLength(

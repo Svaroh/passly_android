@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.otp.scanotp
+package net.svaroh.passly.feature.otp.scanotp
 
 /**
  * Passbolt - Open source password manager for teams

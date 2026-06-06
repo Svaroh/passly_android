@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.networking.interceptor
+package net.svaroh.passly.core.networking.interceptor
 
-import com.passbolt.mobile.android.common.CookieExtractor
-import com.passbolt.mobile.android.core.networking.AuthPaths
-import com.passbolt.mobile.android.core.networking.AuthPaths.AVATAR_PATH
-import com.passbolt.mobile.android.core.networking.AuthPaths.TRANSFER_PATH
+import net.svaroh.passly.common.CookieExtractor
+import net.svaroh.passly.core.networking.AuthPaths
+import net.svaroh.passly.core.networking.AuthPaths.AVATAR_PATH
+import net.svaroh.passly.core.networking.AuthPaths.TRANSFER_PATH
 import okhttp3.Interceptor
 import okhttp3.Response
 

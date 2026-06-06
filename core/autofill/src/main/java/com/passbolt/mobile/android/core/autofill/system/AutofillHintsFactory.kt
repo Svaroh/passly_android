@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.autofill.system
+package net.svaroh.passly.core.autofill.system
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,7 +7,7 @@ import android.content.res.Resources
 import android.view.View
 import androidx.annotation.ArrayRes
 import java.util.Locale
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 class AutofillHintsFactory(
     private val resources: Resources,

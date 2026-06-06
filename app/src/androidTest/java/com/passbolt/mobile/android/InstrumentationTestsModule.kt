@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android
+package net.svaroh.passly
 
-import com.passbolt.mobile.android.accountinit.AccountDataCleaner
-import com.passbolt.mobile.android.accountinit.AccountInitializer
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.NOT_SUPPORTED
-import com.passbolt.mobile.android.core.security.rootdetection.RootDetector
-import com.passbolt.mobile.android.intents.ManagedAccountIntentCreator
+import net.svaroh.passly.accountinit.AccountDataCleaner
+import net.svaroh.passly.accountinit.AccountInitializer
+import net.svaroh.passly.core.autofill.AutofillInformationProvider
+import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.NOT_SUPPORTED
+import net.svaroh.passly.core.security.rootdetection.RootDetector
+import net.svaroh.passly.intents.ManagedAccountIntentCreator
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.screen.data
+package net.svaroh.passly.resourcepicker.screen.data
 
-import com.passbolt.mobile.android.ui.ResourcePickerListItem
+import net.svaroh.passly.ui.ResourcePickerListItem
 
 data class ResourcePickerData(
     val suggestedResources: List<ResourcePickerListItem> = emptyList(),

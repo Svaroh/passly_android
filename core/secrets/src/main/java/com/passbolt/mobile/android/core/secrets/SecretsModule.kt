@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.secrets
+package net.svaroh.passly.core.secrets
 
-import com.passbolt.mobile.android.core.secrets.usecase.decrypt.DecryptSecretUseCase
-import com.passbolt.mobile.android.core.secrets.usecase.decrypt.FetchSecretUseCase
-import com.passbolt.mobile.android.core.secrets.usecase.decrypt.SecretInteractor
-import com.passbolt.mobile.android.core.secrets.usecase.decrypt.parser.SecretParser
+import net.svaroh.passly.core.secrets.usecase.decrypt.DecryptSecretUseCase
+import net.svaroh.passly.core.secrets.usecase.decrypt.FetchSecretUseCase
+import net.svaroh.passly.core.secrets.usecase.decrypt.SecretInteractor
+import net.svaroh.passly.core.secrets.usecase.decrypt.parser.SecretParser
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

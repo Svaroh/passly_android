@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.scenarios.setup.scanqrcode
+package net.svaroh.passly.scenarios.setup.scanqrcode
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
@@ -31,12 +31,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
-import com.passbolt.mobile.android.accountinit.AccountDataCleaner
-import com.passbolt.mobile.android.feature.setup.SetUpActivity
-import com.passbolt.mobile.android.helpers.getString
-import com.passbolt.mobile.android.instrumentationTestsModule
-import com.passbolt.mobile.android.intents.ManagedAccountIntentCreator
-import com.passbolt.mobile.android.rules.lazyActivityScenarioRule
+import net.svaroh.passly.accountinit.AccountDataCleaner
+import net.svaroh.passly.feature.setup.SetUpActivity
+import net.svaroh.passly.helpers.getString
+import net.svaroh.passly.instrumentationTestsModule
+import net.svaroh.passly.intents.ManagedAccountIntentCreator
+import net.svaroh.passly.rules.lazyActivityScenarioRule
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -44,7 +44,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @RunWith(AndroidJUnit4::class)
 @MediumTest

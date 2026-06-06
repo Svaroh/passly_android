@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.logger.exceptionhandler
+package net.svaroh.passly.core.logger.exceptionhandler
 
 import timber.log.Timber
 import java.lang.Thread.UncaughtExceptionHandler

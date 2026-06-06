@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.main.mainscreen
+package net.svaroh.passly.feature.main.mainscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -23,11 +23,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.passbolt.mobile.android.core.compose.Inter
-import com.passbolt.mobile.android.core.navigation.compose.BottomTab
-import com.passbolt.mobile.android.feature.main.R
-import com.passbolt.mobile.android.testtags.composetags.BottomNav
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.compose.Inter
+import net.svaroh.passly.core.navigation.compose.BottomTab
+import net.svaroh.passly.feature.main.R
+import net.svaroh.passly.testtags.composetags.BottomNav
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun MainBottomNavigationBar(

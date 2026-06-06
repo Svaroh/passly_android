@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.menu
+package net.svaroh.passly.core.ui.menu
 
 import PassboltTheme
 import androidx.annotation.DrawableRes
@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.passbolt.mobile.android.core.ui.R
+import net.svaroh.passly.core.ui.R
 
 /**
  * Passbolt - Open source password manager for teams

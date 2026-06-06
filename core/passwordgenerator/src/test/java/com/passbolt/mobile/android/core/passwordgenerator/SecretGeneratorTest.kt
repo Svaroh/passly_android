@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.core.passwordgenerator
+package net.svaroh.passly.core.passwordgenerator
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.passwordgenerator.SecretGenerator.SecretGenerationResult.FailedToGenerateLowEntropy
-import com.passbolt.mobile.android.ui.CaseTypeModel
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsModel
+import net.svaroh.passly.core.passwordgenerator.SecretGenerator.SecretGenerationResult.FailedToGenerateLowEntropy
+import net.svaroh.passly.ui.CaseTypeModel
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule

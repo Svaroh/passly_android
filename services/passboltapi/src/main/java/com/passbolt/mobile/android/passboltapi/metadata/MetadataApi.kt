@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.passboltapi.metadata
+package net.svaroh.passly.passboltapi.metadata
 
-import com.passbolt.mobile.android.dto.request.EncryptedDataAndModifiedRequest
-import com.passbolt.mobile.android.dto.request.EncryptedDataRequest
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.MetadataKeysResponseDto
-import com.passbolt.mobile.android.dto.response.MetadataKeysSettingsResponseDto
-import com.passbolt.mobile.android.dto.response.MetadataSessionKeyResponseDto
-import com.passbolt.mobile.android.dto.response.MetadataTypesSettingsResponseDto
+import net.svaroh.passly.dto.request.EncryptedDataAndModifiedRequest
+import net.svaroh.passly.dto.request.EncryptedDataRequest
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.MetadataKeysResponseDto
+import net.svaroh.passly.dto.response.MetadataKeysSettingsResponseDto
+import net.svaroh.passly.dto.response.MetadataSessionKeyResponseDto
+import net.svaroh.passly.dto.response.MetadataTypesSettingsResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

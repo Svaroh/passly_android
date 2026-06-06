@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.formatter
+package net.svaroh.passly.core.formatter
 
 import org.jetbrains.annotations.VisibleForTesting
 

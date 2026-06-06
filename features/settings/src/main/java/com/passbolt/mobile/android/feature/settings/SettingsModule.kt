@@ -1,20 +1,20 @@
-package com.passbolt.mobile.android.feature.settings
+package net.svaroh.passly.feature.settings
 
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.feature.settings.navigation.AutofillEncouragementsFeatureNavigation
-import com.passbolt.mobile.android.feature.settings.navigation.SettingsFeatureNavigation
-import com.passbolt.mobile.android.feature.settings.screen.accounts.accountsSettingsModule
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyInspectorModule
-import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.keyInspectorMoreMenuModule
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.appSettingsModule
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.settingsAutofillModule
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.defaultfilter.defaultFilterModule
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.expertsettings.expertSettingsModule
-import com.passbolt.mobile.android.feature.settings.screen.debuglogssettings.debugLogsSettingsModule
-import com.passbolt.mobile.android.feature.settings.screen.settingsModule
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses.licensesModule
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.termsAndLicensesSettingsModule
+import net.svaroh.passly.core.navigation.compose.base.Feature
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.feature.settings.navigation.AutofillEncouragementsFeatureNavigation
+import net.svaroh.passly.feature.settings.navigation.SettingsFeatureNavigation
+import net.svaroh.passly.feature.settings.screen.accounts.accountsSettingsModule
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyInspectorModule
+import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.keyInspectorMoreMenuModule
+import net.svaroh.passly.feature.settings.screen.appsettings.appSettingsModule
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.settingsAutofillModule
+import net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter.defaultFilterModule
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.expertSettingsModule
+import net.svaroh.passly.feature.settings.screen.debuglogssettings.debugLogsSettingsModule
+import net.svaroh.passly.feature.settings.screen.settingsModule
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.licensesModule
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.termsAndLicensesSettingsModule
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

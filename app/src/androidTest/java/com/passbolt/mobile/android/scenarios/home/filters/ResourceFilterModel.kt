@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.scenarios.home.filters
+package net.svaroh.passly.scenarios.home.filters
 
 import androidx.annotation.StringRes
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 /**
  * Passbolt - Open source password manager for teams

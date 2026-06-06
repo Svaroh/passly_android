@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.passboltapi.resourcetypes
+package net.svaroh.passly.passboltapi.resourcetypes
 
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.ResourceTypeDto
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.ResourceTypeDto
 import retrofit2.http.GET
 
 /**

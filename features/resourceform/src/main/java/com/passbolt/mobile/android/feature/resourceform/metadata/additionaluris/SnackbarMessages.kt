@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris
+package net.svaroh.passly.feature.resourceform.metadata.additionaluris
 
 import android.content.Context
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.SnackbarErrorType.MAX_URIS_EXCEEDED
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.SnackbarErrorType.MAX_URIS_EXCEEDED
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getErrorMessage(
     context: Context,

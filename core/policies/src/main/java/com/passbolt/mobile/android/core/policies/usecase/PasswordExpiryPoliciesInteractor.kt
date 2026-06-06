@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.policies.usecase
+package net.svaroh.passly.core.policies.usecase
 
-import com.passbolt.mobile.android.ui.PasswordExpirySettings
+import net.svaroh.passly.ui.PasswordExpirySettings
 
 class PasswordExpiryPoliciesInteractor(
     private val fetchPasswordExpirySettingsUseCase: FetchPasswordExpirySettingsUseCase,

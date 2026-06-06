@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.locationdetails.ui
+package net.svaroh.passly.locationdetails.ui
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -40,8 +40,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.locationdetails.data.ExpandableFolderNode
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.locationdetails.data.ExpandableFolderNode
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 private const val FOLDER_ARROW_ANIMATION_DURATION_MS = 200
 private const val EXPANDED_ARROW_ROTATION = 0f

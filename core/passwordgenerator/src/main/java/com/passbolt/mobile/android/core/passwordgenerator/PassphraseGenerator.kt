@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.passwordgenerator
+package net.svaroh.passly.core.passwordgenerator
 
-import com.passbolt.mobile.android.core.passwordgenerator.codepoints.Codepoint
-import com.passbolt.mobile.android.core.passwordgenerator.codepoints.toCodepoints
-import com.passbolt.mobile.android.core.passwordgenerator.dice.Dice
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsModel
+import net.svaroh.passly.core.passwordgenerator.codepoints.Codepoint
+import net.svaroh.passly.core.passwordgenerator.codepoints.toCodepoints
+import net.svaroh.passly.core.passwordgenerator.dice.Dice
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsModel
 import kotlinx.coroutines.flow.takeWhile
 
 /**

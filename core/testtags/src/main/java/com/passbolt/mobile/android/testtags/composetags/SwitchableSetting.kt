@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.testtags.composetags
+package net.svaroh.passly.testtags.composetags
 
 object SwitchableSetting {
     const val ITEM = "SwitchableSettingsItem"

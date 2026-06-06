@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.scenarios.resourcesedition
+package net.svaroh.passly.scenarios.resourcesedition
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
@@ -34,33 +34,33 @@ import androidx.test.espresso.IdlingRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
-import com.passbolt.mobile.android.core.idlingresource.CreateResourceIdlingResource
-import com.passbolt.mobile.android.core.idlingresource.ResourcesFullRefreshIdlingResource
-import com.passbolt.mobile.android.core.idlingresource.SignInIdlingResource
-import com.passbolt.mobile.android.core.idlingresource.UpdateResourceIdlingResource
-import com.passbolt.mobile.android.core.localization.R.string.filters_menu_all_items
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.feature.authentication.AuthenticationMainActivity
-import com.passbolt.mobile.android.helpers.chooseFilter
-import com.passbolt.mobile.android.helpers.createNewPasswordFromHomeScreen
-import com.passbolt.mobile.android.helpers.getString
-import com.passbolt.mobile.android.helpers.searchAndClickMoreOfFirstResource
-import com.passbolt.mobile.android.helpers.signIn
-import com.passbolt.mobile.android.helpers.waitForResourceForm
-import com.passbolt.mobile.android.instrumentationTestsModule
-import com.passbolt.mobile.android.intents.ManagedAccountIntentCreator
-import com.passbolt.mobile.android.rules.IdlingResourceRule
-import com.passbolt.mobile.android.rules.lazyActivitySetupScenarioRule
-import com.passbolt.mobile.android.testtags.composetags.Home
-import com.passbolt.mobile.android.testtags.composetags.ResourceForm
+import net.svaroh.passly.core.idlingresource.CreateResourceIdlingResource
+import net.svaroh.passly.core.idlingresource.ResourcesFullRefreshIdlingResource
+import net.svaroh.passly.core.idlingresource.SignInIdlingResource
+import net.svaroh.passly.core.idlingresource.UpdateResourceIdlingResource
+import net.svaroh.passly.core.localization.R.string.filters_menu_all_items
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.feature.authentication.AuthenticationMainActivity
+import net.svaroh.passly.helpers.chooseFilter
+import net.svaroh.passly.helpers.createNewPasswordFromHomeScreen
+import net.svaroh.passly.helpers.getString
+import net.svaroh.passly.helpers.searchAndClickMoreOfFirstResource
+import net.svaroh.passly.helpers.signIn
+import net.svaroh.passly.helpers.waitForResourceForm
+import net.svaroh.passly.instrumentationTestsModule
+import net.svaroh.passly.intents.ManagedAccountIntentCreator
+import net.svaroh.passly.rules.IdlingResourceRule
+import net.svaroh.passly.rules.lazyActivitySetupScenarioRule
+import net.svaroh.passly.testtags.composetags.Home
+import net.svaroh.passly.testtags.composetags.ResourceForm
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.component.inject
 import org.koin.test.KoinTest
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @RunWith(AndroidJUnit4::class)
 @MediumTest

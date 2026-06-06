@@ -20,9 +20,9 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.navigation.compose
+package net.svaroh.passly.core.navigation.compose
 
-import com.passbolt.mobile.android.core.navigation.deeplink.BrowserFirstLoginDeepLinkStore
+import net.svaroh.passly.core.navigation.deeplink.BrowserFirstLoginDeepLinkStore
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.scopedOf
 import org.koin.core.module.dsl.singleOf

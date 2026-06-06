@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common
+package net.svaroh.passly.common
 
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG

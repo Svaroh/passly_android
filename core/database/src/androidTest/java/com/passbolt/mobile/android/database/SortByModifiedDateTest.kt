@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.database
+package net.svaroh.passly.database
 
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.database.impl.resources.ResourcesDao
-import com.passbolt.mobile.android.entity.resource.Permission
-import com.passbolt.mobile.android.entity.resource.Resource
-import com.passbolt.mobile.android.entity.resource.ResourceType
-import com.passbolt.mobile.android.entity.resource.ResourceUpdateState
+import net.svaroh.passly.database.impl.resources.ResourcesDao
+import net.svaroh.passly.entity.resource.Permission
+import net.svaroh.passly.entity.resource.Resource
+import net.svaroh.passly.entity.resource.ResourceType
+import net.svaroh.passly.entity.resource.ResourceUpdateState
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before

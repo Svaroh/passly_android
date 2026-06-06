@@ -3,7 +3,7 @@
 -keepattributes SourceFile,LineNumberTable
 
 # keep all the code from the app
--keep class com.passbolt.mobile.android.** { *; }
+-keep class net.svaroh.passly.** { *; }
 
 # General config
 -keepattributes InnerClasses,Signature,Exceptions,EnclosingMethod,SourceFile,LineNumberTable,*Annotation*

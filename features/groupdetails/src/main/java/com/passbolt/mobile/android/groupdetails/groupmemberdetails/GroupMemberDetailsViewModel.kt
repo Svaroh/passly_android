@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.groupdetails.groupmemberdetails
+package net.svaroh.passly.groupdetails.groupmemberdetails
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.users.usecase.db.GetLocalUserUseCase
-import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.GoBack
-import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.Initialize
-import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsSideEffect.NavigateUp
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.users.usecase.db.GetLocalUserUseCase
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.GoBack
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.Initialize
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsSideEffect.NavigateUp
 import kotlinx.coroutines.launch
 
 internal class GroupMemberDetailsViewModel(

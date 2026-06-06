@@ -1,15 +1,15 @@
-package com.passbolt.mobile.android.feature.otp.scanotp
+package net.svaroh.passly.feature.otp.scanotp
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpIntent
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpSideEffect
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpViewModel
-import com.passbolt.mobile.android.ui.OtpParseResult
-import com.passbolt.mobile.android.ui.OtpParseResult.UserResolvableError.ErrorType.MULTIPLE_BARCODES
-import com.passbolt.mobile.android.ui.OtpParseResult.UserResolvableError.ErrorType.NOT_A_OTP_QR
-import com.passbolt.mobile.android.ui.OtpParseResult.UserResolvableError.ErrorType.NO_BARCODES_IN_RANGE
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpSideEffect
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpViewModel
+import net.svaroh.passly.ui.OtpParseResult
+import net.svaroh.passly.ui.OtpParseResult.UserResolvableError.ErrorType.MULTIPLE_BARCODES
+import net.svaroh.passly.ui.OtpParseResult.UserResolvableError.ErrorType.NOT_A_OTP_QR
+import net.svaroh.passly.ui.OtpParseResult.UserResolvableError.ErrorType.NO_BARCODES_IN_RANGE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

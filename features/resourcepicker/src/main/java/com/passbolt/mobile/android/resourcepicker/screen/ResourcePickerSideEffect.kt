@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.screen
+package net.svaroh.passly.resourcepicker.screen
 
-import com.passbolt.mobile.android.resourcepicker.model.PickResourceAction
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.resourcepicker.model.PickResourceAction
+import net.svaroh.passly.ui.ResourceModel
 
 internal sealed class ResourcePickerSideEffect {
     data class NavigateBackWithResult(

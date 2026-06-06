@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.locationdetails
+package net.svaroh.passly.locationdetails
 
 import PassboltTheme
 import android.graphics.drawable.Drawable
@@ -60,32 +60,32 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.common.extension.toSingleLine
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.resources.resourceicon.ResourceIconProvider
-import com.passbolt.mobile.android.core.ui.pulltorefresh.PullToRefreshIndicatorBox
-import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.locationdetails.LocationDetailsIntent.GoBack
-import com.passbolt.mobile.android.locationdetails.LocationDetailsIntent.ToggleExpanded
-import com.passbolt.mobile.android.locationdetails.LocationDetailsSideEffect.NavigateToHome
-import com.passbolt.mobile.android.locationdetails.LocationDetailsSideEffect.NavigateUp
-import com.passbolt.mobile.android.locationdetails.LocationDetailsSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.locationdetails.LocationDetailsSideEffect.ShowToast
-import com.passbolt.mobile.android.locationdetails.data.ExpandableFolderTreeCreator
-import com.passbolt.mobile.android.locationdetails.data.flattenTree
-import com.passbolt.mobile.android.locationdetails.ui.ExpandableFolderItem
-import com.passbolt.mobile.android.locationdetails.ui.LocationItem
-import com.passbolt.mobile.android.ui.FolderModel
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.common.extension.toSingleLine
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.core.ui.pulltorefresh.PullToRefreshIndicatorBox
+import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.locationdetails.LocationDetailsIntent.GoBack
+import net.svaroh.passly.locationdetails.LocationDetailsIntent.ToggleExpanded
+import net.svaroh.passly.locationdetails.LocationDetailsSideEffect.NavigateToHome
+import net.svaroh.passly.locationdetails.LocationDetailsSideEffect.NavigateUp
+import net.svaroh.passly.locationdetails.LocationDetailsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.locationdetails.LocationDetailsSideEffect.ShowToast
+import net.svaroh.passly.locationdetails.data.ExpandableFolderTreeCreator
+import net.svaroh.passly.locationdetails.data.flattenTree
+import net.svaroh.passly.locationdetails.ui.ExpandableFolderItem
+import net.svaroh.passly.locationdetails.ui.LocationItem
+import net.svaroh.passly.ui.FolderModel
+import net.svaroh.passly.ui.ResourcePermission
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun LocationDetailsScreen(

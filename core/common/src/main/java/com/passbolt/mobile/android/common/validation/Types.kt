@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.common.validation
+package net.svaroh.passly.common.validation
 
 internal typealias MinLength = Int
 internal typealias MaxLength = Int

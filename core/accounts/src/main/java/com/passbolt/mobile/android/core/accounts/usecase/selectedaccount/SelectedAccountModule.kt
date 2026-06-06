@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.accounts.usecase.selectedaccount
+package net.svaroh.passly.core.accounts.usecase.selectedaccount
 
-import com.passbolt.mobile.android.core.accounts.AccountSwitchFlow
+import net.svaroh.passly.core.accounts.AccountSwitchFlow
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf

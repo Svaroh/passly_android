@@ -1,17 +1,17 @@
-package com.passbolt.mobile.android.feature.setup.scanqr
+package net.svaroh.passly.feature.setup.scanqr
 
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.passbolt.mobile.android.core.localization.R
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrState.TooltipMessage.CAMERA_ERROR
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrState.TooltipMessage.CENTER_CAMERA_ON_BARCODE
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrState.TooltipMessage.KEEP_GOING
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrState.TooltipMessage.MULTIPLE_BARCODES
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrState.TooltipMessage.NOT_A_PASSBOLT_QR
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrState.TooltipMessage.SCAN_ERROR
-import com.passbolt.mobile.android.feature.setup.scanqr.ToastType
-import com.passbolt.mobile.android.feature.setup.scanqr.ToastType.UPDATE_TRANSFER_ERROR
+import net.svaroh.passly.core.localization.R
+import net.svaroh.passly.feature.setup.scanqr.ScanQrState.TooltipMessage.CAMERA_ERROR
+import net.svaroh.passly.feature.setup.scanqr.ScanQrState.TooltipMessage.CENTER_CAMERA_ON_BARCODE
+import net.svaroh.passly.feature.setup.scanqr.ScanQrState.TooltipMessage.KEEP_GOING
+import net.svaroh.passly.feature.setup.scanqr.ScanQrState.TooltipMessage.MULTIPLE_BARCODES
+import net.svaroh.passly.feature.setup.scanqr.ScanQrState.TooltipMessage.NOT_A_PASSBOLT_QR
+import net.svaroh.passly.feature.setup.scanqr.ScanQrState.TooltipMessage.SCAN_ERROR
+import net.svaroh.passly.feature.setup.scanqr.ToastType
+import net.svaroh.passly.feature.setup.scanqr.ToastType.UPDATE_TRANSFER_ERROR
 
 @Composable
 fun getTooltipMessage(

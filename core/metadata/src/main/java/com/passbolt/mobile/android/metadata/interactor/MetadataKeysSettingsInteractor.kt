@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.metadata.interactor
+package net.svaroh.passly.metadata.interactor
 
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.metadata.usecase.FetchMetadataKeysSettingsUseCase
-import com.passbolt.mobile.android.metadata.usecase.SaveMetadataKeysSettingsUseCase
-import com.passbolt.mobile.android.ui.MetadataKeysSettingsModel
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.metadata.usecase.FetchMetadataKeysSettingsUseCase
+import net.svaroh.passly.metadata.usecase.SaveMetadataKeysSettingsUseCase
+import net.svaroh.passly.ui.MetadataKeysSettingsModel
 
 /**
  * Passbolt - Open source password manager for teams

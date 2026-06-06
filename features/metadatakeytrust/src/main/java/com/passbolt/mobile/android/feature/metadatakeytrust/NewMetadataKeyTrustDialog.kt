@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.metadatakeytrust
+package net.svaroh.passly.feature.metadatakeytrust
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,18 +25,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.passbolt.mobile.android.core.formatter.FingerprintFormatter
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.ui.MetadataKeyModification
-import com.passbolt.mobile.android.ui.MetadataKeyModification.ROLLBACK
-import com.passbolt.mobile.android.ui.MetadataKeyModification.ROTATION
-import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
-import com.passbolt.mobile.android.ui.ParsedMetadataPrivateKeyModel
+import net.svaroh.passly.core.formatter.FingerprintFormatter
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.ui.MetadataKeyModification
+import net.svaroh.passly.ui.MetadataKeyModification.ROLLBACK
+import net.svaroh.passly.ui.MetadataKeyModification.ROTATION
+import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
+import net.svaroh.passly.ui.ParsedMetadataPrivateKeyModel
 import org.koin.compose.koinInject
 import java.time.ZonedDateTime
 import java.util.UUID
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 /**
  * Passbolt - Open source password manager for teams

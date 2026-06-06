@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.createfolder
+package net.svaroh.passly.createfolder
 
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionModelUi
 
 data class CreateFolderState(
     val parentFolderId: String? = null,

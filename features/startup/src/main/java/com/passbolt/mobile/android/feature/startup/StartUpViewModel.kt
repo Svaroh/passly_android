@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.startup
+package net.svaroh.passly.feature.startup
 
-import com.passbolt.mobile.android.core.accounts.usecase.accounts.GetAccountsUseCase
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.navigation.AccountSetupDataModel
-import com.passbolt.mobile.android.feature.startup.StartUpSideEffect.NavigateToSetup
-import com.passbolt.mobile.android.feature.startup.StartUpSideEffect.NavigateToSignIn
+import net.svaroh.passly.core.accounts.usecase.accounts.GetAccountsUseCase
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.navigation.AccountSetupDataModel
+import net.svaroh.passly.feature.startup.StartUpSideEffect.NavigateToSetup
+import net.svaroh.passly.feature.startup.StartUpSideEffect.NavigateToSignIn
 
 class StartUpViewModel(
     private val accountSetupDataModel: AccountSetupDataModel?,

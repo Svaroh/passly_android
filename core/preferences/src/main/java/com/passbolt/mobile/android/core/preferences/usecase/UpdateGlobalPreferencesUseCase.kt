@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.core.preferences.usecase
+package net.svaroh.passly.core.preferences.usecase
 
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 

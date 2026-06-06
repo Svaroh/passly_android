@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.metadata.privatekeys
+package net.svaroh.passly.metadata.privatekeys
 
-import com.passbolt.mobile.android.ui.DecryptedMetadataPrivateKeyJsonModel
+import net.svaroh.passly.ui.DecryptedMetadataPrivateKeyJsonModel
 
 class MetadataPrivateKeysValidator {
     fun isValid(key: DecryptedMetadataPrivateKeyJsonModel): Boolean = key.objectType == "PASSBOLT_METADATA_PRIVATE_KEY"

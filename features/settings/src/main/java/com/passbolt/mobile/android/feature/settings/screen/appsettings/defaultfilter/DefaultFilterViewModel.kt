@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.defaultfilter
+package net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.preferences.usecase.GetHomeDisplayViewPrefsUseCase
-import com.passbolt.mobile.android.core.preferences.usecase.HomeDisplayViewPrefsValidator
-import com.passbolt.mobile.android.core.preferences.usecase.UpdateHomeDisplayViewPrefsUseCase
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.defaultfilter.DefaultFilterIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.defaultfilter.DefaultFilterIntent.SelectDefaultFilter
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.defaultfilter.DefaultFilterSideEffect.NavigateUp
-import com.passbolt.mobile.android.ui.DefaultFilterModel
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.preferences.usecase.GetHomeDisplayViewPrefsUseCase
+import net.svaroh.passly.core.preferences.usecase.HomeDisplayViewPrefsValidator
+import net.svaroh.passly.core.preferences.usecase.UpdateHomeDisplayViewPrefsUseCase
+import net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter.DefaultFilterIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter.DefaultFilterIntent.SelectDefaultFilter
+import net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter.DefaultFilterSideEffect.NavigateUp
+import net.svaroh.passly.ui.DefaultFilterModel
 
 internal class DefaultFilterViewModel(
     private val updateHomeDisplayViewPrefsUseCase: UpdateHomeDisplayViewPrefsUseCase,

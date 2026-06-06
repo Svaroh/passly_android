@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.common.CookieExtractor
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.accountdata.GetAccountDataUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.core.authenticationcore.session.GetSessionUseCase
-import com.passbolt.mobile.android.core.authenticationcore.session.SaveSessionUseCase
-import com.passbolt.mobile.android.dto.request.RefreshSessionRequest
-import com.passbolt.mobile.android.passboltapi.auth.AuthRepository
+import net.svaroh.passly.common.CookieExtractor
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.accountdata.GetAccountDataUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.core.authenticationcore.session.GetSessionUseCase
+import net.svaroh.passly.core.authenticationcore.session.SaveSessionUseCase
+import net.svaroh.passly.dto.request.RefreshSessionRequest
+import net.svaroh.passly.passboltapi.auth.AuthRepository
 import retrofit2.HttpException
 import timber.log.Timber
 import java.net.HttpURLConnection

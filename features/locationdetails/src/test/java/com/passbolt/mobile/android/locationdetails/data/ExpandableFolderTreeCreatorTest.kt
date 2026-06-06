@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.locationdetails.data
+package net.svaroh.passly.locationdetails.data
 
 /**
  * Passbolt - Open source password manager for teams
@@ -24,8 +24,8 @@ package com.passbolt.mobile.android.locationdetails.data
  */
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.ui.FolderModel
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.ui.FolderModel
+import net.svaroh.passly.ui.ResourcePermission
 import org.junit.Test
 
 class ExpandableFolderTreeCreatorTest {

@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.accountslist
+package net.svaroh.passly.feature.authentication.accountslist
 
-import com.passbolt.mobile.android.ui.AccountModelUi
+import net.svaroh.passly.ui.AccountModelUi
 
 data class AccountsListState(
     val showManageAccountsTopBar: Boolean,

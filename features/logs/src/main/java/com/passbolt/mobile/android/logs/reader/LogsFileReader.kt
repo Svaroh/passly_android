@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.logs.reader
+package net.svaroh.passly.logs.reader
 
-import com.passbolt.mobile.android.core.logger.LogFilesManager
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.logger.LogFilesManager
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import kotlinx.coroutines.withContext
 import java.io.File
 

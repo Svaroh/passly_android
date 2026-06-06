@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.setup.welcome
+package net.svaroh.passly.feature.setup.welcome
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

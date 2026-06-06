@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.core.users.profile
+package net.svaroh.passly.core.users.profile
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.mappers.UserProfileMapper
-import com.passbolt.mobile.android.passboltapi.users.UsersRepository
-import com.passbolt.mobile.android.ui.UserProfileModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.mappers.UserProfileMapper
+import net.svaroh.passly.passboltapi.users.UsersRepository
+import net.svaroh.passly.ui.UserProfileModel
 import timber.log.Timber
 
 /**

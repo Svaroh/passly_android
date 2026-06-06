@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.policies.usecase
+package net.svaroh.passly.core.policies.usecase
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf

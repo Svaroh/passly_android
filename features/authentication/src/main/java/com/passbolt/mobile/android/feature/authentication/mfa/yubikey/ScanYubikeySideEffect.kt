@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.yubikey
+package net.svaroh.passly.feature.authentication.mfa.yubikey
 
 sealed interface ScanYubikeySideEffect {
     data object LaunchYubikeyScan : ScanYubikeySideEffect

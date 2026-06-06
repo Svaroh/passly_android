@@ -1,23 +1,23 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.navigation
+package net.svaroh.passly.feature.otp.scanotp.navigation
 
 import PassboltTheme
-import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode.SCAN_FOR_RESULT
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode.SCAN_WITH_SUCCESS_SCREEN
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpSuccess
-import com.passbolt.mobile.android.core.navigation.compose.results.ResourcePickerResultEvent
-import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
-import com.passbolt.mobile.android.feature.otp.scanotp.ScanOtpMode
-import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpScreen
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkedResourceReceived
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessScreen
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessViewModel
-import com.passbolt.mobile.android.ui.OtpParseResult
+import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode.SCAN_FOR_RESULT
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode.SCAN_WITH_SUCCESS_SCREEN
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpSuccess
+import net.svaroh.passly.core.navigation.compose.results.ResourcePickerResultEvent
+import net.svaroh.passly.core.navigation.compose.results.ResultEffect
+import net.svaroh.passly.feature.otp.scanotp.ScanOtpMode
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpScreen
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkedResourceReceived
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessScreen
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessViewModel
+import net.svaroh.passly.ui.OtpParseResult
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode as NavigationScanOtpMode
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode as NavigationScanOtpMode
 
 class ScanOtpFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy
+package net.svaroh.passly.feature.autofill.resources.datasetstrategy
 
 import android.app.Activity
 import android.content.Context
@@ -8,9 +8,9 @@ import android.service.autofill.FillResponse
 import android.view.autofill.AutofillId
 import android.view.autofill.AutofillManager
 import android.view.autofill.AutofillValue
-import com.passbolt.mobile.android.core.autofill.system.AssistStructureParser
-import com.passbolt.mobile.android.core.autofill.system.FillableInputsFinder
-import com.passbolt.mobile.android.feature.autofill.autofill.RemoteViewsFactory
+import net.svaroh.passly.core.autofill.system.AssistStructureParser
+import net.svaroh.passly.core.autofill.system.FillableInputsFinder
+import net.svaroh.passly.feature.autofill.autofill.RemoteViewsFactory
 
 class ReturnAutofillDataset(
     private val autofillCallback: AutofillCallback,
@@ -29,12 +29,12 @@ class ReturnAutofillDataset(
 
         val usernameParsedAssistStructure =
             fillableInputsFinder.findStructureForAutofillFields(
-                com.passbolt.mobile.android.core.autofill.system.AutofillField.USERNAME,
+                net.svaroh.passly.core.autofill.system.AutofillField.USERNAME,
                 parsedStructures.structures,
             )
         val passwordParsedAssistStructure =
             fillableInputsFinder.findStructureForAutofillFields(
-                com.passbolt.mobile.android.core.autofill.system.AutofillField.PASSWORD,
+                net.svaroh.passly.core.autofill.system.AutofillField.PASSWORD,
                 parsedStructures.structures,
             )
 

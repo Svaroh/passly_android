@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.core.qrscan.manager
+package net.svaroh.passly.core.qrscan.manager
 
 import androidx.camera.core.CameraSelector
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.barcode.BarcodeScanner
-import com.passbolt.mobile.android.core.qrscan.analyzer.BarcodeScanResult
-import com.passbolt.mobile.android.core.qrscan.analyzer.QrCodeImageAnalyzer
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.core.qrscan.analyzer.QrCodeImageAnalyzer
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.Executor
 

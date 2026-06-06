@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.summary
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf

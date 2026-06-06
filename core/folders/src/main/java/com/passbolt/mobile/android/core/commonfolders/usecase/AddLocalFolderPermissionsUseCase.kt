@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.core.commonfolders.usecase
+package net.svaroh.passly.core.commonfolders.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.SelectedAccountUseCase
-import com.passbolt.mobile.android.database.DatabaseProvider
-import com.passbolt.mobile.android.entity.folder.FolderAndUsersCrossRef
-import com.passbolt.mobile.android.entity.group.FolderAndGroupsCrossRef
-import com.passbolt.mobile.android.mappers.PermissionsModelMapper
-import com.passbolt.mobile.android.ui.FolderModelWithAttributes
-import com.passbolt.mobile.android.ui.PermissionModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.entity.folder.FolderAndUsersCrossRef
+import net.svaroh.passly.entity.group.FolderAndGroupsCrossRef
+import net.svaroh.passly.mappers.PermissionsModelMapper
+import net.svaroh.passly.ui.FolderModelWithAttributes
+import net.svaroh.passly.ui.PermissionModel
 
 /**
  * Passbolt - Open source password manager for teams

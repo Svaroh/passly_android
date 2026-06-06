@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.defaultfilter.model
+package net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.passbolt.mobile.android.ui.DefaultFilterModel
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.ui.DefaultFilterModel
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 internal data class DefaultFilterUiModel(
     val filter: DefaultFilterModel,

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.linksapi
+package net.svaroh.passly.linksapi
 
 import okhttp3.OkHttpClient
 import retrofit2.Converter

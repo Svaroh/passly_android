@@ -21,32 +21,32 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.dto.request.SessionKeyDto
-import com.passbolt.mobile.android.dto.request.SessionKeysBundleDto
-import com.passbolt.mobile.android.dto.response.DecryptedMetadataSessionKeysBundleModel
-import com.passbolt.mobile.android.dto.response.MetadataKeyTypeDto
-import com.passbolt.mobile.android.dto.response.MetadataKeysResponseDto
-import com.passbolt.mobile.android.dto.response.MetadataKeysSettingsResponseDto
-import com.passbolt.mobile.android.dto.response.MetadataSessionKeyResponseDto
-import com.passbolt.mobile.android.dto.response.MetadataTypeDto
-import com.passbolt.mobile.android.dto.response.MetadataTypesSettingsResponseDto
-import com.passbolt.mobile.android.entity.metadata.MetadataKey
-import com.passbolt.mobile.android.entity.metadata.MetadataKeyWithPrivateKeys
-import com.passbolt.mobile.android.entity.metadata.MetadataPrivateKey
-import com.passbolt.mobile.android.ui.MergedSessionKeys
-import com.passbolt.mobile.android.ui.MetadataKeyModel
-import com.passbolt.mobile.android.ui.MetadataKeyTypeModel
-import com.passbolt.mobile.android.ui.MetadataKeysSettingsModel
-import com.passbolt.mobile.android.ui.MetadataPrivateKeyModel
-import com.passbolt.mobile.android.ui.MetadataSessionKeysBundleModel
-import com.passbolt.mobile.android.ui.MetadataTypeModel
-import com.passbolt.mobile.android.ui.MetadataTypesSettingsModel
-import com.passbolt.mobile.android.ui.ParsedMetadataKeyModel
-import com.passbolt.mobile.android.ui.ParsedMetadataPrivateKeyModel
-import com.passbolt.mobile.android.ui.SessionKeyIdentifier
-import com.passbolt.mobile.android.ui.SessionKeyModel
+import net.svaroh.passly.dto.request.SessionKeyDto
+import net.svaroh.passly.dto.request.SessionKeysBundleDto
+import net.svaroh.passly.dto.response.DecryptedMetadataSessionKeysBundleModel
+import net.svaroh.passly.dto.response.MetadataKeyTypeDto
+import net.svaroh.passly.dto.response.MetadataKeysResponseDto
+import net.svaroh.passly.dto.response.MetadataKeysSettingsResponseDto
+import net.svaroh.passly.dto.response.MetadataSessionKeyResponseDto
+import net.svaroh.passly.dto.response.MetadataTypeDto
+import net.svaroh.passly.dto.response.MetadataTypesSettingsResponseDto
+import net.svaroh.passly.entity.metadata.MetadataKey
+import net.svaroh.passly.entity.metadata.MetadataKeyWithPrivateKeys
+import net.svaroh.passly.entity.metadata.MetadataPrivateKey
+import net.svaroh.passly.ui.MergedSessionKeys
+import net.svaroh.passly.ui.MetadataKeyModel
+import net.svaroh.passly.ui.MetadataKeyTypeModel
+import net.svaroh.passly.ui.MetadataKeysSettingsModel
+import net.svaroh.passly.ui.MetadataPrivateKeyModel
+import net.svaroh.passly.ui.MetadataSessionKeysBundleModel
+import net.svaroh.passly.ui.MetadataTypeModel
+import net.svaroh.passly.ui.MetadataTypesSettingsModel
+import net.svaroh.passly.ui.ParsedMetadataKeyModel
+import net.svaroh.passly.ui.ParsedMetadataPrivateKeyModel
+import net.svaroh.passly.ui.SessionKeyIdentifier
+import net.svaroh.passly.ui.SessionKeyModel
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount
 
 import PassboltTheme
 import android.graphics.Bitmap
@@ -56,27 +56,27 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.TransferStatus
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.dialogs.CancelAccountTransferAlertDialog
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountIntent.CancelTransfer
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountIntent.ConfirmCancelTransfer
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountIntent.DismissCancelDialog
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountIntent.GoBack
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountScreenSideEffect.NavigateToResult
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountScreenSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.testtags.composetags.TransferAccount
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.TransferStatus
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.dialogs.CancelAccountTransferAlertDialog
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountIntent.CancelTransfer
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountIntent.ConfirmCancelTransfer
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountIntent.DismissCancelDialog
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountIntent.GoBack
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountScreenSideEffect.NavigateToResult
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountScreenSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.testtags.composetags.TransferAccount
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun TransferAccountScreen(

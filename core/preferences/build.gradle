@@ -17,7 +17,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.preferences"
+    namespace = "net.svaroh.passly.core.preferences"
 
     kotlin {
         jvmToolchain(17)

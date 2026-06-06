@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
