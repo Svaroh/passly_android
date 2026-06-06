@@ -74,7 +74,9 @@ class ClipboardAccess(
     private fun scheduleClearPrimaryClip(context: Context) {
         currentClearClipboardPendingIntent?.let { alarmManager.cancel(it) }
 
-        val intent = Intent(context, ClearClipboardReceiver::class.java)
+        val intent = Intent(ACTION_CLEAR_CLIPBOARD)
+        intent.setClassName(context.packageName, ClearClipboardReceiver::class.java.name)
+        intent.setPackage(context.packageName)
         currentClearClipboardPendingIntent =
             PendingIntent.getBroadcast(
                 context,
@@ -101,6 +103,7 @@ class ClipboardAccess(
     }
 
     private companion object {
+        private const val ACTION_CLEAR_CLIPBOARD = "net.svaroh.passly.action.CLEAR_CLIPBOARD"
         private const val CLIPBOARD_CLEAR_DELAY_MILLIS = 30_000L
     }
 }
