@@ -1,12 +1,3 @@
-package net.svaroh.passly.core.accounts.usecase
-
-import net.svaroh.passly.domain.biometrickey.BiometricKeyRepository
-import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
-import net.svaroh.passly.encryptedstorage.biometric.BiometricCrypto.Companion.BIOMETRIC_KEY_ALIAS
-import net.svaroh.passly.encryptedstorage.biometric.KeyStoreWrapper
-import javax.crypto.Cipher
-import javax.crypto.spec.IvParameterSpec
-
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -30,23 +21,50 @@ import javax.crypto.spec.IvParameterSpec
  * @since v1.0
  */
 
+package net.svaroh.passly.core.accounts.usecase
+
+import android.security.keystore.KeyPermanentlyInvalidatedException
+import net.svaroh.passly.domain.biometrickey.BiometricKeyRepository
+import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
+import net.svaroh.passly.encryptedstorage.biometric.BiometricCrypto.Companion.BIOMETRIC_KEY_ALIAS
+import net.svaroh.passly.encryptedstorage.biometric.KeyStoreWrapper
+import java.security.InvalidKeyException
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+
 class BiometricCipherImpl(
     private val keyStoreWrapper: KeyStoreWrapper,
     private val biometricKeyRepository: BiometricKeyRepository,
 ) : BiometricCipher {
     override fun getBiometricEncryptCipher(): Cipher =
+        try {
+            createBiometricEncryptCipher()
+        } catch (exception: InvalidKeyException) {
+            keyStoreWrapper.removeKey(BIOMETRIC_KEY_ALIAS)
+            createBiometricEncryptCipher()
+        }
+
+    private fun createBiometricEncryptCipher(): Cipher =
         newSymmetricCipher().apply {
             val biometricKey = keyStoreWrapper.getOrCreateSymmetricKey(BIOMETRIC_KEY_ALIAS)
             init(Cipher.ENCRYPT_MODE, biometricKey)
         }
 
     override fun getBiometricDecryptCipher(userId: String): Cipher =
-        newSymmetricCipher().apply {
-            val key =
-                keyStoreWrapper.getSymmetricKey(BIOMETRIC_KEY_ALIAS)
-                    ?: throw SecurityException("Unable to decrypt: No keys found")
-            val iv = biometricKeyRepository.getBiometricKey(userId).iv
-            init(Cipher.DECRYPT_MODE, key, IvParameterSpec(iv))
+        try {
+            newSymmetricCipher().apply {
+                val key =
+                    keyStoreWrapper.getSymmetricKey(BIOMETRIC_KEY_ALIAS)
+                        ?: throw SecurityException("Unable to decrypt: No keys found")
+                val iv = biometricKeyRepository.getBiometricKey(userId).iv
+                init(Cipher.DECRYPT_MODE, key, IvParameterSpec(iv))
+            }
+        } catch (exception: KeyPermanentlyInvalidatedException) {
+            keyStoreWrapper.removeKey(BIOMETRIC_KEY_ALIAS)
+            throw exception
+        } catch (exception: InvalidKeyException) {
+            keyStoreWrapper.removeKey(BIOMETRIC_KEY_ALIAS)
+            throw KeyPermanentlyInvalidatedException("Biometric key is incompatible", exception)
         }
 
     companion object {

@@ -24,11 +24,11 @@
 package net.svaroh.passly.core.accounts
 
 import android.util.Base64
+import kotlinx.serialization.json.Json
 import net.svaroh.passly.dto.response.AccountKitDto
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import net.svaroh.passly.ui.AccountSetupDataModel
-import kotlinx.serialization.json.Json
 import timber.log.Timber
 
 class AccountKitParser(
