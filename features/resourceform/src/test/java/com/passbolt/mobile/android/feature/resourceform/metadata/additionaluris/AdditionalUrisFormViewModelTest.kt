@@ -21,25 +21,25 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris
+package net.svaroh.passly.feature.resourceform.metadata.additionaluris
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.common.UuidProvider
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.AddAdditionalUri
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.AdditionalUriChanged
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.Initialize
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.MainUriChanged
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.RemoveAdditionalUri
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.NavigateUp
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.resourceform.metadata.additionaluris.AdditionalUrisLimitChecker.Companion.MAX_ADDITIONAL_URIS
-import com.passbolt.mobile.android.ui.AdditionalUrisUiModel
-import com.passbolt.mobile.android.ui.LeadingContentType
-import com.passbolt.mobile.android.ui.ResourceFormMode.Create
+import net.svaroh.passly.common.UuidProvider
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.AddAdditionalUri
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.AdditionalUriChanged
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.Initialize
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.MainUriChanged
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.RemoveAdditionalUri
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.NavigateUp
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisLimitChecker.Companion.MAX_ADDITIONAL_URIS
+import net.svaroh.passly.ui.AdditionalUrisUiModel
+import net.svaroh.passly.ui.LeadingContentType
+import net.svaroh.passly.ui.ResourceFormMode.Create
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

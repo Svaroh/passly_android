@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.scenarios.settings
+package net.svaroh.passly.scenarios.settings
 
 import android.app.Instrumentation.ActivityResult
 import android.content.Intent
@@ -47,25 +47,25 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import com.passbolt.mobile.android.core.idlingresource.ResourcesFullRefreshIdlingResource
-import com.passbolt.mobile.android.core.idlingresource.SignInIdlingResource
-import com.passbolt.mobile.android.core.idlingresource.SignOutIdlingResource
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.feature.authentication.AuthenticationMainActivity
-import com.passbolt.mobile.android.helpers.getString
-import com.passbolt.mobile.android.helpers.signIn
-import com.passbolt.mobile.android.instrumentationTestsModule
-import com.passbolt.mobile.android.intents.ManagedAccountIntentCreator
-import com.passbolt.mobile.android.rules.IdlingResourceRule
-import com.passbolt.mobile.android.rules.lazyActivitySetupScenarioRule
-import com.passbolt.mobile.android.scenarios.setup.autofill.autofillConfiguredModuleTests
-import com.passbolt.mobile.android.scenarios.setup.configurebiometric.biometricSetupUnavailableModuleTests
-import com.passbolt.mobile.android.testtags.composetags.BackNavigation
-import com.passbolt.mobile.android.testtags.composetags.BottomNav
-import com.passbolt.mobile.android.testtags.composetags.OpenableSetting
-import com.passbolt.mobile.android.testtags.composetags.SwitchWithDescription
-import com.passbolt.mobile.android.testtags.composetags.SwitchableSetting
+import net.svaroh.passly.core.idlingresource.ResourcesFullRefreshIdlingResource
+import net.svaroh.passly.core.idlingresource.SignInIdlingResource
+import net.svaroh.passly.core.idlingresource.SignOutIdlingResource
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.feature.authentication.AuthenticationMainActivity
+import net.svaroh.passly.helpers.getString
+import net.svaroh.passly.helpers.signIn
+import net.svaroh.passly.instrumentationTestsModule
+import net.svaroh.passly.intents.ManagedAccountIntentCreator
+import net.svaroh.passly.rules.IdlingResourceRule
+import net.svaroh.passly.rules.lazyActivitySetupScenarioRule
+import net.svaroh.passly.scenarios.setup.autofill.autofillConfiguredModuleTests
+import net.svaroh.passly.scenarios.setup.configurebiometric.biometricSetupUnavailableModuleTests
+import net.svaroh.passly.testtags.composetags.BackNavigation
+import net.svaroh.passly.testtags.composetags.BottomNav
+import net.svaroh.passly.testtags.composetags.OpenableSetting
+import net.svaroh.passly.testtags.composetags.SwitchWithDescription
+import net.svaroh.passly.testtags.composetags.SwitchableSetting
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.junit.Before
@@ -74,7 +74,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.component.inject
 import org.koin.test.KoinTest
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest

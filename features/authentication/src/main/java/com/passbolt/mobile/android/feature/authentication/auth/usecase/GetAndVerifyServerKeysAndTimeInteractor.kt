@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.accountdata.GetAccountDataUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.accountdata.IsServerFingerprintCorrectUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.accountdata.GetAccountDataUseCase
+import net.svaroh.passly.core.accounts.usecase.accountdata.IsServerFingerprintCorrectUseCase
 import timber.log.Timber
 import kotlin.time.measureTimedValue
 

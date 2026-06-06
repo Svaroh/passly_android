@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses
+package net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses.LicensesIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses.LicensesSideEffect.NavigateToLicenseUrl
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses.LicensesSideEffect.NavigateUp
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses.reader.LicensesReader
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.LicensesIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.LicensesSideEffect.NavigateToLicenseUrl
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.LicensesSideEffect.NavigateUp
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.reader.LicensesReader
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 

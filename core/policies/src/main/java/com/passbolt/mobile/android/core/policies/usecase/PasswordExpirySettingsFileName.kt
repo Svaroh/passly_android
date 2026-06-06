@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.policies.usecase
+package net.svaroh.passly.core.policies.usecase
 
 class PasswordExpirySettingsFileName(
     userId: String,

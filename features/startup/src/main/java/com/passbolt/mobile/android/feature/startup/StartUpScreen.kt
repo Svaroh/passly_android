@@ -1,16 +1,16 @@
-package com.passbolt.mobile.android.feature.startup
+package net.svaroh.passly.feature.startup
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.AccountSetupDataModel
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.AuthenticationStartUp
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.SetupWithPredefinedAccountData
-import com.passbolt.mobile.android.feature.startup.StartUpSideEffect.NavigateToSetup
-import com.passbolt.mobile.android.feature.startup.StartUpSideEffect.NavigateToSignIn
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.AccountSetupDataModel
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.AuthenticationStartUp
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.SetupWithPredefinedAccountData
+import net.svaroh.passly.feature.startup.StartUpSideEffect.NavigateToSetup
+import net.svaroh.passly.feature.startup.StartUpSideEffect.NavigateToSignIn
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf

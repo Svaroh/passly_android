@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses
+package net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses
 
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses.reader.LicensesAssetsReader
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.licenses.reader.LicensesReader
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.reader.LicensesAssetsReader
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.reader.LicensesReader
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf

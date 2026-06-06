@@ -21,29 +21,29 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.helpmenu
+package net.svaroh.passly.helpmenu
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.logger.FileLoggingTree
-import com.passbolt.mobile.android.core.preferences.usecase.GetGlobalPreferencesUseCase
-import com.passbolt.mobile.android.core.preferences.usecase.UpdateGlobalPreferencesUseCase
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.AccessLogs
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.AccountKitRead
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.Close
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.DismissQrCodesDialog
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.ImportAccountKit
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.ImportProfileManually
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.Initialize
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.SeeWhyQrCodesExplanation
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.ToggleEnableLogs
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetIntent.VisitHelpWebsite
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetSideEffect.Dismiss
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetSideEffect.NavigateToAccessLogs
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetSideEffect.NavigateToImportAccountKit
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetSideEffect.NavigateToImportProfileManually
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetSideEffect.NotifyAccountKitRead
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheetSideEffect.OpenHelpWebsite
-import com.passbolt.mobile.android.ui.HelpMenuModel
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.logger.FileLoggingTree
+import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.core.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.AccessLogs
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.AccountKitRead
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.Close
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.DismissQrCodesDialog
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.ImportAccountKit
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.ImportProfileManually
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.Initialize
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.SeeWhyQrCodesExplanation
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.ToggleEnableLogs
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.VisitHelpWebsite
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetSideEffect.Dismiss
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetSideEffect.NavigateToAccessLogs
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetSideEffect.NavigateToImportAccountKit
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetSideEffect.NavigateToImportProfileManually
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetSideEffect.NotifyAccountKitRead
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheetSideEffect.OpenHelpWebsite
+import net.svaroh.passly.ui.HelpMenuModel
 import timber.log.Timber
 
 class HelpMenuBottomSheetViewModel(

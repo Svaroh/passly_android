@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.navigation.deeplink
+package net.svaroh.passly.core.navigation.deeplink
 
 class BrowserFirstLoginDeepLinkStore {
     private var pendingDeepLink: String? = null

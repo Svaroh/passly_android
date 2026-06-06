@@ -20,9 +20,9 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.ui.sharedwith
+package net.svaroh.passly.core.ui.sharedwith
 
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionModelUi
 
 data class SharedWithSectionModel(
     val groupPermissions: List<PermissionModelUi.GroupPermissionModel>,

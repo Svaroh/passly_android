@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.mfa.duo
+package net.svaroh.passly.feature.authentication.mfa.duo
 
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetDuoPromptUseCase
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.VerifyDuoCallbackUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.GetDuoPromptUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.VerifyDuoCallbackUseCase
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModel

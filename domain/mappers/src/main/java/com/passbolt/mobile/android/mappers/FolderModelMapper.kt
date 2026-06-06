@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.dto.response.FolderResponseDto
-import com.passbolt.mobile.android.entity.folder.Folder
-import com.passbolt.mobile.android.entity.folder.FolderUpdateState
-import com.passbolt.mobile.android.entity.folder.FolderWithChildItemsCountAndPath
-import com.passbolt.mobile.android.ui.FolderModel
-import com.passbolt.mobile.android.ui.FolderModelWithAttributes
-import com.passbolt.mobile.android.ui.FolderWithCountAndPath
+import net.svaroh.passly.dto.response.FolderResponseDto
+import net.svaroh.passly.entity.folder.Folder
+import net.svaroh.passly.entity.folder.FolderUpdateState
+import net.svaroh.passly.entity.folder.FolderWithChildItemsCountAndPath
+import net.svaroh.passly.ui.FolderModel
+import net.svaroh.passly.ui.FolderModelWithAttributes
+import net.svaroh.passly.ui.FolderWithCountAndPath
 
 /**
  * Passbolt - Open source password manager for teams

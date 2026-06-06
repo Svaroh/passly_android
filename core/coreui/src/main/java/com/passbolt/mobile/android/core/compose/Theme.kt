@@ -4,7 +4,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.passbolt.mobile.android.core.compose.AppTypography
+import net.svaroh.passly.core.compose.AppTypography
 
 @Suppress("MagicNumber")
 private val LightColors =

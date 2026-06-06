@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.totp
+package net.svaroh.passly.feature.authentication.mfa.totp
 
 import PassboltTheme
 import androidx.activity.compose.BackHandler
@@ -37,44 +37,44 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.clipboard.ClipboardAccess
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.AuthenticationSignIn
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.Start
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaDialogState
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaResult
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaResult.OtherProvider
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaResult.Succeeded
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpIntent.ChooseOtherProvider
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpIntent.Close
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpIntent.PasteFromClipboard
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpIntent.ToggleRememberMe
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpIntent.ValidateOtp
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.ClearOtp
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.CloseAndNavigateToStartup
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.NavigateToLogin
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.NotifyChooseOtherProvider
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.NotifyLoginSucceeded
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.NotifyVerificationSucceeded
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.PasteOtp
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpState.OtpTextColor.DEFAULT
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpState.OtpTextColor.ERROR
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.compose.DigitsOnlySanitizer
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.compose.PinInput
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.compose.PinInputState
-import com.passbolt.mobile.android.feature.authentication.mfa.totp.compose.rememberPinInputState
+import net.svaroh.passly.core.clipboard.ClipboardAccess
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.AuthenticationSignIn
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.Start
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
+import net.svaroh.passly.feature.authentication.mfa.MfaDialogState
+import net.svaroh.passly.feature.authentication.mfa.MfaResult
+import net.svaroh.passly.feature.authentication.mfa.MfaResult.OtherProvider
+import net.svaroh.passly.feature.authentication.mfa.MfaResult.Succeeded
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.ChooseOtherProvider
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.Close
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.PasteFromClipboard
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.ToggleRememberMe
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.ValidateOtp
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.ClearOtp
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.CloseAndNavigateToStartup
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.NavigateToLogin
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.NotifyChooseOtherProvider
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.NotifyLoginSucceeded
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.NotifyVerificationSucceeded
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.PasteOtp
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpState.OtpTextColor.DEFAULT
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpState.OtpTextColor.ERROR
+import net.svaroh.passly.feature.authentication.mfa.totp.compose.DigitsOnlySanitizer
+import net.svaroh.passly.feature.authentication.mfa.totp.compose.PinInput
+import net.svaroh.passly.feature.authentication.mfa.totp.compose.PinInputState
+import net.svaroh.passly.feature.authentication.mfa.totp.compose.rememberPinInputState
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 private const val OTP_LENGTH = 6
 

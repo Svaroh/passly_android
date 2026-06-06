@@ -1,15 +1,15 @@
-package com.passbolt.mobile.android.createresourcemenu
+package net.svaroh.passly.createresourcemenu
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuIntent.Close
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuIntent.CreateFolder
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuIntent.CreateNote
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuIntent.CreatePassword
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuIntent.CreateTotp
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuIntent.Initialize
-import com.passbolt.mobile.android.createresourcemenu.usecase.CreateCreateResourceMenuModelUseCase
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.Close
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.CreateFolder
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.CreateNote
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.CreatePassword
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.CreateTotp
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.Initialize
+import net.svaroh.passly.createresourcemenu.usecase.CreateCreateResourceMenuModelUseCase
+import net.svaroh.passly.ui.HomeDisplayViewModel
 import kotlinx.coroutines.launch
 
 /**

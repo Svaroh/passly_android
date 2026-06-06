@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common.lifecycleawarelazy
+package net.svaroh.passly.common.lifecycleawarelazy
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.importprofile
+package net.svaroh.passly.feature.setup.importprofile
 
 import PassboltTheme
 import androidx.compose.foundation.layout.Column
@@ -38,25 +38,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.Summary
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.text.TextInput
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Default
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Error
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileIntent.ChangeAccountUrl
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileIntent.ChangePrivateKey
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileIntent.ChangeUserId
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileIntent.GoBack
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileIntent.Import
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileSideEffect.NavigateToSummary
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.Summary
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.text.TextInput
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Default
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Error
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileIntent.ChangeAccountUrl
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileIntent.ChangePrivateKey
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileIntent.ChangeUserId
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileIntent.GoBack
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileIntent.Import
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileSideEffect.NavigateBack
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileSideEffect.NavigateToSummary
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun ImportProfileScreen(

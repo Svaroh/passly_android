@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.core.users
+package net.svaroh.passly.core.users
 
-import com.passbolt.mobile.android.core.users.profile.userProfileModule
-import com.passbolt.mobile.android.core.users.usecase.FetchUsersUseCase
-import com.passbolt.mobile.android.core.users.usecase.RebuildUsersTablesUseCase
-import com.passbolt.mobile.android.core.users.usecase.db.usersDbModule
-import com.passbolt.mobile.android.core.users.user.FetchCurrentUserUseCase
+import net.svaroh.passly.core.users.profile.userProfileModule
+import net.svaroh.passly.core.users.usecase.FetchUsersUseCase
+import net.svaroh.passly.core.users.usecase.RebuildUsersTablesUseCase
+import net.svaroh.passly.core.users.usecase.db.usersDbModule
+import net.svaroh.passly.core.users.user.FetchCurrentUserUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.navigation.compose.keys
+package net.svaroh.passly.core.navigation.compose.keys
 
 import androidx.navigation3.runtime.NavKey
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.PermissionsItem
-import com.passbolt.mobile.android.ui.PermissionsMode
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionsItem
+import net.svaroh.passly.ui.PermissionsMode
 import kotlinx.serialization.Serializable
 
 sealed interface PermissionsNavigationKey : NavKey {

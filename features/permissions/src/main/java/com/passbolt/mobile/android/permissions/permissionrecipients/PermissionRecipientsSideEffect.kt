@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissionrecipients
+package net.svaroh.passly.permissions.permissionrecipients
 
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionModelUi
 
 sealed interface PermissionRecipientsSideEffect {
     data object NavigateBack : PermissionRecipientsSideEffect

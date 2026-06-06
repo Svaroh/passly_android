@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
-import com.passbolt.mobile.android.common.search.Searchable
+import net.svaroh.passly.common.search.Searchable
 
 data class SelectableResourceModelWrapper(
     val resourceModel: ResourceModel,

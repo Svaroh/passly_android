@@ -21,34 +21,34 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.folderdetails
+package net.svaroh.passly.folderdetails
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.InProgress
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
-import com.passbolt.mobile.android.core.commonfolders.usecase.db.GetLocalFolderLocationUseCase
-import com.passbolt.mobile.android.core.commonfolders.usecase.db.GetLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.rbac.usecase.GetRbacRulesUseCase
-import com.passbolt.mobile.android.folderdetails.FolderDetailsIntent.GoBack
-import com.passbolt.mobile.android.folderdetails.FolderDetailsIntent.GoToLocationDetails
-import com.passbolt.mobile.android.folderdetails.FolderDetailsIntent.GoToPermissionDetails
-import com.passbolt.mobile.android.folderdetails.FolderDetailsIntent.SharedWithClick
-import com.passbolt.mobile.android.folderdetails.FolderDetailsSideEffect.NavigateToFolderLocation
-import com.passbolt.mobile.android.folderdetails.FolderDetailsSideEffect.NavigateToFolderPermissions
-import com.passbolt.mobile.android.folderdetails.FolderDetailsSideEffect.NavigateToHome
-import com.passbolt.mobile.android.folderdetails.FolderDetailsSideEffect.NavigateUp
-import com.passbolt.mobile.android.folderdetails.FolderDetailsSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.folderdetails.FolderDetailsSideEffect.ShowToast
-import com.passbolt.mobile.android.folderdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
-import com.passbolt.mobile.android.folderdetails.ToastType.CONTENT_NOT_AVAILABLE
-import com.passbolt.mobile.android.ui.PermissionsMode
-import com.passbolt.mobile.android.ui.RbacRuleModel.ALLOW
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderLocationUseCase
+import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderPermissionsUseCase
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.folderdetails.FolderDetailsIntent.GoBack
+import net.svaroh.passly.folderdetails.FolderDetailsIntent.GoToLocationDetails
+import net.svaroh.passly.folderdetails.FolderDetailsIntent.GoToPermissionDetails
+import net.svaroh.passly.folderdetails.FolderDetailsIntent.SharedWithClick
+import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.NavigateToFolderLocation
+import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.NavigateToFolderPermissions
+import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.NavigateToHome
+import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.NavigateUp
+import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.ShowToast
+import net.svaroh.passly.folderdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
+import net.svaroh.passly.folderdetails.ToastType.CONTENT_NOT_AVAILABLE
+import net.svaroh.passly.ui.PermissionsMode
+import net.svaroh.passly.ui.RbacRuleModel.ALLOW
 import kotlinx.coroutines.launch
 import timber.log.Timber
 

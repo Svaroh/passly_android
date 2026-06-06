@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.folderdetails
+package net.svaroh.passly.folderdetails
 
 import PassboltTheme
 import android.widget.Toast
@@ -52,35 +52,35 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.common.extension.toSingleLine
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationDetails
-import com.passbolt.mobile.android.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationItem
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
-import com.passbolt.mobile.android.core.ui.header.ItemWithHeader
-import com.passbolt.mobile.android.core.ui.pulltorefresh.PullToRefreshIndicatorBox
-import com.passbolt.mobile.android.core.ui.sharedwith.SharedWithSection
-import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
-import com.passbolt.mobile.android.core.ui.text.SeparatedText
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.folderdetails.FolderDetailsIntent.GoBack
-import com.passbolt.mobile.android.folderdetails.FolderDetailsIntent.GoToLocationDetails
-import com.passbolt.mobile.android.folderdetails.FolderDetailsIntent.SharedWithClick
-import com.passbolt.mobile.android.folderdetails.FolderDetailsSideEffect.NavigateToFolderLocation
-import com.passbolt.mobile.android.folderdetails.FolderDetailsSideEffect.NavigateToFolderPermissions
-import com.passbolt.mobile.android.folderdetails.FolderDetailsSideEffect.NavigateToHome
-import com.passbolt.mobile.android.folderdetails.FolderDetailsSideEffect.NavigateUp
-import com.passbolt.mobile.android.folderdetails.FolderDetailsSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.folderdetails.FolderDetailsSideEffect.ShowToast
-import com.passbolt.mobile.android.ui.PermissionsItem
+import net.svaroh.passly.common.extension.toSingleLine
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationDetails
+import net.svaroh.passly.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationItem
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
+import net.svaroh.passly.core.ui.header.ItemWithHeader
+import net.svaroh.passly.core.ui.pulltorefresh.PullToRefreshIndicatorBox
+import net.svaroh.passly.core.ui.sharedwith.SharedWithSection
+import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
+import net.svaroh.passly.core.ui.text.SeparatedText
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.folderdetails.FolderDetailsIntent.GoBack
+import net.svaroh.passly.folderdetails.FolderDetailsIntent.GoToLocationDetails
+import net.svaroh.passly.folderdetails.FolderDetailsIntent.SharedWithClick
+import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.NavigateToFolderLocation
+import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.NavigateToFolderPermissions
+import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.NavigateToHome
+import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.NavigateUp
+import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.ShowToast
+import net.svaroh.passly.ui.PermissionsItem
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun FolderDetailsScreen(

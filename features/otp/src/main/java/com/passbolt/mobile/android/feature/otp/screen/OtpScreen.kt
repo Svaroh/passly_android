@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.otp.screen
+package net.svaroh.passly.feature.otp.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.PaddingValues
@@ -46,62 +46,62 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.clipboard.ClipboardAccess
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.fulldatarefresh.service.DataRefreshService
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
-import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
-import com.passbolt.mobile.android.core.resources.resourceicon.ResourceIconProvider
-import com.passbolt.mobile.android.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
-import com.passbolt.mobile.android.core.ui.empty.EmptyResourceListState
-import com.passbolt.mobile.android.core.ui.fab.AddFloatingActionButton
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.core.ui.scaffold.HomeScaffold
-import com.passbolt.mobile.android.core.ui.search.SearchInput
-import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
-import com.passbolt.mobile.android.createresourcemenu.CreateResourceMenuBottomSheet
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountBottomSheet
-import com.passbolt.mobile.android.feature.metadatakeytrust.NewMetadataKeyTrustDialog
-import com.passbolt.mobile.android.feature.metadatakeytrust.TrustedMetadataKeyDeletedDialog
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseCreateResourceMenu
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseDeleteConfirmationDialog
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseOtpMoreMenu
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseSwitchAccount
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseTrustNewKeyDialog
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseTrustedKeyDeletedDialog
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.ConfirmDeleteTotp
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CopyOtp
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CreateNote
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CreatePassword
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CreateTotp
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.DeleteOtp
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.EditOtp
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.OpenCreateResourceMenu
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.OpenOtpMoreMenu
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.RevealOtp
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.Search
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.SearchEndIconAction
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.TrustMetadataKeyDeletion
-import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.TrustNewMetadataKey
-import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.CopyToClipboard
-import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.InitiateDataRefresh
-import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToCreateResourceForm
-import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToCreateTotp
-import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToEditResourceForm
-import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.ShowSuccessSnackbar
-import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.ShowToast
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuBottomSheet
-import com.passbolt.mobile.android.testtags.composetags.Otp
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.core.clipboard.ClipboardAccess
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.fulldatarefresh.service.DataRefreshService
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
+import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
+import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
+import net.svaroh.passly.core.ui.empty.EmptyResourceListState
+import net.svaroh.passly.core.ui.fab.AddFloatingActionButton
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.scaffold.HomeScaffold
+import net.svaroh.passly.core.ui.search.SearchInput
+import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
+import net.svaroh.passly.createresourcemenu.CreateResourceMenuBottomSheet
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountBottomSheet
+import net.svaroh.passly.feature.metadatakeytrust.NewMetadataKeyTrustDialog
+import net.svaroh.passly.feature.metadatakeytrust.TrustedMetadataKeyDeletedDialog
+import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseCreateResourceMenu
+import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseDeleteConfirmationDialog
+import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseOtpMoreMenu
+import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseSwitchAccount
+import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseTrustNewKeyDialog
+import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseTrustedKeyDeletedDialog
+import net.svaroh.passly.feature.otp.screen.OtpIntent.ConfirmDeleteTotp
+import net.svaroh.passly.feature.otp.screen.OtpIntent.CopyOtp
+import net.svaroh.passly.feature.otp.screen.OtpIntent.CreateNote
+import net.svaroh.passly.feature.otp.screen.OtpIntent.CreatePassword
+import net.svaroh.passly.feature.otp.screen.OtpIntent.CreateTotp
+import net.svaroh.passly.feature.otp.screen.OtpIntent.DeleteOtp
+import net.svaroh.passly.feature.otp.screen.OtpIntent.EditOtp
+import net.svaroh.passly.feature.otp.screen.OtpIntent.OpenCreateResourceMenu
+import net.svaroh.passly.feature.otp.screen.OtpIntent.OpenOtpMoreMenu
+import net.svaroh.passly.feature.otp.screen.OtpIntent.RevealOtp
+import net.svaroh.passly.feature.otp.screen.OtpIntent.Search
+import net.svaroh.passly.feature.otp.screen.OtpIntent.SearchEndIconAction
+import net.svaroh.passly.feature.otp.screen.OtpIntent.TrustMetadataKeyDeletion
+import net.svaroh.passly.feature.otp.screen.OtpIntent.TrustNewMetadataKey
+import net.svaroh.passly.feature.otp.screen.OtpSideEffect.CopyToClipboard
+import net.svaroh.passly.feature.otp.screen.OtpSideEffect.InitiateDataRefresh
+import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToCreateResourceForm
+import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToCreateTotp
+import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToEditResourceForm
+import net.svaroh.passly.feature.otp.screen.OtpSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.otp.screen.OtpSideEffect.ShowSuccessSnackbar
+import net.svaroh.passly.feature.otp.screen.OtpSideEffect.ShowToast
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuBottomSheet
+import net.svaroh.passly.testtags.composetags.Otp
+import net.svaroh.passly.ui.ResourceFormMode
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun OtpScreen(

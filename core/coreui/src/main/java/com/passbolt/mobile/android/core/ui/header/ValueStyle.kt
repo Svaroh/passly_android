@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.header
+package net.svaroh.passly.core.ui.header
 
 sealed class ValueStyle {
     data object Plain : ValueStyle()

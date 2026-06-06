@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.text
+package net.svaroh.passly.core.ui.text
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,11 +18,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.extensions.optionalTestTag
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Default
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Error
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.extensions.optionalTestTag
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Default
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Error
 
 /**
  * Passbolt - Open source password manager for teams

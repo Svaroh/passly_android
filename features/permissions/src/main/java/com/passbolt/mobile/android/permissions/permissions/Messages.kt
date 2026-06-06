@@ -21,26 +21,26 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissions
+package net.svaroh.passly.permissions.permissions
 
 import android.content.Context
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.CANNOT_SHARE_RESOURCE
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.CANNOT_UPDATE_TOTP_WITH_CURRENT_CONFIG
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.DATA_REFRESH_ERROR
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.ENCRYPTION_ERROR
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.FAILED_TO_TRUST_METADATA_KEY
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.FAILED_TO_VERIFY_METADATA_KEY
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.GENERIC_ERROR
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.JSON_RESOURCE_SCHEMA_ERROR
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.JSON_SECRET_SCHEMA_ERROR
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.ONE_OWNER_REQUIRED
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.SECRET_DECRYPT_FAILURE
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.SECRET_ENCRYPT_FAILURE
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.SECRET_FETCH_FAILURE
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.SHARE_FAILED
-import com.passbolt.mobile.android.permissions.permissions.SnackbarErrorType.SHARE_SIMULATION_FAILED
-import com.passbolt.mobile.android.permissions.permissions.SnackbarSuccessType.METADATA_KEY_IS_TRUSTED
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.CANNOT_SHARE_RESOURCE
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.CANNOT_UPDATE_TOTP_WITH_CURRENT_CONFIG
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.DATA_REFRESH_ERROR
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.ENCRYPTION_ERROR
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.FAILED_TO_TRUST_METADATA_KEY
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.FAILED_TO_VERIFY_METADATA_KEY
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.GENERIC_ERROR
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.JSON_RESOURCE_SCHEMA_ERROR
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.JSON_SECRET_SCHEMA_ERROR
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.ONE_OWNER_REQUIRED
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.SECRET_DECRYPT_FAILURE
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.SECRET_ENCRYPT_FAILURE
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.SECRET_FETCH_FAILURE
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.SHARE_FAILED
+import net.svaroh.passly.permissions.permissions.SnackbarErrorType.SHARE_SIMULATION_FAILED
+import net.svaroh.passly.permissions.permissions.SnackbarSuccessType.METADATA_KEY_IS_TRUSTED
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Suppress("CyclomaticComplexMethod")
 internal fun getErrorMessage(

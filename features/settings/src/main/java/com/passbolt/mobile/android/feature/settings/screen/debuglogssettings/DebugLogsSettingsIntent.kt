@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.debuglogssettings
+package net.svaroh.passly.feature.settings.screen.debuglogssettings
 
 sealed interface DebugLogsSettingsIntent {
     object GoBack : DebugLogsSettingsIntent

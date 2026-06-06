@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.duo
+package net.svaroh.passly.feature.authentication.mfa.duo
 
 import android.content.Context
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoSideEffect.SnackbarErrorType
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoSideEffect.SnackbarErrorType.GENERIC
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoSideEffect.SnackbarErrorType.SESSION_EXPIRED
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.SnackbarErrorType
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.SnackbarErrorType.GENERIC
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.SnackbarErrorType.SESSION_EXPIRED
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getSnackbarMessage(
     context: Context,

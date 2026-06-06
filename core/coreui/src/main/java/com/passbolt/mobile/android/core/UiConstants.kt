@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core
+package net.svaroh.passly.core
 
 /**
  * Passbolt - Open source password manager for teams

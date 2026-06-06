@@ -1,17 +1,17 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess
+package net.svaroh.passly.feature.otp.scanotp.scanotpsuccess
 
 import android.content.Context
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.CANNOT_CREATE_WITH_CURRENT_CONFIG
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.ENCRYPTION_ERROR
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.FAILED_TO_TRUST_METADATA_KEY
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.FAILED_TO_VERIFY_METADATA_KEY
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.GENERIC_ERROR
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.JSON_RESOURCE_SCHEMA_VALIDATION_ERROR
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.JSON_SECRET_SCHEMA_VALIDATION_ERROR
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowSuccessSnackbar
-import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.SuccessSnackbarType.NEW_METADATA_KEY_IS_TRUSTED
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.CANNOT_CREATE_WITH_CURRENT_CONFIG
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.ENCRYPTION_ERROR
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.FAILED_TO_TRUST_METADATA_KEY
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.FAILED_TO_VERIFY_METADATA_KEY
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.GENERIC_ERROR
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.JSON_RESOURCE_SCHEMA_VALIDATION_ERROR
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.JSON_SECRET_SCHEMA_VALIDATION_ERROR
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowSuccessSnackbar
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.SuccessSnackbarType.NEW_METADATA_KEY_IS_TRUSTED
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getErrorSnackbarMessage(
     context: Context,

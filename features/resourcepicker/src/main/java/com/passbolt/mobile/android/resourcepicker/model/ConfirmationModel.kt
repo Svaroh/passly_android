@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.model
+package net.svaroh.passly.resourcepicker.model
 
 import androidx.annotation.StringRes
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 sealed class ConfirmationModel(
     @StringRes val titleResId: Int,

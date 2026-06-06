@@ -1,25 +1,25 @@
-package com.passbolt.mobile.android.metadata.interactor
+package net.svaroh.passly.metadata.interactor
 
 import com.google.gson.Gson
-import com.passbolt.mobile.android.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.privatekey.GetSelectedUserPrivateKeyUseCase
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.networking.MfaTypeProvider
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
-import com.passbolt.mobile.android.core.users.usecase.db.GetLocalUserUseCase
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpError
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
-import com.passbolt.mobile.android.metadata.usecase.DeleteTrustedMetadataKeyUseCase
-import com.passbolt.mobile.android.metadata.usecase.SaveTrustedMetadataKeyUseCase
-import com.passbolt.mobile.android.metadata.usecase.UpdateMetadataPrivateKeyUseCase
-import com.passbolt.mobile.android.ui.DecryptedMetadataPrivateKeyJsonModel
-import com.passbolt.mobile.android.ui.MetadataKeyModification
-import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
-import com.passbolt.mobile.android.ui.ParsedMetadataPrivateKeyModel
+import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
+import net.svaroh.passly.core.accounts.usecase.privatekey.GetSelectedUserPrivateKeyUseCase
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.networking.MfaTypeProvider
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
+import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
+import net.svaroh.passly.core.users.usecase.db.GetLocalUserUseCase
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.OpenPgpError
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.metadata.usecase.DeleteTrustedMetadataKeyUseCase
+import net.svaroh.passly.metadata.usecase.SaveTrustedMetadataKeyUseCase
+import net.svaroh.passly.metadata.usecase.UpdateMetadataPrivateKeyUseCase
+import net.svaroh.passly.ui.DecryptedMetadataPrivateKeyJsonModel
+import net.svaroh.passly.ui.MetadataKeyModification
+import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
+import net.svaroh.passly.ui.ParsedMetadataPrivateKeyModel
 import timber.log.Timber
 
 /**

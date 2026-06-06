@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin
 
-import com.passbolt.mobile.android.dto.response.qrcode.BrowserFirstLoginPageDto
+import net.svaroh.passly.dto.response.qrcode.BrowserFirstLoginPageDto
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.net.URI

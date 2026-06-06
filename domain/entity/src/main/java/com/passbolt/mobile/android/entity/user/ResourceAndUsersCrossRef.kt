@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.entity.user
+package net.svaroh.passly.entity.user
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import com.passbolt.mobile.android.entity.resource.Permission
-import com.passbolt.mobile.android.entity.resource.Resource
+import net.svaroh.passly.entity.resource.Permission
+import net.svaroh.passly.entity.resource.Resource
 
 @Entity(
     primaryKeys = ["resourceId", "userId"],

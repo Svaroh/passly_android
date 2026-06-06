@@ -21,20 +21,20 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.gson
+package net.svaroh.passly.serializers.gson
 
-import com.passbolt.mobile.android.core.accounts.usecase.privatekey.GetSelectedUserPrivateKeyUseCase
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
-import com.passbolt.mobile.android.dto.response.MetadataKeyTypeDto.PERSONAL
-import com.passbolt.mobile.android.dto.response.MetadataKeyTypeDto.SHARED
-import com.passbolt.mobile.android.dto.response.ResourceResponseV5Dto
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
-import com.passbolt.mobile.android.metadata.sessionkeys.ForeignModel.RESOURCE
-import com.passbolt.mobile.android.metadata.sessionkeys.SessionKeysMemoryCache
-import com.passbolt.mobile.android.ui.ParsedMetadataKeyModel
+import net.svaroh.passly.core.accounts.usecase.privatekey.GetSelectedUserPrivateKeyUseCase
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
+import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
+import net.svaroh.passly.dto.response.MetadataKeyTypeDto.PERSONAL
+import net.svaroh.passly.dto.response.MetadataKeyTypeDto.SHARED
+import net.svaroh.passly.dto.response.ResourceResponseV5Dto
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.metadata.sessionkeys.ForeignModel.RESOURCE
+import net.svaroh.passly.metadata.sessionkeys.SessionKeysMemoryCache
+import net.svaroh.passly.ui.ParsedMetadataKeyModel
 import com.proton.gopenpgp.crypto.Crypto
 import com.proton.gopenpgp.crypto.Key
 import kotlinx.coroutines.withContext

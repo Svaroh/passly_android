@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.passboltapi.groups
+package net.svaroh.passly.passboltapi.groups
 
-import com.passbolt.mobile.android.dto.response.GroupsResponseDto
+import net.svaroh.passly.dto.response.GroupsResponseDto
 
 /**
  * Passbolt - Open source password manager for teams

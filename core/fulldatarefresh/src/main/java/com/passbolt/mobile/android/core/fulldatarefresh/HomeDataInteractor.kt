@@ -21,22 +21,22 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.fulldatarefresh
+package net.svaroh.passly.core.fulldatarefresh
 
-import com.passbolt.mobile.android.core.commonfolders.usecase.FoldersInteractor
-import com.passbolt.mobile.android.core.commongroups.usecase.GroupsInteractor
-import com.passbolt.mobile.android.core.idlingresource.ResourcesFullRefreshIdlingResource
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.mvp.authentication.plus
-import com.passbolt.mobile.android.core.resources.usecase.ResourceInteractor
-import com.passbolt.mobile.android.core.resourcetypes.ResourceTypesInteractor
-import com.passbolt.mobile.android.core.users.UsersInteractor
-import com.passbolt.mobile.android.database.snapshot.ResourcesSnapshot
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
-import com.passbolt.mobile.android.metadata.interactor.MetadataKeysInteractor
-import com.passbolt.mobile.android.metadata.interactor.MetadataPrivateKeysInteractor
-import com.passbolt.mobile.android.metadata.interactor.MetadataSessionKeysInteractor
+import net.svaroh.passly.core.commonfolders.usecase.FoldersInteractor
+import net.svaroh.passly.core.commongroups.usecase.GroupsInteractor
+import net.svaroh.passly.core.idlingresource.ResourcesFullRefreshIdlingResource
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.mvp.authentication.plus
+import net.svaroh.passly.core.resources.usecase.ResourceInteractor
+import net.svaroh.passly.core.resourcetypes.ResourceTypesInteractor
+import net.svaroh.passly.core.users.UsersInteractor
+import net.svaroh.passly.database.snapshot.ResourcesSnapshot
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
+import net.svaroh.passly.metadata.interactor.MetadataKeysInteractor
+import net.svaroh.passly.metadata.interactor.MetadataPrivateKeysInteractor
+import net.svaroh.passly.metadata.interactor.MetadataSessionKeysInteractor
 import timber.log.Timber
 
 /**

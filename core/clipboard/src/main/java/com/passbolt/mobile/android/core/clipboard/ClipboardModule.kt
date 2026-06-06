@@ -20,7 +20,7 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.clipboard
+package net.svaroh.passly.core.clipboard
 
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

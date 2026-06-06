@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.linksapi
+package net.svaroh.passly.linksapi
 
-import com.passbolt.mobile.android.core.networking.DEFAULT_HTTP_CLIENT
+import net.svaroh.passly.core.networking.DEFAULT_HTTP_CLIENT
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.converter.gson.GsonConverterFactory

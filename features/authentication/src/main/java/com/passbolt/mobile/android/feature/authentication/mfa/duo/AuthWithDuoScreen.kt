@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.duo
+package net.svaroh.passly.feature.authentication.mfa.duo
 
 import PassboltTheme
 import androidx.activity.compose.BackHandler
@@ -34,36 +34,36 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.AuthenticationSignIn
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.Start
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaDialogState
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaResult
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaResult.OtherProvider
-import com.passbolt.mobile.android.feature.authentication.mfa.MfaResult.Succeeded
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoIntent.AuthenticateWithDuo
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoIntent.ChooseOtherProvider
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoIntent.Close
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoIntent.DismissDuoAuth
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoIntent.DuoAuthFinished
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoSideEffect.CloseAndNavigateToStartup
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NavigateToLogin
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NotifyLoginSucceeded
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NotifyOtherProviderClicked
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NotifyVerificationSucceeded
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.duowebviewsheet.DuoWebViewSheet
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.AuthenticationSignIn
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.Start
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
+import net.svaroh.passly.feature.authentication.mfa.MfaDialogState
+import net.svaroh.passly.feature.authentication.mfa.MfaResult
+import net.svaroh.passly.feature.authentication.mfa.MfaResult.OtherProvider
+import net.svaroh.passly.feature.authentication.mfa.MfaResult.Succeeded
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.AuthenticateWithDuo
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.ChooseOtherProvider
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.Close
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.DismissDuoAuth
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.DuoAuthFinished
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.CloseAndNavigateToStartup
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NavigateToLogin
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NotifyLoginSucceeded
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NotifyOtherProviderClicked
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NotifyVerificationSucceeded
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.authentication.mfa.duo.duowebviewsheet.DuoWebViewSheet
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun AuthWithDuoScreen(

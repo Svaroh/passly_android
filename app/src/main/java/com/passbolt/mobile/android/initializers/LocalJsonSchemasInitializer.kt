@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.initializers
+package net.svaroh.passly.initializers
 
 import android.content.Context
 import androidx.startup.Initializer
-import com.passbolt.mobile.android.serializers.jsonschema.schamarepository.JsonSchemaRepository
+import net.svaroh.passly.serializers.jsonschema.schamarepository.JsonSchemaRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import javax.xml.validation.Schema

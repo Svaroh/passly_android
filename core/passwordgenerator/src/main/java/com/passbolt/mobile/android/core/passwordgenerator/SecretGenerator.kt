@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.passwordgenerator
+package net.svaroh.passly.core.passwordgenerator
 
-import com.passbolt.mobile.android.core.passwordgenerator.codepoints.Codepoint
-import com.passbolt.mobile.android.core.passwordgenerator.entropy.EntropyCalculator
-import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsModel
-import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsModel
+import net.svaroh.passly.core.passwordgenerator.codepoints.Codepoint
+import net.svaroh.passly.core.passwordgenerator.entropy.EntropyCalculator
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsModel
 
 class SecretGenerator(
     private val passwordGenerator: PasswordGenerator,

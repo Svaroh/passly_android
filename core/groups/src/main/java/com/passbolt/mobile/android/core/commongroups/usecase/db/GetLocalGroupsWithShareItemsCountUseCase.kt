@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.core.commongroups.usecase.db
+package net.svaroh.passly.core.commongroups.usecase.db
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.database.DatabaseProvider
-import com.passbolt.mobile.android.database.QuerySanitizer
-import com.passbolt.mobile.android.mappers.GroupsModelMapper
-import com.passbolt.mobile.android.ui.GroupWithCount
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.database.QuerySanitizer
+import net.svaroh.passly.mappers.GroupsModelMapper
+import net.svaroh.passly.ui.GroupWithCount
 
 /**
  * Passbolt - Open source password manager for teams

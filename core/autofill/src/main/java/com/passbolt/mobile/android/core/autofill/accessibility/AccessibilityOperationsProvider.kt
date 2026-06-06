@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.autofill.accessibility
+package net.svaroh.passly.core.autofill.accessibility
 
 import android.graphics.PixelFormat
 import android.graphics.Point
@@ -11,7 +11,7 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityNodeInfo.ACTION_SET_TEXT
 import android.view.accessibility.AccessibilityWindowInfo
-import com.passbolt.mobile.android.common.ResourceDimenProvider
+import net.svaroh.passly.common.ResourceDimenProvider
 
 /**
  * Passbolt - Open source password manager for teams

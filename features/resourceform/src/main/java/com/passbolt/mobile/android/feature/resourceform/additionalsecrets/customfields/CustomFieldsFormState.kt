@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.customfields
+package net.svaroh.passly.feature.resourceform.additionalsecrets.customfields
 
-import com.passbolt.mobile.android.ui.CustomFieldUiModel
+import net.svaroh.passly.ui.CustomFieldUiModel
 
 internal data class CustomFieldsFormState(
     val customFields: List<CustomFieldUiModel> = emptyList(),

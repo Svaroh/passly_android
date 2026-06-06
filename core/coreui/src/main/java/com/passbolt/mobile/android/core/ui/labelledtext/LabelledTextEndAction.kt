@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.ui.labelledtext
+package net.svaroh.passly.core.ui.labelledtext
 
 import androidx.annotation.DrawableRes
 

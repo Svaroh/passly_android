@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.database.impl.base
+package net.svaroh.passly.database.impl.base
 
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy

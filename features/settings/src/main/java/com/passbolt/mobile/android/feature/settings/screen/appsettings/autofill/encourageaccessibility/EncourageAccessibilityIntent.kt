@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility
+package net.svaroh.passly.feature.settings.screen.appsettings.autofill.encourageaccessibility
 
 sealed interface EncourageAccessibilityIntent {
     data object RefreshState : EncourageAccessibilityIntent

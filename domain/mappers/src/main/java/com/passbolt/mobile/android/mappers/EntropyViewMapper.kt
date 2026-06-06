@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.ui.Entropy
-import com.passbolt.mobile.android.ui.PasswordStrength
+import net.svaroh.passly.ui.Entropy
+import net.svaroh.passly.ui.PasswordStrength
 
 /**
  * Passbolt - Open source password manager for teams

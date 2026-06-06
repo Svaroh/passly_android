@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.serializers.gson
+package net.svaroh.passly.serializers.gson
 
-import com.passbolt.mobile.android.core.accounts.usecase.privatekey.GetSelectedUserPrivateKeyUseCase
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
-import com.passbolt.mobile.android.metadata.usecase.db.GetLocalMetadataKeyUseCase
-import com.passbolt.mobile.android.ui.MetadataKeyTypeModel
+import net.svaroh.passly.core.accounts.usecase.privatekey.GetSelectedUserPrivateKeyUseCase
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.metadata.usecase.db.GetLocalMetadataKeyUseCase
+import net.svaroh.passly.ui.MetadataKeyTypeModel
 import timber.log.Timber
 
 class MetadataEncryptor(

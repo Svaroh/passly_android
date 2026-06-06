@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.scenarios.setup.configurebiometric
+package net.svaroh.passly.scenarios.setup.configurebiometric
 
-import com.passbolt.mobile.android.common.Biometric
-import com.passbolt.mobile.android.common.BiometricInformationProvider
+import net.svaroh.passly.common.Biometric
+import net.svaroh.passly.common.BiometricInformationProvider
 import org.koin.dsl.module
 
 val biometricSetupUnavailableModuleTests =

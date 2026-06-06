@@ -1,6 +1,6 @@
 adb shell 'am start \
--a "com.passbolt.mobile.android.MANAGED_PROFILE" \
--n "com.passbolt.mobile.android.debug/com.passbolt.mobile.android.feature.startup.StartUpActivity" \
+-a "net.svaroh.passly.MANAGED_PROFILE" \
+-n "net.svaroh.passly.debug/net.svaroh.passly.feature.startup.StartUpActivity" \
 --es "USER_ID" "_INSERT_USER_ID_[uid]_" \
 --es "DOMAIN" "_INSERT_DOMAIN_[https://...]_" \
 --es "USERNAME" "_INSERT_USERNAME_" \

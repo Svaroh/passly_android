@@ -21,25 +21,25 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.secrets.usecase.decrypt.parser.validation
+package net.svaroh.passly.core.secrets.usecase.decrypt.parser.validation
 
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.passbolt.mobile.android.core.secrets.usecase.decrypt.parser.mockJSFSchemaRepository
-import com.passbolt.mobile.android.core.secrets.usecase.decrypt.parser.testParserModule
-import com.passbolt.mobile.android.jsonmodel.JSON_MODEL_GSON
-import com.passbolt.mobile.android.serializers.gson.validation.JsonSchemaValidationRunner
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAndDescription
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordDescriptionTotp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordString
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.Totp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5CustomFields
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Default
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5DefaultWithTotp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Note
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5PasswordString
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5TotpStandalone
+import net.svaroh.passly.core.secrets.usecase.decrypt.parser.mockJSFSchemaRepository
+import net.svaroh.passly.core.secrets.usecase.decrypt.parser.testParserModule
+import net.svaroh.passly.jsonmodel.JSON_MODEL_GSON
+import net.svaroh.passly.serializers.gson.validation.JsonSchemaValidationRunner
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordAndDescription
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordDescriptionTotp
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.Totp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 import kotlinx.coroutines.test.runTest
 import net.jimblackler.jsonschemafriend.SchemaStore
 import org.junit.Before

@@ -17,7 +17,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.policies"
+    namespace = "net.svaroh.passly.core.policies"
 }
 
 kotlin {

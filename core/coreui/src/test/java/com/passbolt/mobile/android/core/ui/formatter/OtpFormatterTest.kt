@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.ui.formatter
+package net.svaroh.passly.core.ui.formatter
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.formatter.OtpFormatter
+import net.svaroh.passly.core.formatter.OtpFormatter
 import org.junit.Test
 
 class OtpFormatterTest {

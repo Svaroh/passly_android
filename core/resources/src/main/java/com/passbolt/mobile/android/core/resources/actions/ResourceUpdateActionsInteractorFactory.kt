@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.resources.actions
+package net.svaroh.passly.core.resources.actions
 
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceModel
 
 fun interface ResourceUpdateActionsInteractorFactory {
     fun create(resource: ResourceModel): ResourceUpdateActionsInteractor

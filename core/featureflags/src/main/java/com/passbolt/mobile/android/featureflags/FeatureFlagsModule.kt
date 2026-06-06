@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.featureflags
+package net.svaroh.passly.featureflags
 
-import com.passbolt.mobile.android.featureflags.mapper.FeatureFlagsMapper
-import com.passbolt.mobile.android.featureflags.usecase.FeatureFlagsInteractor
-import com.passbolt.mobile.android.featureflags.usecase.FetchFeatureFlagsUseCase
-import com.passbolt.mobile.android.featureflags.usecase.featureFlagsModule
+import net.svaroh.passly.featureflags.mapper.FeatureFlagsMapper
+import net.svaroh.passly.featureflags.usecase.FeatureFlagsInteractor
+import net.svaroh.passly.featureflags.usecase.FetchFeatureFlagsUseCase
+import net.svaroh.passly.featureflags.usecase.featureFlagsModule
 import org.koin.dsl.module
 
 /**

@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.gopenpgp
+package net.svaroh.passly.gopenpgp
 
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.common.extension.encodeHex
-import com.passbolt.mobile.android.core.gopenpgp.test.R
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.common.extension.encodeHex
+import net.svaroh.passly.core.gopenpgp.test.R
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import com.proton.gopenpgp.crypto.Crypto
 import kotlinx.coroutines.runBlocking
 import org.junit.Before

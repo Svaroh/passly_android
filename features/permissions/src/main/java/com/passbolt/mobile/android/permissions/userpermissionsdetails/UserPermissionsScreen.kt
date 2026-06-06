@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.permissions.userpermissionsdetails
+package net.svaroh.passly.permissions.userpermissionsdetails
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,37 +30,37 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.formatter.FingerprintFormatter
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.circularimage.CircularProfileImage
-import com.passbolt.mobile.android.core.ui.dialogs.PermissionDeleteAlertDialog
-import com.passbolt.mobile.android.core.ui.header.ItemWithHeader
-import com.passbolt.mobile.android.core.ui.permissions.PermissionLabel
-import com.passbolt.mobile.android.core.ui.permissions.PermissionSelector
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.permissions.navigation.UserPermissionDeletedResult
-import com.passbolt.mobile.android.permissions.navigation.UserPermissionModifiedResult
-import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsIntent.CancelPermissionDelete
-import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsIntent.ConfirmPermissionDelete
-import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsIntent.DeletePermission
-import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsIntent.GoBack
-import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsIntent.Save
-import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsIntent.SelectPermission
-import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsSideEffect.NavigateBack
-import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsSideEffect.SetDeletePermissionResult
-import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsSideEffect.SetUpdatedPermissionResult
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.PermissionsMode
-import com.passbolt.mobile.android.ui.UserModel
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.formatter.FingerprintFormatter
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
+import net.svaroh.passly.core.ui.dialogs.PermissionDeleteAlertDialog
+import net.svaroh.passly.core.ui.header.ItemWithHeader
+import net.svaroh.passly.core.ui.permissions.PermissionLabel
+import net.svaroh.passly.core.ui.permissions.PermissionSelector
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.permissions.navigation.UserPermissionDeletedResult
+import net.svaroh.passly.permissions.navigation.UserPermissionModifiedResult
+import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsIntent.CancelPermissionDelete
+import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsIntent.ConfirmPermissionDelete
+import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsIntent.DeletePermission
+import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsIntent.GoBack
+import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsIntent.Save
+import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsIntent.SelectPermission
+import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsSideEffect.NavigateBack
+import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsSideEffect.SetDeletePermissionResult
+import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsSideEffect.SetUpdatedPermissionResult
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionsMode
+import net.svaroh.passly.ui.UserModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun UserPermissionsScreen(

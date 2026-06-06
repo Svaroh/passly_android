@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
 import androidx.annotation.VisibleForTesting
-import com.passbolt.mobile.android.common.time.TimeProvider
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
+import net.svaroh.passly.common.time.TimeProvider
+import net.svaroh.passly.gopenpgp.OpenPgp
 import timber.log.Timber
 import kotlin.math.abs
 

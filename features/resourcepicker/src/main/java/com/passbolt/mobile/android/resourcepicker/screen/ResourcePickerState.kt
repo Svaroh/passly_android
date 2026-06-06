@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.screen
+package net.svaroh.passly.resourcepicker.screen
 
-import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode
-import com.passbolt.mobile.android.resourcepicker.model.ConfirmationType
-import com.passbolt.mobile.android.resourcepicker.model.PickResourceAction
-import com.passbolt.mobile.android.resourcepicker.screen.data.ResourcePickerData
-import com.passbolt.mobile.android.ui.ResourcePickerListItem
+import net.svaroh.passly.core.ui.search.SearchInputEndIconMode
+import net.svaroh.passly.resourcepicker.model.ConfirmationType
+import net.svaroh.passly.resourcepicker.model.PickResourceAction
+import net.svaroh.passly.resourcepicker.screen.data.ResourcePickerData
+import net.svaroh.passly.ui.ResourcePickerListItem
 
 data class ResourcePickerState(
     val resourcePickerData: ResourcePickerData = ResourcePickerData(),

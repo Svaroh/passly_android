@@ -1,19 +1,19 @@
-package com.passbolt.mobile.android.feature.authentication.auth
+package net.svaroh.passly.feature.authentication.auth
 
 import android.content.Context
-import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.AUTHENTICATION_ERROR
-import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_CHANGED
-import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_DECRYPT_ERROR
-import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_NO_CRYPTO_CIPHER
-import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_INVALID_SIGNATURE
-import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_TOKEN_EXPIRED
-import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_VERIFICATION_FAILURE
-import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.DECRYPTION_ERROR
-import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.GENERIC
-import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.PROFILE_FETCH_FAILURE
-import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.TIME_OUT_OF_SYNC
-import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.WRONG_PASSPHRASE
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.AUTHENTICATION_ERROR
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_CHANGED
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_DECRYPT_ERROR
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_NO_CRYPTO_CIPHER
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_INVALID_SIGNATURE
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_TOKEN_EXPIRED
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_VERIFICATION_FAILURE
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.DECRYPTION_ERROR
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.GENERIC
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.PROFILE_FETCH_FAILURE
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.TIME_OUT_OF_SYNC
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.WRONG_PASSPHRASE
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getTitleText(
     context: Context,

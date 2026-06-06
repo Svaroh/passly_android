@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core
+package net.svaroh.passly.core
 
-import com.passbolt.mobile.android.core.policies.usecase.FetchPasswordExpirySettingsUseCase
-import com.passbolt.mobile.android.core.policies.usecase.FetchPasswordPoliciesUseCase
-import com.passbolt.mobile.android.core.policies.usecase.PasswordExpiryPoliciesInteractor
-import com.passbolt.mobile.android.core.policies.usecase.PasswordPoliciesInteractor
-import com.passbolt.mobile.android.core.policies.usecase.policiesModule
-import com.passbolt.mobile.android.core.policies.validation.PasswordPoliciesValidator
+import net.svaroh.passly.core.policies.usecase.FetchPasswordExpirySettingsUseCase
+import net.svaroh.passly.core.policies.usecase.FetchPasswordPoliciesUseCase
+import net.svaroh.passly.core.policies.usecase.PasswordExpiryPoliciesInteractor
+import net.svaroh.passly.core.policies.usecase.PasswordPoliciesInteractor
+import net.svaroh.passly.core.policies.usecase.policiesModule
+import net.svaroh.passly.core.policies.validation.PasswordPoliciesValidator
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

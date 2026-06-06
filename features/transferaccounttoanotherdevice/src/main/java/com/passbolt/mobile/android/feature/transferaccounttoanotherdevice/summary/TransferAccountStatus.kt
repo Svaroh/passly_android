@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.summary
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import java.io.Serializable
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 sealed class TransferAccountStatus(
     @DrawableRes val icon: Int,

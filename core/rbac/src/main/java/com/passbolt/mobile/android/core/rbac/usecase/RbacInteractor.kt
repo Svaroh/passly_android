@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.rbac.usecase
+package net.svaroh.passly.core.rbac.usecase
 
-import com.passbolt.mobile.android.ui.RbacModel
+import net.svaroh.passly.ui.RbacModel
 
 class RbacInteractor(
     private val fetchRbacPermissionsUseCase: FetchRbacPermissionsUseCase,

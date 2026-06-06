@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.accountdetails.screen
+package net.svaroh.passly.feature.accountdetails.screen
 
 sealed class AccountDetailsValidationError {
     data class MaxLengthExceeded(

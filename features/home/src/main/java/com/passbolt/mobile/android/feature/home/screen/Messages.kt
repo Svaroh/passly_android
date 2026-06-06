@@ -1,22 +1,22 @@
-package com.passbolt.mobile.android.feature.home.screen
+package net.svaroh.passly.feature.home.screen
 
 import android.content.Context
 import androidx.annotation.DrawableRes
-import com.passbolt.mobile.android.common.extension.toSingleLine
-import com.passbolt.mobile.android.ui.Folder.Child
-import com.passbolt.mobile.android.ui.Folder.Root
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.AllItems
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Expiry
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Favourites
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Folders
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Groups
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.OwnedByMe
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.RecentlyModified
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.SharedWithMe
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Tags
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.common.extension.toSingleLine
+import net.svaroh.passly.ui.Folder.Child
+import net.svaroh.passly.ui.Folder.Root
+import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.HomeDisplayViewModel.AllItems
+import net.svaroh.passly.ui.HomeDisplayViewModel.Expiry
+import net.svaroh.passly.ui.HomeDisplayViewModel.Favourites
+import net.svaroh.passly.ui.HomeDisplayViewModel.Folders
+import net.svaroh.passly.ui.HomeDisplayViewModel.Groups
+import net.svaroh.passly.ui.HomeDisplayViewModel.OwnedByMe
+import net.svaroh.passly.ui.HomeDisplayViewModel.RecentlyModified
+import net.svaroh.passly.ui.HomeDisplayViewModel.SharedWithMe
+import net.svaroh.passly.ui.HomeDisplayViewModel.Tags
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Suppress("CyclomaticComplexMethod")
 internal fun getAppBarTitle(

@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.core.users.usecase
+package net.svaroh.passly.core.users.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.core.users.usecase.db.AddLocalUsersUseCase
-import com.passbolt.mobile.android.core.users.usecase.db.RemoveLocalUsersUseCase
-import com.passbolt.mobile.android.ui.UserModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.core.users.usecase.db.AddLocalUsersUseCase
+import net.svaroh.passly.core.users.usecase.db.RemoveLocalUsersUseCase
+import net.svaroh.passly.ui.UserModel
 
 class RebuildUsersTablesUseCase(
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,

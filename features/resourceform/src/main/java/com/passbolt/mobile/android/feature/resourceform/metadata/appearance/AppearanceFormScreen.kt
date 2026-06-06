@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.appearance
+package net.svaroh.passly.feature.resourceform.metadata.appearance
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -57,33 +57,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.localization.R
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.resources.resourceicon.BackgroundColorIconProvider
-import com.passbolt.mobile.android.core.resources.resourceicon.ResourceIconProvider
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.switch.TextSwitch
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.Initialize
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetCustomIconBackgroundColor
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetKeepassIcon
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormSideEffect.NavigateUp
-import com.passbolt.mobile.android.feature.resourceform.navigation.AppearanceFormResult
-import com.passbolt.mobile.android.ui.LeadingContentType
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel.Companion.DEFAULT_BACKGROUND_COLOR_HEX_STRING
-import com.passbolt.mobile.android.ui.ResourceFormMode
-import com.passbolt.mobile.android.ui.ResourceFormMode.Create
-import com.passbolt.mobile.android.ui.ResourceFormMode.Edit
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.localization.R
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.resources.resourceicon.BackgroundColorIconProvider
+import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.switch.TextSwitch
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.Initialize
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetCustomIconBackgroundColor
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetKeepassIcon
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormSideEffect.NavigateUp
+import net.svaroh.passly.feature.resourceform.navigation.AppearanceFormResult
+import net.svaroh.passly.ui.LeadingContentType
+import net.svaroh.passly.ui.ResourceAppearanceModel
+import net.svaroh.passly.ui.ResourceAppearanceModel.Companion.DEFAULT_BACKGROUND_COLOR_HEX_STRING
+import net.svaroh.passly.ui.ResourceFormMode
+import net.svaroh.passly.ui.ResourceFormMode.Create
+import net.svaroh.passly.ui.ResourceFormMode.Edit
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun AppearanceFormScreen(

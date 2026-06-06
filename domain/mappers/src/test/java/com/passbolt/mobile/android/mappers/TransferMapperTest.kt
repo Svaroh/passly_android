@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.dto.request.StatusRequest
-import com.passbolt.mobile.android.dto.request.UpdateTransferRequestDto
-import com.passbolt.mobile.android.ui.Status
+import net.svaroh.passly.dto.request.StatusRequest
+import net.svaroh.passly.dto.request.UpdateTransferRequestDto
+import net.svaroh.passly.ui.Status
 import org.junit.Before
 import org.junit.Test
 

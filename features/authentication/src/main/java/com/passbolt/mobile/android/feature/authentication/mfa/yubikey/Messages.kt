@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.yubikey
+package net.svaroh.passly.feature.authentication.mfa.yubikey
 
 import android.content.Context
-import com.passbolt.mobile.android.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.SnackbarErrorType
-import com.passbolt.mobile.android.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.SnackbarErrorType.EMPTY_OTP
-import com.passbolt.mobile.android.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.SnackbarErrorType.GENERIC
-import com.passbolt.mobile.android.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.SnackbarErrorType.SESSION_EXPIRED
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.SnackbarErrorType
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.SnackbarErrorType.EMPTY_OTP
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.SnackbarErrorType.GENERIC
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.SnackbarErrorType.SESSION_EXPIRED
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getSnackbarMessage(
     context: Context,

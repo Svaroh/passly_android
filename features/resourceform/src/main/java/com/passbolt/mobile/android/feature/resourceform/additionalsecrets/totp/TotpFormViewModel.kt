@@ -21,29 +21,29 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp
+package net.svaroh.passly.feature.resourceform.additionalsecrets.totp
 
-import com.passbolt.mobile.android.common.validation.StringIsBase32
-import com.passbolt.mobile.android.common.validation.StringNotBlank
-import com.passbolt.mobile.android.common.validation.validation
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.AdvancedSettingsChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.IssuerChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.MoreSettingsClick
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.RemoveTotp
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.ScanTotpClick
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.SecretChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormIntent.TotpScanned
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.NavigateToAdvancedSettings
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.NavigateToScanTotp
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError.MustBeBase32
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError.MustNotBeEmpty
-import com.passbolt.mobile.android.ui.ResourceFormMode
-import com.passbolt.mobile.android.ui.TotpUiModel
+import net.svaroh.passly.common.validation.StringIsBase32
+import net.svaroh.passly.common.validation.StringNotBlank
+import net.svaroh.passly.common.validation.validation
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.AdvancedSettingsChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.IssuerChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.MoreSettingsClick
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.RemoveTotp
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.ScanTotpClick
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.SecretChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.TotpScanned
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.NavigateBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.NavigateToAdvancedSettings
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormSideEffect.NavigateToScanTotp
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError.MustBeBase32
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError.MustNotBeEmpty
+import net.svaroh.passly.ui.ResourceFormMode
+import net.svaroh.passly.ui.TotpUiModel
 
 internal class TotpFormViewModel(
     private val mode: ResourceFormMode,

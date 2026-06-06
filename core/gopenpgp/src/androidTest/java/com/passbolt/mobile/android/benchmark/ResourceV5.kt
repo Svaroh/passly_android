@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.benchmark
+package net.svaroh.passly.benchmark
 
 import java.util.UUID
 

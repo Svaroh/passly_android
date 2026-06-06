@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.helpmenu
+package net.svaroh.passly.helpmenu
 
-import com.passbolt.mobile.android.ui.HelpMenuModel
+import net.svaroh.passly.ui.HelpMenuModel
 
 sealed class HelpMenuBottomSheetIntent {
     data class Initialize(

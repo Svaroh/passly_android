@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.home.switchaccount
+package net.svaroh.passly.feature.home.switchaccount
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,13 +25,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.localization.R
-import com.passbolt.mobile.android.core.ui.button.SecondaryButton
-import com.passbolt.mobile.android.core.ui.circularimage.CircularProfileImage
-import com.passbolt.mobile.android.core.ui.menu.OpenableSettingsItem
-import com.passbolt.mobile.android.ui.SwitchAccountUiModel
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R
+import net.svaroh.passly.core.ui.button.SecondaryButton
+import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
+import net.svaroh.passly.core.ui.menu.OpenableSettingsItem
+import net.svaroh.passly.ui.SwitchAccountUiModel
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 /**
  * Passbolt - Open source password manager for teams

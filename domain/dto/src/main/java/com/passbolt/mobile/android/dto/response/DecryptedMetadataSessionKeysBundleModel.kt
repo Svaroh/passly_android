@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.dto.response
+package net.svaroh.passly.dto.response
 
-import com.passbolt.mobile.android.dto.request.SessionKeysBundleDto
+import net.svaroh.passly.dto.request.SessionKeysBundleDto
 import java.time.ZonedDateTime
 import java.util.UUID
 

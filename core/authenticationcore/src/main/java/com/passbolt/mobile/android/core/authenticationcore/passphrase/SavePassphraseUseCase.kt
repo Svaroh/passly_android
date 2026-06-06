@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.core.authenticationcore.passphrase
+package net.svaroh.passly.core.authenticationcore.passphrase
 
 import android.content.Context
 import android.security.keystore.UserNotAuthenticatedException
-import com.passbolt.mobile.android.common.extension.erase
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.core.authenticationcore.PassphraseFileName
-import com.passbolt.mobile.android.encryptedstorage.biometric.BiometricCrypto
+import net.svaroh.passly.common.extension.erase
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.core.authenticationcore.PassphraseFileName
+import net.svaroh.passly.encryptedstorage.biometric.BiometricCrypto
 import java.io.File
 import javax.crypto.Cipher
 
@@ -36,13 +36,13 @@ class SavePassphraseUseCase(
     private val biometricCrypto: BiometricCrypto,
     private val appContext: Context,
 ) : UseCase<SavePassphraseUseCase.Input, Unit>,
-    com.passbolt.mobile.android.core.accounts.usecase.SelectedAccountUseCase {
+    net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase {
     @Throws(UserNotAuthenticatedException::class)
     override fun execute(input: Input) {
         val fileName = PassphraseFileName(selectedAccountId).name
         val file =
             File(
-                com.passbolt.mobile.android.encryptedstorage
+                net.svaroh.passly.encryptedstorage
                     .EncryptedFileBaseDirectory(appContext)
                     .baseDirectory,
                 fileName,

@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.preferences
+package net.svaroh.passly.core.preferences
 
-import com.passbolt.mobile.android.core.preferences.usecase.preferencesModule
+import net.svaroh.passly.core.preferences.usecase.preferencesModule
 import org.koin.dsl.module
 
 /**

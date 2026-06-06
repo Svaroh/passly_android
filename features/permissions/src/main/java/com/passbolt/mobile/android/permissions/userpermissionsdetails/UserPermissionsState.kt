@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.permissions.userpermissionsdetails
+package net.svaroh.passly.permissions.userpermissionsdetails
 
-import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
-import com.passbolt.mobile.android.ui.UserModel
+import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
+import net.svaroh.passly.ui.UserModel
 
 data class UserPermissionsState(
     val permission: UserPermissionModel,

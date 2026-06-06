@@ -21,32 +21,32 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resources.details
+package net.svaroh.passly.feature.resources.details
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.rbac.usecase.GetRbacRulesUseCase
-import com.passbolt.mobile.android.core.resources.actions.ResourceCommonActionResult
-import com.passbolt.mobile.android.core.resources.actions.ResourceCommonActionsInteractor
-import com.passbolt.mobile.android.core.resources.actions.ResourcePropertiesActionsInteractor
-import com.passbolt.mobile.android.core.resources.actions.ResourcePropertyActionResult
-import com.passbolt.mobile.android.feature.resourcedetails.details.ErrorSnackbarType
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.CloseDeleteConfirmationDialog
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.CloseMoreMenu
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.ConfirmDeleteResource
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.CopyUsername
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.DeleteClick
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.GoBack
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.Initialize
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.LaunchWebsite
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.OpenMoreMenu
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.AddToClipboard
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.CloseWithDeleteSuccess
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.OpenWebsite
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsViewModel
-import com.passbolt.mobile.android.ui.RbacRuleModel.DENY
+import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.core.resources.actions.ResourceCommonActionResult
+import net.svaroh.passly.core.resources.actions.ResourceCommonActionsInteractor
+import net.svaroh.passly.core.resources.actions.ResourcePropertiesActionsInteractor
+import net.svaroh.passly.core.resources.actions.ResourcePropertyActionResult
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CloseDeleteConfirmationDialog
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CloseMoreMenu
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ConfirmDeleteResource
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyUsername
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.DeleteClick
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.GoBack
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.Initialize
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.LaunchWebsite
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.OpenMoreMenu
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.AddToClipboard
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.CloseWithDeleteSuccess
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.NavigateBack
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.OpenWebsite
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsViewModel
+import net.svaroh.passly.ui.RbacRuleModel.DENY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop

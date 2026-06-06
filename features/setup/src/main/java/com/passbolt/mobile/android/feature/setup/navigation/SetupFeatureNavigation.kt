@@ -1,23 +1,23 @@
-package com.passbolt.mobile.android.feature.setup.navigation
+package net.svaroh.passly.feature.setup.navigation
 
 import PassboltTheme
-import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.AccessibilityPolicies
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.BiometricSetup
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.ImportProfile
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.ScanQrCodes
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.Summary
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.TransferDetails
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.Welcome
-import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesFlow
-import com.passbolt.mobile.android.feature.accessibilitypolicies.AccessibilityPoliciesScreen
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupScreen
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileScreen
-import com.passbolt.mobile.android.feature.setup.scanqr.ScanQrScreen
-import com.passbolt.mobile.android.feature.setup.summary.SummaryScreen
-import com.passbolt.mobile.android.feature.setup.transferdetails.TransferDetailsScreen
-import com.passbolt.mobile.android.feature.setup.welcome.WelcomeScreen
+import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.AccessibilityPolicies
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.BiometricSetup
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.ImportProfile
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.ScanQrCodes
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.Summary
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.TransferDetails
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.Welcome
+import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesFlow
+import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesScreen
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupScreen
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileScreen
+import net.svaroh.passly.feature.setup.scanqr.ScanQrScreen
+import net.svaroh.passly.feature.setup.summary.SummaryScreen
+import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsScreen
+import net.svaroh.passly.feature.setup.welcome.WelcomeScreen
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,17 +21,17 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.secrets.usecase.decrypt.parser
+package net.svaroh.passly.core.secrets.usecase.decrypt.parser
 
-import com.passbolt.mobile.android.jsonmodel.JsonModel
-import com.passbolt.mobile.android.jsonmodel.delegates.NullableStringDelegate
-import com.passbolt.mobile.android.jsonmodel.delegates.RootRelativeJsonPathNullableStringDelegate
-import com.passbolt.mobile.android.jsonmodel.delegates.RootRelativeJsonPathSecretCustomFieldsDelegate
-import com.passbolt.mobile.android.jsonmodel.delegates.RootRelativeJsonPathTotpDelegate
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldsModel
-import com.passbolt.mobile.android.jsonmodel.delegates.TotpSecret
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
-import com.passbolt.mobile.android.ui.OtpParseResult
+import net.svaroh.passly.jsonmodel.JsonModel
+import net.svaroh.passly.jsonmodel.delegates.NullableStringDelegate
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathNullableStringDelegate
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathSecretCustomFieldsDelegate
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathTotpDelegate
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldsModel
+import net.svaroh.passly.jsonmodel.delegates.TotpSecret
+import net.svaroh.passly.supportedresourceTypes.ContentType
+import net.svaroh.passly.ui.OtpParseResult
 
 class SecretJsonModel(
     override var json: String?,

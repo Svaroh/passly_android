@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.common.urimatcher
+package net.svaroh.passly.common.urimatcher
 
 import org.apache.commons.validator.routines.UrlValidator
 import java.net.URL

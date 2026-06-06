@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.dto.response.PasswordExpirySettingsDto
-import com.passbolt.mobile.android.ui.PasswordExpirySettings
+import net.svaroh.passly.dto.response.PasswordExpirySettingsDto
+import net.svaroh.passly.ui.PasswordExpirySettings
 
 class PasswordExpiryMapper {
     fun map(dto: PasswordExpirySettingsDto) =

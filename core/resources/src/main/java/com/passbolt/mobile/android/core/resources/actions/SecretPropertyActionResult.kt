@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.resources.actions
+package net.svaroh.passly.core.resources.actions
 
-import com.passbolt.mobile.android.common.types.ClipboardLabel
+import net.svaroh.passly.common.types.ClipboardLabel
 
 sealed class SecretPropertyActionResult<T> {
     data class Success<T>(

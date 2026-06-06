@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
 enum class DefaultFilterModel {
     LAST_USED,

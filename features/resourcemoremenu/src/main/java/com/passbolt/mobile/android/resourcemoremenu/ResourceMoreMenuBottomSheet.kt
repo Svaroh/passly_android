@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcemoremenu
+package net.svaroh.passly.resourcemoremenu
 
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -38,28 +38,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.ui.bottomsheet.BottomSheetHeader
-import com.passbolt.mobile.android.core.ui.menu.OpenableSettingsItem
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Close
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyMetadataDescription
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyNote
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyPassword
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyUrl
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyUsername
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Delete
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Edit
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Initialize
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.LaunchWebsite
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Share
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.ToggleFavourite
-import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.Dismiss
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.FavouriteOption
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
-import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.FavouriteOption.REMOVE_FROM_FAVOURITES
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.ui.bottomsheet.BottomSheetHeader
+import net.svaroh.passly.core.ui.menu.OpenableSettingsItem
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Close
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyMetadataDescription
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyNote
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyPassword
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyUrl
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.CopyUsername
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Delete
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Edit
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Initialize
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.LaunchWebsite
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Share
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.ToggleFavourite
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.Dismiss
+import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption
+import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
+import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.REMOVE_FROM_FAVOURITES
 import org.koin.androidx.compose.koinViewModel
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun ResourceMoreMenuBottomSheet(

@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.defaultfilter
+package net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter
 
-import com.passbolt.mobile.android.ui.DefaultFilterModel
+import net.svaroh.passly.ui.DefaultFilterModel
 
 internal sealed interface DefaultFilterIntent {
     object GoBack : DefaultFilterIntent

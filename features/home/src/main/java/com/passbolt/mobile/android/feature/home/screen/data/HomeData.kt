@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.home.screen.data
+package net.svaroh.passly.feature.home.screen.data
 
 import androidx.paging.PagingData
-import com.passbolt.mobile.android.ui.FolderWithCountAndPath
-import com.passbolt.mobile.android.ui.GroupWithCount
-import com.passbolt.mobile.android.ui.ResourceModel
-import com.passbolt.mobile.android.ui.TagWithCount
+import net.svaroh.passly.ui.FolderWithCountAndPath
+import net.svaroh.passly.ui.GroupWithCount
+import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.TagWithCount
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

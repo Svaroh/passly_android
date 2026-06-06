@@ -25,19 +25,19 @@
             android:exported="false"
             tools:node="merge">
             <meta-data
-                android:name="com.passbolt.mobile.android.initializers.KoinInitializer"
+                android:name="net.svaroh.passly.initializers.KoinInitializer"
                 android:value="androidx.startup" />
             <meta-data
-                android:name="com.passbolt.mobile.android.initializers.CoilInitializer"
+                android:name="net.svaroh.passly.initializers.CoilInitializer"
                 android:value="androidx.startup" />
             <meta-data
-                android:name="com.passbolt.mobile.android.initializers.TimberInitializer"
+                android:name="net.svaroh.passly.initializers.TimberInitializer"
                 android:value="androidx.startup" />
             <meta-data
-                android:name="com.passbolt.mobile.android.initializers.LoggingExceptionHandlerInitializer"
+                android:name="net.svaroh.passly.initializers.LoggingExceptionHandlerInitializer"
                 android:value="androidx.startup" />
             <meta-data
-                android:name="com.passbolt.mobile.android.initializers.LocalJsonSchemasInitializer"
+                android:name="net.svaroh.passly.initializers.LocalJsonSchemasInitializer"
                 android:value="androidx.startup" />
         </provider>
         <meta-data

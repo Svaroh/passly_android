@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.home.filtersmenu
+package net.svaroh.passly.feature.home.filtersmenu
 
-import com.passbolt.mobile.android.ui.FiltersMenuModel
+import net.svaroh.passly.ui.FiltersMenuModel
 
 /**
  * Passbolt - Open source password manager for teams

@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.passboltapi.metadata
+package net.svaroh.passly.passboltapi.metadata
 
-import com.passbolt.mobile.android.core.networking.RestService
+import net.svaroh.passly.core.networking.RestService
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

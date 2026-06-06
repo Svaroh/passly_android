@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.common.dialogs
+package net.svaroh.passly.common.dialogs
 
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 fun accessibilityServiceConsentDialog(
     context: Context,

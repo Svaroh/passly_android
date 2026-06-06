@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.accounts.usecase.accounts
+package net.svaroh.passly.core.accounts.usecase.accounts
 
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.accountdata.GetAccountDataUseCase
-import com.passbolt.mobile.android.entity.account.Account
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.accountdata.GetAccountDataUseCase
+import net.svaroh.passly.entity.account.Account
 
 /**
  * Passbolt - Open source password manager for teams

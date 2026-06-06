@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.passboltapi.users
+package net.svaroh.passly.passboltapi.users
 
-import com.passbolt.mobile.android.dto.response.UserDto
+import net.svaroh.passly.dto.response.UserDto
 
 /**
  * Passbolt - Open source password manager for teams

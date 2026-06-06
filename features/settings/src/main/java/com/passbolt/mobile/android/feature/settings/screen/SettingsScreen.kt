@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen
+package net.svaroh.passly.feature.settings.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,31 +37,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.AuthenticationStartUp
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.Accounts
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.AppSettings
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DebugLogs
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.TermsAndLicenses
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.dialogs.SignOutAlertDialog
-import com.passbolt.mobile.android.core.ui.menu.OpenableSettingsItem
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.CancelSignOut
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.ConfirmSignOut
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.Initialize
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.SignOut
-import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToAccounts
-import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToAppSettings
-import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToDebugLogs
-import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToStartUp
-import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToTermsAndLicenses
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.AuthenticationStartUp
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.Accounts
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.AppSettings
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.DebugLogs
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.TermsAndLicenses
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.dialogs.SignOutAlertDialog
+import net.svaroh.passly.core.ui.menu.OpenableSettingsItem
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.CancelSignOut
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.ConfirmSignOut
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.Initialize
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.SignOut
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToAccounts
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToAppSettings
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToDebugLogs
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToStartUp
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToTermsAndLicenses
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun SettingsScreen(

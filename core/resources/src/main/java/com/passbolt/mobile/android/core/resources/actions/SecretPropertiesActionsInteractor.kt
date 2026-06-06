@@ -21,19 +21,19 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.resources.actions
+package net.svaroh.passly.core.resources.actions
 
 import androidx.annotation.VisibleForTesting
-import com.passbolt.mobile.android.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
-import com.passbolt.mobile.android.core.secrets.usecase.decrypt.SecretInteractor
-import com.passbolt.mobile.android.core.secrets.usecase.decrypt.parser.SecretJsonModel
-import com.passbolt.mobile.android.core.secrets.usecase.decrypt.parser.SecretParser
-import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
-import com.passbolt.mobile.android.jsonmodel.delegates.SecretCustomFieldsModel
-import com.passbolt.mobile.android.jsonmodel.delegates.TotpSecret
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
-import com.passbolt.mobile.android.ui.DecryptedSecretOrError
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.core.secrets.usecase.decrypt.SecretInteractor
+import net.svaroh.passly.core.secrets.usecase.decrypt.parser.SecretJsonModel
+import net.svaroh.passly.core.secrets.usecase.decrypt.parser.SecretParser
+import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldsModel
+import net.svaroh.passly.jsonmodel.delegates.TotpSecret
+import net.svaroh.passly.supportedresourceTypes.ContentType
+import net.svaroh.passly.ui.DecryptedSecretOrError
+import net.svaroh.passly.ui.ResourceModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccountonboarding
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

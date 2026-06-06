@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.accounts.usecase.biometrickey
+package net.svaroh.passly.core.accounts.usecase.biometrickey
 
 import org.koin.core.module.Module
 

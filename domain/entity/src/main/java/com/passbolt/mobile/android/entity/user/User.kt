@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.entity.user
+package net.svaroh.passly.entity.user
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded

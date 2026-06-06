@@ -1,21 +1,21 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
 import com.google.gson.JsonObject
-import com.passbolt.mobile.android.dto.response.MetadataKeyTypeDto
-import com.passbolt.mobile.android.dto.response.MetadataKeyTypeDto.PERSONAL
-import com.passbolt.mobile.android.dto.response.MetadataKeyTypeDto.SHARED
-import com.passbolt.mobile.android.dto.response.ResourceResponseDto
-import com.passbolt.mobile.android.dto.response.ResourceResponseV4Dto
-import com.passbolt.mobile.android.dto.response.ResourceResponseV5Dto
-import com.passbolt.mobile.android.entity.metadata.MetadataKeyType
-import com.passbolt.mobile.android.entity.resource.Resource
-import com.passbolt.mobile.android.entity.resource.ResourceMetadata
-import com.passbolt.mobile.android.entity.resource.ResourceUpdateState
-import com.passbolt.mobile.android.entity.resource.ResourceUri
-import com.passbolt.mobile.android.entity.resource.ResourceWithMetadata
-import com.passbolt.mobile.android.ui.MetadataJsonModel
-import com.passbolt.mobile.android.ui.MetadataKeyTypeModel
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.dto.response.MetadataKeyTypeDto
+import net.svaroh.passly.dto.response.MetadataKeyTypeDto.PERSONAL
+import net.svaroh.passly.dto.response.MetadataKeyTypeDto.SHARED
+import net.svaroh.passly.dto.response.ResourceResponseDto
+import net.svaroh.passly.dto.response.ResourceResponseV4Dto
+import net.svaroh.passly.dto.response.ResourceResponseV5Dto
+import net.svaroh.passly.entity.metadata.MetadataKeyType
+import net.svaroh.passly.entity.resource.Resource
+import net.svaroh.passly.entity.resource.ResourceMetadata
+import net.svaroh.passly.entity.resource.ResourceUpdateState
+import net.svaroh.passly.entity.resource.ResourceUri
+import net.svaroh.passly.entity.resource.ResourceWithMetadata
+import net.svaroh.passly.ui.MetadataJsonModel
+import net.svaroh.passly.ui.MetadataKeyTypeModel
+import net.svaroh.passly.ui.ResourceModel
 import java.time.ZonedDateTime
 
 /**

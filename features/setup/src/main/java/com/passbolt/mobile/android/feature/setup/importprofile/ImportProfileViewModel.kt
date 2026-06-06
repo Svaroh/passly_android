@@ -1,25 +1,25 @@
-package com.passbolt.mobile.android.feature.setup.importprofile
+package net.svaroh.passly.feature.setup.importprofile
 
-import com.passbolt.mobile.android.common.validation.StringIsHttpsWebUrl
-import com.passbolt.mobile.android.common.validation.StringIsUuid
-import com.passbolt.mobile.android.common.validation.StringNotBlank
-import com.passbolt.mobile.android.common.validation.validation
-import com.passbolt.mobile.android.core.accounts.AccountsInteractor
-import com.passbolt.mobile.android.core.accounts.AccountsInteractor.InjectAccountFailureType.ACCOUNT_ALREADY_LINKED
-import com.passbolt.mobile.android.core.accounts.AccountsInteractor.InjectAccountFailureType.ERROR_NON_HTTPS_DOMAIN
-import com.passbolt.mobile.android.core.accounts.AccountsInteractor.InjectAccountFailureType.ERROR_WHEN_SAVING_PRIVATE_KEY
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.navigation.AccountSetupDataModel
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileIntent.ChangeAccountUrl
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileIntent.ChangePrivateKey
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileIntent.ChangeUserId
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileIntent.Import
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileSideEffect.NavigateBack
-import com.passbolt.mobile.android.feature.setup.importprofile.ImportProfileSideEffect.NavigateToSummary
-import com.passbolt.mobile.android.ui.ResultStatus.AlreadyLinked
-import com.passbolt.mobile.android.ui.ResultStatus.Failure
-import com.passbolt.mobile.android.ui.ResultStatus.HttpNotSupported
-import com.passbolt.mobile.android.ui.ResultStatus.Success
+import net.svaroh.passly.common.validation.StringIsHttpsWebUrl
+import net.svaroh.passly.common.validation.StringIsUuid
+import net.svaroh.passly.common.validation.StringNotBlank
+import net.svaroh.passly.common.validation.validation
+import net.svaroh.passly.core.accounts.AccountsInteractor
+import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ACCOUNT_ALREADY_LINKED
+import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ERROR_NON_HTTPS_DOMAIN
+import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ERROR_WHEN_SAVING_PRIVATE_KEY
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.navigation.AccountSetupDataModel
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileIntent.ChangeAccountUrl
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileIntent.ChangePrivateKey
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileIntent.ChangeUserId
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileIntent.Import
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileSideEffect.NavigateBack
+import net.svaroh.passly.feature.setup.importprofile.ImportProfileSideEffect.NavigateToSummary
+import net.svaroh.passly.ui.ResultStatus.AlreadyLinked
+import net.svaroh.passly.ui.ResultStatus.Failure
+import net.svaroh.passly.ui.ResultStatus.HttpNotSupported
+import net.svaroh.passly.ui.ResultStatus.Success
 
 /**
  * Passbolt - Open source password manager for teams

@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.entity.home.HomeDisplayView
-import com.passbolt.mobile.android.entity.resource.Permission
-import com.passbolt.mobile.android.entity.resource.ResourceDatabaseView
-import com.passbolt.mobile.android.ui.DefaultFilterModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
+import net.svaroh.passly.entity.home.HomeDisplayView
+import net.svaroh.passly.entity.resource.Permission
+import net.svaroh.passly.entity.resource.ResourceDatabaseView
+import net.svaroh.passly.ui.DefaultFilterModel
+import net.svaroh.passly.ui.HomeDisplayViewModel
 
 /**
  * Mapper responsible for mapping between UI related resource display view type and database related

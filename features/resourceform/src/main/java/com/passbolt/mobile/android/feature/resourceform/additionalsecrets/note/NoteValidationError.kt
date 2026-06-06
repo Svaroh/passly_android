@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note
+package net.svaroh.passly.feature.resourceform.additionalsecrets.note
 
 sealed class NoteValidationError {
     data class MaxLengthExceeded(

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.home.filtersmenu
+package net.svaroh.passly.feature.home.filtersmenu
 
 import PassboltTheme
 import androidx.compose.foundation.layout.Column
@@ -17,37 +17,37 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.ui.bottomsheet.BottomSheetHeader
-import com.passbolt.mobile.android.core.ui.menu.MenuItem
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuIntent.AllItemsClick
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuIntent.Close
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuIntent.ExpiryClick
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuIntent.FavouritesClick
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuIntent.FoldersClick
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuIntent.GroupsClick
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuIntent.Initialize
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuIntent.OwnedByMeClick
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuIntent.RecentlyModifiedClick
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuIntent.SharedWithMeClick
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuIntent.TagsClick
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuSideEffect.Dismiss
-import com.passbolt.mobile.android.feature.home.filtersmenu.FiltersMenuSideEffect.HomeViewChanged
-import com.passbolt.mobile.android.testtags.composetags.FiltersMenu
-import com.passbolt.mobile.android.ui.FiltersMenuModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.AllItems
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Expiry
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Favourites
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Folders
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Groups
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.OwnedByMe
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.RecentlyModified
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.SharedWithMe
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Tags
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.ui.bottomsheet.BottomSheetHeader
+import net.svaroh.passly.core.ui.menu.MenuItem
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.AllItemsClick
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.Close
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.ExpiryClick
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.FavouritesClick
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.FoldersClick
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.GroupsClick
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.Initialize
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.OwnedByMeClick
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.RecentlyModifiedClick
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.SharedWithMeClick
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.TagsClick
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuSideEffect.Dismiss
+import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuSideEffect.HomeViewChanged
+import net.svaroh.passly.testtags.composetags.FiltersMenu
+import net.svaroh.passly.ui.FiltersMenuModel
+import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.HomeDisplayViewModel.AllItems
+import net.svaroh.passly.ui.HomeDisplayViewModel.Expiry
+import net.svaroh.passly.ui.HomeDisplayViewModel.Favourites
+import net.svaroh.passly.ui.HomeDisplayViewModel.Folders
+import net.svaroh.passly.ui.HomeDisplayViewModel.Groups
+import net.svaroh.passly.ui.HomeDisplayViewModel.OwnedByMe
+import net.svaroh.passly.ui.HomeDisplayViewModel.RecentlyModified
+import net.svaroh.passly.ui.HomeDisplayViewModel.SharedWithMe
+import net.svaroh.passly.ui.HomeDisplayViewModel.Tags
 import org.koin.androidx.compose.koinViewModel
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 /**
  * Passbolt - Open source password manager for teams

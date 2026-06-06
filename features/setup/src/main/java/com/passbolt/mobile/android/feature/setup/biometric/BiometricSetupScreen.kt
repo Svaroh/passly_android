@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.biometric
+package net.svaroh.passly.feature.setup.biometric
 
 import PassboltTheme
 import android.app.Activity
@@ -57,38 +57,38 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig.Setup
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior.NAVIGATE_TO_ACCESSIBILITY_POLICIES
-import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.EncourageNativeAutofill
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.AccessibilityPolicies
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.dialogs.KeyChangesDetectedAlertDialog
-import com.passbolt.mobile.android.feature.authentication.auth.showBiometricPrompt
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.AuthenticationSuccess
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.BiometricAuthenticationCancel
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.BiometricAuthenticationError
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.BiometricAuthenticationSuccess
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ConfirmKeyPermanentlyInvalidated
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.DismissKeyPermanentlyInvalidated
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.KeyPermanentlyInvalidated
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.MaybeLater
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ResumeView
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.UseBiometric
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToAccessibilityPolicies
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToAppSystemSettings
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.NavigateToEncourageAutofill
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.ShowBiometricPrompt
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupSideEffect.StartAuthActivity
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.Setup
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.DismissBehavior.NAVIGATE_TO_ACCESSIBILITY_POLICIES
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.EncourageNativeAutofill
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.AccessibilityPolicies
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.dialogs.KeyChangesDetectedAlertDialog
+import net.svaroh.passly.feature.authentication.auth.showBiometricPrompt
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.AuthenticationSuccess
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.BiometricAuthenticationCancel
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.BiometricAuthenticationError
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.BiometricAuthenticationSuccess
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.ConfirmKeyPermanentlyInvalidated
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.DismissKeyPermanentlyInvalidated
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.KeyPermanentlyInvalidated
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.MaybeLater
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.ResumeView
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.UseBiometric
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.NavigateToAccessibilityPolicies
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.NavigateToAppSystemSettings
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.NavigateToEncourageAutofill
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.ShowBiometricPrompt
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.StartAuthActivity
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import java.util.concurrent.Executor
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun BiometricSetupScreen(

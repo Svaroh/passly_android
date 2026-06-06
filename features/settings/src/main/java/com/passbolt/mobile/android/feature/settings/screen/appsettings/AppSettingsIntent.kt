@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.appsettings
+package net.svaroh.passly.feature.settings.screen.appsettings
 
 import android.security.keystore.KeyPermanentlyInvalidatedException
-import com.passbolt.mobile.android.ui.BiometricAuthError
+import net.svaroh.passly.ui.BiometricAuthError
 import javax.crypto.Cipher
 
 internal sealed interface AppSettingsIntent {

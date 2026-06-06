@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note
+package net.svaroh.passly.feature.resourceform.additionalsecrets.note
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel

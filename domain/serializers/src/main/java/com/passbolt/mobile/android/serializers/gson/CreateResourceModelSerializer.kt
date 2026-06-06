@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.serializers.gson
+package net.svaroh.passly.serializers.gson
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
-import com.passbolt.mobile.android.dto.request.CreateResourceDto
-import com.passbolt.mobile.android.dto.request.CreateV4ResourceDto
-import com.passbolt.mobile.android.dto.request.CreateV5ResourceDto
+import net.svaroh.passly.dto.request.CreateResourceDto
+import net.svaroh.passly.dto.request.CreateV4ResourceDto
+import net.svaroh.passly.dto.request.CreateV5ResourceDto
 import java.lang.reflect.Type
 
 class CreateResourceModelSerializer : JsonSerializer<CreateResourceDto> {

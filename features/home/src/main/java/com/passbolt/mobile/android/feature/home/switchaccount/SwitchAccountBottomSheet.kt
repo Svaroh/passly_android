@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.home.switchaccount
+package net.svaroh.passly.feature.home.switchaccount
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Column
@@ -12,30 +12,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.AppContext
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.AuthenticationManageAccounts
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.AuthenticationStartUp
-import com.passbolt.mobile.android.core.navigation.compose.keys.AccountDetailsNavigationKey.AccountDetails
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.bottomsheet.BottomSheetHeader
-import com.passbolt.mobile.android.core.ui.dialogs.SignOutAlertDialog
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.CloseSignOutDialog
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.Initialize
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.SeeCurrentAccountDetails
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.SignOut
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.SignOutConfirmed
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountIntent.SwitchAccount
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountSideEffect.Dismiss
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToAccountDetails
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToManageAccounts
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToSignInForAccount
-import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToStartup
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.AuthenticationManageAccounts
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.AuthenticationStartUp
+import net.svaroh.passly.core.navigation.compose.keys.AccountDetailsNavigationKey.AccountDetails
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.bottomsheet.BottomSheetHeader
+import net.svaroh.passly.core.ui.dialogs.SignOutAlertDialog
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.CloseSignOutDialog
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.Initialize
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.SeeCurrentAccountDetails
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.SignOut
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.SignOutConfirmed
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.SwitchAccount
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountSideEffect.Dismiss
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToAccountDetails
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToManageAccounts
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToSignInForAccount
+import net.svaroh.passly.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToStartup
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 /**
  * Passbolt - Open source password manager for teams

@@ -21,31 +21,31 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.resourcelistdeserializer
+package net.svaroh.passly.serializers.resourcelistdeserializer
 
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.core.resourcetypes.usecase.db.GetLocalResourceTypesUseCase
-import com.passbolt.mobile.android.core.resourcetypes.usecase.db.GetResourceTypeIdToSlugMappingUseCase
-import com.passbolt.mobile.android.dto.response.MetadataKeyTypeDto
-import com.passbolt.mobile.android.dto.response.PermissionDto
-import com.passbolt.mobile.android.dto.response.ResourceResponseDto
-import com.passbolt.mobile.android.dto.response.ResourceResponseV4Dto
-import com.passbolt.mobile.android.dto.response.ResourceResponseV5Dto
-import com.passbolt.mobile.android.serializers.gson.MetadataDecryptor
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAndDescription
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordDescriptionTotp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordString
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.Totp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5CustomFields
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Default
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5DefaultWithTotp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Note
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5PasswordString
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5TotpStandalone
-import com.passbolt.mobile.android.ui.ResourceTypeModel
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.core.resourcetypes.usecase.db.GetLocalResourceTypesUseCase
+import net.svaroh.passly.core.resourcetypes.usecase.db.GetResourceTypeIdToSlugMappingUseCase
+import net.svaroh.passly.dto.response.MetadataKeyTypeDto
+import net.svaroh.passly.dto.response.PermissionDto
+import net.svaroh.passly.dto.response.ResourceResponseDto
+import net.svaroh.passly.dto.response.ResourceResponseV4Dto
+import net.svaroh.passly.dto.response.ResourceResponseV5Dto
+import net.svaroh.passly.serializers.gson.MetadataDecryptor
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordAndDescription
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordDescriptionTotp
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.Totp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
+import net.svaroh.passly.ui.ResourceTypeModel
 import net.jimblackler.jsonschemafriend.SchemaStore
 import org.junit.Before
 import org.junit.Rule

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.featureflagserror
+package net.svaroh.passly.featureflagserror
 
 import PassboltTheme
 import androidx.compose.foundation.Image
@@ -22,9 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreR
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreR
 
 @Composable
 fun FeatureFlagsFetchErrorDialog(

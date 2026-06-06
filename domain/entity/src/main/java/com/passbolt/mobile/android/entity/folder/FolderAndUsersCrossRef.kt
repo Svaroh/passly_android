@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.entity.folder
+package net.svaroh.passly.entity.folder
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import com.passbolt.mobile.android.entity.resource.Permission
-import com.passbolt.mobile.android.entity.user.User
+import net.svaroh.passly.entity.resource.Permission
+import net.svaroh.passly.entity.user.User
 
 @Entity(
     primaryKeys = ["userId", "folderId"],

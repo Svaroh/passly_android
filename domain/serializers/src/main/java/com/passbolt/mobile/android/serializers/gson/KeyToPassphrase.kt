@@ -21,6 +21,6 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.serializers.gson
+package net.svaroh.passly.serializers.gson
 
 internal typealias KeyToPassphrase = Pair<String, ByteArray>

@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.ServerRsaResponseDto
-import com.passbolt.mobile.android.passboltapi.auth.AuthRepository
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.ServerRsaResponseDto
+import net.svaroh.passly.passboltapi.auth.AuthRepository
 
 /**
  * Passbolt - Open source password manager for teams

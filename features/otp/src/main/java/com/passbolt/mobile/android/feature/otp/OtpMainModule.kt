@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.otp
+package net.svaroh.passly.feature.otp
 
-import com.passbolt.mobile.android.common.coroutinetimer.CoroutineTimerFactory
-import com.passbolt.mobile.android.common.coroutinetimer.TimerFactory
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.ui.controller.TotpComposeController
-import com.passbolt.mobile.android.feature.otp.navigation.OtpFeatureNavigation
-import com.passbolt.mobile.android.feature.otp.screen.OtpViewModel
+import net.svaroh.passly.common.coroutinetimer.CoroutineTimerFactory
+import net.svaroh.passly.common.coroutinetimer.TimerFactory
+import net.svaroh.passly.core.navigation.compose.base.Feature
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.ui.controller.TotpComposeController
+import net.svaroh.passly.feature.otp.navigation.OtpFeatureNavigation
+import net.svaroh.passly.feature.otp.screen.OtpViewModel
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named

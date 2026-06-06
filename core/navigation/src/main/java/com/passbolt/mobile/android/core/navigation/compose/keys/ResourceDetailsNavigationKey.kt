@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.core.navigation.compose.keys
+package net.svaroh.passly.core.navigation.compose.keys
 
 import androidx.navigation3.runtime.NavKey
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceModel
 import kotlinx.serialization.Serializable
 
 sealed interface ResourceDetailsNavigationKey : NavKey {

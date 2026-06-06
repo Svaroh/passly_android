@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.account.RemoveAccountUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.accountdata.RemoveAccountDataUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.privatekey.RemovePrivateKeyUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.RemoveSelectedAccountUseCase
-import com.passbolt.mobile.android.core.authenticationcore.passphrase.RemovePassphraseUseCase
-import com.passbolt.mobile.android.core.authenticationcore.session.RemoveSessionUseCase
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.account.RemoveAccountUseCase
+import net.svaroh.passly.core.accounts.usecase.accountdata.RemoveAccountDataUseCase
+import net.svaroh.passly.core.accounts.usecase.privatekey.RemovePrivateKeyUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.RemoveSelectedAccountUseCase
+import net.svaroh.passly.core.authenticationcore.passphrase.RemovePassphraseUseCase
+import net.svaroh.passly.core.authenticationcore.session.RemoveSessionUseCase
 
 /**
  * Passbolt - Open source password manager for teams

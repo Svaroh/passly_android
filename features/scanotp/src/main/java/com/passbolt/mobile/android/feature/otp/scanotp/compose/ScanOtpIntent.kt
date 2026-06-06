@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.compose
+package net.svaroh.passly.feature.otp.scanotp.compose
 
-import com.passbolt.mobile.android.core.qrscan.analyzer.BarcodeScanResult
-import com.passbolt.mobile.android.feature.otp.scanotp.ScanOtpMode
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.feature.otp.scanotp.ScanOtpMode
 import kotlinx.coroutines.flow.StateFlow
 
 sealed interface ScanOtpIntent {

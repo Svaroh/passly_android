@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.main.mainscreen
+package net.svaroh.passly.feature.main.mainscreen
 
 import android.app.Activity
 import androidx.activity.compose.LocalActivity
@@ -22,21 +22,21 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.review.ReviewManager
-import com.passbolt.mobile.android.core.compose.OnResumeEffect
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.fulldatarefresh.service.DataRefreshService
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.feature.main.mainscreen.MainIntent.AppUpdateDownloaded
-import com.passbolt.mobile.android.feature.main.mainscreen.MainIntent.Resumed
-import com.passbolt.mobile.android.feature.main.mainscreen.MainSideEffect.CheckForAppUpdates
-import com.passbolt.mobile.android.feature.main.mainscreen.MainSideEffect.LaunchChromeNativeAutofillDeeplink
-import com.passbolt.mobile.android.feature.main.mainscreen.MainSideEffect.PerformFullDataRefresh
-import com.passbolt.mobile.android.feature.main.mainscreen.MainSideEffect.ShowSnackbar
-import com.passbolt.mobile.android.feature.main.mainscreen.MainSideEffect.TryLaunchReviewFlow
+import net.svaroh.passly.core.compose.OnResumeEffect
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.fulldatarefresh.service.DataRefreshService
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.feature.main.mainscreen.MainIntent.AppUpdateDownloaded
+import net.svaroh.passly.feature.main.mainscreen.MainIntent.Resumed
+import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.CheckForAppUpdates
+import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.LaunchChromeNativeAutofillDeeplink
+import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.PerformFullDataRefresh
+import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.ShowSnackbar
+import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.TryLaunchReviewFlow
 import kotlinx.coroutines.flow.Flow
 import org.koin.compose.koinInject
 import timber.log.Timber
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun MainScreenEffects(

@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.policies.usecase
+package net.svaroh.passly.core.policies.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.mappers.PasswordPoliciesMapper
-import com.passbolt.mobile.android.passboltapi.passwordpolicies.PasswordPoliciesRepository
-import com.passbolt.mobile.android.ui.PasswordPolicies
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.mappers.PasswordPoliciesMapper
+import net.svaroh.passly.passboltapi.passwordpolicies.PasswordPoliciesRepository
+import net.svaroh.passly.ui.PasswordPolicies
 
 class FetchPasswordPoliciesUseCase(
     private val passwordPoliciesRepository: PasswordPoliciesRepository,

@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.database.impl.folderanduserscrossref
+package net.svaroh.passly.database.impl.folderanduserscrossref
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
-import com.passbolt.mobile.android.database.impl.base.BaseDao
-import com.passbolt.mobile.android.entity.folder.FolderAndUsersCrossRef
+import net.svaroh.passly.database.impl.base.BaseDao
+import net.svaroh.passly.entity.folder.FolderAndUsersCrossRef
 
 /**
  * Passbolt - Open source password manager for teams

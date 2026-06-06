@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourceform.main.ui
+package net.svaroh.passly.feature.resourceform.main.ui
 
 import PassboltTheme
 import android.content.Context
@@ -9,17 +9,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.section.Section
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.GoToAdditionalUris
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.GoToAppearance
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.GoToMetadataDescription
-import com.passbolt.mobile.android.ui.ResourceFormUiModel
-import com.passbolt.mobile.android.ui.ResourceFormUiModel.Metadata.ADDITIONAL_URIS
-import com.passbolt.mobile.android.ui.ResourceFormUiModel.Metadata.APPEARANCE
-import com.passbolt.mobile.android.ui.ResourceFormUiModel.Metadata.DESCRIPTION
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.section.Section
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoToAdditionalUris
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoToAppearance
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoToMetadataDescription
+import net.svaroh.passly.ui.ResourceFormUiModel
+import net.svaroh.passly.ui.ResourceFormUiModel.Metadata.ADDITIONAL_URIS
+import net.svaroh.passly.ui.ResourceFormUiModel.Metadata.APPEARANCE
+import net.svaroh.passly.ui.ResourceFormUiModel.Metadata.DESCRIPTION
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun MetadataSection(

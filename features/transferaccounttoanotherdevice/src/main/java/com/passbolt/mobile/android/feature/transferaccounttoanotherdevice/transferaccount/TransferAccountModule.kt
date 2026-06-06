@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount
 
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.data.CreateTransferInputParametersGenerator
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.data.TransferQrCodesDataGenerator
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data.CreateTransferInputParametersGenerator
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data.TransferQrCodesDataGenerator
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.gopenpgp.model
+package net.svaroh.passly.gopenpgp.model
 
 /**
  * Passbolt - Open source password manager for teams

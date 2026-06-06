@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.entity.resource
+package net.svaroh.passly.entity.resource
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.ForeignKey.Companion.SET_NULL
 import androidx.room.PrimaryKey
-import com.passbolt.mobile.android.entity.folder.Folder
-import com.passbolt.mobile.android.entity.metadata.MetadataKeyType
+import net.svaroh.passly.entity.folder.Folder
+import net.svaroh.passly.entity.metadata.MetadataKeyType
 import java.time.ZonedDateTime
 
 /**

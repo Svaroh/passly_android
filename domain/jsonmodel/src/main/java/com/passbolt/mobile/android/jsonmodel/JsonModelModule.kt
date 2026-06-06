@@ -21,15 +21,15 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.jsonmodel
+package net.svaroh.passly.jsonmodel
 
 import com.google.gson.Gson
 import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
-import com.passbolt.mobile.android.jsonmodel.jsonpathops.JsonPathJsonPathOps
-import com.passbolt.mobile.android.jsonmodel.jsonpathops.JsonPathsOps
+import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathJsonPathOps
+import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathsOps
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind

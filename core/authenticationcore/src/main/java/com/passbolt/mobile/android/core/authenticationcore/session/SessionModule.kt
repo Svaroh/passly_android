@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.authenticationcore.session
+package net.svaroh.passly.core.authenticationcore.session
 
 import org.koin.core.module.Module
 

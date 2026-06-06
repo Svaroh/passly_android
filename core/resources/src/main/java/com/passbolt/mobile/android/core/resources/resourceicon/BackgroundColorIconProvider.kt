@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.resources.resourceicon
+package net.svaroh.passly.core.resources.resourceicon
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -31,7 +31,7 @@ import android.graphics.drawable.shapes.OvalShape
 import android.view.Gravity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 class BackgroundColorIconProvider {
     fun getBackgroundColorIcon(

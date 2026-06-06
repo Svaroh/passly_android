@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.core.resourcetypes
+package net.svaroh.passly.core.resourcetypes
 
-import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
-import com.passbolt.mobile.android.core.resourcetypes.usecase.db.resourceTypesDbModule
+import net.svaroh.passly.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
+import net.svaroh.passly.core.resourcetypes.usecase.db.resourceTypesDbModule
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

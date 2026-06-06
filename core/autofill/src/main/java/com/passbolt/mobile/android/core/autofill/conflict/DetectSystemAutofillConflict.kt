@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.core.autofill.conflict
+package net.svaroh.passly.core.autofill.conflict
 
-import com.passbolt.mobile.android.common.autofill.DetectAutofillConflict
-import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider
+import net.svaroh.passly.common.autofill.DetectAutofillConflict
+import net.svaroh.passly.core.autofill.AutofillInformationProvider
 
 class DetectSystemAutofillConflict(
     private val autofillInformationProvider: AutofillInformationProvider,

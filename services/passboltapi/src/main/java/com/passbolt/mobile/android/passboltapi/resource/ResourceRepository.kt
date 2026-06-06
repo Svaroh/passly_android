@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.passboltapi.resource
+package net.svaroh.passly.passboltapi.resource
 
-import com.passbolt.mobile.android.core.networking.ResponseHandler
-import com.passbolt.mobile.android.core.networking.callWithHandler
-import com.passbolt.mobile.android.dto.request.CreateResourceDto
+import net.svaroh.passly.core.networking.ResponseHandler
+import net.svaroh.passly.core.networking.callWithHandler
+import net.svaroh.passly.dto.request.CreateResourceDto
 
 /**
  * Passbolt - Open source password manager for teams

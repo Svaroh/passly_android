@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.passboltapi.mfa
+package net.svaroh.passly.passboltapi.mfa
 
-import com.passbolt.mobile.android.dto.request.HotpRequest
-import com.passbolt.mobile.android.dto.request.TotpRequest
+import net.svaroh.passly.dto.request.HotpRequest
+import net.svaroh.passly.dto.request.TotpRequest
 import retrofit2.Response
 
 /**

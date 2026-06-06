@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.core.commonfolders.usecase
+package net.svaroh.passly.core.commonfolders.usecase
 
-import com.passbolt.mobile.android.core.commonfolders.usecase.db.GetLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.mvp.authentication.UnauthenticatedReason
-import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderPermissionsUseCase
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.mvp.authentication.UnauthenticatedReason
+import net.svaroh.passly.mappers.SharePermissionsModelMapper
+import net.svaroh.passly.ui.PermissionModelUi
 import retrofit2.HttpException
 import java.net.HttpURLConnection
 

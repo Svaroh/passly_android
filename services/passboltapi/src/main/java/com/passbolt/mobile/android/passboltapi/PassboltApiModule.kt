@@ -1,21 +1,21 @@
-package com.passbolt.mobile.android.passboltapi
+package net.svaroh.passly.passboltapi
 
-import com.passbolt.mobile.android.passboltapi.auth.authApiModule
-import com.passbolt.mobile.android.passboltapi.expiry.passwordExpiryApiModule
-import com.passbolt.mobile.android.passboltapi.favourites.favouritesApiModule
-import com.passbolt.mobile.android.passboltapi.folders.foldersApiModule
-import com.passbolt.mobile.android.passboltapi.groups.groupsApiModule
-import com.passbolt.mobile.android.passboltapi.metadata.metadataApiModule
-import com.passbolt.mobile.android.passboltapi.mfa.mfaApiModule
-import com.passbolt.mobile.android.passboltapi.passwordpolicies.passwordPoliciesApiModule
-import com.passbolt.mobile.android.passboltapi.rbac.rbacApiModule
-import com.passbolt.mobile.android.passboltapi.registration.mobileTransferApiModule
-import com.passbolt.mobile.android.passboltapi.resource.resourceApiModule
-import com.passbolt.mobile.android.passboltapi.resourcetypes.resourceTypesApiModule
-import com.passbolt.mobile.android.passboltapi.secrets.secretsApiModule
-import com.passbolt.mobile.android.passboltapi.settings.settingsApiModule
-import com.passbolt.mobile.android.passboltapi.share.shareApiModule
-import com.passbolt.mobile.android.passboltapi.users.usersApiModule
+import net.svaroh.passly.passboltapi.auth.authApiModule
+import net.svaroh.passly.passboltapi.expiry.passwordExpiryApiModule
+import net.svaroh.passly.passboltapi.favourites.favouritesApiModule
+import net.svaroh.passly.passboltapi.folders.foldersApiModule
+import net.svaroh.passly.passboltapi.groups.groupsApiModule
+import net.svaroh.passly.passboltapi.metadata.metadataApiModule
+import net.svaroh.passly.passboltapi.mfa.mfaApiModule
+import net.svaroh.passly.passboltapi.passwordpolicies.passwordPoliciesApiModule
+import net.svaroh.passly.passboltapi.rbac.rbacApiModule
+import net.svaroh.passly.passboltapi.registration.mobileTransferApiModule
+import net.svaroh.passly.passboltapi.resource.resourceApiModule
+import net.svaroh.passly.passboltapi.resourcetypes.resourceTypesApiModule
+import net.svaroh.passly.passboltapi.secrets.secretsApiModule
+import net.svaroh.passly.passboltapi.settings.settingsApiModule
+import net.svaroh.passly.passboltapi.share.shareApiModule
+import net.svaroh.passly.passboltapi.users.usersApiModule
 import org.koin.dsl.module
 
 /**

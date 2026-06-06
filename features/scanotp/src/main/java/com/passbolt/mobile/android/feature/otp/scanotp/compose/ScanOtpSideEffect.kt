@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.compose
+package net.svaroh.passly.feature.otp.scanotp.compose
 
-import com.passbolt.mobile.android.ui.OtpParseResult
+import net.svaroh.passly.ui.OtpParseResult
 
 internal sealed interface ScanOtpSideEffect {
     data object RequestCameraPermission : ScanOtpSideEffect

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.welcome
+package net.svaroh.passly.feature.setup.welcome
 
 data class WelcomeState(
     val showBackNavigation: Boolean = false,

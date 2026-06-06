@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core
+package net.svaroh.passly.core
 
-import com.passbolt.mobile.android.core.rbac.usecase.FetchRbacPermissionsUseCase
-import com.passbolt.mobile.android.core.rbac.usecase.GetRbacRulesUseCase
-import com.passbolt.mobile.android.core.rbac.usecase.RbacInteractor
-import com.passbolt.mobile.android.core.rbac.usecase.SaveRbacRulesUseCase
+import net.svaroh.passly.core.rbac.usecase.FetchRbacPermissionsUseCase
+import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.core.rbac.usecase.RbacInteractor
+import net.svaroh.passly.core.rbac.usecase.SaveRbacRulesUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

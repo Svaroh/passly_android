@@ -21,35 +21,35 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.database
+package net.svaroh.passly.database
 
 import androidx.room.Room
 import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.database.migrations.Migration10to11
-import com.passbolt.mobile.android.database.migrations.Migration11to12
-import com.passbolt.mobile.android.database.migrations.Migration12to13
-import com.passbolt.mobile.android.database.migrations.Migration13to14
-import com.passbolt.mobile.android.database.migrations.Migration14to15
-import com.passbolt.mobile.android.database.migrations.Migration15to16
-import com.passbolt.mobile.android.database.migrations.Migration16to17
-import com.passbolt.mobile.android.database.migrations.Migration17to18
-import com.passbolt.mobile.android.database.migrations.Migration18to19
-import com.passbolt.mobile.android.database.migrations.Migration19to20
-import com.passbolt.mobile.android.database.migrations.Migration1to2
-import com.passbolt.mobile.android.database.migrations.Migration20to21
-import com.passbolt.mobile.android.database.migrations.Migration21to22
-import com.passbolt.mobile.android.database.migrations.Migration22to23
-import com.passbolt.mobile.android.database.migrations.Migration2to3
-import com.passbolt.mobile.android.database.migrations.Migration3to4
-import com.passbolt.mobile.android.database.migrations.Migration4to5
-import com.passbolt.mobile.android.database.migrations.Migration5to6
-import com.passbolt.mobile.android.database.migrations.Migration6to7
-import com.passbolt.mobile.android.database.migrations.Migration7to8
-import com.passbolt.mobile.android.database.migrations.Migration8to9
-import com.passbolt.mobile.android.database.migrations.Migration9to10
+import net.svaroh.passly.database.migrations.Migration10to11
+import net.svaroh.passly.database.migrations.Migration11to12
+import net.svaroh.passly.database.migrations.Migration12to13
+import net.svaroh.passly.database.migrations.Migration13to14
+import net.svaroh.passly.database.migrations.Migration14to15
+import net.svaroh.passly.database.migrations.Migration15to16
+import net.svaroh.passly.database.migrations.Migration16to17
+import net.svaroh.passly.database.migrations.Migration17to18
+import net.svaroh.passly.database.migrations.Migration18to19
+import net.svaroh.passly.database.migrations.Migration19to20
+import net.svaroh.passly.database.migrations.Migration1to2
+import net.svaroh.passly.database.migrations.Migration20to21
+import net.svaroh.passly.database.migrations.Migration21to22
+import net.svaroh.passly.database.migrations.Migration22to23
+import net.svaroh.passly.database.migrations.Migration2to3
+import net.svaroh.passly.database.migrations.Migration3to4
+import net.svaroh.passly.database.migrations.Migration4to5
+import net.svaroh.passly.database.migrations.Migration5to6
+import net.svaroh.passly.database.migrations.Migration6to7
+import net.svaroh.passly.database.migrations.Migration7to8
+import net.svaroh.passly.database.migrations.Migration8to9
+import net.svaroh.passly.database.migrations.Migration9to10
 import org.junit.Rule
 import org.junit.Test
 

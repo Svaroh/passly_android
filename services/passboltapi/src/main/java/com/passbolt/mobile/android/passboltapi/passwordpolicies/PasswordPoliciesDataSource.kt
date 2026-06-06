@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.passboltapi.passwordpolicies
+package net.svaroh.passly.passboltapi.passwordpolicies
 
-import com.passbolt.mobile.android.dto.response.PasswordPoliciesDto
+import net.svaroh.passly.dto.response.PasswordPoliciesDto
 
 interface PasswordPoliciesDataSource {
     suspend fun getPasswordPoliciesSettings(): PasswordPoliciesDto

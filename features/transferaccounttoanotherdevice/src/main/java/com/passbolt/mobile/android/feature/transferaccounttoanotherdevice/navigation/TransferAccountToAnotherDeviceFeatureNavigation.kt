@@ -20,19 +20,19 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.navigation
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.navigation
 
 import PassboltTheme
-import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.BrowserFirstLoginScan
-import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Onboarding
-import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Transfer
-import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.TransferStatus
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryScreen
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanScreen
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountScreen
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreen
+import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.BrowserFirstLoginScan
+import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Onboarding
+import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Transfer
+import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.TransferStatus
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryScreen
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanScreen
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountScreen
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreen
 
 class TransferAccountToAnotherDeviceFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =

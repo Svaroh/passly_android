@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.idlingresource
+package net.svaroh.passly.core.idlingresource
 
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.core.networking.interceptor
+package net.svaroh.passly.core.networking.interceptor
 
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetCurrentApiUrlUseCase
-import com.passbolt.mobile.android.core.networking.PLACEHOLDER_BASE_URL
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetCurrentApiUrlUseCase
+import net.svaroh.passly.core.networking.PLACEHOLDER_BASE_URL
 import okhttp3.Interceptor
 import okhttp3.Response
 

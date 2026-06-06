@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.welcome
+package net.svaroh.passly.feature.setup.welcome
 
-import com.passbolt.mobile.android.ui.ResultStatus
+import net.svaroh.passly.ui.ResultStatus
 
 internal sealed interface WelcomeSideEffect {
     data object NavigateUp : WelcomeSideEffect

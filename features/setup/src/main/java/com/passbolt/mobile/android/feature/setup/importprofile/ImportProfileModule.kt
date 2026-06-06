@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.setup.importprofile
+package net.svaroh.passly.feature.setup.importprofile
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

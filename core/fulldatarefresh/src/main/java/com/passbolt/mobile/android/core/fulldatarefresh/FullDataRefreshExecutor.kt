@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.core.fulldatarefresh
+package net.svaroh.passly.core.fulldatarefresh
 
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.InProgress
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.core.fulldatarefresh.HomeDataInteractor.Output.Failure
-import com.passbolt.mobile.android.core.fulldatarefresh.HomeDataInteractor.Output.Success
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.core.fulldatarefresh.HomeDataInteractor.Output.Failure
+import net.svaroh.passly.core.fulldatarefresh.HomeDataInteractor.Output.Success
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch

@@ -21,6 +21,6 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.accessibilitypolicies
+package net.svaroh.passly.feature.accessibilitypolicies
 
 data object AccessibilityPoliciesState

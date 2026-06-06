@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.resources.actions
+package net.svaroh.passly.core.resources.actions
 
 sealed class ResourceCommonActionResult {
     data class Success(

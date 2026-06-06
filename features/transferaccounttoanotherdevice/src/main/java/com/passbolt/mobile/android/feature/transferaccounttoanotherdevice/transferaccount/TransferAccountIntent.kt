@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.transferaccount
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount
 
 sealed interface TransferAccountIntent {
     data object GoBack : TransferAccountIntent

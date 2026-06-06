@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.core.navigation.compose.keys
+package net.svaroh.passly.core.navigation.compose.keys
 
 import androidx.navigation3.runtime.NavKey
-import com.passbolt.mobile.android.ui.AdditionalUrisUiModel
-import com.passbolt.mobile.android.ui.CustomFieldsUiModel
-import com.passbolt.mobile.android.ui.PasswordUiModel
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel
-import com.passbolt.mobile.android.ui.ResourceFormMode
-import com.passbolt.mobile.android.ui.TotpUiModel
+import net.svaroh.passly.ui.AdditionalUrisUiModel
+import net.svaroh.passly.ui.CustomFieldsUiModel
+import net.svaroh.passly.ui.PasswordUiModel
+import net.svaroh.passly.ui.ResourceAppearanceModel
+import net.svaroh.passly.ui.ResourceFormMode
+import net.svaroh.passly.ui.TotpUiModel
 import kotlinx.serialization.Serializable
 
 sealed interface ResourceFormNavigationKey : NavKey {

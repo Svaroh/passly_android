@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.createfolder
+package net.svaroh.passly.createfolder
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
+package net.svaroh.passly.feature.authentication.auth.usecase
 
-import com.passbolt.mobile.android.common.CookieExtractor
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.mappers.SignInMapper
-import com.passbolt.mobile.android.passboltapi.auth.AuthRepository
+import net.svaroh.passly.common.CookieExtractor
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.mappers.SignInMapper
+import net.svaroh.passly.passboltapi.auth.AuthRepository
 import java.net.HttpURLConnection
 
 /**

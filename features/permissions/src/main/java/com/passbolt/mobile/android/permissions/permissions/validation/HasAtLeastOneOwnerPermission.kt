@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissions.validation
+package net.svaroh.passly.permissions.permissions.validation
 
-import com.passbolt.mobile.android.common.validation.Rule
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.common.validation.Rule
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourcePermission
 
 object HasAtLeastOneOwnerPermission : Rule<List<PermissionModelUi>>(
     { it.any { p -> p.permission == ResourcePermission.OWNER } },

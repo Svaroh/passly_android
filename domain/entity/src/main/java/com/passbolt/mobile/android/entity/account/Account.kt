@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.entity.account
+package net.svaroh.passly.entity.account
 
 /**
  * Passbolt - Open source password manager for teams

@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.core.commongroups.usecase
+package net.svaroh.passly.core.commongroups.usecase
 
 import android.database.SQLException
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
 import timber.log.Timber
 
 /**

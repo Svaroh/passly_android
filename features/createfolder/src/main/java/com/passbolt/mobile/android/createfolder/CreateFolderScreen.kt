@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.createfolder
+package net.svaroh.passly.createfolder
 
 import PassboltTheme
 import androidx.compose.foundation.layout.Box
@@ -50,34 +50,34 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.results.CreateFolderCompleteResult
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.header.ItemWithHeader
-import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
-import com.passbolt.mobile.android.core.ui.sharedwith.SharedWithSection
-import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
-import com.passbolt.mobile.android.core.ui.text.SeparatedText
-import com.passbolt.mobile.android.core.ui.text.TextInput
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Default
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Error
-import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
-import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
-import com.passbolt.mobile.android.createfolder.CreateFolderIntent.FolderNameChanged
-import com.passbolt.mobile.android.createfolder.CreateFolderIntent.GoBack
-import com.passbolt.mobile.android.createfolder.CreateFolderIntent.Initialize
-import com.passbolt.mobile.android.createfolder.CreateFolderIntent.Save
-import com.passbolt.mobile.android.createfolder.CreateFolderSideEffect.FolderCreated
-import com.passbolt.mobile.android.createfolder.CreateFolderSideEffect.NavigateUp
-import com.passbolt.mobile.android.createfolder.CreateFolderSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.testtags.composetags.CreateFolder
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.results.CreateFolderCompleteResult
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.header.ItemWithHeader
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.sharedwith.SharedWithSection
+import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
+import net.svaroh.passly.core.ui.text.SeparatedText
+import net.svaroh.passly.core.ui.text.TextInput
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Default
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Error
+import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
+import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.createfolder.CreateFolderIntent.FolderNameChanged
+import net.svaroh.passly.createfolder.CreateFolderIntent.GoBack
+import net.svaroh.passly.createfolder.CreateFolderIntent.Initialize
+import net.svaroh.passly.createfolder.CreateFolderIntent.Save
+import net.svaroh.passly.createfolder.CreateFolderSideEffect.FolderCreated
+import net.svaroh.passly.createfolder.CreateFolderSideEffect.NavigateUp
+import net.svaroh.passly.createfolder.CreateFolderSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.testtags.composetags.CreateFolder
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun CreateFolderScreen(

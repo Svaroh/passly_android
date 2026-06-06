@@ -20,11 +20,11 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.common.datarefresh
+package net.svaroh.passly.common.datarefresh
 
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.InProgress
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first

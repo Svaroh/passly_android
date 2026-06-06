@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.setup.biometric
+package net.svaroh.passly.feature.setup.biometric
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

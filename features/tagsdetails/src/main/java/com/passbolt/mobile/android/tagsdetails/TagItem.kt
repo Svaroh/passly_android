@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.tagsdetails
+package net.svaroh.passly.tagsdetails
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.ui.TagModel
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.ui.TagModel
 
 @Composable
 fun TagItem(

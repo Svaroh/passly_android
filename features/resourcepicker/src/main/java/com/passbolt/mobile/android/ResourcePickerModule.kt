@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android
+package net.svaroh.passly
 
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.resourcepicker.navigation.ResourcePickerFeatureNavigation
-import com.passbolt.mobile.android.resourcepicker.resourcePickerScreenModule
+import net.svaroh.passly.core.navigation.compose.base.Feature
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.resourcepicker.navigation.ResourcePickerFeatureNavigation
+import net.svaroh.passly.resourcepicker.resourcePickerScreenModule
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

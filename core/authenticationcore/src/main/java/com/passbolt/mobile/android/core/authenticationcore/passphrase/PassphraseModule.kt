@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.authenticationcore.passphrase
+package net.svaroh.passly.core.authenticationcore.passphrase
 
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext

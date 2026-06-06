@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.commontest.session
+package net.svaroh.passly.commontest.session
 
-import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetSessionExpiryUseCase
+import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
+import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase
 import org.koin.dsl.module
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.stub

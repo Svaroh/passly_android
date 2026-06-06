@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess
+package net.svaroh.passly.feature.otp.scanotp.scanotpsuccess
 
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceModel
 
 sealed interface ScanOtpSuccessIntent {
     data object CreateStandaloneOtpClick : ScanOtpSuccessIntent

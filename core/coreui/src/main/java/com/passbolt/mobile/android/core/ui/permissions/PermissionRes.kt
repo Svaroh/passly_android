@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.core.ui.permissions
+package net.svaroh.passly.core.ui.permissions
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.ResourcePermission.OWNER
-import com.passbolt.mobile.android.ui.ResourcePermission.READ
-import com.passbolt.mobile.android.ui.ResourcePermission.UPDATE
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.ResourcePermission.OWNER
+import net.svaroh.passly.ui.ResourcePermission.READ
+import net.svaroh.passly.ui.ResourcePermission.UPDATE
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @DrawableRes
 internal fun getPermissionIconRes(permission: ResourcePermission): Int =

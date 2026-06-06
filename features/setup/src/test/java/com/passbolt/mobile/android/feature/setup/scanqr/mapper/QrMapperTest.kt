@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.setup.scanqr.mapper
+package net.svaroh.passly.feature.setup.scanqr.mapper
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.qrscan.analyzer.BarcodeScanResult
-import com.passbolt.mobile.android.feature.setup.di.testModule
-import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.ParseResult
-import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.QrScanResultsMapper
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.feature.setup.di.testModule
+import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult
+import net.svaroh.passly.feature.setup.scanqr.qrparser.QrScanResultsMapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.Test

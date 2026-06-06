@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourcedetails.details
+package net.svaroh.passly.feature.resourcedetails.details
 
-import com.passbolt.mobile.android.ui.CustomFieldModel
-import com.passbolt.mobile.android.ui.OtpItemWrapper
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.ui.CustomFieldModel
+import net.svaroh.passly.ui.OtpItemWrapper
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourceModel
 import java.util.UUID
 
 data class ResourceDetailsState(

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.dto.request
+package net.svaroh.passly.dto.request
 
 import com.google.gson.annotations.SerializedName
 

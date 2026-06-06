@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.security.rootdetection
+package net.svaroh.passly.core.security.rootdetection
 
 import com.scottyab.rootbeer.RootBeer
 

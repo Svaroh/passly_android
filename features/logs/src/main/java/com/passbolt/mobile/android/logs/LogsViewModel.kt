@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.logs
+package net.svaroh.passly.logs
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.logs.LogsIntent.GoBack
-import com.passbolt.mobile.android.logs.LogsIntent.ShareLogs
-import com.passbolt.mobile.android.logs.LogsSideEffect.NavigateToLogsShareSheet
-import com.passbolt.mobile.android.logs.LogsSideEffect.NavigateUp
-import com.passbolt.mobile.android.logs.LogsSideEffect.ScrollLogsToLastLine
-import com.passbolt.mobile.android.logs.reader.LogsReader
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.logs.LogsIntent.GoBack
+import net.svaroh.passly.logs.LogsIntent.ShareLogs
+import net.svaroh.passly.logs.LogsSideEffect.NavigateToLogsShareSheet
+import net.svaroh.passly.logs.LogsSideEffect.NavigateUp
+import net.svaroh.passly.logs.LogsSideEffect.ScrollLogsToLastLine
+import net.svaroh.passly.logs.reader.LogsReader
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 

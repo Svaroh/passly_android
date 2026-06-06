@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.entity.metadata
+package net.svaroh.passly.entity.metadata
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

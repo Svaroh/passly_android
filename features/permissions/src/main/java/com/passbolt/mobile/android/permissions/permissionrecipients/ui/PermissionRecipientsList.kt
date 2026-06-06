@@ -1,20 +1,20 @@
-package com.passbolt.mobile.android.permissions.permissionrecipients.ui
+package net.svaroh.passly.permissions.permissionrecipients.ui
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.passbolt.mobile.android.core.ui.permissions.GroupPermissionRow
-import com.passbolt.mobile.android.core.ui.permissions.UserPermissionRow
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsIntent
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsIntent.ToggleGroupSelection
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsIntent.ToggleUserSelection
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsState
-import com.passbolt.mobile.android.permissions.permissionrecipients.ui.list.AlreadyAddedHeader
-import com.passbolt.mobile.android.permissions.permissionrecipients.ui.list.GroupRecipientRow
-import com.passbolt.mobile.android.permissions.permissionrecipients.ui.list.UserRecipientRow
-import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
+import net.svaroh.passly.core.ui.permissions.GroupPermissionRow
+import net.svaroh.passly.core.ui.permissions.UserPermissionRow
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent.ToggleGroupSelection
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent.ToggleUserSelection
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsState
+import net.svaroh.passly.permissions.permissionrecipients.ui.list.AlreadyAddedHeader
+import net.svaroh.passly.permissions.permissionrecipients.ui.list.GroupRecipientRow
+import net.svaroh.passly.permissions.permissionrecipients.ui.list.UserRecipientRow
+import net.svaroh.passly.ui.PermissionModelUi.GroupPermissionModel
+import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
 
 @Composable
 internal fun PermissionRecipientsList(

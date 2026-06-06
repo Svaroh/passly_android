@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.autofill.resources
+package net.svaroh.passly.feature.autofill.resources
 
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceModel
 
 sealed interface AutofillResourcesIntent {
     data object UserAuthenticated : AutofillResourcesIntent

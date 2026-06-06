@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.authentication.accountslist
+package net.svaroh.passly.feature.authentication.accountslist
 
-import com.passbolt.mobile.android.ui.AccountModelUi.AccountModel
+import net.svaroh.passly.ui.AccountModelUi.AccountModel
 
 sealed interface AccountsListIntent {
     data class SelectAccount(

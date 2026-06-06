@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.passboltapi.groups
+package net.svaroh.passly.passboltapi.groups
 
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.GroupsResponseDto
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.GroupsResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 

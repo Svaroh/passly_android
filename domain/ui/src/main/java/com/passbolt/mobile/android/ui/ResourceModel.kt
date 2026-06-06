@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.ui
+package net.svaroh.passly.ui
 
 import android.os.Parcelable
-import com.passbolt.mobile.android.common.extension.isInFuture
-import com.passbolt.mobile.android.common.search.Searchable
-import com.passbolt.mobile.android.jsonmodel.JsonModel
-import com.passbolt.mobile.android.jsonmodel.delegates.RootRelativeJsonPathNullableStringDelegate
-import com.passbolt.mobile.android.jsonmodel.delegates.RootRelativeJsonPathNullableStringListDelegate
-import com.passbolt.mobile.android.jsonmodel.delegates.RootRelativeJsonPathStringDelegate
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType
+import net.svaroh.passly.common.extension.isInFuture
+import net.svaroh.passly.common.search.Searchable
+import net.svaroh.passly.jsonmodel.JsonModel
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathNullableStringDelegate
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathNullableStringListDelegate
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathStringDelegate
+import net.svaroh.passly.supportedresourceTypes.ContentType
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable

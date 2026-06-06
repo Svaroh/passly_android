@@ -1,14 +1,14 @@
-package com.passbolt.mobile.android.feature.settings
+package net.svaroh.passly.feature.settings
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.common.autofill.DetectAutofillConflict
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignOutUseCase
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.ConfirmSignOut
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.Initialize
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.SignOut
-import com.passbolt.mobile.android.feature.settings.screen.SettingsViewModel
+import net.svaroh.passly.common.autofill.DetectAutofillConflict
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.ConfirmSignOut
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.Initialize
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.SignOut
+import net.svaroh.passly.feature.settings.screen.SettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop

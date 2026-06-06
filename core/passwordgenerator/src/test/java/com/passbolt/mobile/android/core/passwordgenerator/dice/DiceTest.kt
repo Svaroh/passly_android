@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.passwordgenerator.dice
+package net.svaroh.passly.core.passwordgenerator.dice
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.passwordgenerator.passwordGeneratorTestModule
-import com.passbolt.mobile.android.ui.CaseTypeModel
+import net.svaroh.passly.core.passwordgenerator.passwordGeneratorTestModule
+import net.svaroh.passly.ui.CaseTypeModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.accessibilitypolicies
+package net.svaroh.passly.feature.accessibilitypolicies
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf

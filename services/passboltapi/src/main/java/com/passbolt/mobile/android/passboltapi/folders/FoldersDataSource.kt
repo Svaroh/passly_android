@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.passboltapi.folders
+package net.svaroh.passly.passboltapi.folders
 
-import com.passbolt.mobile.android.dto.request.CreateFolderRequestDto
-import com.passbolt.mobile.android.dto.response.BasePaginatedResponse
-import com.passbolt.mobile.android.dto.response.CreateFolderResponseDto
-import com.passbolt.mobile.android.dto.response.FolderResponseDto
+import net.svaroh.passly.dto.request.CreateFolderRequestDto
+import net.svaroh.passly.dto.response.BasePaginatedResponse
+import net.svaroh.passly.dto.response.CreateFolderResponseDto
+import net.svaroh.passly.dto.response.FolderResponseDto
 
 /**
  * Passbolt - Open source password manager for teams

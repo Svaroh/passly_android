@@ -21,21 +21,21 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.resourcetypes.graph.redesigned
+package net.svaroh.passly.core.resourcetypes.graph.redesigned
 
-import com.passbolt.mobile.android.core.resourcetypes.graph.UpdateActionMetadata
-import com.passbolt.mobile.android.core.resourcetypes.graph.base.ResourceTypeEdge
-import com.passbolt.mobile.android.core.resourcetypes.graph.base.ResourceTypeVertex
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAndDescription
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordDescriptionTotp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordString
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.Totp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5CustomFields
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Default
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5DefaultWithTotp
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Note
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5PasswordString
-import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5TotpStandalone
+import net.svaroh.passly.core.resourcetypes.graph.UpdateActionMetadata
+import net.svaroh.passly.core.resourcetypes.graph.base.ResourceTypeEdge
+import net.svaroh.passly.core.resourcetypes.graph.base.ResourceTypeVertex
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordAndDescription
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordDescriptionTotp
+import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.Totp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 
 class ResourceTypesUpdatesAdjacencyGraph {
     private val adjacencyMap: Map<ResourceTypeVertex, List<ResourceTypeEdge>>

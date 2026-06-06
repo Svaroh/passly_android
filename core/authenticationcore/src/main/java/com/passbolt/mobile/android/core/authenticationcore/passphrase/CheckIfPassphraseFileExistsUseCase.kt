@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.core.authenticationcore.passphrase
+package net.svaroh.passly.core.authenticationcore.passphrase
 
 import android.content.Context
-import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.authenticationcore.PassphraseFileName
-import com.passbolt.mobile.android.encryptedstorage.EncryptedFileBaseDirectory
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.authenticationcore.PassphraseFileName
+import net.svaroh.passly.encryptedstorage.EncryptedFileBaseDirectory
 import java.io.File
 
 /**

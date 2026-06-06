@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.navigation.constants
+package net.svaroh.passly.core.navigation.constants
 
 internal object Setup {
     internal const val SET_UP_ACTIVITY: String =
-        "com.passbolt.mobile.android.feature.setup.SetUpActivity"
+        "net.svaroh.passly.feature.setup.SetUpActivity"
 }

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.passboltapi.expiry
+package net.svaroh.passly.passboltapi.expiry
 
 internal class PasswordExpiryRemoteDataSource(
     private val passwordExpiryApi: PasswordExpiryApi,

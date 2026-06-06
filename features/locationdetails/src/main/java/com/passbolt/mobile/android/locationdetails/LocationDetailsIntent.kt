@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.locationdetails
+package net.svaroh.passly.locationdetails
 
 internal sealed interface LocationDetailsIntent {
     data object GoBack : LocationDetailsIntent

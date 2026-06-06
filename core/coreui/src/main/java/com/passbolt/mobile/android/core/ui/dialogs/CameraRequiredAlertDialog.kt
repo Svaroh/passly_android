@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.core.ui.dialogs
+package net.svaroh.passly.core.ui.dialogs
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.passbolt.mobile.android.core.localization.R
+import net.svaroh.passly.core.localization.R
 
 @Composable
 fun CameraRequiredAlertDialog(

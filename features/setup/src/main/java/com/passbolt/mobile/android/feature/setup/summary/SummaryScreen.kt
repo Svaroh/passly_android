@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup.summary
+package net.svaroh.passly.feature.setup.summary
 
 import PassboltTheme
 import android.app.Activity
@@ -59,37 +59,37 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.AuthenticationManageAccounts
-import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.Start
-import com.passbolt.mobile.android.core.navigation.compose.keys.LogsNavigationKey.Logs
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.BiometricSetup
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.Welcome
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.dialogs.LeaveSetupAlertDialog
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.AccessLogs
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.AuthenticationSuccess
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.ConfirmSetupLeave
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.DismissHelpMenu
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.DismissSetupLeave
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.GoBack
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.Initialize
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.OpenHelpMenu
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.PrimaryButtonAction
-import com.passbolt.mobile.android.feature.setup.summary.SummarySideEffect.NavigateToAppStart
-import com.passbolt.mobile.android.feature.setup.summary.SummarySideEffect.NavigateToBiometricSetup
-import com.passbolt.mobile.android.feature.setup.summary.SummarySideEffect.NavigateToLogs
-import com.passbolt.mobile.android.feature.setup.summary.SummarySideEffect.NavigateToManageAccounts
-import com.passbolt.mobile.android.feature.setup.summary.SummarySideEffect.NavigateToSignIn
-import com.passbolt.mobile.android.feature.setup.summary.SummarySideEffect.NavigateToWelcome
-import com.passbolt.mobile.android.helpmenu.HelpMenuBottomSheet
-import com.passbolt.mobile.android.ui.HelpMenuModel
-import com.passbolt.mobile.android.ui.ResultStatus
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.AuthenticationManageAccounts
+import net.svaroh.passly.core.navigation.compose.NavigationActivity.Start
+import net.svaroh.passly.core.navigation.compose.keys.LogsNavigationKey.Logs
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.BiometricSetup
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.Welcome
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.dialogs.LeaveSetupAlertDialog
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.AccessLogs
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.AuthenticationSuccess
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.ConfirmSetupLeave
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.DismissHelpMenu
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.DismissSetupLeave
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.GoBack
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.Initialize
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.OpenHelpMenu
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.PrimaryButtonAction
+import net.svaroh.passly.feature.setup.summary.SummarySideEffect.NavigateToAppStart
+import net.svaroh.passly.feature.setup.summary.SummarySideEffect.NavigateToBiometricSetup
+import net.svaroh.passly.feature.setup.summary.SummarySideEffect.NavigateToLogs
+import net.svaroh.passly.feature.setup.summary.SummarySideEffect.NavigateToManageAccounts
+import net.svaroh.passly.feature.setup.summary.SummarySideEffect.NavigateToSignIn
+import net.svaroh.passly.feature.setup.summary.SummarySideEffect.NavigateToWelcome
+import net.svaroh.passly.helpmenu.HelpMenuBottomSheet
+import net.svaroh.passly.ui.HelpMenuModel
+import net.svaroh.passly.ui.ResultStatus
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun SummaryScreen(

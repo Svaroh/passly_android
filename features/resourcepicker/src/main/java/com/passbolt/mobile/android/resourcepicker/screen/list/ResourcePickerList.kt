@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.screen.list
+package net.svaroh.passly.resourcepicker.screen.list
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,15 +30,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.rememberDebouncedBoolean
-import com.passbolt.mobile.android.core.resources.resourceicon.ResourceIconProvider
-import com.passbolt.mobile.android.core.ui.empty.EmptyResourceListState
-import com.passbolt.mobile.android.core.ui.lists.HeaderItem
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerIntent
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerIntent.ResourcePicked
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerState
+import net.svaroh.passly.core.compose.rememberDebouncedBoolean
+import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.core.ui.empty.EmptyResourceListState
+import net.svaroh.passly.core.ui.lists.HeaderItem
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.ResourcePicked
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerState
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 fun ResourcePickerList(

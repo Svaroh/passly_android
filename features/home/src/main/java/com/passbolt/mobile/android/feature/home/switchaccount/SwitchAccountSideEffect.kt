@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.home.switchaccount
+package net.svaroh.passly.feature.home.switchaccount
 
-import com.passbolt.mobile.android.core.navigation.AppContext
+import net.svaroh.passly.core.navigation.AppContext
 
 /**
  * Passbolt - Open source password manager for teams

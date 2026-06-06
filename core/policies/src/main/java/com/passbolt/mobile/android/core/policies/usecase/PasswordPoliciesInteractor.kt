@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.policies.usecase
+package net.svaroh.passly.core.policies.usecase
 
-import com.passbolt.mobile.android.core.policies.validation.PasswordPoliciesValidator
-import com.passbolt.mobile.android.ui.PasswordPolicies
+import net.svaroh.passly.core.policies.validation.PasswordPoliciesValidator
+import net.svaroh.passly.ui.PasswordPolicies
 
 class PasswordPoliciesInteractor(
     private val fetchPasswordPoliciesUseCase: FetchPasswordPoliciesUseCase,

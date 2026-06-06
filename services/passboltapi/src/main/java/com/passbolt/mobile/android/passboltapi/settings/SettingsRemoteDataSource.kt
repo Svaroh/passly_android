@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.passboltapi.settings
+package net.svaroh.passly.passboltapi.settings
 
 /**
  * Passbolt - Open source password manager for teams

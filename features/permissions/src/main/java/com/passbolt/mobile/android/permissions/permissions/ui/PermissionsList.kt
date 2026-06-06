@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissions.ui
+package net.svaroh.passly.permissions.permissions.ui
 
 import PassboltTheme
 import androidx.compose.foundation.clickable
@@ -30,14 +30,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.passbolt.mobile.android.core.ui.permissions.GroupPermissionRow
-import com.passbolt.mobile.android.core.ui.permissions.UserPermissionRow
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
-import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.UserWithAvatar
+import net.svaroh.passly.core.ui.permissions.GroupPermissionRow
+import net.svaroh.passly.core.ui.permissions.UserPermissionRow
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionModelUi.GroupPermissionModel
+import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.UserWithAvatar
 
 @Composable
 internal fun PermissionsList(

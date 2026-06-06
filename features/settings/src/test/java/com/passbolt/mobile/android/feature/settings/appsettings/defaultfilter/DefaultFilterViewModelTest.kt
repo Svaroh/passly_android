@@ -1,15 +1,15 @@
-package com.passbolt.mobile.android.feature.settings.appsettings.defaultfilter
+package net.svaroh.passly.feature.settings.appsettings.defaultfilter
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.preferences.usecase.GetHomeDisplayViewPrefsUseCase
-import com.passbolt.mobile.android.core.preferences.usecase.HomeDisplayViewPrefsValidator
-import com.passbolt.mobile.android.core.preferences.usecase.UpdateHomeDisplayViewPrefsUseCase
-import com.passbolt.mobile.android.entity.home.HomeDisplayView.ALL_ITEMS
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.defaultfilter.DefaultFilterIntent.SelectDefaultFilter
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.defaultfilter.DefaultFilterViewModel
-import com.passbolt.mobile.android.ui.DefaultFilterModel
-import com.passbolt.mobile.android.ui.DefaultFilterModel.EXPIRY
-import com.passbolt.mobile.android.ui.DefaultFilterModel.FAVOURITES
+import net.svaroh.passly.core.preferences.usecase.GetHomeDisplayViewPrefsUseCase
+import net.svaroh.passly.core.preferences.usecase.HomeDisplayViewPrefsValidator
+import net.svaroh.passly.core.preferences.usecase.UpdateHomeDisplayViewPrefsUseCase
+import net.svaroh.passly.entity.home.HomeDisplayView.ALL_ITEMS
+import net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter.DefaultFilterIntent.SelectDefaultFilter
+import net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter.DefaultFilterViewModel
+import net.svaroh.passly.ui.DefaultFilterModel
+import net.svaroh.passly.ui.DefaultFilterModel.EXPIRY
+import net.svaroh.passly.ui.DefaultFilterModel.FAVOURITES
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.resourceform.main.ui
+package net.svaroh.passly.feature.resourceform.main.ui
 
 import PassboltTheme
 import androidx.compose.foundation.layout.Column
@@ -15,38 +15,38 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.button.SecondaryIconButton
-import com.passbolt.mobile.android.core.ui.section.Section
-import com.passbolt.mobile.android.core.ui.text.TextInput
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Default
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Error
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note.NoteValidationError
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.password.ui.PasswordGenerationInput
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError
-import com.passbolt.mobile.android.feature.resourceform.main.NoteData
-import com.passbolt.mobile.android.feature.resourceform.main.PasswordData
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.GeneratePassword
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.GoToTotpMoreSettings
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.NoteChanged
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.PasswordMainUriTextChanged
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.PasswordTextChanged
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.PasswordUsernameTextChanged
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.ScanTotp
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.TotpSecretChanged
-import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.TotpUrlChanged
-import com.passbolt.mobile.android.feature.resourceform.main.TotpData
-import com.passbolt.mobile.android.feature.resourceform.main.getNoteErrorMessage
-import com.passbolt.mobile.android.feature.resourceform.main.getTotpSecretErrorMessage
-import com.passbolt.mobile.android.testtags.composetags.ResourceForm
-import com.passbolt.mobile.android.ui.LeadingContentType
-import com.passbolt.mobile.android.ui.LeadingContentType.CUSTOM_FIELDS
-import com.passbolt.mobile.android.ui.LeadingContentType.PASSWORD
-import com.passbolt.mobile.android.ui.LeadingContentType.STANDALONE_NOTE
-import com.passbolt.mobile.android.ui.LeadingContentType.TOTP
-import com.passbolt.mobile.android.ui.PasswordStrength
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.button.SecondaryIconButton
+import net.svaroh.passly.core.ui.section.Section
+import net.svaroh.passly.core.ui.text.TextInput
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Default
+import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Error
+import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteValidationError
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.ui.PasswordGenerationInput
+import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError
+import net.svaroh.passly.feature.resourceform.main.NoteData
+import net.svaroh.passly.feature.resourceform.main.PasswordData
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GeneratePassword
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoToTotpMoreSettings
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.NoteChanged
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.PasswordMainUriTextChanged
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.PasswordTextChanged
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.PasswordUsernameTextChanged
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.ScanTotp
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.TotpSecretChanged
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.TotpUrlChanged
+import net.svaroh.passly.feature.resourceform.main.TotpData
+import net.svaroh.passly.feature.resourceform.main.getNoteErrorMessage
+import net.svaroh.passly.feature.resourceform.main.getTotpSecretErrorMessage
+import net.svaroh.passly.testtags.composetags.ResourceForm
+import net.svaroh.passly.ui.LeadingContentType
+import net.svaroh.passly.ui.LeadingContentType.CUSTOM_FIELDS
+import net.svaroh.passly.ui.LeadingContentType.PASSWORD
+import net.svaroh.passly.ui.LeadingContentType.STANDALONE_NOTE
+import net.svaroh.passly.ui.LeadingContentType.TOTP
+import net.svaroh.passly.ui.PasswordStrength
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun LeadingContent(

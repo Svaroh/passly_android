@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy
+package net.svaroh.passly.feature.autofill.resources.datasetstrategy
 
-import com.passbolt.mobile.android.core.autofill.accessibility.AccessibilityCommunicator
+import net.svaroh.passly.core.autofill.accessibility.AccessibilityCommunicator
 
 class ReturnAccessibilityDataset(
     private val autofillCallback: AutofillCallback,

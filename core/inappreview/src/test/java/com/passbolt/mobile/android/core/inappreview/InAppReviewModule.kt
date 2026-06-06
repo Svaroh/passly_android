@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.inappreview
+package net.svaroh.passly.core.inappreview
 
-import com.passbolt.mobile.android.core.inappreview.storage.GetInAppReviewParametersUseCase
-import com.passbolt.mobile.android.core.inappreview.storage.GetInAppReviewShowModeUseCase
-import com.passbolt.mobile.android.core.inappreview.storage.SaveInAppReviewParametersUseCase
-import com.passbolt.mobile.android.core.inappreview.storage.SaveInAppShowModeUseCase
+import net.svaroh.passly.core.inappreview.storage.GetInAppReviewParametersUseCase
+import net.svaroh.passly.core.inappreview.storage.GetInAppReviewShowModeUseCase
+import net.svaroh.passly.core.inappreview.storage.SaveInAppReviewParametersUseCase
+import net.svaroh.passly.core.inappreview.storage.SaveInAppShowModeUseCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 import org.mockito.kotlin.mock

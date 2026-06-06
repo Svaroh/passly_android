@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.core.security.runtimeauth
+package net.svaroh.passly.core.security.runtimeauth
 
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.ActivityIntents
 import timber.log.Timber
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 /**
  * Passbolt - Open source password manager for teams

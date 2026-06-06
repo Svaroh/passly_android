@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill
+package net.svaroh.passly.feature.settings.screen.appsettings.autofill
 
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityViewModel
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillViewModel
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.encourageaccessibility.EncourageAccessibilityViewModel
+import net.svaroh.passly.feature.settings.screen.appsettings.autofill.encouragenativeautofill.EncourageNativeAutofillViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
 

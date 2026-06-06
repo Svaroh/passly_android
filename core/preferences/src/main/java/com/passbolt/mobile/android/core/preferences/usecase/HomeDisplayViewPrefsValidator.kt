@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.core.preferences.usecase
+package net.svaroh.passly.core.preferences.usecase
 
-import com.passbolt.mobile.android.core.rbac.usecase.GetRbacRulesUseCase
-import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
-import com.passbolt.mobile.android.entity.home.HomeDisplayView
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
-import com.passbolt.mobile.android.ui.DefaultFilterModel
-import com.passbolt.mobile.android.ui.RbacModel
-import com.passbolt.mobile.android.ui.RbacRuleModel.ALLOW
+import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
+import net.svaroh.passly.entity.home.HomeDisplayView
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
+import net.svaroh.passly.ui.DefaultFilterModel
+import net.svaroh.passly.ui.RbacModel
+import net.svaroh.passly.ui.RbacRuleModel.ALLOW
 import kotlinx.coroutines.runBlocking
 
 /**

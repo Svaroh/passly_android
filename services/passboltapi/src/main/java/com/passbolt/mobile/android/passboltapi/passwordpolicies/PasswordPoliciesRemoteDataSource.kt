@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.passboltapi.passwordpolicies
+package net.svaroh.passly.passboltapi.passwordpolicies
 
 internal class PasswordPoliciesRemoteDataSource(
     private val passwordPoliciesApi: PasswordPoliciesApi,

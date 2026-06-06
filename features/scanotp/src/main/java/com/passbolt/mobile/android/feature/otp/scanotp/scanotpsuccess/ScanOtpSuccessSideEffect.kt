@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess
+package net.svaroh.passly.feature.otp.scanotp.scanotpsuccess
 
-import com.passbolt.mobile.android.ui.OtpParseResult
+import net.svaroh.passly.ui.OtpParseResult
 
 internal sealed interface ScanOtpSuccessSideEffect {
     data class NavigateToOtpList(

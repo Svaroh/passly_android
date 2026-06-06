@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.metadata.sessionkeys
+package net.svaroh.passly.metadata.sessionkeys
 
-import com.passbolt.mobile.android.dto.request.SessionKeysBundleDto
+import net.svaroh.passly.dto.request.SessionKeysBundleDto
 
 class SessionKeysBundleValidator {
     fun isValid(bundle: SessionKeysBundleDto?): Boolean = bundle?.objectType == "PASSBOLT_SESSION_KEYS"

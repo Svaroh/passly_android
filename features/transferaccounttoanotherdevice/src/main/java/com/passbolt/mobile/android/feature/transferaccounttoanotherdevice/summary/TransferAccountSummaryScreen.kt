@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary
+package net.svaroh.passly.feature.transferaccounttoanotherdevice.summary
 
 import PassboltTheme
 import androidx.activity.compose.BackHandler
@@ -51,21 +51,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Onboarding
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.GoBack
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.Initialize
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.PrimaryAction
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.TryAgain
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummarySideEffect.NavigateToMyAccount
-import com.passbolt.mobile.android.feature.transferaccounttoanotherdevice.summary.TransferAccountSummarySideEffect.NavigateToTransferAccountStart
-import com.passbolt.mobile.android.testtags.composetags.TransferAccount
-import com.passbolt.mobile.android.ui.TransferAccountStatusType
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Onboarding
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.GoBack
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.Initialize
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.PrimaryAction
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryIntent.TryAgain
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummarySideEffect.NavigateToMyAccount
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummarySideEffect.NavigateToTransferAccountStart
+import net.svaroh.passly.testtags.composetags.TransferAccount
+import net.svaroh.passly.ui.TransferAccountStatusType
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 internal fun TransferAccountSummaryScreen(

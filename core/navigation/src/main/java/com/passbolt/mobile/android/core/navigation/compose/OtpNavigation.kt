@@ -1,16 +1,16 @@
-package com.passbolt.mobile.android.core.navigation.compose
+package net.svaroh.passly.core.navigation.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.ACCOUNT_DETAILS
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.OTP
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.RESOURCE_FORM
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.RESOURCE_PICKER
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.SCAN_OTP
-import com.passbolt.mobile.android.core.navigation.compose.base.Feature.TRANSFER_ACCOUNT_TO_ANOTHER_DEVICE
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.Otp
-import com.passbolt.mobile.android.core.navigation.compose.results.ResultEventBus
+import net.svaroh.passly.core.navigation.compose.base.Feature.ACCOUNT_DETAILS
+import net.svaroh.passly.core.navigation.compose.base.Feature.OTP
+import net.svaroh.passly.core.navigation.compose.base.Feature.RESOURCE_FORM
+import net.svaroh.passly.core.navigation.compose.base.Feature.RESOURCE_PICKER
+import net.svaroh.passly.core.navigation.compose.base.Feature.SCAN_OTP
+import net.svaroh.passly.core.navigation.compose.base.Feature.TRANSFER_ACCOUNT_TO_ANOTHER_DEVICE
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.Otp
+import net.svaroh.passly.core.navigation.compose.results.ResultEventBus
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 

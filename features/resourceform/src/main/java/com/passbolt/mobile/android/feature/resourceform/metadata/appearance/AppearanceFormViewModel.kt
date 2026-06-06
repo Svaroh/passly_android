@@ -21,19 +21,19 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.metadata.appearance
+package net.svaroh.passly.feature.resourceform.metadata.appearance
 
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.Initialize
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetCustomIconBackgroundColor
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetKeepassIcon
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.ToggleDefaultColor
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormIntent.ToggleDefaultIcon
-import com.passbolt.mobile.android.feature.resourceform.metadata.appearance.AppearanceFormSideEffect.NavigateUp
-import com.passbolt.mobile.android.mappers.ResourceFormMapper
-import com.passbolt.mobile.android.ui.ResourceAppearanceModel
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.Initialize
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetCustomIconBackgroundColor
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetKeepassIcon
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.ToggleDefaultColor
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.ToggleDefaultIcon
+import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormSideEffect.NavigateUp
+import net.svaroh.passly.mappers.ResourceFormMapper
+import net.svaroh.passly.ui.ResourceAppearanceModel
 
 internal class AppearanceFormViewModel(
     private val resourceFormMapper: ResourceFormMapper,

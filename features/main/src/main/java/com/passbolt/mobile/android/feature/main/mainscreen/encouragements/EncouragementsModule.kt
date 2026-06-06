@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.main.mainscreen.encouragements
+package net.svaroh.passly.feature.main.mainscreen.encouragements
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf

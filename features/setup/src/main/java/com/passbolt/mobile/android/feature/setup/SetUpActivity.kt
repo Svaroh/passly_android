@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.setup
+package net.svaroh.passly.feature.setup
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -29,18 +29,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.IntentCompat
 import androidx.navigation3.runtime.NavKey
-import com.passbolt.mobile.android.common.lifecycleawarelazy.lifecycleAwareLazy
-import com.passbolt.mobile.android.core.navigation.AccountSetupDataModel
-import com.passbolt.mobile.android.core.navigation.ActivityIntents
-import com.passbolt.mobile.android.core.navigation.PartiallyAuthenticated
-import com.passbolt.mobile.android.core.navigation.compose.APP_NAVIGATOR_SCOPE
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.SetupNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.LogsNavigationKey.Logs
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.ImportProfile
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.ScanQrCodes
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.TransferDetails
-import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.Welcome
+import net.svaroh.passly.common.lifecycleawarelazy.lifecycleAwareLazy
+import net.svaroh.passly.core.navigation.AccountSetupDataModel
+import net.svaroh.passly.core.navigation.ActivityIntents
+import net.svaroh.passly.core.navigation.PartiallyAuthenticated
+import net.svaroh.passly.core.navigation.compose.APP_NAVIGATOR_SCOPE
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.SetupNavigation
+import net.svaroh.passly.core.navigation.compose.keys.LogsNavigationKey.Logs
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.ImportProfile
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.ScanQrCodes
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.TransferDetails
+import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.Welcome
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.koin.compose.koinInject

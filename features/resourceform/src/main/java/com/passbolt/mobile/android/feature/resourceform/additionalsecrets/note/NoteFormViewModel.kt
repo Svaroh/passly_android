@@ -21,18 +21,18 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note
+package net.svaroh.passly.feature.resourceform.additionalsecrets.note
 
-import com.passbolt.mobile.android.common.validation.StringMaxLength
-import com.passbolt.mobile.android.common.validation.validation
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note.NoteFormIntent.ApplyChanges
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note.NoteFormIntent.GoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note.NoteFormIntent.NoteTextChanged
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note.NoteFormIntent.RemoveNote
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note.NoteFormSideEffect.ApplyAndGoBack
-import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note.NoteFormSideEffect.NavigateBack
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.common.validation.StringMaxLength
+import net.svaroh.passly.common.validation.validation
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteFormIntent.GoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteFormIntent.NoteTextChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteFormIntent.RemoveNote
+import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteFormSideEffect.ApplyAndGoBack
+import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteFormSideEffect.NavigateBack
+import net.svaroh.passly.ui.ResourceFormMode
 
 internal class NoteFormViewModel(
     mode: ResourceFormMode,

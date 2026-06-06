@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.otpmoremenu
+package net.svaroh.passly.otpmoremenu
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,24 +14,24 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.bottomsheet.BottomSheetHeader
-import com.passbolt.mobile.android.core.ui.menu.OpenableSettingsItem
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuIntent.Close
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuIntent.CopyOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuIntent.DeleteOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuIntent.EditOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuIntent.Initialize
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuIntent.ShowOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.Dismiss
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeCopyOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeDeleteOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeEditOtp
-import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeShowOtp
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.bottomsheet.BottomSheetHeader
+import net.svaroh.passly.core.ui.menu.OpenableSettingsItem
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.Close
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.CopyOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.DeleteOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.EditOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.Initialize
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.ShowOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.Dismiss
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeCopyOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeDeleteOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeEditOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeShowOtp
 import org.koin.androidx.compose.koinViewModel
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 /**
  * Passbolt - Open source password manager for teams

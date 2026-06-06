@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.tags
+package net.svaroh.passly.core.tags
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.core.tags.usecase.db.AddLocalTagsUseCase
-import com.passbolt.mobile.android.ui.ResourceModelWithAttributes
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.core.tags.usecase.db.AddLocalTagsUseCase
+import net.svaroh.passly.ui.ResourceModelWithAttributes
 
 // TODO MOB-3051 do not delete existing when rebuilding
 class RebuildTagsTablesUseCase(

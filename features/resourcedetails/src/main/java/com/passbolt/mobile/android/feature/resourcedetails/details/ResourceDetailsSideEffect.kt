@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourcedetails.details
+package net.svaroh.passly.feature.resourcedetails.details
 
-import com.passbolt.mobile.android.ui.PermissionsMode
-import com.passbolt.mobile.android.ui.ResourceModel
+import net.svaroh.passly.ui.PermissionsMode
+import net.svaroh.passly.ui.ResourceModel
 
 sealed class ResourceDetailsSideEffect {
     data object NavigateBack : ResourceDetailsSideEffect()

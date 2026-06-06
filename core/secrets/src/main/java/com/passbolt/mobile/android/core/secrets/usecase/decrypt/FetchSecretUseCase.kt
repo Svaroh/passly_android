@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.secrets.usecase.decrypt
+package net.svaroh.passly.core.secrets.usecase.decrypt
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.passboltapi.secrets.SecretsRepository
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.passboltapi.secrets.SecretsRepository
 
 class FetchSecretUseCase(
     private val secretsRepository: SecretsRepository,

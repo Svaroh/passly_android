@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.database.impl.resources
+package net.svaroh.passly.database.impl.resources
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
-import com.passbolt.mobile.android.database.impl.base.BaseDao
-import com.passbolt.mobile.android.entity.resource.Permission
-import com.passbolt.mobile.android.entity.resource.Resource
-import com.passbolt.mobile.android.entity.resource.ResourceWithMetadata
+import net.svaroh.passly.database.impl.base.BaseDao
+import net.svaroh.passly.entity.resource.Permission
+import net.svaroh.passly.entity.resource.Resource
+import net.svaroh.passly.entity.resource.ResourceWithMetadata
 import java.time.ZonedDateTime
 
 /**

@@ -21,10 +21,10 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.home.filtersmenu
+package net.svaroh.passly.feature.home.filtersmenu
 
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewModel.NotLoaded
+import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.HomeDisplayViewModel.NotLoaded
 
 data class FiltersMenuState(
     val showFoldersMenuItem: Boolean = false,

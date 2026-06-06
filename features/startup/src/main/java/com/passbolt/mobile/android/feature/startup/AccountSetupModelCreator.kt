@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.feature.startup
+package net.svaroh.passly.feature.startup
 
 import android.content.Intent
-import com.passbolt.mobile.android.core.navigation.AccountSetupDataModel
+import net.svaroh.passly.core.navigation.AccountSetupDataModel
 
 /**
  * Passbolt - Open source password manager for teams
@@ -43,7 +43,7 @@ class AccountSetupModelCreator {
         }
 
     private companion object {
-        const val ACTION_MANAGED_PROFILE = "com.passbolt.mobile.android.MANAGED_PROFILE"
+        const val ACTION_MANAGED_PROFILE = "net.svaroh.passly.MANAGED_PROFILE"
 
         const val EXTRA_USER_ID = "USER_ID"
         const val EXTRA_USERNAME = "USERNAME"

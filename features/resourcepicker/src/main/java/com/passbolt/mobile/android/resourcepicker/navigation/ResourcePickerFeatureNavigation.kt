@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.resourcepicker.navigation
+package net.svaroh.passly.resourcepicker.navigation
 
 import PassboltTheme
-import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ResourcePicker
-import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerScreen
+import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ResourcePicker
+import net.svaroh.passly.resourcepicker.screen.ResourcePickerScreen
 
 class ResourcePickerFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =

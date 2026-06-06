@@ -21,13 +21,13 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.rbac.usecase
+package net.svaroh.passly.core.rbac.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.SelectedAccountUseCase
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
-import com.passbolt.mobile.android.ui.RbacModel
-import com.passbolt.mobile.android.ui.RbacRuleModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.ui.RbacModel
+import net.svaroh.passly.ui.RbacRuleModel
 
 class GetRbacRulesUseCase(
     private val encryptedSharedPreferencesFactory: EncryptedSharedPreferencesFactory,

@@ -21,25 +21,25 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.metadata.interactor
+package net.svaroh.passly.metadata.interactor
 
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.privatekey.GetSelectedUserPrivateKeyUseCase
-import com.passbolt.mobile.android.core.metadata.test.R
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
-import com.passbolt.mobile.android.core.users.usecase.db.GetLocalUserUseCase
-import com.passbolt.mobile.android.gopenpgp.OpenPgp
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
-import com.passbolt.mobile.android.metadata.usecase.GetTrustedMetadataKeyUseCase
-import com.passbolt.mobile.android.metadata.usecase.SaveTrustedMetadataKeyUseCase
-import com.passbolt.mobile.android.metadata.usecase.UpdateMetadataPrivateKeyUseCase
-import com.passbolt.mobile.android.ui.GpgKeyModel
-import com.passbolt.mobile.android.ui.ParsedMetadataKeyModel
-import com.passbolt.mobile.android.ui.ParsedMetadataPrivateKeyModel
-import com.passbolt.mobile.android.ui.UserModel
-import com.passbolt.mobile.android.ui.UserProfileModel
+import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
+import net.svaroh.passly.core.accounts.usecase.privatekey.GetSelectedUserPrivateKeyUseCase
+import net.svaroh.passly.core.metadata.test.R
+import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
+import net.svaroh.passly.core.users.usecase.db.GetLocalUserUseCase
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
+import net.svaroh.passly.metadata.usecase.GetTrustedMetadataKeyUseCase
+import net.svaroh.passly.metadata.usecase.SaveTrustedMetadataKeyUseCase
+import net.svaroh.passly.metadata.usecase.UpdateMetadataPrivateKeyUseCase
+import net.svaroh.passly.ui.GpgKeyModel
+import net.svaroh.passly.ui.ParsedMetadataKeyModel
+import net.svaroh.passly.ui.ParsedMetadataPrivateKeyModel
+import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserProfileModel
 import com.proton.gopenpgp.crypto.Crypto
 import kotlinx.coroutines.test.runTest
 import org.junit.After

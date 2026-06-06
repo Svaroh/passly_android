@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.metadata.usecase
+package net.svaroh.passly.metadata.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.metadata.usecase.db.GetLocalMetadataKeysUseCase
-import com.passbolt.mobile.android.metadata.usecase.db.GetLocalMetadataKeysUseCase.MetadataKeyPurpose.ENCRYPT
-import com.passbolt.mobile.android.ui.MetadataTypeModel.V4
-import com.passbolt.mobile.android.ui.MetadataTypeModel.V5
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.metadata.usecase.db.GetLocalMetadataKeysUseCase
+import net.svaroh.passly.metadata.usecase.db.GetLocalMetadataKeysUseCase.MetadataKeyPurpose.ENCRYPT
+import net.svaroh.passly.ui.MetadataTypeModel.V4
+import net.svaroh.passly.ui.MetadataTypeModel.V5
 
 /**
  * Passbolt - Open source password manager for teams

@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.entity.permission
+package net.svaroh.passly.entity.permission
 
-import com.passbolt.mobile.android.entity.resource.Permission
+import net.svaroh.passly.entity.resource.Permission
 
 data class UserPermission(
     val userId: String,

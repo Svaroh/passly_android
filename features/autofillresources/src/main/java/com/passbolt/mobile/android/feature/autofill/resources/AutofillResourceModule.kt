@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.feature.autofill.resources
+package net.svaroh.passly.feature.autofill.resources
 
-import com.passbolt.mobile.android.core.navigation.AutofillMode
-import com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy.AutofillCallback
-import com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy.ReturnAccessibilityDataset
-import com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy.ReturnAutofillDataset
-import com.passbolt.mobile.android.feature.autofill.resources.datasetstrategy.ReturnAutofillDatasetStrategy
+import net.svaroh.passly.core.navigation.AutofillMode
+import net.svaroh.passly.feature.autofill.resources.datasetstrategy.AutofillCallback
+import net.svaroh.passly.feature.autofill.resources.datasetstrategy.ReturnAccessibilityDataset
+import net.svaroh.passly.feature.autofill.resources.datasetstrategy.ReturnAutofillDataset
+import net.svaroh.passly.feature.autofill.resources.datasetstrategy.ReturnAutofillDatasetStrategy
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel

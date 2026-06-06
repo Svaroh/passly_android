@@ -21,16 +21,16 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.users.user
+package net.svaroh.passly.core.users.user
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.networking.MfaTypeProvider
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.mappers.UsersModelMapper
-import com.passbolt.mobile.android.passboltapi.users.UsersRepository
-import com.passbolt.mobile.android.ui.UserModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.networking.MfaTypeProvider
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.mappers.UsersModelMapper
+import net.svaroh.passly.passboltapi.users.UsersRepository
+import net.svaroh.passly.ui.UserModel
 
 class FetchCurrentUserUseCase(
     private val usersRepository: UsersRepository,

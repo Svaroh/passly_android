@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.setup.summary
+package net.svaroh.passly.feature.setup.summary
 
 /**
  * Passbolt - Open source password manager for teams
@@ -25,30 +25,30 @@ package com.passbolt.mobile.android.feature.setup.summary
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.common.UuidProvider
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.account.SaveAccountUseCase
-import com.passbolt.mobile.android.database.usecase.SaveResourcesDatabasePassphraseUseCase
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.AccessLogs
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.AuthenticationSuccess
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.ConfirmSetupLeave
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.DismissHelpMenu
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.DismissSetupLeave
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.GoBack
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.Initialize
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.OpenHelpMenu
-import com.passbolt.mobile.android.feature.setup.summary.SummaryIntent.PrimaryButtonAction
-import com.passbolt.mobile.android.feature.setup.summary.SummarySideEffect.NavigateToAppStart
-import com.passbolt.mobile.android.feature.setup.summary.SummarySideEffect.NavigateToBiometricSetup
-import com.passbolt.mobile.android.feature.setup.summary.SummarySideEffect.NavigateToLogs
-import com.passbolt.mobile.android.feature.setup.summary.SummarySideEffect.NavigateToManageAccounts
-import com.passbolt.mobile.android.feature.setup.summary.SummarySideEffect.NavigateToSignIn
-import com.passbolt.mobile.android.feature.setup.summary.SummarySideEffect.NavigateToWelcome
-import com.passbolt.mobile.android.ui.ResultStatus.AlreadyLinked
-import com.passbolt.mobile.android.ui.ResultStatus.Failure
-import com.passbolt.mobile.android.ui.ResultStatus.HttpNotSupported
-import com.passbolt.mobile.android.ui.ResultStatus.NoNetwork
-import com.passbolt.mobile.android.ui.ResultStatus.Success
+import net.svaroh.passly.common.UuidProvider
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.account.SaveAccountUseCase
+import net.svaroh.passly.database.usecase.SaveResourcesDatabasePassphraseUseCase
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.AccessLogs
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.AuthenticationSuccess
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.ConfirmSetupLeave
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.DismissHelpMenu
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.DismissSetupLeave
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.GoBack
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.Initialize
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.OpenHelpMenu
+import net.svaroh.passly.feature.setup.summary.SummaryIntent.PrimaryButtonAction
+import net.svaroh.passly.feature.setup.summary.SummarySideEffect.NavigateToAppStart
+import net.svaroh.passly.feature.setup.summary.SummarySideEffect.NavigateToBiometricSetup
+import net.svaroh.passly.feature.setup.summary.SummarySideEffect.NavigateToLogs
+import net.svaroh.passly.feature.setup.summary.SummarySideEffect.NavigateToManageAccounts
+import net.svaroh.passly.feature.setup.summary.SummarySideEffect.NavigateToSignIn
+import net.svaroh.passly.feature.setup.summary.SummarySideEffect.NavigateToWelcome
+import net.svaroh.passly.ui.ResultStatus.AlreadyLinked
+import net.svaroh.passly.ui.ResultStatus.Failure
+import net.svaroh.passly.ui.ResultStatus.HttpNotSupported
+import net.svaroh.passly.ui.ResultStatus.NoNetwork
+import net.svaroh.passly.ui.ResultStatus.Success
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop

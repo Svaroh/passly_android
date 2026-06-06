@@ -21,32 +21,32 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.locationdetails
+package net.svaroh.passly.locationdetails
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.InProgress
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
-import com.passbolt.mobile.android.core.commonfolders.usecase.db.GetLocalFolderLocationUseCase
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.resources.usecase.db.GetLocalResourceUseCase
-import com.passbolt.mobile.android.locationdetails.LocationDetailsIntent.GoBack
-import com.passbolt.mobile.android.locationdetails.LocationDetailsIntent.ToggleExpanded
-import com.passbolt.mobile.android.locationdetails.LocationDetailsSideEffect.NavigateToHome
-import com.passbolt.mobile.android.locationdetails.LocationDetailsSideEffect.NavigateUp
-import com.passbolt.mobile.android.locationdetails.LocationDetailsSideEffect.ShowErrorSnackbar
-import com.passbolt.mobile.android.locationdetails.LocationDetailsSideEffect.ShowToast
-import com.passbolt.mobile.android.locationdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
-import com.passbolt.mobile.android.locationdetails.ToastType.CONTENT_NOT_AVAILABLE
-import com.passbolt.mobile.android.locationdetails.data.ExpandableFolderTreeCreator
-import com.passbolt.mobile.android.locationdetails.data.createExpandedIds
-import com.passbolt.mobile.android.locationdetails.ui.LocationItem
-import com.passbolt.mobile.android.locationdetails.ui.LocationItem.FOLDER
-import com.passbolt.mobile.android.locationdetails.ui.LocationItem.RESOURCE
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderLocationUseCase
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.locationdetails.LocationDetailsIntent.GoBack
+import net.svaroh.passly.locationdetails.LocationDetailsIntent.ToggleExpanded
+import net.svaroh.passly.locationdetails.LocationDetailsSideEffect.NavigateToHome
+import net.svaroh.passly.locationdetails.LocationDetailsSideEffect.NavigateUp
+import net.svaroh.passly.locationdetails.LocationDetailsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.locationdetails.LocationDetailsSideEffect.ShowToast
+import net.svaroh.passly.locationdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
+import net.svaroh.passly.locationdetails.ToastType.CONTENT_NOT_AVAILABLE
+import net.svaroh.passly.locationdetails.data.ExpandableFolderTreeCreator
+import net.svaroh.passly.locationdetails.data.createExpandedIds
+import net.svaroh.passly.locationdetails.ui.LocationItem
+import net.svaroh.passly.locationdetails.ui.LocationItem.FOLDER
+import net.svaroh.passly.locationdetails.ui.LocationItem.RESOURCE
 import kotlinx.coroutines.launch
 import timber.log.Timber
 

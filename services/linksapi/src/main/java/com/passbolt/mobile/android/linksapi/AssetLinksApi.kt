@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.linksapi
+package net.svaroh.passly.linksapi
 
 import retrofit2.http.GET
 

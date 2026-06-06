@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.serializers.jsonschema
+package net.svaroh.passly.serializers.jsonschema
 
 enum class SchemaEntity {
     RESOURCE,

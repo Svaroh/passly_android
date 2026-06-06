@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.common.hash
+package net.svaroh.passly.common.hash
 
 import java.security.MessageDigest
 

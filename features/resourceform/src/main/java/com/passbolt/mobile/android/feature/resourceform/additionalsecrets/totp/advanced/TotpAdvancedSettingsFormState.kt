@@ -21,11 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.advanced
+package net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced
 
-import com.passbolt.mobile.android.ui.OtpParseResult.OtpQr
-import com.passbolt.mobile.android.ui.OtpParseResult.OtpQr.Algorithm
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.ui.OtpParseResult.OtpQr
+import net.svaroh.passly.ui.OtpParseResult.OtpQr.Algorithm
+import net.svaroh.passly.ui.ResourceFormMode
 
 internal data class TotpAdvancedSettingsFormState(
     val resourceFormMode: ResourceFormMode? = null,

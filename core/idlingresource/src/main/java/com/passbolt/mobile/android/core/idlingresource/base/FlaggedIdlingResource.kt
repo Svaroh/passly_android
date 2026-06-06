@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.idlingresource.base
+package net.svaroh.passly.core.idlingresource.base
 
 import androidx.test.espresso.IdlingResource
 import java.util.concurrent.atomic.AtomicBoolean

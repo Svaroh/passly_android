@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.resourcepicker.model
+package net.svaroh.passly.resourcepicker.model
 
 enum class ConfirmationType {
     LINK_TOTP,

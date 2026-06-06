@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.scenarios.resource.details
+package net.svaroh.passly.scenarios.resource.details
 
 import androidx.annotation.StringRes
-import com.passbolt.mobile.android.core.localization.R
+import net.svaroh.passly.core.localization.R
 
 enum class CopyItem(
     @param:StringRes val stringResId: Int,

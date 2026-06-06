@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.envinfo
+package net.svaroh.passly.core.envinfo
 
 import android.content.pm.PackageInfo
 import android.os.Build

@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp
+package net.svaroh.passly.feature.resourceform.additionalsecrets.totp
 
-import com.passbolt.mobile.android.ui.ResourceFormMode
+import net.svaroh.passly.ui.ResourceFormMode
 
 internal data class TotpFormState(
     val resourceFormMode: ResourceFormMode? = null,

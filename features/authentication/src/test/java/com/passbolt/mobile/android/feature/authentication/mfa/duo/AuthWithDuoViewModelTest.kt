@@ -1,15 +1,15 @@
-package com.passbolt.mobile.android.feature.authentication.mfa.duo
+package net.svaroh.passly.feature.authentication.mfa.duo
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetDuoPromptUseCase
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.RefreshSessionUseCase
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignOutUseCase
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.VerifyDuoCallbackUseCase
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoIntent.AuthenticateWithDuo
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoIntent.DuoAuthFinished
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NotifyVerificationSucceeded
-import com.passbolt.mobile.android.feature.authentication.mfa.duo.duowebviewsheet.DuoState
+import net.svaroh.passly.feature.authentication.auth.usecase.GetDuoPromptUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.VerifyDuoCallbackUseCase
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.AuthenticateWithDuo
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.DuoAuthFinished
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NotifyVerificationSucceeded
+import net.svaroh.passly.feature.authentication.mfa.duo.duowebviewsheet.DuoState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop

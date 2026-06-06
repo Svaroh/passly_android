@@ -21,14 +21,14 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.mappers
+package net.svaroh.passly.mappers
 
-import com.passbolt.mobile.android.dto.response.RbacPermissionDto
-import com.passbolt.mobile.android.ui.RbacModel
-import com.passbolt.mobile.android.ui.RbacRuleModel
-import com.passbolt.mobile.android.ui.RbacRuleModel.ALLOW
-import com.passbolt.mobile.android.ui.RbacRuleModel.DENY
-import com.passbolt.mobile.android.ui.RbacRuleModel.UNSUPPORTED_RULE
+import net.svaroh.passly.dto.response.RbacPermissionDto
+import net.svaroh.passly.ui.RbacModel
+import net.svaroh.passly.ui.RbacRuleModel
+import net.svaroh.passly.ui.RbacRuleModel.ALLOW
+import net.svaroh.passly.ui.RbacRuleModel.DENY
+import net.svaroh.passly.ui.RbacRuleModel.UNSUPPORTED_RULE
 
 class RbacMapper {
     fun map(rbacs: List<RbacPermissionDto>) =

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.logs
+package net.svaroh.passly.logs
 
 data class LogsState(
     val logLines: List<String> = emptyList(),

@@ -1,16 +1,16 @@
-package com.passbolt.mobile.android.core.resources.usecase
+package net.svaroh.passly.core.resources.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.networking.MfaTypeProvider
-import com.passbolt.mobile.android.core.networking.NetworkResult
-import com.passbolt.mobile.android.dto.PassphraseNotInCacheException
-import com.passbolt.mobile.android.mappers.PermissionsModelMapper
-import com.passbolt.mobile.android.mappers.ResourceModelMapper
-import com.passbolt.mobile.android.mappers.TagsModelMapper
-import com.passbolt.mobile.android.passboltapi.resource.ResourceRepository
-import com.passbolt.mobile.android.ui.ResourceModelWithAttributes
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.networking.MfaTypeProvider
+import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.dto.PassphraseNotInCacheException
+import net.svaroh.passly.mappers.PermissionsModelMapper
+import net.svaroh.passly.mappers.ResourceModelMapper
+import net.svaroh.passly.mappers.TagsModelMapper
+import net.svaroh.passly.passboltapi.resource.ResourceRepository
+import net.svaroh.passly.ui.ResourceModelWithAttributes
 
 /**
  * Passbolt - Open source password manager for teams

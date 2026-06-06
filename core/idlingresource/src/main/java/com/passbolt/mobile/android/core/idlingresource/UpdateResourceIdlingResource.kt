@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.core.idlingresource
+package net.svaroh.passly.core.idlingresource
 
-import com.passbolt.mobile.android.core.idlingresource.base.FlaggedIdlingResource
+import net.svaroh.passly.core.idlingresource.base.FlaggedIdlingResource
 
 /**
  * Passbolt - Open source password manager for teams

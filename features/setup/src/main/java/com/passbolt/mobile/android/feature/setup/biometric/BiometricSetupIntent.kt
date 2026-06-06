@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.feature.setup.biometric
+package net.svaroh.passly.feature.setup.biometric
 
 import android.security.keystore.KeyPermanentlyInvalidatedException
-import com.passbolt.mobile.android.ui.BiometricAuthError
+import net.svaroh.passly.ui.BiometricAuthError
 import javax.crypto.Cipher
 
 /**

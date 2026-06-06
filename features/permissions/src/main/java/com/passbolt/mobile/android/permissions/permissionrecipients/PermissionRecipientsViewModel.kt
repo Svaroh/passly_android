@@ -21,28 +21,28 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissionrecipients
+package net.svaroh.passly.permissions.permissionrecipients
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.common.search.SearchableMatcher
-import com.passbolt.mobile.android.core.commongroups.usecase.db.GetLocalGroupsUseCase
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode
-import com.passbolt.mobile.android.core.users.usecase.db.GetLocalUsersUseCase
-import com.passbolt.mobile.android.mappers.PermissionsModelMapper
-import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper.Companion.TEMPORARY_NEW_PERMISSION_ID
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsIntent.GoBack
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsIntent.Save
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsIntent.Search
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsIntent.ToggleGroupSelection
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsIntent.ToggleUserSelection
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsSideEffect.NavigateBack
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsSideEffect.NavigateBackWithResult
-import com.passbolt.mobile.android.ui.GroupModel
-import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.UserModel
+import net.svaroh.passly.common.search.SearchableMatcher
+import net.svaroh.passly.core.commongroups.usecase.db.GetLocalGroupsUseCase
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.ui.search.SearchInputEndIconMode
+import net.svaroh.passly.core.users.usecase.db.GetLocalUsersUseCase
+import net.svaroh.passly.mappers.PermissionsModelMapper
+import net.svaroh.passly.mappers.SharePermissionsModelMapper.Companion.TEMPORARY_NEW_PERMISSION_ID
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent.GoBack
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent.Save
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent.Search
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent.ToggleGroupSelection
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent.ToggleUserSelection
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsSideEffect.NavigateBack
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsSideEffect.NavigateBackWithResult
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.UserModel
 import kotlinx.coroutines.launch
 
 class PermissionRecipientsViewModel(

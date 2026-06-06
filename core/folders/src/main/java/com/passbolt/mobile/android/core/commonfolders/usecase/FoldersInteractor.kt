@@ -1,18 +1,18 @@
-package com.passbolt.mobile.android.core.commonfolders.usecase
+package net.svaroh.passly.core.commonfolders.usecase
 
 import android.database.SQLException
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.SelectedAccountUseCase
-import com.passbolt.mobile.android.core.commonfolders.usecase.GetFoldersPaginatedUseCase.Output.Failure
-import com.passbolt.mobile.android.core.commonfolders.usecase.GetFoldersPaginatedUseCase.Output.Success
-import com.passbolt.mobile.android.core.commonfolders.usecase.db.RemoveLocalFoldersWithUpdateStateUseCase
-import com.passbolt.mobile.android.core.commonfolders.usecase.db.SetLocalFoldersUpdateStateUseCase
-import com.passbolt.mobile.android.core.commonfolders.usecase.db.UpsertLocalFoldersUseCase
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.entity.folder.FolderUpdateState.PENDING
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
-import com.passbolt.mobile.android.ui.FolderModelWithAttributes
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase
+import net.svaroh.passly.core.commonfolders.usecase.GetFoldersPaginatedUseCase.Output.Failure
+import net.svaroh.passly.core.commonfolders.usecase.GetFoldersPaginatedUseCase.Output.Success
+import net.svaroh.passly.core.commonfolders.usecase.db.RemoveLocalFoldersWithUpdateStateUseCase
+import net.svaroh.passly.core.commonfolders.usecase.db.SetLocalFoldersUpdateStateUseCase
+import net.svaroh.passly.core.commonfolders.usecase.db.UpsertLocalFoldersUseCase
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.entity.folder.FolderUpdateState.PENDING
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
+import net.svaroh.passly.ui.FolderModelWithAttributes
 import timber.log.Timber
 import kotlin.math.ceil
 

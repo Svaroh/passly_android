@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.core.accounts.usecase
+package net.svaroh.passly.core.accounts.usecase
 
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.biometrickey.GetBiometricKeyIvUseCase
-import com.passbolt.mobile.android.encryptedstorage.biometric.BiometricCipher
-import com.passbolt.mobile.android.encryptedstorage.biometric.BiometricCrypto.Companion.BIOMETRIC_KEY_ALIAS
-import com.passbolt.mobile.android.encryptedstorage.biometric.KeyStoreWrapper
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.biometrickey.GetBiometricKeyIvUseCase
+import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
+import net.svaroh.passly.encryptedstorage.biometric.BiometricCrypto.Companion.BIOMETRIC_KEY_ALIAS
+import net.svaroh.passly.encryptedstorage.biometric.KeyStoreWrapper
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 

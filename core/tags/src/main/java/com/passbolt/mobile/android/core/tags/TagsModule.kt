@@ -21,9 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.core.tags
+package net.svaroh.passly.core.tags
 
-import com.passbolt.mobile.android.core.tags.usecase.db.tagsDbModule
+import net.svaroh.passly.core.tags.usecase.db.tagsDbModule
 import org.koin.dsl.module
 
 val tagsModule =

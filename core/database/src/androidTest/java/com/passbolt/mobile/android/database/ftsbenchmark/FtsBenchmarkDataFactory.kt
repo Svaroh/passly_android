@@ -1,13 +1,13 @@
-package com.passbolt.mobile.android.database.ftsbenchmark
+package net.svaroh.passly.database.ftsbenchmark
 
-import com.passbolt.mobile.android.entity.resource.Permission
-import com.passbolt.mobile.android.entity.resource.Resource
-import com.passbolt.mobile.android.entity.resource.ResourceAndTagsCrossRef
-import com.passbolt.mobile.android.entity.resource.ResourceMetadata
-import com.passbolt.mobile.android.entity.resource.ResourceType
-import com.passbolt.mobile.android.entity.resource.ResourceUpdateState
-import com.passbolt.mobile.android.entity.resource.ResourceUri
-import com.passbolt.mobile.android.entity.resource.Tag
+import net.svaroh.passly.entity.resource.Permission
+import net.svaroh.passly.entity.resource.Resource
+import net.svaroh.passly.entity.resource.ResourceAndTagsCrossRef
+import net.svaroh.passly.entity.resource.ResourceMetadata
+import net.svaroh.passly.entity.resource.ResourceType
+import net.svaroh.passly.entity.resource.ResourceUpdateState
+import net.svaroh.passly.entity.resource.ResourceUri
+import net.svaroh.passly.entity.resource.Tag
 import java.time.ZonedDateTime
 import java.util.UUID
 

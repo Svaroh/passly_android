@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.feature.autofill.resources
+package net.svaroh.passly.feature.autofill.resources
 
 import android.content.Context
-import com.passbolt.mobile.android.feature.autofill.resources.ToastType.DECRYPTION_FAILURE
-import com.passbolt.mobile.android.feature.autofill.resources.ToastType.FETCH_FAILURE
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.feature.autofill.resources.ToastType.DECRYPTION_FAILURE
+import net.svaroh.passly.feature.autofill.resources.ToastType.FETCH_FAILURE
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getToastMessage(
     context: Context,

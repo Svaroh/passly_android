@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.passboltapi.secrets
+package net.svaroh.passly.passboltapi.secrets
 
-import com.passbolt.mobile.android.dto.response.BaseResponse
-import com.passbolt.mobile.android.dto.response.SecretResponseDto
+import net.svaroh.passly.dto.response.BaseResponse
+import net.svaroh.passly.dto.response.SecretResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 

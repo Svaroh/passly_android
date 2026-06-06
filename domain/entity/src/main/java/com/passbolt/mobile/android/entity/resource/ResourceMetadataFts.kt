@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.entity.resource
+package net.svaroh.passly.entity.resource
 
 import androidx.room.Entity
 import androidx.room.Fts4

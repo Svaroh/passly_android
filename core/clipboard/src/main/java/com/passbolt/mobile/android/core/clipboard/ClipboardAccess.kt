@@ -20,7 +20,7 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-package com.passbolt.mobile.android.core.clipboard
+package net.svaroh.passly.core.clipboard
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -34,7 +34,7 @@ import android.os.Build
 import android.os.PersistableBundle
 import android.os.SystemClock
 import android.widget.Toast
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 class ClipboardAccess(
     private val clipboardManager: ClipboardManager?,

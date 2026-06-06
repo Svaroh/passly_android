@@ -1,15 +1,15 @@
-package com.passbolt.mobile.android.feature.resourcedetails.details
+package net.svaroh.passly.feature.resourcedetails.details
 
 import android.content.Context
-import com.passbolt.mobile.android.feature.resourcedetails.details.ErrorSnackbarType.CANNOT_PERFORM_ACTION
-import com.passbolt.mobile.android.feature.resourcedetails.details.ErrorSnackbarType.DATA_REFRESH_ERROR
-import com.passbolt.mobile.android.feature.resourcedetails.details.ErrorSnackbarType.DECRYPTION_FAILURE
-import com.passbolt.mobile.android.feature.resourcedetails.details.ErrorSnackbarType.FETCH_FAILURE
-import com.passbolt.mobile.android.feature.resourcedetails.details.ErrorSnackbarType.GENERAL_ERROR
-import com.passbolt.mobile.android.feature.resourcedetails.details.ErrorSnackbarType.TOGGLE_FAVOURITE_FAILURE
-import com.passbolt.mobile.android.feature.resourcedetails.details.SuccessSnackbarType.RESOURCE_EDITED
-import com.passbolt.mobile.android.feature.resourcedetails.details.SuccessSnackbarType.RESOURCE_SHARED
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.CANNOT_PERFORM_ACTION
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.DATA_REFRESH_ERROR
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.DECRYPTION_FAILURE
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.FETCH_FAILURE
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.GENERAL_ERROR
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.TOGGLE_FAVOURITE_FAILURE
+import net.svaroh.passly.feature.resourcedetails.details.SuccessSnackbarType.RESOURCE_EDITED
+import net.svaroh.passly.feature.resourcedetails.details.SuccessSnackbarType.RESOURCE_SHARED
+import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getSuccessSnackbarMessage(
     context: Context,

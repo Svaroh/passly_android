@@ -1,20 +1,20 @@
-package com.passbolt.mobile.android.metadata.usecase
+package net.svaroh.passly.metadata.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V4_FOLDERS
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V4_RESOURCES
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V4_TAGS
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V5_FOLDERS
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V5_RESOURCES
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V5_TAGS
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.ALLOW_V4_V5_UPGRADE
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.ALLOW_V5_V4_DOWNGRADE
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.DEFAULT_FOLDER_TYPE
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.DEFAULT_METADATA_TYPE
-import com.passbolt.mobile.android.metadata.usecase.MetadataTypesStorageConstants.DEFAULT_TAG_TYPE
-import com.passbolt.mobile.android.ui.MetadataTypeModel
-import com.passbolt.mobile.android.ui.MetadataTypesSettingsModel
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V4_FOLDERS
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V4_RESOURCES
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V4_TAGS
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V5_FOLDERS
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V5_RESOURCES
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V5_TAGS
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.ALLOW_V4_V5_UPGRADE
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.ALLOW_V5_V4_DOWNGRADE
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.DEFAULT_FOLDER_TYPE
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.DEFAULT_METADATA_TYPE
+import net.svaroh.passly.metadata.usecase.MetadataTypesStorageConstants.DEFAULT_TAG_TYPE
+import net.svaroh.passly.ui.MetadataTypeModel
+import net.svaroh.passly.ui.MetadataTypesSettingsModel
 
 /**
  * Passbolt - Open source password manager for teams
@@ -41,7 +41,7 @@ import com.passbolt.mobile.android.ui.MetadataTypesSettingsModel
 class GetMetadataTypesSettingsUseCase(
     private val encryptedSharedPreferencesFactory: EncryptedSharedPreferencesFactory,
 ) : AsyncUseCase<Unit, GetMetadataTypesSettingsUseCase.Output>,
-    com.passbolt.mobile.android.core.accounts.usecase.SelectedAccountUseCase {
+    net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase {
     override suspend fun execute(input: Unit): Output {
         val fileName = MetadataSettingsFileName(selectedAccountId).name
         encryptedSharedPreferencesFactory.get("$fileName.xml").let {

@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.main.mainscreen
+package net.svaroh.passly.feature.main.mainscreen
 
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.review.ReviewManagerFactory

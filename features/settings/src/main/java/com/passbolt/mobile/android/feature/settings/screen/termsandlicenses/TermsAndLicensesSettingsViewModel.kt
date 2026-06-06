@@ -21,19 +21,19 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen.termsandlicenses
+package net.svaroh.passly.feature.settings.screen.termsandlicenses
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsIntent.GoBack
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsIntent.GoToOpenSourceLicenses
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsIntent.GoToPrivacyPolicy
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsIntent.GoToTermsAndLicenses
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsSideEffect.NavigateToOpenSourceLicensesSettings
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsSideEffect.NavigateToPrivacyPolicy
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsSideEffect.NavigateToTermsAndConditionsSettings
-import com.passbolt.mobile.android.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsSideEffect.NavigateUp
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsIntent.GoBack
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsIntent.GoToOpenSourceLicenses
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsIntent.GoToPrivacyPolicy
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsIntent.GoToTermsAndLicenses
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsSideEffect.NavigateToOpenSourceLicensesSettings
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsSideEffect.NavigateToPrivacyPolicy
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsSideEffect.NavigateToTermsAndConditionsSettings
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsSideEffect.NavigateUp
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import kotlinx.coroutines.launch
 
 internal class TermsAndLicensesSettingsViewModel(

@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.core.commongroups
+package net.svaroh.passly.core.commongroups
 
-import com.passbolt.mobile.android.core.commongroups.usecase.FetchUserGroupsUseCase
-import com.passbolt.mobile.android.core.commongroups.usecase.GroupsInteractor
-import com.passbolt.mobile.android.core.commongroups.usecase.RebuildGroupsTablesUseCase
-import com.passbolt.mobile.android.core.commongroups.usecase.db.groupsDbModule
+import net.svaroh.passly.core.commongroups.usecase.FetchUserGroupsUseCase
+import net.svaroh.passly.core.commongroups.usecase.GroupsInteractor
+import net.svaroh.passly.core.commongroups.usecase.RebuildGroupsTablesUseCase
+import net.svaroh.passly.core.commongroups.usecase.db.groupsDbModule
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

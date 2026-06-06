@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.metadata.sessionkeys
+package net.svaroh.passly.metadata.sessionkeys
 
 enum class ForeignModel(
     val value: String,

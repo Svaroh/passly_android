@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.notifications
+package net.svaroh.passly.core.notifications
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

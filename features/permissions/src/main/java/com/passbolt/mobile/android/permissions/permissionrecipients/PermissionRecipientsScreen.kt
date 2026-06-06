@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissionrecipients
+package net.svaroh.passly.permissions.permissionrecipients
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,27 +39,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
-import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.ui.button.PrimaryButton
-import com.passbolt.mobile.android.core.ui.scaffold.HomeScaffold
-import com.passbolt.mobile.android.core.ui.search.SearchInput
-import com.passbolt.mobile.android.core.ui.sharedwith.SharedWithSection
-import com.passbolt.mobile.android.permissions.navigation.ShareRecipientsAddedResult
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsIntent.GoBack
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsIntent.Save
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsIntent.Search
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsSideEffect.NavigateBack
-import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsSideEffect.NavigateBackWithResult
-import com.passbolt.mobile.android.permissions.permissionrecipients.ui.EmptyState
-import com.passbolt.mobile.android.permissions.permissionrecipients.ui.PermissionRecipientsList
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.scaffold.HomeScaffold
+import net.svaroh.passly.core.ui.search.SearchInput
+import net.svaroh.passly.core.ui.sharedwith.SharedWithSection
+import net.svaroh.passly.permissions.navigation.ShareRecipientsAddedResult
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent.GoBack
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent.Save
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent.Search
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsSideEffect.NavigateBack
+import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsSideEffect.NavigateBackWithResult
+import net.svaroh.passly.permissions.permissionrecipients.ui.EmptyState
+import net.svaroh.passly.permissions.permissionrecipients.ui.PermissionRecipientsList
+import net.svaroh.passly.ui.PermissionModelUi
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.passbolt.mobile.android.core.localization.R as LocalizationR
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 fun PermissionRecipientsScreen(

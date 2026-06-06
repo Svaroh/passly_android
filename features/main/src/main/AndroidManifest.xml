@@ -5,7 +5,7 @@
 
     <application>
         <activity
-            android:name="com.passbolt.mobile.android.feature.main.mainscreen.MainActivity"
+            android:name="net.svaroh.passly.feature.main.mainscreen.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Passbolt"
             android:exported="false"

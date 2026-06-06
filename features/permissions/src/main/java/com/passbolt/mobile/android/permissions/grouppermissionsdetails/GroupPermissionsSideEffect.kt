@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.permissions.grouppermissionsdetails
+package net.svaroh.passly.permissions.grouppermissionsdetails
 
-import com.passbolt.mobile.android.ui.PermissionModelUi
+import net.svaroh.passly.ui.PermissionModelUi
 
 sealed interface GroupPermissionsSideEffect {
     data object NavigateBack : GroupPermissionsSideEffect

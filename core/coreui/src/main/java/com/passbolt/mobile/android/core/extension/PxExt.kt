@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.extension
+package net.svaroh.passly.core.extension
 
 import android.content.res.Resources
 

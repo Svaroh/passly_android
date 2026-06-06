@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.compose
+package net.svaroh.passly.core.compose
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow

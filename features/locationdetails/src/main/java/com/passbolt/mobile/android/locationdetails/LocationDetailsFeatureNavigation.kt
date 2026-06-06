@@ -1,11 +1,11 @@
-package com.passbolt.mobile.android.locationdetails
+package net.svaroh.passly.locationdetails
 
 import PassboltTheme
-import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
-import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationDetails
-import com.passbolt.mobile.android.locationdetails.ui.LocationItem
-import com.passbolt.mobile.android.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationItem as NavigationLocationItem
+import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
+import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationDetails
+import net.svaroh.passly.locationdetails.ui.LocationItem
+import net.svaroh.passly.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationItem as NavigationLocationItem
 
 class LocationDetailsFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =

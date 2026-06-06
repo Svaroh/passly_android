@@ -1,12 +1,12 @@
-package com.passbolt.mobile.android.core.qrscan
+package net.svaroh.passly.core.qrscan
 
 import androidx.camera.view.LifecycleCameraController
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
-import com.passbolt.mobile.android.core.qrscan.analyzer.QrCodeImageAnalyzer
-import com.passbolt.mobile.android.core.qrscan.analyzer.QrCodeImageAnalyzerResultsConsumer
-import com.passbolt.mobile.android.core.qrscan.manager.ScanManager
+import net.svaroh.passly.core.qrscan.analyzer.QrCodeImageAnalyzer
+import net.svaroh.passly.core.qrscan.analyzer.QrCodeImageAnalyzerResultsConsumer
+import net.svaroh.passly.core.qrscan.manager.ScanManager
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.scopedOf

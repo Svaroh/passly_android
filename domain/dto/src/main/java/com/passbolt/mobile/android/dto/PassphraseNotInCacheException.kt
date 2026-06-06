@@ -21,6 +21,6 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.dto
+package net.svaroh.passly.dto
 
 class PassphraseNotInCacheException : Exception("Passphrase not in cache")

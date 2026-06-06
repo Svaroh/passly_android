@@ -1,10 +1,10 @@
-package com.passbolt.mobile.android.core.resources.usecase
+package net.svaroh.passly.core.resources.usecase
 
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseOutput
-import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
-import com.passbolt.mobile.android.core.resources.usecase.db.UpdateLocalResourceUseCase
-import com.passbolt.mobile.android.ui.ResourceModel
-import com.passbolt.mobile.android.ui.isFavourite
+import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
+import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.resources.usecase.db.UpdateLocalResourceUseCase
+import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.isFavourite
 import timber.log.Timber
 
 /**

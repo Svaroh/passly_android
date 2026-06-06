@@ -1,7 +1,7 @@
-package com.passbolt.mobile.android.feature.setup.scanqr.keyassembler
+package net.svaroh.passly.feature.setup.scanqr.keyassembler
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.feature.setup.scanqr.qrparser.KeyAssembler
+import net.svaroh.passly.feature.setup.scanqr.qrparser.KeyAssembler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okio.Buffer

@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.common.coroutinetimer
+package net.svaroh.passly.common.coroutinetimer
 
 import kotlinx.coroutines.flow.Flow
 import kotlin.time.Duration

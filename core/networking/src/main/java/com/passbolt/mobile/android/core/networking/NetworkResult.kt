@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.networking
+package net.svaroh.passly.core.networking
 
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException

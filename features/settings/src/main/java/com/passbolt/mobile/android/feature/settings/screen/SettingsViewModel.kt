@@ -21,26 +21,26 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.feature.settings.screen
+package net.svaroh.passly.feature.settings.screen
 
 import androidx.lifecycle.viewModelScope
-import com.passbolt.mobile.android.common.autofill.DetectAutofillConflict
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.core.compose.SideEffectViewModel
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignOutUseCase
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.ConfirmSignOut
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.GoToAccounts
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.GoToAppSettings
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.GoToDebugLogs
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.GoToStartUp
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.GoToTermsAndLicenses
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.Initialize
-import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.SignOut
-import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToAccounts
-import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToAppSettings
-import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToDebugLogs
-import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToStartUp
-import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToTermsAndLicenses
+import net.svaroh.passly.common.autofill.DetectAutofillConflict
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.ConfirmSignOut
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.GoToAccounts
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.GoToAppSettings
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.GoToDebugLogs
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.GoToStartUp
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.GoToTermsAndLicenses
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.Initialize
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.SignOut
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToAccounts
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToAppSettings
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToDebugLogs
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToStartUp
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToTermsAndLicenses
 import kotlinx.coroutines.launch
 
 internal class SettingsViewModel(

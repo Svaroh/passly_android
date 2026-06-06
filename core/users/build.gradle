@@ -21,7 +21,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.passbolt.mobile.android.core.users"
+    namespace = "net.svaroh.passly.core.users"
 }
 
 kotlin {

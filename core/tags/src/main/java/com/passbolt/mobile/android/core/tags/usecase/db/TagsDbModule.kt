@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.tags.usecase.db
+package net.svaroh.passly.core.tags.usecase.db
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf

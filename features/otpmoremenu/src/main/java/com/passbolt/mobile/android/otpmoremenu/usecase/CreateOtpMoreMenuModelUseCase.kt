@@ -21,12 +21,12 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.otpmoremenu.usecase
+package net.svaroh.passly.otpmoremenu.usecase
 
-import com.passbolt.mobile.android.common.usecase.AsyncUseCase
-import com.passbolt.mobile.android.core.resources.usecase.db.GetLocalResourceUseCase
-import com.passbolt.mobile.android.ui.OtpMoreMenuModel
-import com.passbolt.mobile.android.ui.ResourcePermission
+import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.ui.OtpMoreMenuModel
+import net.svaroh.passly.ui.ResourcePermission
 
 class CreateOtpMoreMenuModelUseCase(
     private val getLocalResourceUseCase: GetLocalResourceUseCase,

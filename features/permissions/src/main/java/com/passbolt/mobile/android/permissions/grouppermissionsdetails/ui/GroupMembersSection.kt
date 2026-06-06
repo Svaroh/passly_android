@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.permissions.grouppermissionsdetails.ui
+package net.svaroh.passly.permissions.grouppermissionsdetails.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,10 +21,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.passbolt.mobile.android.core.ui.circularimage.CircularProfileImage
-import com.passbolt.mobile.android.core.ui.sharedwith.xFor
-import com.passbolt.mobile.android.ui.UserModel
-import com.passbolt.mobile.android.core.ui.R as CoreUiR
+import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
+import net.svaroh.passly.core.ui.sharedwith.xFor
+import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 // TODO: Identical UI offset logic to "SharedWith" section - prepare one composable that abstracts model and use in both
 @Composable

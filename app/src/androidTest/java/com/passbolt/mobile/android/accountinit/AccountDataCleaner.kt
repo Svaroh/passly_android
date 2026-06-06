@@ -1,9 +1,9 @@
-package com.passbolt.mobile.android.accountinit
+package net.svaroh.passly.accountinit
 
-import com.passbolt.mobile.android.common.usecase.UserIdInput
-import com.passbolt.mobile.android.core.accounts.usecase.accounts.GetAccountsUseCase
-import com.passbolt.mobile.android.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.feature.authentication.auth.usecase.RemoveAllAccountDataUseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.accounts.GetAccountsUseCase
+import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.RemoveAllAccountDataUseCase
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get

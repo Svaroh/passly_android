@@ -1,6 +1,6 @@
-package com.passbolt.mobile.android.passboltapi.favourites
+package net.svaroh.passly.passboltapi.favourites
 
-import com.passbolt.mobile.android.core.networking.RestService
+import net.svaroh.passly.core.networking.RestService
 import org.koin.core.module.Module
 
 /**

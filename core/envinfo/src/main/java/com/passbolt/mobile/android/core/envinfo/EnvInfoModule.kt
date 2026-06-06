@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.core.envinfo
+package net.svaroh.passly.core.envinfo
 
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf

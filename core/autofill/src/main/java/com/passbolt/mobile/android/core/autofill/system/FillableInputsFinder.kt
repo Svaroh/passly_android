@@ -1,8 +1,8 @@
-package com.passbolt.mobile.android.core.autofill.system
+package net.svaroh.passly.core.autofill.system
 
 import android.annotation.SuppressLint
-import com.passbolt.mobile.android.core.autofill.BuildConfig
-import com.passbolt.mobile.android.ui.ParsedStructure
+import net.svaroh.passly.core.autofill.BuildConfig
+import net.svaroh.passly.ui.ParsedStructure
 import timber.log.Timber
 
 /**
