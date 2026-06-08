@@ -470,6 +470,8 @@
     <string name="otp_delete_totp">Удалить одноразовый пароль</string>
     <string name="otp_deleted">Одноразовый пароль был удален</string>
     <string name="otp_failed_to_delete">Не удалось удалить TOTP</string>
+    <string name="passkey_deleted">Passkey удалён</string>
+    <string name="passkey_failed_to_delete">Не удалось удалить passkey</string>
     <string name="otp_delete_confirmation">Это действие окончательно удалит TOTP.</string>
     <string name="otp_new_otp_created">Новый TOTP создан!</string>
     <string name="otp_scan_title">Сканировать QR-код</string>

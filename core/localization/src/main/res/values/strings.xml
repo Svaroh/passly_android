@@ -215,6 +215,7 @@
     <string name="dialog_unable_to_generate_password_message">The password generator will not generate strong enough password. Minimum of %d bits is required</string>
 
     <string name="autofill_service_name">Passly Autofill</string>
+    <string name="passkey_create_entry_description">Save passkey in Passly</string>
 
     <string name="dialog_encourage_autofill_header">Log In to your favourite apps in 3 seconds!</string>
     <string name="dialog_autofill_header">Autofill</string>
@@ -590,6 +591,8 @@
     <string name="otp_delete_totp">Delete TOTP</string>
     <string name="otp_deleted">TOTP was deleted</string>
     <string name="otp_failed_to_delete">Failed to delete TOTP</string>
+    <string name="passkey_deleted">Passkey was deleted</string>
+    <string name="passkey_failed_to_delete">Failed to delete passkey</string>
     <string name="otp_delete_confirmation">This action will permanently delete the TOTP.</string>
     <string name="otp_new_otp_created">New TOTP created!</string>
 

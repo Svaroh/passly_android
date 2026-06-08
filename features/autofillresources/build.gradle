@@ -16,11 +16,14 @@ dependencies {
     implementation project(':secrets')
     implementation project(':authentication')
     implementation project(':resources')
+    implementation project(':users')
+    implementation project(':metadata')
     implementation project(':localization')
     implementation project(':home')
     implementation project(':security')
     implementation project(':gopenpgp')
     implementation project(':resourcetypes')
+    implementation project(':supportedresourcetypes')
     implementation project(':notifications')
     implementation project(':autofill')
     implementation project(':accounts')
@@ -29,6 +32,7 @@ dependencies {
     implementation project(':entity')
 
     implementation libs.activity
+    implementation libs.androidx.credentials
     implementation libs.material
     implementation platform(libs.koin.bom)
     implementation libs.koin

@@ -189,8 +189,6 @@ dependencies {
     implementation project(':navigation')
     implementation project(':clipboard')
 
-    debugImplementation libs.leakcanary
-
     implementation platform(libs.koin.bom)
     implementation libs.lifecycle.process
     implementation libs.coil

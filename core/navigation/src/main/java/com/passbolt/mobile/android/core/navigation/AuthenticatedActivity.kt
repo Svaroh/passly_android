@@ -32,6 +32,7 @@ fun Activity.isAuthenticated() =
     when {
         this.javaClass.name == Startup.START_UP_ACTIVITY -> false
         this.javaClass.name == Autofillresources.AUTOFILL_RESOURCES_ACTIVITY -> false
+        this.javaClass.name == Autofillresources.PASSKEY_CREDENTIAL_PROVIDER_ACTIVITY -> false
         this.javaClass.name == Authentication.AUTHENTICATION_MAIN_ACTIVITY -> false
         this is PartiallyAuthenticated -> (this as PartiallyAuthenticated).isCurrentScreenAuthenticated
         else -> true

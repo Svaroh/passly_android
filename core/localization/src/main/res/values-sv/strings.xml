@@ -471,6 +471,8 @@ den aktiverade autofyll-funktionen att föreslå att fylla i dina tidigare tilla
     <string name="otp_delete_totp">Radera TOTP</string>
     <string name="otp_deleted">TOTP raderades</string>
     <string name="otp_failed_to_delete">Misslyckades att radera TOTP</string>
+    <string name="passkey_deleted">Passkey raderades</string>
+    <string name="passkey_failed_to_delete">Det gick inte att radera passkey</string>
     <string name="otp_delete_confirmation">Denna åtgärd kommer att radera TOTP permanent.</string>
     <string name="otp_new_otp_created">Ny TOTP skapad!</string>
     <string name="otp_scan_title">Skanna QR-kod</string>

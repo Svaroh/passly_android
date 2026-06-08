@@ -471,6 +471,8 @@
     <string name="otp_delete_totp">TOTP 삭제</string>
     <string name="otp_deleted">TOTP가 삭제됨.</string>
     <string name="otp_failed_to_delete">TOTP 삭제가 실패됨</string>
+    <string name="passkey_deleted">Passkey가 삭제됨</string>
+    <string name="passkey_failed_to_delete">Passkey를 삭제하지 못했습니다</string>
     <string name="otp_delete_confirmation">이 작업을 수행하면 TOTP를 영구적으로 삭제합니다.</string>
     <string name="otp_new_otp_created">새로운 TOTP가 생성됨!</string>
     <string name="otp_scan_title">QR 코드 스캔</string>

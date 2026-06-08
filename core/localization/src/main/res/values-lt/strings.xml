@@ -470,6 +470,8 @@
     <string name="otp_delete_totp">Ištrinti TOTP</string>
     <string name="otp_deleted">TOTP ištrintas</string>
     <string name="otp_failed_to_delete">Nepavyko ištrinti TOTP</string>
+    <string name="passkey_deleted">Passkey ištrintas</string>
+    <string name="passkey_failed_to_delete">Nepavyko ištrinti passkey</string>
     <string name="otp_delete_confirmation">Šis veiksmas visam laikui ištrins TOTP.</string>
     <string name="otp_new_otp_created">Naujas TOTP sukurtas!</string>
     <string name="otp_scan_title">Nuskaityti QR kodą</string>

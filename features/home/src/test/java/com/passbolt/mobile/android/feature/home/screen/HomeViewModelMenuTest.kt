@@ -30,6 +30,13 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
@@ -46,7 +53,9 @@ import net.svaroh.passly.core.resources.actions.ResourcePropertiesActionsInterac
 import net.svaroh.passly.core.resources.actions.ResourcePropertyActionResult
 import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractor
 import net.svaroh.passly.core.resources.actions.SecretPropertyActionResult
+import net.svaroh.passly.core.resources.usecase.ResourceContentTypeProvider
 import net.svaroh.passly.entity.home.HomeDisplayView
+import net.svaroh.passly.feature.home.screen.HomeIntent.ConfirmDeleteResource
 import net.svaroh.passly.feature.home.screen.HomeIntent.CopyNote
 import net.svaroh.passly.feature.home.screen.HomeIntent.CopyPassword
 import net.svaroh.passly.feature.home.screen.HomeIntent.CopyResourceMetadataDescription
@@ -57,10 +66,14 @@ import net.svaroh.passly.feature.home.screen.HomeIntent.LaunchResourceWebsite
 import net.svaroh.passly.feature.home.screen.HomeIntent.OpenResourceMenu
 import net.svaroh.passly.feature.home.screen.HomeIntent.ToggleResourceFavourite
 import net.svaroh.passly.feature.home.screen.HomeSideEffect.CopyToClipboard
+import net.svaroh.passly.feature.home.screen.HomeSideEffect.InitiateDataRefresh
 import net.svaroh.passly.feature.home.screen.HomeSideEffect.NavigateToResourceUri
 import net.svaroh.passly.feature.home.screen.HomeSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.home.screen.HomeSideEffect.ShowSuccessSnackbar
 import net.svaroh.passly.feature.home.screen.ShowSuggestedModel.DoNotShow
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_DELETE_PASSKEY
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.TOGGLE_FAVOURITE_FAILURE
+import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.PASSKEY_DELETED
 import net.svaroh.passly.feature.home.screen.data.HomeData
 import net.svaroh.passly.feature.home.screen.data.HomeDataProvider
 import net.svaroh.passly.jsonmodel.JSON_MODEL_GSON
@@ -77,13 +90,6 @@ import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.REMOVE_FROM_FAVOURITES
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -129,6 +135,7 @@ class HomeViewModelMenuTest : KoinTest {
                     single { mock<CanCreateResourceUseCase>() }
                     single { mock<CanShareResourceUseCase>() }
                     single { mock<DetectAutofillConflict>() }
+                    single { mock<ResourceContentTypeProvider>() }
                     single { AccountSwitchFlow(mock { on { execute(any()) } doReturn GetSelectedAccountUseCase.Output("id1") }) }
                     single(named(JSON_MODEL_GSON)) { GsonBuilder().serializeNulls().create() }
                     single {
@@ -448,6 +455,60 @@ class HomeViewModelMenuTest : KoinTest {
         }
 
     @Test
+    fun `should show passkey snackbar when deleting passkey`() =
+        runTest {
+            val passkeyResource = mockResourceModel("Passkey Resource")
+            val resourceCommonActionsInteractor = mock<ResourceCommonActionsInteractor>()
+
+            whenever(resourceCommonActionsInteractor.deleteResource()).thenReturn(
+                flowOf(ResourceCommonActionResult.Success("Passkey Resource")),
+            )
+            get<ResourceContentTypeProvider>().stub {
+                onBlocking { isPasskey(passkeyResource) }.doReturn(true)
+            }
+            declare { resourceCommonActionsInteractor }
+
+            viewModel = get()
+            viewModel.onIntent(OpenResourceMenu(passkeyResource))
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(ConfirmDeleteResource)
+
+                assertIs<InitiateDataRefresh>(awaitItem())
+                val effect = awaitItem()
+                assertIs<ShowSuccessSnackbar>(effect)
+                assertThat(effect.type).isEqualTo(PASSKEY_DELETED)
+                assertThat(effect.message).isEqualTo("Passkey Resource")
+            }
+        }
+
+    @Test
+    fun `should show passkey error snackbar when deleting passkey fails`() =
+        runTest {
+            val passkeyResource = mockResourceModel("Passkey Resource")
+            val resourceCommonActionsInteractor = mock<ResourceCommonActionsInteractor>()
+
+            whenever(resourceCommonActionsInteractor.deleteResource()).thenReturn(
+                flowOf(ResourceCommonActionResult.Failure),
+            )
+            get<ResourceContentTypeProvider>().stub {
+                onBlocking { isPasskey(passkeyResource) }.doReturn(true)
+            }
+            declare { resourceCommonActionsInteractor }
+
+            viewModel = get()
+            viewModel.onIntent(OpenResourceMenu(passkeyResource))
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(ConfirmDeleteResource)
+
+                val effect = awaitItem()
+                assertIs<ShowErrorSnackbar>(effect)
+                assertThat(effect.type).isEqualTo(FAILED_TO_DELETE_PASSKEY)
+            }
+        }
+
+    @Test
     fun `should detect autofill conflict when detector returns true on initialize`() =
         runTest {
             val detectAutofillConflict: DetectAutofillConflict = get()
@@ -483,27 +544,29 @@ class HomeViewModelMenuTest : KoinTest {
             verify(detectAutofillConflict).invoke()
         }
 
-    private fun mockResourceModel(name: String) =
-        ResourceModel(
-            resourceId = "id1",
-            resourceTypeId = "resTypeId",
-            folderId = "folderId",
-            permission = ResourcePermission.READ,
-            favouriteId = null,
-            modified = ZonedDateTime.now(),
-            expiry = null,
-            metadataJsonModel =
-                MetadataJsonModel(
-                    """
+    private fun mockResourceModel(
+        name: String,
+        resourceTypeId: String = "resTypeId",
+    ) = ResourceModel(
+        resourceId = "id1",
+        resourceTypeId = resourceTypeId,
+        folderId = "folderId",
+        permission = ResourcePermission.READ,
+        favouriteId = null,
+        modified = ZonedDateTime.now(),
+        expiry = null,
+        metadataJsonModel =
+            MetadataJsonModel(
+                """
                     {
                         "name": "$name",
                         "uri": "https://example.com",
                         "username": "testuser",
                         "description": "Test description"
                     }
-                    """.trimIndent(),
-                ),
-            metadataKeyId = null,
-            metadataKeyType = null,
-        )
+                """.trimIndent(),
+            ),
+        metadataKeyId = null,
+        metadataKeyType = null,
+    )
 }

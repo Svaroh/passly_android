@@ -27,6 +27,7 @@ appcompat = "1.7.1"
 navigation = "2.9.6"
 security = "1.1.0-alpha06"
 biometric = "1.2.0-alpha05"
+credentials = "1.6.0"
 fragment = "1.8.9"
 activity = "1.11.0"
 cameraX = "1.5.1"
@@ -80,6 +81,7 @@ navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", 
 navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 security = { module = "androidx.security:security-crypto", version.ref = "security" }
 biometric = { module = "androidx.biometric:biometric-ktx", version.ref = "biometric" }
+androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 camerax = { module = "androidx.camera:camera-camera2", version.ref = "cameraX" }

@@ -469,6 +469,8 @@ ali preverite specifičen vodnik za vašo napravo:</string>
     <string name="otp_delete_totp">Izbriši TOTP</string>
     <string name="otp_deleted">TOTP je bil izbrisan</string>
     <string name="otp_failed_to_delete">Ni bilo mogoče izbrisati TOTP</string>
+    <string name="passkey_deleted">Passkey je bil izbrisan</string>
+    <string name="passkey_failed_to_delete">Passkeyja ni bilo mogoče izbrisati</string>
     <string name="otp_delete_confirmation">S tem dejanjem boste trajno izbrisali TOTP.</string>
     <string name="otp_new_otp_created">Ustvarjen je nov TOTP!</string>
     <string name="otp_scan_title">Skeniraj QR kodo</string>

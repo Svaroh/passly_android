@@ -30,6 +30,7 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 import net.svaroh.passly.ui.LeadingContentType
@@ -272,6 +273,9 @@ class ResourceModelHandler(
                     if (description.isNullOrBlank()) {
                         description = ""
                     }
+                }
+                V5Passkey -> {
+                    // Passkey secrets are managed by WebAuthn flows, not by the generic resource form.
                 }
             }
         }

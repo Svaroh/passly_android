@@ -54,7 +54,7 @@ class ResourceTypesListDeserializerTest : KoinTest {
                 ),
                 ResourceTypeDto(
                     id = UUID.randomUUID(),
-                    slug = ContentType.PasswordString.slug,
+                    slug = ContentType.V5Passkey.slug,
                     name = "name",
                     description = "description",
                     deleted = null,
@@ -69,5 +69,6 @@ class ResourceTypesListDeserializerTest : KoinTest {
             )
 
         assertThat(resultList.size).isEqualTo(1)
+        assertThat(resultList[0].slug).isEqualTo(ContentType.V5Passkey.slug)
     }
 }

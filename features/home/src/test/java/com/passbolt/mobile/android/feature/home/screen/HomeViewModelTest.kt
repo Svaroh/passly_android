@@ -31,6 +31,15 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
@@ -44,6 +53,7 @@ import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderDetailsUseC
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.preferences.usecase.GetHomeDisplayViewPrefsUseCase
+import net.svaroh.passly.core.resources.usecase.ResourceContentTypeProvider
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.AVATAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.CLEAR
 import net.svaroh.passly.entity.home.HomeDisplayView
@@ -89,15 +99,6 @@ import net.svaroh.passly.ui.LeadingContentType.STANDALONE_NOTE
 import net.svaroh.passly.ui.MetadataJsonModel
 import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -143,6 +144,7 @@ class HomeViewModelTest : KoinTest {
                     single { mock<CanCreateResourceUseCase>() }
                     single { mock<CanShareResourceUseCase>() }
                     single { mock<DetectAutofillConflict>() }
+                    single { mock<ResourceContentTypeProvider>() }
                     single { AccountSwitchFlow(mock { on { execute(any()) } doReturn GetSelectedAccountUseCase.Output("id1") }) }
                     single(named(JSON_MODEL_GSON)) { GsonBuilder().serializeNulls().create() }
                     single {
