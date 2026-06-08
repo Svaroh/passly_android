@@ -85,9 +85,11 @@ class CreateResourceInteractor(
 
         if (resourceInput.contentType.slug in SupportedContentTypes.v5Slugs) {
             val resourceTypeId = getResourceTypeIdForSlug(resourceInput.contentType.slug)
-            secretInput.apply {
-                this.objectType = "PASSBOLT_SECRET_DATA"
-                this.resourceTypeId = resourceTypeId
+            if (resourceInput.contentType != ContentType.V5Passkey) {
+                secretInput.apply {
+                    this.objectType = "PASSBOLT_SECRET_DATA"
+                    this.resourceTypeId = resourceTypeId
+                }
             }
             resourceInput.apply {
                 this.metadataJsonModel.objectType = "PASSBOLT_RESOURCE_METADATA"

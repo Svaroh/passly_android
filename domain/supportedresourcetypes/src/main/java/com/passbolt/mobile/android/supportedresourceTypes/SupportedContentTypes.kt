@@ -31,6 +31,7 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 
@@ -44,6 +45,7 @@ private const val V5_DEFAULT_WITH_TOTP = "v5-default-with-totp"
 private const val V5_PASSWORD_STRING_SLUG = "v5-password-string"
 private const val V5_CUSTOM_FIELDS = "v5-custom-fields"
 private const val V5_NOTE = "v5-note"
+private const val V5_PASSKEY = "v5-passkey"
 
 sealed class ContentType(
     val slug: String,
@@ -67,6 +69,8 @@ sealed class ContentType(
     data object V5CustomFields : ContentType(V5_CUSTOM_FIELDS)
 
     data object V5Note : ContentType(V5_NOTE)
+
+    data object V5Passkey : ContentType(V5_PASSKEY)
 
     fun isSimplePassword() = this == PasswordString || this == V5PasswordString
 
@@ -135,6 +139,7 @@ sealed class ContentType(
                 V5_PASSWORD_STRING_SLUG -> V5PasswordString
                 V5_CUSTOM_FIELDS -> V5CustomFields
                 V5_NOTE -> V5Note
+                V5_PASSKEY -> V5Passkey
                 else -> throw IllegalArgumentException("Unsupported content type slug: $slug")
             }
     }
@@ -155,6 +160,7 @@ object SupportedContentTypes {
             V5DefaultWithTotp,
             V5CustomFields,
             V5Note,
+            V5Passkey,
         ).map { it.slug }.toSet()
 
     val totpSlugs =
@@ -183,6 +189,7 @@ object SupportedContentTypes {
             V5TotpStandalone,
             V5CustomFields,
             V5Note,
+            V5Passkey,
         ).map { it.slug }.toSet()
 
     val resourcesSlugsSupportingExpiry =

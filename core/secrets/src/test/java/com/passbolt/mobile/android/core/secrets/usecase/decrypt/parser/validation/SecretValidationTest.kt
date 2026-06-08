@@ -38,6 +38,7 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 import kotlinx.coroutines.test.runTest
@@ -107,6 +108,10 @@ class SecretValidationTest : KoinTest {
             on { schemaForSecret(V5Note.slug) } doReturn
                 SchemaStore().loadSchema(
                     this::class.java.getResource("/v5-note-secret-schema.json"),
+                )
+            on { schemaForSecret(V5Passkey.slug) } doReturn
+                SchemaStore().loadSchema(
+                    this::class.java.getResource("/v5-passkey-secret-schema.json"),
                 )
         }
     }
@@ -752,6 +757,85 @@ class SecretValidationTest : KoinTest {
                 )
 
             val results = invalidSecrets.map { secretValidationRunner.isSecretValid(it, V5CustomFields.slug) }
+
+            assertThat(results.none { it }).isTrue()
+        }
+
+    @Test
+    fun `valid secret for v5 passkey resource type should not be rejected`() =
+        runTest {
+            val validSecret =
+                """
+                {
+                    "object_type": "PASSLY_PASSKEY",
+                    "schema_version": 1,
+                    "credential_id": "Y3JlZGVudGlhbC1pZA",
+                    "rp_id": "www.passkeys.io",
+                    "origin": "https://www.passkeys.io",
+                    "user_handle": "dXNlci1oYW5kbGU",
+                    "user_name": "ada@example.com",
+                    "user_display_name": "Ada Lovelace",
+                    "cose_alg": -7,
+                    "public_key_cose": "cHVibGljLWtleS1jb3Nl",
+                    "private_key_pkcs8": "cHJpdmF0ZS1rZXktcGtjczg",
+                    "aaguid": "00000000-0000-0000-0000-000000000000",
+                    "backup_eligible": false,
+                    "backup_state": false,
+                    "sign_count": 0,
+                    "transports": ["internal"]
+                }
+                """.trimIndent()
+
+            val result = secretValidationRunner.isSecretValid(validSecret, V5Passkey.slug)
+
+            assertThat(result).isTrue()
+        }
+
+    @Test
+    fun `invalid secret for v5 passkey resource type should be rejected`() =
+        runTest {
+            val invalidSecrets =
+                listOf(
+                    """
+                    {
+                        "object_type": "PASSBOLT_SECRET_DATA",
+                        "schema_version": 1,
+                        "credential_id": "Y3JlZGVudGlhbC1pZA",
+                        "rp_id": "www.passkeys.io",
+                        "origin": "https://www.passkeys.io",
+                        "user_handle": "dXNlci1oYW5kbGU",
+                        "user_name": "ada@example.com",
+                        "cose_alg": -7,
+                        "public_key_cose": "cHVibGljLWtleS1jb3Nl",
+                        "private_key_pkcs8": "cHJpdmF0ZS1rZXktcGtjczg",
+                        "aaguid": "00000000-0000-0000-0000-000000000000",
+                        "backup_eligible": false,
+                        "backup_state": false,
+                        "sign_count": 0,
+                        "transports": ["internal"]
+                    }
+                    """.trimIndent(),
+                    """
+                    {
+                        "object_type": "PASSLY_PASSKEY",
+                        "schema_version": 1,
+                        "credential_id": "Y3JlZGVudGlhbC1pZA",
+                        "rp_id": "www.passkeys.io",
+                        "origin": "https://www.passkeys.io",
+                        "user_handle": "dXNlci1oYW5kbGU",
+                        "user_name": "ada@example.com",
+                        "cose_alg": -7,
+                        "public_key_cose": "cHVibGljLWtleS1jb3Nl",
+                        "aaguid": "00000000-0000-0000-0000-000000000000",
+                        "backup_eligible": false,
+                        "backup_state": false,
+                        "sign_count": 0,
+                        "transports": ["internal"]
+                    }
+                    """.trimIndent(),
+                )
+
+            val results = invalidSecrets.map { secretValidationRunner.isSecretValid(it, V5Passkey.slug) }
 
             assertThat(results.none { it }).isTrue()
         }

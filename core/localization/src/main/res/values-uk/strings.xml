@@ -179,6 +179,7 @@
     <string name="dialog_unable_to_generate_password_title">Не вдалося згенерувати надійний пароль</string>
     <string name="dialog_unable_to_generate_password_message">Генератор паролів не зможе створити достатньо надійний пароль. Потрібно принаймні %d біт ентропії</string>
     <string name="autofill_service_name">Автозаповнення Passly</string>
+    <string name="passkey_create_entry_description">Зберегти passkey у Passly</string>
     <string name="dialog_encourage_autofill_header">Увійдіть до улюблених застосунків за 3 секунди!</string>
     <string name="dialog_autofill_header">Автозаповнення</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">Samsung</string>
@@ -478,6 +479,8 @@
     <string name="otp_delete_totp">Видалити TOTP</string>
     <string name="otp_deleted">TOTP видалено</string>
     <string name="otp_failed_to_delete">Не вдалося видалити TOTP</string>
+    <string name="passkey_deleted">Passkey видалено</string>
+    <string name="passkey_failed_to_delete">Не вдалося видалити passkey</string>
     <string name="otp_delete_confirmation">Ця дія назавжди видалить TOTP.</string>
     <string name="otp_new_otp_created">Новий TOTP створено!</string>
     <string name="otp_scan_title">Сканувати QR-код</string>
