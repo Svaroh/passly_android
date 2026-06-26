@@ -6,6 +6,7 @@ import net.svaroh.passly.feature.home.screen.SnackbarErrorType.CANNOT_UPDATE_WIT
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.DECRYPTION_FAILURE
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.ENCRYPTION_FAILURE
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.ERROR
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_DELETE_PASSKEY
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_DELETE_RESOURCE
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_REFRESH_DATA
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_TRUST_METADATA_KEY
@@ -17,6 +18,7 @@ import net.svaroh.passly.feature.home.screen.SnackbarErrorType.SECRET_SCHEMA_INV
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.TOGGLE_FAVOURITE_FAILURE
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.FOLDER_CREATED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.METADATA_KEY_IS_TRUSTED
+import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.PASSKEY_DELETED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_CREATED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_DELETED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_EDITED
@@ -44,7 +46,12 @@ internal fun getSuccessMessage(
                 additionalSuccessMessage.orEmpty().toSingleLine(),
             )
         RESOURCE_CREATED -> context.getString(LocalizationR.string.resource_form_create_success)
-        RESOURCE_DELETED -> context.getString(LocalizationR.string.otp_deleted)
+        RESOURCE_DELETED ->
+            context.getString(
+                LocalizationR.string.common_message_resource_deleted,
+                additionalSuccessMessage.orEmpty().toSingleLine(),
+            )
+        PASSKEY_DELETED -> context.getString(LocalizationR.string.passkey_deleted)
         METADATA_KEY_IS_TRUSTED -> context.getString(LocalizationR.string.common_metadata_key_is_trusted)
         RESOURCE_SHARED -> context.getString(LocalizationR.string.common_message_resource_shared)
         FOLDER_CREATED ->
@@ -63,7 +70,8 @@ internal fun getErrorMessage(
         DECRYPTION_FAILURE -> context.getString(LocalizationR.string.common_decryption_failure)
         FETCH_FAILURE -> context.getString(LocalizationR.string.common_fetch_failure)
         ERROR -> context.getString(LocalizationR.string.common_failure_format, additionalErrorMessage.orEmpty())
-        FAILED_TO_DELETE_RESOURCE -> context.getString(LocalizationR.string.otp_failed_to_delete)
+        FAILED_TO_DELETE_RESOURCE -> context.getString(LocalizationR.string.delete_failure)
+        FAILED_TO_DELETE_PASSKEY -> context.getString(LocalizationR.string.passkey_failed_to_delete)
         ENCRYPTION_FAILURE -> context.getString(LocalizationR.string.common_encryption_failure)
         RESOURCE_SCHEMA_INVALID -> context.getString(LocalizationR.string.common_json_schema_resource_validation_error)
         SECRET_SCHEMA_INVALID -> context.getString(LocalizationR.string.common_json_schema_secret_validation_error)

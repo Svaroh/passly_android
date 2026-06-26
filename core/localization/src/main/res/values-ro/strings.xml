@@ -471,6 +471,8 @@
     <string name="otp_delete_totp">Ștergeți TOTP</string>
     <string name="otp_deleted">TOTP-ul a fost șters</string>
     <string name="otp_failed_to_delete">Nu s-a reușit ștergerea TOTP-ului</string>
+    <string name="passkey_deleted">Passkey a fost ștearsă</string>
+    <string name="passkey_failed_to_delete">Nu s-a putut șterge passkey</string>
     <string name="otp_delete_confirmation">Această acțiune va șterge definitiv TOTP-ul.</string>
     <string name="otp_new_otp_created">Un nou TOTP a fost creat!</string>
     <string name="otp_scan_title">Scanați codul QR</string>

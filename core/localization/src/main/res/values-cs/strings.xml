@@ -471,6 +471,8 @@
     <string name="otp_delete_totp">Odstranit TOTP</string>
     <string name="otp_deleted">TOTP bylo smazáno</string>
     <string name="otp_failed_to_delete">Nepodařilo se odstranit TOTP</string>
+    <string name="passkey_deleted">Passkey byl odstraněn</string>
+    <string name="passkey_failed_to_delete">Passkey se nepodařilo odstranit</string>
     <string name="otp_delete_confirmation">Tato akce permanentně odstraní TOTP.</string>
     <string name="otp_new_otp_created">Nový TOTP byl vytvořen!</string>
     <string name="otp_scan_title">Načíst QR kódy</string>

@@ -54,9 +54,9 @@ class CreateResourceMoreMenuModelUseCase(
         return Output(
             ResourceMoreMenuModel(
                 title = resource.metadataJsonModel.name,
-                canCopy = isCopyRbacAllowed,
+                canCopy = isCopyRbacAllowed && contentType.hasPassword(),
                 canDelete = resource.permission in WRITE_PERMISSIONS,
-                canEdit = resource.permission in WRITE_PERMISSIONS,
+                canEdit = resource.permission in WRITE_PERMISSIONS && contentType != ContentType.V5Passkey,
                 canShare = isShareRbacAllowed && resource.permission == ResourcePermission.OWNER,
                 favouriteOption =
                     if (resource.isFavourite()) {

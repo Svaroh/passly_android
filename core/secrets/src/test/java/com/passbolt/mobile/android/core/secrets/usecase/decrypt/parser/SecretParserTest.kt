@@ -35,6 +35,7 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordString
 import net.svaroh.passly.supportedresourceTypes.ContentType.Totp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.ui.DecryptedSecretOrError
 import kotlinx.coroutines.test.runTest
 import net.jimblackler.jsonschemafriend.SchemaStore
@@ -85,6 +86,10 @@ class SecretParserTest : KoinTest {
             on { schemaForSecret(V5Note.slug) } doReturn
                 SchemaStore().loadSchema(
                     this::class.java.getResource("/v5-note-secret-schema.json"),
+                )
+            on { schemaForSecret(V5Passkey.slug) } doReturn
+                SchemaStore().loadSchema(
+                    this::class.java.getResource("/v5-passkey-secret-schema.json"),
                 )
         }
     }
@@ -256,6 +261,43 @@ class SecretParserTest : KoinTest {
 
             assertThat(customFields[4].type).isEqualTo(URI)
             assertThat(customFields[4].secretValue?.asString).isEqualTo("https://passbolt.com")
+        }
+
+    @Test
+    fun `passkey should parse correct for v5 passkey secret`() =
+        runTest {
+            val secret =
+                """
+                {
+                    "object_type": "PASSLY_PASSKEY",
+                    "schema_version": 1,
+                    "credential_id": "Y3JlZGVudGlhbC1pZA",
+                    "rp_id": "www.passkeys.io",
+                    "origin": "https://www.passkeys.io",
+                    "user_handle": "dXNlci1oYW5kbGU",
+                    "user_name": "ada@example.com",
+                    "user_display_name": "Ada Lovelace",
+                    "cose_alg": -7,
+                    "public_key_cose": "cHVibGljLWtleS1jb3Nl",
+                    "private_key_pkcs8": "cHJpdmF0ZS1rZXktcGtjczg",
+                    "aaguid": "00000000-0000-0000-0000-000000000000",
+                    "backup_eligible": false,
+                    "backup_state": false,
+                    "sign_count": 0,
+                    "transports": ["internal"]
+                }
+                """.trimIndent()
+            mockIdToSlugMappingProvider.stub {
+                onBlocking { provideMappingForSelectedAccount() }.doReturn(
+                    mapOf(resourceTypeId to V5Passkey.slug),
+                )
+            }
+
+            val secretResult = secretParser.parseSecret(resourceTypeId.toString(), secret)
+
+            assertThat(secretResult).isInstanceOf(DecryptedSecretOrError.DecryptedSecret::class.java)
+            val parsedSecret = (secretResult as DecryptedSecretOrError.DecryptedSecret).secret
+            assertThat(parsedSecret.objectType).isEqualTo("PASSLY_PASSKEY")
         }
 
     @Test

@@ -43,6 +43,7 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 import net.svaroh.passly.ui.ResourceTypeModel
@@ -88,6 +89,7 @@ class ResourceListDeserializerTest : KoinTest {
                         ResourceTypeModel(UUID.randomUUID(), PasswordDescriptionTotp.slug, "", deleted = null),
                         ResourceTypeModel(UUID.randomUUID(), V5CustomFields.slug, "", deleted = null),
                         ResourceTypeModel(UUID.randomUUID(), V5Note.slug, "", deleted = null),
+                        ResourceTypeModel(UUID.randomUUID(), V5Passkey.slug, "", deleted = null),
                     ),
                 ),
             )
@@ -132,6 +134,10 @@ class ResourceListDeserializerTest : KoinTest {
             on { schemaForResource(V5Note.slug) } doReturn
                 SchemaStore().loadSchema(
                     this::class.java.getResource("/v5-note-resource-schema.json"),
+                )
+            on { schemaForResource(V5Passkey.slug) } doReturn
+                SchemaStore().loadSchema(
+                    this::class.java.getResource("/v5-passkey-resource-schema.json"),
                 )
         }
     }
@@ -927,6 +933,59 @@ class ResourceListDeserializerTest : KoinTest {
                                 "metadata_value": "https://passbolt.com"
                             }
                         ]
+                    }
+                    """.trimIndent(),
+                ),
+            )
+        }
+
+        val listJson = gson.toJson(validResources)
+        val resulList =
+            gson.fromJson<List<ResourceResponseDto>>(
+                listJson,
+                object : TypeToken<List<@JvmSuppressWildcards ResourceResponseDto>>() {}.type,
+            )
+
+        assertThat(resulList).hasSize(1)
+        assertThat(resulList[0].id).isEqualTo(validResources[0].id)
+    }
+
+    @Test
+    fun `resources with valid fields for v5 passkey type should not be filtered`() {
+        mockIdToSlugMappingUseCase.stub {
+            onBlocking { execute(Unit) }.doReturn(
+                GetResourceTypeIdToSlugMappingUseCase.Output(
+                    mapOf(testedResourceTypeUuid to V5Passkey.slug),
+                ),
+            )
+        }
+        val validResources =
+            listOf(
+                ResourceResponseV5Dto(
+                    id = UUID.randomUUID(),
+                    resourceTypeId = testedResourceTypeUuid,
+                    resourceFolderId = null,
+                    permission = PermissionDto(UUID.randomUUID(), 1, "", UUID.randomUUID(), "", UUID.randomUUID(), "", ""),
+                    favorite = null,
+                    modified = "",
+                    tags = emptyList(),
+                    permissions = emptyList(),
+                    expired = null,
+                    metadataKeyType = MetadataKeyTypeDto.SHARED,
+                    metadata = "encrypted metadata",
+                    metadataKeyId = UUID.randomUUID(),
+                ),
+            )
+        mockMetadataDecryptor.stub {
+            onBlocking { decryptMetadata(any()) }.doReturn(
+                MetadataDecryptor.Output.Success(
+                    """
+                    {
+                        "object_type": "PASSBOLT_RESOURCE_METADATA",
+                        "name": "www.passkeys.io",
+                        "uris": ["https://www.passkeys.io"],
+                        "username": "ada@example.com",
+                        "description": null
                     }
                     """.trimIndent(),
                 ),

@@ -18,6 +18,7 @@ import net.svaroh.passly.core.resources.usecase.FavouritesInteractor
 import net.svaroh.passly.core.resources.usecase.GetResourcesPaginatedUseCase
 import net.svaroh.passly.core.resources.usecase.GetResourcesUseCase
 import net.svaroh.passly.core.resources.usecase.RemoveFromFavouritesUseCase
+import net.svaroh.passly.core.resources.usecase.ResourceContentTypeProvider
 import net.svaroh.passly.core.resources.usecase.ResourceInteractor
 import net.svaroh.passly.core.resources.usecase.ResourceShareInteractor
 import net.svaroh.passly.core.resources.usecase.ShareResourceUseCase
@@ -68,6 +69,7 @@ val resourcesModule =
         singleOf(::ShareResourceUseCase)
         singleOf(::AddToFavouritesUseCase)
         singleOf(::RemoveFromFavouritesUseCase)
+        singleOf(::ResourceContentTypeProvider)
         singleOf(::FavouritesInteractor)
         singleOf(::ResourceShareInteractor)
         singleOf(::UpdateResourceInteractor)

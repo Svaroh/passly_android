@@ -2,6 +2,7 @@ package net.svaroh.passly.feature.authentication.auth.usecase
 
 import net.svaroh.passly.common.BiometricInformationProvider
 import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.core.accounts.usecase.biometrickey.RemoveAllBiometricKeyIvUseCase
 import net.svaroh.passly.core.accounts.usecase.biometrickey.RemoveBiometricKeyUseCase
 import net.svaroh.passly.core.authenticationcore.passphrase.CheckIfPassphraseFileExistsUseCase
 import net.svaroh.passly.core.authenticationcore.passphrase.RemoveAllAccountsPassphrasesUseCase
@@ -32,6 +33,7 @@ import timber.log.Timber
 class BiometryInteractor(
     private val checkIfPassphraseFileExistsUseCase: CheckIfPassphraseFileExistsUseCase,
     private val removeAllAccountsPassphrasesUseCase: RemoveAllAccountsPassphrasesUseCase,
+    private val removeAllBiometricKeyIvUseCase: RemoveAllBiometricKeyIvUseCase,
     private val removeBiometricKeyUseCase: RemoveBiometricKeyUseCase,
     private val biometricInfoProvider: BiometricInformationProvider,
 ) {
@@ -48,11 +50,14 @@ class BiometryInteractor(
                 Timber.d("Disabling biometry")
                 disableBiometry()
             }
+        } else {
+            removeAllBiometricKeyIvUseCase.execute(Unit)
         }
     }
 
     fun disableBiometry() {
         removeAllAccountsPassphrasesUseCase.execute(Unit)
+        removeAllBiometricKeyIvUseCase.execute(Unit)
         removeBiometricKeyUseCase.execute(Unit)
     }
 }

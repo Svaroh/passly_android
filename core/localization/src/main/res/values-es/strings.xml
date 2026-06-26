@@ -471,6 +471,8 @@
     <string name="otp_delete_totp">Eliminar TOTP</string>
     <string name="otp_deleted">El TOTP ha sido eliminado</string>
     <string name="otp_failed_to_delete">Error al eliminar el TOTP</string>
+    <string name="passkey_deleted">La passkey se eliminó</string>
+    <string name="passkey_failed_to_delete">No se pudo eliminar la passkey</string>
     <string name="otp_delete_confirmation">Esta acción eliminará el TOTP de forma permanente.</string>
     <string name="otp_new_otp_created">¡Nuevo TOTP creado!</string>
     <string name="otp_scan_title">Escanear código QR</string>

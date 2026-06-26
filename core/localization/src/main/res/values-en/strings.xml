@@ -17,4 +17,7 @@
         <item>passphrase</item>
     </string-array>
 
+    <string name="passkey_deleted">Passkey was deleted</string>
+    <string name="passkey_failed_to_delete">Failed to delete passkey</string>
+
 </resources>

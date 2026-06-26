@@ -37,6 +37,12 @@ internal fun Module.biometricKeyIvModule() {
         )
     }
     factory {
+        RemoveAllBiometricKeyIvUseCase(
+            encryptedSharedPreferencesFactory = get(),
+            getAllAccountsDataUseCase = get(),
+        )
+    }
+    factory {
         RemoveBiometricKeyUseCase(
             keyStoreWrapper = get(),
         )

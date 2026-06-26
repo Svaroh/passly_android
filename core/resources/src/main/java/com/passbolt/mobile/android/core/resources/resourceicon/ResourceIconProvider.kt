@@ -23,6 +23,7 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 import net.svaroh.passly.ui.ResourceAppearanceModel.Companion.DEFAULT_BACKGROUND_COLOR_HEX_STRING
@@ -118,6 +119,7 @@ class ResourceIconProvider(
                 Totp, V5TotpStandalone -> CoreUiR.drawable.passbolt_totp
                 V5CustomFields -> CoreUiR.drawable.passbolt_key_value
                 V5Note -> CoreUiR.drawable.passbolt_note
+                V5Passkey -> CoreUiR.drawable.passbolt_passkey
                 null -> null
             }
 

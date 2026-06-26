@@ -23,6 +23,9 @@
 package net.svaroh.passly.feature.home.screen
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
@@ -41,6 +44,7 @@ import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteracto
 import net.svaroh.passly.core.resources.actions.performCommonResourceAction
 import net.svaroh.passly.core.resources.actions.performResourcePropertyAction
 import net.svaroh.passly.core.resources.actions.performSecretPropertyAction
+import net.svaroh.passly.core.resources.usecase.ResourceContentTypeProvider
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.AVATAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.CLEAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.NONE
@@ -92,11 +96,13 @@ import net.svaroh.passly.feature.home.screen.HomeSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.home.screen.HomeSideEffect.ShowSuccessSnackbar
 import net.svaroh.passly.feature.home.screen.HomeSideEffect.ShowToast
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.DECRYPTION_FAILURE
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_DELETE_PASSKEY
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_DELETE_RESOURCE
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_REFRESH_DATA
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FETCH_FAILURE
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.NO_SHARED_KEY_ACCESS
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.TOGGLE_FAVOURITE_FAILURE
+import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.PASSKEY_DELETED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_CREATED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_DELETED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_EDITED
@@ -117,9 +123,6 @@ import net.svaroh.passly.ui.LeadingContentType.STANDALONE_NOTE
 import net.svaroh.passly.ui.LeadingContentType.TOTP
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
@@ -137,6 +140,7 @@ internal class HomeViewModel(
     private val canShareResourceUse: CanShareResourceUseCase,
     private val detectAutofillConflict: DetectAutofillConflict,
     private val accountSwitchFlow: AccountSwitchFlow,
+    private val resourceContentTypeProvider: ResourceContentTypeProvider,
 ) : SideEffectViewModel<HomeState, HomeSideEffect>(HomeState()),
     KoinComponent {
     private val resourcePropertiesActionsInteractor: ResourcePropertiesActionsInteractor
@@ -348,12 +352,17 @@ internal class HomeViewModel(
     private fun deleteResource() {
         updateViewState { copy(showDeleteResourceConfirmationDialog = false, showProgress = true) }
         viewModelScope.launch(coroutineLaunchContext.io) {
+            val resource = viewState.value.moreMenuResource
+            val isDeletingPasskey = resource?.let { resourceContentTypeProvider.isPasskey(it) } == true
+            val errorType = if (isDeletingPasskey) FAILED_TO_DELETE_PASSKEY else FAILED_TO_DELETE_RESOURCE
+            val successType = if (isDeletingPasskey) PASSKEY_DELETED else RESOURCE_DELETED
+
             performCommonResourceAction(
                 action = { resourceCommonActionsInteractor.deleteResource() },
-                doOnFailure = { emitSideEffect(ShowErrorSnackbar(FAILED_TO_DELETE_RESOURCE)) },
+                doOnFailure = { emitSideEffect(ShowErrorSnackbar(errorType)) },
                 doOnSuccess = {
                     emitSideEffect(InitiateDataRefresh)
-                    emitSideEffect(ShowSuccessSnackbar(RESOURCE_DELETED, it.resourceName))
+                    emitSideEffect(ShowSuccessSnackbar(successType, it.resourceName))
                 },
             )
             updateViewState { copy(showProgress = false) }
