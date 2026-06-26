@@ -31,6 +31,7 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PinCodeStandalone
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
@@ -46,6 +47,7 @@ private const val V5_PASSWORD_STRING_SLUG = "v5-password-string"
 private const val V5_CUSTOM_FIELDS = "v5-custom-fields"
 private const val V5_NOTE = "v5-note"
 private const val V5_PIN_CODE_SLUG = "v5-pin-code"
+private const val V5_PASSKEY = "v5-passkey"
 
 sealed class ContentType(
     val slug: String,
@@ -71,6 +73,8 @@ sealed class ContentType(
     data object V5Note : ContentType(V5_NOTE)
 
     data object V5PinCodeStandalone : ContentType(V5_PIN_CODE_SLUG)
+
+    data object V5Passkey : ContentType(V5_PASSKEY)
 
     fun isSimplePassword() = this == PasswordString || this == V5PasswordString
 
@@ -157,6 +161,7 @@ sealed class ContentType(
                 V5_CUSTOM_FIELDS -> V5CustomFields
                 V5_NOTE -> V5Note
                 V5_PIN_CODE_SLUG -> V5PinCodeStandalone
+                V5_PASSKEY -> V5Passkey
                 else -> throw IllegalArgumentException("Unsupported content type slug: $slug")
             }
     }
@@ -178,9 +183,10 @@ object SupportedContentTypes {
             V5CustomFields,
             V5Note,
             V5PinCodeStandalone,
+            V5Passkey,
         ).map { it.slug }.toSet()
 
-    val autofillSlugs = homeSlugs - setOf(V5PinCodeStandalone.slug, V5CustomFields.slug, V5Note.slug)
+    val autofillSlugs = homeSlugs - setOf(V5PinCodeStandalone.slug, V5CustomFields.slug, V5Note.slug, V5Passkey.slug)
 
     val totpSlugs =
         setOf(
@@ -209,6 +215,7 @@ object SupportedContentTypes {
             V5CustomFields,
             V5Note,
             V5PinCodeStandalone,
+            V5Passkey,
         ).map { it.slug }.toSet()
 
     val resourcesSlugsSupportingExpiry =

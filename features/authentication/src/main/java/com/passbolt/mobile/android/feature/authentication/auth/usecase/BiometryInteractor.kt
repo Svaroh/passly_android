@@ -1,12 +1,3 @@
-package net.svaroh.passly.feature.authentication.auth.usecase
-
-import net.svaroh.passly.common.BiometricInformationProvider
-import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.domain.auth.usecase.CheckIfPassphraseFileExistsUseCase
-import net.svaroh.passly.domain.auth.usecase.RemoveAllAccountsPassphrasesUseCase
-import net.svaroh.passly.domain.biometrickey.BiometricKeyRepository
-import timber.log.Timber
-
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -29,6 +20,16 @@ import timber.log.Timber
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
+
+package net.svaroh.passly.feature.authentication.auth.usecase
+
+import net.svaroh.passly.common.BiometricInformationProvider
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.domain.auth.usecase.CheckIfPassphraseFileExistsUseCase
+import net.svaroh.passly.domain.auth.usecase.RemoveAllAccountsPassphrasesUseCase
+import net.svaroh.passly.domain.biometrickey.BiometricKeyRepository
+import timber.log.Timber
+
 class BiometryInteractor(
     private val checkIfPassphraseFileExistsUseCase: CheckIfPassphraseFileExistsUseCase,
     private val removeAllAccountsPassphrasesUseCase: RemoveAllAccountsPassphrasesUseCase,
@@ -48,6 +49,8 @@ class BiometryInteractor(
                 Timber.d("Disabling biometry")
                 disableBiometry()
             }
+        } else {
+            biometricKeyRepository.removeBiometricKey()
         }
     }
 

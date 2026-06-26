@@ -31,6 +31,15 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
@@ -43,6 +52,7 @@ import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.domain.resources.usecase.ResourceContentTypeProvider
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.AVATAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.CLEAR
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
@@ -156,6 +166,7 @@ class HomeViewModelTest : KoinTest {
                         }
                     }
                     singleOf(::UserProfileRefreshTrackingFlow)
+                    single { mock<ResourceContentTypeProvider>() }
                     single(named(JSON_MODEL_GSON)) { GsonBuilder().serializeNulls().create() }
                     single {
                         Configuration

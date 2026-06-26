@@ -20,6 +20,7 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PinCodeStandalone
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
@@ -100,6 +101,8 @@ class ResourceIconProvider(
                 V5CustomFields -> CoreUiR.drawable.passbolt_key_value
                 V5Note -> CoreUiR.drawable.passbolt_note
                 V5PinCodeStandalone -> CoreUiR.drawable.passbolt_pin
+                V5Passkey -> CoreUiR.drawable.passbolt_passkey
+                null -> null
             }
 
         return createCircleDrawableWithIcon(

@@ -20,6 +20,7 @@ import net.svaroh.passly.domain.resources.usecase.DeleteResourceUseCase
 import net.svaroh.passly.domain.resources.usecase.EditPermissionsConfirmationInteractor
 import net.svaroh.passly.domain.resources.usecase.FetchResourcePermissionsUseCase
 import net.svaroh.passly.domain.resources.usecase.GetResourcesPaginatedUseCase
+import net.svaroh.passly.domain.resources.usecase.ResourceContentTypeProvider
 import net.svaroh.passly.domain.resources.usecase.ResourceInteractor
 import net.svaroh.passly.domain.resources.usecase.ResourceShareInteractor
 import net.svaroh.passly.domain.resources.usecase.ShareResourceUseCase
@@ -69,6 +70,7 @@ val resourcesDomainModule =
         singleOf(::CreatePermissionsSnapshotInteractor)
         singleOf(::SimulateShareResourceUseCase)
         singleOf(::ShareResourceUseCase)
+        singleOf(::ResourceContentTypeProvider)
         singleOf(::ResourceShareInteractor)
         singleOf(::ResourceShareActionsInteractor)
         singleOf(::EditPermissionsConfirmationInteractor)

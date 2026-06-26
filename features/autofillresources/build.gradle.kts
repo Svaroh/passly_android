@@ -27,6 +27,9 @@ dependencies {
     implementation(project(":otpcore"))
     implementation(project(":otp"))
     implementation(project(":supportedresourcetypes"))
+    implementation(project(":users-domain"))
+    implementation(project(":metadata-domain"))
+    implementation(libs.androidx.credentials)
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin)

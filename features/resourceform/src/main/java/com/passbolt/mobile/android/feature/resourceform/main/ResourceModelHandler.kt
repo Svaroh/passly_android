@@ -33,6 +33,7 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PinCodeStandalone
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
@@ -304,6 +305,9 @@ class ResourceModelHandler(
                     if (pinCode.isNullOrBlank()) {
                         Timber.e("Attempt to create or edit pin code resource with empty pin code")
                     }
+                }
+                V5Passkey -> {
+                    // Passkey secrets are managed by WebAuthn flows, not by the generic resource form.
                 }
             }
         }
