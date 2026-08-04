@@ -37,6 +37,7 @@ import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
+import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmCreatePermissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.AdditionalUrisForm
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.AdvancedSecretGenerationForm
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.AppearanceForm
@@ -75,6 +76,7 @@ import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEff
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToAdditionalUris
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToAdvancedSecretGeneration
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToAppearance
+import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToConfirmPermissions
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToCustomFields
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToDescription
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToNote
@@ -154,6 +156,8 @@ internal fun ResourceFormScreen(
                 )
             NavigateToScanOtp ->
                 navigator.navigateToKey(ScanOtp(ScanOtpMode.SCAN_FOR_RESULT))
+            is NavigateToConfirmPermissions ->
+                navigator.navigateToKey(ConfirmCreatePermissions(sideEffect.parentFolderId))
             is NavigateBackWithCreateSuccess -> {
                 resultBus.sendResult(
                     result =
@@ -480,6 +484,9 @@ private fun getToastMessage(
                 LocalizationR.string.dialog_unable_to_generate_password_message
             ToastMessage.CREATE_INITIALIZATION_ERROR -> LocalizationR.string.resource_form_create_init_error
             ToastMessage.EDIT_INITIALIZATION_ERROR -> LocalizationR.string.resource_form_edit_init_error
+            ToastMessage.RESOURCE_CREATED_SHARE_FAILED -> LocalizationR.string.resource_form_created_share_failed
+            ToastMessage.RESOURCE_CREATED_PERMISSIONS_CHANGED ->
+                LocalizationR.string.resource_form_created_permissions_changed
         },
         *args.toTypedArray(),
     )

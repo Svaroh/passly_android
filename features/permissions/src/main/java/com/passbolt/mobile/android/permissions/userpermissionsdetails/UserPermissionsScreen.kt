@@ -67,7 +67,8 @@ fun UserPermissionsScreen(
     permission: PermissionModelUi.UserPermissionModel,
     mode: PermissionsMode,
     modifier: Modifier = Modifier,
-    viewModel: UserPermissionsViewModel = koinViewModel(parameters = { parametersOf(mode, permission) }),
+    fromSnapshot: Boolean = false,
+    viewModel: UserPermissionsViewModel = koinViewModel(parameters = { parametersOf(mode, permission, fromSnapshot) }),
     navigator: AppNavigator = koinInject(),
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle()

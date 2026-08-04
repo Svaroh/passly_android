@@ -70,6 +70,10 @@ sealed interface ResourceFormSideEffect {
 
     data object NavigateToScanOtp : ResourceFormSideEffect
 
+    data class NavigateToConfirmPermissions(
+        val parentFolderId: String,
+    ) : ResourceFormSideEffect
+
     data class NavigateBackWithCreateSuccess(
         val name: String,
         val resourceId: String,
@@ -114,4 +118,6 @@ enum class ToastMessage {
     UNABLE_TO_GENERATE_PASSWORD,
     CREATE_INITIALIZATION_ERROR,
     EDIT_INITIALIZATION_ERROR,
+    RESOURCE_CREATED_SHARE_FAILED,
+    RESOURCE_CREATED_PERMISSIONS_CHANGED,
 }

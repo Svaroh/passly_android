@@ -83,6 +83,7 @@ internal val DEFAULT_FEATURE_FLAGS =
         arePasswordPoliciesAvailable = true,
         canUpdatePasswordPolicies = true,
         isV5MetadataAvailable = false,
+        isPermissionsConfirmationOptOutAvailable = false,
     )
 
 internal val DEFAULT_RBAC =

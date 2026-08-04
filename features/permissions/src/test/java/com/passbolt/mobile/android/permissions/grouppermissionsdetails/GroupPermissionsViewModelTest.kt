@@ -6,6 +6,7 @@ import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
 import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackingFlow
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
 import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsIntent.CancelPermissionDelete
 import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsIntent.ConfirmPermissionDelete
 import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsIntent.DeletePermission
@@ -63,12 +64,15 @@ class GroupPermissionsViewModelTest : KoinTest {
                 listOf(
                     module {
                         single { mock<GetGroupWithUsersUseCase>() }
+                        single { mock<GetPermissionsSnapshotUseCase>() }
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
-                        factory { (permission: PermissionModelUi.GroupPermissionModel, mode: PermissionsMode) ->
+                        factory { params ->
                             GroupPermissionsViewModel(
-                                mode = mode,
-                                permission = permission,
+                                mode = params.get(),
+                                permission = params.get(),
+                                fromSnapshot = params.getOrNull() ?: false,
                                 getGroupWithUsersUseCase = get(),
+                                getPermissionsSnapshotUseCase = get(),
                                 coroutineLaunchContext = get(),
                             )
                         }
@@ -191,6 +195,20 @@ class GroupPermissionsViewModelTest : KoinTest {
             viewModel.sideEffect.test {
                 viewModel.onIntent(GoBack)
 
+                assertIs<NavigateBack>(awaitItem())
+            }
+        }
+
+    @Test
+    fun `snapshot details without an available snapshot should navigate back`() =
+        runTest {
+            get<GetPermissionsSnapshotUseCase>().stub {
+                onBlocking { execute(Unit) }.doReturn(GetPermissionsSnapshotUseCase.Output(null))
+            }
+
+            viewModel = get { parametersOf(GROUP_PERMISSION, PermissionsMode.VIEW, true) }
+
+            viewModel.sideEffect.test {
                 assertIs<NavigateBack>(awaitItem())
             }
         }

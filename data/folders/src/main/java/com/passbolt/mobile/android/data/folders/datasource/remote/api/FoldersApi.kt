@@ -31,6 +31,7 @@ import com.passbolt.mobile.android.dto.response.FolderResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 internal interface FoldersApi {
@@ -52,6 +53,13 @@ internal interface FoldersApi {
         @Query(QUERY_DIRECTION) direction: String = "desc",
     ): BasePaginatedResponse<List<FolderResponseDto>>
 
+    @GET(FOLDER_BY_ID)
+    suspend fun getFolder(
+        @Path(PATH_FOLDER_ID) folderId: String,
+        @Query(QUERY_CONTAIN_PERMISSION) containingPermission: Int? = 1,
+        @Query(QUERY_CONTAIN_PERMISSIONS) containingPermissions: Int? = 1,
+    ): BaseResponse<FolderResponseDto>
+
     @POST(FOLDERS)
     suspend fun createFolder(
         @Body createFolderRequestDto: CreateFolderRequestDto,
@@ -61,6 +69,8 @@ internal interface FoldersApi {
 
     private companion object {
         private const val FOLDERS = "folders.json"
+        private const val PATH_FOLDER_ID = "folderId"
+        private const val FOLDER_BY_ID = "folders/{$PATH_FOLDER_ID}.json"
 
         private const val QUERY_CONTAIN_PERMISSION = "contain[permission]"
         private const val QUERY_CONTAIN_PERMISSIONS = "contain[permissions.group]"

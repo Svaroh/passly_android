@@ -28,11 +28,15 @@ import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAct
 import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAction.REMOVE_PASSWORD
 import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAction.REMOVE_PIN_CODE
 import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAction.REMOVE_TOTP
+import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import com.passbolt.mobile.android.domain.folders.usecase.FetchFolderPermissionsUseCase
+import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
 import com.passbolt.mobile.android.domain.metadata.usecase.GetMetadataTypesSettingsUseCase
 import com.passbolt.mobile.android.domain.passwordexpiry.usecase.PasswordExpiryPoliciesInteractor
 import com.passbolt.mobile.android.domain.passwordpolicies.usecase.GetPasswordPoliciesUseCase
 import com.passbolt.mobile.android.domain.passwordpolicies.usecase.PasswordPoliciesInteractor
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
 import com.passbolt.mobile.android.domain.resources.actions.performResourceCreateAction
@@ -48,6 +52,7 @@ import com.passbolt.mobile.android.feature.resourceform.main.GetOrLoadGeneratorS
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.AdditionalUrisResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.AdvancedSecretGenerationResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.AppearanceResult
+import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.ConfirmedPermissionsResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.CreateResource
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.CustomFieldsResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.DescriptionResult
@@ -97,6 +102,7 @@ import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEff
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToAdditionalUris
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToAdvancedSecretGeneration
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToAppearance
+import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToConfirmPermissions
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToCustomFields
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToDescription
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToNote
@@ -127,6 +133,8 @@ import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
 import com.passbolt.mobile.android.ui.OtpParseResult
 import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
 import com.passbolt.mobile.android.ui.PasswordUiModel
+import com.passbolt.mobile.android.ui.PermissionModel
+import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.PinCodeUiModel
 import com.passbolt.mobile.android.ui.ResourceAppearanceModel
 import com.passbolt.mobile.android.ui.ResourceAppearanceModel.Companion.DEFAULT_BACKGROUND_COLOR_HEX_STRING
@@ -136,6 +144,7 @@ import com.passbolt.mobile.android.ui.ResourceFormMode
 import com.passbolt.mobile.android.ui.ResourceFormMode.Create
 import com.passbolt.mobile.android.ui.ResourceFormMode.Edit
 import com.passbolt.mobile.android.ui.ResourceFormUiModel
+import com.passbolt.mobile.android.ui.ResourcePermission
 import com.passbolt.mobile.android.ui.TotpUiModel
 import com.passbolt.mobile.android.ui.contentType
 import kotlinx.coroutines.async
@@ -166,6 +175,10 @@ class ResourceFormViewModel(
     private val resourceUpdateActionsInteractorFactory: ResourceUpdateActionsInteractorFactory,
     private val checkPasswordPropertiesUseCase: CheckPasswordPropertiesUseCase,
     private val getMetadataTypesSettingsUseCase: GetMetadataTypesSettingsUseCase,
+    private val getLocalFolderPermissionsUseCase: GetLocalFolderPermissionsUseCase,
+    private val fetchFolderPermissionsUseCase: FetchFolderPermissionsUseCase,
+    private val getPermissionsConfirmationOptOutUseCase: GetPermissionsConfirmationOptOutUseCase,
+    private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
 ) : SideEffectViewModel<ResourceFormState, ResourceFormSideEffect>(ResourceFormState(mode = mode)),
     KoinComponent {
     private val uiModel: ResourceFormUiModel by lazy {
@@ -183,6 +196,7 @@ class ResourceFormViewModel(
             is NameTextChanged -> nameTextChanged(intent.name)
             ExpandAdvancedSettings -> expandAdvancedSettings()
             CreateResource -> createResource()
+            is ConfirmedPermissionsResult -> performCreateWithConfirmedPermissions(intent.permissions)
             UpdateResource -> updateResource()
             is PasswordTextChanged -> passwordTextChanged(intent.password)
             GeneratePassword -> generatePassword()
@@ -833,8 +847,67 @@ class ResourceFormViewModel(
 
     private fun createResource() {
         onValid {
-            checkPasswordAndProceed { performCreate() }
+            checkPasswordAndProceed { proceedWithCreate() }
         }
+    }
+
+    private fun proceedWithCreate() {
+        launch {
+            if (shouldConfirmPermissions()) {
+                Timber.d("Creating inside a shared folder - navigating to permissions confirmation")
+                emitSideEffect(NavigateToConfirmPermissions(requireNotNull(parentFolderId)))
+            } else {
+                performCreate()
+            }
+        }
+    }
+
+    private suspend fun shouldConfirmPermissions(): Boolean {
+        val folderId = parentFolderId ?: return false
+        if (getPermissionsConfirmationOptOutUseCase.execute(Unit).isOptedOut) {
+            Timber.d("Permissions confirmation opted out for this session - applying parent folder permissions")
+            return false
+        }
+        val fetchOutput =
+            runAuthenticatedOperation {
+                fetchFolderPermissionsUseCase.execute(FetchFolderPermissionsUseCase.Input(folderId))
+            }
+        return when (fetchOutput) {
+            is FetchFolderPermissionsUseCase.Output.Success -> isShared(fetchOutput.permissions)
+            is FetchFolderPermissionsUseCase.Output.Failure -> {
+                Timber.e(
+                    "Failed to fetch folder permissions to decide on confirmation: ${fetchOutput.message} - " +
+                        "falling back to local permissions",
+                )
+                isSharedLocally(folderId)
+            }
+        }
+    }
+
+    private suspend fun isSharedLocally(folderId: String): Boolean {
+        val folderPermissions =
+            getLocalFolderPermissionsUseCase
+                .execute(GetLocalFolderPermissionsUseCase.Input(folderId))
+                .permissions
+        val currentUserServerId = getSelectedAccountDataUseCase.execute(Unit).serverId
+        val isOperatorDirectOwnershipOnly =
+            folderPermissions.singleOrNull()?.let {
+                it is PermissionModelUi.UserPermissionModel &&
+                    it.user.userId == currentUserServerId &&
+                    it.permission == ResourcePermission.OWNER
+            } == true
+        return folderPermissions.isNotEmpty() && !isOperatorDirectOwnershipOnly
+    }
+
+    private fun isShared(permissions: List<PermissionModel>): Boolean {
+        val currentUserServerId = getSelectedAccountDataUseCase.execute(Unit).serverId
+        val isOperatorDirectOwnershipOnly =
+            permissions.singleOrNull()?.let {
+                it is PermissionModel.UserPermissionModel &&
+                    it.userId == currentUserServerId &&
+                    it.permission == ResourcePermission.OWNER
+            } == true
+        return permissions.isNotEmpty() && !isOperatorDirectOwnershipOnly
     }
 
     private fun updateResource() {
@@ -874,7 +947,7 @@ class ResourceFormViewModel(
     private fun proceedWithPasswordWarning() {
         updateViewState { copy(showPasswordWarningDialog = false, passwordWarningType = null) }
         when (mode) {
-            is Create -> performCreate()
+            is Create -> proceedWithCreate()
             is Edit -> performUpdate()
         }
     }
@@ -925,6 +998,67 @@ class ResourceFormViewModel(
             updateViewState { copy(shouldShowDialogProgress = false) }
             createResourceIdlingResource.setIdle(true)
         }
+    }
+
+    private fun performCreateWithConfirmedPermissions(confirmedPermissions: List<PermissionModelUi>) {
+        launch {
+            createResourceIdlingResource.setIdle(false)
+            updateViewState { copy(shouldShowDialogProgress = true) }
+            val resourceCreateActionsInteractor = get<ResourceCreateActionsInteractor>()
+            performResourceCreateAction(
+                action = {
+                    resourceCreateActionsInteractor.createGenericResourceWithConfirmedPermissions(
+                        resourceModelHandler.contentType,
+                        parentFolderId,
+                        resourceModelHandler.getResourceMetadataWithRequiredFields(),
+                        resourceModelHandler.getResourceSecretWithRequiredFields(),
+                        confirmedPermissions,
+                    )
+                },
+                doOnFailure = { emitSideEffect(ShowSnackbar(SnackbarMessage.COMMON_FAILURE)) },
+                doOnCryptoFailure = {
+                    emitSideEffect(ShowSnackbar(SnackbarMessage.ENCRYPTION_FAILURE))
+                },
+                doOnSchemaValidationFailure = ::handleSchemaValidationFailure,
+                doOnSuccess = {
+                    emitSideEffect(NavigateBackWithCreateSuccess(it.resourceName, it.resourceId))
+                },
+                doOnShareFailure = { navigateBackWithCreatedButNotShared(ToastMessage.RESOURCE_CREATED_SHARE_FAILED) },
+                doOnFetchFailure = { navigateBackWithCreatedButNotShared(ToastMessage.RESOURCE_CREATED_SHARE_FAILED) },
+                doOnPermissionsDrifted = {
+                    navigateBackWithCreatedButNotShared(ToastMessage.RESOURCE_CREATED_PERMISSIONS_CHANGED)
+                },
+                doOnCannotCreateWithCurrentConfig = {
+                    emitSideEffect(
+                        ShowSnackbar(SnackbarMessage.CANNOT_CREATE_RESOURCE_WITH_CURRENT_CONFIG),
+                    )
+                },
+                doOnMetadataKeyModified = {
+                    updateViewState { copy(metadataKeyModifiedDialog = it) }
+                },
+                doOnMetadataKeyDeleted = {
+                    updateViewState { copy(metadataKeyDeletedDialog = it) }
+                },
+                doOnMetadataKeyVerificationFailure = {
+                    emitSideEffect(
+                        ShowSnackbar(SnackbarMessage.METADATA_KEY_VERIFICATION_FAILURE),
+                    )
+                },
+            )
+            updateViewState { copy(shouldShowDialogProgress = false) }
+            createResourceIdlingResource.setIdle(true)
+        }
+    }
+
+    private fun navigateBackWithCreatedButNotShared(message: ToastMessage) {
+        Timber.e("Resource created but sharing to the confirmed recipients did not complete.")
+        emitSideEffect(ShowToast(message))
+        emitSideEffect(
+            NavigateBackWithCreateSuccess(
+                resourceModelHandler.resourceMetadata.name,
+                resourceId = "",
+            ),
+        )
     }
 
     private fun performUpdate() {

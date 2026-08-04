@@ -45,6 +45,8 @@ sealed class ResourceCreateActionResult {
         val message: String? = null,
     ) : ResourceCreateActionResult()
 
+    data object PermissionsDrifted : ResourceCreateActionResult()
+
     data class SimulateShareFailure(
         val message: String? = null,
     ) : ResourceCreateActionResult()

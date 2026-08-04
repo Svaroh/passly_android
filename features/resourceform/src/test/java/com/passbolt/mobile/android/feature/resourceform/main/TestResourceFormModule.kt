@@ -17,11 +17,15 @@ import com.passbolt.mobile.android.core.passwordgenerator.SecretGenerator
 import com.passbolt.mobile.android.core.passwordgenerator.entropy.EntropyCalculator
 import com.passbolt.mobile.android.core.passwordgenerator.usecase.CheckPasswordPropertiesUseCase
 import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
+import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import com.passbolt.mobile.android.domain.folders.usecase.FetchFolderPermissionsUseCase
+import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
 import com.passbolt.mobile.android.domain.metadata.usecase.GetMetadataTypesSettingsUseCase
 import com.passbolt.mobile.android.domain.passwordexpiry.usecase.PasswordExpiryPoliciesInteractor
 import com.passbolt.mobile.android.domain.passwordpolicies.usecase.GetPasswordPoliciesUseCase
 import com.passbolt.mobile.android.domain.passwordpolicies.usecase.PasswordPoliciesInteractor
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
 import com.passbolt.mobile.android.domain.resources.actions.SecretPropertiesActionsInteractorFactory
@@ -85,6 +89,7 @@ internal val DEFAULT_TEST_FEATURE_FLAGS =
         arePasswordPoliciesAvailable = false,
         canUpdatePasswordPolicies = false,
         isV5MetadataAvailable = false,
+        isPermissionsConfirmationOptOutAvailable = false,
     )
 
 internal val mockGetPasswordPoliciesUseCase = mock<GetPasswordPoliciesUseCase>()
@@ -107,6 +112,15 @@ internal val mockResourceUpdateActionsInteractorFactory = mock<ResourceUpdateAct
 internal val mockResourceCreateActionsInteractor = mock<ResourceCreateActionsInteractor>()
 internal val mockCheckPasswordPropertiesUseCase = mock<CheckPasswordPropertiesUseCase>()
 internal val mockGetMetadataTypesSettingsUseCase = mock<GetMetadataTypesSettingsUseCase>()
+internal val mockGetLocalFolderPermissionsUseCase = mock<GetLocalFolderPermissionsUseCase>()
+internal val mockFetchFolderPermissionsUseCase = mock<FetchFolderPermissionsUseCase>()
+internal val mockGetPermissionsConfirmationOptOutUseCase =
+    mock<GetPermissionsConfirmationOptOutUseCase>().apply {
+        stub {
+            onBlocking { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false)
+        }
+    }
+internal val mockGetSelectedAccountDataUseCase = mock<GetSelectedAccountDataUseCase>()
 
 internal val DEFAULT_FEATURE_FLAGS =
     FeatureFlagsModel(
@@ -121,6 +135,7 @@ internal val DEFAULT_FEATURE_FLAGS =
         arePasswordPoliciesAvailable = false,
         canUpdatePasswordPolicies = false,
         isV5MetadataAvailable = false,
+        isPermissionsConfirmationOptOutAvailable = false,
     )
 
 internal val DEFAULT_METADATA_TYPES_SETTINGS =
@@ -185,6 +200,10 @@ internal val testResourceFormModule =
                 resourceUpdateActionsInteractorFactory = get(),
                 checkPasswordPropertiesUseCase = mockCheckPasswordPropertiesUseCase,
                 getMetadataTypesSettingsUseCase = mockGetMetadataTypesSettingsUseCase,
+                getLocalFolderPermissionsUseCase = mockGetLocalFolderPermissionsUseCase,
+                fetchFolderPermissionsUseCase = mockFetchFolderPermissionsUseCase,
+                getPermissionsConfirmationOptOutUseCase = mockGetPermissionsConfirmationOptOutUseCase,
+                getSelectedAccountDataUseCase = mockGetSelectedAccountDataUseCase,
             )
         }
 

@@ -127,6 +127,10 @@ val resourcesDomainModule =
                 getLocalCurrentUserUseCase = get(),
                 metadataPrivateKeysInteractor = get(),
                 resourceTypeIdToSlugMappingProvider = get(),
+                getPermissionsSnapshotUseCase = get(),
+                createPermissionsSnapshotInteractor = get(),
+                getLocalUserUseCase = get(),
+                getGroupWithUsersUseCase = get(),
             )
         }
     }

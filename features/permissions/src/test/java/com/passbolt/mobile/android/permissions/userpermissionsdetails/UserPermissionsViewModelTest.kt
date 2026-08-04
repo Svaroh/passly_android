@@ -5,6 +5,7 @@ import com.google.common.truth.Truth.assertThat
 import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
 import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackingFlow
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalUserUseCase
 import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsIntent.CancelPermissionDelete
 import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsIntent.ConfirmPermissionDelete
@@ -36,7 +37,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.bind
@@ -61,8 +61,18 @@ class UserPermissionsViewModelTest : KoinTest {
                 listOf(
                     module {
                         single { mock<GetLocalUserUseCase>() }
+                        single { mock<GetPermissionsSnapshotUseCase>() }
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
-                        factoryOf(::UserPermissionsViewModel)
+                        factory { params ->
+                            UserPermissionsViewModel(
+                                mode = params.get(),
+                                permission = params.get(),
+                                fromSnapshot = params.getOrNull() ?: false,
+                                getLocalUserUseCase = get(),
+                                getPermissionsSnapshotUseCase = get(),
+                                coroutineLaunchContext = get(),
+                            )
+                        }
                         singleOf(::SessionRefreshTrackingFlow)
                     },
                 ),
@@ -181,6 +191,20 @@ class UserPermissionsViewModelTest : KoinTest {
             viewModel.sideEffect.test {
                 viewModel.onIntent(GoBack)
 
+                assertIs<NavigateBack>(awaitItem())
+            }
+        }
+
+    @Test
+    fun `snapshot details without an available snapshot should navigate back`() =
+        runTest {
+            get<GetPermissionsSnapshotUseCase>().stub {
+                onBlocking { execute(Unit) }.doReturn(GetPermissionsSnapshotUseCase.Output(null))
+            }
+
+            viewModel = get(parameters = { parametersOf(PermissionsMode.VIEW, USER_PERMISSION, true) })
+
+            viewModel.sideEffect.test {
                 assertIs<NavigateBack>(awaitItem())
             }
         }

@@ -57,6 +57,7 @@ class ResourceShareInteractor(
     suspend fun simulateAndShareResource(
         resourceId: String,
         recipients: List<PermissionModelUi>,
+        recipientsPublicKeys: Map<String, String> = emptyMap(),
     ): Output {
         val existingResourcePermissions =
             getLocalResourcePermissionsUseCase
@@ -80,7 +81,13 @@ class ResourceShareInteractor(
         ) {
             is SimulateShareResourceUseCase.Output.Success -> {
                 Timber.d("Share simulation success; Starting to share resource")
-                shareResource(resourceId, recipients, existingResourcePermissions, simulateShareOutput.value.added)
+                shareResource(
+                    resourceId,
+                    recipients,
+                    existingResourcePermissions,
+                    simulateShareOutput.value.added,
+                    recipientsPublicKeys,
+                )
             }
             is SimulateShareResourceUseCase.Output.Failure -> {
                 Timber.e("Share simulation failure: %s", simulateShareOutput.message)
@@ -95,6 +102,7 @@ class ResourceShareInteractor(
         recipients: List<PermissionModelUi>,
         existingPermissions: List<PermissionModelUi>,
         newUsers: List<ShareRecipient>,
+        recipientsPublicKeys: Map<String, String>,
     ): Output {
         return when (val secretOutput = secretInteractor.fetchAndDecrypt(resourceId)) {
             is SecretInteractor.Output.DecryptFailure -> {
@@ -126,6 +134,7 @@ class ResourceShareInteractor(
                             passphrase.passphrase,
                             secretOutput.decryptedSecret,
                             newUsers,
+                            recipientsPublicKeys,
                         )
                     if (secretsData.any { it is EncryptedSecretOrError.Error }) {
                         return Output.SecretEncryptFailure(
@@ -161,17 +170,24 @@ class ResourceShareInteractor(
         passphrase: ByteArray,
         decryptedSecret: String,
         addedUsers: List<ShareRecipient>,
+        recipientsPublicKeys: Map<String, String>,
     ): List<EncryptedSecretOrError> {
         val encryptedSecretsForAddedUsers = mutableListOf<EncryptedSecretOrError>()
         addedUsers
-            .map { getLocalUserUseCase.execute(GetLocalUserUseCase.Input(it.userId)).user }
-            .forEach { user ->
+            .forEach { recipient ->
                 val currentUserId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
                 val privateKey =
                     requireNotNull(privateKeyRepository.getPrivateKey(currentUserId)) {
                         "Unable to restore private key."
                     }.armoredKey
-                val publicKey = user.gpgKey.armoredKey
+                val publicKey = recipientPublicKey(recipient.userId, recipientsPublicKeys)
+                if (publicKey == null) {
+                    Timber.e("Public key not available for one of the recipients")
+                    encryptedSecretsForAddedUsers.add(
+                        EncryptedSecretOrError.Error("Public key not available for one of the recipients"),
+                    )
+                    return@forEach
+                }
 
                 val encryptedSecret =
                     openPgp.encryptSignMessageArmored(
@@ -186,7 +202,7 @@ class ResourceShareInteractor(
                         is OpenPgpResult.Error -> EncryptedSecretOrError.Error(encryptedSecret.error.message)
                         is OpenPgpResult.Result ->
                             EncryptedSecretOrError.EncryptedSecret(
-                                user.id,
+                                recipient.userId,
                                 encryptedSecret.result,
                             )
                     },
@@ -194,6 +210,23 @@ class ResourceShareInteractor(
             }
         return encryptedSecretsForAddedUsers
     }
+
+    private suspend fun recipientPublicKey(
+        userId: String,
+        recipientsPublicKeys: Map<String, String>,
+    ): String? =
+        if (recipientsPublicKeys.isNotEmpty()) {
+            recipientsPublicKeys[userId]
+        } else {
+            try {
+                getLocalUserUseCase
+                    .execute(GetLocalUserUseCase.Input(userId))
+                    .user.gpgKey.armoredKey
+            } catch (exception: NullPointerException) {
+                Timber.e(exception, "Recipient user not found in the local storage")
+                null
+            }
+        }
 
     sealed class Output : AuthenticatedUseCaseOutput {
         override val authenticationState: AuthenticationState

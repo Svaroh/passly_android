@@ -41,6 +41,8 @@ internal fun SettingsResponseDto.toDomain(): FeatureFlags {
             arePasswordPoliciesAvailable = it.plugins.passwordPolicies?.enabled ?: defaults.arePasswordPoliciesAvailable,
             canUpdatePasswordPolicies = it.plugins.passwordPoliciesUpdate?.enabled ?: defaults.canUpdatePasswordPolicies,
             isV5MetadataAvailable = it.plugins.metadata?.enabled ?: defaults.isV5MetadataAvailable,
+            isPermissionsConfirmationOptOutAvailable =
+                it.plugins.permissions?.allowOptout ?: defaults.isPermissionsConfirmationOptOutAvailable,
         )
     }
 }

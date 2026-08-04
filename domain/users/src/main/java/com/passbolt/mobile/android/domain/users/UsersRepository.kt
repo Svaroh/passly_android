@@ -31,6 +31,8 @@ interface UsersRepository {
 
     suspend fun getUsers(hasAccessTo: List<String>? = null): DomainResult<List<UserProfile>>
 
+    suspend fun getUsersByIds(userIds: List<String>): DomainResult<List<UserProfile>>
+
     suspend fun getLocalUser(
         selectedAccountId: String,
         userId: String,
