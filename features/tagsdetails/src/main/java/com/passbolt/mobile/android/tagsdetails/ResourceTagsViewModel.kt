@@ -101,7 +101,7 @@ internal class ResourceTagsViewModel(
                     tags = tagsResult.tags,
                 )
             }
-        } catch (_: NullPointerException) {
+        } catch (_: IllegalStateException) {
             emitSideEffect(ShowContentNotAvailable)
             emitSideEffect(NavigateToHome)
         } catch (throwable: Exception) {

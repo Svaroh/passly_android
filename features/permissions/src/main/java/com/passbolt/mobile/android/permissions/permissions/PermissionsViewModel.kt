@@ -120,7 +120,7 @@ class PermissionsViewModel(
     ) {
     private val missingItemHandler =
         CoroutineExceptionHandler { _, throwable ->
-            if (throwable is NullPointerException) {
+            if (throwable is IllegalStateException) {
                 emitSideEffect(ShowContentNotAvailable)
                 emitSideEffect(NavigateToHome)
             }

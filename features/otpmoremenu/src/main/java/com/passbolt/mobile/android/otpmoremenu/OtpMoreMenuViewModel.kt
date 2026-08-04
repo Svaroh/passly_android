@@ -14,8 +14,10 @@ import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeCopyO
 import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeDeleteOtp
 import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeEditOtp
 import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeShowOtp
+import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.ShowContentNotAvailable
 import com.passbolt.mobile.android.otpmoremenu.usecase.CreateOtpMoreMenuModelUseCase
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Passbolt - Open source password manager for teams
@@ -59,18 +61,24 @@ class OtpMoreMenuViewModel(
         updateViewState { copy(title = initialize.resourceName, showShowOtpButton = initialize.canShowTotp) }
         viewModelScope.launch {
             dataRefreshTrackingFlow.awaitIdle()
-            val menuModel =
-                createOtpMoreMenuModelUseCase
-                    .execute(
-                        CreateOtpMoreMenuModelUseCase.Input(initialize.resourceId),
-                    ).otpMoreMenuModel
+            try {
+                val menuModel =
+                    createOtpMoreMenuModelUseCase
+                        .execute(
+                            CreateOtpMoreMenuModelUseCase.Input(initialize.resourceId),
+                        ).otpMoreMenuModel
 
-            updateViewState {
-                copy(
-                    showDeleteButton = menuModel.canDelete,
-                    showEditButton = menuModel.canEdit,
-                    showSeparator = menuModel.canEdit || menuModel.canDelete,
-                )
+                updateViewState {
+                    copy(
+                        showDeleteButton = menuModel.canDelete,
+                        showEditButton = menuModel.canEdit,
+                        showSeparator = menuModel.canEdit || menuModel.canDelete,
+                    )
+                }
+            } catch (_: IllegalStateException) {
+                Timber.d("Resource item for the shown menu was deleted")
+                emitSideEffect(ShowContentNotAvailable)
+                emitSideEffect(Dismiss)
             }
         }
     }

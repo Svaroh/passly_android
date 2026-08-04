@@ -41,6 +41,7 @@ import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetI
 import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Share
 import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.ToggleFavourite
 import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.Dismiss
+import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.ShowContentNotAvailable
 import com.passbolt.mobile.android.resourcemoremenu.usecase.CreateResourceMoreMenuModelUseCase
 import com.passbolt.mobile.android.ui.ResourceMoreMenuModel
 import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.DescriptionOption.HAS_METADATA_DESCRIPTION
@@ -135,8 +136,9 @@ class ResourceMoreMenuBottomSheetViewModel(
                         )
                     }
                 }
-            } catch (exception: NullPointerException) {
-                Timber.d("Resource item for the shown menu was deleted: $exception")
+            } catch (_: IllegalStateException) {
+                Timber.d("Resource item for the shown menu was deleted")
+                emitSideEffect(ShowContentNotAvailable)
                 emitSideEffect(Dismiss)
             } finally {
                 createMenuModelIdlingResource.setIdle(true)

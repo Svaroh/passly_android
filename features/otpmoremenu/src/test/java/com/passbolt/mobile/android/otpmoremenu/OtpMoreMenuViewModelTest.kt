@@ -15,6 +15,7 @@ import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeCopyO
 import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeDeleteOtp
 import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeEditOtp
 import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeShowOtp
+import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.ShowContentNotAvailable
 import com.passbolt.mobile.android.otpmoremenu.usecase.CreateOtpMoreMenuModelUseCase
 import com.passbolt.mobile.android.ui.OtpMoreMenuModel
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +40,7 @@ import org.koin.test.get
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stub
 import kotlin.time.ExperimentalTime
 
@@ -107,6 +109,29 @@ class OtpMoreMenuViewModelTest : KoinTest {
                 assertThat(state.showDeleteButton).isTrue()
                 assertThat(state.showEditButton).isTrue()
                 assertThat(state.showSeparator).isTrue()
+            }
+        }
+
+    @OptIn(ExperimentalTime::class)
+    @Test
+    fun `should dismiss when resource for the shown menu is missing`() =
+        runTest {
+            get<CreateOtpMoreMenuModelUseCase>().stub {
+                onBlocking { execute(any()) } doThrow IllegalStateException("The query result was empty")
+            }
+            viewModel = get()
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(
+                    OtpMoreMenuIntent.Initialize(
+                        resourceId = RESOURCE_ID,
+                        resourceName = RESOURCE_NAME,
+                        canShowTotp = CAN_SHOW_TOTP,
+                    ),
+                )
+
+                assertThat(awaitItem()).isEqualTo(ShowContentNotAvailable)
+                assertThat(awaitItem()).isEqualTo(Dismiss)
             }
         }
 

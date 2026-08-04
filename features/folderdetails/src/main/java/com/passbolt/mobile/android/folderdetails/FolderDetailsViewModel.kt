@@ -119,7 +119,7 @@ internal class FolderDetailsViewModel(
                     permissions = permissions,
                 )
             }
-        } catch (_: NullPointerException) {
+        } catch (_: IllegalStateException) {
             emitSideEffect(ShowToast(CONTENT_NOT_AVAILABLE))
             emitSideEffect(NavigateToHome)
         } catch (throwable: Exception) {

@@ -200,11 +200,11 @@ class ResourceTagsViewModelTest : KoinTest {
 
     @OptIn(ExperimentalTime::class)
     @Test
-    fun `should handle null pointer exception and navigate to home`() =
+    fun `should handle missing item exception and navigate to home`() =
         runTest {
             val getLocalResourceUseCase = get<GetLocalResourceUseCase>()
             getLocalResourceUseCase.stub {
-                onBlocking { execute(any()) } doThrow NullPointerException("Resource not found")
+                onBlocking { execute(any()) } doThrow IllegalStateException("The query result was empty")
             }
 
             viewModel = get { parametersOf(testResource.resourceId) }

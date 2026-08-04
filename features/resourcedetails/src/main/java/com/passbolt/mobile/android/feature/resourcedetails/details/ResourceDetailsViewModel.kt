@@ -151,7 +151,7 @@ class ResourceDetailsViewModel(
 
     private val missingItemExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
-            if (throwable is NullPointerException) {
+            if (throwable is IllegalStateException) {
                 emitSideEffect(ShowToast(ToastType.CONTENT_NOT_AVAILABLE))
                 emitSideEffect(NavigateBack)
             }
@@ -208,7 +208,7 @@ class ResourceDetailsViewModel(
 
         dataRefreshJob?.cancel()
         dataRefreshJob =
-            viewModelScope.launch(coroutineLaunchContext.io) {
+            viewModelScope.launch(coroutineLaunchContext.io + missingItemExceptionHandler) {
                 synchronizeWithDataRefresh()
             }
 
@@ -387,7 +387,7 @@ class ResourceDetailsViewModel(
                             resourceData = resourceData.copy(resourceModel = refreshedResource),
                         )
                     }
-                    viewModelScope.launch { loadResourceDetails() }
+                    viewModelScope.launch(missingItemExceptionHandler) { loadResourceDetails() }
                 }
                 NotCompleted -> {
                     // do nothing
@@ -785,7 +785,7 @@ class ResourceDetailsViewModel(
 
     private fun toggleFavourite(option: ResourceMoreMenuModel.FavouriteOption) {
         resourceDetailActionIdlingResource.setIdle(false)
-        viewModelScope.launch(coroutineLaunchContext.io) {
+        viewModelScope.launch(coroutineLaunchContext.io + missingItemExceptionHandler) {
             updateViewState { copy(isLoading = true) }
             performCommonResourceAction(
                 action = { resourceCommonActionsInteractor.toggleFavourite(option) },
@@ -807,13 +807,13 @@ class ResourceDetailsViewModel(
     }
 
     private fun handleResourceEdited(resourceName: String?) {
-        viewModelScope.launch(coroutineLaunchContext.io) {
+        viewModelScope.launch(coroutineLaunchContext.io + missingItemExceptionHandler) {
             val refreshedResource =
                 getLocalResourceUseCase
                     .execute(GetLocalResourceUseCase.Input(resource.resourceId))
                     .resource
             updateViewState { copy(resourceData = resourceData.copy(resourceModel = refreshedResource)) }
-            viewModelScope.launch { loadResourceDetails() }
+            viewModelScope.launch(missingItemExceptionHandler) { loadResourceDetails() }
 
             emitSideEffect(ShowSuccessSnackbar(RESOURCE_EDITED))
             emitSideEffect(SetResourceEditedResult(resourceName.orEmpty()))

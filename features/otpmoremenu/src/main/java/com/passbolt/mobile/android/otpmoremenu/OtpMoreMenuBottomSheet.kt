@@ -1,5 +1,6 @@
 package com.passbolt.mobile.android.otpmoremenu
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,6 +35,7 @@ import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeCopyO
 import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeDeleteOtp
 import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeEditOtp
 import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.InvokeShowOtp
+import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuSideEffect.ShowContentNotAvailable
 import org.koin.androidx.compose.koinViewModel
 import com.passbolt.mobile.android.core.localization.R as LocalizationR
 import com.passbolt.mobile.android.core.ui.R as CoreUiR
@@ -73,6 +77,8 @@ fun OtpMoreMenuBottomSheet(
 ) {
     viewModel.onIntent(Initialize(resourceId, resourceName, onShowOtp != null))
 
+    val context = LocalContext.current
+    val resources = LocalResources.current
     val state by viewModel.viewState.collectAsState()
 
     OtpMoreMenuBottomSheet(
@@ -84,6 +90,13 @@ fun OtpMoreMenuBottomSheet(
     SideEffectDispatcher(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             Dismiss -> onDismissRequest()
+            ShowContentNotAvailable ->
+                Toast
+                    .makeText(
+                        context,
+                        resources.getString(LocalizationR.string.content_not_available),
+                        Toast.LENGTH_SHORT,
+                    ).show()
             InvokeShowOtp -> onShowOtp?.invoke()
             InvokeCopyOtp -> onCopyOtp()
             InvokeEditOtp -> onEditOtp()

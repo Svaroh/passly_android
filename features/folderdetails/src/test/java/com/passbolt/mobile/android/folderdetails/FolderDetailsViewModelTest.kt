@@ -286,11 +286,11 @@ class FolderDetailsViewModelTest : KoinTest {
 
     @OptIn(ExperimentalTime::class)
     @Test
-    fun `should handle null pointer exception when loading folder and navigate to home`() =
+    fun `should handle missing item exception when loading folder and navigate to home`() =
         runTest {
             val getLocalFolderDetailsUseCase = get<GetLocalFolderDetailsUseCase>()
             getLocalFolderDetailsUseCase.stub {
-                onBlocking { execute(any()) } doThrow NullPointerException("Folder not found")
+                onBlocking { execute(any()) } doThrow IllegalStateException("The query result was empty")
             }
 
             viewModel = get { parametersOf(testFolder.folderId) }

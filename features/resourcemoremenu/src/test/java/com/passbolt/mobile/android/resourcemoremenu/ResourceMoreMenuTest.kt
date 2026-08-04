@@ -29,6 +29,8 @@ import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
 import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
 import com.passbolt.mobile.android.core.idlingresource.CreateMenuModelIdlingResource
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
+import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.Dismiss
+import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.ShowContentNotAvailable
 import com.passbolt.mobile.android.resourcemoremenu.usecase.CreateResourceMoreMenuModelUseCase
 import com.passbolt.mobile.android.ui.ResourceMoreMenuModel
 import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.DescriptionOption.HAS_METADATA_DESCRIPTION
@@ -55,6 +57,7 @@ import org.koin.test.get
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stub
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -125,6 +128,23 @@ class ResourceMoreMenuTest : KoinTest {
                 assertThat(state.showEdit).isTrue()
                 assertThat(state.showShare).isTrue()
                 assertThat(state.favouriteOption).isEqualTo(ADD_TO_FAVOURITES)
+            }
+        }
+
+    @Test
+    fun `missing resource for the shown menu should dismiss`() =
+        runTest {
+            mockCreateResourceMoreMenuModelUseCase.stub {
+                onBlocking { execute(any()) } doThrow IllegalStateException("The query result was empty")
+            }
+
+            viewModel = get()
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(ResourceMoreMenuBottomSheetIntent.Initialize("resourceId"))
+
+                assertThat(awaitItem()).isEqualTo(ShowContentNotAvailable)
+                assertThat(awaitItem()).isEqualTo(Dismiss)
             }
         }
 

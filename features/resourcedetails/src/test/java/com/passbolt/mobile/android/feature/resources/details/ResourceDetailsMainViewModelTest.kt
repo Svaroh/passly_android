@@ -25,11 +25,14 @@ package com.passbolt.mobile.android.feature.resources.details
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
+import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
 import com.passbolt.mobile.android.domain.rbac.usecase.GetRbacRulesUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCommonActionResult
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCommonActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourcePropertiesActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourcePropertyActionResult
+import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceUseCase
 import com.passbolt.mobile.android.feature.resourcedetails.details.ErrorSnackbarType
 import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.CloseDeleteConfirmationDialog
 import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsIntent.CloseMoreMenu
@@ -45,7 +48,9 @@ import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetai
 import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.NavigateBack
 import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.OpenWebsite
 import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowErrorSnackbar
+import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowToast
 import com.passbolt.mobile.android.feature.resourcedetails.details.ResourceDetailsViewModel
+import com.passbolt.mobile.android.feature.resourcedetails.details.ToastType
 import com.passbolt.mobile.android.ui.RbacRuleModel.DENY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -63,7 +68,9 @@ import org.koin.core.logger.Level
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.get
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stub
 import kotlin.test.assertIs
 
@@ -155,6 +162,26 @@ class ResourceDetailsMainViewModelTest : KoinTest {
                 val state = awaitItem()
                 assertThat(state.resourceData.resourceModel).isEqualTo(DEFAULT_RESOURCE_MODEL)
                 cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun `resource missing after data refresh should show toast and navigate back`() =
+        runTest {
+            viewModel = get()
+            viewModel.onIntent(Initialize(DEFAULT_RESOURCE_MODEL))
+            get<GetLocalResourceUseCase>().stub {
+                onBlocking { execute(any()) } doThrow
+                    IllegalStateException("The query result was empty, but expected a single row")
+            }
+
+            viewModel.sideEffect.test {
+                get<DataRefreshTrackingFlow>().updateStatus(FinishedWithSuccess)
+
+                val toast = awaitItem()
+                assertIs<ShowToast>(toast)
+                assertThat(toast.type).isEqualTo(ToastType.CONTENT_NOT_AVAILABLE)
+                assertIs<NavigateBack>(awaitItem())
             }
         }
 
