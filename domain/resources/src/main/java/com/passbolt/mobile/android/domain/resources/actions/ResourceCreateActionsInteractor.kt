@@ -26,12 +26,16 @@ package com.passbolt.mobile.android.domain.resources.actions
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalParentFolderPermissionsToApplyToNewItemUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.ItemIdResourceId
+import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
 import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysInteractor
 import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysInteractor.Output.TrustedKeyDeleted
 import com.passbolt.mobile.android.domain.metadata.model.MetadataKeyPurpose.ENCRYPT
 import com.passbolt.mobile.android.domain.metadata.usecase.GetMetadataKeysSettingsUseCase
 import com.passbolt.mobile.android.domain.metadata.usecase.GetMetadataTypesSettingsUseCase
 import com.passbolt.mobile.android.domain.metadata.usecase.db.GetLocalMetadataKeysUseCase
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.CreatePermissionsSnapshotInteractor
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.CreatePermissionsSnapshotInteractor.DriftOutput
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult.CannotCreateWithCurrentConfig
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult.CryptoFailure
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult.Failure
@@ -39,6 +43,7 @@ import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateAction
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult.JsonSchemaValidationFailure
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult.MetadataKeyDeleted
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult.MetadataKeyModified
+import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult.PermissionsDrifted
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult.ShareFailure
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult.SimulateShareFailure
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult.Success
@@ -50,6 +55,7 @@ import com.passbolt.mobile.android.domain.resources.usecase.db.AddLocalResourceU
 import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
 import com.passbolt.mobile.android.domain.secrets.model.SecretJsonModel
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
+import com.passbolt.mobile.android.domain.users.usecase.GetLocalUserUseCase
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
 import com.passbolt.mobile.android.serializers.jsonschema.SchemaEntity
 import com.passbolt.mobile.android.supportedresourceTypes.ContentType
@@ -59,8 +65,10 @@ import com.passbolt.mobile.android.ui.MetadataKeyParamsModel
 import com.passbolt.mobile.android.ui.MetadataKeyTypeModel
 import com.passbolt.mobile.android.ui.MetadataTypeModel
 import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
+import com.passbolt.mobile.android.ui.PermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.ResourceUiModel
+import com.passbolt.mobile.android.ui.ResourceUiModelWithAttributes
 import com.passbolt.mobile.android.ui.TrustedKeyDeletedModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -80,12 +88,46 @@ class ResourceCreateActionsInteractor(
     private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
     private val metadataPrivateKeysInteractor: MetadataPrivateKeysInteractor,
     private val resourceTypeIdToSlugMappingProvider: ResourceTypeIdToSlugMappingProvider,
+    private val getPermissionsSnapshotUseCase: GetPermissionsSnapshotUseCase,
+    private val createPermissionsSnapshotInteractor: CreatePermissionsSnapshotInteractor,
+    private val getLocalUserUseCase: GetLocalUserUseCase,
+    private val getGroupWithUsersUseCase: GetGroupWithUsersUseCase,
 ) {
     suspend fun createGenericResource(
         contentType: ContentType,
         resourceParentFolderId: String?,
         metadataJsonModel: MetadataJsonModel,
         secretJsonModel: SecretJsonModel,
+    ): Flow<ResourceCreateActionResult> =
+        createGenericResource(
+            contentType = contentType,
+            resourceParentFolderId = resourceParentFolderId,
+            metadataJsonModel = metadataJsonModel,
+            secretJsonModel = secretJsonModel,
+            applyPermissions = ::applyParentFolderPermissions,
+        )
+
+    suspend fun createGenericResourceWithConfirmedPermissions(
+        contentType: ContentType,
+        resourceParentFolderId: String?,
+        metadataJsonModel: MetadataJsonModel,
+        secretJsonModel: SecretJsonModel,
+        confirmedPermissions: List<PermissionModelUi>,
+    ): Flow<ResourceCreateActionResult> =
+        createGenericResource(
+            contentType = contentType,
+            resourceParentFolderId = resourceParentFolderId,
+            metadataJsonModel = metadataJsonModel,
+            secretJsonModel = secretJsonModel,
+            applyPermissions = { createdResource -> applyConfirmedPermissions(createdResource, confirmedPermissions) },
+        )
+
+    private suspend fun createGenericResource(
+        contentType: ContentType,
+        resourceParentFolderId: String?,
+        metadataJsonModel: MetadataJsonModel,
+        secretJsonModel: SecretJsonModel,
+        applyPermissions: suspend (ResourceUiModelWithAttributes) -> ResourceCreateActionResult,
     ): Flow<ResourceCreateActionResult> =
         if (!isSupported(contentType)) {
             flowOf(CannotCreateWithCurrentConfig)
@@ -113,6 +155,7 @@ class ResourceCreateActionsInteractor(
                             )
                         },
                         createSecret = { secretJsonModel },
+                        applyPermissions = applyPermissions,
                     )
                 }
             }
@@ -215,22 +258,29 @@ class ResourceCreateActionsInteractor(
     private suspend fun createResource(
         createResource: (MetadataTypeModel) -> CreateResourceModel,
         createSecret: () -> SecretJsonModel,
+        applyPermissions: suspend (ResourceUiModelWithAttributes) -> ResourceCreateActionResult,
     ): Flow<ResourceCreateActionResult> =
         try {
             flowOf(
-                runCreateOperation {
-                    createResourceInteractor.execute(
-                        resourceInput = createResource(getMetadataType()),
-                        secretInput = createSecret(),
-                    )
-                },
+                runCreateOperation(
+                    operation = {
+                        createResourceInteractor.execute(
+                            resourceInput = createResource(getMetadataType()),
+                            secretInput = createSecret(),
+                        )
+                    },
+                    applyPermissions = applyPermissions,
+                ),
             )
         } catch (e: Exception) {
             Timber.e(e, "Error updating resource")
             flowOf(Failure())
         }
 
-    private suspend fun runCreateOperation(operation: suspend () -> CreateResourceInteractor.Output): ResourceCreateActionResult =
+    private suspend fun runCreateOperation(
+        operation: suspend () -> CreateResourceInteractor.Output,
+        applyPermissions: suspend (ResourceUiModelWithAttributes) -> ResourceCreateActionResult,
+    ): ResourceCreateActionResult =
         when (
             val operationResult =
                 runAuthenticatedOperation {
@@ -251,43 +301,153 @@ class ResourceCreateActionsInteractor(
                 addLocalResourcePermissionsUseCase.execute(
                     AddLocalResourcePermissionsUseCase.Input(listOf(operationResult.resource)),
                 )
-
-                val newFolderPermissionsToApply =
-                    operationResult.resource.resourceModel.folderId
-                        ?.let {
-                            getLocalParentFolderPermissionsToApplyUseCase
-                                .execute(
-                                    GetLocalParentFolderPermissionsToApplyToNewItemUseCase.Input(
-                                        it,
-                                        ItemIdResourceId(operationResult.resource.resourceModel.resourceId),
-                                    ),
-                                ).permissions
-                        }.orEmpty()
-
-                if (newFolderPermissionsToApply.size > 1) {
-                    applyFolderPermissionsToCreatedResource(
-                        operationResult.resource.resourceModel,
-                        newFolderPermissionsToApply,
-                    )
-                } else {
-                    Success(
-                        operationResult.resource.resourceModel.resourceId,
-                        operationResult.resource.resourceModel.metadataJsonModel.name,
-                    )
-                }
+                applyPermissions(operationResult.resource)
             }
             is CreateResourceInteractor.Output.JsonSchemaValidationFailure ->
                 JsonSchemaValidationFailure(operationResult.entity)
         }
 
-    private suspend fun applyFolderPermissionsToCreatedResource(
+    private suspend fun applyParentFolderPermissions(createdResource: ResourceUiModelWithAttributes): ResourceCreateActionResult {
+        val newFolderPermissionsToApply =
+            createdResource.resourceModel.folderId
+                ?.let {
+                    getLocalParentFolderPermissionsToApplyUseCase
+                        .execute(
+                            GetLocalParentFolderPermissionsToApplyToNewItemUseCase.Input(
+                                it,
+                                ItemIdResourceId(createdResource.resourceModel.resourceId),
+                            ),
+                        ).permissions
+                }.orEmpty()
+
+        return if (newFolderPermissionsToApply.size > 1) {
+            applyPermissionsToCreatedResource(
+                createdResource.resourceModel,
+                newFolderPermissionsToApply,
+                recipientsPublicKeys = emptyMap(),
+            )
+        } else {
+            Success(
+                createdResource.resourceModel.resourceId,
+                createdResource.resourceModel.metadataJsonModel.name,
+            )
+        }
+    }
+
+    private suspend fun applyConfirmedPermissions(
+        createdResource: ResourceUiModelWithAttributes,
+        confirmedPermissions: List<PermissionModelUi>,
+    ): ResourceCreateActionResult {
+        Timber.d("Applying confirmed permissions to the created resource")
+        val permissionsToApply = withOperatorRealPermissionId(confirmedPermissions, createdResource)
+        if (permissionsToApply.size <= 1) {
+            return Success(
+                createdResource.resourceModel.resourceId,
+                createdResource.resourceModel.metadataJsonModel.name,
+            )
+        }
+
+        return when (val driftOutput = detectPermissionsDrift(createdResource.resourceModel.folderId)) {
+            is DriftOutput.NoDrift ->
+                applyPermissionsToCreatedResource(
+                    createdResource.resourceModel,
+                    permissionsToApply,
+                    recipientsPublicKeys = confirmedRecipientsPublicKeys(permissionsToApply),
+                )
+            is DriftOutput.DriftDetected -> PermissionsDrifted
+            is DriftOutput.Failure -> {
+                Timber.e("Unable to verify permissions drift: ${driftOutput.message} - not sharing")
+                ShareFailure(driftOutput.message)
+            }
+        }
+    }
+
+    private suspend fun detectPermissionsDrift(folderId: String?): DriftOutput =
+        if (folderId == null) {
+            DriftOutput.NoDrift
+        } else {
+            runAuthenticatedOperation {
+                createPermissionsSnapshotInteractor.detectDriftForFolder(folderId)
+            }
+        }
+
+    private suspend fun withOperatorRealPermissionId(
+        confirmedPermissions: List<PermissionModelUi>,
+        createdResource: ResourceUiModelWithAttributes,
+    ): List<PermissionModelUi> {
+        val currentUserServerId =
+            getLocalCurrentUserUseCase
+                .execute(Unit)
+                .user.id
+        val createdOperatorPermissionId =
+            createdResource.resourcePermissions
+                .filterIsInstance<PermissionModel.UserPermissionModel>()
+                .firstOrNull { it.userId == currentUserServerId }
+                ?.permissionId
+                ?: return confirmedPermissions
+        return confirmedPermissions.map {
+            if (it is PermissionModelUi.UserPermissionModel && it.user.userId == currentUserServerId) {
+                it.copy(permissionId = createdOperatorPermissionId)
+            } else {
+                it
+            }
+        }
+    }
+
+    private suspend fun confirmedRecipientsPublicKeys(permissionsToApply: List<PermissionModelUi>): Map<String, String> {
+        val snapshot = getPermissionsSnapshotUseCase.execute(Unit).snapshot
+        val snapshotKeys =
+            snapshot
+                ?.users
+                .orEmpty()
+                .mapNotNull { (userId, profile) -> profile.gpgKey?.armoredKey?.let { userId to it } }
+                .toMap()
+
+        val addedUsersKeys =
+            permissionsToApply
+                .filterIsInstance<PermissionModelUi.UserPermissionModel>()
+                .filter { it.user.userId !in snapshotKeys }
+                .mapNotNull { permission ->
+                    localArmoredKey(permission.user.userId)?.let { permission.user.userId to it }
+                }.toMap()
+
+        val addedGroupsMembersKeys =
+            permissionsToApply
+                .filterIsInstance<PermissionModelUi.GroupPermissionModel>()
+                .filter { snapshot == null || it.group.groupId !in snapshot.groupsMembers }
+                .flatMap { groupPermission ->
+                    getGroupWithUsersUseCase
+                        .execute(GetGroupWithUsersUseCase.Input(groupPermission.group.groupId))
+                        .groupWithUsers.users
+                        .map { it.id to it.gpgKey.armoredKey }
+                }.toMap()
+
+        return snapshotKeys + addedUsersKeys + addedGroupsMembersKeys
+    }
+
+    private suspend fun localArmoredKey(userId: String): String? =
+        try {
+            getLocalUserUseCase
+                .execute(GetLocalUserUseCase.Input(userId))
+                .user.gpgKey.armoredKey
+        } catch (exception: NullPointerException) {
+            Timber.e(exception, "Added recipient not found in the local storage")
+            null
+        }
+
+    private suspend fun applyPermissionsToCreatedResource(
         resource: ResourceUiModel,
         newPermissionsToApply: List<PermissionModelUi>,
+        recipientsPublicKeys: Map<String, String>,
     ): ResourceCreateActionResult =
         when (
             val shareResult =
                 runAuthenticatedOperation {
-                    resourceShareInteractor.simulateAndShareResource(resource.resourceId, newPermissionsToApply)
+                    resourceShareInteractor.simulateAndShareResource(
+                        resource.resourceId,
+                        newPermissionsToApply,
+                        recipientsPublicKeys,
+                    )
                 }
         ) {
             is ResourceShareInteractor.Output.SecretDecryptFailure -> CryptoFailure(shareResult.message)
@@ -300,7 +460,7 @@ class ResourceCreateActionsInteractor(
         }
 }
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "CyclomaticComplexMethod")
 suspend fun performResourceCreateAction(
     action: suspend () -> Flow<ResourceCreateActionResult>,
     doOnCryptoFailure: (String) -> Unit,
@@ -313,6 +473,7 @@ suspend fun performResourceCreateAction(
     doOnFetchFailure: () -> Unit = {},
     doOnUnauthorized: () -> Unit = {},
     doOnShareFailure: (String) -> Unit = {},
+    doOnPermissionsDrifted: () -> Unit = {},
     doOnMetadataKeyVerificationFailure: () -> Unit = {},
 ) {
     action().single().let {
@@ -325,6 +486,7 @@ suspend fun performResourceCreateAction(
             is JsonSchemaValidationFailure -> doOnSchemaValidationFailure(it.entity)
             is ShareFailure -> doOnShareFailure(it.message.orEmpty())
             is SimulateShareFailure -> doOnShareFailure(it.message.orEmpty())
+            is PermissionsDrifted -> doOnPermissionsDrifted()
             is CannotCreateWithCurrentConfig -> doOnCannotCreateWithCurrentConfig()
             is MetadataKeyModified -> doOnMetadataKeyModified(it.keyToTrust)
             is MetadataKeyDeleted -> doOnMetadataKeyDeleted(it.deletedKey)

@@ -35,6 +35,7 @@ data class FeatureFlags(
     val arePasswordPoliciesAvailable: Boolean,
     val canUpdatePasswordPolicies: Boolean,
     val isV5MetadataAvailable: Boolean,
+    val isPermissionsConfirmationOptOutAvailable: Boolean,
 ) {
     companion object {
         fun defaults(): FeatureFlags =
@@ -50,6 +51,7 @@ data class FeatureFlags(
                 arePasswordPoliciesAvailable = false,
                 canUpdatePasswordPolicies = false,
                 isV5MetadataAvailable = false,
+                isPermissionsConfirmationOptOutAvailable = false,
             )
     }
 }

@@ -46,4 +46,13 @@ internal class UsersRemoteDataSource(
         callWithHandler(responseHandler) { usersApi.getUsers(hasAccessTo).body }
             .toDomainResult()
             .map { it.toDomain() }
+
+    override suspend fun getUsersByIds(userIds: List<String>): DomainResult<List<UserProfile>> {
+        val userIdsSet = userIds.toSet()
+        return callWithHandler(responseHandler) { usersApi.getUsers(hasIds = userIds).body }
+            .toDomainResult()
+            // the has-id filter may not be supported on older backends according to specs
+            // -> filter also after reception
+            .map { users -> users.toDomain().filter { it.id in userIdsSet } }
+    }
 }

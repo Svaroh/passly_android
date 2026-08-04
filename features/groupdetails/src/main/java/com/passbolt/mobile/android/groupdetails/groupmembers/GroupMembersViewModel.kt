@@ -27,22 +27,62 @@ import androidx.lifecycle.viewModelScope
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
 import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
+import com.passbolt.mobile.android.domain.users.mapper.toUserModel
 import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersIntent.GoBack
 import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersIntent.GoToMemberDetails
 import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersIntent.Initialize
 import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersSideEffect.NavigateToMemberDetails
 import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersSideEffect.NavigateUp
+import com.passbolt.mobile.android.ui.PermissionModel
 import kotlinx.coroutines.launch
 
 internal class GroupMembersViewModel(
     private val getGroupWithUsersUseCase: GetGroupWithUsersUseCase,
+    private val getPermissionsSnapshotUseCase: GetPermissionsSnapshotUseCase,
     private val coroutineLaunchContext: CoroutineLaunchContext,
 ) : SideEffectViewModel<GroupMembersState, GroupMembersSideEffect>(GroupMembersState()) {
+    private var fromSnapshot = false
+
     fun onIntent(intent: GroupMembersIntent) {
         when (intent) {
             GoBack -> emitSideEffect(NavigateUp)
-            is Initialize -> loadGroupMembers(intent.groupId)
-            is GoToMemberDetails -> emitSideEffect(NavigateToMemberDetails(intent.userId))
+            is Initialize -> {
+                fromSnapshot = intent.fromSnapshot
+                if (intent.fromSnapshot) {
+                    loadSnapshotGroupMembers(intent.groupId)
+                } else {
+                    loadGroupMembers(intent.groupId)
+                }
+            }
+            is GoToMemberDetails -> emitSideEffect(NavigateToMemberDetails(intent.userId, fromSnapshot))
+        }
+    }
+
+    private fun loadSnapshotGroupMembers(groupId: String) {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            val snapshot = getPermissionsSnapshotUseCase.execute(Unit).snapshot
+            when {
+                // the snapshot is not available (i.e. after process death) - close instead of showing unconfirmed
+                snapshot == null -> emitSideEffect(NavigateUp)
+                groupId in snapshot.groupsMembers -> {
+                    val groupName =
+                        snapshot.permissions
+                            .filterIsInstance<PermissionModel.GroupPermissionModel>()
+                            .firstOrNull { it.group.groupId == groupId }
+                            ?.group
+                            ?.groupName
+                            .orEmpty()
+                    val members =
+                        snapshot.groupsMembers
+                            .getValue(groupId)
+                            .mapNotNull { memberId -> snapshot.users[memberId] }
+                            .map { it.toUserModel() }
+                    updateViewState { copy(groupName = groupName, members = members) }
+                }
+                // not part of the snapshot - a group added from the local search during confirmation
+                else -> loadGroupMembers(groupId)
+            }
         }
     }
 

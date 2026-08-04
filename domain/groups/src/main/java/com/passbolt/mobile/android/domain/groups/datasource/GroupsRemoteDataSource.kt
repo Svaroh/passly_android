@@ -28,4 +28,6 @@ import com.passbolt.mobile.android.domain.groups.model.GroupWithMembers
 
 interface GroupsRemoteDataSource {
     suspend fun getGroups(): DomainResult<List<GroupWithMembers>>
+
+    suspend fun getGroupsByIds(groupIds: List<String>): DomainResult<List<GroupWithMembers>>
 }

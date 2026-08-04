@@ -59,13 +59,14 @@ import com.passbolt.mobile.android.core.localization.R as LocalizationR
 internal fun GroupMemberDetailsScreen(
     userId: String,
     modifier: Modifier = Modifier,
+    fromSnapshot: Boolean = false,
     viewModel: GroupMemberDetailsViewModel = koinViewModel(),
     navigator: AppNavigator = koinInject(),
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle()
 
     LaunchedEffect(userId) {
-        viewModel.onIntent(Initialize(userId))
+        viewModel.onIntent(Initialize(userId, fromSnapshot))
     }
 
     GroupMemberDetailsContent(

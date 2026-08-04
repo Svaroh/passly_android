@@ -255,6 +255,7 @@ class FoldersInteractorTest : KoinTest {
                             arePasswordPoliciesAvailable = false,
                             canUpdatePasswordPolicies = false,
                             isV5MetadataAvailable = false,
+                            isPermissionsConfirmationOptOutAvailable = false,
                         ),
                 ),
             )

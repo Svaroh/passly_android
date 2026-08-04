@@ -33,6 +33,7 @@ fun Module.permissionsModule() {
             permissionsItem = params.get(),
             id = params.get(),
             mode = params.get(),
+            flow = params.get(),
             getLocalResourcePermissionsUseCase = get(),
             getLocalResourceUseCase = get(),
             getLocalFolderPermissionsUseCase = get(),
@@ -44,6 +45,11 @@ fun Module.permissionsModule() {
             dataRefreshTrackingFlow = get(),
             coroutineLaunchContext = get(),
             resourceUpdateActionsInteractorFactory = get(),
+            createPermissionsSnapshotInteractor = get(),
+            getLocalCurrentUserUseCase = get(),
+            getFeatureFlagsUseCase = get(),
+            setPermissionsConfirmationOptOutUseCase = get(),
+            usersModelMapper = get(),
         )
     }
 }

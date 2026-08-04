@@ -35,10 +35,12 @@ internal interface UsersApi {
     @GET(USERS)
     suspend fun getUsers(
         @Query(QUERY_HAS_ACCESS_PERMISSION) hasAccessTo: List<String>? = null,
+        @Query(QUERY_HAS_ID) hasIds: List<String>? = null,
     ): BaseResponse<List<UserDto>>
 
     private companion object {
         private const val QUERY_HAS_ACCESS_PERMISSION = "filter[has-access]"
+        private const val QUERY_HAS_ID = "filter[has-id][]"
         private const val USERS = "users.json"
         private const val USERS_ME = "users/me.json"
     }

@@ -5,6 +5,7 @@ import com.passbolt.mobile.android.ui.AdditionalUrisUiModel
 import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
 import com.passbolt.mobile.android.ui.OtpParseResult
 import com.passbolt.mobile.android.ui.PasswordUiModel
+import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.PinCodeUiModel
 import com.passbolt.mobile.android.ui.ResourceAppearanceModel
 import com.passbolt.mobile.android.ui.TotpUiModel
@@ -17,6 +18,10 @@ sealed interface ResourceFormIntent {
     data object ExpandAdvancedSettings : ResourceFormIntent
 
     data object CreateResource : ResourceFormIntent
+
+    data class ConfirmedPermissionsResult(
+        val permissions: List<PermissionModelUi>,
+    ) : ResourceFormIntent
 
     data object UpdateResource : ResourceFormIntent
 

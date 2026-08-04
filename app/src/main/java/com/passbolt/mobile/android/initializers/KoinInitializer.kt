@@ -61,6 +61,7 @@ import com.passbolt.mobile.android.data.mfa.mfaDataModule
 import com.passbolt.mobile.android.data.mobiletransfer.mobileTransferDataModule
 import com.passbolt.mobile.android.data.passwordexpiry.passwordExpiryDataModule
 import com.passbolt.mobile.android.data.passwordpolicies.passwordPoliciesDataModule
+import com.passbolt.mobile.android.data.permissionsconfirmation.permissionsConfirmationDataModule
 import com.passbolt.mobile.android.data.preferences.preferencesDataModule
 import com.passbolt.mobile.android.data.privatekey.privateKeyDataModule
 import com.passbolt.mobile.android.data.rbac.rbacDataModule
@@ -82,6 +83,7 @@ import com.passbolt.mobile.android.domain.metadata.metadataDomainModule
 import com.passbolt.mobile.android.domain.mobiletransfer.mobileTransferDomainModule
 import com.passbolt.mobile.android.domain.passwordexpiry.passwordExpiryDomainModule
 import com.passbolt.mobile.android.domain.passwordpolicies.passwordPoliciesDomainModule
+import com.passbolt.mobile.android.domain.permissionsconfirmation.permissionsConfirmationDomainModule
 import com.passbolt.mobile.android.domain.preferences.preferencesDomainModule
 import com.passbolt.mobile.android.domain.privatekey.privateKeyDomainModule
 import com.passbolt.mobile.android.domain.rbac.rbacDomainModule
@@ -215,6 +217,8 @@ class KoinInitializer : Initializer<Unit> {
                 accountsCoreModule,
                 passwordPoliciesDomainModule,
                 passwordPoliciesDataModule,
+                permissionsConfirmationDomainModule,
+                permissionsConfirmationDataModule,
                 preferencesDomainModule,
                 preferencesDataModule,
                 mobileTransferDomainModule,

@@ -26,6 +26,7 @@ package com.passbolt.mobile.android.domain.folders
 import com.passbolt.mobile.android.domain.folders.usecase.AddLocalFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.AddLocalFolderUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.CreateFolderUseCase
+import com.passbolt.mobile.android.domain.folders.usecase.FetchFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.FolderShareInteractor
 import com.passbolt.mobile.android.domain.folders.usecase.FoldersInteractor
 import com.passbolt.mobile.android.domain.folders.usecase.GetFoldersPaginatedUseCase
@@ -49,6 +50,7 @@ val foldersDomainModule =
     module {
         factoryOf(::CreateFolderUseCase)
         singleOf(::GetFoldersPaginatedUseCase)
+        singleOf(::FetchFolderPermissionsUseCase)
         singleOf(::FoldersInteractor)
         singleOf(::RemoveLocalFolderPermissionsUseCase)
         singleOf(::AddLocalFolderPermissionsUseCase)

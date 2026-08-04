@@ -107,6 +107,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
                         arePasswordPoliciesAvailable = true,
                         canUpdatePasswordPolicies = true,
                         isV5MetadataAvailable = true,
+                        isPermissionsConfirmationOptOutAvailable = false,
                     ),
                 )
         }
@@ -130,6 +131,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
                             arePasswordPoliciesAvailable = true,
                             canUpdatePasswordPolicies = true,
                             isV5MetadataAvailable = true,
+                            isPermissionsConfirmationOptOutAvailable = false,
                         ),
                     )
             }
@@ -157,6 +159,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
                             arePasswordPoliciesAvailable = true,
                             canUpdatePasswordPolicies = true,
                             isV5MetadataAvailable = true,
+                            isPermissionsConfirmationOptOutAvailable = false,
                         ),
                     )
             }

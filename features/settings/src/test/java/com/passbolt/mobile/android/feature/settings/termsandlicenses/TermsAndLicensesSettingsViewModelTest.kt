@@ -96,6 +96,7 @@ class TermsAndLicensesSettingsViewModelTest : KoinTest {
                         arePasswordPoliciesAvailable = true,
                         canUpdatePasswordPolicies = true,
                         isV5MetadataAvailable = false,
+                        isPermissionsConfirmationOptOutAvailable = false,
                     ),
                 )
 
@@ -127,6 +128,7 @@ class TermsAndLicensesSettingsViewModelTest : KoinTest {
                         arePasswordPoliciesAvailable = true,
                         canUpdatePasswordPolicies = true,
                         isV5MetadataAvailable = false,
+                        isPermissionsConfirmationOptOutAvailable = false,
                     ),
                 )
 

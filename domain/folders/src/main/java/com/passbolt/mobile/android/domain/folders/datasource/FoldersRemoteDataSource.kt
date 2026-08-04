@@ -26,6 +26,7 @@ package com.passbolt.mobile.android.domain.folders.datasource
 import com.passbolt.mobile.android.core.architecture.result.DomainResult
 import com.passbolt.mobile.android.domain.folders.model.FolderModelWithAttributes
 import com.passbolt.mobile.android.domain.folders.model.FoldersPage
+import com.passbolt.mobile.android.ui.PermissionModel
 
 interface FoldersRemoteDataSource {
     suspend fun getFoldersPage(
@@ -37,4 +38,6 @@ interface FoldersRemoteDataSource {
         name: String,
         parentFolderId: String?,
     ): DomainResult<FolderModelWithAttributes>
+
+    suspend fun getFolderPermissions(folderId: String): DomainResult<List<PermissionModel>>
 }

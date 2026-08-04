@@ -402,6 +402,8 @@
     <string name="resource_form_save">Save</string>
     <string name="resource_form_edit_init_error">Failed to initialize resource edition</string>
     <string name="resource_form_create_init_error">Failed to initialize resource creation</string>
+    <string name="resource_form_created_share_failed">Resource created but not shared - sharing failed.</string>
+    <string name="resource_form_created_permissions_changed">Resource created but not shared - permissions changed in the meantime.</string>
     <string name="resource_form_remove_totp">Remove TOTP</string>
     <string name="resource_form_remove_note">Remove Note</string>
     <string name="resource_form_remove_pin_code">Remove pin code</string>
@@ -534,6 +536,10 @@
     <string name="resource_permissions_share_simulation_failed">There was an error during share simulation</string>
     <string name="resource_permissions_share_failed">There was an error during share </string>
     <string name="resource_permissions_edit_permissions">Edit permissions</string>
+
+    <string name="confirm_permissions_title">Confirm permissions</string>
+    <string name="confirm_permissions_skip_until_session_end">Skip permission confirmation until the end of my session.</string>
+    <string name="confirm_permissions_fetch_failure">Unable to load current permissions. Please try again.</string>
 
     <string name="group_permission_permission">Permission</string>
     <string name="group_permission_group_members">Group members</string>

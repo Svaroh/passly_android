@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":coreui"))
     implementation(project(":groups-domain"))
     implementation(project(":users-domain"))
+    implementation(project(":permissionsconfirmation-domain"))
     implementation(project(":localization"))
 
     implementation(platform(libs.koin.bom))

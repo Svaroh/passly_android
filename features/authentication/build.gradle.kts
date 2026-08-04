@@ -31,6 +31,7 @@ dependencies {
     implementation(project(":privatekey-domain"))
     implementation(project(":testtags"))
     implementation(project(":passphrasememorycache"))
+    implementation(project(":permissionsconfirmation-domain"))
     implementation(project(":encryptedstorage"))
     implementation(project(":preferences-domain"))
     implementation(project(":clipboard"))

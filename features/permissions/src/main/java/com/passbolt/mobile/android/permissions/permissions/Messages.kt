@@ -76,3 +76,14 @@ internal fun getSuccessMessage(
             METADATA_KEY_IS_TRUSTED -> LocalizationR.string.common_metadata_key_is_trusted
         },
     )
+
+internal fun getToastMessage(
+    context: Context,
+    type: ToastType,
+): String =
+    context.getString(
+        when (type) {
+            ToastType.CONTENT_NOT_AVAILABLE -> LocalizationR.string.content_not_available
+            ToastType.PERMISSIONS_FETCH_FAILURE -> LocalizationR.string.confirm_permissions_fetch_failure
+        },
+    )

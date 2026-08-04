@@ -28,6 +28,7 @@ import com.google.common.truth.Truth.assertThat
 import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
 import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersIntent.GoBack
 import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersIntent.GoToMemberDetails
 import com.passbolt.mobile.android.groupdetails.groupmembers.GroupMembersIntent.Initialize
@@ -74,6 +75,7 @@ class GroupMembersViewModelTest : KoinTest {
                 listOf(
                     module {
                         single { mock<GetGroupWithUsersUseCase>() }
+                        single { mock<GetPermissionsSnapshotUseCase>() }
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                         factoryOf(::GroupMembersViewModel)
                     },

@@ -23,6 +23,7 @@
 
 package com.passbolt.mobile.android.domain.groups
 
+import com.passbolt.mobile.android.domain.groups.usecase.FetchGroupsByIdsUseCase
 import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
 import com.passbolt.mobile.android.domain.groups.usecase.GetLocalGroupsUseCase
 import com.passbolt.mobile.android.domain.groups.usecase.GetLocalGroupsWithShareItemsCountPaginatedUseCase
@@ -32,6 +33,7 @@ import org.koin.dsl.module
 
 val groupsDomainModule =
     module {
+        singleOf(::FetchGroupsByIdsUseCase)
         singleOf(::GetLocalGroupsUseCase)
         singleOf(::GetLocalGroupsWithShareItemsCountPaginatedUseCase)
         singleOf(::GetGroupWithUsersUseCase)

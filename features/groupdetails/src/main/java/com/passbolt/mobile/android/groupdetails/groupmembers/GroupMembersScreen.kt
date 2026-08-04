@@ -67,13 +67,14 @@ import com.passbolt.mobile.android.core.ui.R as CoreUiR
 internal fun GroupMembersScreen(
     groupId: String,
     modifier: Modifier = Modifier,
+    fromSnapshot: Boolean = false,
     viewModel: GroupMembersViewModel = koinViewModel(),
     navigator: AppNavigator = koinInject(),
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle()
 
     LaunchedEffect(groupId) {
-        viewModel.onIntent(Initialize(groupId))
+        viewModel.onIntent(Initialize(groupId, fromSnapshot))
     }
 
     GroupMembersContent(
@@ -85,7 +86,7 @@ internal fun GroupMembersScreen(
     SideEffectDispatcher(viewModel.sideEffect) {
         when (it) {
             NavigateUp -> navigator.navigateBack()
-            is NavigateToMemberDetails -> navigator.navigateToKey(GroupMemberDetails(it.userId))
+            is NavigateToMemberDetails -> navigator.navigateToKey(GroupMemberDetails(it.userId, it.fromSnapshot))
         }
     }
 }

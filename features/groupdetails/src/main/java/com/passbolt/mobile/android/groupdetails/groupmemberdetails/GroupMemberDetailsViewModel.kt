@@ -26,6 +26,7 @@ package com.passbolt.mobile.android.groupdetails.groupmemberdetails
 import androidx.lifecycle.viewModelScope
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalUserUseCase
 import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.GoBack
 import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.Initialize
@@ -34,12 +35,42 @@ import kotlinx.coroutines.launch
 
 internal class GroupMemberDetailsViewModel(
     private val getLocalUserUseCase: GetLocalUserUseCase,
+    private val getPermissionsSnapshotUseCase: GetPermissionsSnapshotUseCase,
     private val coroutineLaunchContext: CoroutineLaunchContext,
 ) : SideEffectViewModel<GroupMemberDetailsState, GroupMemberDetailsSideEffect>(GroupMemberDetailsState()) {
     fun onIntent(intent: GroupMemberDetailsIntent) {
         when (intent) {
             GoBack -> emitSideEffect(NavigateUp)
-            is Initialize -> loadUserData(intent.userId)
+            is Initialize ->
+                if (intent.fromSnapshot) {
+                    loadSnapshotUserData(intent.userId)
+                } else {
+                    loadUserData(intent.userId)
+                }
+        }
+    }
+
+    private fun loadSnapshotUserData(userId: String) {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            val snapshot = getPermissionsSnapshotUseCase.execute(Unit).snapshot
+            when {
+                // the snapshot is not available (i.e. after process death) - close instead of showing unconfirmed
+                snapshot == null -> emitSideEffect(NavigateUp)
+                userId in snapshot.users -> {
+                    val snapshotUser = snapshot.users.getValue(userId)
+                    updateViewState {
+                        copy(
+                            userName = snapshotUser.username,
+                            firstName = snapshotUser.firstName.orEmpty(),
+                            lastName = snapshotUser.lastName.orEmpty(),
+                            avatarUrl = snapshotUser.avatarUrl,
+                            fingerprint = snapshotUser.gpgKey?.fingerprint.orEmpty(),
+                        )
+                    }
+                }
+                // not part of the snapshot - a member of a group added from the local search during confirmation
+                else -> loadUserData(userId)
+            }
         }
     }
 

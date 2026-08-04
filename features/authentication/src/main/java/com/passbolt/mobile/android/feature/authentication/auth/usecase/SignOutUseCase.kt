@@ -1,12 +1,15 @@
 package com.passbolt.mobile.android.feature.authentication.auth.usecase
 
 import com.passbolt.mobile.android.common.usecase.AsyncUseCase
+import com.passbolt.mobile.android.common.usecase.UserIdInput
 import com.passbolt.mobile.android.core.idlingresource.SignOutIdlingResource
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.RemoveSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.auth.AuthRepository
 import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsConfirmationOptOutUseCase
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
 import timber.log.Timber
 
 /**
@@ -33,6 +36,8 @@ import timber.log.Timber
  */
 class SignOutUseCase(
     private val passphraseMemoryCache: PassphraseMemoryCache,
+    private val removePermissionsConfirmationOptOutUseCase: RemovePermissionsConfirmationOptOutUseCase,
+    private val removePermissionsSnapshotUseCase: RemovePermissionsSnapshotUseCase,
     private val removeSelectedAccountUseCase: RemoveSelectedAccountUseCase,
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
     private val authRepository: AuthRepository,
@@ -46,7 +51,9 @@ class SignOutUseCase(
             authRepository.signOut(it)
         }
         passphraseMemoryCache.clear()
-        getSelectedAccountUseCase.execute(Unit).selectedAccount?.let {
+        getSelectedAccountUseCase.execute(Unit).selectedAccount?.let { selectedAccount ->
+            removePermissionsConfirmationOptOutUseCase.execute(UserIdInput(selectedAccount))
+            removePermissionsSnapshotUseCase.execute(UserIdInput(selectedAccount))
             removeSelectedAccountUseCase.execute(Unit)
         }
         signOutIdlingResource.setIdle(true)

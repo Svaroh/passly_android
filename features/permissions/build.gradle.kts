@@ -25,6 +25,9 @@ dependencies {
     implementation(project(":metadata-domain"))
     implementation(project(":serializers"))
     implementation(project(":metadatakeytrust"))
+    implementation(project(":permissionsconfirmation-domain"))
+    implementation(project(":featureflags-domain"))
+    implementation(project(":entity"))
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin)

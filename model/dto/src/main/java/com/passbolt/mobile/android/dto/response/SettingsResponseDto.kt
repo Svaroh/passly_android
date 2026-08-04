@@ -57,9 +57,14 @@ data class PluginsDto(
     val passwordPolicies: PluginAvailabilityDto?,
     val passwordPoliciesUpdate: PluginAvailabilityDto?,
     val metadata: PluginAvailabilityDto?,
+    val permissions: PermissionsPluginDto?,
 )
 
 data class PluginAvailabilityDto(
     val enabled: Boolean?,
     val version: String?,
+)
+
+data class PermissionsPluginDto(
+    val allowOptout: Boolean?,
 )

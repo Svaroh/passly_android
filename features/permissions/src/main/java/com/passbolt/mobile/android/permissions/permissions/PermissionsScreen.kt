@@ -24,10 +24,13 @@
 package com.passbolt.mobile.android.permissions.permissions
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -36,6 +39,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -50,23 +54,28 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavig
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.UserPermissionDetails
 import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
+import com.passbolt.mobile.android.core.navigation.compose.results.PermissionsConfirmedResult
 import com.passbolt.mobile.android.core.navigation.compose.results.ShareCompleteResult
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.fab.AddFloatingActionButton
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
 import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
+import com.passbolt.mobile.android.core.ui.switch.TextSwitch
 import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
 import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
 import com.passbolt.mobile.android.feature.metadatakeytrust.NewMetadataKeyTrustDialog
 import com.passbolt.mobile.android.feature.metadatakeytrust.TrustedMetadataKeyDeletedDialog
+import com.passbolt.mobile.android.permissions.permissions.PermissionsFlow.CONFIRM_CREATE
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.AddPermission
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.DismissMetadataKeyDeletedDialog
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.DismissMetadataKeyModifiedDialog
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.GoBack
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.MainButtonIntent
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.SeePermission
+import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.SkipConfirmationToggled
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.TrustNewMetadataKey
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.TrustedMetadataKeyDeleted
+import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.CloseWithPermissionsConfirmed
 import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.CloseWithShareSuccess
 import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.InitiateDataRefresh
 import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateBack
@@ -75,9 +84,9 @@ import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect
 import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToSelectShareRecipients
 import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToSelfWithMode
 import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToUserPermissionDetails
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.ShowContentNotAvailable
 import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.ShowErrorSnackbar
 import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.ShowSuccessSnackbar
+import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.ShowToast
 import com.passbolt.mobile.android.permissions.permissions.ui.EmptyPermissionsState
 import com.passbolt.mobile.android.permissions.permissions.ui.PermissionsList
 import kotlinx.coroutines.launch
@@ -114,6 +123,7 @@ fun PermissionsScreen(
                     GroupPermissionDetails(
                         permission = effect.permission,
                         mode = effect.mode,
+                        fromSnapshot = effect.fromSnapshot,
                     ),
                 )
             is NavigateToUserPermissionDetails ->
@@ -121,6 +131,7 @@ fun PermissionsScreen(
                     UserPermissionDetails(
                         permission = effect.permission,
                         mode = effect.mode,
+                        fromSnapshot = effect.fromSnapshot,
                     ),
                 )
             is NavigateToSelectShareRecipients ->
@@ -136,11 +147,15 @@ fun PermissionsScreen(
                 resultBus.sendResult(result = ShareCompleteResult(shared = true))
                 navigator.navigateBack()
             }
+            is CloseWithPermissionsConfirmed -> {
+                resultBus.sendResult(result = PermissionsConfirmedResult(permissions = effect.permissions))
+                navigator.navigateBack()
+            }
             InitiateDataRefresh -> DataRefreshService.start(context)
             NavigateToHome -> navigator.popToRoot()
-            ShowContentNotAvailable ->
+            is ShowToast ->
                 Toast
-                    .makeText(context, LocalizationR.string.content_not_available, Toast.LENGTH_SHORT)
+                    .makeText(context, getToastMessage(context, effect.type), Toast.LENGTH_SHORT)
                     .show()
             is ShowErrorSnackbar ->
                 coroutineScope.launch {
@@ -175,7 +190,12 @@ private fun PermissionsScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             TitleAppBar(
-                title = stringResource(LocalizationR.string.shared_with),
+                title =
+                    if (state.flow == CONFIRM_CREATE) {
+                        stringResource(LocalizationR.string.confirm_permissions_title)
+                    } else {
+                        stringResource(LocalizationR.string.shared_with)
+                    },
                 navigationIcon = { BackNavigationIcon(onBackClick = { onIntent(GoBack) }) },
             )
         },
@@ -210,22 +230,33 @@ private fun PermissionsScreen(
             )
         },
     ) { paddingValues ->
-        if (state.showEmptyState) {
-            EmptyPermissionsState(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-            )
-        } else {
-            PermissionsList(
-                permissions = state.permissions,
-                onPermissionClick = { onIntent(SeePermission(it)) },
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-            )
+        when {
+            state.isLoading ->
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+            state.showEmptyState ->
+                EmptyPermissionsState(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                )
+            else ->
+                PermissionsList(
+                    permissions = state.permissions,
+                    onPermissionClick = { onIntent(SeePermission(it)) },
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                )
         }
     }
 
@@ -254,19 +285,29 @@ private fun ActionButtonAppBar(
     onIntent: (PermissionsIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BottomAppBar(
-        modifier = modifier.fillMaxWidth(),
-        containerColor = MaterialTheme.colorScheme.background,
-    ) {
-        PrimaryButton(
-            text =
-                if (state.showSaveButton) {
-                    stringResource(LocalizationR.string.save)
-                } else {
-                    stringResource(LocalizationR.string.resource_permissions_edit_permissions)
-                },
-            onClick = { onIntent(MainButtonIntent) },
-            modifier = Modifier.padding(horizontal = 16.dp),
-        )
+    Column(modifier = modifier.fillMaxWidth()) {
+        if (state.showSkipConfirmationSwitch) {
+            TextSwitch(
+                text = stringResource(LocalizationR.string.confirm_permissions_skip_until_session_end),
+                isChecked = state.isSkipConfirmationChecked,
+                onCheckedChange = { onIntent(SkipConfirmationToggled(it)) },
+            )
+        }
+        BottomAppBar(
+            modifier = Modifier.fillMaxWidth(),
+            containerColor = MaterialTheme.colorScheme.background,
+        ) {
+            PrimaryButton(
+                text =
+                    if (state.showSaveButton) {
+                        stringResource(LocalizationR.string.save)
+                    } else {
+                        stringResource(LocalizationR.string.resource_permissions_edit_permissions)
+                    },
+                onClick = { onIntent(MainButtonIntent) },
+                isEnabled = !state.isLoading,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+        }
     }
 }

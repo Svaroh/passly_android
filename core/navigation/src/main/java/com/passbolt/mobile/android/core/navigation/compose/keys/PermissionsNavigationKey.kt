@@ -15,15 +15,22 @@ sealed interface PermissionsNavigationKey : NavKey {
     ) : PermissionsNavigationKey
 
     @Serializable
+    data class ConfirmCreatePermissions(
+        val folderId: String,
+    ) : PermissionsNavigationKey
+
+    @Serializable
     data class GroupPermissionDetails(
         val permission: PermissionModelUi.GroupPermissionModel,
         val mode: PermissionsMode,
+        val fromSnapshot: Boolean = false,
     ) : PermissionsNavigationKey
 
     @Serializable
     data class UserPermissionDetails(
         val permission: PermissionModelUi.UserPermissionModel,
         val mode: PermissionsMode,
+        val fromSnapshot: Boolean = false,
     ) : PermissionsNavigationKey
 
     @Serializable

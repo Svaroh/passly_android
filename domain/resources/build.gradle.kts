@@ -28,6 +28,8 @@ dependencies {
     implementation(project(":privatekey-domain"))
     implementation(project(":passphrasememorycache"))
     implementation(project(":metadata-domain"))
+    implementation(project(":groups-domain"))
+    implementation(project(":permissionsconfirmation-domain"))
     implementation(project(":jsonmodel"))
     implementation(project(":coreui"))
 
