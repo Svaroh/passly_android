@@ -239,6 +239,82 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
         }
 
     @Test
+    fun correctOutputShouldBeReturnedWhenBackendKeyIsNotSharedWithCurrentUserAndNoKeyLocally() =
+        runTest {
+            mockGetLocalMetadataKeysUseCase.stub {
+                on { execute(any()) } doReturn
+                    listOf(
+                        ParsedMetadataKeyModel(
+                            id = UUID.randomUUID(),
+                            armoredKey = "",
+                            fingerprint = "",
+                            modified = ZonedDateTime.now(),
+                            expired = null,
+                            deleted = null,
+                            metadataPrivateKeys = emptyList(),
+                        ),
+                    )
+            }
+            mockGetTrustedMetadataKeyUseCase.stub {
+                onBlocking { execute(any()) } doReturn GetTrustedMetadataKeyUseCase.Output.NoTrustedKey
+            }
+
+            val result = metadataPrivateKeysInteractor.verifyMetadataPrivateKey()
+
+            verify(mockSaveTrustedMetadataKeyUseCase, never()).execute(any())
+            verify(mockUpdateMetadataPrivateKeyUseCase, never()).execute(any())
+            assertThat(result).isInstanceOf(MetadataPrivateKeysInteractor.Output.NoMetadataKey::class.java)
+        }
+
+    @Test
+    fun correctOutputShouldBeReturnedWhenBackendKeyIsNotSharedWithCurrentUserAndThereIsAKeyLocally() =
+        runTest {
+            mockGetLocalMetadataKeysUseCase.stub {
+                on { execute(any()) } doReturn
+                    listOf(
+                        ParsedMetadataKeyModel(
+                            id = UUID.randomUUID(),
+                            armoredKey = "",
+                            fingerprint = "",
+                            modified = ZonedDateTime.now(),
+                            expired = null,
+                            deleted = null,
+                            metadataPrivateKeys = emptyList(),
+                        ),
+                    )
+            }
+            mockGetTrustedMetadataKeyUseCase.stub {
+                on { execute(any()) } doReturn
+                    GetTrustedMetadataKeyUseCase.Output.TrustedKey(
+                        id = UUID.randomUUID(),
+                        userId = UUID.fromString(GRACE_USER_ID),
+                        keyData = "",
+                        passphrase = "",
+                        created = ZonedDateTime.now(),
+                        createdBy = UUID.fromString(GRACE_USER_ID),
+                        modified = ZonedDateTime.now(),
+                        modifiedBy = UUID.fromString(GRACE_USER_ID),
+                        keyPgpMessage = "",
+                        signingKeyFingerprint = "63452C7A0AE6FAE8C8C309640BD9E2409BC6A569",
+                        signatureCreationTimestampSeconds = GRACE_SIGNED_PGP_MESSAGE_SIGNATURE_TIME_SECONDS,
+                        signedUsername = "grace@passbolt.com",
+                        signedName = "Grace Hopper",
+                    )
+            }
+
+            val result = metadataPrivateKeysInteractor.verifyMetadataPrivateKey()
+
+            verify(mockSaveTrustedMetadataKeyUseCase, never()).execute(any())
+            verify(mockUpdateMetadataPrivateKeyUseCase, never()).execute(any())
+            assertThat(result).isInstanceOf(MetadataPrivateKeysInteractor.Output.TrustedKeyDeleted::class.java)
+            with(result as MetadataPrivateKeysInteractor.Output.TrustedKeyDeleted) {
+                assertThat(keyFingerprint).isEqualTo("63452C7A0AE6FAE8C8C309640BD9E2409BC6A569")
+                assertThat(signedUsername).isEqualTo("grace@passbolt.com")
+                assertThat(signedName).isEqualTo("Grace Hopper")
+            }
+        }
+
+    @Test
     fun correctOutputShouldBeReturnedWhenThereIsBackendKeySignedByCurrentUserAndNoLocalKey() =
         runTest {
             mockGetLocalMetadataKeysUseCase.stub {

@@ -73,7 +73,8 @@ class MetadataPrivateKeysInteractor(
         return if (backendMetadataKey != null) {
             verifyWithBackendMetadataKeyPresent(backendMetadataKey, localTrustedKey)
         } else {
-            verifyWithNoBackendMetadataKey(localTrustedKey)
+            Timber.d("Metadata key is not present server-side")
+            verifyWithNoUsableBackendMetadataKey(localTrustedKey)
         }
     }
 
@@ -86,10 +87,8 @@ class MetadataPrivateKeysInteractor(
         }
     }
 
-    private fun verifyWithNoBackendMetadataKey(localTrustedKey: GetTrustedMetadataKeyUseCase.Output): Output {
-        Timber.d("Metadata key is not present server-side")
-
-        return when (localTrustedKey) {
+    private fun verifyWithNoUsableBackendMetadataKey(localTrustedKey: GetTrustedMetadataKeyUseCase.Output): Output =
+        when (localTrustedKey) {
             is TrustedKey -> {
                 Timber.d("Metadata key is present locally - trusted key to be deleted after confirmation")
                 Output.TrustedKeyDeleted(
@@ -103,7 +102,6 @@ class MetadataPrivateKeysInteractor(
                 Output.NoMetadataKey
             }
         }
-    }
 
     @Suppress("ReturnCount", "LongMethod")
     private suspend fun verifyWithBackendMetadataKeyPresent(
@@ -112,7 +110,11 @@ class MetadataPrivateKeysInteractor(
     ): Output {
         Timber.d("Metadata key is present server-side")
 
-        val backendMetadataPrivateKey = backendMetadataKey.metadataPrivateKeys.first()
+        val backendMetadataPrivateKey = backendMetadataKey.metadataPrivateKeys.firstOrNull()
+        if (backendMetadataPrivateKey == null) {
+            Timber.w("Backend metadata key contains no private keys - treating it as no usable metadata key")
+            return verifyWithNoUsableBackendMetadataKey(localTrustedKey)
+        }
         val userWhoModifiedTheKey =
             runCatching {
                 getLocalUserUseCase
@@ -149,11 +151,7 @@ class MetadataPrivateKeysInteractor(
                 armoredPrivateKey = currentUserPrivateKey,
                 passphrase = passphrase,
                 armoredPublicKey = userWhoModifiedTheKey.gpgKey.armoredKey,
-                pgpMessage =
-                    backendMetadataKey.metadataPrivateKeys
-                        .first()
-                        .pgpMessage
-                        .toByteArray(),
+                pgpMessage = backendMetadataPrivateKey.pgpMessage.toByteArray(),
             )
 
         when (verifiedMessage) {
