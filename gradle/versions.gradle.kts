@@ -5,4 +5,4 @@ extra["projectVersionCode"] = 57
 
 extra["projectMinSdk"] = 29
 extra["projectCompileSdk"] = 37
-extra["projectTargetSdk"] = 35
+extra["projectTargetSdk"] = 36
