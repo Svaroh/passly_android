@@ -26,20 +26,21 @@ package com.passbolt.mobile.android.data.inappreview.datasource.local
 import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewShowMode
 
 internal class InAppReviewShowSerializer {
-    fun serialize(model: InAppReviewShowMode) =
+    fun serialize(model: InAppReviewShowMode): String =
         when (model) {
-            is InAppReviewShowMode.ConsecutiveShow -> InAppReviewShowModeEnum.CONSECUTIVE_SHOW.ordinal
-            is InAppReviewShowMode.FirstShow -> InAppReviewShowModeEnum.FIRST_SHOW.ordinal
+            is InAppReviewShowMode.FirstShow -> FIRST_SHOW_ID
+            is InAppReviewShowMode.ConsecutiveShow -> CONSECUTIVE_SHOW_ID
         }
 
-    fun deserialize(ordinal: Int) =
-        when (InAppReviewShowModeEnum.values()[ordinal]) {
-            InAppReviewShowModeEnum.FIRST_SHOW -> InAppReviewShowMode.FirstShow()
-            InAppReviewShowModeEnum.CONSECUTIVE_SHOW -> InAppReviewShowMode.ConsecutiveShow()
+    fun deserialize(identifier: String?): InAppReviewShowMode? =
+        when (identifier) {
+            FIRST_SHOW_ID -> InAppReviewShowMode.FirstShow()
+            CONSECUTIVE_SHOW_ID -> InAppReviewShowMode.ConsecutiveShow()
+            else -> null
         }
 
-    enum class InAppReviewShowModeEnum {
-        FIRST_SHOW,
-        CONSECUTIVE_SHOW,
+    private companion object {
+        private const val FIRST_SHOW_ID = "FIRST_SHOW"
+        private const val CONSECUTIVE_SHOW_ID = "CONSECUTIVE_SHOW"
     }
 }

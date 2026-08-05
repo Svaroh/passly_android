@@ -25,46 +25,40 @@ package com.passbolt.mobile.android.data.preferences.datasource.local
 
 import com.passbolt.mobile.android.data.preferences.AccountPreferencesFileName
 import com.passbolt.mobile.android.data.preferences.KEY_CHROME_NATIVE_AUTOFILL_DIALOG_SHOWN
-import com.passbolt.mobile.android.data.preferences.KEY_LAST_USED_HOME_VIEW
-import com.passbolt.mobile.android.data.preferences.KEY_USER_SET_HOME_VIEW
+import com.passbolt.mobile.android.data.preferences.KEY_LAST_USED_HOME_VIEW_ID
+import com.passbolt.mobile.android.data.preferences.KEY_USER_SET_HOME_VIEW_ID
 import com.passbolt.mobile.android.domain.preferences.AccountFlagsUpdate
 import com.passbolt.mobile.android.domain.preferences.AccountPreferencesLocalDataSource
 import com.passbolt.mobile.android.domain.preferences.HomeDisplayViewPreferencesUpdate
+import com.passbolt.mobile.android.domain.preferences.PreferencesDefaults
 import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
 import com.passbolt.mobile.android.ui.AccountFlagsUiModel
-import com.passbolt.mobile.android.ui.DefaultFilterUiModel
 import com.passbolt.mobile.android.ui.HomeDisplayViewPreferencesUiModel
-import com.passbolt.mobile.android.ui.HomeDisplayViewUiModel
 import timber.log.Timber
 
 internal class AccountPreferencesLocalDataSourceImpl(
     private val encryptedSharedPreferencesFactory: EncryptedSharedPreferencesFactory,
+    private val homeDisplayViewSerializer: HomeDisplayViewSerializer,
+    private val defaultFilterSerializer: DefaultFilterSerializer,
 ) : AccountPreferencesLocalDataSource {
     override fun getHomeDisplayViewPreferences(userId: String): HomeDisplayViewPreferencesUiModel {
         with(sharedPreferences(userId)) {
-            return try {
-                val lastUsedHomeViewOrdinal = getInt(KEY_LAST_USED_HOME_VIEW, DEFAULT_LAST_USED_FILTER_ORDINAL)
-                val lastUsedHomeView = HomeDisplayViewUiModel.entries[lastUsedHomeViewOrdinal]
+            val lastUsedHomeViewId = getString(KEY_LAST_USED_HOME_VIEW_ID, null)
+            val lastUsedHomeView = homeDisplayViewSerializer.deserialize(lastUsedHomeViewId)
+            val userSetHomeViewId = getString(KEY_USER_SET_HOME_VIEW_ID, null)
+            val userSetHomeView = defaultFilterSerializer.deserialize(userSetHomeViewId)
 
-                val userSetHomeViewOrdinal = getInt(KEY_USER_SET_HOME_VIEW, -1)
-                val userSetHomeView =
-                    if (userSetHomeViewOrdinal != -1) {
-                        DefaultFilterUiModel.entries[userSetHomeViewOrdinal]
-                    } else {
-                        DefaultFilterUiModel.LAST_USED
-                    }
-
-                HomeDisplayViewPreferencesUiModel(
-                    lastUsedHomeView = lastUsedHomeView,
-                    userSetHomeView = userSetHomeView,
-                )
-            } catch (e: IndexOutOfBoundsException) {
-                Timber.w(e, "Stored home view ordinal is invalid, falling back to defaults")
-                HomeDisplayViewPreferencesUiModel(
-                    lastUsedHomeView = HomeDisplayViewUiModel.ALL_ITEMS,
-                    userSetHomeView = DefaultFilterUiModel.LAST_USED,
-                )
+            if (lastUsedHomeViewId != null && lastUsedHomeView == null) {
+                Timber.w("Stored home view id \"$lastUsedHomeViewId\" is not recognized, falling back to the default")
             }
+            if (userSetHomeViewId != null && userSetHomeView == null) {
+                Timber.w("Stored default filter id \"$userSetHomeViewId\" is not recognized, falling back to the default")
+            }
+
+            return HomeDisplayViewPreferencesUiModel(
+                lastUsedHomeView = lastUsedHomeView ?: PreferencesDefaults.LAST_USED_HOME_VIEW,
+                userSetHomeView = userSetHomeView ?: PreferencesDefaults.USER_SET_HOME_VIEW,
+            )
         }
     }
 
@@ -73,8 +67,12 @@ internal class AccountPreferencesLocalDataSourceImpl(
         userId: String,
     ) {
         with(sharedPreferences(userId).edit()) {
-            update.lastUsedHomeView?.let { putInt(KEY_LAST_USED_HOME_VIEW, it.ordinal) }
-            update.userSetHomeView?.let { putInt(KEY_USER_SET_HOME_VIEW, it.ordinal) }
+            update.lastUsedHomeView?.let {
+                putString(KEY_LAST_USED_HOME_VIEW_ID, homeDisplayViewSerializer.serialize(it))
+            }
+            update.userSetHomeView?.let {
+                putString(KEY_USER_SET_HOME_VIEW_ID, defaultFilterSerializer.serialize(it))
+            }
             apply()
         }
     }
@@ -98,8 +96,4 @@ internal class AccountPreferencesLocalDataSourceImpl(
     }
 
     private fun sharedPreferences(userId: String) = encryptedSharedPreferencesFactory.get("${AccountPreferencesFileName(userId).name}.xml")
-
-    private companion object {
-        private val DEFAULT_LAST_USED_FILTER_ORDINAL = HomeDisplayViewUiModel.ALL_ITEMS.ordinal
-    }
 }

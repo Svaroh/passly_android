@@ -27,22 +27,38 @@ import com.google.common.truth.Truth.assertThat
 import com.passbolt.mobile.android.domain.inappreview.model.InAppReviewShowMode
 import org.junit.Test
 
-/**
- * Guards the persisted ordinal contract: existing users have these integers stored on disk, so the
- * mapping between show mode and ordinal must stay stable across the module migration.
- */
 class InAppReviewShowSerializerTest {
     private val serializer = InAppReviewShowSerializer()
 
     @Test
-    fun `serialize maps show modes to their stored ordinals`() {
-        assertThat(serializer.serialize(InAppReviewShowMode.FirstShow())).isEqualTo(0)
-        assertThat(serializer.serialize(InAppReviewShowMode.ConsecutiveShow())).isEqualTo(1)
+    fun `serialize maps show modes to their stored identifiers`() {
+        assertThat(serializer.serialize(InAppReviewShowMode.FirstShow())).isEqualTo("FIRST_SHOW")
+        assertThat(serializer.serialize(InAppReviewShowMode.ConsecutiveShow())).isEqualTo("CONSECUTIVE_SHOW")
     }
 
     @Test
-    fun `deserialize maps stored ordinals back to show modes`() {
-        assertThat(serializer.deserialize(0)).isInstanceOf(InAppReviewShowMode.FirstShow::class.java)
-        assertThat(serializer.deserialize(1)).isInstanceOf(InAppReviewShowMode.ConsecutiveShow::class.java)
+    fun `deserialize maps stored identifiers back to show modes`() {
+        assertThat(serializer.deserialize("FIRST_SHOW")).isInstanceOf(InAppReviewShowMode.FirstShow::class.java)
+        assertThat(serializer.deserialize("CONSECUTIVE_SHOW")).isInstanceOf(InAppReviewShowMode.ConsecutiveShow::class.java)
+    }
+
+    @Test
+    fun `deserialize restores every show mode from its stored identifier`() {
+        listOf(InAppReviewShowMode.FirstShow(), InAppReviewShowMode.ConsecutiveShow()).forEach {
+            assertThat(serializer.deserialize(serializer.serialize(it))).isInstanceOf(it::class.java)
+        }
+    }
+
+    @Test
+    fun `deserialize returns null for missing and unrecognized identifiers`() {
+        assertThat(serializer.deserialize(null)).isNull()
+        assertThat(serializer.deserialize("")).isNull()
+        assertThat(serializer.deserialize("REMOVED_SHOW_MODE")).isNull()
+    }
+
+    @Test
+    fun `deserialize does not accept ordinals of the previously stored format`() {
+        assertThat(serializer.deserialize("0")).isNull()
+        assertThat(serializer.deserialize("1")).isNull()
     }
 }
