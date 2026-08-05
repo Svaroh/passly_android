@@ -1,26 +1,24 @@
 package com.passbolt.mobile.android.core.ui.text
 
-import androidx.compose.foundation.layout.padding
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.android.tools.screenshot.PreviewTest
-import com.passbolt.mobile.android.core.compose.PassboltTheme
-import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput
+import com.passbolt.mobile.android.core.ui.screenshot.ScreenshotContainer
+import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Default
+import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Error
 
 @PreviewTest
 @Preview(showBackground = true)
 @Composable
 fun TextInputFilledScreenshot() {
-    PassboltTheme {
+    ScreenshotContainer {
         TextInput(
             title = "Name",
             hint = "Enter resource name",
             isRequired = true,
             text = "Production Database",
-            state = StatefulInput.State.Default,
-            modifier = Modifier.padding(16.dp),
+            state = Default,
         )
     }
 }
@@ -29,14 +27,13 @@ fun TextInputFilledScreenshot() {
 @Preview(showBackground = true)
 @Composable
 fun TextInputEmptyScreenshot() {
-    PassboltTheme {
+    ScreenshotContainer {
         TextInput(
             title = "Description",
             hint = "Add a description",
             isRequired = false,
             text = "",
-            state = StatefulInput.State.Default,
-            modifier = Modifier.padding(16.dp),
+            state = Default,
         )
     }
 }
@@ -45,14 +42,58 @@ fun TextInputEmptyScreenshot() {
 @Preview(showBackground = true)
 @Composable
 fun TextInputErrorScreenshot() {
-    PassboltTheme {
+    ScreenshotContainer {
         TextInput(
             title = "Name",
             hint = "Enter resource name",
             isRequired = true,
             text = "",
-            state = StatefulInput.State.Error("This field is required"),
-            modifier = Modifier.padding(16.dp),
+            state = Error("This field is required"),
+        )
+    }
+}
+
+@PreviewTest
+@Preview(showBackground = true)
+@Composable
+fun TextInputMultilineScreenshot() {
+    ScreenshotContainer {
+        TextInput(
+            title = "Description",
+            hint = "Add a description",
+            text = "A resource description long enough to wrap onto a second line inside the field.",
+            minLines = 3,
+            state = Default,
+        )
+    }
+}
+
+@PreviewTest
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun TextInputDarkThemeScreenshot() {
+    ScreenshotContainer(isDarkTheme = true) {
+        TextInput(
+            title = "Name",
+            hint = "Enter resource name",
+            isRequired = true,
+            text = "Production Database",
+            state = Default,
+        )
+    }
+}
+
+@PreviewTest
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun TextInputErrorDarkThemeScreenshot() {
+    ScreenshotContainer(isDarkTheme = true) {
+        TextInput(
+            title = "Name",
+            hint = "Enter resource name",
+            isRequired = true,
+            text = "",
+            state = Error("This field is required"),
         )
     }
 }
