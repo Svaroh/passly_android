@@ -46,8 +46,6 @@ sealed interface HomeIntent {
 
     data object SearchEndIconAction : HomeIntent
 
-    data object OnResume : HomeIntent
-
     data object OpenFiltersBottomSheet : HomeIntent
 
     data object CloseFiltersBottomSheet : HomeIntent

@@ -26,16 +26,16 @@ import kotlinx.coroutines.flow.StateFlow
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-class AccountSwitchFlow(
+class AuthenticatedAccountFlow(
     getSelectedAccountUseCase: GetSelectedAccountUseCase,
 ) {
-    private val _selectedAccountFlow =
+    private val _authenticatedAccount =
         MutableStateFlow(
             getSelectedAccountUseCase.execute(Unit).selectedAccount,
         )
-    val selectedAccountFlow: StateFlow<String?> = _selectedAccountFlow
+    val authenticatedAccount: StateFlow<String?> = _authenticatedAccount
 
-    fun notifyAccountSwitch(newAccountId: String) {
-        _selectedAccountFlow.value = newAccountId
+    fun notifyAccountAuthenticated(userId: String) {
+        _authenticatedAccount.value = userId
     }
 }

@@ -22,6 +22,7 @@ import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphras
 import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase.Passphrase
 import com.passbolt.mobile.android.core.security.rootdetection.RootDetector
 import com.passbolt.mobile.android.core.security.runtimeauth.RuntimeAuthenticatedFlag
+import com.passbolt.mobile.android.domain.accounts.AuthenticatedAccountFlow
 import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountDataUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveServerFingerprintUseCase
@@ -130,6 +131,7 @@ class AuthViewModel(
     private val runtimeAuthenticatedFlag: RuntimeAuthenticatedFlag,
     private val saveSessionUseCase: SaveSessionUseCase,
     private val saveSelectedAccountUseCase: SaveSelectedAccountUseCase,
+    private val authenticatedAccountFlow: AuthenticatedAccountFlow,
     private val signOutUseCase: SignOutUseCase,
     private val saveServerFingerprintUseCase: SaveServerFingerprintUseCase,
     private val mfaStatusProvider: MfaStatusProvider,
@@ -485,6 +487,7 @@ class AuthViewModel(
             SaveServerFingerprintUseCase.Input(userId, currentLoginState.fingerprint),
         )
         saveSelectedAccountUseCase.execute(UserIdInput(userId))
+        authenticatedAccountFlow.notifyAccountAuthenticated(userId)
         Timber.d("Increasing sign in count")
         inAppReviewInteractor.processSuccessfulSignIn()
         loginState = null
