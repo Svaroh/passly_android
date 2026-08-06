@@ -32,6 +32,7 @@ import com.passbolt.mobile.android.ui.ResourcePickerListItem
 data class ResourcePickerState(
     val resourcePickerData: ResourcePickerData = ResourcePickerData(),
     val searchQuery: String = "",
+    val isSearching: Boolean = false,
     val isRefreshing: Boolean = false,
     val refreshProgress: Float = 0f,
     val searchInputEndIconMode: SearchInputEndIconMode = SearchInputEndIconMode.NONE,

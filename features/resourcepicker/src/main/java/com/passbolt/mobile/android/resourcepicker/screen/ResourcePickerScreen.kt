@@ -44,12 +44,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
+import com.passbolt.mobile.android.core.compose.rememberDebouncedBoolean
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
 import com.passbolt.mobile.android.core.navigation.compose.results.ResourcePickerResultEvent
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.dialogs.ConfirmAlertDialog
 import com.passbolt.mobile.android.core.ui.progressindicator.DataRefreshProgressIndicator
+import com.passbolt.mobile.android.core.ui.progressindicator.SearchProgressIndicator
 import com.passbolt.mobile.android.core.ui.scaffold.HomeScaffold
 import com.passbolt.mobile.android.core.ui.search.SearchInput
 import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
@@ -63,6 +65,8 @@ import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerSideEffec
 import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerSideEffect.NavigateUp
 import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerSideEffect.ShowErrorSnackbar
 import com.passbolt.mobile.android.resourcepicker.screen.list.ResourcePickerList
+import com.passbolt.mobile.android.resourcepicker.screen.list.rememberIsAnyListRefreshing
+import com.passbolt.mobile.android.resourcepicker.screen.list.rememberResourcePickerListData
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import com.passbolt.mobile.android.core.localization.R as LocalizationR
@@ -119,6 +123,12 @@ private fun ResourcePickerScreen(
     modifier: Modifier = Modifier,
     confirmationModelFactory: ConfirmationModelFactory = koinInject(),
 ) {
+    val listData = rememberResourcePickerListData(state)
+    val isAnyListRefreshing = rememberIsAnyListRefreshing(listData)
+    val isListLoading = state.isSearching || isAnyListRefreshing
+    val isSearchRunning = state.isSearching || (isAnyListRefreshing && state.searchQuery.isNotBlank())
+    val showSearchProgress = rememberDebouncedBoolean(isSearchRunning && !state.isRefreshing)
+
     HomeScaffold(
         snackbarHostState = snackbarHostState,
         modifier = modifier,
@@ -165,12 +175,20 @@ private fun ResourcePickerScreen(
                         .fillMaxSize()
                         .padding(paddingValues),
             ) {
-                ResourcePickerList(state, onIntent)
+                ResourcePickerList(
+                    state = state,
+                    listData = listData,
+                    isListLoading = isListLoading,
+                    onIntent = onIntent,
+                )
                 if (state.isRefreshing) {
                     DataRefreshProgressIndicator(
                         progress = state.refreshProgress,
                         modifier = Modifier.align(Alignment.TopCenter),
                     )
+                }
+                if (showSearchProgress) {
+                    SearchProgressIndicator(modifier = Modifier.align(Alignment.TopCenter))
                 }
             }
 

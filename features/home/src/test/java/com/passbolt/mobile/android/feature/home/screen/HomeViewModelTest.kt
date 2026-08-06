@@ -97,6 +97,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -118,6 +119,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.stub
@@ -127,9 +129,11 @@ import java.time.ZonedDateTime
 import java.util.EnumSet
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
+@Suppress("LargeClass")
 class HomeViewModelTest : KoinTest {
     @get:Rule
     val koinTestRule =
@@ -265,14 +269,51 @@ class HomeViewModelTest : KoinTest {
             whenever(get<HomeDataProvider>().provideData(any(), any(), any(), any())).thenReturn(mockHomeData)
 
             viewModel = get()
-            viewModel.onIntent(Search("test query"))
 
-            viewModel.viewState.drop(1).test {
-                val updatedState = awaitItem()
-                assertThat(updatedState.searchQuery).isEqualTo("test query")
-                assertThat(updatedState.searchInputEndIconMode).isEqualTo(CLEAR)
-                assertThat(updatedState.homeData).isEqualTo(mockHomeData)
+            viewModel.viewState.test {
+                assertThat(awaitItem().isSearching).isFalse()
+
+                viewModel.onIntent(Search("test query"))
+
+                val typedState = awaitItem()
+                assertThat(typedState.searchQuery).isEqualTo("test query")
+                assertThat(typedState.searchInputEndIconMode).isEqualTo(CLEAR)
+                assertThat(typedState.isSearching).isTrue()
+
+                advanceTimeBy(HomeViewModel.SEARCH_DEBOUNCE + 1.milliseconds)
+
+                val appliedState = awaitItem()
+                assertThat(appliedState.homeData).isEqualTo(mockHomeData)
+                assertThat(appliedState.isSearching).isFalse()
             }
+        }
+
+    @Test
+    fun `should apply the search query only once when typing multiple characters quickly`() =
+        runTest {
+            viewModel = get()
+            clearInvocations(get<HomeDataProvider>())
+
+            viewModel.onIntent(Search("t"))
+            viewModel.onIntent(Search("te"))
+            viewModel.onIntent(Search("tes"))
+            advanceUntilIdle()
+
+            verify(get<HomeDataProvider>()).provideData(eq("tes"), any(), any(), any())
+        }
+
+    @Test
+    fun `should not re-run the search when the query text did not change`() =
+        runTest {
+            viewModel = get()
+            viewModel.onIntent(Search("test query"))
+            advanceUntilIdle()
+            clearInvocations(get<HomeDataProvider>())
+
+            viewModel.onIntent(Search("test query"))
+            advanceUntilIdle()
+
+            verify(get<HomeDataProvider>(), never()).provideData(any(), any(), any(), any())
         }
 
     @Test
@@ -280,6 +321,7 @@ class HomeViewModelTest : KoinTest {
         runTest {
             viewModel = get()
             viewModel.onIntent(Search("test query"))
+            advanceUntilIdle()
 
             viewModel.viewState.drop(1).test {
                 viewModel.onIntent(SearchEndIconAction)

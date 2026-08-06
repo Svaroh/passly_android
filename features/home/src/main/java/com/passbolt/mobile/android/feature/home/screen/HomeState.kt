@@ -42,6 +42,7 @@ data class HomeState(
     val isRefreshing: Boolean = false,
     val refreshProgress: Float = 0f,
     val searchQuery: String = "",
+    val isSearching: Boolean = false,
     val showProgress: Boolean = false,
     val searchInputEndIconMode: SearchInputEndIconMode = AVATAR,
     val userAvatar: String? = null,

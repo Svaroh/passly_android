@@ -120,18 +120,26 @@ import com.passbolt.mobile.android.ui.HomeDisplayViewModel
 import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Folders
 import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Groups
 import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Tags
+import com.passbolt.mobile.android.ui.LeadingContentType
 import com.passbolt.mobile.android.ui.LeadingContentType.PASSWORD
 import com.passbolt.mobile.android.ui.LeadingContentType.PIN_CODE
 import com.passbolt.mobile.android.ui.LeadingContentType.STANDALONE_NOTE
 import com.passbolt.mobile.android.ui.LeadingContentType.TOTP
 import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.FavouriteOption
 import com.passbolt.mobile.android.ui.ResourcePermission
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class HomeViewModel(
     private val coroutineLaunchContext: CoroutineLaunchContext,
@@ -156,9 +164,38 @@ internal class HomeViewModel(
     private var dataRefreshJob: Job? = null
     private var lastInitializeIntent: Initialize? = null
 
+    private val searchQueryFlow = MutableStateFlow("")
+
     init {
         loadUserAvatar()
         refreshUserProfile()
+        observeSearchQuery()
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeSearchQuery() {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            searchQueryFlow
+                .drop(1)
+                .debounce(SEARCH_DEBOUNCE)
+                .collectLatest { searchQuery ->
+                    Timber.d("Applying search query (length: ${searchQuery.length})")
+                    try {
+                        val homeData =
+                            getHomeData(
+                                viewState.value.homeView,
+                                searchQuery,
+                                viewState.value.showSuggestedModel,
+                            )
+                        updateViewState { copy(homeData = homeData, isSearching = false) }
+                    } catch (exception: CancellationException) {
+                        throw exception
+                    } catch (exception: Exception) {
+                        Timber.e(exception, "Failed to apply the search query")
+                        updateViewState { copy(isSearching = false) }
+                    }
+                }
+        }
     }
 
     private fun loadUserAvatar() {
@@ -206,11 +243,11 @@ internal class HomeViewModel(
             CloseFolderMoreMenu -> updateViewState { copy(showFolderMoreMenuBottomSheet = false) }
             ViewFolderDetails -> viewFolderDetails()
             ConfirmDeleteResource -> deleteResource()
-            CreateNote -> createNote()
-            CreatePassword -> createPassword()
+            CreateNote -> createResource(STANDALONE_NOTE)
+            CreatePassword -> createResource(PASSWORD)
             CreateTotp -> createTotp()
             CreateFolder -> createFolder()
-            CreatePinCode -> createPinCode()
+            CreatePinCode -> createResource(PIN_CODE)
             is Initialize -> initialize(intent)
             is OpenResourceMenu -> openResourceMoreMenu(intent)
             is Search -> searchQueryChanged(intent.searchQuery)
@@ -269,36 +306,12 @@ internal class HomeViewModel(
         }
     }
 
-    private fun createPassword() {
+    private fun createResource(leadingContentType: LeadingContentType) {
         updateViewState { copy(showCreateResourceBottomSheet = false) }
         withResourceAccess({ resourceAccessInteractor.canCreateResource(viewState.value.currentFolderId) }) {
             emitSideEffect(
                 NavigateToCreateResourceForm(
-                    leadingContentType = PASSWORD,
-                    folderId = viewState.value.currentFolderId,
-                ),
-            )
-        }
-    }
-
-    private fun createNote() {
-        updateViewState { copy(showCreateResourceBottomSheet = false) }
-        withResourceAccess({ resourceAccessInteractor.canCreateResource(viewState.value.currentFolderId) }) {
-            emitSideEffect(
-                NavigateToCreateResourceForm(
-                    leadingContentType = STANDALONE_NOTE,
-                    folderId = viewState.value.currentFolderId,
-                ),
-            )
-        }
-    }
-
-    private fun createPinCode() {
-        updateViewState { copy(showCreateResourceBottomSheet = false) }
-        withResourceAccess({ resourceAccessInteractor.canCreateResource(viewState.value.currentFolderId) }) {
-            emitSideEffect(
-                NavigateToCreateResourceForm(
-                    leadingContentType = PIN_CODE,
+                    leadingContentType = leadingContentType,
                     folderId = viewState.value.currentFolderId,
                 ),
             )
@@ -442,12 +455,7 @@ internal class HomeViewModel(
                     updateViewState { copy(showAccountSwitchBottomSheet = true) }
                 }
             }
-            CLEAR -> {
-                searchQueryChanged("")
-                updateViewState {
-                    copy(searchInputEndIconMode = AVATAR)
-                }
-            }
+            CLEAR -> searchQueryChanged("")
             NONE -> {
                 // no-op
             }
@@ -455,16 +463,16 @@ internal class HomeViewModel(
     }
 
     private fun searchQueryChanged(searchQuery: String) {
-        val searchEndIcon = if (searchQuery.isNotBlank()) CLEAR else AVATAR
-        viewModelScope.launch {
-            val homeData = getHomeData(viewState.value.homeView, searchQuery, viewState.value.showSuggestedModel)
-            updateViewState {
-                copy(
-                    searchInputEndIconMode = searchEndIcon,
-                    searchQuery = searchQuery,
-                    homeData = homeData,
-                )
-            }
+        if (searchQuery == searchQueryFlow.value) {
+            return
+        }
+        searchQueryFlow.value = searchQuery
+        updateViewState {
+            copy(
+                searchInputEndIconMode = if (searchQuery.isNotBlank()) CLEAR else AVATAR,
+                searchQuery = searchQuery,
+                isSearching = true,
+            )
         }
     }
 
@@ -613,5 +621,9 @@ internal class HomeViewModel(
                 emitSideEffect(ShowErrorSnackbar(NO_SHARED_KEY_ACCESS))
             }
         }
+    }
+
+    companion object {
+        val SEARCH_DEBOUNCE = 300.milliseconds
     }
 }

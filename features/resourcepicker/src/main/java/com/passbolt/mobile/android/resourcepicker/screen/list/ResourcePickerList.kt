@@ -27,32 +27,39 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.passbolt.mobile.android.core.compose.rememberDebouncedBoolean
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
 import com.passbolt.mobile.android.core.ui.empty.EmptyResourceListState
 import com.passbolt.mobile.android.core.ui.lists.HeaderItem
+import com.passbolt.mobile.android.core.ui.loading.LoadingListState
 import com.passbolt.mobile.android.domain.resources.resourceicon.ResourceIconProvider
 import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerIntent
 import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerIntent.ResourcePicked
 import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerState
+import com.passbolt.mobile.android.ui.ResourcePickerListItem
 import org.koin.compose.koinInject
 import com.passbolt.mobile.android.core.localization.R as LocalizationR
 
 @Composable
-fun ResourcePickerList(
+internal fun ResourcePickerList(
     state: ResourcePickerState,
+    listData: ResourcePickerListData,
+    isListLoading: Boolean,
     onIntent: (ResourcePickerIntent) -> Unit,
     modifier: Modifier = Modifier,
     resourceIconProvider: ResourceIconProvider = koinInject(),
-    coroutineLaunchContext: CoroutineLaunchContext = koinInject(),
 ) {
-    val suggestedResources = state.resourcePickerData.suggestedResources.collectAsLazyPagingItems(coroutineLaunchContext.default)
-    val resources = state.resourcePickerData.resources.collectAsLazyPagingItems(coroutineLaunchContext.default)
+    val (suggestedResources, resources) = listData
     val pickedResourceId = state.pickedResource?.resourceModel?.resourceId
 
     val isSuggestedSectionVisible = suggestedResources.itemSnapshotList.isNotEmpty()
@@ -60,9 +67,17 @@ fun ResourcePickerList(
     val areAllSectionsEmpty =
         suggestedResources.itemSnapshotList.isEmpty() && resources.itemSnapshotList.isEmpty()
 
-    val showEmpty = rememberDebouncedBoolean(areAllSectionsEmpty && !state.isRefreshing)
+    val showLoading = rememberDebouncedBoolean(areAllSectionsEmpty && isListLoading)
 
-    if (showEmpty) {
+    val showEmpty =
+        rememberDebouncedBoolean(areAllSectionsEmpty && !state.isRefreshing && !isListLoading)
+
+    if (showLoading) {
+        LoadingListState(
+            itemHeight = RESOURCE_PICKER_ITEM_PLACEHOLDER_HEIGHT,
+            itemContent = { ResourcePickerItemPlaceholder() },
+        )
+    } else if (showEmpty) {
         EmptyResourceListState(title = stringResource(LocalizationR.string.no_passwords))
     } else {
         LazyColumn(
@@ -115,4 +130,37 @@ fun ResourcePickerList(
             }
         }
     }
+}
+
+internal data class ResourcePickerListData(
+    val suggestedResources: LazyPagingItems<ResourcePickerListItem>,
+    val resources: LazyPagingItems<ResourcePickerListItem>,
+)
+
+@Composable
+internal fun rememberResourcePickerListData(
+    state: ResourcePickerState,
+    coroutineLaunchContext: CoroutineLaunchContext = koinInject(),
+): ResourcePickerListData {
+    val suggestedResources =
+        state.resourcePickerData.suggestedResources.collectAsLazyPagingItems(coroutineLaunchContext.default)
+    val resources = state.resourcePickerData.resources.collectAsLazyPagingItems(coroutineLaunchContext.default)
+
+    return remember(suggestedResources, resources) {
+        ResourcePickerListData(
+            suggestedResources = suggestedResources,
+            resources = resources,
+        )
+    }
+}
+
+@Composable
+internal fun rememberIsAnyListRefreshing(listData: ResourcePickerListData): Boolean {
+    val isRefreshing by remember(listData) {
+        derivedStateOf {
+            listOf(listData.suggestedResources, listData.resources)
+                .any { it.loadState.refresh is LoadState.Loading }
+        }
+    }
+    return isRefreshing
 }

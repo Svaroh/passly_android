@@ -42,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -51,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.passbolt.mobile.android.core.clipboard.ClipboardAccess
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
+import com.passbolt.mobile.android.core.compose.rememberDebouncedBoolean
 import com.passbolt.mobile.android.core.fulldatarefresh.service.DataRefreshService
 import com.passbolt.mobile.android.core.navigation.AppContext
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
@@ -61,6 +63,7 @@ import com.passbolt.mobile.android.core.ui.dialogs.ConfirmResourceDeleteAlertDia
 import com.passbolt.mobile.android.core.ui.empty.EmptyResourceListState
 import com.passbolt.mobile.android.core.ui.fab.AddFloatingActionButton
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
+import com.passbolt.mobile.android.core.ui.progressindicator.SearchProgressIndicator
 import com.passbolt.mobile.android.core.ui.pulltorefresh.SlidingFeedbackPullToRefreshBox
 import com.passbolt.mobile.android.core.ui.scaffold.HomeScaffold
 import com.passbolt.mobile.android.core.ui.search.SearchInput
@@ -228,6 +231,7 @@ fun OtpScreen(
         content =
             { paddingValues ->
                 val context = LocalContext.current
+                val showSearchProgress = rememberDebouncedBoolean(state.isSearching && !state.isRefreshing)
                 SlidingFeedbackPullToRefreshBox(
                     isRefreshing = state.isRefreshing,
                     refreshProgress = state.refreshProgress,
@@ -296,6 +300,9 @@ fun OtpScreen(
                                 )
                             }
                         }
+                    }
+                    if (showSearchProgress) {
+                        SearchProgressIndicator(modifier = Modifier.align(Alignment.TopCenter))
                     }
                 }
                 if (state.showOtpMoreBottomSheet) {
