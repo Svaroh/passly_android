@@ -6,161 +6,151 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.android.tools.screenshot.PreviewTest
-import com.passbolt.mobile.android.core.ui.screenshot.ScreenshotContainer
+import com.passbolt.mobile.android.core.ui.screenshot.PassboltPreviewWrapper
 
 private const val PASSWORD = "MyP@ssw0rd!"
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun ItemWithHeaderUsernameScreenshot() {
-    ScreenshotContainer {
-        ItemWithHeader(
-            headerText = "Username",
-            value = "ada@passbolt.com",
-            actionIcon = ActionIcon.COPY,
-        )
-    }
+    ItemWithHeader(
+        headerText = "Username",
+        value = "ada@passbolt.com",
+        actionIcon = ActionIcon.COPY,
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun ItemWithHeaderItalicValueScreenshot() {
-    ScreenshotContainer {
-        ItemWithHeader(
-            headerText = "Username",
-            value = "no username",
-            actionIcon = ActionIcon.NONE,
-            valueFontStyle = FontStyle.Italic,
-        )
-    }
+    ItemWithHeader(
+        headerText = "Username",
+        value = "no username",
+        actionIcon = ActionIcon.NONE,
+        valueFontStyle = FontStyle.Italic,
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun ItemWithHeaderCustomContentScreenshot() {
-    ScreenshotContainer {
-        ItemWithHeader(
-            headerText = "Expiry",
-            content = {
-                Text(
-                    text = "Never expires",
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            },
-        )
-    }
+    ItemWithHeader(
+        headerText = "Expiry",
+        content = {
+            Text(
+                text = "Never expires",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        },
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun ItemWithHeaderSecretHiddenScreenshot() {
-    ScreenshotContainer {
-        ItemWithHeader(
-            headerText = "Password",
-            value = "",
-            valueStyle = ValueStyle.Secret(),
-            actionIcon = ActionIcon.VIEW,
-        )
-    }
+    ItemWithHeader(
+        headerText = "Password",
+        value = "",
+        valueStyle = ValueStyle.Secret(),
+        actionIcon = ActionIcon.VIEW,
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun ItemWithHeaderSecretVisibleScreenshot() {
-    ScreenshotContainer {
-        ItemWithHeader(
-            headerText = "Password",
-            value = PASSWORD,
-            valueStyle = ValueStyle.Secret(isRevealed = true),
-            actionIcon = ActionIcon.HIDE,
-        )
-    }
+    ItemWithHeader(
+        headerText = "Password",
+        value = PASSWORD,
+        valueStyle = ValueStyle.Secret(isRevealed = true),
+        actionIcon = ActionIcon.HIDE,
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun ItemWithHeaderSecretDifferentiatedScreenshot() {
-    ScreenshotContainer {
-        ItemWithHeader(
-            headerText = "Password",
-            value = PASSWORD,
-            valueStyle = ValueStyle.Secret(differentiateCharacters = true, isRevealed = true),
-            actionIcon = ActionIcon.HIDE,
-        )
-    }
+    ItemWithHeader(
+        headerText = "Password",
+        value = PASSWORD,
+        valueStyle = ValueStyle.Secret(differentiateCharacters = true, isRevealed = true),
+        actionIcon = ActionIcon.HIDE,
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun ItemWithHeaderLinkifiedScreenshot() {
-    ScreenshotContainer {
-        ItemWithHeader(
-            headerText = "URL",
-            value = "Staging is at https://staging.passbolt.com and production at https://passbolt.com",
-            valueStyle = ValueStyle.Linkified,
-        )
-    }
+    ItemWithHeader(
+        headerText = "URL",
+        value = "Staging is at https://staging.passbolt.com and production at https://passbolt.com",
+        valueStyle = ValueStyle.Linkified,
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun ItemWithHeaderConcealedScreenshot() {
-    ScreenshotContainer {
-        ItemWithHeader(
-            headerText = "Password",
-            value = PASSWORD,
-            valueStyle = ValueStyle.Concealed,
-            actionIcon = ActionIcon.VIEW,
-        )
-    }
+    ItemWithHeader(
+        headerText = "Password",
+        value = PASSWORD,
+        valueStyle = ValueStyle.Concealed,
+        actionIcon = ActionIcon.VIEW,
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun ItemWithHeaderUsernameDarkThemeScreenshot() {
-    ScreenshotContainer(isDarkTheme = true) {
-        ItemWithHeader(
-            headerText = "Username",
-            value = "ada@passbolt.com",
-            actionIcon = ActionIcon.COPY,
-        )
-    }
+    ItemWithHeader(
+        headerText = "Username",
+        value = "ada@passbolt.com",
+        actionIcon = ActionIcon.COPY,
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun ItemWithHeaderSecretDifferentiatedDarkThemeScreenshot() {
-    ScreenshotContainer(isDarkTheme = true) {
-        ItemWithHeader(
-            headerText = "Password",
-            value = PASSWORD,
-            valueStyle = ValueStyle.Secret(differentiateCharacters = true, isRevealed = true),
-            actionIcon = ActionIcon.HIDE,
-        )
-    }
+    ItemWithHeader(
+        headerText = "Password",
+        value = PASSWORD,
+        valueStyle = ValueStyle.Secret(differentiateCharacters = true, isRevealed = true),
+        actionIcon = ActionIcon.HIDE,
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun ItemWithHeaderConcealedDarkThemeScreenshot() {
-    ScreenshotContainer(isDarkTheme = true) {
-        ItemWithHeader(
-            headerText = "Password",
-            value = PASSWORD,
-            valueStyle = ValueStyle.Concealed,
-            actionIcon = ActionIcon.VIEW,
-        )
-    }
+    ItemWithHeader(
+        headerText = "Password",
+        value = PASSWORD,
+        valueStyle = ValueStyle.Concealed,
+        actionIcon = ActionIcon.VIEW,
+    )
 }

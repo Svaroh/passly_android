@@ -6,8 +6,9 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.android.tools.screenshot.PreviewTest
-import com.passbolt.mobile.android.core.ui.screenshot.ScreenshotContainer
+import com.passbolt.mobile.android.core.ui.screenshot.PassboltPreviewWrapper
 
 @Composable
 private fun SearchLeadingIcon() {
@@ -19,88 +20,82 @@ private fun SearchLeadingIcon() {
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SearchInputEmptyScreenshot() {
-    ScreenshotContainer {
-        SearchInput(
-            onValueChange = {},
-            placeholder = "Search passwords",
-            endIconMode = SearchInputEndIconMode.AVATAR,
-            leadingIcon = { SearchLeadingIcon() },
-        )
-    }
+    SearchInput(
+        onValueChange = {},
+        placeholder = "Search passwords",
+        endIconMode = SearchInputEndIconMode.AVATAR,
+        leadingIcon = { SearchLeadingIcon() },
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SearchInputFilledScreenshot() {
-    ScreenshotContainer {
-        SearchInput(
-            onValueChange = {},
-            placeholder = "Search passwords",
-            endIconMode = SearchInputEndIconMode.AVATAR,
-            initialValue = "database",
-            leadingIcon = { SearchLeadingIcon() },
-        )
-    }
+    SearchInput(
+        onValueChange = {},
+        placeholder = "Search passwords",
+        endIconMode = SearchInputEndIconMode.AVATAR,
+        initialValue = "database",
+        leadingIcon = { SearchLeadingIcon() },
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SearchInputLongPlaceholderScreenshot() {
-    ScreenshotContainer {
-        SearchInput(
-            onValueChange = {},
-            placeholder = "Search for passwords, usernames, folders, tags and other items",
-            endIconMode = SearchInputEndIconMode.AVATAR,
-            leadingIcon = { SearchLeadingIcon() },
-        )
-    }
+    SearchInput(
+        onValueChange = {},
+        placeholder = "Search for passwords, usernames, folders, tags and other items",
+        endIconMode = SearchInputEndIconMode.AVATAR,
+        leadingIcon = { SearchLeadingIcon() },
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SearchInputClearIconScreenshot() {
-    ScreenshotContainer {
-        SearchInput(
-            onValueChange = {},
-            placeholder = "Search passwords",
-            endIconMode = SearchInputEndIconMode.CLEAR,
-            initialValue = "database",
-            leadingIcon = { SearchLeadingIcon() },
-        )
-    }
+    SearchInput(
+        onValueChange = {},
+        placeholder = "Search passwords",
+        endIconMode = SearchInputEndIconMode.CLEAR,
+        initialValue = "database",
+        leadingIcon = { SearchLeadingIcon() },
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SearchInputNoEndIconScreenshot() {
-    ScreenshotContainer {
-        SearchInput(
-            onValueChange = {},
-            placeholder = "Search passwords",
-            endIconMode = SearchInputEndIconMode.NONE,
-            initialValue = "database",
-            leadingIcon = { SearchLeadingIcon() },
-        )
-    }
+    SearchInput(
+        onValueChange = {},
+        placeholder = "Search passwords",
+        endIconMode = SearchInputEndIconMode.NONE,
+        initialValue = "database",
+        leadingIcon = { SearchLeadingIcon() },
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SearchInputDarkThemeScreenshot() {
-    ScreenshotContainer(isDarkTheme = true) {
-        SearchInput(
-            onValueChange = {},
-            placeholder = "Search passwords",
-            endIconMode = SearchInputEndIconMode.CLEAR,
-            initialValue = "database",
-            leadingIcon = { SearchLeadingIcon() },
-        )
-    }
+    SearchInput(
+        onValueChange = {},
+        placeholder = "Search passwords",
+        endIconMode = SearchInputEndIconMode.CLEAR,
+        initialValue = "database",
+        leadingIcon = { SearchLeadingIcon() },
+    )
 }

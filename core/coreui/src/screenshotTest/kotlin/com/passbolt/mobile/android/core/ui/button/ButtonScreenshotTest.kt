@@ -4,105 +4,98 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.android.tools.screenshot.PreviewTest
 import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.screenshot.ScreenshotContainer
+import com.passbolt.mobile.android.core.ui.screenshot.PassboltPreviewWrapper
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun PrimaryButtonEnabledScreenshot() {
-    ScreenshotContainer {
-        PrimaryButton(
-            text = "Sign in",
-            onClick = {},
-        )
-    }
+    PrimaryButton(
+        text = "Sign in",
+        onClick = {},
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun PrimaryButtonDisabledScreenshot() {
-    ScreenshotContainer {
-        PrimaryButton(
-            text = "Sign in",
-            onClick = {},
-            isEnabled = false,
-        )
-    }
+    PrimaryButton(
+        text = "Sign in",
+        onClick = {},
+        isEnabled = false,
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true, fontScale = 1.5f)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun PrimaryButtonLargeFontScreenshot() {
-    ScreenshotContainer {
-        PrimaryButton(
-            text = "Sign in",
-            onClick = {},
-        )
-    }
+    PrimaryButton(
+        text = "Sign in",
+        onClick = {},
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun PrimaryButtonDarkThemeScreenshot() {
-    ScreenshotContainer(isDarkTheme = true) {
-        PrimaryButton(
-            text = "Sign in",
-            onClick = {},
-        )
-    }
+    PrimaryButton(
+        text = "Sign in",
+        onClick = {},
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SecondaryButtonScreenshot() {
-    ScreenshotContainer {
-        SecondaryButton(
-            onClick = {},
-            text = "Sign out",
-            icon = painterResource(id = R.drawable.ic_sign_out),
-        )
-    }
+    SecondaryButton(
+        onClick = {},
+        text = "Sign out",
+        icon = painterResource(id = R.drawable.ic_sign_out),
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SecondaryButtonDarkThemeScreenshot() {
-    ScreenshotContainer(isDarkTheme = true) {
-        SecondaryButton(
-            onClick = {},
-            text = "Sign out",
-            icon = painterResource(id = R.drawable.ic_sign_out),
-        )
-    }
+    SecondaryButton(
+        onClick = {},
+        text = "Sign out",
+        icon = painterResource(id = R.drawable.ic_sign_out),
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SecondaryIconButtonScreenshot() {
-    ScreenshotContainer {
-        SecondaryIconButton(
-            onClick = {},
-            icon = painterResource(id = R.drawable.ic_trash),
-        )
-    }
+    SecondaryIconButton(
+        onClick = {},
+        icon = painterResource(id = R.drawable.ic_trash),
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SecondaryIconButtonDarkThemeScreenshot() {
-    ScreenshotContainer(isDarkTheme = true) {
-        SecondaryIconButton(
-            onClick = {},
-            icon = painterResource(id = R.drawable.ic_trash),
-        )
-    }
+    SecondaryIconButton(
+        onClick = {},
+        icon = painterResource(id = R.drawable.ic_trash),
+    )
 }
