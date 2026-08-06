@@ -119,13 +119,19 @@ import com.passbolt.mobile.android.ui.refreshingNone
 import com.passbolt.mobile.android.ui.refreshingOnly
 import com.passbolt.mobile.android.ui.replaceOnId
 import com.passbolt.mobile.android.ui.revealed
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 internal class OtpViewModel(
@@ -149,8 +155,11 @@ internal class OtpViewModel(
     private var universalCountdownJob: Job? = null
     private var fetchTotpJob: Job? = null
 
+    private val searchQueryFlow = MutableStateFlow("")
+
     init {
         loadUserAvatar()
+        observeSearchQuery()
         updateViewState { copy(universalCountdownSeconds = currentRemainingCountdownSeconds()) }
         dataRefreshJob?.cancel()
         dataRefreshJob =
@@ -267,13 +276,7 @@ internal class OtpViewModel(
                     updateViewState { copy(showAccountSwitchBottomSheet = true) }
                 }
             }
-            CLEAR ->
-                updateViewState {
-                    copy(
-                        searchQuery = "",
-                        searchInputEndIconMode = AVATAR,
-                    )
-                }
+            CLEAR -> searchQueryChanged("")
             NONE -> {
                 // no-op
             }
@@ -429,16 +432,38 @@ internal class OtpViewModel(
     }
 
     private fun searchQueryChanged(searchQuery: String) {
-        val searchEndIcon = if (searchQuery.isNotBlank()) CLEAR else AVATAR
+        if (searchQuery == searchQueryFlow.value) {
+            return
+        }
+        searchQueryFlow.value = searchQuery
+        updateViewState {
+            copy(
+                searchInputEndIconMode = if (searchQuery.isNotBlank()) CLEAR else AVATAR,
+                isSearching = true,
+            )
+        }
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeSearchQuery() {
         viewModelScope.launch(coroutineLaunchContext.io) {
-            val filteredOtps = getOtpResources(searchQuery)
-            updateViewState {
-                copy(
-                    searchInputEndIconMode = searchEndIcon,
-                    searchQuery = searchQuery,
-                    filteredOtps = filteredOtps,
-                )
-            }
+            searchQueryFlow
+                .drop(1)
+                .debounce(SEARCH_DEBOUNCE)
+                .collectLatest { searchQuery ->
+                    Timber.d("Applying search query (length: ${searchQuery.length})")
+                    try {
+                        val filteredOtps = getOtpResources(searchQuery)
+                        updateViewState {
+                            copy(searchQuery = searchQuery, filteredOtps = filteredOtps, isSearching = false)
+                        }
+                    } catch (exception: CancellationException) {
+                        throw exception
+                    } catch (exception: Exception) {
+                        Timber.e(exception, "Failed to apply the search query")
+                        updateViewState { copy(isSearching = false) }
+                    }
+                }
         }
     }
 
@@ -606,5 +631,9 @@ internal class OtpViewModel(
         Timber.e("Invalid TOTP parameters")
         emitSideEffect(ShowErrorSnackbar(INVALID_TOTP_PARAMETERS))
         updateOtpLists { refreshingNone() }
+    }
+
+    companion object {
+        val SEARCH_DEBOUNCE = 300.milliseconds
     }
 }

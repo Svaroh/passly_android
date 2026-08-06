@@ -20,26 +20,39 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
+package com.passbolt.mobile.android.core.ui.loading
 
-package com.passbolt.mobile.android.resourcepicker.screen.data
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import kotlin.math.ceil
 
-import androidx.paging.LoadState
-import androidx.paging.LoadStates
-import androidx.paging.PagingData
-import com.passbolt.mobile.android.ui.ResourcePickerListItem
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+private val CONTENT_VERTICAL_PADDING = 16.dp
+private const val MAX_ROWS = 32
 
-data class ResourcePickerData(
-    val suggestedResources: Flow<PagingData<ResourcePickerListItem>> = settledEmptyPagingData(),
-    val resources: Flow<PagingData<ResourcePickerListItem>> = settledEmptyPagingData(),
-)
+@Composable
+fun LoadingListState(
+    itemHeight: Dp,
+    modifier: Modifier = Modifier,
+    itemContent: @Composable () -> Unit,
+) {
+    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+        val rowsToFillViewport =
+            ceil((maxHeight - CONTENT_VERTICAL_PADDING) / itemHeight)
+                .toInt()
+                .coerceIn(0, MAX_ROWS)
+        val itemCount = rowsToFillViewport + 1
 
-private val settledLoadStates =
-    LoadStates(
-        refresh = LoadState.NotLoading(endOfPaginationReached = true),
-        prepend = LoadState.NotLoading(endOfPaginationReached = true),
-        append = LoadState.NotLoading(endOfPaginationReached = true),
-    )
-
-internal fun <T : Any> settledEmptyPagingData(): Flow<PagingData<T>> = flowOf(PagingData.empty(settledLoadStates))
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(vertical = CONTENT_VERTICAL_PADDING),
+        ) {
+            items(itemCount) { itemContent() }
+        }
+    }
+}

@@ -46,6 +46,8 @@ import androidx.compose.ui.unit.dp
 private const val PRIMARY_LINE_WIDTH_FRACTION = 0.5f
 private const val SECONDARY_LINE_WIDTH_FRACTION = 0.3f
 
+internal val RESOURCE_PICKER_ITEM_PLACEHOLDER_HEIGHT = 64.dp
+
 @Composable
 fun ResourcePickerItemPlaceholder(modifier: Modifier = Modifier) {
     val skeletonColor = MaterialTheme.colorScheme.outlineVariant
@@ -53,7 +55,7 @@ fun ResourcePickerItemPlaceholder(modifier: Modifier = Modifier) {
         modifier =
             modifier
                 .fillMaxWidth()
-                .height(64.dp)
+                .height(RESOURCE_PICKER_ITEM_PLACEHOLDER_HEIGHT)
                 .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

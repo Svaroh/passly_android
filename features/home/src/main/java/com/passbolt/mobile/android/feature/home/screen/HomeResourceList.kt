@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -24,6 +25,7 @@ import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.HomeNavigationKey
 import com.passbolt.mobile.android.core.ui.empty.EmptyResourceListState
 import com.passbolt.mobile.android.core.ui.lists.HeaderItem
+import com.passbolt.mobile.android.core.ui.loading.LoadingListState
 import com.passbolt.mobile.android.domain.folders.model.FolderWithCountAndPath
 import com.passbolt.mobile.android.domain.resources.resourceicon.ResourceIconProvider
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.OpenResourceMenu
@@ -31,6 +33,7 @@ import com.passbolt.mobile.android.feature.home.screen.data.HeaderSectionConfigu
 import com.passbolt.mobile.android.feature.home.screen.list.FolderItem
 import com.passbolt.mobile.android.feature.home.screen.list.FolderItemPlaceholder
 import com.passbolt.mobile.android.feature.home.screen.list.GroupItem
+import com.passbolt.mobile.android.feature.home.screen.list.RESOURCE_ITEM_PLACEHOLDER_HEIGHT
 import com.passbolt.mobile.android.feature.home.screen.list.ResourceItem
 import com.passbolt.mobile.android.feature.home.screen.list.ResourceItemPlaceholder
 import com.passbolt.mobile.android.feature.home.screen.list.TagItem
@@ -46,15 +49,16 @@ import com.passbolt.mobile.android.core.localization.R as LocalizationR
 
 @Suppress("CyclomaticComplexMethod")
 @Composable
-fun HomeResourceList(
+internal fun HomeResourceList(
     state: HomeState,
+    homeListData: HomeListData,
+    isListLoading: Boolean,
     navigator: AppNavigator,
     resourceHandlingStrategy: ResourceHandlingStrategy,
     onIntent: (HomeIntent) -> Unit,
     modifier: Modifier = Modifier,
     resourceIconProvider: ResourceIconProvider = koinInject(),
 ) {
-    val homeListData = rememberHomeListData(state)
     val headerConfig = rememberHeaderConfig(state, homeListData)
     val listState = rememberLazyListState()
 
@@ -77,10 +81,19 @@ fun HomeResourceList(
         }
     }
 
-    // Suppress the empty state while a refresh is running so it doesn't flash before the first data arrives.
-    val showEmpty = rememberDebouncedBoolean(headerConfig.areAllSectionsEmpty && !state.isRefreshing)
+    val showLoading = rememberDebouncedBoolean(headerConfig.areAllSectionsEmpty && isListLoading)
 
-    if (showEmpty) {
+    val showEmpty =
+        rememberDebouncedBoolean(
+            headerConfig.areAllSectionsEmpty && !state.isRefreshing && !isListLoading,
+        )
+
+    if (showLoading) {
+        LoadingListState(
+            itemHeight = RESOURCE_ITEM_PLACEHOLDER_HEIGHT,
+            itemContent = { ResourceItemPlaceholder() },
+        )
+    } else if (showEmpty) {
         EmptyResourceListState(title = stringResource(LocalizationR.string.no_passwords))
     } else {
         LazyColumn(
@@ -250,7 +263,7 @@ fun HomeResourceList(
     }
 }
 
-private data class HomeListData(
+internal data class HomeListData(
     val suggestedResources: LazyPagingItems<ResourceUiModel>,
     val resources: LazyPagingItems<ResourceUiModel>,
     val tags: LazyPagingItems<TagWithCount>,
@@ -258,10 +271,32 @@ private data class HomeListData(
     val folders: LazyPagingItems<FolderWithCountAndPath>,
     val filteredSubfolders: LazyPagingItems<FolderWithCountAndPath>,
     val filteredSubfoldersResources: LazyPagingItems<ResourceUiModel>,
-)
+) {
+    val allLists: Array<LazyPagingItems<*>>
+        get() =
+            arrayOf(
+                suggestedResources,
+                resources,
+                tags,
+                groups,
+                folders,
+                filteredSubfolders,
+                filteredSubfoldersResources,
+            )
+}
 
 @Composable
-private fun rememberHomeListData(
+internal fun rememberIsAnyListRefreshing(homeListData: HomeListData): Boolean {
+    val isRefreshing by remember(homeListData) {
+        derivedStateOf {
+            homeListData.allLists.any { it.loadState.refresh is LoadState.Loading }
+        }
+    }
+    return isRefreshing
+}
+
+@Composable
+internal fun rememberHomeListData(
     state: HomeState,
     coroutineLaunchContext: CoroutineLaunchContext = koinInject(),
 ): HomeListData {

@@ -37,6 +37,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -47,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.passbolt.mobile.android.core.clipboard.ClipboardAccess
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
+import com.passbolt.mobile.android.core.compose.rememberDebouncedBoolean
 import com.passbolt.mobile.android.core.fulldatarefresh.service.DataRefreshService
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.BottomTab
@@ -61,6 +63,7 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigati
 import com.passbolt.mobile.android.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
 import com.passbolt.mobile.android.core.ui.fab.AddFloatingActionButton
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
+import com.passbolt.mobile.android.core.ui.progressindicator.SearchProgressIndicator
 import com.passbolt.mobile.android.core.ui.pulltorefresh.SlidingFeedbackPullToRefreshBox
 import com.passbolt.mobile.android.core.ui.scaffold.HomeScaffold
 import com.passbolt.mobile.android.core.ui.search.SearchInput
@@ -249,6 +252,12 @@ private fun HomeScreen(
     val activity = LocalActivity.current
     val context = LocalContext.current
 
+    val homeListData = rememberHomeListData(state)
+    val isAnyListRefreshing = rememberIsAnyListRefreshing(homeListData)
+    val isListLoading = state.isSearching || isAnyListRefreshing
+    val isSearchRunning = state.isSearching || (isAnyListRefreshing && state.searchQuery.isNotBlank())
+    val showSearchProgress = rememberDebouncedBoolean(isSearchRunning && !state.isRefreshing)
+
     HomeScaffold(
         snackbarHostState = snackbarHostState,
         modifier =
@@ -302,7 +311,17 @@ private fun HomeScreen(
                         .fillMaxSize()
                         .padding(paddingValues),
             ) {
-                HomeResourceList(state, navigator, resourceHandlingStrategy, onIntent)
+                HomeResourceList(
+                    state = state,
+                    homeListData = homeListData,
+                    isListLoading = isListLoading,
+                    navigator = navigator,
+                    resourceHandlingStrategy = resourceHandlingStrategy,
+                    onIntent = onIntent,
+                )
+                if (showSearchProgress) {
+                    SearchProgressIndicator(modifier = Modifier.align(Alignment.TopCenter))
+                }
             }
         },
     )

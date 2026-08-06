@@ -84,6 +84,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -229,12 +230,17 @@ class OtpViewModelTest : KoinTest {
             viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.onIntent(Search("abc"))
+            advanceUntilIdle()
 
             viewModel.viewState.test {
-                assertThat(awaitItem().searchInputEndIconMode).isEqualTo(CLEAR)
+                val searchedState = awaitItem()
+                assertThat(searchedState.searchInputEndIconMode).isEqualTo(CLEAR)
+                assertThat(searchedState.searchQuery).isEqualTo("abc")
 
                 viewModel.onIntent(SearchEndIconAction)
-                val state = awaitItem()
+                advanceUntilIdle()
+
+                val state = expectMostRecentItem()
                 assertThat(state.searchQuery).isEmpty()
                 assertThat(state.searchInputEndIconMode).isEqualTo(AVATAR)
             }
@@ -246,13 +252,36 @@ class OtpViewModelTest : KoinTest {
             viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.onIntent(Search("resource 2"))
+            advanceUntilIdle()
 
             viewModel.viewState.test {
                 val state = awaitItem()
                 assertThat(state.searchQuery).isEqualTo("resource 2")
                 assertThat(state.searchInputEndIconMode).isEqualTo(CLEAR)
                 assertThat(state.isInFilteringMode).isTrue()
+                assertThat(state.isSearching).isFalse()
             }
+        }
+
+    @Test
+    fun `should mark searching and keep previous results until the query is applied`() =
+        runTest {
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
+            advanceUntilIdle()
+            val otpsBeforeSearch = viewModel.viewState.value.uiOtps
+
+            viewModel.onIntent(Search("resource 2"))
+
+            val searchingState = viewModel.viewState.value
+            assertThat(searchingState.isSearching).isTrue()
+            assertThat(searchingState.isInFilteringMode).isFalse()
+            assertThat(searchingState.uiOtps).isEqualTo(otpsBeforeSearch)
+
+            advanceUntilIdle()
+
+            val appliedState = viewModel.viewState.value
+            assertThat(appliedState.isSearching).isFalse()
+            assertThat(appliedState.isInFilteringMode).isTrue()
         }
 
     @Test
@@ -262,6 +291,7 @@ class OtpViewModelTest : KoinTest {
             viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.onIntent(Search("resource"))
+            advanceUntilIdle()
             viewModel.onIntent(RevealOtp(otpResources.first()))
 
             viewModel.viewState.test {
@@ -280,6 +310,7 @@ class OtpViewModelTest : KoinTest {
             viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.onIntent(Search("resource"))
+            advanceUntilIdle()
             viewModel.onIntent(RevealOtp(otpResources.first()))
 
             viewModel.viewState.test {

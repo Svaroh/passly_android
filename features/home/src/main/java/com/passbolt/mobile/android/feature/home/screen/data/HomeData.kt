@@ -23,6 +23,8 @@
 
 package com.passbolt.mobile.android.feature.home.screen.data
 
+import androidx.paging.LoadState
+import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import com.passbolt.mobile.android.domain.folders.model.FolderWithCountAndPath
 import com.passbolt.mobile.android.ui.GroupWithCount
@@ -32,11 +34,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 data class HomeData(
-    val suggestedResourceList: Flow<PagingData<ResourceUiModel>> = flowOf(PagingData.empty()),
-    val resourceList: Flow<PagingData<ResourceUiModel>> = flowOf(PagingData.empty()),
-    val foldersList: Flow<PagingData<FolderWithCountAndPath>> = flowOf(PagingData.empty()),
-    val tagsList: Flow<PagingData<TagWithCount>> = flowOf(PagingData.empty()),
-    val groupsList: Flow<PagingData<GroupWithCount>> = flowOf(PagingData.empty()),
-    val filteredSubFolderResources: Flow<PagingData<ResourceUiModel>> = flowOf(PagingData.empty()),
-    val filteredSubFolders: Flow<PagingData<FolderWithCountAndPath>> = flowOf(PagingData.empty()),
+    val suggestedResourceList: Flow<PagingData<ResourceUiModel>> = settledEmptyPagingData(),
+    val resourceList: Flow<PagingData<ResourceUiModel>> = settledEmptyPagingData(),
+    val foldersList: Flow<PagingData<FolderWithCountAndPath>> = settledEmptyPagingData(),
+    val tagsList: Flow<PagingData<TagWithCount>> = settledEmptyPagingData(),
+    val groupsList: Flow<PagingData<GroupWithCount>> = settledEmptyPagingData(),
+    val filteredSubFolderResources: Flow<PagingData<ResourceUiModel>> = settledEmptyPagingData(),
+    val filteredSubFolders: Flow<PagingData<FolderWithCountAndPath>> = settledEmptyPagingData(),
 )
+
+private val settledLoadStates =
+    LoadStates(
+        refresh = LoadState.NotLoading(endOfPaginationReached = true),
+        prepend = LoadState.NotLoading(endOfPaginationReached = true),
+        append = LoadState.NotLoading(endOfPaginationReached = true),
+    )
+
+internal fun <T : Any> settledEmptyPagingData(): Flow<PagingData<T>> = flowOf(PagingData.empty(settledLoadStates))
