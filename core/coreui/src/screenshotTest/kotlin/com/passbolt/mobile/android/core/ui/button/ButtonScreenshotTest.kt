@@ -1,24 +1,21 @@
 package com.passbolt.mobile.android.core.ui.button
 
-import androidx.compose.foundation.layout.padding
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.android.tools.screenshot.PreviewTest
-import com.passbolt.mobile.android.core.compose.PassboltTheme
 import com.passbolt.mobile.android.core.ui.R
+import com.passbolt.mobile.android.core.ui.screenshot.ScreenshotContainer
 
 @PreviewTest
 @Preview(showBackground = true)
 @Composable
 fun PrimaryButtonEnabledScreenshot() {
-    PassboltTheme {
+    ScreenshotContainer {
         PrimaryButton(
             text = "Sign in",
             onClick = {},
-            modifier = Modifier.padding(16.dp),
         )
     }
 }
@@ -27,12 +24,35 @@ fun PrimaryButtonEnabledScreenshot() {
 @Preview(showBackground = true)
 @Composable
 fun PrimaryButtonDisabledScreenshot() {
-    PassboltTheme {
+    ScreenshotContainer {
         PrimaryButton(
             text = "Sign in",
             onClick = {},
             isEnabled = false,
-            modifier = Modifier.padding(16.dp),
+        )
+    }
+}
+
+@PreviewTest
+@Preview(showBackground = true, fontScale = 1.5f)
+@Composable
+fun PrimaryButtonLargeFontScreenshot() {
+    ScreenshotContainer {
+        PrimaryButton(
+            text = "Sign in",
+            onClick = {},
+        )
+    }
+}
+
+@PreviewTest
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun PrimaryButtonDarkThemeScreenshot() {
+    ScreenshotContainer(isDarkTheme = true) {
+        PrimaryButton(
+            text = "Sign in",
+            onClick = {},
         )
     }
 }
@@ -41,28 +61,48 @@ fun PrimaryButtonDisabledScreenshot() {
 @Preview(showBackground = true)
 @Composable
 fun SecondaryButtonScreenshot() {
-    PassboltTheme {
+    ScreenshotContainer {
         SecondaryButton(
             onClick = {},
             text = "Sign out",
             icon = painterResource(id = R.drawable.ic_sign_out),
-            modifier = Modifier.padding(16.dp),
         )
     }
 }
 
 @PreviewTest
-@Preview(
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
-)
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun PrimaryButtonDarkThemeScreenshot() {
-    PassboltTheme(darkTheme = true) {
-        PrimaryButton(
-            text = "Sign in",
+fun SecondaryButtonDarkThemeScreenshot() {
+    ScreenshotContainer(isDarkTheme = true) {
+        SecondaryButton(
             onClick = {},
-            modifier = Modifier.padding(16.dp),
+            text = "Sign out",
+            icon = painterResource(id = R.drawable.ic_sign_out),
+        )
+    }
+}
+
+@PreviewTest
+@Preview(showBackground = true)
+@Composable
+fun SecondaryIconButtonScreenshot() {
+    ScreenshotContainer {
+        SecondaryIconButton(
+            onClick = {},
+            icon = painterResource(id = R.drawable.ic_trash),
+        )
+    }
+}
+
+@PreviewTest
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun SecondaryIconButtonDarkThemeScreenshot() {
+    ScreenshotContainer(isDarkTheme = true) {
+        SecondaryIconButton(
+            onClick = {},
+            icon = painterResource(id = R.drawable.ic_trash),
         )
     }
 }
