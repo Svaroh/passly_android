@@ -45,9 +45,7 @@ import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchCont
 import com.passbolt.mobile.android.core.navigation.AppContext
 import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode.AVATAR
 import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode.CLEAR
-import com.passbolt.mobile.android.domain.accounts.AccountSwitchFlow
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderDetailsUseCase
 import com.passbolt.mobile.android.domain.metadata.interactor.ResourceAccessInteractor
 import com.passbolt.mobile.android.domain.preferences.usecase.GetHomeDisplayViewPreferencesUseCase
@@ -60,7 +58,6 @@ import com.passbolt.mobile.android.feature.home.screen.HomeIntent.CreateNote
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.CreatePassword
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.CreateTotp
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.Initialize
-import com.passbolt.mobile.android.feature.home.screen.HomeIntent.OnResume
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.OpenCreateResourceMenu
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.Search
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.SearchEndIconAction
@@ -144,7 +141,6 @@ class HomeViewModelTest : KoinTest {
                     singleOf(::DataRefreshTrackingFlow)
                     singleOf(::SessionRefreshTrackingFlow)
                     single { mock<GetSelectedAccountDataUseCase>() }
-                    single { mock<GetSelectedAccountUseCase> { on { execute(Unit) } doReturn GetSelectedAccountUseCase.Output("userId") } }
                     single { mock<GetHomeDisplayViewPreferencesUseCase>() }
                     single { mock<HomeDataProvider>() }
                     single { mock<GetLocalFolderDetailsUseCase>() }
@@ -156,7 +152,6 @@ class HomeViewModelTest : KoinTest {
                         }
                     }
                     singleOf(::UserProfileRefreshTrackingFlow)
-                    single { AccountSwitchFlow(mock { on { execute(any()) } doReturn GetSelectedAccountUseCase.Output("id1") }) }
                     single(named(JSON_MODEL_GSON)) { GsonBuilder().serializeNulls().create() }
                     single {
                         Configuration
@@ -658,95 +653,6 @@ class HomeViewModelTest : KoinTest {
 
             dataRefreshFlow.updateStatus(InProgress(progress = 0f))
             dataRefreshFlow.updateStatus(FinishedWithSuccess)
-            advanceUntilIdle()
-
-            verify(provider, never()).provideData(any(), any(), any(), any())
-        }
-
-    @Test
-    fun `should reload home data and avatar when account switches`() =
-        runTest {
-            mockHomeData()
-            viewModel = get()
-            viewModel.onIntent(Initialize(DoNotShow, NotLoaded))
-            advanceUntilIdle()
-
-            val newAvatar = "new_avatar_url"
-            whenever(get<GetSelectedAccountDataUseCase>().execute(anyOrNull())).thenReturn(
-                GetSelectedAccountDataUseCase.Output(
-                    firstName = "New",
-                    lastName = "User",
-                    email = "new@passbolt.com",
-                    avatarUrl = newAvatar,
-                    url = "www.passbolt.com",
-                    serverId = "2",
-                    label = "label2",
-                    role = "user",
-                ),
-            )
-
-            val newHomeData = mockResourcesData()
-            whenever(get<HomeDataProvider>().provideData(any(), any(), any(), any())).thenReturn(newHomeData)
-
-            val accountSwitchFlow: AccountSwitchFlow = get()
-            accountSwitchFlow.notifyAccountSwitch("id2")
-            advanceUntilIdle()
-
-            assertThat(viewModel.viewState.value.userAvatar).isEqualTo(newAvatar)
-            assertThat(viewModel.viewState.value.homeData).isEqualTo(newHomeData)
-        }
-
-    @Test
-    fun `should reload home data and avatar on resume when selected account changed`() =
-        runTest {
-            mockHomeData()
-            // first read (initialize) returns the initial account, second read (resume) a new one
-            whenever(get<GetSelectedAccountUseCase>().execute(Unit)).thenReturn(
-                GetSelectedAccountUseCase.Output("id1"),
-                GetSelectedAccountUseCase.Output("id2"),
-            )
-
-            viewModel = get()
-            viewModel.onIntent(Initialize(DoNotShow, NotLoaded))
-            advanceUntilIdle()
-
-            val newAvatar = "new_avatar_url"
-            whenever(get<GetSelectedAccountDataUseCase>().execute(anyOrNull())).thenReturn(
-                GetSelectedAccountDataUseCase.Output(
-                    firstName = "New",
-                    lastName = "User",
-                    email = "new@passbolt.com",
-                    avatarUrl = newAvatar,
-                    url = "www.passbolt.com",
-                    serverId = "2",
-                    label = "label2",
-                    role = "user",
-                ),
-            )
-            val newHomeData = mockResourcesData()
-            whenever(get<HomeDataProvider>().provideData(any(), any(), any(), any())).thenReturn(newHomeData)
-
-            viewModel.onIntent(OnResume)
-            advanceUntilIdle()
-
-            assertThat(viewModel.viewState.value.userAvatar).isEqualTo(newAvatar)
-            assertThat(viewModel.viewState.value.homeData).isEqualTo(newHomeData)
-        }
-
-    @Test
-    fun `should not reload home data on resume when selected account unchanged`() =
-        runTest {
-            mockHomeData()
-            whenever(get<GetSelectedAccountUseCase>().execute(Unit)).thenReturn(GetSelectedAccountUseCase.Output("id1"))
-            val provider: HomeDataProvider = get()
-
-            viewModel = get()
-            viewModel.onIntent(Initialize(DoNotShow, NotLoaded))
-            advanceUntilIdle()
-
-            clearInvocations(provider)
-
-            viewModel.onIntent(OnResume)
             advanceUntilIdle()
 
             verify(provider, never()).provideData(any(), any(), any(), any())

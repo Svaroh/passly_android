@@ -11,7 +11,9 @@ import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCa
 import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
 import com.passbolt.mobile.android.core.security.rootdetection.RootDetector
 import com.passbolt.mobile.android.core.security.runtimeauth.RuntimeAuthenticatedFlag
+import com.passbolt.mobile.android.domain.accounts.AuthenticatedAccountFlow
 import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountDataUseCase
+import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveServerFingerprintUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.GetPassphraseUseCase
@@ -73,10 +75,10 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.get
-import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argThat
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.reset
 import org.mockito.kotlin.stub
@@ -104,6 +106,13 @@ class AuthViewModelTest : KoinTest {
                     single { mock<GetGlobalPreferencesUseCase>() }
                     single { mock<SaveSessionUseCase>() }
                     single { mock<SaveSelectedAccountUseCase>() }
+                    single {
+                        AuthenticatedAccountFlow(
+                            mock<GetSelectedAccountUseCase> {
+                                on { execute(Unit) } doReturn GetSelectedAccountUseCase.Output(null)
+                            },
+                        )
+                    }
                     single { mock<SignOutUseCase>() }
                     single { mock<SaveServerFingerprintUseCase>() }
                     single { mock<MfaStatusProvider>() }
@@ -133,6 +142,7 @@ class AuthViewModelTest : KoinTest {
                             runtimeAuthenticatedFlag = get(),
                             saveSessionUseCase = get(),
                             saveSelectedAccountUseCase = get(),
+                            authenticatedAccountFlow = get(),
                             signOutUseCase = get(),
                             saveServerFingerprintUseCase = get(),
                             mfaStatusProvider = get(),

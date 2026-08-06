@@ -44,6 +44,7 @@ fun Module.authModule() {
             runtimeAuthenticatedFlag = get(),
             saveSessionUseCase = get(),
             saveSelectedAccountUseCase = get(),
+            authenticatedAccountFlow = get(),
             signOutUseCase = get(),
             saveServerFingerprintUseCase = get(),
             mfaStatusProvider = get(),
