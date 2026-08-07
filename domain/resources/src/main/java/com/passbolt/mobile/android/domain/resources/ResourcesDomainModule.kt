@@ -1,6 +1,7 @@
 package com.passbolt.mobile.android.domain.resources
 
 import com.passbolt.mobile.android.common.search.SearchableMatcher
+import com.passbolt.mobile.android.domain.resources.actions.ConfirmedRecipientsPublicKeysResolver
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCommonActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourcePropertiesActionsInteractor
@@ -12,7 +13,9 @@ import com.passbolt.mobile.android.domain.resources.interactor.create.CreateReso
 import com.passbolt.mobile.android.domain.resources.interactor.update.UpdateResourceInteractor
 import com.passbolt.mobile.android.domain.resources.resourceicon.BackgroundColorIconProvider
 import com.passbolt.mobile.android.domain.resources.resourceicon.ResourceIconProvider
+import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.DeleteResourceUseCase
+import com.passbolt.mobile.android.domain.resources.usecase.FetchResourcePermissionsUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.GetResourcesPaginatedUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.ResourceInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.ResourceShareInteractor
@@ -59,6 +62,8 @@ val resourcesDomainModule =
         singleOf(::ResourceInteractor)
         singleOf(::SearchableMatcher)
         singleOf(::DeleteResourceUseCase)
+        singleOf(::FetchResourcePermissionsUseCase)
+        singleOf(::CreatePermissionsSnapshotInteractor)
         singleOf(::SimulateShareResourceUseCase)
         singleOf(::ShareResourceUseCase)
         singleOf(::ResourceShareInteractor)
@@ -66,6 +71,7 @@ val resourcesDomainModule =
         singleOf(::CreateResourceInteractor)
         factoryOf(::ResourceIconProvider)
         factoryOf(::BackgroundColorIconProvider)
+        factoryOf(::ConfirmedRecipientsPublicKeysResolver)
         singleOf(::SetLocalResourcesUpdateStateUseCase)
         singleOf(::RemoveLocalUrisUseCase)
         singleOf(::RemoveLocalResourcesWithUpdateStateUseCase)
@@ -108,6 +114,10 @@ val resourcesDomainModule =
                 getMetadataKeysSettingsUseCase = get(),
                 getMetadataKeysUseCase = get(),
                 resourceTypeIdToSlugMappingProvider = get(),
+                createPermissionsSnapshotInteractor = get(),
+                getPermissionsSnapshotUseCase = get(),
+                resourceShareInteractor = get(),
+                confirmedRecipientsPublicKeysResolver = get(),
             )
         }
         factory<ResourceUpdateActionsInteractorFactory> {
@@ -127,10 +137,8 @@ val resourcesDomainModule =
                 getLocalCurrentUserUseCase = get(),
                 metadataPrivateKeysInteractor = get(),
                 resourceTypeIdToSlugMappingProvider = get(),
-                getPermissionsSnapshotUseCase = get(),
                 createPermissionsSnapshotInteractor = get(),
-                getLocalUserUseCase = get(),
-                getGroupWithUsersUseCase = get(),
+                confirmedRecipientsPublicKeysResolver = get(),
             )
         }
     }

@@ -66,6 +66,32 @@ fun PermissionsSnapshot.toCreateModePermissions(currentUser: UserWithAvatar): Li
     return groupsPermissions + otherUsersPermissions + currentUserPermission
 }
 
+fun PermissionsSnapshot.toEditModePermissions(): List<PermissionModelUi> {
+    val groupsPermissions =
+        permissions
+            .filterIsInstance<PermissionModel.GroupPermissionModel>()
+            .map {
+                PermissionModelUi.GroupPermissionModel(
+                    permission = it.permission,
+                    permissionId = it.permissionId,
+                    group = it.group,
+                )
+            }
+    val usersPermissions =
+        permissions
+            .filterIsInstance<PermissionModel.UserPermissionModel>()
+            .mapNotNull { permission ->
+                users[permission.userId]?.let { user ->
+                    PermissionModelUi.UserPermissionModel(
+                        permission = permission.permission,
+                        permissionId = permission.permissionId,
+                        user = user.toUserWithAvatar(),
+                    )
+                }
+            }
+    return groupsPermissions + usersPermissions
+}
+
 fun UserProfile.toUserWithAvatar(): UserWithAvatar =
     UserWithAvatar(
         userId = id,

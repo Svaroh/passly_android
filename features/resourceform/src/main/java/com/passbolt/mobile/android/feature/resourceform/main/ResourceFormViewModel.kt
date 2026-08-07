@@ -41,6 +41,8 @@ import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateAction
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
 import com.passbolt.mobile.android.domain.resources.actions.performResourceCreateAction
 import com.passbolt.mobile.android.domain.resources.actions.performResourceUpdateAction
+import com.passbolt.mobile.android.domain.resources.usecase.FetchResourcePermissionsUseCase
+import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceUseCase
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
 import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note.NoteFormViewModel
@@ -121,6 +123,7 @@ import com.passbolt.mobile.android.jsonmodel.delegates.TotpSecret
 import com.passbolt.mobile.android.mappers.ResourceFormMapper
 import com.passbolt.mobile.android.serializers.jsonschema.SchemaEntity
 import com.passbolt.mobile.android.ui.AdditionalUrisUiModel
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.Entropy
 import com.passbolt.mobile.android.ui.LeadingContentType
 import com.passbolt.mobile.android.ui.LeadingContentType.CUSTOM_FIELDS
@@ -177,6 +180,8 @@ class ResourceFormViewModel(
     private val getMetadataTypesSettingsUseCase: GetMetadataTypesSettingsUseCase,
     private val getLocalFolderPermissionsUseCase: GetLocalFolderPermissionsUseCase,
     private val fetchFolderPermissionsUseCase: FetchFolderPermissionsUseCase,
+    private val fetchResourcePermissionsUseCase: FetchResourcePermissionsUseCase,
+    private val getLocalResourcePermissionsUseCase: GetLocalResourcePermissionsUseCase,
     private val getPermissionsConfirmationOptOutUseCase: GetPermissionsConfirmationOptOutUseCase,
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
 ) : SideEffectViewModel<ResourceFormState, ResourceFormSideEffect>(ResourceFormState(mode = mode)),
@@ -196,7 +201,7 @@ class ResourceFormViewModel(
             is NameTextChanged -> nameTextChanged(intent.name)
             ExpandAdvancedSettings -> expandAdvancedSettings()
             CreateResource -> createResource()
-            is ConfirmedPermissionsResult -> performCreateWithConfirmedPermissions(intent.permissions)
+            is ConfirmedPermissionsResult -> onPermissionsConfirmed(intent.permissions)
             UpdateResource -> updateResource()
             is PasswordTextChanged -> passwordTextChanged(intent.password)
             GeneratePassword -> generatePassword()
@@ -855,7 +860,9 @@ class ResourceFormViewModel(
         launch {
             if (shouldConfirmPermissions()) {
                 Timber.d("Creating inside a shared folder - navigating to permissions confirmation")
-                emitSideEffect(NavigateToConfirmPermissions(requireNotNull(parentFolderId)))
+                emitSideEffect(
+                    NavigateToConfirmPermissions(ConfirmPermissionsMode.Create(requireNotNull(parentFolderId))),
+                )
             } else {
                 performCreate()
             }
@@ -912,8 +919,58 @@ class ResourceFormViewModel(
 
     private fun updateResource() {
         onValid {
-            checkPasswordAndProceed { performUpdate() }
+            checkPasswordAndProceed { proceedWithUpdate() }
         }
+    }
+
+    private fun proceedWithUpdate() {
+        launch {
+            if (shouldConfirmEditPermissions()) {
+                Timber.d("Editing a shared resource - navigating to permissions confirmation")
+                emitSideEffect(
+                    NavigateToConfirmPermissions(ConfirmPermissionsMode.Edit((mode as Edit).resourceId)),
+                )
+            } else {
+                performUpdate()
+            }
+        }
+    }
+
+    private suspend fun shouldConfirmEditPermissions(): Boolean {
+        val resourceId = (mode as? Edit)?.resourceId ?: return false
+        if (getPermissionsConfirmationOptOutUseCase.execute(Unit).isOptedOut) {
+            Timber.d("Permissions confirmation opted out for this session - updating without confirmation")
+            return false
+        }
+        val fetchOutput =
+            runAuthenticatedOperation {
+                fetchResourcePermissionsUseCase.execute(FetchResourcePermissionsUseCase.Input(resourceId))
+            }
+        return when (fetchOutput) {
+            is FetchResourcePermissionsUseCase.Output.Success -> isShared(fetchOutput.permissions)
+            is FetchResourcePermissionsUseCase.Output.Failure -> {
+                Timber.e(
+                    "Failed to fetch resource permissions to decide on confirmation: ${fetchOutput.message} - " +
+                        "falling back to local permissions",
+                )
+                isResourceSharedLocally(resourceId)
+            }
+        }
+    }
+
+    private suspend fun isResourceSharedLocally(resourceId: String): Boolean {
+        val resourcePermissions =
+            getLocalResourcePermissionsUseCase
+                .execute(GetLocalResourcePermissionsUseCase.Input(resourceId))
+                .permissions
+        val currentUserServerId = getSelectedAccountDataUseCase.execute(Unit).serverId
+        val isOperatorDirectOwnershipOnly =
+            resourcePermissions.singleOrNull()?.let {
+                it is PermissionModelUi.UserPermissionModel &&
+                    it.user.userId == currentUserServerId &&
+                    it.permission == ResourcePermission.OWNER
+            } == true
+        return resourcePermissions.isNotEmpty() && !isOperatorDirectOwnershipOnly
     }
 
     private fun checkPasswordAndProceed(onProceed: () -> Unit) {
@@ -948,7 +1005,7 @@ class ResourceFormViewModel(
         updateViewState { copy(showPasswordWarningDialog = false, passwordWarningType = null) }
         when (mode) {
             is Create -> proceedWithCreate()
-            is Edit -> performUpdate()
+            is Edit -> proceedWithUpdate()
         }
     }
 
@@ -997,6 +1054,13 @@ class ResourceFormViewModel(
             )
             updateViewState { copy(shouldShowDialogProgress = false) }
             createResourceIdlingResource.setIdle(true)
+        }
+    }
+
+    private fun onPermissionsConfirmed(confirmedPermissions: List<PermissionModelUi>) {
+        when (mode) {
+            is Edit -> performUpdateWithConfirmedPermissions(confirmedPermissions)
+            is Create -> performCreateWithConfirmedPermissions(confirmedPermissions)
         }
     }
 
@@ -1059,6 +1123,64 @@ class ResourceFormViewModel(
                 resourceId = "",
             ),
         )
+    }
+
+    private fun performUpdateWithConfirmedPermissions(confirmedPermissions: List<PermissionModelUi>) {
+        launch {
+            updateResourceIdlingResource.setIdle(false)
+            updateViewState { copy(shouldShowDialogProgress = true) }
+            val editedResource =
+                getLocalResourceUseCase
+                    .execute(
+                        GetLocalResourceUseCase.Input((mode as Edit).resourceId),
+                    ).resource
+            val resourceUpdateActionsInteractor = resourceUpdateActionsInteractorFactory.create(editedResource)
+            performResourceUpdateAction(
+                action = {
+                    resourceUpdateActionsInteractor.updateGenericResourceWithConfirmedPermissions(
+                        resourceModelHandler.contentType,
+                        confirmedPermissions,
+                        { resourceModelHandler.getResourceMetadataWithRequiredFields() },
+                        { resourceModelHandler.getResourceSecretWithRequiredFields() },
+                    )
+                },
+                doOnFailure = { emitSideEffect(ShowSnackbar(SnackbarMessage.COMMON_FAILURE)) },
+                doOnCryptoFailure = {
+                    emitSideEffect(ShowSnackbar(SnackbarMessage.ENCRYPTION_FAILURE))
+                },
+                doOnSchemaValidationFailure = ::handleSchemaValidationFailure,
+                doOnSuccess = { emitSideEffect(NavigateBackWithEditSuccess(resourceModelHandler.resourceMetadata.name)) },
+                doOnShareFailure = { emitSideEffect(ShowSnackbar(SnackbarMessage.RESOURCE_EDITED_SHARE_FAILED)) },
+                doOnFetchFailure = { emitSideEffect(ShowSnackbar(SnackbarMessage.RESOURCE_EDITED_SHARE_FAILED)) },
+                doOnPermissionsDrifted = {
+                    Timber.d("Permissions drifted before saving the edit - reopening the confirmation")
+                    emitSideEffect(
+                        NavigateToConfirmPermissions(
+                            ConfirmPermissionsMode.Edit((mode as Edit).resourceId),
+                            driftDetected = true,
+                        ),
+                    )
+                },
+                doOnCannotEditWithCurrentConfig = {
+                    emitSideEffect(
+                        ShowSnackbar(SnackbarMessage.CANNOT_CREATE_RESOURCE_WITH_CURRENT_CONFIG),
+                    )
+                },
+                doOnMetadataKeyModified = {
+                    updateViewState { copy(metadataKeyModifiedDialog = it) }
+                },
+                doOnMetadataKeyDeleted = {
+                    updateViewState { copy(metadataKeyDeletedDialog = it) }
+                },
+                doOnMetadataKeyVerificationFailure = {
+                    emitSideEffect(
+                        ShowSnackbar(SnackbarMessage.METADATA_KEY_VERIFICATION_FAILURE),
+                    )
+                },
+            )
+            updateViewState { copy(shouldShowDialogProgress = false) }
+            updateResourceIdlingResource.setIdle(true)
+        }
     }
 
     private fun performUpdate() {

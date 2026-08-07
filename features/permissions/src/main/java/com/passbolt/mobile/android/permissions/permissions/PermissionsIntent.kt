@@ -56,10 +56,6 @@ sealed interface PermissionsIntent {
         val permission: PermissionModelUi.GroupPermissionModel,
     ) : PermissionsIntent
 
-    data class SkipConfirmationToggled(
-        val isChecked: Boolean,
-    ) : PermissionsIntent
-
     data object TrustNewMetadataKey : PermissionsIntent
 
     data object TrustedMetadataKeyDeleted : PermissionsIntent

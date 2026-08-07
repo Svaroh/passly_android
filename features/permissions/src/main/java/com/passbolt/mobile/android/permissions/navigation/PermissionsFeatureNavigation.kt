@@ -4,28 +4,25 @@ import androidx.compose.runtime.Composable
 import com.passbolt.mobile.android.core.compose.PassboltTheme
 import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderInstaller
 import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmCreatePermissions
+import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.GroupPermissionDetails
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.PermissionRecipients
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.UserPermissionDetails
-import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
-import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsScreen
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsViewModel
 import com.passbolt.mobile.android.permissions.grouppermissionsdetails.GroupPermissionsScreen
 import com.passbolt.mobile.android.permissions.permissionrecipients.PermissionRecipientsScreen
-import com.passbolt.mobile.android.permissions.permissions.PermissionsFlow
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.GroupPermissionDeleted
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.GroupPermissionModified
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.ShareRecipientsAdded
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.UserPermissionDeleted
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.UserPermissionModified
 import com.passbolt.mobile.android.permissions.permissions.PermissionsScreen
 import com.passbolt.mobile.android.permissions.permissions.PermissionsViewModel
 import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsScreen
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.PermissionsItem
 import com.passbolt.mobile.android.ui.PermissionsMode
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent as ConfirmPermissionsIntent
+import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent as PermissionsIntent
 
 class PermissionsFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =
@@ -35,16 +32,13 @@ class PermissionsFeatureNavigation : FeatureModuleNavigation {
                     id = key.id,
                     mode = key.mode,
                     permissionsItem = key.permissionsItem,
-                    flow = PermissionsFlow.STANDARD,
                 )
             }
 
-            entry<ConfirmCreatePermissions> { key ->
-                PermissionsScreenEntry(
-                    id = key.folderId,
-                    mode = PermissionsMode.EDIT,
-                    permissionsItem = PermissionsItem.FOLDER,
-                    flow = PermissionsFlow.CONFIRM_CREATE,
+            entry<ConfirmPermissions> { key ->
+                ConfirmPermissionsScreenEntry(
+                    confirmMode = key.confirmMode,
+                    driftDetected = key.driftDetected,
                 )
             }
 
@@ -83,31 +77,43 @@ class PermissionsFeatureNavigation : FeatureModuleNavigation {
         id: String,
         mode: PermissionsMode,
         permissionsItem: PermissionsItem,
-        flow: PermissionsFlow,
     ) {
-        val resultBus = NavigationResultEventBus.current
-
         val viewModel: PermissionsViewModel =
-            koinViewModel(parameters = { parametersOf(id, mode, permissionsItem, flow) })
+            koinViewModel(parameters = { parametersOf(id, mode, permissionsItem) })
 
-        ResultEffect<GroupPermissionModifiedResult>(resultBus) { result ->
-            viewModel.onIntent(GroupPermissionModified(result.permission))
-        }
-        ResultEffect<GroupPermissionDeletedResult>(resultBus) { result ->
-            viewModel.onIntent(GroupPermissionDeleted(result.permission))
-        }
-        ResultEffect<UserPermissionModifiedResult>(resultBus) { result ->
-            viewModel.onIntent(UserPermissionModified(result.permission))
-        }
-        ResultEffect<UserPermissionDeletedResult>(resultBus) { result ->
-            viewModel.onIntent(UserPermissionDeleted(result.permission))
-        }
-        ResultEffect<ShareRecipientsAddedResult>(resultBus) { result ->
-            viewModel.onIntent(ShareRecipientsAdded(result.permissions))
-        }
+        PermissionListEditResultEffects(
+            onModifyUserPermission = { viewModel.onIntent(PermissionsIntent.UserPermissionModified(it)) },
+            onDeleteUserPermission = { viewModel.onIntent(PermissionsIntent.UserPermissionDeleted(it)) },
+            onModifyGroupPermission = { viewModel.onIntent(PermissionsIntent.GroupPermissionModified(it)) },
+            onDeleteGroupPermission = { viewModel.onIntent(PermissionsIntent.GroupPermissionDeleted(it)) },
+            onAddShareRecipients = { viewModel.onIntent(PermissionsIntent.ShareRecipientsAdded(it)) },
+        )
 
         PassboltTheme {
             PermissionsScreen(
+                viewModel = viewModel,
+            )
+        }
+    }
+
+    @Composable
+    private fun ConfirmPermissionsScreenEntry(
+        confirmMode: ConfirmPermissionsMode,
+        driftDetected: Boolean,
+    ) {
+        val viewModel: ConfirmPermissionsViewModel =
+            koinViewModel(parameters = { parametersOf(confirmMode, driftDetected) })
+
+        PermissionListEditResultEffects(
+            onModifyUserPermission = { viewModel.onIntent(ConfirmPermissionsIntent.UserPermissionModified(it)) },
+            onDeleteUserPermission = { viewModel.onIntent(ConfirmPermissionsIntent.UserPermissionDeleted(it)) },
+            onModifyGroupPermission = { viewModel.onIntent(ConfirmPermissionsIntent.GroupPermissionModified(it)) },
+            onDeleteGroupPermission = { viewModel.onIntent(ConfirmPermissionsIntent.GroupPermissionDeleted(it)) },
+            onAddShareRecipients = { viewModel.onIntent(ConfirmPermissionsIntent.ShareRecipientsAdded(it)) },
+        )
+
+        PassboltTheme {
+            ConfirmPermissionsScreen(
                 viewModel = viewModel,
             )
         }

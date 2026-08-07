@@ -29,8 +29,10 @@ import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPer
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
 import com.passbolt.mobile.android.domain.resources.actions.SecretPropertiesActionsInteractorFactory
+import com.passbolt.mobile.android.domain.resources.usecase.FetchResourcePermissionsUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.GetDefaultCreateContentTypeUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.GetEditContentTypeUseCase
+import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceUseCase
 import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetSessionExpiryUseCase
@@ -114,6 +116,8 @@ internal val mockCheckPasswordPropertiesUseCase = mock<CheckPasswordPropertiesUs
 internal val mockGetMetadataTypesSettingsUseCase = mock<GetMetadataTypesSettingsUseCase>()
 internal val mockGetLocalFolderPermissionsUseCase = mock<GetLocalFolderPermissionsUseCase>()
 internal val mockFetchFolderPermissionsUseCase = mock<FetchFolderPermissionsUseCase>()
+internal val mockFetchResourcePermissionsUseCase = mock<FetchResourcePermissionsUseCase>()
+internal val mockGetLocalResourcePermissionsUseCase = mock<GetLocalResourcePermissionsUseCase>()
 internal val mockGetPermissionsConfirmationOptOutUseCase =
     mock<GetPermissionsConfirmationOptOutUseCase>().apply {
         stub {
@@ -202,6 +206,8 @@ internal val testResourceFormModule =
                 getMetadataTypesSettingsUseCase = mockGetMetadataTypesSettingsUseCase,
                 getLocalFolderPermissionsUseCase = mockGetLocalFolderPermissionsUseCase,
                 fetchFolderPermissionsUseCase = mockFetchFolderPermissionsUseCase,
+                fetchResourcePermissionsUseCase = mockFetchResourcePermissionsUseCase,
+                getLocalResourcePermissionsUseCase = mockGetLocalResourcePermissionsUseCase,
                 getPermissionsConfirmationOptOutUseCase = mockGetPermissionsConfirmationOptOutUseCase,
                 getSelectedAccountDataUseCase = mockGetSelectedAccountDataUseCase,
             )

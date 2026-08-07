@@ -1,6 +1,7 @@
 package com.passbolt.mobile.android.feature.resourceform.main
 
 import com.passbolt.mobile.android.ui.AdditionalUrisUiModel
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.CustomFieldsUiModel
 import com.passbolt.mobile.android.ui.PassphraseGeneratorSettingsUiModel
 import com.passbolt.mobile.android.ui.PasswordGeneratorSettingsUiModel
@@ -71,7 +72,8 @@ sealed interface ResourceFormSideEffect {
     data object NavigateToScanOtp : ResourceFormSideEffect
 
     data class NavigateToConfirmPermissions(
-        val parentFolderId: String,
+        val confirmMode: ConfirmPermissionsMode,
+        val driftDetected: Boolean = false,
     ) : ResourceFormSideEffect
 
     data class NavigateBackWithCreateSuccess(
@@ -112,6 +114,7 @@ enum class SnackbarMessage {
     UPGRADE_FAILURE,
     PASSWORD_POLICIES_FETCH_FAILED,
     PASSWORD_EXPIRY_FETCH_FAILED,
+    RESOURCE_EDITED_SHARE_FAILED,
 }
 
 enum class ToastMessage {

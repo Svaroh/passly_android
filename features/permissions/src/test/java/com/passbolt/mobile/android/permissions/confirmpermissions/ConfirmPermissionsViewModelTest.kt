@@ -21,49 +21,43 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissions
+package com.passbolt.mobile.android.permissions.confirmpermissions
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
 import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
 import com.passbolt.mobile.android.commontest.session.validSessionTestModule
 import com.passbolt.mobile.android.core.architecture.result.DomainResult
 import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackingFlow
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderDetailsUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
-import com.passbolt.mobile.android.domain.metadata.interactor.ResourceAccessInteractor
 import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.CreatePermissionsSnapshotInteractor
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
-import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
-import com.passbolt.mobile.android.domain.resources.usecase.ResourceShareInteractor
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceUseCase
+import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
 import com.passbolt.mobile.android.domain.users.model.GpgKey
 import com.passbolt.mobile.android.domain.users.model.UserProfile
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
 import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
 import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
 import com.passbolt.mobile.android.mappers.UsersModelMapper
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.MainButtonIntent
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.SeePermission
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.SkipConfirmationToggled
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.UserPermissionDeleted
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.UserPermissionModified
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.CloseWithPermissionsConfirmed
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateBack
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToGroupPermissionDetails
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateToUserPermissionDetails
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.ShowToast
+import com.passbolt.mobile.android.permissions.common.PermissionsListMapper
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.Confirm
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SeePermission
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SkipConfirmationToggled
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.UserPermissionDeleted
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.UserPermissionModified
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithPermissionsConfirmed
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateBack
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToGroupPermissionDetails
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToUserPermissionDetails
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowErrorSnackbar
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowToast
+import com.passbolt.mobile.android.permissions.permissions.PermissionModelUiComparator
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.GpgKeyUiModel
 import com.passbolt.mobile.android.ui.GroupModel
 import com.passbolt.mobile.android.ui.PermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.PermissionsItem
 import com.passbolt.mobile.android.ui.PermissionsMode
 import com.passbolt.mobile.android.ui.ResourcePermission
 import com.passbolt.mobile.android.ui.UserProfileUiModel
@@ -95,21 +89,13 @@ import java.time.ZonedDateTime
 import kotlin.test.assertIs
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ConfirmCreatePermissionsViewModelTest : KoinTest {
+class ConfirmPermissionsViewModelTest : KoinTest {
     @get:Rule
     val koinTestRule =
         KoinTestRule.create {
             printLogger(Level.ERROR)
             modules(
                 module {
-                    single { mock<GetLocalResourcePermissionsUseCase>() }
-                    single { mock<GetLocalFolderPermissionsUseCase>() }
-                    single { mock<GetLocalResourceUseCase>() }
-                    single { mock<GetLocalFolderDetailsUseCase>() }
-                    single { mock<ResourceShareInteractor>() }
-                    single { mock<MetadataPrivateKeysHelperInteractor>() }
-                    single { mock<ResourceUpdateActionsInteractorFactory>() }
-                    single { mock<ResourceAccessInteractor>() }
                     single { mock<CreatePermissionsSnapshotInteractor>() }
                     single { mock<GetLocalCurrentUserUseCase>() }
                     single { mock<GetFeatureFlagsUseCase>() }
@@ -117,30 +103,19 @@ class ConfirmCreatePermissionsViewModelTest : KoinTest {
                     single { UsersModelMapper() }
                     singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                     singleOf(::SessionRefreshTrackingFlow)
-                    singleOf(::DataRefreshTrackingFlow)
                     factory { PermissionModelUiComparator() }
+                    factory { PermissionsListMapper(get()) }
                     factory { params ->
-                        PermissionsViewModel(
-                            permissionsItem = params.get(),
-                            id = params.get(),
-                            mode = params.get(),
-                            flow = params.get(),
-                            getLocalResourcePermissionsUseCase = get(),
-                            getLocalResourceUseCase = get(),
-                            getLocalFolderPermissionsUseCase = get(),
-                            getLocalFolderUseCase = get(),
-                            permissionModelUiComparator = get(),
-                            resourceShareInteractor = get(),
-                            metadataPrivateKeysHelperInteractor = get(),
-                            resourceAccessInteractor = get(),
-                            dataRefreshTrackingFlow = get(),
-                            coroutineLaunchContext = get(),
-                            resourceUpdateActionsInteractorFactory = get(),
+                        ConfirmPermissionsViewModel(
+                            confirmMode = params.get(),
+                            driftDetected = params.get(),
                             createPermissionsSnapshotInteractor = get(),
                             getLocalCurrentUserUseCase = get(),
+                            usersModelMapper = get(),
                             getFeatureFlagsUseCase = get(),
                             setPermissionsConfirmationOptOutUseCase = get(),
-                            usersModelMapper = get(),
+                            permissionsListMapper = get(),
+                            coroutineLaunchContext = get(),
                         )
                     }
                 },
@@ -189,15 +164,12 @@ class ConfirmCreatePermissionsViewModelTest : KoinTest {
         }
 
     @Test
-    fun `add user button, save button and skip switch are shown`() =
+    fun `skip switch is shown when opt out feature flag is on`() =
         runTest {
             val viewModel = confirmCreateViewModel()
 
             viewModel.viewState.test {
-                val state = expectMostRecentItem()
-                assertThat(state.showAddUserButton).isTrue()
-                assertThat(state.showSaveButton).isTrue()
-                assertThat(state.showSkipConfirmationSwitch).isTrue()
+                assertThat(expectMostRecentItem().showSkipConfirmationSwitch).isTrue()
             }
         }
 
@@ -216,30 +188,29 @@ class ConfirmCreatePermissionsViewModelTest : KoinTest {
         }
 
     @Test
-    fun `save publishes confirmed permissions and does not share`() =
+    fun `confirm publishes confirmed permissions without opt out`() =
         runTest {
             val viewModel = confirmCreateViewModel()
             viewModel.viewState.test { expectMostRecentItem() }
 
             viewModel.sideEffect.test {
-                viewModel.onIntent(MainButtonIntent)
+                viewModel.onIntent(Confirm)
 
                 val effect = assertIs<CloseWithPermissionsConfirmed>(awaitItem())
                 assertThat(effect.permissions).hasSize(3)
             }
-            verifyNoInteractions(get<ResourceShareInteractor>())
             verifyNoInteractions(get<SetPermissionsConfirmationOptOutUseCase>())
         }
 
     @Test
-    fun `save stores session opt out when skip switch is checked`() =
+    fun `confirm stores session opt out when skip switch is checked`() =
         runTest {
             val viewModel = confirmCreateViewModel()
             viewModel.viewState.test { expectMostRecentItem() }
 
             viewModel.onIntent(SkipConfirmationToggled(isChecked = true))
             viewModel.sideEffect.test {
-                viewModel.onIntent(MainButtonIntent)
+                viewModel.onIntent(Confirm)
 
                 assertIs<CloseWithPermissionsConfirmed>(awaitItem())
             }
@@ -280,7 +251,7 @@ class ConfirmCreatePermissionsViewModelTest : KoinTest {
         }
 
     @Test
-    fun `operator permission opens details in view mode from snapshot`() =
+    fun `operator permission opens details in view mode`() =
         runTest {
             val viewModel = confirmCreateViewModel()
 
@@ -289,12 +260,11 @@ class ConfirmCreatePermissionsViewModelTest : KoinTest {
 
                 val effect = assertIs<NavigateToUserPermissionDetails>(awaitItem())
                 assertThat(effect.mode).isEqualTo(PermissionsMode.VIEW)
-                assertThat(effect.fromSnapshot).isTrue()
             }
         }
 
     @Test
-    fun `other user permission opens details in edit mode from snapshot`() =
+    fun `other user permission opens details in edit mode`() =
         runTest {
             val viewModel = confirmCreateViewModel()
             val userPermission =
@@ -307,12 +277,11 @@ class ConfirmCreatePermissionsViewModelTest : KoinTest {
 
                 val effect = assertIs<NavigateToUserPermissionDetails>(awaitItem())
                 assertThat(effect.mode).isEqualTo(PermissionsMode.EDIT)
-                assertThat(effect.fromSnapshot).isTrue()
             }
         }
 
     @Test
-    fun `group permission opens details from snapshot`() =
+    fun `group permission opens group details`() =
         runTest {
             val viewModel = confirmCreateViewModel()
             val groupPermission =
@@ -324,21 +293,168 @@ class ConfirmCreatePermissionsViewModelTest : KoinTest {
                 viewModel.onIntent(SeePermission(groupPermission))
 
                 val effect = assertIs<NavigateToGroupPermissionDetails>(awaitItem())
-                assertThat(effect.mode).isEqualTo(PermissionsMode.EDIT)
-                assertThat(effect.fromSnapshot).isTrue()
+                assertThat(effect.permission).isEqualTo(groupPermission)
             }
         }
 
-    private fun operatorPermission(viewModel: PermissionsViewModel) =
+    @Test
+    fun `edit mode shows snapshot permissions with real permission ids`() =
+        runTest {
+            stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+
+            val viewModel = confirmEditViewModel()
+
+            viewModel.viewState.test {
+                val state = expectMostRecentItem()
+                assertThat(state.permissions).hasSize(3)
+                val operatorRow = operatorPermission(viewModel)
+                assertThat(operatorRow.permission).isEqualTo(ResourcePermission.OWNER)
+                assertThat(operatorRow.permissionId).isEqualTo("perm-operator")
+                val groupRow = state.permissions.filterIsInstance<PermissionModelUi.GroupPermissionModel>().single()
+                assertThat(groupRow.permissionId).isEqualTo("perm-group")
+            }
+        }
+
+    @Test
+    fun `edit mode with owner operator is editable`() =
+        runTest {
+            stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+
+            val viewModel = confirmEditViewModel()
+            val groupPermission =
+                viewModel.viewState.value.permissions
+                    .filterIsInstance<PermissionModelUi.GroupPermissionModel>()
+                    .single()
+
+            viewModel.viewState.test {
+                assertThat(expectMostRecentItem().isEditable).isTrue()
+            }
+            viewModel.sideEffect.test {
+                viewModel.onIntent(SeePermission(otherUserPermission(viewModel)))
+                assertThat(assertIs<NavigateToUserPermissionDetails>(awaitItem()).mode).isEqualTo(PermissionsMode.EDIT)
+
+                viewModel.onIntent(SeePermission(groupPermission))
+                assertThat(assertIs<NavigateToGroupPermissionDetails>(awaitItem()).mode).isEqualTo(PermissionsMode.EDIT)
+
+                viewModel.onIntent(SeePermission(operatorPermission(viewModel)))
+                assertThat(assertIs<NavigateToUserPermissionDetails>(awaitItem()).mode).isEqualTo(PermissionsMode.VIEW)
+            }
+        }
+
+    @Test
+    fun `edit mode with operator owning through a group is editable`() =
+        runTest {
+            stubResourceSnapshot(
+                snapshot(
+                    operatorPermission = ResourcePermission.UPDATE,
+                    groupPermission = ResourcePermission.OWNER,
+                    groupMembers = listOf(USER_ID, OPERATOR_ID),
+                ),
+            )
+
+            val viewModel = confirmEditViewModel()
+
+            viewModel.viewState.test {
+                assertThat(expectMostRecentItem().isEditable).isTrue()
+            }
+        }
+
+    @Test
+    fun `edit mode with non-owner operator is read only`() =
+        runTest {
+            stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.UPDATE))
+
+            val viewModel = confirmEditViewModel()
+            val groupPermission =
+                viewModel.viewState.value.permissions
+                    .filterIsInstance<PermissionModelUi.GroupPermissionModel>()
+                    .single()
+
+            viewModel.viewState.test {
+                assertThat(expectMostRecentItem().isEditable).isFalse()
+            }
+            viewModel.sideEffect.test {
+                viewModel.onIntent(SeePermission(operatorPermission(viewModel)))
+                assertThat(assertIs<NavigateToUserPermissionDetails>(awaitItem()).mode).isEqualTo(PermissionsMode.VIEW)
+
+                viewModel.onIntent(SeePermission(groupPermission))
+                assertThat(assertIs<NavigateToGroupPermissionDetails>(awaitItem()).mode).isEqualTo(PermissionsMode.VIEW)
+            }
+        }
+
+    @Test
+    fun `edit mode operator permission cannot be modified or removed`() =
+        runTest {
+            stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+
+            val viewModel = confirmEditViewModel()
+            val operatorRow = operatorPermission(viewModel)
+
+            viewModel.onIntent(UserPermissionModified(operatorRow.copy(permission = ResourcePermission.READ)))
+            viewModel.onIntent(UserPermissionDeleted(operatorRow))
+
+            val enforcedOperatorRow = operatorPermission(viewModel)
+            assertThat(enforcedOperatorRow.permission).isEqualTo(ResourcePermission.OWNER)
+            assertThat(enforcedOperatorRow.permissionId).isEqualTo("perm-operator")
+        }
+
+    @Test
+    fun `reopening edit mode after drift shows the drift snackbar`() =
+        runTest {
+            stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+
+            val viewModel = confirmEditViewModel(driftDetected = true)
+
+            viewModel.sideEffect.test {
+                assertThat(awaitItem()).isEqualTo(ShowErrorSnackbar(SnackbarErrorType.PERMISSIONS_DRIFTED))
+            }
+        }
+
+    @Test
+    fun `resource snapshot creation failure closes the screen with a failure message`() =
+        runTest {
+            get<CreatePermissionsSnapshotInteractor>().stub {
+                onBlocking { createForResource(RESOURCE_ID) }
+                    .doReturn(
+                        CreatePermissionsSnapshotInteractor.Output.Failure(
+                            DomainResult.Incomplete.Error(UNKNOWN, "error"),
+                        ),
+                    )
+            }
+
+            val viewModel = confirmEditViewModel()
+
+            viewModel.sideEffect.test {
+                assertThat(awaitItem()).isEqualTo(ShowToast(ToastType.PERMISSIONS_FETCH_FAILURE))
+                assertThat(awaitItem()).isEqualTo(NavigateBack)
+            }
+        }
+
+    private fun stubResourceSnapshot(snapshot: PermissionsSnapshot) {
+        get<CreatePermissionsSnapshotInteractor>().stub {
+            onBlocking { createForResource(RESOURCE_ID) }
+                .doReturn(CreatePermissionsSnapshotInteractor.Output.Success(snapshot))
+        }
+    }
+
+    private fun operatorPermission(viewModel: ConfirmPermissionsViewModel) =
         viewModel.viewState.value.permissions
             .filterIsInstance<PermissionModelUi.UserPermissionModel>()
             .single { it.user.userId == OPERATOR_ID }
 
+    private fun otherUserPermission(viewModel: ConfirmPermissionsViewModel) =
+        viewModel.viewState.value.permissions
+            .filterIsInstance<PermissionModelUi.UserPermissionModel>()
+            .single { it.user.userId == USER_ID }
+
     private fun confirmCreateViewModel() =
-        get<PermissionsViewModel>(
-            parameters = {
-                parametersOf(FOLDER_ID, PermissionsMode.EDIT, PermissionsItem.FOLDER, PermissionsFlow.CONFIRM_CREATE)
-            },
+        get<ConfirmPermissionsViewModel>(
+            parameters = { parametersOf(ConfirmPermissionsMode.Create(FOLDER_ID), false) },
+        )
+
+    private fun confirmEditViewModel(driftDetected: Boolean = false) =
+        get<ConfirmPermissionsViewModel>(
+            parameters = { parametersOf(ConfirmPermissionsMode.Edit(RESOURCE_ID), driftDetected) },
         )
 
     private fun featureFlags(isOptOutAvailable: Boolean) =
@@ -359,6 +475,7 @@ class ConfirmCreatePermissionsViewModelTest : KoinTest {
 
     private companion object {
         private const val FOLDER_ID = "folder-id"
+        private const val RESOURCE_ID = "resource-id"
         private const val GROUP_ID = "group-id"
         private const val OPERATOR_ID = "operator-id"
         private const val USER_ID = "user-id"
@@ -386,18 +503,23 @@ class ConfirmCreatePermissionsViewModelTest : KoinTest {
                     ),
             )
 
-        private val SNAPSHOT =
-            PermissionsSnapshot(
-                permissions =
-                    listOf(
-                        PermissionModel.UserPermissionModel(ResourcePermission.UPDATE, "perm-operator", OPERATOR_ID),
-                        PermissionModel.UserPermissionModel(ResourcePermission.READ, "perm-user", USER_ID),
-                        PermissionModel.GroupPermissionModel(ResourcePermission.UPDATE, "perm-group", GroupModel(GROUP_ID, "group")),
-                    ),
-                groupsMembers = mapOf(GROUP_ID to listOf(USER_ID)),
-                users = listOf(userProfile(OPERATOR_ID), userProfile(USER_ID)).associateBy { it.id },
-                created = ZonedDateTime.now(),
-            )
+        private fun snapshot(
+            operatorPermission: ResourcePermission,
+            groupPermission: ResourcePermission = ResourcePermission.UPDATE,
+            groupMembers: List<String> = listOf(USER_ID),
+        ) = PermissionsSnapshot(
+            permissions =
+                listOf(
+                    PermissionModel.UserPermissionModel(operatorPermission, "perm-operator", OPERATOR_ID),
+                    PermissionModel.UserPermissionModel(ResourcePermission.READ, "perm-user", USER_ID),
+                    PermissionModel.GroupPermissionModel(groupPermission, "perm-group", GroupModel(GROUP_ID, "group")),
+                ),
+            groupsMembers = mapOf(GROUP_ID to groupMembers),
+            users = listOf(userProfile(OPERATOR_ID), userProfile(USER_ID)).associateBy { it.id },
+            created = ZonedDateTime.now(),
+        )
+
+        private val SNAPSHOT = snapshot(operatorPermission = ResourcePermission.UPDATE)
 
         private val CURRENT_USER_UI_MODEL =
             UserUiModel(

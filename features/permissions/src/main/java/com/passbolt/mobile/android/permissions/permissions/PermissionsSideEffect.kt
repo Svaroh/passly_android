@@ -23,7 +23,6 @@
 
 package com.passbolt.mobile.android.permissions.permissions
 
-import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
 import com.passbolt.mobile.android.ui.PermissionsItem
@@ -35,13 +34,11 @@ sealed interface PermissionsSideEffect {
     data class NavigateToGroupPermissionDetails(
         val permission: GroupPermissionModel,
         val mode: PermissionsMode,
-        val fromSnapshot: Boolean = false,
     ) : PermissionsSideEffect
 
     data class NavigateToUserPermissionDetails(
         val permission: UserPermissionModel,
         val mode: PermissionsMode,
-        val fromSnapshot: Boolean = false,
     ) : PermissionsSideEffect
 
     data class NavigateToSelectShareRecipients(
@@ -56,10 +53,6 @@ sealed interface PermissionsSideEffect {
     ) : PermissionsSideEffect
 
     data object CloseWithShareSuccess : PermissionsSideEffect
-
-    data class CloseWithPermissionsConfirmed(
-        val permissions: List<PermissionModelUi>,
-    ) : PermissionsSideEffect
 
     data object InitiateDataRefresh : PermissionsSideEffect
 
@@ -102,5 +95,4 @@ enum class SnackbarSuccessType {
 
 enum class ToastType {
     CONTENT_NOT_AVAILABLE,
-    PERMISSIONS_FETCH_FAILURE,
 }

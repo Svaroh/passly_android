@@ -33,22 +33,14 @@ import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderDetailsU
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
 import com.passbolt.mobile.android.domain.metadata.interactor.ResourceAccessInteractor
-import com.passbolt.mobile.android.domain.permissionsconfirmation.mapper.toCreateModePermissions
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.CreatePermissionsSnapshotInteractor
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
 import com.passbolt.mobile.android.domain.resources.actions.performResourceUpdateAction
 import com.passbolt.mobile.android.domain.resources.usecase.ResourceShareInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.ResourceShareInteractor.Output
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceUseCase
-import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
-import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper
-import com.passbolt.mobile.android.mappers.UsersModelMapper
-import com.passbolt.mobile.android.permissions.permissions.PermissionsFlow.CONFIRM_CREATE
-import com.passbolt.mobile.android.permissions.permissions.PermissionsFlow.STANDARD
+import com.passbolt.mobile.android.permissions.common.PermissionsListMapper
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.AddPermission
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.DismissMetadataKeyDeletedDialog
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.DismissMetadataKeyModifiedDialog
@@ -58,12 +50,10 @@ import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.Gro
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.MainButtonIntent
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.SeePermission
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.ShareRecipientsAdded
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.SkipConfirmationToggled
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.TrustNewMetadataKey
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.TrustedMetadataKeyDeleted
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.UserPermissionDeleted
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.UserPermissionModified
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.CloseWithPermissionsConfirmed
 import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.CloseWithShareSuccess
 import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.InitiateDataRefresh
 import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.NavigateBack
@@ -101,41 +91,32 @@ import com.passbolt.mobile.android.ui.PermissionsMode
 import com.passbolt.mobile.android.ui.PermissionsMode.EDIT
 import com.passbolt.mobile.android.ui.PermissionsMode.VIEW
 import com.passbolt.mobile.android.ui.ResourcePermission
-import com.passbolt.mobile.android.ui.UserWithAvatar
 import com.passbolt.mobile.android.ui.contentType
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Suppress("LongParameterList")
 class PermissionsViewModel(
     permissionsItem: PermissionsItem,
     id: String,
     mode: PermissionsMode,
-    flow: PermissionsFlow,
     private val getLocalResourcePermissionsUseCase: GetLocalResourcePermissionsUseCase,
     private val getLocalResourceUseCase: GetLocalResourceUseCase,
     private val getLocalFolderPermissionsUseCase: GetLocalFolderPermissionsUseCase,
     private val getLocalFolderUseCase: GetLocalFolderDetailsUseCase,
-    private val permissionModelUiComparator: PermissionModelUiComparator,
+    private val permissionsListMapper: PermissionsListMapper,
     private val resourceShareInteractor: ResourceShareInteractor,
     private val metadataPrivateKeysHelperInteractor: MetadataPrivateKeysHelperInteractor,
     private val resourceAccessInteractor: ResourceAccessInteractor,
     private val dataRefreshTrackingFlow: DataRefreshTrackingFlow,
     private val coroutineLaunchContext: CoroutineLaunchContext,
     private val resourceUpdateActionsInteractorFactory: ResourceUpdateActionsInteractorFactory,
-    private val createPermissionsSnapshotInteractor: CreatePermissionsSnapshotInteractor,
-    private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
-    private val getFeatureFlagsUseCase: GetFeatureFlagsUseCase,
-    private val setPermissionsConfirmationOptOutUseCase: SetPermissionsConfirmationOptOutUseCase,
-    private val usersModelMapper: UsersModelMapper,
 ) : SideEffectViewModel<PermissionsState, PermissionsSideEffect>(
         initialState =
             PermissionsState(
                 permissionsItem = permissionsItem,
                 permissionItemId = id,
                 mode = mode,
-                flow = flow,
             ),
     ) {
     private val missingItemHandler =
@@ -146,25 +127,14 @@ class PermissionsViewModel(
             }
         }
 
-    private var currentUser: UserWithAvatar? = null
-
     init {
-        when (flow) {
-            STANDARD -> {
-                loadInitialPermissions()
-                processItemsVisibility()
-                viewModelScope.launch(coroutineLaunchContext.ui) {
-                    synchronizeWithDataRefresh()
-                }
-            }
-            CONFIRM_CREATE -> {
-                loadSnapshotPermissions()
-                processConfirmItemsVisibility()
-            }
+        loadInitialPermissions()
+        processItemsVisibility()
+        viewModelScope.launch(coroutineLaunchContext.ui) {
+            synchronizeWithDataRefresh()
         }
     }
 
-    @Suppress("CyclomaticComplexMethod")
     fun onIntent(intent: PermissionsIntent) {
         when (intent) {
             GoBack -> emitSideEffect(NavigateBack)
@@ -172,11 +142,14 @@ class PermissionsViewModel(
             MainButtonIntent -> actionButtonClick()
             AddPermission -> addPermissionClick()
             is ShareRecipientsAdded -> shareRecipientsAdded(intent.recipients)
-            is UserPermissionModified -> userPermissionModified(intent.permission)
-            is UserPermissionDeleted -> userPermissionDeleted(intent.permission)
-            is GroupPermissionModified -> groupPermissionModified(intent.permission)
-            is GroupPermissionDeleted -> groupPermissionDeleted(intent.permission)
-            is SkipConfirmationToggled -> updateViewState { copy(isSkipConfirmationChecked = intent.isChecked) }
+            is UserPermissionModified ->
+                updatePermissions { permissionsListMapper.withModifiedUserPermission(it, intent.permission) }
+            is UserPermissionDeleted ->
+                updatePermissions { permissionsListMapper.withDeletedUserPermission(it, intent.permission) }
+            is GroupPermissionModified ->
+                updatePermissions { permissionsListMapper.withModifiedGroupPermission(it, intent.permission) }
+            is GroupPermissionDeleted ->
+                updatePermissions { permissionsListMapper.withDeletedGroupPermission(it, intent.permission) }
             TrustNewMetadataKey -> trustNewMetadataKey()
             TrustedMetadataKeyDeleted -> trustedMetadataKeyDeleted()
             DismissMetadataKeyModifiedDialog ->
@@ -212,44 +185,6 @@ class PermissionsViewModel(
         }
     }
 
-    private fun loadSnapshotPermissions() {
-        viewModelScope.launch(coroutineLaunchContext.io) {
-            updateViewState { copy(isLoading = true) }
-            when (
-                val output =
-                    runAuthenticatedOperation {
-                        createPermissionsSnapshotInteractor.createForFolder(viewState.value.permissionItemId)
-                    }
-            ) {
-                is CreatePermissionsSnapshotInteractor.Output.Success -> {
-                    val operator =
-                        usersModelMapper.mapToUserWithAvatar(
-                            getLocalCurrentUserUseCase.execute(Unit).user,
-                        )
-                    currentUser = operator
-                    updateViewState { copy(isLoading = false) }
-                    updatePermissions { output.snapshot.toCreateModePermissions(operator) }
-                }
-                is CreatePermissionsSnapshotInteractor.Output.Failure -> {
-                    Timber.e("Failed to create permissions snapshot: ${output.message}")
-                    emitSideEffect(ShowToast(ToastType.PERMISSIONS_FETCH_FAILURE))
-                    emitSideEffect(NavigateBack)
-                }
-            }
-        }
-    }
-
-    private fun processConfirmItemsVisibility() {
-        updateViewState { copy(showAddUserButton = true, showSaveButton = true) }
-        viewModelScope.launch(coroutineLaunchContext.io) {
-            val isOptOutAvailable =
-                getFeatureFlagsUseCase
-                    .execute(Unit)
-                    .featureFlags.isPermissionsConfirmationOptOutAvailable
-            updateViewState { copy(showSkipConfirmationSwitch = isOptOutAvailable) }
-        }
-    }
-
     private suspend fun reloadPermissions() {
         val fetched = fetchPermissions()
         updatePermissions { fetched }
@@ -269,29 +204,12 @@ class PermissionsViewModel(
 
     private fun updatePermissions(transform: (List<PermissionModelUi>) -> List<PermissionModelUi> = { it }) {
         updateViewState {
-            val transformed =
-                if (flow == CONFIRM_CREATE) {
-                    transform(permissions).withEnforcedOperatorOwnership()
-                } else {
-                    transform(permissions)
-                }
-            val sorted = transformed.sortedWith(permissionModelUiComparator)
+            val sorted = permissionsListMapper.sorted(transform(permissions))
             copy(
                 permissions = sorted,
                 showEmptyState = sorted.isEmpty(),
             )
         }
-    }
-
-    // in the create confirmation flow the operator stays the owner - their permission cannot be downgraded or removed
-    private fun List<PermissionModelUi>.withEnforcedOperatorOwnership(): List<PermissionModelUi> {
-        val operator = currentUser ?: return this
-        return filterNot { it is UserPermissionModel && it.user.userId == operator.userId } +
-            UserPermissionModel(
-                ResourcePermission.OWNER,
-                SharePermissionsModelMapper.TEMPORARY_NEW_PERMISSION_ID,
-                operator,
-            )
     }
 
     private fun processItemsVisibility() {
@@ -325,30 +243,9 @@ class PermissionsViewModel(
 
     private fun permissionClick(permission: PermissionModelUi) {
         val mode = viewState.value.mode
-        when (viewState.value.flow) {
-            STANDARD ->
-                when (permission) {
-                    is GroupPermissionModel -> emitSideEffect(NavigateToGroupPermissionDetails(permission, mode))
-                    is UserPermissionModel -> emitSideEffect(NavigateToUserPermissionDetails(permission, mode))
-                }
-            CONFIRM_CREATE -> confirmFlowPermissionClick(permission)
-        }
-    }
-
-    private fun confirmFlowPermissionClick(permission: PermissionModelUi) {
         when (permission) {
-            is GroupPermissionModel ->
-                emitSideEffect(NavigateToGroupPermissionDetails(permission, EDIT, fromSnapshot = true))
-            is UserPermissionModel -> {
-                val isOperatorPermission = permission.user.userId == currentUser?.userId
-                emitSideEffect(
-                    NavigateToUserPermissionDetails(
-                        permission = permission,
-                        mode = if (isOperatorPermission) VIEW else EDIT,
-                        fromSnapshot = true,
-                    ),
-                )
-            }
+            is GroupPermissionModel -> emitSideEffect(NavigateToGroupPermissionDetails(permission, mode))
+            is UserPermissionModel -> emitSideEffect(NavigateToUserPermissionDetails(permission, mode))
         }
     }
 
@@ -380,21 +277,8 @@ class PermissionsViewModel(
                 }
             }
             onValid {
-                when (viewState.value.flow) {
-                    STANDARD -> updateIfNeededAndShareResource()
-                    CONFIRM_CREATE -> confirmPermissions()
-                }
+                updateIfNeededAndShareResource()
             }
-        }
-    }
-
-    private fun confirmPermissions() {
-        viewModelScope.launch(coroutineLaunchContext.io) {
-            if (viewState.value.isSkipConfirmationChecked) {
-                setPermissionsConfirmationOptOutUseCase.execute(SetPermissionsConfirmationOptOutUseCase.Input(isOptedOut = true))
-            }
-            Timber.d("Permissions confirmed for recipient(s)")
-            emitSideEffect(CloseWithPermissionsConfirmed(viewState.value.permissions))
         }
     }
 
@@ -481,58 +365,6 @@ class PermissionsViewModel(
     private fun shareRecipientsAdded(shareRecipients: List<PermissionModelUi>?) {
         shareRecipients?.let { newRecipients ->
             updatePermissions { newRecipients.toList() }
-        }
-    }
-
-    private fun userPermissionModified(permission: UserPermissionModel) {
-        updatePermissions { current ->
-            current.map { existing ->
-                if (existing is UserPermissionModel &&
-                    existing.user.userId == permission.user.userId
-                ) {
-                    UserPermissionModel(
-                        permission.permission,
-                        permission.permissionId,
-                        existing.user.copy(),
-                    )
-                } else {
-                    existing
-                }
-            }
-        }
-    }
-
-    private fun userPermissionDeleted(permission: UserPermissionModel) {
-        updatePermissions { current ->
-            current.filterNot {
-                it is UserPermissionModel && it.user.userId == permission.user.userId
-            }
-        }
-    }
-
-    private fun groupPermissionModified(permission: GroupPermissionModel) {
-        updatePermissions { current ->
-            current.map { existing ->
-                if (existing is GroupPermissionModel &&
-                    existing.group.groupId == permission.group.groupId
-                ) {
-                    GroupPermissionModel(
-                        permission.permission,
-                        permission.permissionId,
-                        existing.group.copy(),
-                    )
-                } else {
-                    existing
-                }
-            }
-        }
-    }
-
-    private fun groupPermissionDeleted(permission: GroupPermissionModel) {
-        updatePermissions { current ->
-            current.filterNot {
-                it is GroupPermissionModel && it.group.groupId == permission.group.groupId
-            }
         }
     }
 

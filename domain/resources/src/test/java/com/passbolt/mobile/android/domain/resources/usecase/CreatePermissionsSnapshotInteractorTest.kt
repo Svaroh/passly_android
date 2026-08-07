@@ -21,7 +21,7 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.permissionsconfirmation.usecase
+package com.passbolt.mobile.android.domain.resources.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.passbolt.mobile.android.core.architecture.result.DomainResult
@@ -62,17 +62,18 @@ class CreatePermissionsSnapshotInteractorTest : KoinTest {
             modules(
                 module {
                     single { mock<FetchFolderPermissionsUseCase>() }
+                    single { mock<FetchResourcePermissionsUseCase>() }
                     single { mock<FetchGroupsByIdsUseCase>() }
                     single { mock<FetchUsersByIdsUseCase>() }
                     single { mock<PermissionsSnapshotRepository>() }
                     single { mock<GetSelectedAccountUseCase>() }
-                    singleOf(::PermissionsSnapshotComparator)
                     singleOf(::CreatePermissionsSnapshotInteractor)
                 },
             )
         }
 
     private lateinit var fetchFolderPermissionsUseCase: FetchFolderPermissionsUseCase
+    private lateinit var fetchResourcePermissionsUseCase: FetchResourcePermissionsUseCase
     private lateinit var fetchGroupsByIdsUseCase: FetchGroupsByIdsUseCase
     private lateinit var fetchUsersByIdsUseCase: FetchUsersByIdsUseCase
     private lateinit var permissionsSnapshotRepository: PermissionsSnapshotRepository
@@ -81,6 +82,7 @@ class CreatePermissionsSnapshotInteractorTest : KoinTest {
     @Before
     fun setUp() {
         fetchFolderPermissionsUseCase = get()
+        fetchResourcePermissionsUseCase = get()
         fetchGroupsByIdsUseCase = get()
         fetchUsersByIdsUseCase = get()
         permissionsSnapshotRepository = get()
@@ -243,6 +245,92 @@ class CreatePermissionsSnapshotInteractorTest : KoinTest {
         }
 
     @Test
+    fun `resource snapshot is created and stored in the repository`() =
+        runTest {
+            val permissions = listOf(userPermission(USER_A), groupPermission(GROUP_ID))
+            stubResourcePermissions(permissions)
+            fetchGroupsByIdsUseCase.stub {
+                onBlocking { execute(FetchGroupsByIdsUseCase.Input(listOf(GROUP_ID))) }
+                    .thenReturn(
+                        FetchGroupsByIdsUseCase.Output.Success(
+                            listOf(groupWithMembers(GROUP_ID, USER_A, USER_B)),
+                        ),
+                    )
+            }
+            stubUsers(requestedIds = listOf(USER_A, USER_B), returnedProfiles = listOf(userProfile(USER_A), userProfile(USER_B)))
+
+            val output = interactor.createForResource(RESOURCE_ID)
+
+            val snapshot = (output as CreatePermissionsSnapshotInteractor.Output.Success).snapshot
+            assertThat(snapshot.permissions).isEqualTo(permissions)
+            assertThat(snapshot.groupsMembers).containsExactly(GROUP_ID, listOf(USER_A, USER_B))
+            assertThat(snapshot.users.keys).containsExactly(USER_A, USER_B)
+            verify(permissionsSnapshotRepository).setPermissionsSnapshot(ACCOUNT_ID, snapshot)
+        }
+
+    @Test
+    fun `resource permissions fetch failure is propagated`() =
+        runTest {
+            fetchResourcePermissionsUseCase.stub {
+                onBlocking { execute(FetchResourcePermissionsUseCase.Input(RESOURCE_ID)) }
+                    .thenReturn(FetchResourcePermissionsUseCase.Output.Failure(FAILURE))
+            }
+
+            val output = interactor.createForResource(RESOURCE_ID)
+
+            assertThat(output).isEqualTo(CreatePermissionsSnapshotInteractor.Output.Failure(FAILURE))
+            verifyNoInteractions(fetchGroupsByIdsUseCase)
+            verifyNoInteractions(fetchUsersByIdsUseCase)
+        }
+
+    @Test
+    fun `resource drift check with unchanged permissions detects no drift`() =
+        runTest {
+            stubResourcePermissions(listOf(userPermission(USER_A)))
+            stubUsers(requestedIds = listOf(USER_A), returnedProfiles = listOf(userProfile(USER_A)))
+            val original = (interactor.createForResource(RESOURCE_ID) as CreatePermissionsSnapshotInteractor.Output.Success).snapshot
+            permissionsSnapshotRepository.stub {
+                onBlocking { getPermissionsSnapshot(ACCOUNT_ID) } doReturn original
+            }
+
+            val output = interactor.detectDriftForResource(RESOURCE_ID)
+
+            assertThat(output).isEqualTo(CreatePermissionsSnapshotInteractor.DriftOutput.NoDrift)
+        }
+
+    @Test
+    fun `resource drift check with changed permissions detects drift`() =
+        runTest {
+            stubResourcePermissions(listOf(userPermission(USER_A)))
+            stubUsers(requestedIds = listOf(USER_A), returnedProfiles = listOf(userProfile(USER_A)))
+            val original = (interactor.createForResource(RESOURCE_ID) as CreatePermissionsSnapshotInteractor.Output.Success).snapshot
+            permissionsSnapshotRepository.stub {
+                onBlocking { getPermissionsSnapshot(ACCOUNT_ID) } doReturn original
+            }
+            stubResourcePermissions(listOf(userPermission(USER_A), userPermission(USER_B)))
+            stubUsers(
+                requestedIds = listOf(USER_A, USER_B),
+                returnedProfiles = listOf(userProfile(USER_A), userProfile(USER_B)),
+            )
+
+            val output = interactor.detectDriftForResource(RESOURCE_ID)
+
+            assertThat(output).isEqualTo(CreatePermissionsSnapshotInteractor.DriftOutput.DriftDetected)
+        }
+
+    @Test
+    fun `resource drift check without a stored snapshot detects drift`() =
+        runTest {
+            permissionsSnapshotRepository.stub {
+                onBlocking { getPermissionsSnapshot(ACCOUNT_ID) } doReturn null
+            }
+
+            val output = interactor.detectDriftForResource(RESOURCE_ID)
+
+            assertThat(output).isEqualTo(CreatePermissionsSnapshotInteractor.DriftOutput.DriftDetected)
+        }
+
+    @Test
     fun `groups fetch failure is propagated`() =
         runTest {
             stubFolderPermissions(listOf(groupPermission(GROUP_ID)))
@@ -275,6 +363,13 @@ class CreatePermissionsSnapshotInteractorTest : KoinTest {
         fetchFolderPermissionsUseCase.stub {
             onBlocking { execute(FetchFolderPermissionsUseCase.Input(FOLDER_ID)) }
                 .thenReturn(FetchFolderPermissionsUseCase.Output.Success(permissions))
+        }
+    }
+
+    private fun stubResourcePermissions(permissions: List<PermissionModel>) {
+        fetchResourcePermissionsUseCase.stub {
+            onBlocking { execute(FetchResourcePermissionsUseCase.Input(RESOURCE_ID)) }
+                .thenReturn(FetchResourcePermissionsUseCase.Output.Success(permissions))
         }
     }
 
@@ -325,6 +420,7 @@ class CreatePermissionsSnapshotInteractorTest : KoinTest {
     private companion object {
         const val ACCOUNT_ID = "account-id"
         const val FOLDER_ID = "folder-id"
+        const val RESOURCE_ID = "resource-id"
         const val GROUP_ID = "group-id"
         const val USER_A = "user-a"
         const val USER_B = "user-b"

@@ -1,5 +1,3 @@
-package com.passbolt.mobile.android.permissions.permissions
-
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -22,7 +20,43 @@ package com.passbolt.mobile.android.permissions.permissions
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-enum class PermissionsFlow {
-    STANDARD,
-    CONFIRM_CREATE,
+
+package com.passbolt.mobile.android.permissions.confirmpermissions
+
+import com.passbolt.mobile.android.ui.PermissionModelUi
+
+sealed interface ConfirmPermissionsIntent {
+    data object GoBack : ConfirmPermissionsIntent
+
+    data object Confirm : ConfirmPermissionsIntent
+
+    data object AddPermission : ConfirmPermissionsIntent
+
+    data class SeePermission(
+        val permission: PermissionModelUi,
+    ) : ConfirmPermissionsIntent
+
+    data class ShareRecipientsAdded(
+        val recipients: List<PermissionModelUi>?,
+    ) : ConfirmPermissionsIntent
+
+    data class UserPermissionModified(
+        val permission: PermissionModelUi.UserPermissionModel,
+    ) : ConfirmPermissionsIntent
+
+    data class UserPermissionDeleted(
+        val permission: PermissionModelUi.UserPermissionModel,
+    ) : ConfirmPermissionsIntent
+
+    data class GroupPermissionModified(
+        val permission: PermissionModelUi.GroupPermissionModel,
+    ) : ConfirmPermissionsIntent
+
+    data class GroupPermissionDeleted(
+        val permission: PermissionModelUi.GroupPermissionModel,
+    ) : ConfirmPermissionsIntent
+
+    data class SkipConfirmationToggled(
+        val isChecked: Boolean,
+    ) : ConfirmPermissionsIntent
 }

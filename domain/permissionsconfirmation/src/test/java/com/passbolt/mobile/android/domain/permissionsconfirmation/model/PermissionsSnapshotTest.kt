@@ -21,10 +21,9 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.domain.permissionsconfirmation.usecase
+package com.passbolt.mobile.android.domain.permissionsconfirmation.model
 
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
 import com.passbolt.mobile.android.domain.users.model.GpgKey
 import com.passbolt.mobile.android.domain.users.model.UserProfile
 import com.passbolt.mobile.android.ui.GroupModel
@@ -33,15 +32,13 @@ import com.passbolt.mobile.android.ui.ResourcePermission
 import org.junit.Test
 import java.time.ZonedDateTime
 
-class PermissionsSnapshotComparatorTest {
-    private val comparator = PermissionsSnapshotComparator()
-
+class PermissionsSnapshotTest {
     @Test
     fun `equal snapshots with different creation times have no drift`() {
         val original = snapshot()
         val current = snapshot(created = ZonedDateTime.now().plusMinutes(5))
 
-        assertThat(comparator.hasDrift(original, current)).isFalse()
+        assertThat(current.hasDriftedFrom(original)).isFalse()
     }
 
     @Test
@@ -49,7 +46,7 @@ class PermissionsSnapshotComparatorTest {
         val original = snapshot()
         val current = snapshot(userAPermission = ResourcePermission.OWNER)
 
-        assertThat(comparator.hasDrift(original, current)).isTrue()
+        assertThat(current.hasDriftedFrom(original)).isTrue()
     }
 
     @Test
@@ -60,7 +57,7 @@ class PermissionsSnapshotComparatorTest {
                 additionalPermissions = listOf(userPermission("added-user", ResourcePermission.READ)),
             )
 
-        assertThat(comparator.hasDrift(original, current)).isTrue()
+        assertThat(current.hasDriftedFrom(original)).isTrue()
     }
 
     @Test
@@ -68,7 +65,7 @@ class PermissionsSnapshotComparatorTest {
         val original = snapshot()
         val current = snapshot(groupMembers = listOf(USER_A, USER_B))
 
-        assertThat(comparator.hasDrift(original, current)).isTrue()
+        assertThat(current.hasDriftedFrom(original)).isTrue()
     }
 
     @Test
@@ -76,7 +73,7 @@ class PermissionsSnapshotComparatorTest {
         val original = snapshot()
         val current = snapshot(userAFingerprint = "changed-fingerprint")
 
-        assertThat(comparator.hasDrift(original, current)).isTrue()
+        assertThat(current.hasDriftedFrom(original)).isTrue()
     }
 
     @Test
@@ -84,12 +81,37 @@ class PermissionsSnapshotComparatorTest {
         val original = snapshot(groupMembers = listOf(USER_A, USER_B), users = listOf(USER_A, USER_B))
         val current = snapshot(groupMembers = listOf(USER_B, USER_A), users = listOf(USER_A, USER_B))
 
-        assertThat(comparator.hasDrift(original, current)).isFalse()
+        assertThat(current.hasDriftedFrom(original)).isFalse()
+    }
+
+    @Test
+    fun `user with a direct owner permission is an owner`() {
+        assertThat(snapshot(userAPermission = ResourcePermission.OWNER).isUserOwner(USER_A)).isTrue()
+    }
+
+    @Test
+    fun `user with a lower direct permission is not an owner`() {
+        assertThat(snapshot(userAPermission = ResourcePermission.UPDATE).isUserOwner(USER_A)).isFalse()
+    }
+
+    @Test
+    fun `member of an owner group is an owner`() {
+        val snapshot = snapshot(groupPermission = ResourcePermission.OWNER, groupMembers = listOf(USER_B))
+
+        assertThat(snapshot.isUserOwner(USER_B)).isTrue()
+    }
+
+    @Test
+    fun `member of a non-owner group is not an owner`() {
+        val snapshot = snapshot(groupPermission = ResourcePermission.UPDATE, groupMembers = listOf(USER_B))
+
+        assertThat(snapshot.isUserOwner(USER_B)).isFalse()
     }
 
     private fun snapshot(
         userAPermission: ResourcePermission = ResourcePermission.READ,
         additionalPermissions: List<PermissionModel> = emptyList(),
+        groupPermission: ResourcePermission = ResourcePermission.UPDATE,
         groupMembers: List<String> = listOf(USER_A),
         users: List<String> = listOf(USER_A),
         userAFingerprint: String = "fingerprint-$USER_A",
@@ -98,7 +120,7 @@ class PermissionsSnapshotComparatorTest {
         permissions =
             listOf(
                 userPermission(USER_A, userAPermission),
-                groupPermission(GROUP_ID),
+                groupPermission(GROUP_ID, groupPermission),
             ) + additionalPermissions,
         groupsMembers = mapOf(GROUP_ID to groupMembers),
         users =
@@ -120,12 +142,14 @@ class PermissionsSnapshotComparatorTest {
         userId = userId,
     )
 
-    private fun groupPermission(groupId: String) =
-        PermissionModel.GroupPermissionModel(
-            permission = ResourcePermission.UPDATE,
-            permissionId = "permission-$groupId",
-            group = GroupModel(groupId, "group-name"),
-        )
+    private fun groupPermission(
+        groupId: String,
+        permission: ResourcePermission,
+    ) = PermissionModel.GroupPermissionModel(
+        permission = permission,
+        permissionId = "permission-$groupId",
+        group = GroupModel(groupId, "group-name"),
+    )
 
     private fun userProfile(
         userId: String,

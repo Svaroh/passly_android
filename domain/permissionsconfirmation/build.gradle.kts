@@ -4,10 +4,7 @@ plugins {
 
 dependencies {
     implementation(project(":accounts-domain"))
-    implementation(project(":architecture"))
     implementation(project(":common"))
-    implementation(project(":folders-domain"))
-    implementation(project(":groups-domain"))
     implementation(project(":mappers"))
     implementation(project(":users-domain"))
     implementation(project(":uimodel"))

@@ -31,7 +31,12 @@ import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKey
 import com.passbolt.mobile.android.domain.metadata.model.MetadataKeyPurpose.ENCRYPT
 import com.passbolt.mobile.android.domain.metadata.usecase.GetMetadataKeysSettingsUseCase
 import com.passbolt.mobile.android.domain.metadata.usecase.db.GetLocalMetadataKeysUseCase
+import com.passbolt.mobile.android.domain.permissionsconfirmation.mapper.toEditModePermissions
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.domain.resources.interactor.update.UpdateResourceInteractor
+import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
+import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor.DriftOutput
+import com.passbolt.mobile.android.domain.resources.usecase.ResourceShareInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.db.UpdateLocalResourceUseCase
 import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
@@ -39,6 +44,7 @@ import com.passbolt.mobile.android.domain.secrets.model.SecretJsonModel
 import com.passbolt.mobile.android.domain.secrets.usecase.decrypt.SecretInput
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
+import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper
 import com.passbolt.mobile.android.serializers.jsonschema.SchemaEntity
 import com.passbolt.mobile.android.supportedresourceTypes.ContentType
 import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAndDescription
@@ -53,6 +59,7 @@ import com.passbolt.mobile.android.ui.MetadataJsonModel
 import com.passbolt.mobile.android.ui.MetadataKeyParamsModel
 import com.passbolt.mobile.android.ui.MetadataKeyTypeModel
 import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
+import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
 import com.passbolt.mobile.android.ui.ResourceUiModel
@@ -77,12 +84,17 @@ class ResourceUpdateActionsInteractor(
     private val getMetadataKeysSettingsUseCase: GetMetadataKeysSettingsUseCase,
     private val getMetadataKeysUseCase: GetLocalMetadataKeysUseCase,
     private val resourceTypeIdToSlugMappingProvider: ResourceTypeIdToSlugMappingProvider,
+    private val createPermissionsSnapshotInteractor: CreatePermissionsSnapshotInteractor,
+    private val getPermissionsSnapshotUseCase: GetPermissionsSnapshotUseCase,
+    private val resourceShareInteractor: ResourceShareInteractor,
+    private val confirmedRecipientsPublicKeysResolver: ConfirmedRecipientsPublicKeysResolver,
 ) {
     suspend fun updateGenericResource(
         newContentType: ContentType,
         metadataModification: (MetadataJsonModel) -> MetadataJsonModel = { it },
         secretModification: (SecretJsonModel) -> SecretJsonModel = { it },
         forceMetadataSharedKey: Boolean = false,
+        confirmedRecipientsPublicKeys: Map<String, String> = emptyMap(),
     ): Flow<ResourceUpdateActionResult> =
         if (!isSupported(newContentType)) {
             flowOf(ResourceUpdateActionResult.CannotUpdateWithCurrentConfig)
@@ -123,9 +135,161 @@ class ResourceUpdateActionsInteractor(
                                 passwordChanged = passwordChanged,
                             )
                         },
+                        confirmedRecipientsPublicKeys = confirmedRecipientsPublicKeys,
                     )
                 }
             }
+        }
+
+    suspend fun updateGenericResourceWithConfirmedPermissions(
+        newContentType: ContentType,
+        confirmedPermissions: List<PermissionModelUi>,
+        metadataModification: (MetadataJsonModel) -> MetadataJsonModel = { it },
+        secretModification: (SecretJsonModel) -> SecretJsonModel = { it },
+    ): Flow<ResourceUpdateActionResult> =
+        flowOf(
+            detectPermissionsDrift()
+                ?: confirmedPermissionsDelta(confirmedPermissions)
+                    ?.let { delta ->
+                        applySafeOrderedConfirmedPermissions(delta, newContentType, metadataModification, secretModification)
+                    }
+                ?: ResourceUpdateActionResult.PermissionsDrifted,
+        )
+
+    private suspend fun applySafeOrderedConfirmedPermissions(
+        delta: ConfirmedPermissionsDelta,
+        newContentType: ContentType,
+        metadataModification: (MetadataJsonModel) -> MetadataJsonModel,
+        secretModification: (SecretJsonModel) -> SecretJsonModel,
+    ): ResourceUpdateActionResult {
+        val confirmedRecipientsPublicKeys = confirmedRecipientsPublicKeysResolver.resolve(delta.confirmedPermissions)
+        return revokeUnconfirmedAccess(delta, confirmedRecipientsPublicKeys)
+            ?: updateAndGrantConfirmedAdditions(
+                delta,
+                confirmedRecipientsPublicKeys,
+                newContentType,
+                metadataModification,
+                secretModification,
+            )
+    }
+
+    private suspend fun updateAndGrantConfirmedAdditions(
+        delta: ConfirmedPermissionsDelta,
+        confirmedRecipientsPublicKeys: Map<String, String>,
+        newContentType: ContentType,
+        metadataModification: (MetadataJsonModel) -> MetadataJsonModel,
+        secretModification: (SecretJsonModel) -> SecretJsonModel,
+    ): ResourceUpdateActionResult {
+        val updateResult =
+            updateGenericResource(
+                newContentType = newContentType,
+                metadataModification = metadataModification,
+                secretModification = secretModification,
+                confirmedRecipientsPublicKeys = confirmedRecipientsPublicKeys,
+            ).single()
+        return if (updateResult is ResourceUpdateActionResult.Success) {
+            grantConfirmedAdditions(delta, confirmedRecipientsPublicKeys) ?: updateResult
+        } else {
+            updateResult
+        }
+    }
+
+    private suspend fun detectPermissionsDrift(): ResourceUpdateActionResult? =
+        when (
+            val driftOutput =
+                runAuthenticatedOperation {
+                    createPermissionsSnapshotInteractor.detectDriftForResource(existingResource.resourceId)
+                }
+        ) {
+            is DriftOutput.DriftDetected -> ResourceUpdateActionResult.PermissionsDrifted
+            is DriftOutput.Failure -> {
+                Timber.e("Unable to verify permissions drift: ${driftOutput.message} - not updating")
+                ResourceUpdateActionResult.ShareFailure(driftOutput.message)
+            }
+            is DriftOutput.NoDrift -> {
+                Timber.d("No permissions drift detected - applying the confirmed permissions")
+                null
+            }
+        }
+
+    private suspend fun confirmedPermissionsDelta(confirmedPermissions: List<PermissionModelUi>): ConfirmedPermissionsDelta? =
+        getPermissionsSnapshotUseCase
+            .execute(Unit)
+            .snapshot
+            ?.toEditModePermissions()
+            ?.let { snapshotPermissions ->
+                ConfirmedPermissionsDelta(
+                    snapshotPermissions = snapshotPermissions,
+                    retainedPermissions =
+                        confirmedPermissions.filterNot {
+                            it.permissionId == SharePermissionsModelMapper.TEMPORARY_NEW_PERMISSION_ID
+                        },
+                    confirmedPermissions = confirmedPermissions,
+                )
+            }
+
+    private suspend fun revokeUnconfirmedAccess(
+        delta: ConfirmedPermissionsDelta,
+        confirmedRecipientsPublicKeys: Map<String, String>,
+    ): ResourceUpdateActionResult? =
+        if (delta.hasRevocationsOrModifications) {
+            Timber.d("Applying the confirmed permission revocations and modifications before the update")
+            applyConfirmedPermissionsDelta(delta.retainedPermissions, delta.snapshotPermissions, confirmedRecipientsPublicKeys)
+        } else {
+            null
+        }
+
+    private suspend fun grantConfirmedAdditions(
+        delta: ConfirmedPermissionsDelta,
+        confirmedRecipientsPublicKeys: Map<String, String>,
+    ): ResourceUpdateActionResult? =
+        if (delta.hasNewRecipients) {
+            Timber.d("Granting access to the confirmed new recipients after the update")
+            applyConfirmedPermissionsDelta(delta.confirmedPermissions, delta.retainedPermissions, confirmedRecipientsPublicKeys)
+        } else {
+            null
+        }
+
+    private data class ConfirmedPermissionsDelta(
+        val snapshotPermissions: List<PermissionModelUi>,
+        val retainedPermissions: List<PermissionModelUi>,
+        val confirmedPermissions: List<PermissionModelUi>,
+    ) {
+        val hasNewRecipients: Boolean
+            get() = retainedPermissions.size != confirmedPermissions.size
+
+        val hasRevocationsOrModifications: Boolean
+            get() =
+                snapshotPermissions.any { snapshotPermission ->
+                    retainedPermissions.none {
+                        it.permissionId == snapshotPermission.permissionId && it.permission == snapshotPermission.permission
+                    }
+                }
+    }
+
+    private suspend fun applyConfirmedPermissionsDelta(
+        recipients: List<PermissionModelUi>,
+        existingPermissions: List<PermissionModelUi>,
+        confirmedRecipientsPublicKeys: Map<String, String>,
+    ): ResourceUpdateActionResult? =
+        when (
+            val shareResult =
+                runAuthenticatedOperation {
+                    resourceShareInteractor.simulateAndShareResource(
+                        resourceId = existingResource.resourceId,
+                        recipients = recipients,
+                        recipientsPublicKeys = confirmedRecipientsPublicKeys,
+                        existingPermissions = existingPermissions,
+                    )
+                }
+        ) {
+            is ResourceShareInteractor.Output.Success -> null
+            is ResourceShareInteractor.Output.SecretDecryptFailure -> ResourceUpdateActionResult.CryptoFailure(shareResult.message)
+            is ResourceShareInteractor.Output.SecretEncryptFailure -> ResourceUpdateActionResult.CryptoFailure(shareResult.message)
+            is ResourceShareInteractor.Output.SecretFetchFailure -> ResourceUpdateActionResult.FetchFailure
+            is ResourceShareInteractor.Output.ShareFailure -> ResourceUpdateActionResult.ShareFailure(shareResult.message)
+            is ResourceShareInteractor.Output.SimulateShareFailure -> ResourceUpdateActionResult.ShareFailure(shareResult.message)
+            is ResourceShareInteractor.Output.Unauthorized -> ResourceUpdateActionResult.Unauthorized
         }
 
     suspend fun upgradeToV5(): Flow<ResourceUpdateActionResult> {
@@ -316,6 +480,7 @@ class ResourceUpdateActionsInteractor(
     private suspend fun updateResource(
         updateResource: () -> UpdateResourceModel,
         updateSecret: suspend (SecretJsonModel) -> SecretInput,
+        confirmedRecipientsPublicKeys: Map<String, String>,
     ): Flow<ResourceUpdateActionResult> =
         try {
             val decryptedSecret = secretPropertiesActionsInteractor.provideDecryptedSecret().single()
@@ -326,6 +491,7 @@ class ResourceUpdateActionsInteractor(
                             updateResourceInteractor.execute(
                                 resourceInput = updateResource(),
                                 secretInput = updateSecret(decryptedSecret.result),
+                                confirmedRecipientsPublicKeys = confirmedRecipientsPublicKeys,
                             )
                         }
                     is SecretPropertyActionResult.FetchFailure ->
@@ -383,6 +549,8 @@ suspend fun performResourceUpdateAction(
     doOnFetchFailure: () -> Unit = {},
     doOnUnauthorized: () -> Unit = {},
     doOnMetadataKeyVerificationFailure: () -> Unit = {},
+    doOnShareFailure: (String) -> Unit = {},
+    doOnPermissionsDrifted: () -> Unit = {},
     doOnFinish: () -> Unit = {},
 ) {
     action().single().let {
@@ -398,6 +566,8 @@ suspend fun performResourceUpdateAction(
             is ResourceUpdateActionResult.MetadataKeyDeleted -> doOnMetadataKeyDeleted(it.deletedKey)
             is ResourceUpdateActionResult.MetadataKeyModified -> doOnMetadataKeyModified(it.keyToTrust)
             ResourceUpdateActionResult.MetadataKeyVerificationFailure -> doOnMetadataKeyVerificationFailure()
+            is ResourceUpdateActionResult.ShareFailure -> doOnShareFailure(it.message.orEmpty())
+            ResourceUpdateActionResult.PermissionsDrifted -> doOnPermissionsDrifted()
         }
     }
 }

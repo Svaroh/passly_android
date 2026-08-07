@@ -28,8 +28,11 @@ import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissi
 import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysInteractor
 import com.passbolt.mobile.android.domain.metadata.usecase.GetMetadataKeysSettingsUseCase
 import com.passbolt.mobile.android.domain.metadata.usecase.db.GetLocalMetadataKeysUseCase
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionResult.CannotUpdateWithCurrentConfig
 import com.passbolt.mobile.android.domain.resources.interactor.update.UpdateResourceInteractor
+import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
+import com.passbolt.mobile.android.domain.resources.usecase.ResourceShareInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.db.UpdateLocalResourceUseCase
 import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
@@ -161,6 +164,10 @@ class ResourceUpdateActionsInteractorUpgradeTest : KoinTest {
             getMetadataKeysSettingsUseCase = mock<GetMetadataKeysSettingsUseCase>(),
             getMetadataKeysUseCase = mock<GetLocalMetadataKeysUseCase>(),
             resourceTypeIdToSlugMappingProvider = mappingProvider,
+            createPermissionsSnapshotInteractor = mock<CreatePermissionsSnapshotInteractor>(),
+            getPermissionsSnapshotUseCase = mock<GetPermissionsSnapshotUseCase>(),
+            resourceShareInteractor = mock<ResourceShareInteractor>(),
+            confirmedRecipientsPublicKeysResolver = mock<ConfirmedRecipientsPublicKeysResolver>(),
         )
     }
 
