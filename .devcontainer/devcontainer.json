@@ -1,6 +1,6 @@
 {
   "name": "Claude code container",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu@sha256:36c0ae9fe6bfa914cf7eb05b08b09a3a31961dc76eed6fbb75179382c817582c",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu@sha256:1f8bb87ca6d342a587a9163a5a1ea8c487bcd4f149e8483a5ff711f795f0776d",
   "service": "devcontainer",
   "features": {
     "ghcr.io/devcontainers/features/git:1@sha256:fd75977de13a9979000e0e78baf949adb0ca71d2398995fa22e0a36d7e7e7fe2": {},
