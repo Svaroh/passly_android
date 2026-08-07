@@ -1,13 +1,3 @@
-package com.passbolt.mobile.android.domain.permissionsconfirmation
-
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsConfirmationOptOutUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
-
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -30,11 +20,16 @@ import org.koin.dsl.module
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-val permissionsConfirmationDomainModule =
-    module {
-        singleOf(::GetPermissionsConfirmationOptOutUseCase)
-        singleOf(::GetPermissionsSnapshotUseCase)
-        singleOf(::RemovePermissionsSnapshotUseCase)
-        singleOf(::SetPermissionsConfirmationOptOutUseCase)
-        singleOf(::RemovePermissionsConfirmationOptOutUseCase)
-    }
+
+package com.passbolt.mobile.android.permissions.confirmpermissions
+
+import com.passbolt.mobile.android.ui.PermissionModelUi
+
+data class ConfirmPermissionsState(
+    val permissions: List<PermissionModelUi> = emptyList(),
+    val isLoading: Boolean = false,
+    val isEditable: Boolean = true,
+    val lockedOperatorPermission: PermissionModelUi.UserPermissionModel? = null,
+    val showSkipConfirmationSwitch: Boolean = false,
+    val isSkipConfirmationChecked: Boolean = false,
+)

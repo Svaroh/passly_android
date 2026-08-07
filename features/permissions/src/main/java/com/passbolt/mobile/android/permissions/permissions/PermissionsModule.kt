@@ -23,33 +23,30 @@
 
 package com.passbolt.mobile.android.permissions.permissions
 
+import com.passbolt.mobile.android.permissions.common.PermissionsListMapper
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModel
 
 fun Module.permissionsModule() {
     single { PermissionModelUiComparator() }
+    factoryOf(::PermissionsListMapper)
     viewModel { params ->
         PermissionsViewModel(
             permissionsItem = params.get(),
             id = params.get(),
             mode = params.get(),
-            flow = params.get(),
             getLocalResourcePermissionsUseCase = get(),
             getLocalResourceUseCase = get(),
             getLocalFolderPermissionsUseCase = get(),
             getLocalFolderUseCase = get(),
-            permissionModelUiComparator = get(),
+            permissionsListMapper = get(),
             resourceShareInteractor = get(),
             metadataPrivateKeysHelperInteractor = get(),
             resourceAccessInteractor = get(),
             dataRefreshTrackingFlow = get(),
             coroutineLaunchContext = get(),
             resourceUpdateActionsInteractorFactory = get(),
-            createPermissionsSnapshotInteractor = get(),
-            getLocalCurrentUserUseCase = get(),
-            getFeatureFlagsUseCase = get(),
-            setPermissionsConfirmationOptOutUseCase = get(),
-            usersModelMapper = get(),
         )
     }
 }

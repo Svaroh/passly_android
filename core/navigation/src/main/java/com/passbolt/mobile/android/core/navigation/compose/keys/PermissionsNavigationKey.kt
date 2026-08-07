@@ -1,6 +1,7 @@
 package com.passbolt.mobile.android.core.navigation.compose.keys
 
 import androidx.navigation3.runtime.NavKey
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.PermissionsItem
 import com.passbolt.mobile.android.ui.PermissionsMode
@@ -15,8 +16,9 @@ sealed interface PermissionsNavigationKey : NavKey {
     ) : PermissionsNavigationKey
 
     @Serializable
-    data class ConfirmCreatePermissions(
-        val folderId: String,
+    data class ConfirmPermissions(
+        val confirmMode: ConfirmPermissionsMode,
+        val driftDetected: Boolean = false,
     ) : PermissionsNavigationKey
 
     @Serializable

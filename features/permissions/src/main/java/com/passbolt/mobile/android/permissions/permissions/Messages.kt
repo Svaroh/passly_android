@@ -84,6 +84,5 @@ internal fun getToastMessage(
     context.getString(
         when (type) {
             ToastType.CONTENT_NOT_AVAILABLE -> LocalizationR.string.content_not_available
-            ToastType.PERMISSIONS_FETCH_FAILURE -> LocalizationR.string.confirm_permissions_fetch_failure
         },
     )

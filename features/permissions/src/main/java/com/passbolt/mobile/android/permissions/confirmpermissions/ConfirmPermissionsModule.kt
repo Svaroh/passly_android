@@ -1,13 +1,3 @@
-package com.passbolt.mobile.android.domain.permissionsconfirmation
-
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsConfirmationOptOutUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
-
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -30,11 +20,24 @@ import org.koin.dsl.module
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-val permissionsConfirmationDomainModule =
-    module {
-        singleOf(::GetPermissionsConfirmationOptOutUseCase)
-        singleOf(::GetPermissionsSnapshotUseCase)
-        singleOf(::RemovePermissionsSnapshotUseCase)
-        singleOf(::SetPermissionsConfirmationOptOutUseCase)
-        singleOf(::RemovePermissionsConfirmationOptOutUseCase)
+
+package com.passbolt.mobile.android.permissions.confirmpermissions
+
+import org.koin.core.module.Module
+import org.koin.core.module.dsl.viewModel
+
+fun Module.confirmPermissionsModule() {
+    viewModel { params ->
+        ConfirmPermissionsViewModel(
+            confirmMode = params.get(),
+            driftDetected = params.get(),
+            createPermissionsSnapshotInteractor = get(),
+            getLocalCurrentUserUseCase = get(),
+            usersModelMapper = get(),
+            getFeatureFlagsUseCase = get(),
+            setPermissionsConfirmationOptOutUseCase = get(),
+            permissionsListMapper = get(),
+            coroutineLaunchContext = get(),
+        )
     }
+}

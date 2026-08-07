@@ -21,26 +21,49 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.permissions.permissions
+package com.passbolt.mobile.android.permissions.confirmpermissions
 
-import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.PermissionsItem
+import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
+import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
 import com.passbolt.mobile.android.ui.PermissionsMode
-import com.passbolt.mobile.android.ui.TrustedKeyDeletedModel
 
-data class PermissionsState(
-    val permissionsItem: PermissionsItem,
-    val permissionItemId: String,
-    val permissions: List<PermissionModelUi> = emptyList(),
-    val mode: PermissionsMode = PermissionsMode.VIEW,
-    val showEditButton: Boolean = false,
-    val showAddUserButton: Boolean = false,
-    val showSaveButton: Boolean = false,
-    val showEmptyState: Boolean = false,
-    val showProgress: Boolean = false,
-    val showMetadataKeyModifiedDialog: Boolean = false,
-    val newMetadataKeyToTrustModel: NewMetadataKeyToTrustModel? = null,
-    val showMetadataKeyDeletedDialog: Boolean = false,
-    val trustedKeyDeletedModel: TrustedKeyDeletedModel? = null,
-)
+sealed interface ConfirmPermissionsSideEffect {
+    data object NavigateBack : ConfirmPermissionsSideEffect
+
+    data class NavigateToUserPermissionDetails(
+        val permission: UserPermissionModel,
+        val mode: PermissionsMode,
+    ) : ConfirmPermissionsSideEffect
+
+    data class NavigateToGroupPermissionDetails(
+        val permission: GroupPermissionModel,
+        val mode: PermissionsMode,
+    ) : ConfirmPermissionsSideEffect
+
+    data class NavigateToSelectShareRecipients(
+        val groups: List<GroupPermissionModel>,
+        val users: List<UserPermissionModel>,
+    ) : ConfirmPermissionsSideEffect
+
+    data class CloseWithPermissionsConfirmed(
+        val permissions: List<PermissionModelUi>,
+    ) : ConfirmPermissionsSideEffect
+
+    data class ShowErrorSnackbar(
+        val type: SnackbarErrorType,
+    ) : ConfirmPermissionsSideEffect
+
+    data class ShowToast(
+        val type: ToastType,
+    ) : ConfirmPermissionsSideEffect
+}
+
+enum class SnackbarErrorType {
+    ONE_OWNER_REQUIRED,
+    PERMISSIONS_DRIFTED,
+}
+
+enum class ToastType {
+    PERMISSIONS_FETCH_FAILURE,
+}

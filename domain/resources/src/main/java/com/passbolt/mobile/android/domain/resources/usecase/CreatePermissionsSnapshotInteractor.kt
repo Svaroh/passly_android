@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.domain.permissionsconfirmation.usecase
+package com.passbolt.mobile.android.domain.resources.usecase
 
 import com.passbolt.mobile.android.core.architecture.result.DomainResult
 import com.passbolt.mobile.android.core.architecture.result.displayMessage
@@ -41,22 +41,34 @@ import java.time.ZonedDateTime
  */
 class CreatePermissionsSnapshotInteractor(
     private val fetchFolderPermissionsUseCase: FetchFolderPermissionsUseCase,
+    private val fetchResourcePermissionsUseCase: FetchResourcePermissionsUseCase,
     private val fetchGroupsByIdsUseCase: FetchGroupsByIdsUseCase,
     private val fetchUsersByIdsUseCase: FetchUsersByIdsUseCase,
     private val permissionsSnapshotRepository: PermissionsSnapshotRepository,
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
-    private val permissionsSnapshotComparator: PermissionsSnapshotComparator,
 ) {
     suspend fun createForFolder(folderId: String): Output {
         Timber.d("Creating permissions snapshot for a folder")
-        return buildSnapshotForFolder(folderId).also { output ->
+        return createAndStoreSnapshot { buildSnapshotForFolder(folderId) }
+    }
+
+    suspend fun createForResource(resourceId: String): Output {
+        Timber.d("Creating permissions snapshot for a resource")
+        return createAndStoreSnapshot { buildSnapshotForResource(resourceId) }
+    }
+
+    suspend fun detectDriftForFolder(folderId: String): DriftOutput = detectDrift { buildSnapshotForFolder(folderId) }
+
+    suspend fun detectDriftForResource(resourceId: String): DriftOutput = detectDrift { buildSnapshotForResource(resourceId) }
+
+    private suspend fun createAndStoreSnapshot(buildFreshSnapshot: suspend () -> Output): Output =
+        buildFreshSnapshot().also { output ->
             if (output is Output.Success) {
                 storeSnapshot(output.snapshot)
             }
         }
-    }
 
-    suspend fun detectDriftForFolder(folderId: String): DriftOutput {
+    private suspend fun detectDrift(buildFreshSnapshot: suspend () -> Output): DriftOutput {
         Timber.d("Checking for permissions drift before applying permissions")
         val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
         val original =
@@ -64,9 +76,9 @@ class CreatePermissionsSnapshotInteractor(
                 ?: return DriftOutput.DriftDetected.also {
                     Timber.e("No stored permissions snapshot present for the drift check")
                 }
-        return when (val fresh = buildSnapshotForFolder(folderId)) {
+        return when (val fresh = buildFreshSnapshot()) {
             is Output.Success ->
-                if (permissionsSnapshotComparator.hasDrift(original, fresh.snapshot)) {
+                if (fresh.snapshot.hasDriftedFrom(original)) {
                     Timber.e("Permissions drift detected between confirmation and applying permissions")
                     DriftOutput.DriftDetected
                 } else {
@@ -83,6 +95,18 @@ class CreatePermissionsSnapshotInteractor(
                 is FetchFolderPermissionsUseCase.Output.Success -> result.permissions
                 is FetchFolderPermissionsUseCase.Output.Failure -> {
                     Timber.e("Failed to fetch folder permissions for the snapshot: ${result.message}")
+                    return Output.Failure(result.incomplete)
+                }
+            }
+        return createSnapshot(permissions)
+    }
+
+    private suspend fun buildSnapshotForResource(resourceId: String): Output {
+        val permissions =
+            when (val result = fetchResourcePermissionsUseCase.execute(FetchResourcePermissionsUseCase.Input(resourceId))) {
+                is FetchResourcePermissionsUseCase.Output.Success -> result.permissions
+                is FetchResourcePermissionsUseCase.Output.Failure -> {
+                    Timber.e("Failed to fetch resource permissions for the snapshot: ${result.message}")
                     return Output.Failure(result.incomplete)
                 }
             }

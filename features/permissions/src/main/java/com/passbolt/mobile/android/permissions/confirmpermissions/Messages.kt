@@ -1,13 +1,3 @@
-package com.passbolt.mobile.android.domain.permissionsconfirmation
-
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsConfirmationOptOutUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
-
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -30,11 +20,32 @@ import org.koin.dsl.module
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-val permissionsConfirmationDomainModule =
-    module {
-        singleOf(::GetPermissionsConfirmationOptOutUseCase)
-        singleOf(::GetPermissionsSnapshotUseCase)
-        singleOf(::RemovePermissionsSnapshotUseCase)
-        singleOf(::SetPermissionsConfirmationOptOutUseCase)
-        singleOf(::RemovePermissionsConfirmationOptOutUseCase)
-    }
+
+package com.passbolt.mobile.android.permissions.confirmpermissions
+
+import android.content.Context
+import com.passbolt.mobile.android.permissions.confirmpermissions.SnackbarErrorType.ONE_OWNER_REQUIRED
+import com.passbolt.mobile.android.permissions.confirmpermissions.SnackbarErrorType.PERMISSIONS_DRIFTED
+import com.passbolt.mobile.android.permissions.confirmpermissions.ToastType.PERMISSIONS_FETCH_FAILURE
+import com.passbolt.mobile.android.core.localization.R as LocalizationR
+
+internal fun getErrorMessage(
+    context: Context,
+    type: SnackbarErrorType,
+): String =
+    context.getString(
+        when (type) {
+            ONE_OWNER_REQUIRED -> LocalizationR.string.resource_permissions_one_owner
+            PERMISSIONS_DRIFTED -> LocalizationR.string.confirm_permissions_drifted
+        },
+    )
+
+internal fun getToastMessage(
+    context: Context,
+    type: ToastType,
+): String =
+    context.getString(
+        when (type) {
+            PERMISSIONS_FETCH_FAILURE -> LocalizationR.string.confirm_permissions_fetch_failure
+        },
+    )

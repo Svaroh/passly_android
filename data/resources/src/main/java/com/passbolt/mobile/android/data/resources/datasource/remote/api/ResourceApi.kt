@@ -55,6 +55,15 @@ internal interface ResourceApi {
         @Query(QUERY_DIRECTION) direction: String = "desc",
     ): BasePaginatedResponse<List<ResourceResponseDto>>
 
+    @GET(RESOURCE_BY_ID)
+    suspend fun getResource(
+        @Path(PATH_RESOURCE_ID) resourceId: String,
+        // always return with current user permission
+        @Query(QUERY_CONTAIN_PERMISSION) containingPermission: Int? = 1,
+        // always return with all permissions
+        @Query(QUERY_CONTAIN_PERMISSIONS) containingPermissions: Int? = 1,
+    ): BaseResponse<ResourceResponseDto>
+
     @DELETE(RESOURCE_BY_ID)
     suspend fun deleteResource(
         @Path(PATH_RESOURCE_ID) resourceId: String,

@@ -2,6 +2,7 @@ package com.passbolt.mobile.android.domain.permissionsconfirmation.model
 
 import com.passbolt.mobile.android.domain.users.model.UserProfile
 import com.passbolt.mobile.android.ui.PermissionModel
+import com.passbolt.mobile.android.ui.ResourcePermission
 import java.time.ZonedDateTime
 
 /**
@@ -31,4 +32,42 @@ data class PermissionsSnapshot(
     val groupsMembers: Map<String, List<String>>,
     val users: Map<String, UserProfile>,
     val created: ZonedDateTime,
-)
+) {
+    fun isUserOwner(userId: String): Boolean {
+        val hasDirectOwnership =
+            permissions
+                .filterIsInstance<PermissionModel.UserPermissionModel>()
+                .any { it.userId == userId && it.permission == ResourcePermission.OWNER }
+        val hasGroupOwnership =
+            permissions
+                .filterIsInstance<PermissionModel.GroupPermissionModel>()
+                .any { it.permission == ResourcePermission.OWNER && userId in groupsMembers[it.group.groupId].orEmpty() }
+        return hasDirectOwnership || hasGroupOwnership
+    }
+
+    fun hasDriftedFrom(original: PermissionsSnapshot): Boolean =
+        permissionEntries() != original.permissionEntries() ||
+            groupsMemberships() != original.groupsMemberships() ||
+            usersFingerprints() != original.usersFingerprints()
+
+    private fun permissionEntries(): Set<PermissionEntry> =
+        permissions
+            .map {
+                when (it) {
+                    is PermissionModel.UserPermissionModel ->
+                        PermissionEntry(aroId = it.userId, isGroup = false, permission = it.permission)
+                    is PermissionModel.GroupPermissionModel ->
+                        PermissionEntry(aroId = it.group.groupId, isGroup = true, permission = it.permission)
+                }
+            }.toSet()
+
+    private fun groupsMemberships(): Map<String, Set<String>> = groupsMembers.mapValues { it.value.toSet() }
+
+    private fun usersFingerprints(): Map<String, String?> = users.mapValues { it.value.gpgKey?.fingerprint }
+
+    private data class PermissionEntry(
+        val aroId: String,
+        val isGroup: Boolean,
+        val permission: ResourcePermission,
+    )
+}

@@ -16,19 +16,14 @@ import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderDetailsU
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
 import com.passbolt.mobile.android.domain.metadata.interactor.ResourceAccessInteractor
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.CreatePermissionsSnapshotInteractor
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
 import com.passbolt.mobile.android.domain.resources.usecase.ResourceShareInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceUseCase
-import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
 import com.passbolt.mobile.android.jsonmodel.JSON_MODEL_GSON
 import com.passbolt.mobile.android.jsonmodel.jsonpathops.JsonPathJsonPathOps
 import com.passbolt.mobile.android.jsonmodel.jsonpathops.JsonPathsOps
-import com.passbolt.mobile.android.mappers.UsersModelMapper
-import com.passbolt.mobile.android.permissions.permissions.PermissionsFlow
+import com.passbolt.mobile.android.permissions.common.PermissionsListMapper
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.GroupPermissionDeleted
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.GroupPermissionModified
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.MainButtonIntent
@@ -64,10 +59,10 @@ import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.get
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
-import org.mockito.kotlin.verifyNoInteractions
 import java.time.ZonedDateTime
 import java.util.EnumSet
 import java.util.UUID
@@ -89,15 +84,11 @@ class PermissionsViewModelTest : KoinTest {
                     single { mock<MetadataPrivateKeysHelperInteractor>() }
                     single { mock<ResourceUpdateActionsInteractorFactory>() }
                     single { mock<ResourceAccessInteractor>() }
-                    single { mock<CreatePermissionsSnapshotInteractor>() }
-                    single { mock<GetLocalCurrentUserUseCase>() }
-                    single { mock<GetFeatureFlagsUseCase>() }
-                    single { mock<SetPermissionsConfirmationOptOutUseCase>() }
-                    single { UsersModelMapper() }
                     singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                     singleOf(::SessionRefreshTrackingFlow)
                     singleOf(::DataRefreshTrackingFlow)
                     factory { PermissionModelUiComparator() }
+                    factory { PermissionsListMapper(get()) }
                     single(named(JSON_MODEL_GSON)) { GsonBuilder().serializeNulls().create() }
                     single {
                         Configuration
@@ -113,23 +104,17 @@ class PermissionsViewModelTest : KoinTest {
                             permissionsItem = params.get(),
                             id = params.get(),
                             mode = params.get(),
-                            flow = params.get(),
                             getLocalResourcePermissionsUseCase = get(),
                             getLocalResourceUseCase = get(),
                             getLocalFolderPermissionsUseCase = get(),
                             getLocalFolderUseCase = get(),
-                            permissionModelUiComparator = get(),
+                            permissionsListMapper = get(),
                             resourceShareInteractor = get(),
                             metadataPrivateKeysHelperInteractor = get(),
                             resourceAccessInteractor = get(),
                             dataRefreshTrackingFlow = get(),
                             coroutineLaunchContext = get(),
                             resourceUpdateActionsInteractorFactory = get(),
-                            createPermissionsSnapshotInteractor = get(),
-                            getLocalCurrentUserUseCase = get(),
-                            getFeatureFlagsUseCase = get(),
-                            setPermissionsConfirmationOptOutUseCase = get(),
-                            usersModelMapper = get(),
                         )
                     }
                 },
@@ -166,7 +151,7 @@ class PermissionsViewModelTest : KoinTest {
         runTest {
             val viewModel =
                 get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.EDIT, PermissionsItem.RESOURCE, PermissionsFlow.STANDARD) },
+                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.EDIT, PermissionsItem.RESOURCE) },
                 )
 
             viewModel.viewState.test {
@@ -186,7 +171,7 @@ class PermissionsViewModelTest : KoinTest {
 
             val viewModel =
                 get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE, PermissionsFlow.STANDARD) },
+                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
                 )
 
             viewModel.viewState.test {
@@ -208,7 +193,7 @@ class PermissionsViewModelTest : KoinTest {
 
             val viewModel =
                 get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE, PermissionsFlow.STANDARD) },
+                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
                 )
 
             viewModel.sideEffect.test {
@@ -229,7 +214,7 @@ class PermissionsViewModelTest : KoinTest {
 
             val viewModel =
                 get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE, PermissionsFlow.STANDARD) },
+                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
                 )
 
             viewModel.viewState.test {
@@ -243,7 +228,7 @@ class PermissionsViewModelTest : KoinTest {
         runTest {
             val viewModel =
                 get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE, PermissionsFlow.STANDARD) },
+                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
                 )
 
             viewModel.viewState.test {
@@ -257,7 +242,7 @@ class PermissionsViewModelTest : KoinTest {
         runTest {
             val viewModel =
                 get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.EDIT, PermissionsItem.RESOURCE, PermissionsFlow.STANDARD) },
+                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.EDIT, PermissionsItem.RESOURCE) },
                 )
 
             viewModel.sideEffect.test {
@@ -273,7 +258,7 @@ class PermissionsViewModelTest : KoinTest {
         runTest {
             val viewModel =
                 get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE, PermissionsFlow.STANDARD) },
+                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
                 )
 
             viewModel.onIntent(UserPermissionDeleted(USER_PERMISSIONS[0]))
@@ -289,7 +274,7 @@ class PermissionsViewModelTest : KoinTest {
         runTest {
             val viewModel =
                 get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE, PermissionsFlow.STANDARD) },
+                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
                 )
 
             viewModel.onIntent(GroupPermissionDeleted(GROUP_PERMISSIONS[0]))
@@ -305,7 +290,7 @@ class PermissionsViewModelTest : KoinTest {
         runTest {
             val viewModel =
                 get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE, PermissionsFlow.STANDARD) },
+                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
                 )
 
             val modifiedPermission =
@@ -330,7 +315,7 @@ class PermissionsViewModelTest : KoinTest {
         runTest {
             val viewModel =
                 get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE, PermissionsFlow.STANDARD) },
+                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
                 )
 
             val modifiedPermission =
@@ -359,12 +344,12 @@ class PermissionsViewModelTest : KoinTest {
                     .doReturn(GetLocalResourcePermissionsUseCase.Output(ownerPermissions))
             }
             get<ResourceShareInteractor>().stub {
-                onBlocking { simulateAndShareResource(any(), any(), any()) }
+                onBlocking { simulateAndShareResource(any(), any(), any(), anyOrNull()) }
                     .doReturn(ResourceShareInteractor.Output.Success)
             }
             val viewModel =
                 get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.EDIT, PermissionsItem.RESOURCE, PermissionsFlow.STANDARD) },
+                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.EDIT, PermissionsItem.RESOURCE) },
                 )
 
             viewModel.sideEffect.test {
@@ -372,24 +357,6 @@ class PermissionsViewModelTest : KoinTest {
                 assertIs<InitiateDataRefresh>(awaitItem())
                 assertIs<CloseWithShareSuccess>(awaitItem())
             }
-        }
-
-    @Test
-    fun `confirmation flow elements should not be active in standard flow`() =
-        runTest {
-            val viewModel =
-                get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.EDIT, PermissionsItem.RESOURCE, PermissionsFlow.STANDARD) },
-                )
-
-            viewModel.viewState.test {
-                val state = expectMostRecentItem()
-                assertThat(state.showSkipConfirmationSwitch).isFalse()
-                assertThat(state.isLoading).isFalse()
-            }
-            verifyNoInteractions(get<CreatePermissionsSnapshotInteractor>())
-            verifyNoInteractions(get<GetFeatureFlagsUseCase>())
-            verifyNoInteractions(get<SetPermissionsConfirmationOptOutUseCase>())
         }
 
     private companion object {

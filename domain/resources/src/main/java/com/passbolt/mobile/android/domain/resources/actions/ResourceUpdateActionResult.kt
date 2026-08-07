@@ -60,4 +60,10 @@ sealed class ResourceUpdateActionResult {
     data class MetadataKeyDeleted(
         val deletedKey: TrustedKeyDeletedModel,
     ) : ResourceUpdateActionResult()
+
+    class ShareFailure(
+        val message: String? = null,
+    ) : ResourceUpdateActionResult()
+
+    data object PermissionsDrifted : ResourceUpdateActionResult()
 }

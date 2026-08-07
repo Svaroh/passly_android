@@ -58,11 +58,13 @@ class ResourceShareInteractor(
         resourceId: String,
         recipients: List<PermissionModelUi>,
         recipientsPublicKeys: Map<String, String> = emptyMap(),
+        existingPermissions: List<PermissionModelUi>? = null,
     ): Output {
         val existingResourcePermissions =
-            getLocalResourcePermissionsUseCase
-                .execute(GetLocalResourcePermissionsUseCase.Input(resourceId))
-                .permissions
+            existingPermissions
+                ?: getLocalResourcePermissionsUseCase
+                    .execute(GetLocalResourcePermissionsUseCase.Input(resourceId))
+                    .permissions
 
         val simulateSharePermissions =
             sharePermissionsModelMapper

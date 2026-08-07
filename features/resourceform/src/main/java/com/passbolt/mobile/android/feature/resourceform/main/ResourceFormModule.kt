@@ -54,6 +54,8 @@ fun Module.resourceFormModule() {
             getOrLoadGeneratorSettingsUseCase = get(),
             getLocalFolderPermissionsUseCase = get(),
             fetchFolderPermissionsUseCase = get(),
+            fetchResourcePermissionsUseCase = get(),
+            getLocalResourcePermissionsUseCase = get(),
             getPermissionsConfirmationOptOutUseCase = get(),
             getSelectedAccountDataUseCase = get(),
         )

@@ -37,7 +37,7 @@ import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmCreatePermissions
+import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.AdditionalUrisForm
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.AdvancedSecretGenerationForm
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.AppearanceForm
@@ -157,7 +157,7 @@ internal fun ResourceFormScreen(
             NavigateToScanOtp ->
                 navigator.navigateToKey(ScanOtp(ScanOtpMode.SCAN_FOR_RESULT))
             is NavigateToConfirmPermissions ->
-                navigator.navigateToKey(ConfirmCreatePermissions(sideEffect.parentFolderId))
+                navigator.navigateToKey(ConfirmPermissions(sideEffect.confirmMode, sideEffect.driftDetected))
             is NavigateBackWithCreateSuccess -> {
                 resultBus.sendResult(
                     result =
@@ -469,6 +469,8 @@ private fun getSnackbarMessage(
                 LocalizationR.string.common_password_policies_fetch_failed
             SnackbarMessage.PASSWORD_EXPIRY_FETCH_FAILED ->
                 LocalizationR.string.common_password_expiry_fetch_failed
+            SnackbarMessage.RESOURCE_EDITED_SHARE_FAILED ->
+                LocalizationR.string.resource_form_edited_share_failed
         },
     )
 
