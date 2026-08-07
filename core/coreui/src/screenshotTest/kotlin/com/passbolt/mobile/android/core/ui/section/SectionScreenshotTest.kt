@@ -5,47 +5,45 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.android.tools.screenshot.PreviewTest
-import com.passbolt.mobile.android.core.ui.screenshot.ScreenshotContainer
+import com.passbolt.mobile.android.core.ui.screenshot.PassboltPreviewWrapper
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SectionScreenshot() {
-    ScreenshotContainer {
-        Section(title = "Shared with") {
-            Text(
-                text = "Content inside the section",
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
+    Section(title = "Shared with") {
+        Text(
+            text = "Content inside the section",
+            style = MaterialTheme.typography.bodyMedium,
+        )
     }
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SectionWithoutTitleScreenshot() {
-    ScreenshotContainer {
-        Section {
-            Text(
-                text = "Content inside the section",
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
+    Section {
+        Text(
+            text = "Content inside the section",
+            style = MaterialTheme.typography.bodyMedium,
+        )
     }
 }
 
 @PreviewTest
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@PreviewWrapper(PassboltPreviewWrapper::class)
 @Composable
 fun SectionDarkThemeScreenshot() {
-    ScreenshotContainer(isDarkTheme = true) {
-        Section(title = "Shared with") {
-            Text(
-                text = "Content inside the section",
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
+    Section(title = "Shared with") {
+        Text(
+            text = "Content inside the section",
+            style = MaterialTheme.typography.bodyMedium,
+        )
     }
 }

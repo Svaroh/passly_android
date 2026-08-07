@@ -3,85 +3,80 @@ package com.passbolt.mobile.android.core.ui.progresstoolbar
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.android.tools.screenshot.PreviewTest
 import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.screenshot.ScreenshotContainer
+import com.passbolt.mobile.android.core.ui.screenshot.PassboltEdgeToEdgePreviewWrapper
+import com.passbolt.mobile.android.core.ui.screenshot.PassboltRtlPreviewWrapper
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltEdgeToEdgePreviewWrapper::class)
 @Composable
 fun ProgressToolbarEmptyScreenshot() {
-    ScreenshotContainer(contentPadding = 0.dp) {
-        ProgressToolbar(
-            progress = 0f,
-            onBackClick = {},
-        )
-    }
+    ProgressToolbar(
+        progress = 0f,
+        onBackClick = {},
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltEdgeToEdgePreviewWrapper::class)
 @Composable
 fun ProgressToolbarHalfScreenshot() {
-    ScreenshotContainer(contentPadding = 0.dp) {
-        ProgressToolbar(
-            progress = 0.5f,
-            onBackClick = {},
-        )
-    }
+    ProgressToolbar(
+        progress = 0.5f,
+        onBackClick = {},
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltEdgeToEdgePreviewWrapper::class)
 @Composable
 fun ProgressToolbarCompleteScreenshot() {
-    ScreenshotContainer(contentPadding = 0.dp) {
-        ProgressToolbar(
-            progress = 1f,
-            onBackClick = {},
-        )
-    }
+    ProgressToolbar(
+        progress = 1f,
+        onBackClick = {},
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltEdgeToEdgePreviewWrapper::class)
 @Composable
 fun ProgressToolbarWithEndIconScreenshot() {
-    ScreenshotContainer(contentPadding = 0.dp) {
-        ProgressToolbar(
-            progress = 0.5f,
-            onBackClick = {},
-            endIcon = R.drawable.ic_help,
-            onEndIconClick = {},
-        )
-    }
+    ProgressToolbar(
+        progress = 0.5f,
+        onBackClick = {},
+        endIcon = R.drawable.ic_help,
+        onEndIconClick = {},
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@PreviewWrapper(PassboltEdgeToEdgePreviewWrapper::class)
 @Composable
 fun ProgressToolbarDarkThemeScreenshot() {
-    ScreenshotContainer(isDarkTheme = true, contentPadding = 0.dp) {
-        ProgressToolbar(
-            progress = 0.5f,
-            onBackClick = {},
-            endIcon = R.drawable.ic_help,
-            onEndIconClick = {},
-        )
-    }
+    ProgressToolbar(
+        progress = 0.5f,
+        onBackClick = {},
+        endIcon = R.drawable.ic_help,
+        onEndIconClick = {},
+    )
 }
 
 @PreviewTest
 @Preview(showBackground = true)
+@PreviewWrapper(PassboltRtlPreviewWrapper::class)
 @Composable
 fun ProgressToolbarRtlScreenshot() {
-    ScreenshotContainer(isRtl = true, contentPadding = 0.dp) {
-        ProgressToolbar(
-            progress = 0.5f,
-            onBackClick = {},
-            endIcon = R.drawable.ic_help,
-            onEndIconClick = {},
-        )
-    }
+    ProgressToolbar(
+        progress = 0.5f,
+        onBackClick = {},
+        endIcon = R.drawable.ic_help,
+        onEndIconClick = {},
+    )
 }
