@@ -31,6 +31,15 @@ RUN wget --quiet --output-document=/tmp/gcloud.tar.gz \
     && rm /tmp/gcloud.tar.gz \
     && gcloud --version
 
+ENV GH_VERSION="2.97.0" \
+    PATH="/usr/local/gh/bin:${PATH}"
+RUN wget --quiet --output-document=/tmp/gh.tar.gz \
+	https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz \
+    && mkdir /usr/local/gh \
+    && tar -xzf /tmp/gh.tar.gz -C /usr/local/gh --strip-components=1 \
+    && rm /tmp/gh.tar.gz \
+    && gh --version
+
 # setup android home path for moving the downloaded sdk into it
 RUN install -d $ANDROID_HOME
 
