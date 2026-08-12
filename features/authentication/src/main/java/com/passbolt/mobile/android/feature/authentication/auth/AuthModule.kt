@@ -56,6 +56,7 @@ fun Module.authModule() {
             postSignInActionsInteractor = get(),
             refreshSessionUseCase = get(),
             mfaProvidersHandler = get(),
+            hasLocalReplicaUseCase = get(),
         )
     }
 

@@ -1,5 +1,8 @@
 package net.svaroh.passly.core.secrets
 
+import net.svaroh.passly.core.secrets.usecase.db.GetLocalSecretUseCase
+import net.svaroh.passly.core.secrets.usecase.db.RemoveLocalSecretUseCase
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.core.secrets.usecase.decrypt.DecryptSecretUseCase
 import net.svaroh.passly.core.secrets.usecase.decrypt.FetchSecretUseCase
 import net.svaroh.passly.core.secrets.usecase.decrypt.SecretInteractor
@@ -36,4 +39,7 @@ val secretsModule =
         singleOf(::DecryptSecretUseCase)
         singleOf(::SecretInteractor)
         singleOf(::SecretParser)
+        singleOf(::GetLocalSecretUseCase)
+        singleOf(::UpsertLocalSecretsUseCase)
+        singleOf(::RemoveLocalSecretUseCase)
     }

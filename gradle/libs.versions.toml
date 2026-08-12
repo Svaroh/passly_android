@@ -33,6 +33,7 @@ activity = "1.11.0"
 cameraX = "1.5.1"
 lifecycle = "2.9.4"
 appStartUp = "1.2.0"
+work = "2.11.2"
 splashScreen = "1.2.0"
 material = "1.14.0-alpha03"
 retrofit = "3.0.0"
@@ -91,6 +92,7 @@ camerax-mlvision = { module = "androidx.camera:camera-mlkit-vision", version.ref
 lifecycle-annotationprocessor = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifecycle" }
 lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 app-startup = { module = "androidx.startup:startup-runtime", version.ref = "appStartUp" }
+work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
 splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }

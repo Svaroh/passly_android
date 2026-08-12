@@ -17,6 +17,7 @@ import net.svaroh.passly.database.migrations.Migration1to2
 import net.svaroh.passly.database.migrations.Migration20to21
 import net.svaroh.passly.database.migrations.Migration21to22
 import net.svaroh.passly.database.migrations.Migration22to23
+import net.svaroh.passly.database.migrations.Migration23to24
 import net.svaroh.passly.database.migrations.Migration2to3
 import net.svaroh.passly.database.migrations.Migration3to4
 import net.svaroh.passly.database.migrations.Migration4to5
@@ -98,6 +99,7 @@ class DatabaseProvider(
                     Migration20to21,
                     Migration21to22,
                     Migration22to23,
+                    Migration23to24,
                 ).openHelperFactory(factory)
                 .build()
 

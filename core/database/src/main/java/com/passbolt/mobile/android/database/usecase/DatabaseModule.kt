@@ -36,4 +36,9 @@ internal fun Module.databaseModule() {
             encryptedSharedPreferencesFactory = get(),
         )
     }
+    single {
+        HasLocalReplicaUseCase(
+            databaseProvider = get(),
+        )
+    }
 }

@@ -176,6 +176,7 @@ class CreateResourceInteractor(
                             ?.id
                             ?.toString(),
                     ),
+                    armoredSecretForCurrentUser = encryptedSecret.data,
                 )
         }
     }
@@ -266,6 +267,8 @@ class CreateResourceInteractor(
 
         data class Success(
             val resource: ResourceModelWithAttributes,
+            /** Ciphertext just encrypted for this device's account, ready to be stored in the local replica. */
+            val armoredSecretForCurrentUser: String,
         ) : Output()
 
         data class Failure<T : Any>(

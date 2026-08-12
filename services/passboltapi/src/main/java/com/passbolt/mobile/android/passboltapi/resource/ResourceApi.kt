@@ -58,6 +58,8 @@ internal interface ResourceApi {
         @Query(QUERY_CONTAIN_TAG) containingTag: Int? = 1,
         // always return index with all permissions
         @Query(QUERY_CONTAIN_PERMISSIONS) containingGroup: Int? = 1,
+        // always return index with the secret of the calling user - the local replica must stay usable offline
+        @Query(QUERY_CONTAIN_SECRET) containingSecret: Int? = 1,
         // limit resources per page
         @Query(QUERY_LIMIT) limit: Int,
         // page number
@@ -93,6 +95,7 @@ internal interface ResourceApi {
         private const val QUERY_CONTAIN_FAVOURITE = "contain[favorite]"
         private const val QUERY_CONTAIN_TAG = "contain[tag]"
         private const val QUERY_CONTAIN_PERMISSIONS = "contain[permissions.group]"
+        private const val QUERY_CONTAIN_SECRET = "contain[secret]"
         private const val QUERY_LIMIT = "limit"
         private const val QUERY_PAGE = "page"
         private const val QUERY_SORT = "sort"

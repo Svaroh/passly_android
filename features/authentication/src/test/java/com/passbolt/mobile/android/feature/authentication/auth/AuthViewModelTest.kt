@@ -19,6 +19,7 @@ import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
 import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.core.security.rootdetection.RootDetector
 import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
+import net.svaroh.passly.database.usecase.HasLocalReplicaUseCase
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.BiometricAuthenticationSuccess
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.ConnectToExistingAccount
@@ -103,6 +104,7 @@ class AuthViewModelTest : KoinTest {
                     single { mock<InAppReviewInteractor>() }
                     single { mock<PostSignInActionsInteractor>() }
                     single { mock<RefreshSessionUseCase>() }
+                    single { mock<HasLocalReplicaUseCase>() }
                     single { RuntimeAuthenticatedFlag() }
                     singleOf(::SignInIdlingResource)
                     factoryOf(::MfaProvidersHandler)
@@ -133,6 +135,7 @@ class AuthViewModelTest : KoinTest {
                             postSignInActionsInteractor = get(),
                             refreshSessionUseCase = get(),
                             mfaProvidersHandler = get(),
+                            hasLocalReplicaUseCase = get(),
                         )
                     }
                 },

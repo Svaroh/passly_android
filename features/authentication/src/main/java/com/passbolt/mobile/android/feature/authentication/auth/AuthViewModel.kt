@@ -28,6 +28,7 @@ import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase.Passphra
 import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.core.security.rootdetection.RootDetector
 import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
+import net.svaroh.passly.database.usecase.HasLocalReplicaUseCase
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.AcceptChangedServerFingerprint
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.AccessLogs
@@ -131,6 +132,7 @@ class AuthViewModel(
     private val postSignInActionsInteractor: PostSignInActionsInteractor,
     private val refreshSessionUseCase: RefreshSessionUseCase,
     private val mfaProvidersHandler: MfaProvidersHandler,
+    private val hasLocalReplicaUseCase: HasLocalReplicaUseCase,
 ) : SideEffectViewModel<AuthState, AuthSideEffect>(
         AuthState(
             authReason = mapAuthReason(authConfig),
@@ -359,9 +361,7 @@ class AuthViewModel(
                             }
                         }
                         is ServerNotReachable -> {
-                            updateViewState {
-                                copy(showServerNotReachable = true, serverNotReachableDomain = it.serverUrl)
-                            }
+                            launch { onServerNotReachable(it.serverUrl) }
                         }
                         is TimeIsOutOfSync -> {
                             emitSideEffect(ShowErrorSnackbar(TIME_OUT_OF_SYNC))
@@ -372,6 +372,38 @@ class AuthViewModel(
                 signIn(passphrase.copyOf(), it.pgpKey, it.rsaKey, it.pgpKeyFingerprint)
             }
         }
+    }
+
+    /**
+     * The passphrase has already been verified locally at this point, so an unreachable server says nothing about
+     * whether this person may use their own data. If the account carries a local replica, unlocking continues and
+     * the app runs on local data until synchronisation becomes possible again; only an account that has never
+     * synchronised still needs the server to get going.
+     */
+    private suspend fun onServerNotReachable(serverUrl: String) {
+        // the local database key is stored per selected account, so the account being unlocked has to become the
+        // selected one before its replica can even be inspected
+        saveSelectedAccountUseCase.execute(UserIdInput(userId))
+
+        if (hasLocalReplicaUseCase.execute(UserIdInput(userId)).hasLocalReplica) {
+            Timber.d("Server is not reachable, continuing with the local replica")
+            unlockWithLocalReplica()
+        } else {
+            Timber.d("Server is not reachable and there is no local replica to fall back on")
+            updateViewState {
+                copy(showServerNotReachable = true, serverNotReachableDomain = serverUrl)
+            }
+        }
+    }
+
+    private fun unlockWithLocalReplica() {
+        runtimeAuthenticatedFlag.isAuthenticated = true
+        passphraseMemoryCache.set(passphrase.copyOf())
+        // no session is saved: there is no session to save, and the stored one - stale or not - stays untouched
+        loginState = null
+        updateViewState { copy(showProgress = false) }
+        signInIdlingResource.setIdle(true)
+        emitSideEffect(AuthSuccess(authConfig, appContext))
     }
 
     @Suppress("LongMethod")

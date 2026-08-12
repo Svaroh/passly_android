@@ -183,6 +183,12 @@ interface ResourcesDao : BaseDao<Resource> {
     )
     suspend fun get(resourceId: String): ResourceWithMetadata
 
+    @Query("SELECT count(*) FROM Resource")
+    suspend fun countAll(): Int
+
+    @Query("SELECT resourceId FROM Resource WHERE resourceId IN (:resourceIds)")
+    suspend fun getExistingResourceIds(resourceIds: List<String>): List<String>
+
     @Transaction
     @Query(
         "SELECT r.resourceId, r.folderId, r.expiry, r.favouriteId, r.modified, " +

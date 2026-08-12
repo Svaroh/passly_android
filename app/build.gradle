@@ -188,6 +188,7 @@ dependencies {
     implementation project(':permissions')
     implementation project(':navigation')
     implementation project(':clipboard')
+    implementation project(':sync')
 
     implementation platform(libs.koin.bom)
     implementation libs.lifecycle.process

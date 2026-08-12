@@ -55,6 +55,7 @@ import net.svaroh.passly.core.resources.resourcesModule
 import net.svaroh.passly.core.resourcetypes.resourceTypesModule
 import net.svaroh.passly.core.secrets.secretsModule
 import net.svaroh.passly.core.security.securityModule
+import net.svaroh.passly.core.sync.syncModule
 import net.svaroh.passly.core.tags.tagsModule
 import net.svaroh.passly.core.users.usersModule
 import net.svaroh.passly.createFolderModule
@@ -181,6 +182,7 @@ class KoinInitializer : Initializer<Unit> {
                 permissionsModule,
                 navigationModule,
                 clipboardModule,
+                syncModule,
             )
     }
 }

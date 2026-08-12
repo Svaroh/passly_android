@@ -42,6 +42,7 @@ import net.svaroh.passly.core.resources.usecase.ResourceShareInteractor
 import net.svaroh.passly.core.resources.usecase.db.AddLocalResourcePermissionsUseCase
 import net.svaroh.passly.core.resources.usecase.db.AddLocalResourceUseCase
 import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.core.secrets.usecase.decrypt.parser.SecretJsonModel
 import net.svaroh.passly.core.users.usecase.db.GetLocalCurrentUserUseCase
 import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
@@ -80,6 +81,7 @@ class ResourceCreateActionsInteractor(
     private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
     private val metadataPrivateKeysInteractor: MetadataPrivateKeysInteractor,
     private val resourceTypeIdToSlugMappingProvider: ResourceTypeIdToSlugMappingProvider,
+    private val upsertLocalSecretsUseCase: UpsertLocalSecretsUseCase,
 ) {
     suspend fun createGenericResource(
         contentType: ContentType,
@@ -251,6 +253,10 @@ class ResourceCreateActionsInteractor(
                 addLocalResourcePermissionsUseCase.execute(
                     AddLocalResourcePermissionsUseCase.Input(listOf(operationResult.resource)),
                 )
+                storeSecretLocally(
+                    operationResult.resource.resourceModel.resourceId,
+                    operationResult.armoredSecretForCurrentUser,
+                )
 
                 val newFolderPermissionsToApply =
                     operationResult.resource.resourceModel.folderId
@@ -279,6 +285,33 @@ class ResourceCreateActionsInteractor(
             is CreateResourceInteractor.Output.JsonSchemaValidationFailure ->
                 JsonSchemaValidationFailure(operationResult.entity)
         }
+
+    /**
+     * Keeps the local replica autonomous right after a create: the ciphertext was produced on this device, so there
+     * is no reason to make the user go back to the server to read what they just typed.
+     */
+    private suspend fun storeSecretLocally(
+        resourceId: String,
+        armoredSecret: String,
+    ) {
+        try {
+            upsertLocalSecretsUseCase.execute(
+                UpsertLocalSecretsUseCase.Input(
+                    secrets =
+                        listOf(
+                            UpsertLocalSecretsUseCase.LocalSecret(
+                                resourceId = resourceId,
+                                secretId = null,
+                                armoredData = armoredSecret,
+                                modified = null,
+                            ),
+                        ),
+                ),
+            )
+        } catch (exception: Exception) {
+            Timber.e(exception, "Could not store the created secret locally")
+        }
+    }
 
     private suspend fun applyFolderPermissionsToCreatedResource(
         resource: ResourceModel,

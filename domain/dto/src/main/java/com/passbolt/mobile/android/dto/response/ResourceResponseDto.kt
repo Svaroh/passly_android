@@ -39,6 +39,12 @@ sealed class ResourceResponseDto {
     abstract val tags: List<TagDto>?
     abstract val expired: String?
     abstract val permissions: List<PermissionWithGroupDto>?
+
+    /**
+     * Present when the index was requested with `contain[secret]`. The server already narrows the list to the
+     * calling user, so at most one entry is expected.
+     */
+    abstract val secrets: List<SecretDto>?
 }
 
 data class ResourceResponseV4Dto(
@@ -57,6 +63,7 @@ data class ResourceResponseV4Dto(
     override val tags: List<TagDto>?,
     override val expired: String?,
     override val permissions: List<PermissionWithGroupDto>?,
+    override val secrets: List<SecretDto>? = null,
 ) : ResourceResponseDto()
 
 data class ResourceResponseV5Dto(
@@ -76,7 +83,19 @@ data class ResourceResponseV5Dto(
     override val tags: List<TagDto>?,
     override val expired: String?,
     override val permissions: List<PermissionWithGroupDto>?,
+    override val secrets: List<SecretDto>? = null,
 ) : ResourceResponseDto()
+
+/**
+ * OpenPGP ciphertext of a resource secret as delivered inside the resources index.
+ */
+data class SecretDto(
+    val id: UUID?,
+    @SerializedName("resource_id")
+    val resourceId: UUID?,
+    val data: String,
+    val modified: String?,
+)
 
 enum class MetadataKeyTypeDto {
     @SerializedName("shared_key")
