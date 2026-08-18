@@ -1,7 +1,6 @@
 package com.passbolt.mobile.android.encryptedstorage.biometric
 
 import android.content.pm.PackageManager
-import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import java.security.KeyStore
@@ -36,14 +35,7 @@ class KeyStoreWrapper(
     }
 
     private fun KeyGenParameterSpec.Builder.setAuthTimeoutParameters() =
-        let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                setUserAuthenticationParameters(KEY_AUTH_DURATION_ZERO, KeyProperties.AUTH_BIOMETRIC_STRONG)
-            } else {
-                @Suppress("DEPRECATION")
-                setUserAuthenticationValidityDurationSeconds(KEY_AUTH_EVERY_USAGE)
-            }
-        }
+        setUserAuthenticationParameters(KEY_AUTH_DURATION_ZERO, KeyProperties.AUTH_BIOMETRIC_STRONG)
 
     private fun KeyGenParameterSpec.Builder.setStrongBoxParameter() =
         let {
@@ -59,6 +51,5 @@ class KeyStoreWrapper(
 
     private companion object {
         private const val KEY_AUTH_DURATION_ZERO = 0
-        private const val KEY_AUTH_EVERY_USAGE = -1
     }
 }
