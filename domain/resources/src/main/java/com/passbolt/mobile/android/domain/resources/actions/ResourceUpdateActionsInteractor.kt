@@ -144,6 +144,25 @@ class ResourceUpdateActionsInteractor(
         }
 
     suspend fun updateGenericResourceWithConfirmedPermissions(
+        updateAction: UpdateAction,
+        confirmedPermissions: List<PermissionModelUi>,
+        metadataModification: (MetadataJsonModel) -> MetadataJsonModel = { it },
+        secretModification: (SecretJsonModel) -> SecretJsonModel = { it },
+    ): Flow<ResourceUpdateActionResult> {
+        val newContentType =
+            resourceTypesUpdateGraph.getResourceTypeSlugAfterUpdate(
+                existingResource.slug,
+                updateAction,
+            )
+        return updateGenericResourceWithConfirmedPermissions(
+            newContentType,
+            confirmedPermissions,
+            metadataModification,
+            secretModification,
+        )
+    }
+
+    suspend fun updateGenericResourceWithConfirmedPermissions(
         newContentType: ContentType,
         confirmedPermissions: List<PermissionModelUi>,
         metadataModification: (MetadataJsonModel) -> MetadataJsonModel = { it },

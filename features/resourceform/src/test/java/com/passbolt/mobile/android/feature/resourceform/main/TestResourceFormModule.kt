@@ -30,6 +30,8 @@ import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPer
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
 import com.passbolt.mobile.android.domain.resources.actions.SecretPropertiesActionsInteractorFactory
+import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsConfirmationInteractor
+import com.passbolt.mobile.android.domain.resources.usecase.EditPermissionsConfirmationInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.FetchResourcePermissionsUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.GetDefaultCreateContentTypeUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.GetEditContentTypeUseCase
@@ -206,12 +208,20 @@ internal val testResourceFormModule =
                 resourceUpdateActionsInteractorFactory = get(),
                 checkPasswordPropertiesUseCase = mockCheckPasswordPropertiesUseCase,
                 getMetadataTypesSettingsUseCase = mockGetMetadataTypesSettingsUseCase,
-                getLocalFolderPermissionsUseCase = mockGetLocalFolderPermissionsUseCase,
-                fetchFolderPermissionsUseCase = mockFetchFolderPermissionsUseCase,
-                fetchResourcePermissionsUseCase = mockFetchResourcePermissionsUseCase,
-                getLocalResourcePermissionsUseCase = mockGetLocalResourcePermissionsUseCase,
-                getPermissionsConfirmationOptOutUseCase = mockGetPermissionsConfirmationOptOutUseCase,
-                getSelectedAccountDataUseCase = mockGetSelectedAccountDataUseCase,
+                editPermissionsConfirmationInteractor =
+                    EditPermissionsConfirmationInteractor(
+                        getPermissionsConfirmationOptOutUseCase = mockGetPermissionsConfirmationOptOutUseCase,
+                        fetchResourcePermissionsUseCase = mockFetchResourcePermissionsUseCase,
+                        getLocalResourcePermissionsUseCase = mockGetLocalResourcePermissionsUseCase,
+                        getSelectedAccountDataUseCase = mockGetSelectedAccountDataUseCase,
+                    ),
+                createPermissionsConfirmationInteractor =
+                    CreatePermissionsConfirmationInteractor(
+                        getPermissionsConfirmationOptOutUseCase = mockGetPermissionsConfirmationOptOutUseCase,
+                        fetchFolderPermissionsUseCase = mockFetchFolderPermissionsUseCase,
+                        getLocalFolderPermissionsUseCase = mockGetLocalFolderPermissionsUseCase,
+                        getSelectedAccountDataUseCase = mockGetSelectedAccountDataUseCase,
+                    ),
             )
         }
 

@@ -52,12 +52,8 @@ fun Module.resourceFormModule() {
             checkPasswordPropertiesUseCase = get(),
             getMetadataTypesSettingsUseCase = get(),
             getOrLoadGeneratorSettingsUseCase = get(),
-            getLocalFolderPermissionsUseCase = get(),
-            fetchFolderPermissionsUseCase = get(),
-            fetchResourcePermissionsUseCase = get(),
-            getLocalResourcePermissionsUseCase = get(),
-            getPermissionsConfirmationOptOutUseCase = get(),
-            getSelectedAccountDataUseCase = get(),
+            editPermissionsConfirmationInteractor = get(),
+            createPermissionsConfirmationInteractor = get(),
         )
     }
     factoryOf(::ResourceModelHandler)

@@ -12,6 +12,8 @@ fun Module.scanOtpSuccessModule() {
             getDefaultCreateContentTypeUseCase = get(),
             metadataPrivateKeysHelperInteractor = get(),
             resourceUpdateActionsInteractorFactory = get(),
+            editPermissionsConfirmationInteractor = get(),
+            createPermissionsConfirmationInteractor = get(),
         )
     }
 }

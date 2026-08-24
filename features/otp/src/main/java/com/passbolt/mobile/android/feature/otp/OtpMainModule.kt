@@ -50,6 +50,7 @@ val otpModule =
                 timerFactory = get(),
                 resourceAccessInteractor = get(),
                 resourceUpdateActionsInteractorFactory = get(),
+                editPermissionsConfirmationInteractor = get(),
                 secretPropertiesActionsInteractorFactory = get(),
                 autofillUriMatcher = get(),
                 timeProvider = get(),
