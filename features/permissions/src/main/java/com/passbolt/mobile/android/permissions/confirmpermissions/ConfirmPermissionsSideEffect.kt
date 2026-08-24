@@ -54,6 +54,10 @@ sealed interface ConfirmPermissionsSideEffect {
         val type: SnackbarErrorType,
     ) : ConfirmPermissionsSideEffect
 
+    data class ShowPermissionsDriftedSnackbar(
+        val driftedEntityNames: List<String>,
+    ) : ConfirmPermissionsSideEffect
+
     data class ShowToast(
         val type: ToastType,
     ) : ConfirmPermissionsSideEffect
@@ -61,7 +65,6 @@ sealed interface ConfirmPermissionsSideEffect {
 
 enum class SnackbarErrorType {
     ONE_OWNER_REQUIRED,
-    PERMISSIONS_DRIFTED,
 }
 
 enum class ToastType {

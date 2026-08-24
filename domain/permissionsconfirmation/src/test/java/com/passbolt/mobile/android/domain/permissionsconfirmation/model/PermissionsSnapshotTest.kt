@@ -24,6 +24,8 @@
 package com.passbolt.mobile.android.domain.permissionsconfirmation.model
 
 import com.google.common.truth.Truth.assertThat
+import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot.DriftResult.DriftDetected
+import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot.DriftResult.NoDrift
 import com.passbolt.mobile.android.domain.users.model.GpgKey
 import com.passbolt.mobile.android.domain.users.model.UserProfile
 import com.passbolt.mobile.android.ui.GroupModel
@@ -38,42 +40,42 @@ class PermissionsSnapshotTest {
         val original = snapshot()
         val current = snapshot(created = ZonedDateTime.now().plusMinutes(5))
 
-        assertThat(current.hasDriftedFrom(original)).isFalse()
+        assertThat(current.detectDrift(original)).isEqualTo(NoDrift)
     }
 
     @Test
-    fun `changed permission level is a drift`() {
+    fun `changed permission level is a drift naming the user`() {
         val original = snapshot()
         val current = snapshot(userAPermission = ResourcePermission.OWNER)
 
-        assertThat(current.hasDriftedFrom(original)).isTrue()
+        assertThat(current.detectDrift(original)).isEqualTo(DriftDetected(listOf("first-$USER_A last-$USER_A")))
     }
 
     @Test
-    fun `added permission is a drift`() {
+    fun `added permission is a drift naming the user`() {
         val original = snapshot()
         val current =
             snapshot(
                 additionalPermissions = listOf(userPermission("added-user", ResourcePermission.READ)),
             )
 
-        assertThat(current.hasDriftedFrom(original)).isTrue()
+        assertThat(current.detectDrift(original)).isEqualTo(DriftDetected(listOf("added-user")))
     }
 
     @Test
-    fun `changed group membership is a drift`() {
+    fun `changed group membership is a drift naming the group`() {
         val original = snapshot()
         val current = snapshot(groupMembers = listOf(USER_A, USER_B))
 
-        assertThat(current.hasDriftedFrom(original)).isTrue()
+        assertThat(current.detectDrift(original)).isEqualTo(DriftDetected(listOf("group-name")))
     }
 
     @Test
-    fun `changed user key fingerprint is a drift`() {
+    fun `changed user key fingerprint is a drift naming the user`() {
         val original = snapshot()
         val current = snapshot(userAFingerprint = "changed-fingerprint")
 
-        assertThat(current.hasDriftedFrom(original)).isTrue()
+        assertThat(current.detectDrift(original)).isEqualTo(DriftDetected(listOf("first-$USER_A last-$USER_A")))
     }
 
     @Test
@@ -81,7 +83,7 @@ class PermissionsSnapshotTest {
         val original = snapshot(groupMembers = listOf(USER_A, USER_B), users = listOf(USER_A, USER_B))
         val current = snapshot(groupMembers = listOf(USER_B, USER_A), users = listOf(USER_A, USER_B))
 
-        assertThat(current.hasDriftedFrom(original)).isFalse()
+        assertThat(current.detectDrift(original)).isEqualTo(NoDrift)
     }
 
     @Test
@@ -106,6 +108,46 @@ class PermissionsSnapshotTest {
         val snapshot = snapshot(groupPermission = ResourcePermission.UPDATE, groupMembers = listOf(USER_B))
 
         assertThat(snapshot.isUserOwner(USER_B)).isFalse()
+    }
+
+    @Test
+    fun `indirect group access is reported for users who are also group members`() {
+        val snapshot = snapshot(groupMembers = listOf(USER_A, USER_B))
+
+        val indirectAccess = snapshot.indirectGroupAccess(userIds = listOf(USER_A), groupIds = listOf(GROUP_ID))
+
+        assertThat(indirectAccess)
+            .containsExactly(PermissionsSnapshot.IndirectGroupAccess(userId = USER_A, groupId = GROUP_ID))
+    }
+
+    @Test
+    fun `indirect group access ignores groups outside of the provided ids`() {
+        val snapshot = snapshot(groupMembers = listOf(USER_A))
+
+        assertThat(snapshot.indirectGroupAccess(userIds = listOf(USER_A), groupIds = emptyList())).isEmpty()
+    }
+
+    @Test
+    fun `indirect group access ignores users outside of the provided ids`() {
+        val snapshot = snapshot(groupMembers = listOf(USER_A, USER_B))
+
+        assertThat(snapshot.indirectGroupAccess(userIds = listOf(USER_B), groupIds = listOf(GROUP_ID)))
+            .containsExactly(PermissionsSnapshot.IndirectGroupAccess(userId = USER_B, groupId = GROUP_ID))
+    }
+
+    @Test
+    fun `indirect group access covers additionally provided groups members`() {
+        val snapshot = snapshot(groupMembers = emptyList())
+
+        val indirectAccess =
+            snapshot.indirectGroupAccess(
+                userIds = listOf(USER_A),
+                groupIds = listOf(GROUP_ID, ADDED_GROUP_ID),
+                addedGroupsMembers = mapOf(ADDED_GROUP_ID to listOf(USER_A)),
+            )
+
+        assertThat(indirectAccess)
+            .containsExactly(PermissionsSnapshot.IndirectGroupAccess(userId = USER_A, groupId = ADDED_GROUP_ID))
     }
 
     private fun snapshot(
@@ -180,5 +222,6 @@ class PermissionsSnapshotTest {
         const val USER_A = "user-a"
         const val USER_B = "user-b"
         const val GROUP_ID = "group-id"
+        const val ADDED_GROUP_ID = "added-group-id"
     }
 }

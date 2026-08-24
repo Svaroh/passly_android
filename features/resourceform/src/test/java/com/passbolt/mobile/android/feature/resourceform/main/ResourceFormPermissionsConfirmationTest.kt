@@ -430,7 +430,7 @@ class ResourceFormPermissionsConfirmationTest : KoinTest {
             mockResourceUpdateActionsInteractor.stub {
                 onBlocking {
                     updateGenericResourceWithConfirmedPermissions(any(), any(), any(), any())
-                }.thenReturn(flowOf(ResourceUpdateActionResult.PermissionsDrifted))
+                }.thenReturn(flowOf(ResourceUpdateActionResult.PermissionsDrifted(listOf("drifted-user"))))
             }
             val viewModel = editModeViewModel()
             advanceUntilIdle()
@@ -440,7 +440,10 @@ class ResourceFormPermissionsConfirmationTest : KoinTest {
                 advanceUntilIdle()
 
                 assertThat(awaitItem()).isEqualTo(
-                    NavigateToConfirmPermissions(ConfirmPermissionsMode.Edit(RESOURCE_ID), driftDetected = true),
+                    NavigateToConfirmPermissions(
+                        ConfirmPermissionsMode.Edit(RESOURCE_ID),
+                        driftedEntityNames = listOf("drifted-user"),
+                    ),
                 )
             }
         }

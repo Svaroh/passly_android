@@ -153,7 +153,7 @@ class ResourceUpdateActionsInteractor(
                     ?.let { delta ->
                         applySafeOrderedConfirmedPermissions(delta, newContentType, metadataModification, secretModification)
                     }
-                ?: ResourceUpdateActionResult.PermissionsDrifted,
+                ?: ResourceUpdateActionResult.PermissionsDrifted(driftedEntityNames = emptyList()),
         )
 
     private suspend fun applySafeOrderedConfirmedPermissions(
@@ -201,7 +201,11 @@ class ResourceUpdateActionsInteractor(
                     createPermissionsSnapshotInteractor.detectDriftForResource(existingResource.resourceId)
                 }
         ) {
-            is DriftOutput.DriftDetected -> ResourceUpdateActionResult.PermissionsDrifted
+            is DriftOutput.DriftDetected -> ResourceUpdateActionResult.PermissionsDrifted(driftOutput.driftedEntityNames)
+            is DriftOutput.SnapshotMissing -> {
+                Timber.e("No stored permissions snapshot present for the drift check - reopening the confirmation")
+                ResourceUpdateActionResult.PermissionsDrifted(driftedEntityNames = emptyList())
+            }
             is DriftOutput.Failure -> {
                 Timber.e("Unable to verify permissions drift: ${driftOutput.message} - not updating")
                 ResourceUpdateActionResult.ShareFailure(driftOutput.message)
@@ -550,7 +554,7 @@ suspend fun performResourceUpdateAction(
     doOnUnauthorized: () -> Unit = {},
     doOnMetadataKeyVerificationFailure: () -> Unit = {},
     doOnShareFailure: (String) -> Unit = {},
-    doOnPermissionsDrifted: () -> Unit = {},
+    doOnPermissionsDrifted: (ResourceUpdateActionResult.PermissionsDrifted) -> Unit = {},
     doOnFinish: () -> Unit = {},
 ) {
     action().single().let {
@@ -567,7 +571,7 @@ suspend fun performResourceUpdateAction(
             is ResourceUpdateActionResult.MetadataKeyModified -> doOnMetadataKeyModified(it.keyToTrust)
             ResourceUpdateActionResult.MetadataKeyVerificationFailure -> doOnMetadataKeyVerificationFailure()
             is ResourceUpdateActionResult.ShareFailure -> doOnShareFailure(it.message.orEmpty())
-            ResourceUpdateActionResult.PermissionsDrifted -> doOnPermissionsDrifted()
+            is ResourceUpdateActionResult.PermissionsDrifted -> doOnPermissionsDrifted(it)
         }
     }
 }

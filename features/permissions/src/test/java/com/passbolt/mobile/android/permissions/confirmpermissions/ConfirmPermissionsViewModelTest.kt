@@ -31,7 +31,9 @@ import com.passbolt.mobile.android.core.architecture.result.DomainResult
 import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackingFlow
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
+import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
 import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
 import com.passbolt.mobile.android.domain.users.model.GpgKey
@@ -42,7 +44,9 @@ import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
 import com.passbolt.mobile.android.mappers.UsersModelMapper
 import com.passbolt.mobile.android.permissions.common.PermissionsListMapper
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.Confirm
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.GroupPermissionDeleted
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SeePermission
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.ShareRecipientsAdded
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SkipConfirmationToggled
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.UserPermissionDeleted
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.UserPermissionModified
@@ -50,12 +54,13 @@ import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermiss
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateBack
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToGroupPermissionDetails
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToUserPermissionDetails
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowErrorSnackbar
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowPermissionsDriftedSnackbar
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowToast
 import com.passbolt.mobile.android.permissions.permissions.PermissionModelUiComparator
 import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.GpgKeyUiModel
 import com.passbolt.mobile.android.ui.GroupModel
+import com.passbolt.mobile.android.ui.GroupWithUsersModel
 import com.passbolt.mobile.android.ui.PermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.PermissionsMode
@@ -97,6 +102,8 @@ class ConfirmPermissionsViewModelTest : KoinTest {
             modules(
                 module {
                     single { mock<CreatePermissionsSnapshotInteractor>() }
+                    single { mock<GetPermissionsSnapshotUseCase>() }
+                    single { mock<GetGroupWithUsersUseCase>() }
                     single { mock<GetLocalCurrentUserUseCase>() }
                     single { mock<GetFeatureFlagsUseCase>() }
                     single { mock<SetPermissionsConfirmationOptOutUseCase>() }
@@ -108,8 +115,10 @@ class ConfirmPermissionsViewModelTest : KoinTest {
                     factory { params ->
                         ConfirmPermissionsViewModel(
                             confirmMode = params.get(),
-                            driftDetected = params.get(),
+                            driftedEntityNames = params.getOrNull(),
                             createPermissionsSnapshotInteractor = get(),
+                            getPermissionsSnapshotUseCase = get(),
+                            getGroupWithUsersUseCase = get(),
                             getLocalCurrentUserUseCase = get(),
                             usersModelMapper = get(),
                             getFeatureFlagsUseCase = get(),
@@ -132,6 +141,9 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         get<CreatePermissionsSnapshotInteractor>().stub {
             onBlocking { createForFolder(FOLDER_ID) }
                 .doReturn(CreatePermissionsSnapshotInteractor.Output.Success(SNAPSHOT))
+        }
+        get<GetPermissionsSnapshotUseCase>().stub {
+            onBlocking { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(SNAPSHOT)
         }
         get<GetLocalCurrentUserUseCase>().stub {
             onBlocking { execute(Unit) } doReturn GetLocalCurrentUserUseCase.Output(CURRENT_USER_UI_MODEL)
@@ -298,6 +310,98 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         }
 
     @Test
+    fun `indirect access warning is shown for a solo user who is also a group member`() =
+        runTest {
+            val viewModel = confirmCreateViewModel()
+
+            viewModel.viewState.test {
+                assertThat(expectMostRecentItem().indirectAccessWarning)
+                    .isEqualTo(IndirectAccessWarning.SingleUser("first-$USER_ID last-$USER_ID", "group"))
+            }
+        }
+
+    @Test
+    fun `indirect access warning is cleared when the group permission is removed`() =
+        runTest {
+            val viewModel = confirmCreateViewModel()
+            val groupPermission =
+                viewModel.viewState.value.permissions
+                    .filterIsInstance<PermissionModelUi.GroupPermissionModel>()
+                    .single()
+
+            viewModel.onIntent(GroupPermissionDeleted(groupPermission))
+
+            viewModel.viewState.test {
+                assertThat(expectMostRecentItem().indirectAccessWarning).isNull()
+            }
+        }
+
+    @Test
+    fun `indirect access warning lists all solo users with group access`() =
+        runTest {
+            stubFolderSnapshot(
+                snapshot(
+                    operatorPermission = ResourcePermission.UPDATE,
+                    groupMembers = listOf(USER_ID, OPERATOR_ID),
+                ),
+            )
+
+            val viewModel = confirmCreateViewModel()
+
+            viewModel.viewState.test {
+                val warning = expectMostRecentItem().indirectAccessWarning
+                assertIs<IndirectAccessWarning.MultipleUsers>(warning)
+                assertThat(warning.userNames)
+                    .containsExactly("first-$USER_ID last-$USER_ID", "first-$OPERATOR_ID last-$OPERATOR_ID")
+            }
+        }
+
+    @Test
+    fun `no indirect access warning when solo users are not group members`() =
+        runTest {
+            stubFolderSnapshot(
+                snapshot(operatorPermission = ResourcePermission.UPDATE, groupMembers = emptyList()),
+            )
+
+            val viewModel = confirmCreateViewModel()
+
+            viewModel.viewState.test {
+                assertThat(expectMostRecentItem().indirectAccessWarning).isNull()
+            }
+        }
+
+    @Test
+    fun `indirect access warning covers groups added during the confirmation`() =
+        runTest {
+            stubFolderSnapshot(
+                snapshot(operatorPermission = ResourcePermission.UPDATE, groupMembers = emptyList()),
+            )
+            get<GetGroupWithUsersUseCase>().stub {
+                onBlocking { execute(GetGroupWithUsersUseCase.Input(ADDED_GROUP_ID)) } doReturn
+                    GetGroupWithUsersUseCase.Output(
+                        GroupWithUsersModel(
+                            group = GroupModel(ADDED_GROUP_ID, "added-group"),
+                            users = listOf(userUiModel(USER_ID)),
+                        ),
+                    )
+            }
+            val viewModel = confirmCreateViewModel()
+            val addedGroup =
+                PermissionModelUi.GroupPermissionModel(
+                    permission = ResourcePermission.READ,
+                    permissionId = "temporary-permission-id",
+                    group = GroupModel(ADDED_GROUP_ID, "added-group"),
+                )
+
+            viewModel.onIntent(ShareRecipientsAdded(viewModel.viewState.value.permissions + addedGroup))
+
+            viewModel.viewState.test {
+                assertThat(expectMostRecentItem().indirectAccessWarning)
+                    .isEqualTo(IndirectAccessWarning.SingleUser("first-$USER_ID last-$USER_ID", "added-group"))
+            }
+        }
+
+    @Test
     fun `edit mode shows snapshot permissions with real permission ids`() =
         runTest {
             stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
@@ -403,10 +507,10 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         runTest {
             stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
 
-            val viewModel = confirmEditViewModel(driftDetected = true)
+            val viewModel = confirmEditViewModel(driftedEntityNames = listOf("drifted-user"))
 
             viewModel.sideEffect.test {
-                assertThat(awaitItem()).isEqualTo(ShowErrorSnackbar(SnackbarErrorType.PERMISSIONS_DRIFTED))
+                assertThat(awaitItem()).isEqualTo(ShowPermissionsDriftedSnackbar(listOf("drifted-user")))
             }
         }
 
@@ -435,6 +539,21 @@ class ConfirmPermissionsViewModelTest : KoinTest {
             onBlocking { createForResource(RESOURCE_ID) }
                 .doReturn(CreatePermissionsSnapshotInteractor.Output.Success(snapshot))
         }
+        stubStoredSnapshot(snapshot)
+    }
+
+    private fun stubFolderSnapshot(snapshot: PermissionsSnapshot) {
+        get<CreatePermissionsSnapshotInteractor>().stub {
+            onBlocking { createForFolder(FOLDER_ID) }
+                .doReturn(CreatePermissionsSnapshotInteractor.Output.Success(snapshot))
+        }
+        stubStoredSnapshot(snapshot)
+    }
+
+    private fun stubStoredSnapshot(snapshot: PermissionsSnapshot) {
+        get<GetPermissionsSnapshotUseCase>().stub {
+            onBlocking { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(snapshot)
+        }
     }
 
     private fun operatorPermission(viewModel: ConfirmPermissionsViewModel) =
@@ -449,12 +568,12 @@ class ConfirmPermissionsViewModelTest : KoinTest {
 
     private fun confirmCreateViewModel() =
         get<ConfirmPermissionsViewModel>(
-            parameters = { parametersOf(ConfirmPermissionsMode.Create(FOLDER_ID), false) },
+            parameters = { parametersOf(ConfirmPermissionsMode.Create(FOLDER_ID), null) },
         )
 
-    private fun confirmEditViewModel(driftDetected: Boolean = false) =
+    private fun confirmEditViewModel(driftedEntityNames: List<String>? = null) =
         get<ConfirmPermissionsViewModel>(
-            parameters = { parametersOf(ConfirmPermissionsMode.Edit(RESOURCE_ID), driftDetected) },
+            parameters = { parametersOf(ConfirmPermissionsMode.Edit(RESOURCE_ID), driftedEntityNames) },
         )
 
     private fun featureFlags(isOptOutAvailable: Boolean) =
@@ -478,6 +597,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         private const val RESOURCE_ID = "resource-id"
         private const val GROUP_ID = "group-id"
         private const val OPERATOR_ID = "operator-id"
+        private const val ADDED_GROUP_ID = "added-group-id"
         private const val USER_ID = "user-id"
 
         private fun userProfile(userId: String) =
@@ -521,30 +641,32 @@ class ConfirmPermissionsViewModelTest : KoinTest {
 
         private val SNAPSHOT = snapshot(operatorPermission = ResourcePermission.UPDATE)
 
-        private val CURRENT_USER_UI_MODEL =
+        private fun userUiModel(userId: String) =
             UserUiModel(
-                id = OPERATOR_ID,
-                userName = "$OPERATOR_ID@passbolt.com",
+                id = userId,
+                userName = "$userId@passbolt.com",
                 disabled = false,
                 gpgKey =
                     GpgKeyUiModel(
-                        id = "gpg-$OPERATOR_ID",
-                        armoredKey = "armored-key-$OPERATOR_ID",
-                        fingerprint = "fingerprint-$OPERATOR_ID",
+                        id = "gpg-$userId",
+                        armoredKey = "armored-key-$userId",
+                        fingerprint = "fingerprint-$userId",
                         bits = 2048,
                         uid = null,
-                        keyId = "key-$OPERATOR_ID",
+                        keyId = "key-$userId",
                         type = null,
                         keyExpirationDate = null,
                         keyCreationDate = null,
                     ),
                 profile =
                     UserProfileUiModel(
-                        username = "$OPERATOR_ID@passbolt.com",
-                        firstName = "first-$OPERATOR_ID",
-                        lastName = "last-$OPERATOR_ID",
+                        username = "$userId@passbolt.com",
+                        firstName = "first-$userId",
+                        lastName = "last-$userId",
                         avatarUrl = null,
                     ),
             )
+
+        private val CURRENT_USER_UI_MODEL = userUiModel(OPERATOR_ID)
     }
 }

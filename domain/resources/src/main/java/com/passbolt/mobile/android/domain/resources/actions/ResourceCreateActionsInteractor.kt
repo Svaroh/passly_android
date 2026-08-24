@@ -350,6 +350,7 @@ class ResourceCreateActionsInteractor(
                     recipientsPublicKeys = confirmedRecipientsPublicKeysResolver.resolve(permissionsToApply),
                 )
             is DriftOutput.DriftDetected -> PermissionsDrifted
+            is DriftOutput.SnapshotMissing -> PermissionsDrifted
             is DriftOutput.Failure -> {
                 Timber.e("Unable to verify permissions drift: ${driftOutput.message} - not sharing")
                 ShareFailure(driftOutput.message)

@@ -45,10 +45,63 @@ data class PermissionsSnapshot(
         return hasDirectOwnership || hasGroupOwnership
     }
 
-    fun hasDriftedFrom(original: PermissionsSnapshot): Boolean =
-        permissionEntries() != original.permissionEntries() ||
-            groupsMemberships() != original.groupsMemberships() ||
-            usersFingerprints() != original.usersFingerprints()
+    fun indirectGroupAccess(
+        userIds: Collection<String>,
+        groupIds: Collection<String>,
+        addedGroupsMembers: Map<String, List<String>> = emptyMap(),
+    ): List<IndirectGroupAccess> {
+        val allGroupsMembers = groupsMembers + addedGroupsMembers
+        return groupIds.flatMap { groupId ->
+            allGroupsMembers[groupId]
+                .orEmpty()
+                .filter { it in userIds }
+                .map { IndirectGroupAccess(userId = it, groupId = groupId) }
+        }
+    }
+
+    fun detectDrift(original: PermissionsSnapshot): DriftResult {
+        val currentEntries = permissionEntries()
+        val originalEntries = original.permissionEntries()
+        val driftedEntries = (currentEntries - originalEntries) + (originalEntries - currentEntries)
+        val driftedMembershipsGroupIds =
+            (groupsMemberships().keys + original.groupsMemberships().keys)
+                .filter { groupsMemberships()[it] != original.groupsMemberships()[it] }
+        val driftedFingerprintsUserIds =
+            (usersFingerprints().keys + original.usersFingerprints().keys)
+                .filter { usersFingerprints()[it] != original.usersFingerprints()[it] }
+        if (driftedEntries.isEmpty() && driftedMembershipsGroupIds.isEmpty() && driftedFingerprintsUserIds.isEmpty()) {
+            return DriftResult.NoDrift
+        }
+
+        val driftedUserIds = driftedEntries.filterNot { it.isGroup }.map { it.aroId } + driftedFingerprintsUserIds
+        val driftedGroupIds = driftedEntries.filter { it.isGroup }.map { it.aroId } + driftedMembershipsGroupIds
+        return DriftResult.DriftDetected(
+            driftedEntityNames =
+                (
+                    driftedUserIds.distinct().map { userName(it, original) } +
+                        driftedGroupIds.distinct().map { groupName(it, original) }
+                ).distinct(),
+        )
+    }
+
+    private fun userName(
+        userId: String,
+        original: PermissionsSnapshot,
+    ): String {
+        val profile = users[userId] ?: original.users[userId]
+        val fullName = listOfNotNull(profile?.firstName, profile?.lastName).joinToString(" ")
+        return fullName.ifBlank { profile?.username ?: userId }
+    }
+
+    private fun groupName(
+        groupId: String,
+        original: PermissionsSnapshot,
+    ): String =
+        (permissions + original.permissions)
+            .filterIsInstance<PermissionModel.GroupPermissionModel>()
+            .firstOrNull { it.group.groupId == groupId }
+            ?.group
+            ?.groupName ?: groupId
 
     private fun permissionEntries(): Set<PermissionEntry> =
         permissions
@@ -70,4 +123,17 @@ data class PermissionsSnapshot(
         val isGroup: Boolean,
         val permission: ResourcePermission,
     )
+
+    data class IndirectGroupAccess(
+        val userId: String,
+        val groupId: String,
+    )
+
+    sealed class DriftResult {
+        data object NoDrift : DriftResult()
+
+        data class DriftDetected(
+            val driftedEntityNames: List<String>,
+        ) : DriftResult()
+    }
 }

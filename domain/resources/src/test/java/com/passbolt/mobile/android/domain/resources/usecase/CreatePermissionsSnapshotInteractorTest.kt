@@ -172,7 +172,9 @@ class CreatePermissionsSnapshotInteractorTest : KoinTest {
 
             val output = interactor.detectDriftForFolder(FOLDER_ID)
 
-            assertThat(output).isEqualTo(CreatePermissionsSnapshotInteractor.DriftOutput.DriftDetected)
+            assertThat(output).isEqualTo(
+                CreatePermissionsSnapshotInteractor.DriftOutput.SnapshotMissing,
+            )
         }
 
     @Test
@@ -207,7 +209,9 @@ class CreatePermissionsSnapshotInteractorTest : KoinTest {
 
             val output = interactor.detectDriftForFolder(FOLDER_ID)
 
-            assertThat(output).isEqualTo(CreatePermissionsSnapshotInteractor.DriftOutput.DriftDetected)
+            assertThat(output).isEqualTo(
+                CreatePermissionsSnapshotInteractor.DriftOutput.DriftDetected(listOf("first-$USER_B last-$USER_B")),
+            )
         }
 
     @Test
@@ -315,7 +319,9 @@ class CreatePermissionsSnapshotInteractorTest : KoinTest {
 
             val output = interactor.detectDriftForResource(RESOURCE_ID)
 
-            assertThat(output).isEqualTo(CreatePermissionsSnapshotInteractor.DriftOutput.DriftDetected)
+            assertThat(output).isEqualTo(
+                CreatePermissionsSnapshotInteractor.DriftOutput.DriftDetected(listOf("first-$USER_B last-$USER_B")),
+            )
         }
 
     @Test
@@ -327,7 +333,9 @@ class CreatePermissionsSnapshotInteractorTest : KoinTest {
 
             val output = interactor.detectDriftForResource(RESOURCE_ID)
 
-            assertThat(output).isEqualTo(CreatePermissionsSnapshotInteractor.DriftOutput.DriftDetected)
+            assertThat(output).isEqualTo(
+                CreatePermissionsSnapshotInteractor.DriftOutput.SnapshotMissing,
+            )
         }
 
     @Test

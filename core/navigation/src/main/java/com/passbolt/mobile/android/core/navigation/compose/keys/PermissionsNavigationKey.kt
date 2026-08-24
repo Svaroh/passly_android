@@ -18,7 +18,7 @@ sealed interface PermissionsNavigationKey : NavKey {
     @Serializable
     data class ConfirmPermissions(
         val confirmMode: ConfirmPermissionsMode,
-        val driftDetected: Boolean = false,
+        val driftedEntityNames: List<String>? = null,
     ) : PermissionsNavigationKey
 
     @Serializable

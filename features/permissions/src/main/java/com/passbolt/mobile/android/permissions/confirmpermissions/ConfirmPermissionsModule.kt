@@ -30,8 +30,10 @@ fun Module.confirmPermissionsModule() {
     viewModel { params ->
         ConfirmPermissionsViewModel(
             confirmMode = params.get(),
-            driftDetected = params.get(),
+            driftedEntityNames = params.getOrNull(),
             createPermissionsSnapshotInteractor = get(),
+            getPermissionsSnapshotUseCase = get(),
+            getGroupWithUsersUseCase = get(),
             getLocalCurrentUserUseCase = get(),
             usersModelMapper = get(),
             getFeatureFlagsUseCase = get(),

@@ -23,14 +23,13 @@
 
 package com.passbolt.mobile.android.permissions.confirmpermissions
 
-import com.passbolt.mobile.android.ui.PermissionModelUi
+sealed interface IndirectAccessWarning {
+    data class SingleUser(
+        val userName: String,
+        val groupName: String,
+    ) : IndirectAccessWarning
 
-data class ConfirmPermissionsState(
-    val permissions: List<PermissionModelUi> = emptyList(),
-    val isLoading: Boolean = false,
-    val isEditable: Boolean = true,
-    val lockedOperatorPermission: PermissionModelUi.UserPermissionModel? = null,
-    val indirectAccessWarning: IndirectAccessWarning? = null,
-    val showSkipConfirmationSwitch: Boolean = false,
-    val isSkipConfirmationChecked: Boolean = false,
-)
+    data class MultipleUsers(
+        val userNames: List<String>,
+    ) : IndirectAccessWarning
+}

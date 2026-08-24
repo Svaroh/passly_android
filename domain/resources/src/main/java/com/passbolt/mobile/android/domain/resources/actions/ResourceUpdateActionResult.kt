@@ -65,5 +65,7 @@ sealed class ResourceUpdateActionResult {
         val message: String? = null,
     ) : ResourceUpdateActionResult()
 
-    data object PermissionsDrifted : ResourceUpdateActionResult()
+    data class PermissionsDrifted(
+        val driftedEntityNames: List<String>,
+    ) : ResourceUpdateActionResult()
 }

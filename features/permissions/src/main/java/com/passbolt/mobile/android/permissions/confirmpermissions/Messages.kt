@@ -25,7 +25,6 @@ package com.passbolt.mobile.android.permissions.confirmpermissions
 
 import android.content.Context
 import com.passbolt.mobile.android.permissions.confirmpermissions.SnackbarErrorType.ONE_OWNER_REQUIRED
-import com.passbolt.mobile.android.permissions.confirmpermissions.SnackbarErrorType.PERMISSIONS_DRIFTED
 import com.passbolt.mobile.android.permissions.confirmpermissions.ToastType.PERMISSIONS_FETCH_FAILURE
 import com.passbolt.mobile.android.core.localization.R as LocalizationR
 
@@ -36,7 +35,6 @@ internal fun getErrorMessage(
     context.getString(
         when (type) {
             ONE_OWNER_REQUIRED -> LocalizationR.string.resource_permissions_one_owner
-            PERMISSIONS_DRIFTED -> LocalizationR.string.confirm_permissions_drifted
         },
     )
 
@@ -49,3 +47,33 @@ internal fun getToastMessage(
             PERMISSIONS_FETCH_FAILURE -> LocalizationR.string.confirm_permissions_fetch_failure
         },
     )
+
+internal fun getIndirectAccessWarningMessage(
+    context: Context,
+    warning: IndirectAccessWarning,
+): String =
+    when (warning) {
+        is IndirectAccessWarning.SingleUser ->
+            context.getString(
+                LocalizationR.string.confirm_permissions_indirect_access_single_user,
+                warning.userName,
+                warning.groupName,
+            )
+        is IndirectAccessWarning.MultipleUsers ->
+            context.getString(
+                LocalizationR.string.confirm_permissions_indirect_access_multiple_users,
+                warning.userNames.first(),
+            )
+    }
+
+internal fun getPermissionsDriftedMessage(
+    context: Context,
+    driftedEntityNames: List<String>,
+): String =
+    when {
+        driftedEntityNames.isEmpty() -> context.getString(LocalizationR.string.confirm_permissions_drifted)
+        driftedEntityNames.size == 1 ->
+            context.getString(LocalizationR.string.confirm_permissions_drifted_single, driftedEntityNames.single())
+        else ->
+            context.getString(LocalizationR.string.confirm_permissions_drifted_multiple, driftedEntityNames.first())
+    }

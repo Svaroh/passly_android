@@ -27,8 +27,11 @@ import androidx.lifecycle.viewModelScope
 import com.passbolt.mobile.android.common.validation.validation
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
+import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
 import com.passbolt.mobile.android.domain.permissionsconfirmation.mapper.toCreateModePermissions
 import com.passbolt.mobile.android.domain.permissionsconfirmation.mapper.toEditModePermissions
+import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
@@ -53,6 +56,7 @@ import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermiss
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToSelectShareRecipients
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToUserPermissionDetails
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowErrorSnackbar
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowPermissionsDriftedSnackbar
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowToast
 import com.passbolt.mobile.android.permissions.permissions.validation.HasAtLeastOneOwnerPermission
 import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
@@ -67,8 +71,10 @@ import timber.log.Timber
 
 class ConfirmPermissionsViewModel(
     private val confirmMode: ConfirmPermissionsMode,
-    private val driftDetected: Boolean,
+    private val driftedEntityNames: List<String>?,
     private val createPermissionsSnapshotInteractor: CreatePermissionsSnapshotInteractor,
+    private val getPermissionsSnapshotUseCase: GetPermissionsSnapshotUseCase,
+    private val getGroupWithUsersUseCase: GetGroupWithUsersUseCase,
     private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
     private val usersModelMapper: UsersModelMapper,
     private val getFeatureFlagsUseCase: GetFeatureFlagsUseCase,
@@ -162,8 +168,8 @@ class ConfirmPermissionsViewModel(
     }
 
     private fun showDriftInfoIfReopenedAfterDrift() {
-        if (driftDetected) {
-            emitSideEffect(ShowErrorSnackbar(SnackbarErrorType.PERMISSIONS_DRIFTED))
+        driftedEntityNames?.let {
+            emitSideEffect(ShowPermissionsDriftedSnackbar(it))
         }
     }
 
@@ -185,6 +191,61 @@ class ConfirmPermissionsViewModel(
                         transform(permissions).withEnforcedOperatorOwnership(lockedOperatorPermission),
                     ),
             )
+        }
+        refreshIndirectAccessWarning()
+    }
+
+    private fun refreshIndirectAccessWarning() {
+        viewModelScope.launch(coroutineLaunchContext.default) {
+            val snapshot = getPermissionsSnapshotUseCase.execute(Unit).snapshot
+            val addedGroupsMembers = addedGroupsLocalMembers(snapshot)
+            updateViewState { copy(indirectAccessWarning = indirectAccessWarning(snapshot, permissions, addedGroupsMembers)) }
+        }
+    }
+
+    private suspend fun addedGroupsLocalMembers(snapshot: PermissionsSnapshot?): Map<String, List<String>> =
+        viewState.value.permissions
+            .filterIsInstance<GroupPermissionModel>()
+            .map { it.group.groupId }
+            .filter { snapshot == null || it !in snapshot.groupsMembers }
+            .associateWith { groupId ->
+                getGroupWithUsersUseCase
+                    .execute(GetGroupWithUsersUseCase.Input(groupId))
+                    .groupWithUsers.users
+                    .map { it.id }
+            }
+
+    private fun indirectAccessWarning(
+        snapshot: PermissionsSnapshot?,
+        permissions: List<PermissionModelUi>,
+        addedGroupsMembers: Map<String, List<String>>,
+    ): IndirectAccessWarning? {
+        val usersPermissions = permissions.filterIsInstance<UserPermissionModel>()
+        val groupsPermissions = permissions.filterIsInstance<GroupPermissionModel>()
+        val indirectAccess =
+            snapshot
+                ?.indirectGroupAccess(
+                    userIds = usersPermissions.map { it.user.userId },
+                    groupIds = groupsPermissions.map { it.group.groupId },
+                    addedGroupsMembers = addedGroupsMembers,
+                ).orEmpty()
+        val indirectUserNames =
+            indirectAccess
+                .map { it.userId }
+                .distinct()
+                .mapNotNull { userId -> usersPermissions.find { it.user.userId == userId }?.user }
+                .map { "${it.firstName} ${it.lastName}" }
+        return when {
+            indirectUserNames.isEmpty() -> null
+            indirectUserNames.size == 1 ->
+                IndirectAccessWarning.SingleUser(
+                    userName = indirectUserNames.single(),
+                    groupName =
+                        groupsPermissions
+                            .first { it.group.groupId == indirectAccess.first().groupId }
+                            .group.groupName,
+                )
+            else -> IndirectAccessWarning.MultipleUsers(indirectUserNames)
         }
     }
 

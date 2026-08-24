@@ -543,6 +543,10 @@
     <string name="confirm_permissions_skip_until_session_end">Skip permission confirmation until the end of my session.</string>
     <string name="confirm_permissions_fetch_failure">Unable to load current permissions. Please try again.</string>
     <string name="confirm_permissions_drifted">The permissions changed in the meantime. Please review them and confirm again.</string>
+    <string name="confirm_permissions_drifted_single">Permissions for %1$s have changed</string>
+    <string name="confirm_permissions_drifted_multiple">Permissions for %1$s (and more) have changed</string>
+    <string name="confirm_permissions_indirect_access_single_user">%1$s is already part of the group %2$s</string>
+    <string name="confirm_permissions_indirect_access_multiple_users">%1$s (and more) already have access via group membership</string>
 
     <string name="group_permission_permission">Permission</string>
     <string name="group_permission_group_members">Group members</string>

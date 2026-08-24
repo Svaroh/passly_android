@@ -73,7 +73,7 @@ sealed interface ResourceFormSideEffect {
 
     data class NavigateToConfirmPermissions(
         val confirmMode: ConfirmPermissionsMode,
-        val driftDetected: Boolean = false,
+        val driftedEntityNames: List<String>? = null,
     ) : ResourceFormSideEffect
 
     data class NavigateBackWithCreateSuccess(

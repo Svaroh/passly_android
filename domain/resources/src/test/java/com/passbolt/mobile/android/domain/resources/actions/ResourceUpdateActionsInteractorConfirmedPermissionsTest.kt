@@ -143,7 +143,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
     fun `drift detected stops before any permission changes or update`() =
         runTest {
             createPermissionsSnapshotInteractor.stub {
-                onBlocking { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.DriftDetected
+                onBlocking { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.DriftDetected(listOf("drifted-user"))
             }
 
             val result =
@@ -152,6 +152,23 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
                     .single()
 
             assertIs<ResourceUpdateActionResult.PermissionsDrifted>(result)
+            verifyNoInteractions(resourceShareInteractor)
+            verifyNoInteractions(updateResourceInteractor)
+        }
+
+    @Test
+    fun `missing snapshot during the drift check stops with a drift result without names`() =
+        runTest {
+            createPermissionsSnapshotInteractor.stub {
+                onBlocking { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.SnapshotMissing
+            }
+
+            val result =
+                interactor
+                    .updateGenericResourceWithConfirmedPermissions(PasswordAndDescription, listOf(OPERATOR_UI, USER_UI))
+                    .single()
+
+            assertThat(result).isEqualTo(ResourceUpdateActionResult.PermissionsDrifted(driftedEntityNames = emptyList()))
             verifyNoInteractions(resourceShareInteractor)
             verifyNoInteractions(updateResourceInteractor)
         }
