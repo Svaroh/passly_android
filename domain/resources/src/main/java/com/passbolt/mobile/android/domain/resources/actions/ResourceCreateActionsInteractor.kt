@@ -412,6 +412,7 @@ class ResourceCreateActionsInteractor(
             is ResourceShareInteractor.Output.ShareFailure -> ShareFailure(shareResult.message)
             is ResourceShareInteractor.Output.SimulateShareFailure -> ShareFailure(shareResult.message)
             is ResourceShareInteractor.Output.Success -> Success(resourceId, resourceName)
+            is ResourceShareInteractor.Output.DriftDetected -> PermissionsDrifted
             is ResourceShareInteractor.Output.Unauthorized -> Unauthorized
         }
 }

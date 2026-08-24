@@ -290,6 +290,8 @@ class ResourceUpdateActionsInteractor(
                 }
         ) {
             is ResourceShareInteractor.Output.Success -> null
+            is ResourceShareInteractor.Output.DriftDetected ->
+                ResourceUpdateActionResult.PermissionsDrifted(driftedEntityNames = emptyList())
             is ResourceShareInteractor.Output.SecretDecryptFailure -> ResourceUpdateActionResult.CryptoFailure(shareResult.message)
             is ResourceShareInteractor.Output.SecretEncryptFailure -> ResourceUpdateActionResult.CryptoFailure(shareResult.message)
             is ResourceShareInteractor.Output.SecretFetchFailure -> ResourceUpdateActionResult.FetchFailure

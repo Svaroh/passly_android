@@ -46,8 +46,14 @@ sealed interface ConfirmPermissionsSideEffect {
         val users: List<UserPermissionModel>,
     ) : ConfirmPermissionsSideEffect
 
+    data object CloseWithShareSuccess : ConfirmPermissionsSideEffect
+
     data class CloseWithPermissionsConfirmed(
         val permissions: List<PermissionModelUi>,
+    ) : ConfirmPermissionsSideEffect
+
+    data class ShowSuccessSnackbar(
+        val type: SnackbarSuccessType,
     ) : ConfirmPermissionsSideEffect
 
     data class ShowErrorSnackbar(
@@ -65,6 +71,17 @@ sealed interface ConfirmPermissionsSideEffect {
 
 enum class SnackbarErrorType {
     ONE_OWNER_REQUIRED,
+    SHARE_FAILED,
+    ENCRYPTION_ERROR,
+    JSON_RESOURCE_SCHEMA_ERROR,
+    JSON_SECRET_SCHEMA_ERROR,
+    CANNOT_UPDATE_TOTP_WITH_CURRENT_CONFIG,
+    FAILED_TO_VERIFY_METADATA_KEY,
+    FAILED_TO_TRUST_METADATA_KEY,
+}
+
+enum class SnackbarSuccessType {
+    METADATA_KEY_IS_TRUSTED,
 }
 
 enum class ToastType {

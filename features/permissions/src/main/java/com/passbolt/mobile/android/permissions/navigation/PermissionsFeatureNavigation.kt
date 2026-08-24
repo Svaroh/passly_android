@@ -22,7 +22,6 @@ import com.passbolt.mobile.android.ui.PermissionsMode
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent as ConfirmPermissionsIntent
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent as PermissionsIntent
 
 class PermissionsFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =
@@ -80,14 +79,6 @@ class PermissionsFeatureNavigation : FeatureModuleNavigation {
     ) {
         val viewModel: PermissionsViewModel =
             koinViewModel(parameters = { parametersOf(id, mode, permissionsItem) })
-
-        PermissionListEditResultEffects(
-            onModifyUserPermission = { viewModel.onIntent(PermissionsIntent.UserPermissionModified(it)) },
-            onDeleteUserPermission = { viewModel.onIntent(PermissionsIntent.UserPermissionDeleted(it)) },
-            onModifyGroupPermission = { viewModel.onIntent(PermissionsIntent.GroupPermissionModified(it)) },
-            onDeleteGroupPermission = { viewModel.onIntent(PermissionsIntent.GroupPermissionDeleted(it)) },
-            onAddShareRecipients = { viewModel.onIntent(PermissionsIntent.ShareRecipientsAdded(it)) },
-        )
 
         PassboltTheme {
             PermissionsScreen(

@@ -82,14 +82,28 @@ class ResourceShareInteractor(
                 )
         ) {
             is SimulateShareResourceUseCase.Output.Success -> {
-                Timber.d("Share simulation success; Starting to share resource")
-                shareResource(
-                    resourceId,
-                    recipients,
-                    existingResourcePermissions,
-                    simulateShareOutput.value.added,
-                    recipientsPublicKeys,
-                )
+                val unconfirmedRecipients =
+                    if (recipientsPublicKeys.isEmpty()) {
+                        emptyList()
+                    } else {
+                        simulateShareOutput.value.added.filter { it.userId !in recipientsPublicKeys }
+                    }
+                if (unconfirmedRecipients.isNotEmpty()) {
+                    Timber.e(
+                        "Permissions drift detected - share simulation reported " +
+                            "${unconfirmedRecipients.size} recipient(s) outside of the confirmed snapshot",
+                    )
+                    Output.DriftDetected
+                } else {
+                    Timber.d("Share simulation success; Starting to share resource")
+                    shareResource(
+                        resourceId,
+                        recipients,
+                        existingResourcePermissions,
+                        simulateShareOutput.value.added,
+                        recipientsPublicKeys,
+                    )
+                }
             }
             is SimulateShareResourceUseCase.Output.Failure -> {
                 Timber.e("Share simulation failure: %s", simulateShareOutput.message)
@@ -275,5 +289,7 @@ class ResourceShareInteractor(
         ) : Output()
 
         data object Success : Output()
+
+        data object DriftDetected : Output()
     }
 }

@@ -29,11 +29,14 @@ import com.passbolt.mobile.android.core.compose.SideEffectViewModel
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
 import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
 import com.passbolt.mobile.android.domain.groups.usecase.GroupsInteractor
+import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
 import com.passbolt.mobile.android.domain.permissionsconfirmation.mapper.toCreateModePermissions
 import com.passbolt.mobile.android.domain.permissionsconfirmation.mapper.toEditModePermissions
 import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
+import com.passbolt.mobile.android.domain.resources.actions.ResourceShareActionsInteractor
+import com.passbolt.mobile.android.domain.resources.actions.ShareActionResult
 import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
 import com.passbolt.mobile.android.domain.users.usecase.UsersInteractor
@@ -44,23 +47,30 @@ import com.passbolt.mobile.android.mappers.UsersModelMapper
 import com.passbolt.mobile.android.permissions.common.PermissionsListMapper
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.AddPermission
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.Confirm
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.DismissMetadataKeyDeletedDialog
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.DismissMetadataKeyModifiedDialog
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.GoBack
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.GroupPermissionDeleted
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.GroupPermissionModified
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SeePermission
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.ShareRecipientsAdded
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SkipConfirmationToggled
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.TrustNewMetadataKey
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.TrustedMetadataKeyDeleted
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.UserPermissionDeleted
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.UserPermissionModified
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithPermissionsConfirmed
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithShareSuccess
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateBack
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToGroupPermissionDetails
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToSelectShareRecipients
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToUserPermissionDetails
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowErrorSnackbar
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowPermissionsDriftedSnackbar
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowSuccessSnackbar
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowToast
 import com.passbolt.mobile.android.permissions.permissions.validation.HasAtLeastOneOwnerPermission
+import com.passbolt.mobile.android.serializers.jsonschema.SchemaEntity
 import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
@@ -68,6 +78,7 @@ import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
 import com.passbolt.mobile.android.ui.PermissionsMode.EDIT
 import com.passbolt.mobile.android.ui.PermissionsMode.VIEW
 import com.passbolt.mobile.android.ui.ResourcePermission
+import com.passbolt.mobile.android.ui.UserWithAvatar
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -76,6 +87,8 @@ class ConfirmPermissionsViewModel(
     private val confirmMode: ConfirmPermissionsMode,
     private val driftedEntityNames: List<String>?,
     private val createPermissionsSnapshotInteractor: CreatePermissionsSnapshotInteractor,
+    private val resourceShareActionsInteractor: ResourceShareActionsInteractor,
+    private val metadataPrivateKeysHelperInteractor: MetadataPrivateKeysHelperInteractor,
     private val getPermissionsSnapshotUseCase: GetPermissionsSnapshotUseCase,
     private val getGroupWithUsersUseCase: GetGroupWithUsersUseCase,
     private val usersInteractor: UsersInteractor,
@@ -96,6 +109,7 @@ class ConfirmPermissionsViewModel(
         showDriftInfoIfReopenedAfterDrift()
     }
 
+    @Suppress("CyclomaticComplexMethod")
     fun onIntent(intent: ConfirmPermissionsIntent) {
         when (intent) {
             GoBack -> emitSideEffect(NavigateBack)
@@ -112,23 +126,19 @@ class ConfirmPermissionsViewModel(
             is GroupPermissionDeleted ->
                 updatePermissions { permissionsListMapper.withDeletedGroupPermission(it, intent.permission) }
             is SkipConfirmationToggled -> updateViewState { copy(isSkipConfirmationChecked = intent.isChecked) }
+            TrustNewMetadataKey -> trustNewMetadataKey()
+            TrustedMetadataKeyDeleted -> trustedMetadataKeyDeleted()
+            DismissMetadataKeyModifiedDialog ->
+                updateViewState { copy(showMetadataKeyModifiedDialog = false, newMetadataKeyToTrustModel = null) }
+            DismissMetadataKeyDeletedDialog ->
+                updateViewState { copy(showMetadataKeyDeletedDialog = false, trustedKeyDeletedModel = null) }
         }
     }
 
     private fun loadSnapshotPermissions() {
         viewModelScope.launch(coroutineLaunchContext.io) {
             updateViewState { copy(isPreparingPermissions = true) }
-            when (
-                val output =
-                    runAuthenticatedOperation {
-                        when (confirmMode) {
-                            is ConfirmPermissionsMode.Create ->
-                                createPermissionsSnapshotInteractor.createForFolder(confirmMode.folderId)
-                            is ConfirmPermissionsMode.Edit ->
-                                createPermissionsSnapshotInteractor.createForResource(confirmMode.resourceId)
-                        }
-                    }
-            ) {
+            when (val output = runAuthenticatedOperation { createSnapshot() }) {
                 is CreatePermissionsSnapshotInteractor.Output.Success -> {
                     val operator =
                         usersModelMapper.mapToUserWithAvatar(
@@ -136,33 +146,9 @@ class ConfirmPermissionsViewModel(
                         )
                     updateViewState { copy(isPreparingPermissions = false) }
                     when (confirmMode) {
-                        is ConfirmPermissionsMode.Create -> {
-                            updateViewState {
-                                copy(
-                                    isEditable = output.snapshot.isUserOwner(operator.userId),
-                                    lockedOperatorPermission =
-                                        UserPermissionModel(
-                                            ResourcePermission.OWNER,
-                                            SharePermissionsModelMapper.TEMPORARY_NEW_PERMISSION_ID,
-                                            operator,
-                                        ),
-                                )
-                            }
-                            updatePermissions { output.snapshot.toCreateModePermissions(operator) }
-                        }
-                        is ConfirmPermissionsMode.Edit -> {
-                            val editPermissions = output.snapshot.toEditModePermissions()
-                            updateViewState {
-                                copy(
-                                    isEditable = output.snapshot.isUserOwner(operator.userId),
-                                    lockedOperatorPermission =
-                                        editPermissions
-                                            .filterIsInstance<UserPermissionModel>()
-                                            .find { it.user.userId == operator.userId },
-                                )
-                            }
-                            updatePermissions { editPermissions }
-                        }
+                        is ConfirmPermissionsMode.Create -> showCreateModePermissions(output.snapshot, operator)
+                        is ConfirmPermissionsMode.Edit -> showEditModePermissions(output.snapshot, operator)
+                        is ConfirmPermissionsMode.Share -> showShareModePermissions(output.snapshot, operator)
                     }
                 }
                 is CreatePermissionsSnapshotInteractor.Output.Failure -> {
@@ -172,6 +158,56 @@ class ConfirmPermissionsViewModel(
                 }
             }
         }
+    }
+
+    private suspend fun createSnapshot(): CreatePermissionsSnapshotInteractor.Output =
+        when (confirmMode) {
+            is ConfirmPermissionsMode.Create -> createPermissionsSnapshotInteractor.createForFolder(confirmMode.folderId)
+            is ConfirmPermissionsMode.Edit -> createPermissionsSnapshotInteractor.createForResource(confirmMode.resourceId)
+            is ConfirmPermissionsMode.Share -> createPermissionsSnapshotInteractor.createForResource(confirmMode.resourceId)
+        }
+
+    private fun showCreateModePermissions(
+        snapshot: PermissionsSnapshot,
+        operator: UserWithAvatar,
+    ) {
+        updateViewState {
+            copy(
+                isEditable = snapshot.isUserOwner(operator.userId),
+                lockedOperatorPermission =
+                    UserPermissionModel(
+                        ResourcePermission.OWNER,
+                        SharePermissionsModelMapper.TEMPORARY_NEW_PERMISSION_ID,
+                        operator,
+                    ),
+            )
+        }
+        updatePermissions { snapshot.toCreateModePermissions(operator) }
+    }
+
+    private fun showEditModePermissions(
+        snapshot: PermissionsSnapshot,
+        operator: UserWithAvatar,
+    ) {
+        val editPermissions = snapshot.toEditModePermissions()
+        updateViewState {
+            copy(
+                isEditable = snapshot.isUserOwner(operator.userId),
+                lockedOperatorPermission =
+                    editPermissions
+                        .filterIsInstance<UserPermissionModel>()
+                        .find { it.user.userId == operator.userId },
+            )
+        }
+        updatePermissions { editPermissions }
+    }
+
+    private fun showShareModePermissions(
+        snapshot: PermissionsSnapshot,
+        operator: UserWithAvatar,
+    ) {
+        updateViewState { copy(isEditable = snapshot.isUserOwner(operator.userId)) }
+        updatePermissions { snapshot.toEditModePermissions() }
     }
 
     private fun refreshUsersAndGroups() {
@@ -200,12 +236,14 @@ class ConfirmPermissionsViewModel(
     }
 
     private fun loadSkipConfirmationSwitchVisibility() {
-        viewModelScope.launch(coroutineLaunchContext.io) {
-            val isOptOutAvailable =
-                getFeatureFlagsUseCase
-                    .execute(Unit)
-                    .featureFlags.isPermissionsConfirmationOptOutAvailable
-            updateViewState { copy(showSkipConfirmationSwitch = isOptOutAvailable) }
+        if (confirmMode !is ConfirmPermissionsMode.Share) {
+            viewModelScope.launch(coroutineLaunchContext.io) {
+                val isOptOutAvailable =
+                    getFeatureFlagsUseCase
+                        .execute(Unit)
+                        .featureFlags.isPermissionsConfirmationOptOutAvailable
+                updateViewState { copy(showSkipConfirmationSwitch = isOptOutAvailable) }
+            }
         }
     }
 
@@ -275,6 +313,35 @@ class ConfirmPermissionsViewModel(
         }
     }
 
+    private fun trustNewMetadataKey() {
+        val model = viewState.value.newMetadataKeyToTrustModel ?: return
+        updateViewState { copy(showMetadataKeyModifiedDialog = false, newMetadataKeyToTrustModel = null) }
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            updateViewState { copy(isApplyingShare = true) }
+            when (
+                val output =
+                    runAuthenticatedOperation {
+                        metadataPrivateKeysHelperInteractor.trustNewKey(model)
+                    }
+            ) {
+                is MetadataPrivateKeysHelperInteractor.Output.Success ->
+                    emitSideEffect(ShowSuccessSnackbar(SnackbarSuccessType.METADATA_KEY_IS_TRUSTED))
+                else -> {
+                    Timber.e("Failed to trust new metadata key: $output")
+                    emitSideEffect(ShowErrorSnackbar(SnackbarErrorType.FAILED_TO_TRUST_METADATA_KEY))
+                }
+            }
+            updateViewState { copy(isApplyingShare = false) }
+        }
+    }
+
+    private fun trustedMetadataKeyDeleted() {
+        updateViewState { copy(showMetadataKeyDeletedDialog = false, trustedKeyDeletedModel = null) }
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            metadataPrivateKeysHelperInteractor.deletedTrustedMetadataPrivateKey()
+        }
+    }
+
     private fun List<PermissionModelUi>.withEnforcedOperatorOwnership(
         lockedOperatorPermission: UserPermissionModel?,
     ): List<PermissionModelUi> {
@@ -333,12 +400,70 @@ class ConfirmPermissionsViewModel(
     }
 
     private fun confirmPermissions() {
+        when (confirmMode) {
+            is ConfirmPermissionsMode.Share -> performConfirmedShare(confirmMode.resourceId)
+            else ->
+                viewModelScope.launch(coroutineLaunchContext.io) {
+                    if (viewState.value.isSkipConfirmationChecked) {
+                        setPermissionsConfirmationOptOutUseCase.execute(
+                            SetPermissionsConfirmationOptOutUseCase.Input(isOptedOut = true),
+                        )
+                    }
+                    Timber.d("Permissions confirmed for ${viewState.value.permissions.size} recipient(s)")
+                    emitSideEffect(CloseWithPermissionsConfirmed(viewState.value.permissions))
+                }
+        }
+    }
+
+    private fun performConfirmedShare(resourceId: String) {
         viewModelScope.launch(coroutineLaunchContext.io) {
-            if (viewState.value.isSkipConfirmationChecked) {
-                setPermissionsConfirmationOptOutUseCase.execute(SetPermissionsConfirmationOptOutUseCase.Input(isOptedOut = true))
+            updateViewState { copy(isApplyingShare = true) }
+            Timber.d("Sharing with confirmed permissions for ${viewState.value.permissions.size} recipient(s)")
+            val result =
+                resourceShareActionsInteractor.shareWithConfirmedPermissions(
+                    resourceId = resourceId,
+                    confirmedPermissions = viewState.value.permissions,
+                )
+            updateViewState { copy(isApplyingShare = false) }
+            when (result) {
+                is ShareActionResult.Success -> emitSideEffect(CloseWithShareSuccess)
+                is ShareActionResult.PermissionsDrifted -> {
+                    loadSnapshotPermissions()
+                    emitSideEffect(ShowPermissionsDriftedSnackbar(result.driftedEntityNames))
+                }
+                is ShareActionResult.ShareFailure -> {
+                    Timber.e("Failed to share with confirmed permissions: ${result.message}")
+                    emitSideEffect(ShowErrorSnackbar(SnackbarErrorType.SHARE_FAILED))
+                }
+                is ShareActionResult.CryptoFailure -> {
+                    Timber.e("Encryption failure during the confirmed share: ${result.message}")
+                    emitSideEffect(ShowErrorSnackbar(SnackbarErrorType.ENCRYPTION_ERROR))
+                }
+                is ShareActionResult.SchemaValidationFailure ->
+                    emitSideEffect(
+                        ShowErrorSnackbar(
+                            when (result.entity) {
+                                SchemaEntity.RESOURCE -> SnackbarErrorType.JSON_RESOURCE_SCHEMA_ERROR
+                                SchemaEntity.SECRET -> SnackbarErrorType.JSON_SECRET_SCHEMA_ERROR
+                            },
+                        ),
+                    )
+                is ShareActionResult.CannotUpdateWithCurrentConfig ->
+                    emitSideEffect(ShowErrorSnackbar(SnackbarErrorType.CANNOT_UPDATE_TOTP_WITH_CURRENT_CONFIG))
+                is ShareActionResult.MetadataKeyVerificationFailure ->
+                    emitSideEffect(ShowErrorSnackbar(SnackbarErrorType.FAILED_TO_VERIFY_METADATA_KEY))
+                is ShareActionResult.MetadataKeyModified ->
+                    updateViewState {
+                        copy(showMetadataKeyModifiedDialog = true, newMetadataKeyToTrustModel = result.keyToTrust)
+                    }
+                is ShareActionResult.MetadataKeyDeleted ->
+                    updateViewState {
+                        copy(showMetadataKeyDeletedDialog = true, trustedKeyDeletedModel = result.deletedKey)
+                    }
+                is ShareActionResult.Unauthorized -> {
+                    // session handling is performed by runAuthenticatedOperation
+                }
             }
-            Timber.d("Permissions confirmed for ${viewState.value.permissions.size} recipient(s)")
-            emitSideEffect(CloseWithPermissionsConfirmed(viewState.value.permissions))
         }
     }
 }

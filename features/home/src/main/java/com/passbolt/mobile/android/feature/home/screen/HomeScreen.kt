@@ -57,7 +57,7 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.FolderDetailsNav
 import com.passbolt.mobile.android.core.navigation.compose.keys.HomeNavigationKey
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
+import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
 import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.Autofill
 import com.passbolt.mobile.android.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
@@ -116,11 +116,10 @@ import com.passbolt.mobile.android.feature.home.screen.snackbar.AutofillConflict
 import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountBottomSheet
 import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheet
 import com.passbolt.mobile.android.testtags.composetags.Home
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.FiltersMenuModel
 import com.passbolt.mobile.android.ui.HomeDisplayViewModel
 import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Folders
-import com.passbolt.mobile.android.ui.PermissionsItem
-import com.passbolt.mobile.android.ui.PermissionsMode
 import com.passbolt.mobile.android.ui.ResourceFormMode
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -224,7 +223,7 @@ internal fun HomeScreen(
             is NavigateToResourceUri -> navigator.openExternalWebsite(context, it.url)
             is NavigateToShare ->
                 navigator.navigateToKey(
-                    Permissions(it.resourceModel.resourceId, PermissionsMode.EDIT, PermissionsItem.RESOURCE),
+                    ConfirmPermissions(ConfirmPermissionsMode.Share(it.resourceModel.resourceId)),
                 )
             is NavigateToCreateFolder ->
                 navigator.navigateToKey(

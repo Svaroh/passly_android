@@ -61,6 +61,7 @@ import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationDetails
 import com.passbolt.mobile.android.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationItem
+import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
 import com.passbolt.mobile.android.core.navigation.compose.keys.TagsDetailsNavigationKey.ResourceTags
@@ -115,7 +116,9 @@ import com.passbolt.mobile.android.feature.resourcedetails.details.ui.SharedWith
 import com.passbolt.mobile.android.feature.resourcedetails.details.ui.TotpSection
 import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheet
 import com.passbolt.mobile.android.testtags.composetags.ResourceDetails
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.PermissionsItem
+import com.passbolt.mobile.android.ui.PermissionsMode
 import com.passbolt.mobile.android.ui.ResourceFormMode
 import com.passbolt.mobile.android.ui.ResourceUiModel
 import com.passbolt.mobile.android.ui.isExpired
@@ -187,9 +190,13 @@ fun ResourceDetailsScreen(
                     ),
                 )
             is NavigateToResourcePermissions ->
-                navigator.navigateToKey(
-                    Permissions(sideEffect.resourceId, sideEffect.mode, PermissionsItem.RESOURCE),
-                )
+                if (sideEffect.mode == PermissionsMode.EDIT) {
+                    navigator.navigateToKey(ConfirmPermissions(ConfirmPermissionsMode.Share(sideEffect.resourceId)))
+                } else {
+                    navigator.navigateToKey(
+                        Permissions(sideEffect.resourceId, sideEffect.mode, PermissionsItem.RESOURCE),
+                    )
+                }
             is NavigateToResourceTags -> navigator.navigateToKey(ResourceTags(sideEffect.resourceId))
             is NavigateToResourceLocation ->
                 navigator.navigateToKey(

@@ -34,9 +34,12 @@ import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackin
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
 import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
 import com.passbolt.mobile.android.domain.groups.usecase.GroupsInteractor
+import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
 import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
+import com.passbolt.mobile.android.domain.resources.actions.ResourceShareActionsInteractor
+import com.passbolt.mobile.android.domain.resources.actions.ShareActionResult
 import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
 import com.passbolt.mobile.android.domain.users.model.GpgKey
 import com.passbolt.mobile.android.domain.users.model.UserProfile
@@ -54,9 +57,11 @@ import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermiss
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.UserPermissionDeleted
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.UserPermissionModified
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithPermissionsConfirmed
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithShareSuccess
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateBack
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToGroupPermissionDetails
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToUserPermissionDetails
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowErrorSnackbar
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowPermissionsDriftedSnackbar
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowToast
 import com.passbolt.mobile.android.permissions.permissions.PermissionModelUiComparator
@@ -88,9 +93,12 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.get
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import java.time.ZonedDateTime
@@ -105,6 +113,8 @@ class ConfirmPermissionsViewModelTest : KoinTest {
             modules(
                 module {
                     single { mock<CreatePermissionsSnapshotInteractor>() }
+                    single { mock<ResourceShareActionsInteractor>() }
+                    single { mock<MetadataPrivateKeysHelperInteractor>() }
                     single { mock<GetPermissionsSnapshotUseCase>() }
                     single { mock<GetGroupWithUsersUseCase>() }
                     single { mock<UsersInteractor>() }
@@ -122,6 +132,8 @@ class ConfirmPermissionsViewModelTest : KoinTest {
                             confirmMode = params.get(),
                             driftedEntityNames = params.getOrNull(),
                             createPermissionsSnapshotInteractor = get(),
+                            resourceShareActionsInteractor = get(),
+                            metadataPrivateKeysHelperInteractor = get(),
                             getPermissionsSnapshotUseCase = get(),
                             getGroupWithUsersUseCase = get(),
                             usersInteractor = get(),
@@ -614,6 +626,83 @@ class ConfirmPermissionsViewModelTest : KoinTest {
             }
         }
 
+    @Test
+    fun `share mode shows snapshot permissions without a locked operator row`() =
+        runTest {
+            stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+
+            val viewModel = confirmShareViewModel()
+
+            viewModel.viewState.test {
+                val state = expectMostRecentItem()
+                assertThat(state.permissions).hasSize(3)
+                assertThat(state.isEditable).isTrue()
+                assertThat(state.lockedOperatorPermission).isNull()
+                assertThat(state.showSkipConfirmationSwitch).isFalse()
+            }
+        }
+
+    @Test
+    fun `share mode confirm applies the share and closes on success`() =
+        runTest {
+            stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+            get<ResourceShareActionsInteractor>().stub {
+                onBlocking { shareWithConfirmedPermissions(eq(RESOURCE_ID), any()) } doReturn ShareActionResult.Success
+            }
+
+            val viewModel = confirmShareViewModel()
+            viewModel.viewState.test { expectMostRecentItem() }
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(Confirm)
+
+                assertThat(awaitItem()).isEqualTo(CloseWithShareSuccess)
+            }
+            verifyNoInteractions(get<SetPermissionsConfirmationOptOutUseCase>())
+        }
+
+    @Test
+    fun `share mode drift reloads the snapshot and informs`() =
+        runTest {
+            stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+            get<ResourceShareActionsInteractor>().stub {
+                onBlocking { shareWithConfirmedPermissions(eq(RESOURCE_ID), any()) } doReturn
+                    ShareActionResult.PermissionsDrifted(listOf("drifted-user"))
+            }
+
+            val viewModel = confirmShareViewModel()
+            viewModel.viewState.test { expectMostRecentItem() }
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(Confirm)
+
+                assertThat(awaitItem()).isEqualTo(ShowPermissionsDriftedSnackbar(listOf("drifted-user")))
+            }
+            verify(get<CreatePermissionsSnapshotInteractor>(), times(2)).createForResource(RESOURCE_ID)
+        }
+
+    @Test
+    fun `share mode failure shows an error and stays on the screen`() =
+        runTest {
+            stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+            get<ResourceShareActionsInteractor>().stub {
+                onBlocking { shareWithConfirmedPermissions(eq(RESOURCE_ID), any()) } doReturn
+                    ShareActionResult.ShareFailure("error")
+            }
+
+            val viewModel = confirmShareViewModel()
+            viewModel.viewState.test { expectMostRecentItem() }
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(Confirm)
+
+                assertThat(awaitItem()).isEqualTo(ShowErrorSnackbar(SnackbarErrorType.SHARE_FAILED))
+            }
+            viewModel.viewState.test {
+                assertThat(expectMostRecentItem().isApplyingShare).isFalse()
+            }
+        }
+
     private fun stubResourceSnapshot(snapshot: PermissionsSnapshot) {
         get<CreatePermissionsSnapshotInteractor>().stub {
             onBlocking { createForResource(RESOURCE_ID) }
@@ -654,6 +743,11 @@ class ConfirmPermissionsViewModelTest : KoinTest {
     private fun confirmEditViewModel(driftedEntityNames: List<String>? = null) =
         get<ConfirmPermissionsViewModel>(
             parameters = { parametersOf(ConfirmPermissionsMode.Edit(RESOURCE_ID), driftedEntityNames) },
+        )
+
+    private fun confirmShareViewModel() =
+        get<ConfirmPermissionsViewModel>(
+            parameters = { parametersOf(ConfirmPermissionsMode.Share(RESOURCE_ID), null) },
         )
 
     private fun featureFlags(isOptOutAvailable: Boolean) =
