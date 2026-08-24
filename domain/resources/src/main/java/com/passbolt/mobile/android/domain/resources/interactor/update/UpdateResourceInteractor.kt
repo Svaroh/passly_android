@@ -73,6 +73,7 @@ class UpdateResourceInteractor(
     private val metadataMapper: MetadataMapper,
     private val metadataEncryptor: MetadataEncryptor,
 ) {
+    @Suppress("ReturnCount")
     suspend fun execute(
         resourceInput: UpdateResourceModel,
         secretInput: SecretInput,
@@ -84,15 +85,41 @@ class UpdateResourceInteractor(
                 is PotentialPassphrase.PassphraseNotPresent -> return Output.PasswordExpired
             }
 
-        val isSecretValid =
-            isSecretValid(
+        if (!isSecretValid(
                 PlainSecretValidationWrapper(secretInput.secretJsonModel.json, resourceInput.contentType)
                     .validationPlainSecret,
                 resourceInput.contentType,
             )
-        val isResourceValid = isResourceValid(resourceInput.metadataJsonModel.json, resourceInput.contentType)
+        ) {
+            return Output.JsonSchemaValidationFailure(SECRET)
+        }
+        if (!isResourceValid(resourceInput.metadataJsonModel.json, resourceInput.contentType)) {
+            return Output.JsonSchemaValidationFailure(RESOURCE)
+        }
 
-        return when (
+        return if (secretInput.secretChanged) {
+            updateWithChangedSecret(resourceInput, secretInput, passphrase, confirmedRecipientsPublicKeys)
+        } else {
+            updateWithUnchangedSecret(resourceInput, secretInput, passphrase)
+        }
+    }
+
+    private suspend fun updateWithUnchangedSecret(
+        resourceInput: UpdateResourceModel,
+        secretInput: SecretInput,
+        passphrase: ByteArray,
+    ): Output {
+        Timber.d("Secret not changed - updating the resource without the secrets payload")
+        return updateResource(secretInput, passphrase, resourceInput, secrets = null)
+    }
+
+    private suspend fun updateWithChangedSecret(
+        resourceInput: UpdateResourceModel,
+        secretInput: SecretInput,
+        passphrase: ByteArray,
+        confirmedRecipientsPublicKeys: Map<String, String>,
+    ): Output =
+        when (
             val usersWhoHaveAccess =
                 fetchUsersUseCase.execute(FetchUsersUseCase.Input(listOf(resourceInput.resourceId)))
         ) {
@@ -101,28 +128,22 @@ class UpdateResourceInteractor(
                 val hasUnconfirmedRecipients =
                     confirmedRecipientsPublicKeys.isNotEmpty() &&
                         usersWhoHaveAccess.users.any { it.id !in confirmedRecipientsPublicKeys }
-                when {
-                    hasUnconfirmedRecipients -> {
-                        Timber.e("Resource has recipients that were not confirmed - aborting the update")
-                        Output.OpenPgpError("Resource has recipients that were not confirmed")
-                    }
-                    isSecretValid && isResourceValid ->
-                        updateResource(
-                            secretInput,
-                            passphrase,
-                            usersWhoHaveAccess.users,
-                            resourceInput,
-                            confirmedRecipientsPublicKeys,
-                        )
-                    !isSecretValid -> Output.JsonSchemaValidationFailure(SECRET)
-                    else -> Output.JsonSchemaValidationFailure(RESOURCE)
+                if (hasUnconfirmedRecipients) {
+                    Timber.e("Resource has recipients that were not confirmed - aborting the update")
+                    Output.OpenPgpError("Resource has recipients that were not confirmed")
+                } else {
+                    encryptSecretsAndUpdateResource(
+                        secretInput,
+                        passphrase,
+                        usersWhoHaveAccess.users,
+                        resourceInput,
+                        confirmedRecipientsPublicKeys,
+                    )
                 }
             }
         }
-    }
 
-    @Suppress("LongMethod")
-    private suspend fun updateResource(
+    private suspend fun encryptSecretsAndUpdateResource(
         secretInput: SecretInput,
         passphrase: ByteArray,
         usersWhoHaveAccess: List<UserUiModel>,
@@ -136,60 +157,77 @@ class UpdateResourceInteractor(
                 encryptedSecrets.filterIsInstance<EncryptedSecretOrError.Error>().first().message,
             )
         } else {
-            val secrets = encryptedSecrets.filterIsInstance<EncryptedSecretOrError.EncryptedSecret>()
-            val createResourceDto =
-                if (SupportedContentTypes.v4Slugs.contains(resourceInput.contentType.slug)) {
-                    CreateV4ResourceDto(
-                        name = resourceInput.metadataJsonModel.name,
-                        resourceTypeId = getResourceTypeIdForSlug(resourceInput.contentType.slug),
-                        secrets = secrets.map { EncryptedSecret(it.userId, it.data) },
-                        username = resourceInput.metadataJsonModel.username,
-                        uri = resourceInput.metadataJsonModel.uri,
-                        description = resourceInput.metadataJsonModel.description,
-                        folderParentId = resourceInput.folderId,
-                        expiry = getResourceExpiry(resourceInput, secretInput),
-                    )
-                } else {
-                    resourceInput.apply {
-                        this.metadataJsonModel.objectType = MetadataJsonModel.OBJECT_TYPE
-                        this.metadataJsonModel.resourceTypeId = getResourceTypeIdForSlug(contentType.slug)
-                    }
+            updateResource(
+                secretInput,
+                passphrase,
+                resourceInput,
+                secrets =
+                    encryptedSecrets
+                        .filterIsInstance<EncryptedSecretOrError.EncryptedSecret>()
+                        .map { EncryptedSecret(it.userId, it.data) },
+            )
+        }
+    }
 
-                    val encryptedMetadata =
-                        metadataEncryptor.encryptMetadata(
-                            resourceInput.metadataKeyType!!,
-                            resourceInput.metadataKeyId!!,
-                            resourceInput.metadataJsonModel.json!!,
-                            passphrase,
-                        )
-                    when (encryptedMetadata) {
-                        is MetadataEncryptor.Output.Success ->
-                            CreateV5ResourceDto(
-                                resourceTypeId = getResourceTypeIdForSlug(resourceInput.contentType.slug),
-                                secrets = secrets.map { EncryptedSecret(it.userId, it.data) },
-                                folderParentId = resourceInput.folderId,
-                                expiry = getResourceExpiry(resourceInput, secretInput),
-                                metadata = encryptedMetadata.encryptedMetadata,
-                                metadataKeyId = resourceInput.metadataKeyId,
-                                metadataKeyType = metadataMapper.mapToDto(resourceInput.metadataKeyType),
-                            )
-                        is MetadataEncryptor.Output.Failure -> return Output.OpenPgpError(
-                            encryptedMetadata.error?.message.orEmpty(),
-                        )
-                    }
+    @Suppress("LongMethod")
+    private suspend fun updateResource(
+        secretInput: SecretInput,
+        passphrase: ByteArray,
+        resourceInput: UpdateResourceModel,
+        secrets: List<EncryptedSecret>?,
+    ): Output {
+        val createResourceDto =
+            if (SupportedContentTypes.v4Slugs.contains(resourceInput.contentType.slug)) {
+                CreateV4ResourceDto(
+                    name = resourceInput.metadataJsonModel.name,
+                    resourceTypeId = getResourceTypeIdForSlug(resourceInput.contentType.slug),
+                    secrets = secrets,
+                    username = resourceInput.metadataJsonModel.username,
+                    uri = resourceInput.metadataJsonModel.uri,
+                    description = resourceInput.metadataJsonModel.description,
+                    folderParentId = resourceInput.folderId,
+                    expiry = getResourceExpiry(resourceInput, secretInput),
+                )
+            } else {
+                resourceInput.apply {
+                    this.metadataJsonModel.objectType = MetadataJsonModel.OBJECT_TYPE
+                    this.metadataJsonModel.resourceTypeId = getResourceTypeIdForSlug(contentType.slug)
                 }
 
-            when (
-                val result =
-                    resourcesRepository.updateResource(
-                        resourceInput.resourceId,
-                        createResourceDto,
-                        resourceInput.contentType.slug,
+                val encryptedMetadata =
+                    metadataEncryptor.encryptMetadata(
+                        resourceInput.metadataKeyType!!,
+                        resourceInput.metadataKeyId!!,
+                        resourceInput.metadataJsonModel.json!!,
+                        passphrase,
                     )
-            ) {
-                is DomainResult.Incomplete -> Output.Failure(result)
-                is DomainResult.Finished -> Output.Success(result.value.toUiModel())
+                when (encryptedMetadata) {
+                    is MetadataEncryptor.Output.Success ->
+                        CreateV5ResourceDto(
+                            resourceTypeId = getResourceTypeIdForSlug(resourceInput.contentType.slug),
+                            secrets = secrets,
+                            folderParentId = resourceInput.folderId,
+                            expiry = getResourceExpiry(resourceInput, secretInput),
+                            metadata = encryptedMetadata.encryptedMetadata,
+                            metadataKeyId = resourceInput.metadataKeyId,
+                            metadataKeyType = metadataMapper.mapToDto(resourceInput.metadataKeyType),
+                        )
+                    is MetadataEncryptor.Output.Failure -> return Output.OpenPgpError(
+                        encryptedMetadata.error?.message.orEmpty(),
+                    )
+                }
             }
+
+        return when (
+            val result =
+                resourcesRepository.updateResource(
+                    resourceInput.resourceId,
+                    createResourceDto,
+                    resourceInput.contentType.slug,
+                )
+        ) {
+            is DomainResult.Incomplete -> Output.Failure(result)
+            is DomainResult.Finished -> Output.Success(result.value.toUiModel())
         }
     }
 

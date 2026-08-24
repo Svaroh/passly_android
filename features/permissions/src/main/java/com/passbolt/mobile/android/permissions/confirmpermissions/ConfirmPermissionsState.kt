@@ -27,10 +27,14 @@ import com.passbolt.mobile.android.ui.PermissionModelUi
 
 data class ConfirmPermissionsState(
     val permissions: List<PermissionModelUi> = emptyList(),
-    val isLoading: Boolean = false,
+    val isPreparingPermissions: Boolean = false,
+    val isRefreshingUsersAndGroups: Boolean = false,
     val isEditable: Boolean = true,
     val lockedOperatorPermission: PermissionModelUi.UserPermissionModel? = null,
     val indirectAccessWarning: IndirectAccessWarning? = null,
     val showSkipConfirmationSwitch: Boolean = false,
     val isSkipConfirmationChecked: Boolean = false,
-)
+) {
+    val isLoading: Boolean
+        get() = isPreparingPermissions || isRefreshingUsersAndGroups
+}

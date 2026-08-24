@@ -34,6 +34,8 @@ fun Module.confirmPermissionsModule() {
             createPermissionsSnapshotInteractor = get(),
             getPermissionsSnapshotUseCase = get(),
             getGroupWithUsersUseCase = get(),
+            usersInteractor = get(),
+            groupsInteractor = get(),
             getLocalCurrentUserUseCase = get(),
             usersModelMapper = get(),
             getFeatureFlagsUseCase = get(),

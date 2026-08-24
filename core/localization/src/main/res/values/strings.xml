@@ -542,6 +542,8 @@
     <string name="confirm_permissions_title">Confirm permissions</string>
     <string name="confirm_permissions_skip_until_session_end">Skip permission confirmation until the end of my session.</string>
     <string name="confirm_permissions_fetch_failure">Unable to load current permissions. Please try again.</string>
+    <string name="confirm_permissions_preparing">Preparing permissions to approve…</string>
+    <string name="confirm_permissions_refreshing_users_and_groups">Refreshing users and groups…</string>
     <string name="confirm_permissions_drifted">The permissions changed in the meantime. Please review them and confirm again.</string>
     <string name="confirm_permissions_drifted_single">Permissions for %1$s have changed</string>
     <string name="confirm_permissions_drifted_multiple">Permissions for %1$s (and more) have changed</string>

@@ -28,4 +28,5 @@ import com.passbolt.mobile.android.domain.secrets.model.SecretJsonModel
 data class SecretInput(
     val secretJsonModel: SecretJsonModel,
     val passwordChanged: Boolean,
+    val secretChanged: Boolean = true,
 )

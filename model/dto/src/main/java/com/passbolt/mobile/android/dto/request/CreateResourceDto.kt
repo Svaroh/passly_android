@@ -28,7 +28,7 @@ import java.time.ZonedDateTime
  */
 sealed class CreateResourceDto {
     abstract val resourceTypeId: String
-    abstract val secrets: List<EncryptedSecret>
+    abstract val secrets: List<EncryptedSecret>?
     abstract val folderParentId: String?
     abstract val expiry: ZonedDateTime?
 }
@@ -37,7 +37,7 @@ data class CreateV4ResourceDto(
     val name: String,
     @SerializedName("resource_type_id")
     override val resourceTypeId: String,
-    override val secrets: List<EncryptedSecret>,
+    override val secrets: List<EncryptedSecret>?,
     val username: String?,
     val uri: String?,
     val description: String?,
@@ -50,7 +50,7 @@ data class CreateV4ResourceDto(
 data class CreateV5ResourceDto(
     @SerializedName("resource_type_id")
     override val resourceTypeId: String,
-    override val secrets: List<EncryptedSecret>,
+    override val secrets: List<EncryptedSecret>?,
     @SerializedName("folder_parent_id")
     override val folderParentId: String?,
     @SerializedName("expired")
@@ -68,11 +68,6 @@ data class EncryptedSecret(
     val data: String,
 )
 
-data class SecretsDto(
-    val password: String,
-    val description: String,
-)
-
 data class TotpSecretsDto(
     val totp: Totp,
 ) {
@@ -84,9 +79,3 @@ data class TotpSecretsDto(
         val period: Long,
     )
 }
-
-data class PasswordDescriptionTotpSecretsDto(
-    val password: String,
-    val description: String,
-    val totp: TotpSecretsDto.Totp,
-)

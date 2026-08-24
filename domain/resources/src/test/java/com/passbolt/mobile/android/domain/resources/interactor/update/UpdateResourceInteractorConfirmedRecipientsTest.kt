@@ -38,6 +38,7 @@ import com.passbolt.mobile.android.domain.resourcetypes.usecase.GetResourceTypeI
 import com.passbolt.mobile.android.domain.secrets.model.SecretJsonModel
 import com.passbolt.mobile.android.domain.secrets.usecase.decrypt.SecretInput
 import com.passbolt.mobile.android.domain.users.usecase.FetchUsersUseCase
+import com.passbolt.mobile.android.dto.request.CreateResourceDto
 import com.passbolt.mobile.android.gopenpgp.OpenPgp
 import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
 import com.passbolt.mobile.android.jsonmodel.jsonModelModule
@@ -61,6 +62,7 @@ import org.koin.test.KoinTestRule
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.times
@@ -184,6 +186,34 @@ class UpdateResourceInteractorConfirmedRecipientsTest : KoinTest {
             assertThat(publicKeyCaptor.allValues).containsExactly("gpg-key-$USER_A", "gpg-key-$USER_B")
         }
 
+    @Test
+    fun `unchanged secret skips encryption and sends no secrets payload`() =
+        runTest {
+            interactor.execute(
+                resourceInput = updateResourceModel(),
+                secretInput = secretInput(secretChanged = false),
+            )
+
+            val dtoCaptor = argumentCaptor<CreateResourceDto>()
+            verify(resourcesRepository).updateResource(eq(RESOURCE_ID), dtoCaptor.capture(), any())
+            assertThat(dtoCaptor.firstValue.secrets).isNull()
+            verifyNoInteractions(openPgp)
+            verifyNoInteractions(fetchUsersUseCase)
+        }
+
+    @Test
+    fun `changed secret is encrypted for all users with access and sent`() =
+        runTest {
+            interactor.execute(
+                resourceInput = updateResourceModel(),
+                secretInput = secretInput(),
+            )
+
+            val dtoCaptor = argumentCaptor<CreateResourceDto>()
+            verify(resourcesRepository).updateResource(eq(RESOURCE_ID), dtoCaptor.capture(), any())
+            assertThat(dtoCaptor.firstValue.secrets).hasSize(2)
+        }
+
     private fun updateResourceModel() =
         UpdateResourceModel(
             contentType = PasswordAndDescription,
@@ -195,10 +225,11 @@ class UpdateResourceInteractorConfirmedRecipientsTest : KoinTest {
             metadataJsonModel = MetadataJsonModel("""{"name": "Test"}"""),
         )
 
-    private fun secretInput() =
+    private fun secretInput(secretChanged: Boolean = true) =
         SecretInput(
             secretJsonModel = SecretJsonModel("""{"password":"password"}"""),
             passwordChanged = false,
+            secretChanged = secretChanged,
         )
 
     private fun user(userId: String) =

@@ -6,6 +6,7 @@ import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
 import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
+import com.passbolt.mobile.android.common.hash.MessageDigestHash
 import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
 import com.passbolt.mobile.android.core.idlingresource.CreateResourceIdlingResource
 import com.passbolt.mobile.android.core.idlingresource.UpdateResourceIdlingResource
@@ -163,6 +164,7 @@ internal val testResourceFormModule =
         factoryOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
         factoryOf(::ResourceFormMapper)
         singleOf(::ResourceModelHandler)
+        singleOf(::MessageDigestHash)
         factoryOf(::ResourceTypesUpdatesAdjacencyGraph)
         factoryOf(::CreateResourceIdlingResource)
         factoryOf(::UpdateResourceIdlingResource)
