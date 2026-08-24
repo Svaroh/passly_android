@@ -42,6 +42,7 @@ import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceP
 import com.passbolt.mobile.android.domain.resources.usecase.db.UpdateLocalResourceUseCase
 import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
 import com.passbolt.mobile.android.domain.secrets.model.SecretJsonModel
+import com.passbolt.mobile.android.domain.secrets.usecase.decrypt.SecretInput
 import com.passbolt.mobile.android.domain.users.model.GpgKey
 import com.passbolt.mobile.android.domain.users.model.UserProfile
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
@@ -233,6 +234,33 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
             val additionCallExisting = existingCaptor.secondValue.map { it.permissionId }
             assertThat(additionCallRecipients).containsExactly(OPERATOR_PERMISSION_ID, TEMPORARY_NEW_PERMISSION_ID)
             assertThat(additionCallExisting).containsExactly(OPERATOR_PERMISSION_ID)
+        }
+
+    @Test
+    fun `identity secret modification marks the secret as unchanged for the update`() =
+        runTest {
+            interactor
+                .updateGenericResourceWithConfirmedPermissions(PasswordAndDescription, listOf(OPERATOR_UI, USER_UI))
+                .single()
+
+            val secretInputCaptor = argumentCaptor<SecretInput>()
+            verify(updateResourceInteractor).execute(any(), secretInputCaptor.capture(), any())
+            assertThat(secretInputCaptor.firstValue.secretChanged).isFalse()
+        }
+
+    @Test
+    fun `secret modification marks the secret as changed for the update`() =
+        runTest {
+            interactor
+                .updateGenericResourceWithConfirmedPermissions(
+                    PasswordAndDescription,
+                    listOf(OPERATOR_UI, USER_UI),
+                    secretModification = { it.apply { secret = "changed-password" } },
+                ).single()
+
+            val secretInputCaptor = argumentCaptor<SecretInput>()
+            verify(updateResourceInteractor).execute(any(), secretInputCaptor.capture(), any())
+            assertThat(secretInputCaptor.firstValue.secretChanged).isTrue()
         }
 
     @Test

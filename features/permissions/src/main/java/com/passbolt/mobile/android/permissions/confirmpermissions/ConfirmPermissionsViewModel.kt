@@ -28,6 +28,7 @@ import com.passbolt.mobile.android.common.validation.validation
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
 import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
+import com.passbolt.mobile.android.domain.groups.usecase.GroupsInteractor
 import com.passbolt.mobile.android.domain.permissionsconfirmation.mapper.toCreateModePermissions
 import com.passbolt.mobile.android.domain.permissionsconfirmation.mapper.toEditModePermissions
 import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
@@ -35,6 +36,7 @@ import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPer
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
+import com.passbolt.mobile.android.domain.users.usecase.UsersInteractor
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
 import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
 import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper
@@ -66,6 +68,7 @@ import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
 import com.passbolt.mobile.android.ui.PermissionsMode.EDIT
 import com.passbolt.mobile.android.ui.PermissionsMode.VIEW
 import com.passbolt.mobile.android.ui.ResourcePermission
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -75,6 +78,8 @@ class ConfirmPermissionsViewModel(
     private val createPermissionsSnapshotInteractor: CreatePermissionsSnapshotInteractor,
     private val getPermissionsSnapshotUseCase: GetPermissionsSnapshotUseCase,
     private val getGroupWithUsersUseCase: GetGroupWithUsersUseCase,
+    private val usersInteractor: UsersInteractor,
+    private val groupsInteractor: GroupsInteractor,
     private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
     private val usersModelMapper: UsersModelMapper,
     private val getFeatureFlagsUseCase: GetFeatureFlagsUseCase,
@@ -86,6 +91,7 @@ class ConfirmPermissionsViewModel(
     ) {
     init {
         loadSnapshotPermissions()
+        refreshUsersAndGroups()
         loadSkipConfirmationSwitchVisibility()
         showDriftInfoIfReopenedAfterDrift()
     }
@@ -111,7 +117,7 @@ class ConfirmPermissionsViewModel(
 
     private fun loadSnapshotPermissions() {
         viewModelScope.launch(coroutineLaunchContext.io) {
-            updateViewState { copy(isLoading = true) }
+            updateViewState { copy(isPreparingPermissions = true) }
             when (
                 val output =
                     runAuthenticatedOperation {
@@ -128,11 +134,12 @@ class ConfirmPermissionsViewModel(
                         usersModelMapper.mapToUserWithAvatar(
                             getLocalCurrentUserUseCase.execute(Unit).user,
                         )
-                    updateViewState { copy(isLoading = false) }
+                    updateViewState { copy(isPreparingPermissions = false) }
                     when (confirmMode) {
                         is ConfirmPermissionsMode.Create -> {
                             updateViewState {
                                 copy(
+                                    isEditable = output.snapshot.isUserOwner(operator.userId),
                                     lockedOperatorPermission =
                                         UserPermissionModel(
                                             ResourcePermission.OWNER,
@@ -163,6 +170,25 @@ class ConfirmPermissionsViewModel(
                     emitSideEffect(ShowToast(ToastType.PERMISSIONS_FETCH_FAILURE))
                     emitSideEffect(NavigateBack)
                 }
+            }
+        }
+    }
+
+    private fun refreshUsersAndGroups() {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            updateViewState { copy(isRefreshingUsersAndGroups = true) }
+            try {
+                Timber.d("Refreshing users and groups before permissions confirmation")
+                val usersRefresh = async { runAuthenticatedOperation { usersInteractor.fetchAndSaveUsers() } }
+                val groupsRefresh = async { runAuthenticatedOperation { groupsInteractor.fetchAndSaveGroups() } }
+                if (usersRefresh.await() !is UsersInteractor.Output.Success) {
+                    Timber.e("Failed to refresh users before permissions confirmation - using local data")
+                }
+                if (groupsRefresh.await() !is GroupsInteractor.Output.Success) {
+                    Timber.e("Failed to refresh groups before permissions confirmation - using local data")
+                }
+            } finally {
+                updateViewState { copy(isRefreshingUsersAndGroups = false) }
             }
         }
     }

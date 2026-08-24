@@ -124,6 +124,7 @@ class ResourceUpdateActionsInteractor(
                         },
                         updateSecret = { decryptedSecret ->
                             val existingResourceContentType = existingResource.contentType()
+                            val originalSecretJson = decryptedSecret.json
                             val modifiedSecret = secretModification(decryptedSecret)
                             val passwordChanged =
                                 decryptedSecret.getPassword(existingResourceContentType) !=
@@ -133,6 +134,7 @@ class ResourceUpdateActionsInteractor(
                             SecretInput(
                                 secretJsonModel = modifiedSecret,
                                 passwordChanged = passwordChanged,
+                                secretChanged = modifiedSecret.json != originalSecretJson,
                             )
                         },
                         confirmedRecipientsPublicKeys = confirmedRecipientsPublicKeys,

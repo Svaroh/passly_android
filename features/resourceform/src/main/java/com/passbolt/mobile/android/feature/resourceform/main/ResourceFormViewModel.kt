@@ -936,10 +936,15 @@ class ResourceFormViewModel(
         }
     }
 
+    @Suppress("ReturnCount")
     private suspend fun shouldConfirmEditPermissions(): Boolean {
         val resourceId = (mode as? Edit)?.resourceId ?: return false
         if (getPermissionsConfirmationOptOutUseCase.execute(Unit).isOptedOut) {
             Timber.d("Permissions confirmation opted out for this session - updating without confirmation")
+            return false
+        }
+        if (!resourceModelHandler.isSecretModified()) {
+            Timber.d("Secret not modified - updating without permissions confirmation")
             return false
         }
         val fetchOutput =

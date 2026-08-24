@@ -29,9 +29,11 @@ import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
 import com.passbolt.mobile.android.commontest.session.validSessionTestModule
 import com.passbolt.mobile.android.core.architecture.result.DomainResult
 import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
 import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackingFlow
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
 import com.passbolt.mobile.android.domain.groups.usecase.GetGroupWithUsersUseCase
+import com.passbolt.mobile.android.domain.groups.usecase.GroupsInteractor
 import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
@@ -39,6 +41,7 @@ import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSna
 import com.passbolt.mobile.android.domain.users.model.GpgKey
 import com.passbolt.mobile.android.domain.users.model.UserProfile
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
+import com.passbolt.mobile.android.domain.users.usecase.UsersInteractor
 import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
 import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
 import com.passbolt.mobile.android.mappers.UsersModelMapper
@@ -104,6 +107,8 @@ class ConfirmPermissionsViewModelTest : KoinTest {
                     single { mock<CreatePermissionsSnapshotInteractor>() }
                     single { mock<GetPermissionsSnapshotUseCase>() }
                     single { mock<GetGroupWithUsersUseCase>() }
+                    single { mock<UsersInteractor>() }
+                    single { mock<GroupsInteractor>() }
                     single { mock<GetLocalCurrentUserUseCase>() }
                     single { mock<GetFeatureFlagsUseCase>() }
                     single { mock<SetPermissionsConfirmationOptOutUseCase>() }
@@ -119,6 +124,8 @@ class ConfirmPermissionsViewModelTest : KoinTest {
                             createPermissionsSnapshotInteractor = get(),
                             getPermissionsSnapshotUseCase = get(),
                             getGroupWithUsersUseCase = get(),
+                            usersInteractor = get(),
+                            groupsInteractor = get(),
                             getLocalCurrentUserUseCase = get(),
                             usersModelMapper = get(),
                             getFeatureFlagsUseCase = get(),
@@ -144,6 +151,12 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         }
         get<GetPermissionsSnapshotUseCase>().stub {
             onBlocking { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(SNAPSHOT)
+        }
+        get<UsersInteractor>().stub {
+            onBlocking { fetchAndSaveUsers() } doReturn UsersInteractor.Output.Success
+        }
+        get<GroupsInteractor>().stub {
+            onBlocking { fetchAndSaveGroups() } doReturn GroupsInteractor.Output.Success
         }
         get<GetLocalCurrentUserUseCase>().stub {
             onBlocking { execute(Unit) } doReturn GetLocalCurrentUserUseCase.Output(CURRENT_USER_UI_MODEL)
@@ -251,6 +264,38 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         }
 
     @Test
+    fun `users and groups are refreshed when the confirmation opens`() =
+        runTest {
+            val viewModel = confirmCreateViewModel()
+
+            viewModel.viewState.test {
+                val state = expectMostRecentItem()
+                assertThat(state.isPreparingPermissions).isFalse()
+                assertThat(state.isRefreshingUsersAndGroups).isFalse()
+                assertThat(state.isLoading).isFalse()
+            }
+            verify(get<UsersInteractor>()).fetchAndSaveUsers()
+            verify(get<GroupsInteractor>()).fetchAndSaveGroups()
+        }
+
+    @Test
+    fun `refresh failure does not block the confirmation`() =
+        runTest {
+            get<UsersInteractor>().stub {
+                onBlocking { fetchAndSaveUsers() } doReturn
+                    UsersInteractor.Output.Failure(AuthenticationState.Authenticated)
+            }
+
+            val viewModel = confirmCreateViewModel()
+
+            viewModel.viewState.test {
+                val state = expectMostRecentItem()
+                assertThat(state.isLoading).isFalse()
+                assertThat(state.permissions).isNotEmpty()
+            }
+        }
+
+    @Test
     fun `operator permission cannot be downgraded or removed`() =
         runTest {
             val viewModel = confirmCreateViewModel()
@@ -278,6 +323,8 @@ class ConfirmPermissionsViewModelTest : KoinTest {
     @Test
     fun `other user permission opens details in edit mode`() =
         runTest {
+            stubFolderSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+
             val viewModel = confirmCreateViewModel()
             val userPermission =
                 viewModel.viewState.value.permissions
@@ -289,6 +336,39 @@ class ConfirmPermissionsViewModelTest : KoinTest {
 
                 val effect = assertIs<NavigateToUserPermissionDetails>(awaitItem())
                 assertThat(effect.mode).isEqualTo(PermissionsMode.EDIT)
+            }
+        }
+
+    @Test
+    fun `create mode with parent folder owner operator is editable`() =
+        runTest {
+            stubFolderSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+
+            val viewModel = confirmCreateViewModel()
+
+            viewModel.viewState.test {
+                assertThat(expectMostRecentItem().isEditable).isTrue()
+            }
+        }
+
+    @Test
+    fun `create mode with non-owner parent folder operator is read only`() =
+        runTest {
+            val viewModel = confirmCreateViewModel()
+            val groupPermission =
+                viewModel.viewState.value.permissions
+                    .filterIsInstance<PermissionModelUi.GroupPermissionModel>()
+                    .single()
+
+            viewModel.viewState.test {
+                assertThat(expectMostRecentItem().isEditable).isFalse()
+            }
+            viewModel.sideEffect.test {
+                viewModel.onIntent(SeePermission(otherUserPermission(viewModel)))
+                assertThat(assertIs<NavigateToUserPermissionDetails>(awaitItem()).mode).isEqualTo(PermissionsMode.VIEW)
+
+                viewModel.onIntent(SeePermission(groupPermission))
+                assertThat(assertIs<NavigateToGroupPermissionDetails>(awaitItem()).mode).isEqualTo(PermissionsMode.VIEW)
             }
         }
 

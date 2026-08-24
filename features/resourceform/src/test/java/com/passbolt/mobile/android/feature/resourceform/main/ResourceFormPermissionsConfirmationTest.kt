@@ -46,6 +46,7 @@ import com.passbolt.mobile.android.domain.secrets.model.SecretJsonModel
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetSessionExpiryUseCase
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.ConfirmedPermissionsResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.CreateResource
+import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.NoteChanged
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.UpdateResource
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateBackWithCreateSuccess
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateBackWithEditSuccess
@@ -92,6 +93,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.reset
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import java.time.ZonedDateTime
 import kotlin.test.assertIs
@@ -331,6 +333,7 @@ class ResourceFormPermissionsConfirmationTest : KoinTest {
             stubResourcePermissions(listOf(operatorOwnerPermissionModel(), otherUserPermissionModel()))
             val viewModel = editModeViewModel()
             advanceUntilIdle()
+            viewModel.onIntent(NoteChanged("changed-note"))
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(UpdateResource)
@@ -351,6 +354,7 @@ class ResourceFormPermissionsConfirmationTest : KoinTest {
             stubUpdateSuccess()
             val viewModel = editModeViewModel()
             advanceUntilIdle()
+            viewModel.onIntent(NoteChanged("changed-note"))
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(UpdateResource)
@@ -359,6 +363,24 @@ class ResourceFormPermissionsConfirmationTest : KoinTest {
                 assertIs<NavigateBackWithEditSuccess>(awaitItem())
             }
             verify(mockResourceUpdateActionsInteractor).updateGenericResource(any(), any(), any(), any(), any())
+        }
+
+    @Test
+    fun `edit of a shared resource without secret change should update directly`() =
+        runTest {
+            stubEditMode()
+            stubUpdateSuccess()
+            val viewModel = editModeViewModel()
+            advanceUntilIdle()
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(UpdateResource)
+                advanceUntilIdle()
+
+                assertIs<NavigateBackWithEditSuccess>(awaitItem())
+            }
+            verify(mockResourceUpdateActionsInteractor).updateGenericResource(any(), any(), any(), any(), any())
+            verifyNoInteractions(mockFetchResourcePermissionsUseCase)
         }
 
     @Test
@@ -372,6 +394,7 @@ class ResourceFormPermissionsConfirmationTest : KoinTest {
             stubUpdateSuccess()
             val viewModel = editModeViewModel()
             advanceUntilIdle()
+            viewModel.onIntent(NoteChanged("changed-note"))
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(UpdateResource)
@@ -389,6 +412,7 @@ class ResourceFormPermissionsConfirmationTest : KoinTest {
             stubLocalResourcePermissions(listOf(operatorOwnerPermission(), otherUserPermission()))
             val viewModel = editModeViewModel()
             advanceUntilIdle()
+            viewModel.onIntent(NoteChanged("changed-note"))
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(UpdateResource)

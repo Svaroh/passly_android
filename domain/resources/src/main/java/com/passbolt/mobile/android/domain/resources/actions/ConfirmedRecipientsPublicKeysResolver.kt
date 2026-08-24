@@ -43,9 +43,6 @@ class ConfirmedRecipientsPublicKeysResolver(
                 .mapNotNull { (userId, profile) -> profile.gpgKey?.armoredKey?.let { userId to it } }
                 .toMap()
 
-        // the local key lookup covers users added by hand during the confirmation - they are not
-        // part of the snapshot so no fresh key was fetched for them
-        // TODO(MOB-4734): confirm the key source - consider fetching the added users' keys fresh by id
         val addedUsersKeys =
             permissionsToApply
                 .filterIsInstance<PermissionModelUi.UserPermissionModel>()
@@ -54,9 +51,6 @@ class ConfirmedRecipientsPublicKeysResolver(
                     localArmoredKey(permission.user.userId)?.let { permission.user.userId to it }
                 }.toMap()
 
-        // the local group members lookup covers groups added by hand during the confirmation - they
-        // are not part of the snapshot so no fresh membership and keys were fetched for them
-        // TODO(MOB-4734): confirm the key source - consider fetching the added groups' members and keys fresh by id
         val addedGroupsMembersKeys =
             permissionsToApply
                 .filterIsInstance<PermissionModelUi.GroupPermissionModel>()
