@@ -24,7 +24,14 @@
 package com.passbolt.mobile.android.permissions.confirmpermissions
 
 import android.content.Context
+import com.passbolt.mobile.android.permissions.confirmpermissions.SnackbarErrorType.CANNOT_UPDATE_TOTP_WITH_CURRENT_CONFIG
+import com.passbolt.mobile.android.permissions.confirmpermissions.SnackbarErrorType.ENCRYPTION_ERROR
+import com.passbolt.mobile.android.permissions.confirmpermissions.SnackbarErrorType.FAILED_TO_TRUST_METADATA_KEY
+import com.passbolt.mobile.android.permissions.confirmpermissions.SnackbarErrorType.FAILED_TO_VERIFY_METADATA_KEY
+import com.passbolt.mobile.android.permissions.confirmpermissions.SnackbarErrorType.JSON_RESOURCE_SCHEMA_ERROR
+import com.passbolt.mobile.android.permissions.confirmpermissions.SnackbarErrorType.JSON_SECRET_SCHEMA_ERROR
 import com.passbolt.mobile.android.permissions.confirmpermissions.SnackbarErrorType.ONE_OWNER_REQUIRED
+import com.passbolt.mobile.android.permissions.confirmpermissions.SnackbarErrorType.SHARE_FAILED
 import com.passbolt.mobile.android.permissions.confirmpermissions.ToastType.PERMISSIONS_FETCH_FAILURE
 import com.passbolt.mobile.android.core.localization.R as LocalizationR
 
@@ -35,6 +42,23 @@ internal fun getErrorMessage(
     context.getString(
         when (type) {
             ONE_OWNER_REQUIRED -> LocalizationR.string.resource_permissions_one_owner
+            SHARE_FAILED -> LocalizationR.string.resource_permissions_share_failed
+            ENCRYPTION_ERROR -> LocalizationR.string.common_encryption_failure
+            JSON_RESOURCE_SCHEMA_ERROR -> LocalizationR.string.common_json_schema_resource_validation_error
+            JSON_SECRET_SCHEMA_ERROR -> LocalizationR.string.common_json_schema_secret_validation_error
+            CANNOT_UPDATE_TOTP_WITH_CURRENT_CONFIG -> LocalizationR.string.common_cannot_create_resource_with_current_config
+            FAILED_TO_VERIFY_METADATA_KEY -> LocalizationR.string.common_metadata_key_verification_failure
+            FAILED_TO_TRUST_METADATA_KEY -> LocalizationR.string.common_metadata_key_trust_failed
+        },
+    )
+
+internal fun getSuccessMessage(
+    context: Context,
+    type: SnackbarSuccessType,
+): String =
+    context.getString(
+        when (type) {
+            SnackbarSuccessType.METADATA_KEY_IS_TRUSTED -> LocalizationR.string.common_metadata_key_is_trusted
         },
     )
 

@@ -48,31 +48,42 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
+import com.passbolt.mobile.android.core.fulldatarefresh.service.DataRefreshService
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.GroupPermissionDetails
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.PermissionRecipients
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.UserPermissionDetails
 import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
 import com.passbolt.mobile.android.core.navigation.compose.results.PermissionsConfirmedResult
+import com.passbolt.mobile.android.core.navigation.compose.results.ShareCompleteResult
 import com.passbolt.mobile.android.core.ui.banner.WarningBanner
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.fab.AddFloatingActionButton
+import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
 import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
 import com.passbolt.mobile.android.core.ui.switch.TextSwitch
 import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
 import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
+import com.passbolt.mobile.android.feature.metadatakeytrust.NewMetadataKeyTrustDialog
+import com.passbolt.mobile.android.feature.metadatakeytrust.TrustedMetadataKeyDeletedDialog
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.AddPermission
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.Confirm
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.DismissMetadataKeyDeletedDialog
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.DismissMetadataKeyModifiedDialog
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.GoBack
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SeePermission
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SkipConfirmationToggled
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.TrustNewMetadataKey
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.TrustedMetadataKeyDeleted
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithPermissionsConfirmed
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithShareSuccess
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateBack
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToGroupPermissionDetails
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToSelectShareRecipients
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToUserPermissionDetails
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowErrorSnackbar
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowPermissionsDriftedSnackbar
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowSuccessSnackbar
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowToast
 import com.passbolt.mobile.android.permissions.permissions.ui.PermissionsList
 import kotlinx.coroutines.launch
@@ -92,6 +103,7 @@ fun ConfirmPermissionsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val errorColor = colorResource(CoreUiR.color.red)
+    val successColor = colorResource(CoreUiR.color.green)
 
     ConfirmPermissionsScreen(
         state = state.value,
@@ -130,6 +142,11 @@ fun ConfirmPermissionsScreen(
                 resultBus.sendResult(result = PermissionsConfirmedResult(permissions = effect.permissions))
                 navigator.navigateBack()
             }
+            CloseWithShareSuccess -> {
+                DataRefreshService.start(context)
+                resultBus.sendResult(result = ShareCompleteResult(shared = true))
+                navigator.navigateBack()
+            }
             is ShowToast ->
                 Toast
                     .makeText(context, getToastMessage(context, effect.type), Toast.LENGTH_SHORT)
@@ -140,6 +157,15 @@ fun ConfirmPermissionsScreen(
                         ColoredSnackbarVisuals(
                             message = getErrorMessage(context, effect.type),
                             backgroundColor = errorColor,
+                        ),
+                    )
+                }
+            is ShowSuccessSnackbar ->
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(
+                        ColoredSnackbarVisuals(
+                            message = getSuccessMessage(context, effect.type),
+                            backgroundColor = successColor,
                         ),
                     )
                 }
@@ -259,5 +285,23 @@ private fun ConfirmPermissionsScreen(
                 )
             }
         }
+    }
+
+    ProgressDialog(isVisible = state.isApplyingShare)
+
+    if (state.showMetadataKeyModifiedDialog && state.newMetadataKeyToTrustModel != null) {
+        NewMetadataKeyTrustDialog(
+            newKeyToTrustModel = state.newMetadataKeyToTrustModel,
+            onTrustClick = { onIntent(TrustNewMetadataKey) },
+            onDismiss = { onIntent(DismissMetadataKeyModifiedDialog) },
+        )
+    }
+
+    if (state.showMetadataKeyDeletedDialog && state.trustedKeyDeletedModel != null) {
+        TrustedMetadataKeyDeletedDialog(
+            trustedKeyDeletedModel = state.trustedKeyDeletedModel,
+            onDismiss = { onIntent(DismissMetadataKeyDeletedDialog) },
+            onTrustClick = { onIntent(TrustedMetadataKeyDeleted) },
+        )
     }
 }

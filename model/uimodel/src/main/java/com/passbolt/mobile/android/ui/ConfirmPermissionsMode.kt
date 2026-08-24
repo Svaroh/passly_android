@@ -13,4 +13,9 @@ sealed interface ConfirmPermissionsMode {
     data class Edit(
         val resourceId: String,
     ) : ConfirmPermissionsMode
+
+    @Serializable
+    data class Share(
+        val resourceId: String,
+    ) : ConfirmPermissionsMode
 }

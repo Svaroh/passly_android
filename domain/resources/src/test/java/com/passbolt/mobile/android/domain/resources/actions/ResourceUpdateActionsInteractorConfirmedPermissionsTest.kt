@@ -175,6 +175,23 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
         }
 
     @Test
+    fun `dry-run drift during the revocation share stops before the update`() =
+        runTest {
+            resourceShareInteractor.stub {
+                onBlocking { simulateAndShareResource(any(), any(), any(), anyOrNull()) }
+                    .doReturn(ResourceShareInteractor.Output.DriftDetected)
+            }
+
+            val result =
+                interactor
+                    .updateGenericResourceWithConfirmedPermissions(PasswordAndDescription, listOf(OPERATOR_UI))
+                    .single()
+
+            assertThat(result).isEqualTo(ResourceUpdateActionResult.PermissionsDrifted(driftedEntityNames = emptyList()))
+            verifyNoInteractions(updateResourceInteractor)
+        }
+
+    @Test
     fun `drift check failure stops before any permission changes or update`() =
         runTest {
             createPermissionsSnapshotInteractor.stub {

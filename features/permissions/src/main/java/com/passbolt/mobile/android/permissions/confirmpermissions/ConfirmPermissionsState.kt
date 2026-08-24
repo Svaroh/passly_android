@@ -23,17 +23,24 @@
 
 package com.passbolt.mobile.android.permissions.confirmpermissions
 
+import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
+import com.passbolt.mobile.android.ui.TrustedKeyDeletedModel
 
 data class ConfirmPermissionsState(
     val permissions: List<PermissionModelUi> = emptyList(),
     val isPreparingPermissions: Boolean = false,
     val isRefreshingUsersAndGroups: Boolean = false,
+    val isApplyingShare: Boolean = false,
     val isEditable: Boolean = true,
     val lockedOperatorPermission: PermissionModelUi.UserPermissionModel? = null,
     val indirectAccessWarning: IndirectAccessWarning? = null,
     val showSkipConfirmationSwitch: Boolean = false,
     val isSkipConfirmationChecked: Boolean = false,
+    val showMetadataKeyModifiedDialog: Boolean = false,
+    val newMetadataKeyToTrustModel: NewMetadataKeyToTrustModel? = null,
+    val showMetadataKeyDeletedDialog: Boolean = false,
+    val trustedKeyDeletedModel: TrustedKeyDeletedModel? = null,
 ) {
     val isLoading: Boolean
         get() = isPreparingPermissions || isRefreshingUsersAndGroups

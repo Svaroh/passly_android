@@ -23,11 +23,9 @@
 
 package com.passbolt.mobile.android.permissions.permissions
 
-import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.PermissionsItem
 import com.passbolt.mobile.android.ui.PermissionsMode
-import com.passbolt.mobile.android.ui.TrustedKeyDeletedModel
 
 data class PermissionsState(
     val permissionsItem: PermissionsItem,
@@ -35,12 +33,5 @@ data class PermissionsState(
     val permissions: List<PermissionModelUi> = emptyList(),
     val mode: PermissionsMode = PermissionsMode.VIEW,
     val showEditButton: Boolean = false,
-    val showAddUserButton: Boolean = false,
-    val showSaveButton: Boolean = false,
     val showEmptyState: Boolean = false,
-    val showProgress: Boolean = false,
-    val showMetadataKeyModifiedDialog: Boolean = false,
-    val newMetadataKeyToTrustModel: NewMetadataKeyToTrustModel? = null,
-    val showMetadataKeyDeletedDialog: Boolean = false,
-    val trustedKeyDeletedModel: TrustedKeyDeletedModel? = null,
 )

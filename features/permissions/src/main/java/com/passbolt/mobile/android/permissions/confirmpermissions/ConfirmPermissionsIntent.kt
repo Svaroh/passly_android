@@ -30,6 +30,14 @@ sealed interface ConfirmPermissionsIntent {
 
     data object Confirm : ConfirmPermissionsIntent
 
+    data object TrustNewMetadataKey : ConfirmPermissionsIntent
+
+    data object TrustedMetadataKeyDeleted : ConfirmPermissionsIntent
+
+    data object DismissMetadataKeyModifiedDialog : ConfirmPermissionsIntent
+
+    data object DismissMetadataKeyDeletedDialog : ConfirmPermissionsIntent
+
     data object AddPermission : ConfirmPermissionsIntent
 
     data class SeePermission(

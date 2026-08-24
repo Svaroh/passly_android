@@ -32,6 +32,8 @@ fun Module.confirmPermissionsModule() {
             confirmMode = params.get(),
             driftedEntityNames = params.getOrNull(),
             createPermissionsSnapshotInteractor = get(),
+            resourceShareActionsInteractor = get(),
+            metadataPrivateKeysHelperInteractor = get(),
             getPermissionsSnapshotUseCase = get(),
             getGroupWithUsersUseCase = get(),
             usersInteractor = get(),

@@ -25,7 +25,6 @@ package com.passbolt.mobile.android.permissions.permissions
 
 import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
-import com.passbolt.mobile.android.ui.PermissionsItem
 import com.passbolt.mobile.android.ui.PermissionsMode
 
 sealed interface PermissionsSideEffect {
@@ -41,29 +40,14 @@ sealed interface PermissionsSideEffect {
         val mode: PermissionsMode,
     ) : PermissionsSideEffect
 
-    data class NavigateToSelectShareRecipients(
-        val groups: List<GroupPermissionModel>,
-        val users: List<UserPermissionModel>,
+    data class NavigateToShareResource(
+        val resourceId: String,
     ) : PermissionsSideEffect
-
-    data class NavigateToSelfWithMode(
-        val id: String,
-        val mode: PermissionsMode,
-        val permissionsItem: PermissionsItem,
-    ) : PermissionsSideEffect
-
-    data object CloseWithShareSuccess : PermissionsSideEffect
-
-    data object InitiateDataRefresh : PermissionsSideEffect
 
     data object NavigateToHome : PermissionsSideEffect
 
     data class ShowErrorSnackbar(
         val type: SnackbarErrorType,
-    ) : PermissionsSideEffect
-
-    data class ShowSuccessSnackbar(
-        val type: SnackbarSuccessType,
     ) : PermissionsSideEffect
 
     data class ShowToast(
@@ -72,25 +56,8 @@ sealed interface PermissionsSideEffect {
 }
 
 enum class SnackbarErrorType {
-    ONE_OWNER_REQUIRED,
-    SHARE_SIMULATION_FAILED,
-    SHARE_FAILED,
-    SECRET_FETCH_FAILURE,
-    SECRET_ENCRYPT_FAILURE,
-    SECRET_DECRYPT_FAILURE,
     DATA_REFRESH_ERROR,
-    GENERIC_ERROR,
-    ENCRYPTION_ERROR,
-    JSON_RESOURCE_SCHEMA_ERROR,
-    JSON_SECRET_SCHEMA_ERROR,
-    CANNOT_UPDATE_TOTP_WITH_CURRENT_CONFIG,
-    FAILED_TO_VERIFY_METADATA_KEY,
-    FAILED_TO_TRUST_METADATA_KEY,
     CANNOT_SHARE_RESOURCE,
-}
-
-enum class SnackbarSuccessType {
-    METADATA_KEY_IS_TRUSTED,
 }
 
 enum class ToastType {

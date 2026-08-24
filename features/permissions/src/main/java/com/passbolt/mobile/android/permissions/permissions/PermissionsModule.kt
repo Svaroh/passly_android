@@ -41,12 +41,9 @@ fun Module.permissionsModule() {
             getLocalFolderPermissionsUseCase = get(),
             getLocalFolderUseCase = get(),
             permissionsListMapper = get(),
-            resourceShareInteractor = get(),
-            metadataPrivateKeysHelperInteractor = get(),
             resourceAccessInteractor = get(),
             dataRefreshTrackingFlow = get(),
             coroutineLaunchContext = get(),
-            resourceUpdateActionsInteractorFactory = get(),
         )
     }
 }
