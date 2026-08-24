@@ -1,5 +1,6 @@
 package com.passbolt.mobile.android.data.auth.datasource.local
 
+import androidx.core.content.edit
 import com.passbolt.mobile.android.domain.auth.datasource.SessionLocalDataSource
 import com.passbolt.mobile.android.domain.auth.model.Session
 import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
@@ -53,11 +54,10 @@ internal class SessionLocalDataSourceImpl(
         Timber.d("Saving session.")
         try {
             val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
-            with(sharedPreferences.edit()) {
+            sharedPreferences.edit {
                 putString(Constants.ACCESS_TOKEN_KEY, accessToken)
                 putString(Constants.REFRESH_TOKEN_KEY, refreshToken)
                 putString(Constants.MFA_TOKEN_KEY, mfaToken)
-                apply()
             }
         } catch (e: Exception) {
             Timber.e(e, "There was an error while saving the session")
@@ -69,10 +69,9 @@ internal class SessionLocalDataSourceImpl(
         Timber.d("Removing session.")
         try {
             val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
-            with(sharedPreferences.edit()) {
+            sharedPreferences.edit {
                 remove(Constants.ACCESS_TOKEN_KEY)
                 remove(Constants.REFRESH_TOKEN_KEY)
-                apply()
             }
         } catch (e: Exception) {
             Timber.e(e, "There was an error while removing the session")

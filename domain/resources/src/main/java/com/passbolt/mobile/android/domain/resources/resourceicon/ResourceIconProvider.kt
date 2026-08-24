@@ -69,7 +69,7 @@ class ResourceIconProvider(
                     resourceIcon.backgroundColorHexString,
                 )
             } catch (e: Exception) {
-                Timber.Forest.e(e, "Error getting keepass icon")
+                Timber.e(e, "Error getting keepass icon")
                 // Fallback to default icon if keepass icon error
                 getIconByResourceType(
                     context,

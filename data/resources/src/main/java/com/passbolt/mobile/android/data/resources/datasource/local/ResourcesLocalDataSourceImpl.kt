@@ -36,7 +36,6 @@ import com.passbolt.mobile.android.domain.resources.mapper.toUiModel
 import com.passbolt.mobile.android.domain.resources.model.Resource
 import com.passbolt.mobile.android.domain.resources.model.ResourceWithAttributes
 import com.passbolt.mobile.android.entity.group.ResourceAndGroupsCrossRef
-import com.passbolt.mobile.android.entity.resource.ResourceDatabaseView
 import com.passbolt.mobile.android.entity.resource.ResourceDatabaseView.ByModifiedDateDescending
 import com.passbolt.mobile.android.entity.resource.ResourceDatabaseView.ByNameAscending
 import com.passbolt.mobile.android.entity.resource.ResourceDatabaseView.HasExpiry
@@ -123,16 +122,16 @@ internal class ResourcesLocalDataSourceImpl(
                 .resourcesDao()
                 .let {
                     when (val viewType = homeDisplayView.toResourceDatabaseView()) {
-                        is ResourceDatabaseView.ByModifiedDateDescending -> it.getAllOrderedByModifiedDate(slugs, ftsQuery)
-                        is ResourceDatabaseView.ByNameAscending -> it.getAllOrderedByName(slugs, ftsQuery)
-                        is ResourceDatabaseView.IsFavourite -> it.getFavourites(slugs, ftsQuery)
-                        is ResourceDatabaseView.HasPermissions ->
+                        is ByModifiedDateDescending -> it.getAllOrderedByModifiedDate(slugs, ftsQuery)
+                        is ByNameAscending -> it.getAllOrderedByName(slugs, ftsQuery)
+                        is IsFavourite -> it.getFavourites(slugs, ftsQuery)
+                        is HasPermissions ->
                             it.getWithPermissions(
                                 viewType.permissions,
                                 slugs,
                                 ftsQuery,
                             )
-                        is ResourceDatabaseView.HasExpiry -> it.getExpiredResources(slugs, ftsQuery = ftsQuery)
+                        is HasExpiry -> it.getExpiredResources(slugs, ftsQuery = ftsQuery)
                     }
                 }
 

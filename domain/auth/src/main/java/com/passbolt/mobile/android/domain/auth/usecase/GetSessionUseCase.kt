@@ -32,14 +32,14 @@ class GetSessionUseCase(
 ) : UseCase<Unit, GetSessionUseCase.Output> {
     override fun execute(input: Unit): Output {
         val userId = getSelectedAccountUseCase.execute(Unit).selectedAccount
-        userId?.let {
+        return userId?.let {
             val session = sessionRepository.getSession(it)
-            return Output(
+            Output(
                 accessToken = session.accessToken,
                 refreshToken = session.refreshToken,
                 mfaToken = session.mfaToken,
             )
-        } ?: return Output(null, null, null)
+        } ?: Output(null, null, null)
     }
 
     data class Output(

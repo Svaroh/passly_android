@@ -34,7 +34,7 @@ android {
     namespace = "com.passbolt.mobile.android.core.database"
 
     sourceSets {
-        getByName("androidTest").assets.srcDirs("$projectDir/schemas")
+        getByName("androidTest").assets.directories.add("$projectDir/schemas")
     }
     packaging {
         resources.excludes += "META-INF/{AL2.0,LGPL2.1}"

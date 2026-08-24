@@ -14,7 +14,7 @@ class StartUpViewModel(
         launch { resolveAccountNavigation() }
     }
 
-    private suspend fun resolveAccountNavigation() {
+    private fun resolveAccountNavigation() {
         val accounts = getAccountsUseCase.execute(Unit).users
         if (accounts.isEmpty() || accountSetupDataModel != null) {
             emitSideEffect(NavigateToSetup(accountSetupDataModel))

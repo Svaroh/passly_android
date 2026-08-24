@@ -30,7 +30,7 @@ class RestServiceProvider(
     private val client: OkHttpClient,
     private val converterFactory: Converter.Factory,
 ) {
-    fun get(url: String) =
+    fun get(url: String): Retrofit =
         Retrofit
             .Builder()
             .baseUrl(url)

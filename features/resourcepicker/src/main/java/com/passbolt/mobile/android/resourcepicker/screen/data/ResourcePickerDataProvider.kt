@@ -31,7 +31,6 @@ import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResources
 import com.passbolt.mobile.android.mappers.ResourcePickerMapper
 import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerViewModel.Companion.SELECTABLE_RESOURCE_TYPES_SLUGS
 import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes.allSlugs
-import com.passbolt.mobile.android.ui.ResourcePickerListItem
 import com.passbolt.mobile.android.ui.ResourceUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -74,7 +73,7 @@ class ResourcePickerDataProvider(
                         }
                     }
             } else {
-                settledEmptyPagingData<ResourcePickerListItem>()
+                settledEmptyPagingData()
             }
 
         return ResourcePickerData(

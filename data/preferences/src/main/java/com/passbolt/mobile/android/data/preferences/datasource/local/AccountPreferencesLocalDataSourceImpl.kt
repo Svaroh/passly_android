@@ -23,6 +23,7 @@
 
 package com.passbolt.mobile.android.data.preferences.datasource.local
 
+import androidx.core.content.edit
 import com.passbolt.mobile.android.data.preferences.AccountPreferencesFileName
 import com.passbolt.mobile.android.data.preferences.KEY_CHROME_NATIVE_AUTOFILL_DIALOG_SHOWN
 import com.passbolt.mobile.android.data.preferences.KEY_LAST_USED_HOME_VIEW_ID
@@ -66,14 +67,13 @@ internal class AccountPreferencesLocalDataSourceImpl(
         update: HomeDisplayViewPreferencesUpdate,
         userId: String,
     ) {
-        with(sharedPreferences(userId).edit()) {
+        sharedPreferences(userId).edit {
             update.lastUsedHomeView?.let {
                 putString(KEY_LAST_USED_HOME_VIEW_ID, homeDisplayViewSerializer.serialize(it))
             }
             update.userSetHomeView?.let {
                 putString(KEY_USER_SET_HOME_VIEW_ID, defaultFilterSerializer.serialize(it))
             }
-            apply()
         }
     }
 
@@ -89,9 +89,8 @@ internal class AccountPreferencesLocalDataSourceImpl(
         update: AccountFlagsUpdate,
         userId: String,
     ) {
-        with(sharedPreferences(userId).edit()) {
+        sharedPreferences(userId).edit {
             update.wasChromeNativeAutofillDialogShown?.let { putBoolean(KEY_CHROME_NATIVE_AUTOFILL_DIALOG_SHOWN, it) }
-            apply()
         }
     }
 

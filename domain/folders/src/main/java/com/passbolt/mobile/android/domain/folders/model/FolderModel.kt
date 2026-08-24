@@ -35,8 +35,7 @@ data class FolderModel(
     val isShared: Boolean,
     val permission: ResourcePermission,
     val modified: ZonedDateTime,
-    override val searchCriteria: String = name,
-) : Searchable
+)
 
 data class FolderWithCountAndPath(
     val folderId: String,

@@ -40,4 +40,4 @@ class ChangeableBaseUrlInterceptor(
     }
 }
 
-private fun String.replaceBaseUrlWithNew(newUrl: String) = toString().replace(PLACEHOLDER_BASE_URL, newUrl)
+private fun String.replaceBaseUrlWithNew(newUrl: String) = replace(PLACEHOLDER_BASE_URL, newUrl)

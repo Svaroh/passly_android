@@ -19,7 +19,7 @@ class LongStrictTypeAdapter : TypeAdapter<Long?>() {
                 throw InvalidJsonTokenType(peek.toString(), Long::class.java.simpleName)
             } else {
                 val numberString = input.nextString()
-                return if (numberString.all { it.isDigit() }) {
+                if (numberString.all { it.isDigit() }) {
                     numberString.toLong()
                 } else {
                     throw InvalidJsonTokenType(peek.toString(), Long::class.java.simpleName)

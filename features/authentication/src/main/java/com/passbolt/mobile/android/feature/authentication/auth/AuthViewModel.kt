@@ -318,8 +318,8 @@ class AuthViewModel(
             is ManageAccount,
             is AuthConfig.SignIn,
             -> performSignIn(passphrase)
-            is AuthConfig.RefreshPassphrase,
-            is AuthConfig.Mfa,
+            is RefreshPassphrase,
+            is Mfa,
             -> {
                 runtimeAuthenticatedFlag.isAuthenticated = true
                 passphrase.erase()
@@ -531,8 +531,8 @@ class AuthViewModel(
                 passphrase = potentialPassphrase.passphrase.copyOf()
                 updateViewState { copy(passphrase = "", isAuthButtonEnabled = false) }
                 when (authConfig) {
-                    is AuthConfig.RefreshPassphrase,
-                    is AuthConfig.Mfa,
+                    is RefreshPassphrase,
+                    is Mfa,
                     -> {
                         runtimeAuthenticatedFlag.isAuthenticated = true
                         emitSideEffect(AuthSuccess(authConfig, appContext))
@@ -594,8 +594,8 @@ class AuthViewModel(
     private fun mfaSucceeded(mfaHeader: String?) {
         Timber.d("MFA succeeded")
         when (authConfig) {
-            is AuthConfig.RefreshPassphrase,
-            is AuthConfig.Mfa,
+            is RefreshPassphrase,
+            is Mfa,
             -> {
                 runtimeAuthenticatedFlag.isAuthenticated = true
                 emitSideEffect(AuthSuccess(authConfig, appContext))
@@ -676,7 +676,7 @@ class AuthViewModel(
     companion object {
         fun mapAuthReason(authConfig: AuthConfig): AuthState.RefreshAuthReason? =
             when (authConfig) {
-                is AuthConfig.RefreshPassphrase -> AuthState.RefreshAuthReason.PASSPHRASE
+                is RefreshPassphrase -> AuthState.RefreshAuthReason.PASSPHRASE
                 is AuthConfig.SignIn -> AuthState.RefreshAuthReason.SESSION
                 else -> null
             }
