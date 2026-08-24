@@ -72,7 +72,7 @@ class ResourceFormUpgradePermissionsConfirmationTest : ResourceFormPermissionsCo
             stubResourcePermissions(listOf(operatorOwnerPermissionModel()))
             mockResourceUpdateActionsInteractor.stub {
                 on { doesUpgradeToV5ReEncryptSecret() }.thenReturn(true)
-                onBlocking { upgradeToV5() }
+                on { upgradeToV5() }
                     .thenReturn(flowOf(ResourceUpdateActionResult.Success(RESOURCE_ID, "name")))
             }
             val viewModel = editModeViewModel()
@@ -91,7 +91,7 @@ class ResourceFormUpgradePermissionsConfirmationTest : ResourceFormPermissionsCo
             stubEditMode()
             mockResourceUpdateActionsInteractor.stub {
                 on { doesUpgradeToV5ReEncryptSecret() }.thenReturn(false)
-                onBlocking { upgradeToV5() }
+                on { upgradeToV5() }
                     .thenReturn(flowOf(ResourceUpdateActionResult.Success(RESOURCE_ID, "name")))
             }
             val viewModel = editModeViewModel()
@@ -113,7 +113,7 @@ class ResourceFormUpgradePermissionsConfirmationTest : ResourceFormPermissionsCo
             stubResourcePermissions(listOf(operatorOwnerPermissionModel(), otherUserPermissionModel()))
             mockResourceUpdateActionsInteractor.stub {
                 on { doesUpgradeToV5ReEncryptSecret() }.thenReturn(true)
-                onBlocking { upgradeToV5WithConfirmedPermissions(any()) }
+                on { upgradeToV5WithConfirmedPermissions(any()) }
                     .thenReturn(flowOf(ResourceUpdateActionResult.Success(RESOURCE_ID, "name")))
             }
             val viewModel = editModeViewModel()
@@ -138,7 +138,7 @@ class ResourceFormUpgradePermissionsConfirmationTest : ResourceFormPermissionsCo
             stubResourcePermissions(listOf(operatorOwnerPermissionModel(), otherUserPermissionModel()))
             mockResourceUpdateActionsInteractor.stub {
                 on { doesUpgradeToV5ReEncryptSecret() }.thenReturn(true)
-                onBlocking { upgradeToV5WithConfirmedPermissions(any()) }
+                on { upgradeToV5WithConfirmedPermissions(any()) }
                     .thenReturn(flowOf(ResourceUpdateActionResult.PermissionsDrifted(listOf("drifted-user"))))
             }
             val viewModel = editModeViewModel()

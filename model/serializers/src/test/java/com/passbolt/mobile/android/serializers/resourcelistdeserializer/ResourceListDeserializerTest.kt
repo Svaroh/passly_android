@@ -73,10 +73,10 @@ class ResourceListDeserializerTest : KoinTest {
     @Before
     fun setup() {
         mockGetSelectedAccountUseCase.stub {
-            onBlocking { execute(Unit) } doReturn GetSelectedAccountUseCase.Output("selectedAccountId")
+            on { execute(Unit) } doReturn GetSelectedAccountUseCase.Output("selectedAccountId")
         }
         mockGetLocalResourceTypesUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetLocalResourceTypesUseCase.Output(
                     listOf(
                         ResourceTypeModel(UUID.randomUUID(), PasswordString.slug, "", deleted = null),
@@ -139,7 +139,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with invalid fields for password string type should be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to PasswordString.slug),
                 ),
@@ -179,7 +179,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with invalid fields for v5 password string type should be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to V5PasswordString.slug),
                 ),
@@ -219,7 +219,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with invalid fields for password and description type should be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to PasswordAndDescription.slug),
                 ),
@@ -254,7 +254,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with invalid fields for v5 default type should be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to V5Default.slug),
                 ),
@@ -289,7 +289,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with invalid fields for totp type should be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to Totp.slug),
                 ),
@@ -320,7 +320,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with invalid fields for v5 totp standalone type should be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to V5TotpStandalone.slug),
                 ),
@@ -351,7 +351,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with invalid fields for password description totp type should be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to PasswordDescriptionTotp.slug),
                 ),
@@ -386,7 +386,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with invalid fields for v5 default with totp type should be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to V5DefaultWithTotp.slug),
                 ),
@@ -421,7 +421,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with invalid fields for v5 custom fields type should be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to V5CustomFields.slug),
                 ),
@@ -456,7 +456,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `optional fields should pass validation`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to PasswordAndDescription.slug),
                 ),
@@ -494,7 +494,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resource with valid fields for password string type should not be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to PasswordString.slug),
                 ),
@@ -533,7 +533,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resource with valid fields for v5 password string type should not be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to V5PasswordString.slug),
                 ),
@@ -557,7 +557,7 @@ class ResourceListDeserializerTest : KoinTest {
                 ),
             )
         mockMetadataDecryptor.stub {
-            onBlocking { decryptMetadata(any()) }.doReturn(
+            on { decryptMetadata(any()) }.doReturn(
                 MetadataDecryptor.Output.Success(
                     """
                     {
@@ -586,7 +586,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with valid fields for password and description type should not be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to PasswordAndDescription.slug),
                 ),
@@ -625,7 +625,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with valid fields for v5 default type should not be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to V5Default.slug),
                 ),
@@ -649,7 +649,7 @@ class ResourceListDeserializerTest : KoinTest {
                 ),
             )
         mockMetadataDecryptor.stub {
-            onBlocking { decryptMetadata(any()) }.doReturn(
+            on { decryptMetadata(any()) }.doReturn(
                 MetadataDecryptor.Output.Success(
                     """
                     {
@@ -678,7 +678,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `v5 resource with null icon value should not be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to V5Default.slug),
                 ),
@@ -702,7 +702,7 @@ class ResourceListDeserializerTest : KoinTest {
                 ),
             )
         mockMetadataDecryptor.stub {
-            onBlocking { decryptMetadata(any()) }.doReturn(
+            on { decryptMetadata(any()) }.doReturn(
                 MetadataDecryptor.Output.Success(
                     """
                     {
@@ -736,7 +736,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `v5 resource with integer icon value should not be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to V5Default.slug),
                 ),
@@ -760,7 +760,7 @@ class ResourceListDeserializerTest : KoinTest {
                 ),
             )
         mockMetadataDecryptor.stub {
-            onBlocking { decryptMetadata(any()) }.doReturn(
+            on { decryptMetadata(any()) }.doReturn(
                 MetadataDecryptor.Output.Success(
                     """
                     {
@@ -794,7 +794,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with valid fields for totp type should not be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to Totp.slug),
                 ),
@@ -833,7 +833,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with valid fields for v5 totp standalone type should not be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to V5TotpStandalone.slug),
                 ),
@@ -857,7 +857,7 @@ class ResourceListDeserializerTest : KoinTest {
                 ),
             )
         mockMetadataDecryptor.stub {
-            onBlocking { decryptMetadata(any()) }.doReturn(
+            on { decryptMetadata(any()) }.doReturn(
                 MetadataDecryptor.Output.Success(
                     """
                     {
@@ -886,7 +886,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with valid fields for password description totp type should not be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to PasswordDescriptionTotp.slug),
                 ),
@@ -925,7 +925,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with valid fields for v5 default with totp type should not be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to V5DefaultWithTotp.slug),
                 ),
@@ -949,7 +949,7 @@ class ResourceListDeserializerTest : KoinTest {
                 ),
             )
         mockMetadataDecryptor.stub {
-            onBlocking { decryptMetadata(any()) }.doReturn(
+            on { decryptMetadata(any()) }.doReturn(
                 MetadataDecryptor.Output.Success(
                     """
                     {
@@ -978,7 +978,7 @@ class ResourceListDeserializerTest : KoinTest {
     @Test
     fun `resources with valid fields for v5 custom fields type should not be filtered`() {
         mockIdToSlugMappingUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetResourceTypeIdToSlugMappingUseCase.Output(
                     mapOf(testedResourceTypeUuid to V5CustomFields.slug),
                 ),
@@ -1002,7 +1002,7 @@ class ResourceListDeserializerTest : KoinTest {
                 ),
             )
         mockMetadataDecryptor.stub {
-            onBlocking { decryptMetadata(any()) }.doReturn(
+            on { decryptMetadata(any()) }.doReturn(
                 MetadataDecryptor.Output.Success(
                     """
                     {

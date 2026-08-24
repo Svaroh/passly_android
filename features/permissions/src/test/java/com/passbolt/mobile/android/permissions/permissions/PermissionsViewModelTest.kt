@@ -112,15 +112,15 @@ class PermissionsViewModelTest : KoinTest {
         Dispatchers.setMain(testDispatcher)
 
         get<GetLocalResourcePermissionsUseCase>().stub {
-            onBlocking { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) }
+            on { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) }
                 .doReturn(GetLocalResourcePermissionsUseCase.Output(GROUP_PERMISSIONS + USER_PERMISSIONS))
         }
         get<GetLocalResourceUseCase>().stub {
-            onBlocking { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
+            on { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
                 .doReturn(GetLocalResourceUseCase.Output(RESOURCE_MODEL))
         }
         get<ResourceAccessInteractor>().stub {
-            onBlocking { canShareResource() } doReturn true
+            on { canShareResource() } doReturn true
         }
     }
 
@@ -133,7 +133,7 @@ class PermissionsViewModelTest : KoinTest {
     fun `edit button should be shown in view mode and if owner`() =
         runTest {
             get<GetLocalResourceUseCase>().stub {
-                onBlocking { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
+                on { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
                     .doReturn(GetLocalResourceUseCase.Output(RESOURCE_MODEL.copy(permission = ResourcePermission.OWNER)))
             }
 
@@ -152,10 +152,10 @@ class PermissionsViewModelTest : KoinTest {
     fun `error should be shown when sharing not possible`() =
         runTest {
             get<ResourceAccessInteractor>().stub {
-                onBlocking { canShareResource() } doReturn false
+                on { canShareResource() } doReturn false
             }
             get<GetLocalResourceUseCase>().stub {
-                onBlocking { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
+                on { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
                     .doReturn(GetLocalResourceUseCase.Output(RESOURCE_MODEL.copy(permission = ResourcePermission.OWNER)))
             }
 
@@ -176,7 +176,7 @@ class PermissionsViewModelTest : KoinTest {
     fun `edit permissions should open the share confirmation`() =
         runTest {
             get<GetLocalResourceUseCase>().stub {
-                onBlocking { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
+                on { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
                     .doReturn(GetLocalResourceUseCase.Output(RESOURCE_MODEL.copy(permission = ResourcePermission.OWNER)))
             }
 
@@ -196,7 +196,7 @@ class PermissionsViewModelTest : KoinTest {
     fun `empty state should be shown when there are no permissions`() =
         runTest {
             get<GetLocalResourcePermissionsUseCase>().stub {
-                onBlocking { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) }
+                on { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) }
                     .doReturn(GetLocalResourcePermissionsUseCase.Output(emptyList()))
             }
 

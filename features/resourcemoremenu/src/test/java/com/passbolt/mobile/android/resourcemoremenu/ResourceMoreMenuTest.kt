@@ -96,7 +96,7 @@ class ResourceMoreMenuTest : KoinTest {
     fun `all enabled items should be displayed according to state`() =
         runTest {
             mockCreateResourceMoreMenuModelUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     CreateResourceMoreMenuModelUseCase.Output(
                         ResourceMoreMenuModel(
                             title = "title",
@@ -135,7 +135,7 @@ class ResourceMoreMenuTest : KoinTest {
     fun `missing resource for the shown menu should dismiss`() =
         runTest {
             mockCreateResourceMoreMenuModelUseCase.stub {
-                onBlocking { execute(any()) } doThrow IllegalStateException("The query result was empty")
+                on { execute(any()) } doThrow IllegalStateException("The query result was empty")
             }
 
             viewModel = get()

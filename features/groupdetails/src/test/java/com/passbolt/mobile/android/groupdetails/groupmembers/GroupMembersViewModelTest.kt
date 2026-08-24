@@ -93,7 +93,7 @@ class GroupMembersViewModelTest : KoinTest {
 
         val getGroupWithUsersUseCase = get<GetGroupWithUsersUseCase>()
         getGroupWithUsersUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetGroupWithUsersUseCase.Output(testGroupWithUsers)
+            on { execute(any()) } doReturn GetGroupWithUsersUseCase.Output(testGroupWithUsers)
         }
     }
 
@@ -132,7 +132,7 @@ class GroupMembersViewModelTest : KoinTest {
 
             val getGroupWithUsersUseCase = get<GetGroupWithUsersUseCase>()
             getGroupWithUsersUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetGroupWithUsersUseCase.Output(emptyGroupWithUsers)
+                on { execute(any()) } doReturn GetGroupWithUsersUseCase.Output(emptyGroupWithUsers)
             }
 
             viewModel = get()

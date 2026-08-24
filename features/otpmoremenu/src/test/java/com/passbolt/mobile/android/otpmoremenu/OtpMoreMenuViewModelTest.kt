@@ -72,7 +72,7 @@ class OtpMoreMenuViewModelTest : KoinTest {
 
         val createOtpMoreMenuModelUseCase = get<CreateOtpMoreMenuModelUseCase>()
         createOtpMoreMenuModelUseCase.stub {
-            onBlocking { execute(any()) } doReturn
+            on { execute(any()) } doReturn
                 CreateOtpMoreMenuModelUseCase.Output(
                     OtpMoreMenuModel(
                         title = RESOURCE_NAME,
@@ -117,7 +117,7 @@ class OtpMoreMenuViewModelTest : KoinTest {
     fun `should dismiss when resource for the shown menu is missing`() =
         runTest {
             get<CreateOtpMoreMenuModelUseCase>().stub {
-                onBlocking { execute(any()) } doThrow IllegalStateException("The query result was empty")
+                on { execute(any()) } doThrow IllegalStateException("The query result was empty")
             }
             viewModel = get()
 
@@ -165,7 +165,7 @@ class OtpMoreMenuViewModelTest : KoinTest {
         runTest {
             val createOtpMoreMenuModelUseCase = get<CreateOtpMoreMenuModelUseCase>()
             createOtpMoreMenuModelUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     CreateOtpMoreMenuModelUseCase.Output(
                         OtpMoreMenuModel(
                             title = RESOURCE_NAME,

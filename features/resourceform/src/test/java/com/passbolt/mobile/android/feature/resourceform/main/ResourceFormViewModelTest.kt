@@ -172,7 +172,7 @@ class ResourceFormViewModelTest : KoinTest {
 
         reset(mockGetFeatureFlagsUseCase, mockPasswordPoliciesInteractor, mockPasswordExpiryPoliciesInteractor)
         mockGetFeatureFlagsUseCase.stub {
-            onBlocking { execute(Unit) }.thenReturn(GetFeatureFlagsUseCase.Output(DEFAULT_TEST_FEATURE_FLAGS))
+            on { execute(Unit) }.thenReturn(GetFeatureFlagsUseCase.Output(DEFAULT_TEST_FEATURE_FLAGS))
         }
 
         val passphraseMemoryCache: PassphraseMemoryCache = get()
@@ -188,7 +188,7 @@ class ResourceFormViewModelTest : KoinTest {
         Dispatchers.resetMain()
         reset(mockGetFeatureFlagsUseCase, mockPasswordPoliciesInteractor, mockPasswordExpiryPoliciesInteractor)
         mockGetFeatureFlagsUseCase.stub {
-            onBlocking { execute(Unit) }.thenReturn(GetFeatureFlagsUseCase.Output(DEFAULT_TEST_FEATURE_FLAGS))
+            on { execute(Unit) }.thenReturn(GetFeatureFlagsUseCase.Output(DEFAULT_TEST_FEATURE_FLAGS))
         }
     }
 
@@ -196,7 +196,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `view should show correct ui for create totp`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,
@@ -238,7 +238,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `view should show correct ui for create password`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -246,7 +246,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -274,7 +274,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `view should show correct ui for create standalone note`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5Note,
@@ -302,7 +302,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `view should show correct ui for create pin code`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5PinCodeStandalone,
@@ -331,7 +331,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `view should show correct initial mode in state`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -339,7 +339,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -359,7 +359,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `initialization failure should emit toast and navigate back`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.NotPossibleNotCreateResource,
                 )
             }
@@ -385,7 +385,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `advanced settings should show additional password sections`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -393,7 +393,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -417,7 +417,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `advanced settings should show additional totp sections`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,
@@ -446,7 +446,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `advanced settings expanded flag should be set after expand`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -454,7 +454,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -478,7 +478,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `password change should trigger entropy recalculation`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -486,7 +486,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -499,10 +499,10 @@ class ResourceFormViewModelTest : KoinTest {
             advanceUntilIdle()
 
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy("t") }.thenReturn(5.0)
-                onBlocking { getSecretEntropy("te") }.thenReturn(10.0)
-                onBlocking { getSecretEntropy("tes") }.thenReturn(15.0)
-                onBlocking { getSecretEntropy("test") }.thenReturn(20.0)
+                on { getSecretEntropy("t") }.thenReturn(5.0)
+                on { getSecretEntropy("te") }.thenReturn(10.0)
+                on { getSecretEntropy("tes") }.thenReturn(15.0)
+                on { getSecretEntropy("test") }.thenReturn(20.0)
             }
 
             viewModel.onIntent(PasswordTextChanged("t"))
@@ -523,7 +523,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `password change should update password strength`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -531,7 +531,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -544,7 +544,7 @@ class ResourceFormViewModelTest : KoinTest {
             advanceUntilIdle()
 
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy("strongpassword") }.thenReturn(130.0)
+                on { getSecretEntropy("strongpassword") }.thenReturn(130.0)
             }
 
             viewModel.onIntent(PasswordTextChanged("strongpassword"))
@@ -558,7 +558,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `password main uri change should update state`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -566,7 +566,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -588,7 +588,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `password username change should update state`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -596,7 +596,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -618,7 +618,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `generate password should update state with generated password on success`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -626,7 +626,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -640,10 +640,10 @@ class ResourceFormViewModelTest : KoinTest {
 
             val generatedCodepoints = "GeneratedPass1!".map { Codepoint(it.code) }
             mockGetPasswordPoliciesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
+                on { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
             }
             mockSecretGenerator.stub {
-                onBlocking { generatePassword(any()) }.thenReturn(
+                on { generatePassword(any()) }.thenReturn(
                     SecretGenerator.SecretGenerationResult.Success(generatedCodepoints, 100.0),
                 )
             }
@@ -661,7 +661,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `generate password should show unable to generate dialog on low entropy failure`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -669,7 +669,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -682,10 +682,10 @@ class ResourceFormViewModelTest : KoinTest {
             advanceUntilIdle()
 
             mockGetPasswordPoliciesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
+                on { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
             }
             mockSecretGenerator.stub {
-                onBlocking { generatePassword(any()) }.thenReturn(
+                on { generatePassword(any()) }.thenReturn(
                     SecretGenerator.SecretGenerationResult.FailedToGenerateLowEntropy(80),
                 )
             }
@@ -702,7 +702,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `name text change should update state`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -710,7 +710,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -732,7 +732,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `totp secret change should update state`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,
@@ -760,7 +760,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `totp secret change should clear previous error`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,
@@ -791,7 +791,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `totp url change should update state`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,
@@ -818,7 +818,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `note change should update state`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5Note,
@@ -846,7 +846,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `note change should clear previous error`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5Note,
@@ -880,7 +880,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `create resource with empty totp secret should show must not be empty error`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,
@@ -908,7 +908,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `create resource with non base32 totp secret should show must be base32 error`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,
@@ -938,7 +938,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `create resource with note exceeding max length should show error`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5Note,
@@ -969,7 +969,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `go back should emit navigate back side effect`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -977,7 +977,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -1000,7 +1000,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `scan totp should emit navigate to scan otp side effect`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,
@@ -1028,7 +1028,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `go to additional note should emit navigate to note side effect`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1036,7 +1036,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -1061,7 +1061,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `go to additional password should emit navigate to password side effect`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,
@@ -1091,7 +1091,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `go to additional totp should emit navigate to totp side effect`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1099,7 +1099,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -1124,7 +1124,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `go to additional pin code should emit navigate to pin code side effect`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5Note,
@@ -1154,7 +1154,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `go to pin code advanced generation should emit navigate side effect`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5PinCodeStandalone,
@@ -1183,7 +1183,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `generate pin code should update state with generated pin`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5PinCodeStandalone,
@@ -1212,7 +1212,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `pin code advanced generation result should regenerate with new length`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5PinCodeStandalone,
@@ -1241,7 +1241,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `go to totp more settings should emit navigate to totp advanced settings`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,
@@ -1271,7 +1271,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `go to metadata description should emit navigate to description side effect`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1279,7 +1279,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -1304,7 +1304,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `go to appearance should emit navigate to appearance side effect`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1312,7 +1312,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -1337,7 +1337,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `go to additional uris should emit navigate to additional uris side effect`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1345,7 +1345,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -1370,7 +1370,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `go to custom fields should emit navigate to custom fields side effect`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1378,7 +1378,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -1403,7 +1403,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `open advanced secret generation loads policies and emits navigate side effect`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1411,10 +1411,10 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
             mockGetPasswordPoliciesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
+                on { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
             }
 
             val mode =
@@ -1446,7 +1446,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `open advanced secret generation reuses cached settings when present`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1454,10 +1454,10 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(75.0)
+                on { getSecretEntropy(any()) }.thenReturn(75.0)
             }
             mockGetPasswordPoliciesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
+                on { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
             }
 
             val mode =
@@ -1497,7 +1497,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `advanced secret generation result stores settings and applies generated password`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1505,8 +1505,8 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
-                onBlocking { getSecretEntropy("generated secret") }.thenReturn(150.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy("generated secret") }.thenReturn(150.0)
             }
 
             val mode =
@@ -1540,7 +1540,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `scan otp result should update state with scanned totp data`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,
@@ -1580,7 +1580,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `scan otp result with manual creation chosen should not update state`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,
@@ -1619,7 +1619,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `dismiss metadata key dialog should clear both dialog states`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1627,7 +1627,7 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             val mode =
@@ -1651,7 +1651,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `create resource with pwned password should show data breach warning`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1659,13 +1659,13 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
             mockGetPasswordPoliciesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
+                on { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
             }
             mockCheckPasswordPropertiesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     CheckPasswordPropertiesUseCase.Output.Pwned(dataBreachesCount = 10),
                 )
             }
@@ -1693,7 +1693,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `create resource with weak password should show low entropy warning`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1701,13 +1701,13 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
             mockGetPasswordPoliciesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
+                on { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
             }
             mockCheckPasswordPropertiesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     CheckPasswordPropertiesUseCase.Output.Weak,
                 )
             }
@@ -1735,7 +1735,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `create resource with fine password should not show warning`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1743,18 +1743,18 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
             mockGetPasswordPoliciesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
+                on { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
             }
             mockCheckPasswordPropertiesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     CheckPasswordPropertiesUseCase.Output.Fine,
                 )
             }
             mockResourceCreateActionsInteractor.stub {
-                onBlocking { createGenericResource(any(), anyOrNull(), any(), any()) }.thenReturn(
+                on { createGenericResource(any(), anyOrNull(), any(), any()) }.thenReturn(
                     flowOf(ResourceCreateActionResult.Success("id", "name")),
                 )
             }
@@ -1782,7 +1782,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `password check failure should not show warning`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1790,18 +1790,18 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
             mockGetPasswordPoliciesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
+                on { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
             }
             mockCheckPasswordPropertiesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     CheckPasswordPropertiesUseCase.Output.Failure,
                 )
             }
             mockResourceCreateActionsInteractor.stub {
-                onBlocking { createGenericResource(any(), anyOrNull(), any(), any()) }.thenReturn(
+                on { createGenericResource(any(), anyOrNull(), any(), any()) }.thenReturn(
                     flowOf(ResourceCreateActionResult.Success("id", "name")),
                 )
             }
@@ -1829,7 +1829,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `password check should be skipped when external dictionary check is disabled`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1837,18 +1837,18 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
             mockGetPasswordPoliciesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES_DICTIONARY_CHECK_DISABLED)
+                on { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES_DICTIONARY_CHECK_DISABLED)
             }
             mockCheckPasswordPropertiesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     CheckPasswordPropertiesUseCase.Output.Pwned(dataBreachesCount = 10),
                 )
             }
             mockResourceCreateActionsInteractor.stub {
-                onBlocking { createGenericResource(any(), anyOrNull(), any(), any()) }.thenReturn(
+                on { createGenericResource(any(), anyOrNull(), any(), any()) }.thenReturn(
                     flowOf(ResourceCreateActionResult.Success("id", "name")),
                 )
             }
@@ -1876,7 +1876,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `proceed with password warning should clear warning state`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1884,18 +1884,18 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
             mockGetPasswordPoliciesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
+                on { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
             }
             mockCheckPasswordPropertiesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     CheckPasswordPropertiesUseCase.Output.Pwned(dataBreachesCount = 5),
                 )
             }
             mockResourceCreateActionsInteractor.stub {
-                onBlocking { createGenericResource(any(), anyOrNull(), any(), any()) }.thenReturn(
+                on { createGenericResource(any(), anyOrNull(), any(), any()) }.thenReturn(
                     flowOf(ResourceCreateActionResult.Success("id", "name")),
                 )
             }
@@ -1927,7 +1927,7 @@ class ResourceFormViewModelTest : KoinTest {
     fun `dismiss password warning should clear warning state`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = V5Default,
@@ -1935,13 +1935,13 @@ class ResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
             mockGetPasswordPoliciesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
+                on { execute(any()) }.thenReturn(MOCK_PASSWORD_POLICIES)
             }
             mockCheckPasswordPropertiesUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     CheckPasswordPropertiesUseCase.Output.Weak,
                 )
             }
@@ -1990,11 +1990,11 @@ class ResourceFormViewModelTest : KoinTest {
         runTest {
             stubCreatePasswordMode()
             mockGetFeatureFlagsUseCase.stub {
-                onBlocking { execute(Unit) }
+                on { execute(Unit) }
                     .thenReturn(GetFeatureFlagsUseCase.Output(FEATURE_FLAGS_WITH_PASSWORD_EXPIRY))
             }
             mockPasswordExpiryPoliciesInteractor.stub {
-                onBlocking { fetchAndSavePasswordExpiryPolicies() }
+                on { fetchAndSavePasswordExpiryPolicies() }
                     .thenReturn(PasswordExpiryPoliciesInteractor.Output.Success(MOCK_PASSWORD_EXPIRY_SETTINGS))
             }
 
@@ -2014,11 +2014,11 @@ class ResourceFormViewModelTest : KoinTest {
         runTest {
             stubCreatePasswordMode()
             mockGetFeatureFlagsUseCase.stub {
-                onBlocking { execute(Unit) }
+                on { execute(Unit) }
                     .thenReturn(GetFeatureFlagsUseCase.Output(FEATURE_FLAGS_WITH_PASSWORD_EXPIRY))
             }
             mockPasswordExpiryPoliciesInteractor.stub {
-                onBlocking { fetchAndSavePasswordExpiryPolicies() }
+                on { fetchAndSavePasswordExpiryPolicies() }
                     .thenReturn(
                         PasswordExpiryPoliciesInteractor.Output.Failure.FetchFailure(
                             DomainResult.Incomplete.Error(UNKNOWN, "boom"),
@@ -2062,11 +2062,11 @@ class ResourceFormViewModelTest : KoinTest {
         runTest {
             stubCreatePasswordMode()
             mockGetFeatureFlagsUseCase.stub {
-                onBlocking { execute(Unit) }
+                on { execute(Unit) }
                     .thenReturn(GetFeatureFlagsUseCase.Output(FEATURE_FLAGS_WITH_PASSWORD_POLICIES))
             }
             mockPasswordPoliciesInteractor.stub {
-                onBlocking { fetchAndSavePasswordPolicies() }
+                on { fetchAndSavePasswordPolicies() }
                     .thenReturn(PasswordPoliciesInteractor.Output.Success(MOCK_PASSWORD_POLICIES))
             }
 
@@ -2086,11 +2086,11 @@ class ResourceFormViewModelTest : KoinTest {
         runTest {
             stubCreatePasswordMode()
             mockGetFeatureFlagsUseCase.stub {
-                onBlocking { execute(Unit) }
+                on { execute(Unit) }
                     .thenReturn(GetFeatureFlagsUseCase.Output(FEATURE_FLAGS_WITH_PASSWORD_POLICIES))
             }
             mockPasswordPoliciesInteractor.stub {
-                onBlocking { fetchAndSavePasswordPolicies() }
+                on { fetchAndSavePasswordPolicies() }
                     .thenReturn(PasswordPoliciesInteractor.Output.Failure.ValidationFailure)
             }
 
@@ -2111,7 +2111,7 @@ class ResourceFormViewModelTest : KoinTest {
 
     private fun stubCreatePasswordMode() {
         mockGetDefaultCreateContentTypeUseCase.stub {
-            onBlocking { execute(any()) }.thenReturn(
+            on { execute(any()) }.thenReturn(
                 GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                     metadataType = MetadataTypeModel.V5,
                     contentType = V5Default,
@@ -2119,7 +2119,7 @@ class ResourceFormViewModelTest : KoinTest {
             )
         }
         mockEntropyCalculator.stub {
-            onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+            on { getSecretEntropy(any()) }.thenReturn(0.0)
         }
     }
 
@@ -2264,19 +2264,19 @@ class ResourceFormViewModelTest : KoinTest {
     ) {
         val resource = createResourceModel(slug = slug)
         mockGetLocalResourceUseCase.stub {
-            onBlocking { execute(any()) }.thenReturn(GetLocalResourceUseCase.Output(resource))
+            on { execute(any()) }.thenReturn(GetLocalResourceUseCase.Output(resource))
         }
         mockGetEditContentTypeUseCase.stub {
-            onBlocking { execute(any()) }.thenReturn(
+            on { execute(any()) }.thenReturn(
                 GetEditContentTypeUseCase.Output(contentType = contentType, metadataType = V4),
             )
         }
         mockEntropyCalculator.stub {
-            onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+            on { getSecretEntropy(any()) }.thenReturn(0.0)
         }
         val secretInteractorMock = mock<SecretPropertiesActionsInteractor>()
         secretInteractorMock.stub {
-            onBlocking { provideDecryptedSecret() }.thenReturn(
+            on { provideDecryptedSecret() }.thenReturn(
                 flowOf(
                     SecretPropertyActionResult.Success(
                         label = "secret",
@@ -2297,14 +2297,14 @@ class ResourceFormViewModelTest : KoinTest {
         allowCreationOfV5Resources: Boolean,
     ) {
         mockGetFeatureFlagsUseCase.stub {
-            onBlocking { execute(Unit) }.thenReturn(
+            on { execute(Unit) }.thenReturn(
                 GetFeatureFlagsUseCase.Output(
                     DEFAULT_FEATURE_FLAGS.copy(isV5MetadataAvailable = isV5MetadataAvailable),
                 ),
             )
         }
         mockGetMetadataTypesSettingsUseCase.stub {
-            onBlocking { execute(Unit) }.thenReturn(
+            on { execute(Unit) }.thenReturn(
                 GetMetadataTypesSettingsUseCase.Output(
                     DEFAULT_METADATA_TYPES_SETTINGS.copy(
                         allowV4V5Upgrade = allowV4V5Upgrade,
@@ -2318,7 +2318,7 @@ class ResourceFormViewModelTest : KoinTest {
     private fun stubUpgradeResult(result: ResourceUpdateActionResult) {
         val upgradeInteractor = mock<ResourceUpdateActionsInteractor>()
         upgradeInteractor.stub {
-            onBlocking { upgradeToV5() }.thenReturn(flowOf(result))
+            on { upgradeToV5() }.thenReturn(flowOf(result))
         }
         mockResourceUpdateActionsInteractorFactory.stub {
             on { create(any()) }.thenReturn(upgradeInteractor)

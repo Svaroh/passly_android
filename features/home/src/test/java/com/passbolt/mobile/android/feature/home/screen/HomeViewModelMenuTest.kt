@@ -128,7 +128,7 @@ class HomeViewModelMenuTest : KoinTest {
                     single { mock<DetectAutofillConflict>() }
                     single {
                         mock<UserProfileInteractor> {
-                            onBlocking { fetchAndUpdateUserProfile() } doReturn UserProfileInteractor.Output.Success
+                            on { fetchAndUpdateUserProfile() } doReturn UserProfileInteractor.Output.Success
                         }
                     }
                     singleOf(::UserProfileRefreshTrackingFlow)
@@ -176,7 +176,7 @@ class HomeViewModelMenuTest : KoinTest {
         )
 
         get<HomeDataProvider>().stub {
-            onBlocking {
+            on {
                 provideData(
                     any(),
                     any(),
@@ -187,8 +187,8 @@ class HomeViewModelMenuTest : KoinTest {
         }
 
         get<ResourceAccessInteractor>().stub {
-            onBlocking { canCreateResource(anyOrNull()) }.doReturn(true)
-            onBlocking { canShareResource() }.doReturn(true)
+            on { canCreateResource(anyOrNull()) }.doReturn(true)
+            on { canShareResource() }.doReturn(true)
         }
     }
 

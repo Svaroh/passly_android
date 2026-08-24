@@ -106,7 +106,7 @@ class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfi
             stubEditMode()
             stubResourcePermissions(listOf(operatorOwnerPermissionModel(), otherUserPermissionModel()))
             mockGetPermissionsConfirmationOptOutUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = true))
+                on { execute(Unit) }.thenReturn(GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = true))
             }
             stubUpdateSuccess()
             val viewModel = editModeViewModel()
@@ -143,7 +143,7 @@ class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfi
             val confirmedPermissions = listOf(operatorOwnerPermission(), otherUserPermission())
             stubEditMode()
             mockResourceUpdateActionsInteractor.stub {
-                onBlocking {
+                on {
                     updateGenericResourceWithConfirmedPermissions(any<ContentType>(), any(), any(), any())
                 }.thenReturn(flowOf(ResourceUpdateActionResult.Success(RESOURCE_ID, "name")))
             }
@@ -163,7 +163,7 @@ class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfi
         runTest {
             stubEditMode()
             mockResourceUpdateActionsInteractor.stub {
-                onBlocking {
+                on {
                     updateGenericResourceWithConfirmedPermissions(any<ContentType>(), any(), any(), any())
                 }.thenReturn(flowOf(ResourceUpdateActionResult.PermissionsDrifted(listOf("drifted-user"))))
             }
@@ -186,7 +186,7 @@ class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfi
         runTest {
             stubEditMode()
             mockResourceUpdateActionsInteractor.stub {
-                onBlocking {
+                on {
                     updateGenericResourceWithConfirmedPermissions(any<ContentType>(), any(), any(), any())
                 }.thenReturn(flowOf(ResourceUpdateActionResult.ShareFailure("error")))
             }

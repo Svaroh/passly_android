@@ -74,7 +74,7 @@ class CreatePermissionsConfirmationInteractorTest : KoinTest {
     @Before
     fun setUp() {
         get<GetPermissionsConfirmationOptOutUseCase>().stub {
-            onBlocking { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false)
+            on { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false)
         }
         get<GetSelectedAccountDataUseCase>().stub {
             on { execute(Unit) } doReturn selectedAccountData()
@@ -92,7 +92,7 @@ class CreatePermissionsConfirmationInteractorTest : KoinTest {
     fun `session opt out skips the confirmation without fetching permissions`() =
         runTest {
             get<GetPermissionsConfirmationOptOutUseCase>().stub {
-                onBlocking { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = true)
+                on { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = true)
             }
 
             assertThat(get<CreatePermissionsConfirmationInteractor>().shouldConfirmPermissions(FOLDER_ID)).isFalse()
@@ -127,11 +127,11 @@ class CreatePermissionsConfirmationInteractorTest : KoinTest {
     fun `permissions fetch failure falls back to the local permissions`() =
         runTest {
             get<FetchFolderPermissionsUseCase>().stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     FetchFolderPermissionsUseCase.Output.Failure(DomainResult.Incomplete.Error(UNKNOWN, "error"))
             }
             get<GetLocalFolderPermissionsUseCase>().stub {
-                onBlocking { execute(GetLocalFolderPermissionsUseCase.Input(FOLDER_ID)) } doReturn
+                on { execute(GetLocalFolderPermissionsUseCase.Input(FOLDER_ID)) } doReturn
                     GetLocalFolderPermissionsUseCase.Output(
                         listOf(localOperatorOwnerPermission(), localOtherUserPermission()),
                     )
@@ -142,7 +142,7 @@ class CreatePermissionsConfirmationInteractorTest : KoinTest {
 
     private fun stubFetchedPermissions(vararg permissions: PermissionModel) {
         get<FetchFolderPermissionsUseCase>().stub {
-            onBlocking { execute(FetchFolderPermissionsUseCase.Input(FOLDER_ID)) } doReturn
+            on { execute(FetchFolderPermissionsUseCase.Input(FOLDER_ID)) } doReturn
                 FetchFolderPermissionsUseCase.Output.Success(permissions.toList())
         }
     }

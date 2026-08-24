@@ -79,7 +79,7 @@ class PasswordExpiryRepositoryImplTest : KoinTest {
     @Test
     fun `memory hit returns memory value and never calls remote`() =
         runTest {
-            memory.stub { onBlocking { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Finished(settings)) }
+            memory.stub { on { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Finished(settings)) }
 
             val result = repository.getPasswordExpirySettings(USER_ID)
 
@@ -90,8 +90,8 @@ class PasswordExpiryRepositoryImplTest : KoinTest {
     @Test
     fun `memory miss with remote success returns success and writes to memory`() =
         runTest {
-            memory.stub { onBlocking { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Incomplete.NotCached) }
-            remote.stub { onBlocking { getPasswordExpirySettings() }.thenReturn(DomainResult.Finished(settings)) }
+            memory.stub { on { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Incomplete.NotCached) }
+            remote.stub { on { getPasswordExpirySettings() }.thenReturn(DomainResult.Finished(settings)) }
 
             val result = repository.getPasswordExpirySettings(USER_ID)
 
@@ -103,8 +103,8 @@ class PasswordExpiryRepositoryImplTest : KoinTest {
     fun `memory miss with remote failure returns failure and does not write to memory`() =
         runTest {
             val failure = DomainResult.Incomplete.Error(UNKNOWN, "boom")
-            memory.stub { onBlocking { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Incomplete.NotCached) }
-            remote.stub { onBlocking { getPasswordExpirySettings() }.thenReturn(failure) }
+            memory.stub { on { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Incomplete.NotCached) }
+            remote.stub { on { getPasswordExpirySettings() }.thenReturn(failure) }
 
             val result = repository.getPasswordExpirySettings(USER_ID)
 

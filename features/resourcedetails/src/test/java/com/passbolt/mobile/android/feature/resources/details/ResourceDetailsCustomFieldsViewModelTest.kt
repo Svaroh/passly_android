@@ -100,7 +100,7 @@ class ResourceDetailsCustomFieldsViewModelTest : KoinTest {
 
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideCustomFields() } doReturn
+                on { provideCustomFields() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -139,7 +139,7 @@ class ResourceDetailsCustomFieldsViewModelTest : KoinTest {
 
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideCustomFields() } doReturn
+                on { provideCustomFields() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -168,7 +168,7 @@ class ResourceDetailsCustomFieldsViewModelTest : KoinTest {
 
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideCustomFields() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
+                on { provideCustomFields() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
             }
 
             viewModel = get()

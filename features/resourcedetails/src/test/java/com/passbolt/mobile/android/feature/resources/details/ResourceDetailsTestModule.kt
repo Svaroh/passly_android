@@ -130,47 +130,47 @@ private fun Koin.setupAuthenticationMocks() {
 private fun Koin.setupConfigurationMocks() {
     val getFeatureFlagsUseCase: GetFeatureFlagsUseCase = get()
     getFeatureFlagsUseCase.stub {
-        onBlocking { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(DEFAULT_FEATURE_FLAGS)
+        on { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(DEFAULT_FEATURE_FLAGS)
     }
 
     val getRbacRulesUseCase: GetRbacRulesUseCase = get()
     getRbacRulesUseCase.stub {
-        onBlocking { execute(Unit) } doReturn GetRbacRulesUseCase.Output(DEFAULT_RBAC)
+        on { execute(Unit) } doReturn GetRbacRulesUseCase.Output(DEFAULT_RBAC)
     }
 }
 
 private fun Koin.setupResourceMocks() {
     val getLocalResourceUseCase: GetLocalResourceUseCase = get()
     getLocalResourceUseCase.stub {
-        onBlocking { execute(any()) } doReturn GetLocalResourceUseCase.Output(DEFAULT_RESOURCE_MODEL)
+        on { execute(any()) } doReturn GetLocalResourceUseCase.Output(DEFAULT_RESOURCE_MODEL)
     }
 
     val getLocalResourcePermissionsUseCase: GetLocalResourcePermissionsUseCase = get()
     getLocalResourcePermissionsUseCase.stub {
-        onBlocking { execute(any()) } doReturn
+        on { execute(any()) } doReturn
             GetLocalResourcePermissionsUseCase.Output(listOf(GROUP_PERMISSION, USER_PERMISSION))
     }
 
     val getLocalResourceTagsUseCase: GetLocalResourceTagsUseCase = get()
     getLocalResourceTagsUseCase.stub {
-        onBlocking { execute(any()) } doReturn GetLocalResourceTagsUseCase.Output(RESOURCE_TAGS)
+        on { execute(any()) } doReturn GetLocalResourceTagsUseCase.Output(RESOURCE_TAGS)
     }
 
     val getLocalFolderLocationUseCase: GetLocalFolderLocationUseCase = get()
     getLocalFolderLocationUseCase.stub {
-        onBlocking { execute(any()) } doReturn GetLocalFolderLocationUseCase.Output(emptyList())
+        on { execute(any()) } doReturn GetLocalFolderLocationUseCase.Output(emptyList())
     }
 
     val canShareResourceUseCase: CanShareResourceUseCase = get()
     canShareResourceUseCase.stub {
-        onBlocking { execute(any()) } doReturn CanShareResourceUseCase.Output(canShareResource = true)
+        on { execute(any()) } doReturn CanShareResourceUseCase.Output(canShareResource = true)
     }
 }
 
 private fun Koin.setupResourceActionsMocks() {
     val resourcePropertiesActionsInteractor: ResourcePropertiesActionsInteractor = get()
     resourcePropertiesActionsInteractor.stub {
-        onBlocking { provideMainUri() } doReturn
+        on { provideMainUri() } doReturn
             flowOf(
                 ResourcePropertyActionResult(
                     ResourcePropertiesActionsInteractor.URL_LABEL,
@@ -178,7 +178,7 @@ private fun Koin.setupResourceActionsMocks() {
                     URL,
                 ),
             )
-        onBlocking { provideAdditionalUris() } doReturn
+        on { provideAdditionalUris() } doReturn
             flowOf(
                 ResourcePropertyActionResult(
                     ResourcePropertiesActionsInteractor.URL_LABEL,
@@ -186,7 +186,7 @@ private fun Koin.setupResourceActionsMocks() {
                     listOf(""),
                 ),
             )
-        onBlocking { provideUsername() } doReturn
+        on { provideUsername() } doReturn
             flowOf(
                 ResourcePropertyActionResult(
                     ResourcePropertiesActionsInteractor.USERNAME_LABEL,
@@ -194,7 +194,7 @@ private fun Koin.setupResourceActionsMocks() {
                     USERNAME,
                 ),
             )
-        onBlocking { provideMetadataDescription() } doReturn
+        on { provideMetadataDescription() } doReturn
             flowOf(
                 ResourcePropertyActionResult(
                     ResourcePropertiesActionsInteractor.DESCRIPTION_LABEL,
@@ -208,6 +208,6 @@ private fun Koin.setupResourceActionsMocks() {
 private fun Koin.setupUtilsMocks() {
     val timerFactory: TimerFactory = get()
     timerFactory.stub {
-        onBlocking { createInfiniteTimer(any()) } doReturn flowOf()
+        on { createInfiniteTimer(any()) } doReturn flowOf()
     }
 }

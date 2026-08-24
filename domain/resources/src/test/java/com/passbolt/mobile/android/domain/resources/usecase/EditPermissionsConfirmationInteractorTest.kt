@@ -73,7 +73,7 @@ class EditPermissionsConfirmationInteractorTest : KoinTest {
     @Before
     fun setUp() {
         get<GetPermissionsConfirmationOptOutUseCase>().stub {
-            onBlocking { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false)
+            on { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false)
         }
         get<GetSelectedAccountDataUseCase>().stub {
             on { execute(Unit) } doReturn selectedAccountData()
@@ -84,7 +84,7 @@ class EditPermissionsConfirmationInteractorTest : KoinTest {
     fun `session opt out skips the confirmation without fetching permissions`() =
         runTest {
             get<GetPermissionsConfirmationOptOutUseCase>().stub {
-                onBlocking { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = true)
+                on { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = true)
             }
 
             assertThat(get<EditPermissionsConfirmationInteractor>().shouldConfirmPermissions(RESOURCE_ID)).isFalse()
@@ -119,11 +119,11 @@ class EditPermissionsConfirmationInteractorTest : KoinTest {
     fun `permissions fetch failure falls back to the local permissions`() =
         runTest {
             get<FetchResourcePermissionsUseCase>().stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     FetchResourcePermissionsUseCase.Output.Failure(DomainResult.Incomplete.Error(UNKNOWN, "error"))
             }
             get<GetLocalResourcePermissionsUseCase>().stub {
-                onBlocking { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) } doReturn
+                on { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) } doReturn
                     GetLocalResourcePermissionsUseCase.Output(
                         listOf(localOperatorOwnerPermission(), localOtherUserPermission()),
                     )
@@ -134,7 +134,7 @@ class EditPermissionsConfirmationInteractorTest : KoinTest {
 
     private fun stubFetchedPermissions(vararg permissions: PermissionModel) {
         get<FetchResourcePermissionsUseCase>().stub {
-            onBlocking { execute(FetchResourcePermissionsUseCase.Input(RESOURCE_ID)) } doReturn
+            on { execute(FetchResourcePermissionsUseCase.Input(RESOURCE_ID)) } doReturn
                 FetchResourcePermissionsUseCase.Output.Success(permissions.toList())
         }
     }

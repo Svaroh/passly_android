@@ -222,7 +222,7 @@ class ResourceInteractorTest : KoinTest {
     fun `should return failure with authenticated state on database exception`() =
         runTest {
             get<SetLocalResourcesUpdateStateUseCase>().stub {
-                onBlocking { execute(any()) }.thenThrow(android.database.SQLException())
+                on { execute(any()) }.thenThrow(android.database.SQLException())
             }
 
             val result = resourceInteractor.fetchAndSaveResources()
@@ -249,7 +249,7 @@ class ResourceInteractorTest : KoinTest {
         totalCount: Int,
     ) {
         get<GetResourcesPaginatedUseCase>().stub {
-            onBlocking {
+            on {
                 execute(
                     GetResourcesPaginatedUseCase.Input(page = page, limit = RESOURCES_PAGE_SIZE),
                 )
@@ -264,7 +264,7 @@ class ResourceInteractorTest : KoinTest {
 
     private fun stubResourcesPaginatedFailure(page: Int) {
         get<GetResourcesPaginatedUseCase>().stub {
-            onBlocking {
+            on {
                 execute(
                     GetResourcesPaginatedUseCase.Input(page = page, limit = RESOURCES_PAGE_SIZE),
                 )

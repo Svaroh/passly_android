@@ -93,7 +93,7 @@ class AuthOperationRunnerTest : KoinTest {
             val operationSpy = spy(sampleAuthenticatedOperation)
             whenever(mockAppForegroundListener.isForeground()) doReturn true
             mockGetSessionExpiryUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     GetSessionExpiryUseCase.Output.JwtWillExpire(
                         ZonedDateTime.now().plusSeconds(60L),
                     ),
@@ -119,12 +119,12 @@ class AuthOperationRunnerTest : KoinTest {
             val operationSpy = spy(sampleAuthenticatedOperation)
             whenever(mockAppForegroundListener.isForeground()) doReturn true
             mockGetSessionExpiryUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     GetSessionExpiryUseCase.Output.JwtAlreadyExpired,
                 )
             }
             mockRefreshSessionUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     RefreshSessionUseCase.Output.Success,
                 )
             }
@@ -149,14 +149,14 @@ class AuthOperationRunnerTest : KoinTest {
             val operationSpy = spy(sampleAuthenticatedOperation)
             whenever(mockAppForegroundListener.isForeground()) doReturn true
             mockGetSessionExpiryUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     GetSessionExpiryUseCase.Output.JwtWillExpire(
                         ZonedDateTime.now().plusSeconds(5L),
                     ),
                 )
             }
             mockRefreshSessionUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     RefreshSessionUseCase.Output.Success,
                 )
             }
@@ -181,7 +181,7 @@ class AuthOperationRunnerTest : KoinTest {
             val operationSpy = spy(sampleAuthenticatedOperation)
             whenever(mockAppForegroundListener.isForeground()) doReturn true
             mockGetSessionExpiryUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     GetSessionExpiryUseCase.Output.JwtWillExpire(
                         ZonedDateTime.now().plusSeconds(60L),
                     ),
@@ -219,12 +219,12 @@ class AuthOperationRunnerTest : KoinTest {
             val operationSpy = spy(sampleAuthenticatedOperation)
             whenever(mockAppForegroundListener.isForeground()) doReturn true
             mockGetSessionExpiryUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     GetSessionExpiryUseCase.Output.JwtAlreadyExpired,
                 )
             }
             mockRefreshSessionUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     RefreshSessionUseCase.Output.Failure,
                 )
             }
@@ -261,12 +261,12 @@ class AuthOperationRunnerTest : KoinTest {
             val operationSpy = spy(sampleAuthenticatedOperation)
             whenever(mockAppForegroundListener.isForeground()) doReturn true
             mockGetSessionExpiryUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     GetSessionExpiryUseCase.Output.JwtAlreadyExpired,
                 )
             }
             mockRefreshSessionUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     RefreshSessionUseCase.Output.Failure,
                 )
             }
@@ -298,7 +298,7 @@ class AuthOperationRunnerTest : KoinTest {
             whenever(mockAppForegroundListener.isForeground()) doReturn false
             whenever(mockAppForegroundListener.appWentForegroundFlow) doReturn appForegroundFlow
             mockGetSessionExpiryUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     GetSessionExpiryUseCase.Output.JwtWillExpire(
                         ZonedDateTime.now().plusSeconds(60L),
                     ),

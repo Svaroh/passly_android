@@ -190,7 +190,7 @@ class AccountsListViewModelTest : KoinTest {
                 GetAllAccountsDataUseCase.Output(mutableAccountList)
             val removeAllAccountDataUseCase = get<RemoveAllAccountDataUseCase>()
             removeAllAccountDataUseCase.stub {
-                onBlocking { execute(any()) }.then { mutableAccountList.removeAt(0) }
+                on { execute(any()) }.then { mutableAccountList.removeAt(0) }
             }
 
             viewModel = get(parameters = { parametersOf(Startup) })
@@ -215,7 +215,7 @@ class AccountsListViewModelTest : KoinTest {
             whenever(getAllAccountsDataUseCase.execute(Unit)) doReturn GetAllAccountsDataUseCase.Output(mutableAccountList)
             val removeAllAccountDataUseCase = get<RemoveAllAccountDataUseCase>()
             removeAllAccountDataUseCase.stub {
-                onBlocking { execute(any()) }.then { mutableAccountList.removeAt(0) }
+                on { execute(any()) }.then { mutableAccountList.removeAt(0) }
             }
 
             viewModel = get(parameters = { parametersOf(Startup) })
@@ -302,7 +302,7 @@ class AccountsListViewModelTest : KoinTest {
 
             val signOutUseCase = get<SignOutUseCase>()
             signOutUseCase.stub {
-                onBlocking { execute(Unit) } doReturn Unit
+                on { execute(Unit) } doReturn Unit
             }
 
             viewModel = get(parameters = { parametersOf(ManageAccount) })

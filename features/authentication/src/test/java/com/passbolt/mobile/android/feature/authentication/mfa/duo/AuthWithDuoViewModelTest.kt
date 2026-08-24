@@ -85,7 +85,7 @@ class AuthWithDuoViewModelTest : KoinTest {
         runTest {
             val getDuoPromptUseCase: GetDuoPromptUseCase = get()
             getDuoPromptUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     GetDuoPromptUseCase.Output.Success(
                         duoPromptUrl = "https://duo.example.com/prompt",
                         passboltDuoCookieUuid = "duo-cookie-123",
@@ -93,7 +93,7 @@ class AuthWithDuoViewModelTest : KoinTest {
             }
             val verifyDuoCallbackUseCase: VerifyDuoCallbackUseCase = get()
             verifyDuoCallbackUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     VerifyDuoCallbackUseCase.Output.Success(
                         mfaHeader = "mfa-token-abc",
                     )

@@ -73,7 +73,7 @@ class ResourceShareInteractorConfirmedRecipientsTest {
             on { mapForSimulation(any(), any(), any()) } doReturn emptyList()
         }
         secretInteractor.stub {
-            onBlocking { fetchAndDecrypt(RESOURCE_ID) } doReturn
+            on { fetchAndDecrypt(RESOURCE_ID) } doReturn
                 SecretInteractor.Output.FetchFailure(DomainResult.Incomplete.Error(UNKNOWN, "stop"))
         }
     }
@@ -129,7 +129,7 @@ class ResourceShareInteractorConfirmedRecipientsTest {
 
     private fun stubSimulatedAdditions(vararg userIds: String) {
         simulateShareUseCase.stub {
-            onBlocking { execute(any()) } doReturn
+            on { execute(any()) } doReturn
                 SimulateShareResourceUseCase.Output.Success(
                     ShareChanges(
                         added = userIds.map { ShareRecipient(it) },

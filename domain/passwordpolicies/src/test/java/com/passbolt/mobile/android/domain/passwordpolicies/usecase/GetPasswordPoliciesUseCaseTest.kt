@@ -78,7 +78,7 @@ class GetPasswordPoliciesUseCaseTest : KoinTest {
         runTest {
             val policies = PasswordPolicies.defaults()
             repository.stub {
-                onBlocking { getPasswordPolicies(any()) }.thenReturn(DomainResult.Finished(policies))
+                on { getPasswordPolicies(any()) }.thenReturn(DomainResult.Finished(policies))
             }
 
             val result = useCase.execute(Unit)
@@ -90,7 +90,7 @@ class GetPasswordPoliciesUseCaseTest : KoinTest {
     fun `failure falls back to defaults mapped to ui model`() =
         runTest {
             repository.stub {
-                onBlocking { getPasswordPolicies(any()) }.thenReturn(DomainResult.Incomplete.Error(UNKNOWN, null))
+                on { getPasswordPolicies(any()) }.thenReturn(DomainResult.Incomplete.Error(UNKNOWN, null))
             }
 
             val result = useCase.execute(Unit)
@@ -102,7 +102,7 @@ class GetPasswordPoliciesUseCaseTest : KoinTest {
     fun `notcached failure also falls back to defaults`() =
         runTest {
             repository.stub {
-                onBlocking { getPasswordPolicies(any()) }.thenReturn(DomainResult.Incomplete.NotCached)
+                on { getPasswordPolicies(any()) }.thenReturn(DomainResult.Incomplete.NotCached)
             }
 
             val result = useCase.execute(Unit)

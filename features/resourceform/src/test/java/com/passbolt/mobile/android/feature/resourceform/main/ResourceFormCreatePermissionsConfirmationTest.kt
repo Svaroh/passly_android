@@ -95,7 +95,7 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
         runTest {
             stubFolderPermissions(listOf(operatorOwnerPermissionModel(), otherUserPermissionModel()))
             mockGetPermissionsConfirmationOptOutUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = true))
+                on { execute(Unit) }.thenReturn(GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = true))
             }
             stubCreateSuccess()
             val viewModel = createModeViewModel()
@@ -127,7 +127,7 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
         runTest {
             val confirmedPermissions = listOf(operatorOwnerPermission(), otherUserPermission())
             mockResourceCreateActionsInteractor.stub {
-                onBlocking {
+                on {
                     createGenericResourceWithConfirmedPermissions(any(), anyOrNull(), any(), any(), any())
                 }.thenReturn(flowOf(ResourceCreateActionResult.Success("id", "name")))
             }
@@ -146,7 +146,7 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
     fun `permissions drift after create should inform and navigate back`() =
         runTest {
             mockResourceCreateActionsInteractor.stub {
-                onBlocking {
+                on {
                     createGenericResourceWithConfirmedPermissions(any(), anyOrNull(), any(), any(), any())
                 }.thenReturn(flowOf(ResourceCreateActionResult.PermissionsDrifted))
             }
@@ -164,7 +164,7 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
     fun `share failure after create should inform and navigate back`() =
         runTest {
             mockResourceCreateActionsInteractor.stub {
-                onBlocking {
+                on {
                     createGenericResourceWithConfirmedPermissions(any(), anyOrNull(), any(), any(), any())
                 }.thenReturn(flowOf(ResourceCreateActionResult.ShareFailure("error")))
             }

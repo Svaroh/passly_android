@@ -79,7 +79,7 @@ class PasswordPoliciesRepositoryImplTest : KoinTest {
     @Test
     fun `memory hit returns memory value and never calls remote`() =
         runTest {
-            memory.stub { onBlocking { getPasswordPolicies(USER_ID) }.thenReturn(DomainResult.Finished(policies)) }
+            memory.stub { on { getPasswordPolicies(USER_ID) }.thenReturn(DomainResult.Finished(policies)) }
 
             val result = repository.getPasswordPolicies(USER_ID)
 
@@ -90,8 +90,8 @@ class PasswordPoliciesRepositoryImplTest : KoinTest {
     @Test
     fun `memory miss with remote success returns success and writes to memory`() =
         runTest {
-            memory.stub { onBlocking { getPasswordPolicies(USER_ID) }.thenReturn(DomainResult.Incomplete.NotCached) }
-            remote.stub { onBlocking { getPasswordPolicies() }.thenReturn(DomainResult.Finished(policies)) }
+            memory.stub { on { getPasswordPolicies(USER_ID) }.thenReturn(DomainResult.Incomplete.NotCached) }
+            remote.stub { on { getPasswordPolicies() }.thenReturn(DomainResult.Finished(policies)) }
 
             val result = repository.getPasswordPolicies(USER_ID)
 
@@ -103,8 +103,8 @@ class PasswordPoliciesRepositoryImplTest : KoinTest {
     fun `memory miss with remote failure returns failure and does not write to memory`() =
         runTest {
             val failure = DomainResult.Incomplete.Error(UNKNOWN, "boom")
-            memory.stub { onBlocking { getPasswordPolicies(USER_ID) }.thenReturn(DomainResult.Incomplete.NotCached) }
-            remote.stub { onBlocking { getPasswordPolicies() }.thenReturn(failure) }
+            memory.stub { on { getPasswordPolicies(USER_ID) }.thenReturn(DomainResult.Incomplete.NotCached) }
+            remote.stub { on { getPasswordPolicies() }.thenReturn(failure) }
 
             val result = repository.getPasswordPolicies(USER_ID)
 

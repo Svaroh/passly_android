@@ -153,13 +153,13 @@ class SecretInteractorTest : KoinTest {
 
     private fun stubFetch(output: FetchSecretUseCase.Output) {
         fetchSecretUseCase.stub {
-            onBlocking { execute(any()) }.thenReturn(output)
+            on { execute(any()) }.thenReturn(output)
         }
     }
 
     private fun stubDecrypt(output: DecryptSecretUseCase.Output) {
         decryptSecretUseCase.stub {
-            onBlocking { execute(any()) }.thenReturn(output)
+            on { execute(any()) }.thenReturn(output)
         }
     }
 

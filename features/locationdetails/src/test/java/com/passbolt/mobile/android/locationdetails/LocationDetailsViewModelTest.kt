@@ -135,17 +135,17 @@ class LocationDetailsViewModelTest : KoinTest {
 
         val getLocalResourceUseCase = get<GetLocalResourceUseCase>()
         getLocalResourceUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalResourceUseCase.Output(testResource)
+            on { execute(any()) } doReturn GetLocalResourceUseCase.Output(testResource)
         }
 
         val getLocalFolderDetailsUseCase = get<GetLocalFolderDetailsUseCase>()
         getLocalFolderDetailsUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalFolderDetailsUseCase.Output(testFolder)
+            on { execute(any()) } doReturn GetLocalFolderDetailsUseCase.Output(testFolder)
         }
 
         val getLocalFolderLocationUseCase = get<GetLocalFolderLocationUseCase>()
         getLocalFolderLocationUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalFolderLocationUseCase.Output(testParentFolders)
+            on { execute(any()) } doReturn GetLocalFolderLocationUseCase.Output(testParentFolders)
         }
 
         val expandableFolderTreeCreator = get<ExpandableFolderTreeCreator>()
@@ -282,7 +282,7 @@ class LocationDetailsViewModelTest : KoinTest {
         runTest {
             val getLocalResourceUseCase = get<GetLocalResourceUseCase>()
             getLocalResourceUseCase.stub {
-                onBlocking { execute(any()) } doThrow IllegalStateException("The query result was empty")
+                on { execute(any()) } doThrow IllegalStateException("The query result was empty")
             }
 
             viewModel = get { parametersOf(RESOURCE, testResource.resourceId) }
@@ -299,7 +299,7 @@ class LocationDetailsViewModelTest : KoinTest {
         runTest {
             val getLocalFolderDetailsUseCase = get<GetLocalFolderDetailsUseCase>()
             getLocalFolderDetailsUseCase.stub {
-                onBlocking { execute(any()) } doThrow IllegalStateException("The query result was empty")
+                on { execute(any()) } doThrow IllegalStateException("The query result was empty")
             }
 
             viewModel = get { parametersOf(FOLDER, testFolder.folderId) }
@@ -317,7 +317,7 @@ class LocationDetailsViewModelTest : KoinTest {
             val resourceWithoutFolder = testResource.copy(folderId = null)
             val getLocalResourceUseCase = get<GetLocalResourceUseCase>()
             getLocalResourceUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetLocalResourceUseCase.Output(resourceWithoutFolder)
+                on { execute(any()) } doReturn GetLocalResourceUseCase.Output(resourceWithoutFolder)
             }
 
             val expandableFolderTreeCreator = get<ExpandableFolderTreeCreator>()

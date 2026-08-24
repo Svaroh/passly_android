@@ -128,7 +128,7 @@ class GetFoldersPaginatedUseCaseTest : KoinTest {
 
     private fun stubRepository(result: DomainResult<FoldersPage>) {
         get<FoldersRepository>().stub {
-            onBlocking { getFoldersPage(any(), any()) }.doReturn(result)
+            on { getFoldersPage(any(), any()) }.doReturn(result)
         }
     }
 
