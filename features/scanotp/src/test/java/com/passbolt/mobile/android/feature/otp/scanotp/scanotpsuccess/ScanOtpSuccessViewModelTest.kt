@@ -8,9 +8,11 @@ import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateAction
 import com.passbolt.mobile.android.domain.resources.usecase.GetDefaultCreateContentTypeUseCase
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.ConfirmedPermissionsResult
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.CreateStandaloneOtpClick
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkToResourceClick
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkedResourceReceived
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToConfirmPermissions
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToOtpList
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToResourcePicker
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowToast
 import com.passbolt.mobile.android.supportedresourceTypes.ContentType
 import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
@@ -96,7 +98,6 @@ class ScanOtpSuccessViewModelTest : KoinTest {
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(CreateStandaloneOtpClick)
-                testDispatcher.scheduler.advanceUntilIdle()
 
                 val sideEffect = awaitItem()
                 assertIs<NavigateToOtpList>(sideEffect)
@@ -135,8 +136,6 @@ class ScanOtpSuccessViewModelTest : KoinTest {
                 val progressShown = awaitItem()
                 assertThat(progressShown.showProgress).isTrue()
 
-                testDispatcher.scheduler.advanceUntilIdle()
-
                 val progressHidden = awaitItem()
                 assertThat(progressHidden.showProgress).isFalse()
             }
@@ -148,10 +147,10 @@ class ScanOtpSuccessViewModelTest : KoinTest {
             val viewModel = get<ScanOtpSuccessViewModel> { parametersOf(mockScannedTotp, null) }
 
             viewModel.sideEffect.test {
-                viewModel.onIntent(ScanOtpSuccessIntent.LinkToResourceClick)
+                viewModel.onIntent(LinkToResourceClick)
 
                 val sideEffect = awaitItem()
-                assertIs<ScanOtpSuccessSideEffect.NavigateToResourcePicker>(sideEffect)
+                assertIs<NavigateToResourcePicker>(sideEffect)
                 assertThat(sideEffect.suggestedUri).isEqualTo(mockScannedTotp.issuer)
             }
         }
@@ -190,7 +189,6 @@ class ScanOtpSuccessViewModelTest : KoinTest {
                 viewModel.onIntent(
                     LinkedResourceReceived(mockLinkResourceModel),
                 )
-                testDispatcher.scheduler.advanceUntilIdle()
 
                 val sideEffect = awaitItem()
                 assertIs<NavigateToOtpList>(sideEffect)
@@ -294,7 +292,6 @@ class ScanOtpSuccessViewModelTest : KoinTest {
                 viewModel.onIntent(
                     LinkedResourceReceived(mockLinkResourceModel),
                 )
-                testDispatcher.scheduler.advanceUntilIdle()
 
                 val sideEffect = awaitItem()
                 assertIs<NavigateToOtpList>(sideEffect)
