@@ -23,6 +23,7 @@
 
 package com.passbolt.mobile.android.domain.resources.actions
 
+import com.google.common.truth.Truth.assertThat
 import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysInteractor
@@ -137,6 +138,25 @@ class ResourceUpdateActionsInteractorUpgradeTest : KoinTest {
 
             assertIs<CannotUpdateWithCurrentConfig>(result)
         }
+
+    @Test
+    fun `upgradeToV5WithConfirmedPermissions returns CannotUpdateWithCurrentConfig when resource is already v5`() =
+        runTest {
+            val interactor = buildInteractor(resourceSlug = V5Default.slug, mapping = emptyMap())
+
+            val result = interactor.upgradeToV5WithConfirmedPermissions(emptyList()).single()
+
+            assertIs<CannotUpdateWithCurrentConfig>(result)
+        }
+
+    @Test
+    fun `upgrade re-encrypts the secret for all v4 types except password string`() {
+        assertThat(buildInteractor(PasswordString.slug, emptyMap()).doesUpgradeToV5ReEncryptSecret()).isFalse()
+        assertThat(buildInteractor(PasswordAndDescription.slug, emptyMap()).doesUpgradeToV5ReEncryptSecret()).isTrue()
+        assertThat(buildInteractor(PasswordDescriptionTotp.slug, emptyMap()).doesUpgradeToV5ReEncryptSecret()).isTrue()
+        assertThat(buildInteractor(Totp.slug, emptyMap()).doesUpgradeToV5ReEncryptSecret()).isTrue()
+        assertThat(buildInteractor(V5Default.slug, emptyMap()).doesUpgradeToV5ReEncryptSecret()).isFalse()
+    }
 
     private fun mappingExcluding(excluded: ContentType): Map<UUID, String> =
         listOf(V5PasswordString, V5Default, V5DefaultWithTotp, V5TotpStandalone)

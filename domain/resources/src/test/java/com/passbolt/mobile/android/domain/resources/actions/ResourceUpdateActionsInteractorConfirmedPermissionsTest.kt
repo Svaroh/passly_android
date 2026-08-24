@@ -49,6 +49,7 @@ import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCa
 import com.passbolt.mobile.android.jsonmodel.jsonModelModule
 import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper.Companion.TEMPORARY_NEW_PERMISSION_ID
 import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAndDescription
+import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Default
 import com.passbolt.mobile.android.ui.MetadataJsonModel
 import com.passbolt.mobile.android.ui.MetadataKeyTypeModel.PERSONAL
 import com.passbolt.mobile.android.ui.MetadataKeysSettingsModel
@@ -56,6 +57,7 @@ import com.passbolt.mobile.android.ui.PermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.ResourcePermission
 import com.passbolt.mobile.android.ui.ResourceUiModel
+import com.passbolt.mobile.android.ui.UpdateResourceModel
 import com.passbolt.mobile.android.ui.UserWithAvatar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -330,6 +332,34 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
         }
 
     @Test
+    fun `confirmed upgrade applies the v5 target type through the confirmed permissions pipeline`() =
+        runTest {
+            stubMappingWithV5Default()
+
+            val result = interactor.upgradeToV5WithConfirmedPermissions(listOf(OPERATOR_UI, USER_UI)).single()
+
+            assertIs<ResourceUpdateActionResult.Success>(result)
+            val resourceInputCaptor = argumentCaptor<UpdateResourceModel>()
+            verify(updateResourceInteractor).execute(resourceInputCaptor.capture(), any(), any())
+            assertThat(resourceInputCaptor.firstValue.contentType).isEqualTo(V5Default)
+        }
+
+    @Test
+    fun `drift detected stops the confirmed upgrade before the update`() =
+        runTest {
+            stubMappingWithV5Default()
+            createPermissionsSnapshotInteractor.stub {
+                onBlocking { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.DriftDetected(listOf("drifted-user"))
+            }
+
+            val result = interactor.upgradeToV5WithConfirmedPermissions(listOf(OPERATOR_UI, USER_UI)).single()
+
+            assertIs<ResourceUpdateActionResult.PermissionsDrifted>(result)
+            verifyNoInteractions(updateResourceInteractor)
+            verifyNoInteractions(resourceShareInteractor)
+        }
+
+    @Test
     fun `confirmed keys are passed to the update and to the share calls`() =
         runTest {
             interactor
@@ -344,6 +374,16 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
             verify(updateResourceInteractor).execute(any(), any(), updateKeysCaptor.capture())
             assertThat(updateKeysCaptor.firstValue).isEqualTo(CONFIRMED_KEYS)
         }
+
+    private fun stubMappingWithV5Default() {
+        mappingProvider.stub {
+            onBlocking { provideMappingForSelectedAccount() } doReturn
+                mapOf(
+                    UUID.randomUUID() to PasswordAndDescription.slug,
+                    UUID.randomUUID() to V5Default.slug,
+                )
+        }
+    }
 
     private fun stubSuccessfulUpdate() {
         mappingProvider.stub {

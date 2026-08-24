@@ -335,6 +335,27 @@ class ResourceUpdateActionsInteractor(
         )
     }
 
+    suspend fun upgradeToV5WithConfirmedPermissions(confirmedPermissions: List<PermissionModelUi>): Flow<ResourceUpdateActionResult> {
+        val currentContentType = existingResource.contentType()
+        val targetContentType =
+            v5TargetFor(currentContentType)
+                ?: return flowOf(ResourceUpdateActionResult.CannotUpdateWithCurrentConfig)
+        val targetTypeId =
+            findResourceTypeId(targetContentType)
+                ?: return flowOf(ResourceUpdateActionResult.CannotUpdateWithCurrentConfig)
+
+        return updateGenericResourceWithConfirmedPermissions(
+            newContentType = targetContentType,
+            confirmedPermissions = confirmedPermissions,
+            metadataModification = upgradeMetadata(currentContentType, targetContentType, targetTypeId),
+            secretModification = upgradeSecret(targetContentType, targetTypeId),
+        )
+    }
+
+    fun doesUpgradeToV5ReEncryptSecret(): Boolean =
+        v5TargetFor(existingResource.contentType())
+            ?.let { it != V5PasswordString } == true
+
     private fun v5TargetFor(contentType: ContentType): ContentType? =
         when (contentType) {
             PasswordString -> V5PasswordString
