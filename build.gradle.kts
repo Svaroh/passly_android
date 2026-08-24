@@ -1,5 +1,4 @@
 plugins {
-    id("dependency-updates")
     alias(libs.plugins.playstore.publisher) apply false
     alias(libs.plugins.kotlin.ksp)
     id(libs.plugins.dependency.analysis.get().pluginId)
