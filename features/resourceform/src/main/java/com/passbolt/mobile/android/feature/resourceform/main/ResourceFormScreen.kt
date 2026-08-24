@@ -157,7 +157,7 @@ internal fun ResourceFormScreen(
             NavigateToScanOtp ->
                 navigator.navigateToKey(ScanOtp(ScanOtpMode.SCAN_FOR_RESULT))
             is NavigateToConfirmPermissions ->
-                navigator.navigateToKey(ConfirmPermissions(sideEffect.confirmMode, sideEffect.driftDetected))
+                navigator.navigateToKey(ConfirmPermissions(sideEffect.confirmMode, sideEffect.driftedEntityNames))
             is NavigateBackWithCreateSuccess -> {
                 resultBus.sendResult(
                     result =

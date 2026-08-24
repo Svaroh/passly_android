@@ -11,6 +11,7 @@ import com.passbolt.mobile.android.domain.groups.model.GroupWithMembers
 import com.passbolt.mobile.android.domain.groups.usecase.FetchGroupsByIdsUseCase
 import com.passbolt.mobile.android.domain.permissionsconfirmation.PermissionsSnapshotRepository
 import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
+import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot.DriftResult
 import com.passbolt.mobile.android.domain.users.model.UserProfile
 import com.passbolt.mobile.android.domain.users.usecase.FetchUsersByIdsUseCase
 import com.passbolt.mobile.android.ui.PermissionModel
@@ -73,17 +74,20 @@ class CreatePermissionsSnapshotInteractor(
         val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
         val original =
             permissionsSnapshotRepository.getPermissionsSnapshot(userId)
-                ?: return DriftOutput.DriftDetected.also {
+                ?: return DriftOutput.SnapshotMissing.also {
                     Timber.e("No stored permissions snapshot present for the drift check")
                 }
         return when (val fresh = buildFreshSnapshot()) {
             is Output.Success ->
-                if (fresh.snapshot.hasDriftedFrom(original)) {
-                    Timber.e("Permissions drift detected between confirmation and applying permissions")
-                    DriftOutput.DriftDetected
-                } else {
-                    Timber.d("No permissions drift detected")
-                    DriftOutput.NoDrift
+                when (val drift = fresh.snapshot.detectDrift(original)) {
+                    is DriftResult.DriftDetected -> {
+                        Timber.e("Permissions drift detected for ${drift.driftedEntityNames.size} recipient(s)")
+                        DriftOutput.DriftDetected(drift.driftedEntityNames)
+                    }
+                    DriftResult.NoDrift -> {
+                        Timber.d("No permissions drift detected")
+                        DriftOutput.NoDrift
+                    }
                 }
             is Output.Failure -> DriftOutput.Failure(fresh.incomplete)
         }
@@ -216,8 +220,13 @@ class CreatePermissionsSnapshotInteractor(
             DriftOutput(),
             CompleteAuthenticatedOutput
 
-        data object DriftDetected :
+        data object SnapshotMissing :
             DriftOutput(),
+            CompleteAuthenticatedOutput
+
+        data class DriftDetected(
+            val driftedEntityNames: List<String>,
+        ) : DriftOutput(),
             CompleteAuthenticatedOutput
 
         data class Failure(

@@ -1152,12 +1152,12 @@ class ResourceFormViewModel(
                 doOnSuccess = { emitSideEffect(NavigateBackWithEditSuccess(resourceModelHandler.resourceMetadata.name)) },
                 doOnShareFailure = { emitSideEffect(ShowSnackbar(SnackbarMessage.RESOURCE_EDITED_SHARE_FAILED)) },
                 doOnFetchFailure = { emitSideEffect(ShowSnackbar(SnackbarMessage.RESOURCE_EDITED_SHARE_FAILED)) },
-                doOnPermissionsDrifted = {
+                doOnPermissionsDrifted = { drifted ->
                     Timber.d("Permissions drifted before saving the edit - reopening the confirmation")
                     emitSideEffect(
                         NavigateToConfirmPermissions(
                             ConfirmPermissionsMode.Edit((mode as Edit).resourceId),
-                            driftDetected = true,
+                            driftedEntityNames = drifted.driftedEntityNames,
                         ),
                     )
                 },

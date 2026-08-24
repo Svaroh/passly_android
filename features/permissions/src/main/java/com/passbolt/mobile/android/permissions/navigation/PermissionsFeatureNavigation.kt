@@ -38,7 +38,7 @@ class PermissionsFeatureNavigation : FeatureModuleNavigation {
             entry<ConfirmPermissions> { key ->
                 ConfirmPermissionsScreenEntry(
                     confirmMode = key.confirmMode,
-                    driftDetected = key.driftDetected,
+                    driftedEntityNames = key.driftedEntityNames,
                 )
             }
 
@@ -99,10 +99,10 @@ class PermissionsFeatureNavigation : FeatureModuleNavigation {
     @Composable
     private fun ConfirmPermissionsScreenEntry(
         confirmMode: ConfirmPermissionsMode,
-        driftDetected: Boolean,
+        driftedEntityNames: List<String>?,
     ) {
         val viewModel: ConfirmPermissionsViewModel =
-            koinViewModel(parameters = { parametersOf(confirmMode, driftDetected) })
+            koinViewModel(parameters = { parametersOf(confirmMode, driftedEntityNames) })
 
         PermissionListEditResultEffects(
             onModifyUserPermission = { viewModel.onIntent(ConfirmPermissionsIntent.UserPermissionModified(it)) },

@@ -53,6 +53,7 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavig
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.UserPermissionDetails
 import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
 import com.passbolt.mobile.android.core.navigation.compose.results.PermissionsConfirmedResult
+import com.passbolt.mobile.android.core.ui.banner.WarningBanner
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.fab.AddFloatingActionButton
 import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
@@ -70,6 +71,7 @@ import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermiss
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToSelectShareRecipients
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.NavigateToUserPermissionDetails
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowErrorSnackbar
+import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowPermissionsDriftedSnackbar
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowToast
 import com.passbolt.mobile.android.permissions.permissions.ui.PermissionsList
 import kotlinx.coroutines.launch
@@ -140,6 +142,15 @@ fun ConfirmPermissionsScreen(
                         ),
                     )
                 }
+            is ShowPermissionsDriftedSnackbar ->
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(
+                        ColoredSnackbarVisuals(
+                            message = getPermissionsDriftedMessage(context, effect.driftedEntityNames),
+                            backgroundColor = errorColor,
+                        ),
+                    )
+                }
         }
     }
 }
@@ -204,25 +215,32 @@ private fun ConfirmPermissionsScreen(
             )
         },
     ) { paddingValues ->
-        if (state.isLoading) {
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator()
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+        ) {
+            state.indirectAccessWarning?.let { warning ->
+                WarningBanner(
+                    text = getIndirectAccessWarningMessage(LocalContext.current, warning),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                )
             }
-        } else {
-            PermissionsList(
-                permissions = state.permissions,
-                onPermissionClick = { onIntent(SeePermission(it)) },
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-            )
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                PermissionsList(
+                    permissions = state.permissions,
+                    onPermissionClick = { onIntent(SeePermission(it)) },
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
     }
 }
