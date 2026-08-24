@@ -193,7 +193,6 @@ internal class OtpViewModel(
         otpsCounterJob?.cancel()
         universalCountdownJob?.cancel()
         fetchTotpJob?.cancel()
-        super.onCleared()
     }
 
     private fun onCanCreateResource(function: () -> Unit) {

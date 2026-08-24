@@ -37,11 +37,7 @@ class ChallengeVerifier {
     ): Output =
         try {
             val verifier: Verifier = RSAVerifier.newVerifier(rsaPublicKey)
-            val jwt: JWT = JWT.getDecoder().decode(challengeResponseDto.accessToken, verifier)
-
-            if (jwt.isExpired) {
-                Output.TokenExpired
-            }
+            JWT.getDecoder().decode(challengeResponseDto.accessToken, verifier)
 
             Output.Verified(
                 challengeResponseDto.accessToken,

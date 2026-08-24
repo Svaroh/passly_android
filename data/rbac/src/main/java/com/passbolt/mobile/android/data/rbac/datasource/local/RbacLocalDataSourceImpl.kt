@@ -24,6 +24,7 @@
 package com.passbolt.mobile.android.data.rbac.datasource.local
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.passbolt.mobile.android.core.architecture.result.DomainResult
 import com.passbolt.mobile.android.domain.rbac.RbacLocalDataSource
 import com.passbolt.mobile.android.domain.rbac.model.Rbac
@@ -50,13 +51,12 @@ internal class RbacLocalDataSourceImpl(
         userId: String,
         rbac: Rbac,
     ) {
-        with(sharedPreferences(userId).edit()) {
+        sharedPreferences(userId).edit {
             putString(KEY_PREVIEW_PASSWORD, rbac.passwordPreviewRule.name)
             putString(KEY_COPY_PASSWORD, rbac.passwordCopyRule.name)
             putString(KEY_USE_TAGS, rbac.tagsUseRule.name)
             putString(KEY_USE_FOLDERS, rbac.foldersUseRule.name)
             putString(KEY_VIEW_SHARE, rbac.shareViewRule.name)
-            apply()
         }
     }
 

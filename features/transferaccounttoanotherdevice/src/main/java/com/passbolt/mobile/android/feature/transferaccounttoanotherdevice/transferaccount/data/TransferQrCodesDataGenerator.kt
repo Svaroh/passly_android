@@ -38,7 +38,7 @@ import java.util.UUID
 class TransferQrCodesDataGenerator(
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
 ) {
-    suspend fun generateQrCodesDataPages(input: Input): Output {
+    fun generateQrCodesDataPages(input: Input): Output {
         return try {
             val pages = mutableListOf<String>()
             appendFirstPage(input, pages)

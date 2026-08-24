@@ -80,7 +80,9 @@ import org.mockito.kotlin.stub
 import org.mockito.kotlin.whenever
 import java.time.ZonedDateTime
 import kotlin.test.assertIs
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
+import kotlin.time.times
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TransferAccountViewModelTest : KoinTest {
@@ -280,7 +282,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             viewModel = get()
 
-            advanceTimeBy(TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY_MILLIS + 100)
+            advanceTimeBy(TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY + 100.milliseconds)
 
             viewModel.viewState.test {
                 val state = awaitItem()
@@ -307,7 +309,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             viewModel = get()
 
-            advanceTimeBy(TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY_MILLIS + 100)
+            advanceTimeBy(TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY + 100.milliseconds)
 
             viewModel.sideEffect.test {
                 val effect = awaitItem()
@@ -342,7 +344,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             viewModel = get()
 
-            advanceTimeBy(10 * TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY_MILLIS + 100)
+            advanceTimeBy(10 * TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY + 100.milliseconds)
 
             viewModel.sideEffect.test {
                 val effect = awaitItem()
@@ -367,7 +369,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             viewModel = get()
 
-            advanceTimeBy(TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY_MILLIS + 100)
+            advanceTimeBy(TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY + 100.milliseconds)
 
             viewModel.sideEffect.test {
                 val effect = awaitItem()

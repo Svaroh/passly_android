@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Passbolt - Open source password manager for teams
@@ -375,9 +376,10 @@ class AccessibilityService :
     }
 
     companion object {
+        private val OBSERVE_POSITION_DELAY = 250L.milliseconds
+        private val CLEAR_CREDENTIALS_DELAY = 1000L.milliseconds
+
         private const val PASSBOLT_PACKAGE = "com.passbolt.mobile.android"
         private const val SYSTEM_UI_PACKAGE = "com.android.systemui"
-        private const val CLEAR_CREDENTIALS_DELAY = 1000L
-        private const val OBSERVE_POSITION_DELAY = 250L
     }
 }

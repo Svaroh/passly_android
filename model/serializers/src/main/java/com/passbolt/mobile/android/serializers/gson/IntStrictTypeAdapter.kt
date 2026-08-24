@@ -19,7 +19,7 @@ class IntStrictTypeAdapter : TypeAdapter<Int?>() {
                 throw InvalidJsonTokenType(peek.toString(), Int::class.java.simpleName)
             } else {
                 val numberString = input.nextString()
-                return if (numberString.all { it.isDigit() }) {
+                if (numberString.all { it.isDigit() }) {
                     numberString.toInt()
                 } else {
                     throw InvalidJsonTokenType(peek.toString(), Int::class.java.simpleName)

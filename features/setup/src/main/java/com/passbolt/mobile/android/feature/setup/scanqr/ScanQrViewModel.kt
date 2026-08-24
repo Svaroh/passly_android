@@ -278,19 +278,17 @@ internal class ScanQrViewModel(
                 if (status == Status.ERROR || status == Status.CANCEL) {
                     // ignoring
                 } else {
-                    val incomplete = response.incomplete
-                    when {
-                        incomplete is DomainResult.Incomplete.Error && incomplete.reason == TIMEOUT ->
+                    when (val incomplete = response.incomplete) {
+                        is DomainResult.Incomplete.Error if incomplete.reason == TIMEOUT ->
                             updateViewState {
                                 copy(
                                     showServerNotReachableDialog = true,
                                     serverDomain = serverDomain,
                                 )
                             }
-                        incomplete is DomainResult.Incomplete.Error && incomplete.reason == OFFLINE ->
+                        is DomainResult.Incomplete.Error if incomplete.reason == OFFLINE ->
                             emitSideEffect(NavigateToSummary(ResultStatus.NoNetwork()))
-                        else ->
-                            emitSideEffect(ScanQrSideEffect.ShowToast(ToastType.UPDATE_TRANSFER_ERROR))
+                        else -> emitSideEffect(ScanQrSideEffect.ShowToast(ToastType.UPDATE_TRANSFER_ERROR))
                     }
                 }
             }

@@ -23,6 +23,7 @@
 
 package com.passbolt.mobile.android.data.preferences.datasource.local
 
+import androidx.core.content.edit
 import com.passbolt.mobile.android.data.preferences.GLOBAL_PREFERENCES_FILE_NAME
 import com.passbolt.mobile.android.data.preferences.KEY_ACCESSIBILITY_POLICIES_CONSENT_GIVEN
 import com.passbolt.mobile.android.data.preferences.KEY_API_FETCH_PAGE_SIZE
@@ -71,7 +72,7 @@ internal class GlobalPreferencesLocalDataSourceImpl(
 
     override fun updateGlobalPreferences(update: GlobalPreferencesUpdate) {
         val sharedPreferences = encryptedSharedPreferencesFactory.get("$GLOBAL_PREFERENCES_FILE_NAME.xml")
-        with(sharedPreferences.edit()) {
+        sharedPreferences.edit {
             update.areDebugLogsEnabled?.let {
                 putBoolean(KEY_DEBUG_LOGS_ENABLED, it)
             }
@@ -96,7 +97,6 @@ internal class GlobalPreferencesLocalDataSourceImpl(
             update.accessibilityPoliciesConsentGiven?.let {
                 putBoolean(KEY_ACCESSIBILITY_POLICIES_CONSENT_GIVEN, it)
             }
-            apply()
         }
     }
 }

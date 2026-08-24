@@ -30,6 +30,4 @@ data class ResourceTypeModel(
     val slug: String,
     val name: String,
     val deleted: ZonedDateTime?,
-) {
-    val isDeleted: Boolean = deleted != null
-}
+)

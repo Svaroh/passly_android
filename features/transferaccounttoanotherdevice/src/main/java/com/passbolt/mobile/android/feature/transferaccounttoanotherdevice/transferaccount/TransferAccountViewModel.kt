@@ -28,6 +28,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Passbolt - Open source password manager for teams
@@ -165,7 +166,7 @@ internal class TransferAccountViewModel(
                         )
                     val mfaCookie = session.mfaToken
 
-                    delay(GET_TRANSFER_LOOP_INTERVAL_DELAY_MILLIS)
+                    delay(GET_TRANSFER_LOOP_INTERVAL_DELAY)
                     when (
                         val response =
                             runAuthenticatedOperation {
@@ -212,7 +213,6 @@ internal class TransferAccountViewModel(
 
     override fun onCleared() {
         transferPollingJob?.cancel()
-        super.onCleared()
     }
 
     @VisibleForTesting
@@ -222,6 +222,6 @@ internal class TransferAccountViewModel(
 
     companion object {
         @VisibleForTesting
-        const val GET_TRANSFER_LOOP_INTERVAL_DELAY_MILLIS = 500L
+        val GET_TRANSFER_LOOP_INTERVAL_DELAY = 500L.milliseconds
     }
 }

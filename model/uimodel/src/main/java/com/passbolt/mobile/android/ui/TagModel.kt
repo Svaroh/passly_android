@@ -1,7 +1,5 @@
 package com.passbolt.mobile.android.ui
 
-import com.passbolt.mobile.android.common.search.Searchable
-
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -36,5 +34,4 @@ data class TagWithCount(
     val slug: String,
     val isShared: Boolean,
     val taggedResourcesCount: Int,
-    override val searchCriteria: String = slug,
-) : Searchable
+)

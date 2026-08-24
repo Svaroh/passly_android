@@ -60,7 +60,7 @@ class HomeDisplayViewPrefsValidator(
         val featureFlags = runBlocking { getFeatureFlagsUseCase.execute(Unit).featureFlags }
         val rbac = runBlocking { getRbacRulesUseCase.execute(Unit).rbacModel }
         return DefaultFilterUiModel
-            .values()
+            .entries
             .toMutableList()
             .apply {
                 if (!featureFlags.areFoldersAvailable || rbac.foldersUseRule != ALLOW) {

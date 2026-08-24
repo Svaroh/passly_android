@@ -33,7 +33,6 @@ import com.passbolt.mobile.android.common.coroutinetimer.TimerFactory
 import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.InProgress
 import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
-import com.passbolt.mobile.android.common.search.SearchableMatcher
 import com.passbolt.mobile.android.common.time.TimeProvider
 import com.passbolt.mobile.android.common.urimatcher.AutofillUriMatcher
 import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
@@ -98,7 +97,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.bind
@@ -169,7 +167,6 @@ class OtpViewModelTest : KoinTest {
                                 .options(EnumSet.noneOf(Option::class.java))
                                 .build()
                         }
-                        factoryOf(::SearchableMatcher)
                         singleOf(::DataRefreshTrackingFlow)
                         singleOf(::SessionRefreshTrackingFlow)
                     },
