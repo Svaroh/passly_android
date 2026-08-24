@@ -42,19 +42,24 @@ import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackin
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
 import com.passbolt.mobile.android.core.otpcore.TotpParametersProvider
 import com.passbolt.mobile.android.core.otpcore.TotpParametersProvider.OtpParametersResult.OtpParameters
+import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAction
 import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode.AVATAR
 import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode.CLEAR
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
 import com.passbolt.mobile.android.domain.metadata.interactor.ResourceAccessInteractor
+import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionResult
+import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
 import com.passbolt.mobile.android.domain.resources.actions.SecretPropertiesActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.SecretPropertiesActionsInteractorFactory
 import com.passbolt.mobile.android.domain.resources.actions.SecretPropertyActionResult
+import com.passbolt.mobile.android.domain.resources.usecase.EditPermissionsConfirmationInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcesUseCase
 import com.passbolt.mobile.android.feature.home.screen.ShowSuggestedModel
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseOtpMoreMenu
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseSwitchAccount
+import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.ConfirmDeleteTotp
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CreateTotp
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.Dispose
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.EditOtp
@@ -104,8 +109,11 @@ import org.koin.test.get
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import java.time.ZonedDateTime
 import java.util.EnumSet
@@ -127,6 +135,8 @@ class OtpViewModelTest : KoinTest {
                         single { mock<MetadataPrivateKeysHelperInteractor>() }
                         single { mock<ResourceAccessInteractor>() }
                         single { mock<ResourceUpdateActionsInteractorFactory>() }
+                        single { mock<EditPermissionsConfirmationInteractor>() }
+                        single { mock<ResourceUpdateActionsInteractor>() }
                         single { mock<SecretPropertiesActionsInteractorFactory>() }
                         single { mock<AutofillUriMatcher>() }
                         single { mock<TimeProvider>() }
@@ -144,6 +154,7 @@ class OtpViewModelTest : KoinTest {
                                 timerFactory = get(),
                                 resourceAccessInteractor = get(),
                                 resourceUpdateActionsInteractorFactory = get(),
+                                editPermissionsConfirmationInteractor = get(),
                                 secretPropertiesActionsInteractorFactory = get(),
                                 autofillUriMatcher = get(),
                                 timeProvider = get(),
@@ -183,6 +194,10 @@ class OtpViewModelTest : KoinTest {
 
         get<ResourceAccessInteractor>().stub {
             onBlocking { canCreateResource(anyOrNull()) } doReturn true
+        }
+
+        get<EditPermissionsConfirmationInteractor>().stub {
+            onBlocking { shouldConfirmPermissions(any()) } doReturn false
         }
     }
 
@@ -483,6 +498,55 @@ class OtpViewModelTest : KoinTest {
         }
 
     @Test
+    fun `deleting totp from a shared combined resource should navigate to permissions confirmation`() =
+        runTest {
+            get<EditPermissionsConfirmationInteractor>().stub {
+                onBlocking { shouldConfirmPermissions(combinedTotpResource.resourceId) } doReturn true
+            }
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(OpenOtpMoreMenu(combinedTotpWrapper))
+                viewModel.onIntent(ConfirmDeleteTotp)
+
+                assertThat(awaitItem()).isEqualTo(
+                    OtpSideEffect.NavigateToConfirmPermissions(combinedTotpResource.resourceId),
+                )
+            }
+            verifyNoInteractions(get<ResourceUpdateActionsInteractorFactory>())
+        }
+
+    @Test
+    fun `confirmed permissions should delete totp with the confirmed list`() =
+        runTest {
+            get<EditPermissionsConfirmationInteractor>().stub {
+                onBlocking { shouldConfirmPermissions(combinedTotpResource.resourceId) } doReturn true
+            }
+            get<ResourceUpdateActionsInteractorFactory>().stub {
+                on { create(any()) } doReturn get<ResourceUpdateActionsInteractor>()
+            }
+            get<ResourceUpdateActionsInteractor>().stub {
+                onBlocking {
+                    updateGenericResourceWithConfirmedPermissions(eq(UpdateAction.REMOVE_TOTP), any(), any(), any())
+                } doReturn flowOf(ResourceUpdateActionResult.Success(combinedTotpResource.resourceId, "name"))
+            }
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(OpenOtpMoreMenu(combinedTotpWrapper))
+                viewModel.onIntent(ConfirmDeleteTotp)
+                awaitItem()
+
+                viewModel.onIntent(OtpIntent.ConfirmedPermissionsResult(emptyList()))
+
+                assertThat(awaitItem()).isEqualTo(ShowSuccessSnackbar(SnackbarSuccessType.RESOURCE_DELETED))
+                assertThat(awaitItem()).isEqualTo(InitiateDataRefresh)
+            }
+            verify(get<ResourceUpdateActionsInteractor>())
+                .updateGenericResourceWithConfirmedPermissions(eq(UpdateAction.REMOVE_TOTP), any(), any(), any())
+        }
+
+    @Test
     fun `should show error when resource creation not possible`() =
         runTest {
             get<ResourceAccessInteractor>().stub {
@@ -575,6 +639,20 @@ class OtpViewModelTest : KoinTest {
                     metadataKeyId = null,
                     metadataKeyType = null,
                 ),
+            )
+        }
+
+        private val combinedTotpResource by lazy {
+            otpResources.first().copy(slug = "password-description-totp")
+        }
+
+        private val combinedTotpWrapper by lazy {
+            OtpItemWrapper(
+                combinedTotpResource,
+                isVisible = false,
+                isRefreshing = false,
+                otpExpirySeconds = null,
+                otpValue = null,
             )
         }
 

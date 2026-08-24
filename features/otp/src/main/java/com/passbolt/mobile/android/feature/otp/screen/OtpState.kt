@@ -26,6 +26,7 @@ package com.passbolt.mobile.android.feature.otp.screen
 import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode
 import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
 import com.passbolt.mobile.android.ui.OtpItemWrapper
+import com.passbolt.mobile.android.ui.ResourceUiModel
 import com.passbolt.mobile.android.ui.TrustedKeyDeletedModel
 
 internal const val DEFAULT_TOTP_PERIOD = 30L
@@ -43,6 +44,7 @@ data class OtpState(
     val searchInputEndIconMode: SearchInputEndIconMode = SearchInputEndIconMode.AVATAR,
     val userAvatar: String? = null,
     val moreMenuResource: OtpItemWrapper? = null,
+    val pendingPermissionsConfirmationResource: ResourceUiModel? = null,
     val metadataDeletedKeyModel: TrustedKeyDeletedModel? = null,
     val newMetadataKeyTrustModel: NewMetadataKeyToTrustModel? = null,
     val showOtpMoreBottomSheet: Boolean = false,

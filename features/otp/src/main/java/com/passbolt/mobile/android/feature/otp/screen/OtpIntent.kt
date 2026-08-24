@@ -25,6 +25,7 @@ package com.passbolt.mobile.android.feature.otp.screen
 
 import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
 import com.passbolt.mobile.android.ui.OtpItemWrapper
+import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.ResourceUiModel
 
 sealed interface OtpIntent {
@@ -80,6 +81,10 @@ sealed interface OtpIntent {
     data object ConfirmDeleteTotp : OtpIntent
 
     data object CloseDeleteConfirmationDialog : OtpIntent
+
+    data class ConfirmedPermissionsResult(
+        val permissions: List<PermissionModelUi>,
+    ) : OtpIntent
 
     // metadata keys
     data object CloseTrustNewKeyDialog : OtpIntent

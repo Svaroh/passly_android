@@ -431,7 +431,7 @@ class ResourceFormPermissionsConfirmationTest : KoinTest {
             stubEditMode()
             mockResourceUpdateActionsInteractor.stub {
                 onBlocking {
-                    updateGenericResourceWithConfirmedPermissions(any(), any(), any(), any())
+                    updateGenericResourceWithConfirmedPermissions(any<ContentType>(), any(), any(), any())
                 }.thenReturn(flowOf(ResourceUpdateActionResult.Success(RESOURCE_ID, "name")))
             }
             val viewModel = editModeViewModel()
@@ -444,7 +444,7 @@ class ResourceFormPermissionsConfirmationTest : KoinTest {
                 assertIs<NavigateBackWithEditSuccess>(awaitItem())
             }
             verify(mockResourceUpdateActionsInteractor)
-                .updateGenericResourceWithConfirmedPermissions(any(), eq(confirmedPermissions), any(), any())
+                .updateGenericResourceWithConfirmedPermissions(any<ContentType>(), eq(confirmedPermissions), any(), any())
         }
 
     @Test
@@ -453,7 +453,7 @@ class ResourceFormPermissionsConfirmationTest : KoinTest {
             stubEditMode()
             mockResourceUpdateActionsInteractor.stub {
                 onBlocking {
-                    updateGenericResourceWithConfirmedPermissions(any(), any(), any(), any())
+                    updateGenericResourceWithConfirmedPermissions(any<ContentType>(), any(), any(), any())
                 }.thenReturn(flowOf(ResourceUpdateActionResult.PermissionsDrifted(listOf("drifted-user"))))
             }
             val viewModel = editModeViewModel()
@@ -478,7 +478,7 @@ class ResourceFormPermissionsConfirmationTest : KoinTest {
             stubEditMode()
             mockResourceUpdateActionsInteractor.stub {
                 onBlocking {
-                    updateGenericResourceWithConfirmedPermissions(any(), any(), any(), any())
+                    updateGenericResourceWithConfirmedPermissions(any<ContentType>(), any(), any(), any())
                 }.thenReturn(flowOf(ResourceUpdateActionResult.ShareFailure("error")))
             }
             val viewModel = editModeViewModel()

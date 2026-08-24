@@ -14,8 +14,10 @@ import com.passbolt.mobile.android.domain.resources.interactor.create.CreateReso
 import com.passbolt.mobile.android.domain.resources.interactor.update.UpdateResourceInteractor
 import com.passbolt.mobile.android.domain.resources.resourceicon.BackgroundColorIconProvider
 import com.passbolt.mobile.android.domain.resources.resourceicon.ResourceIconProvider
+import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsConfirmationInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.DeleteResourceUseCase
+import com.passbolt.mobile.android.domain.resources.usecase.EditPermissionsConfirmationInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.FetchResourcePermissionsUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.GetResourcesPaginatedUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.ResourceInteractor
@@ -69,6 +71,8 @@ val resourcesDomainModule =
         singleOf(::ShareResourceUseCase)
         singleOf(::ResourceShareInteractor)
         singleOf(::ResourceShareActionsInteractor)
+        singleOf(::EditPermissionsConfirmationInteractor)
+        singleOf(::CreatePermissionsConfirmationInteractor)
         singleOf(::UpdateResourceInteractor)
         singleOf(::CreateResourceInteractor)
         factoryOf(::ResourceIconProvider)

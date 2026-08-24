@@ -8,10 +8,13 @@ import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateAction
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
 import com.passbolt.mobile.android.domain.resources.actions.performResourceCreateAction
 import com.passbolt.mobile.android.domain.resources.actions.performResourceUpdateAction
+import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsConfirmationInteractor
+import com.passbolt.mobile.android.domain.resources.usecase.EditPermissionsConfirmationInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.GetDefaultCreateContentTypeUseCase
 import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
 import com.passbolt.mobile.android.domain.secrets.model.SecretJsonModel
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.ConfirmedPermissionsResult
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.CreateStandaloneOtpClick
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.DismissNewMetadataTrustDialog
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.DismissTrustedMetadataKeyDeletedDialog
@@ -19,10 +22,12 @@ import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuc
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkedResourceReceived
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.TrustNewMetadataKey
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.TrustedMetadataKeyDeleted
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToConfirmPermissions
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToOtpList
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToResourcePicker
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowErrorSnackbar
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowSuccessSnackbar
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowToast
 import com.passbolt.mobile.android.jsonmodel.delegates.TotpSecret
 import com.passbolt.mobile.android.serializers.jsonschema.SchemaEntity
 import com.passbolt.mobile.android.supportedresourceTypes.ContentType
@@ -30,10 +35,12 @@ import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAn
 import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordDescriptionTotp
 import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Default
 import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5DefaultWithTotp
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.LeadingContentType
 import com.passbolt.mobile.android.ui.MetadataJsonModel
 import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
 import com.passbolt.mobile.android.ui.OtpParseResult
+import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.ResourceUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
@@ -49,6 +56,8 @@ internal class ScanOtpSuccessViewModel(
     private val getDefaultCreateContentTypeUseCase: GetDefaultCreateContentTypeUseCase,
     private val metadataPrivateKeysHelperInteractor: MetadataPrivateKeysHelperInteractor,
     private val resourceUpdateActionsInteractorFactory: ResourceUpdateActionsInteractorFactory,
+    private val editPermissionsConfirmationInteractor: EditPermissionsConfirmationInteractor,
+    private val createPermissionsConfirmationInteractor: CreatePermissionsConfirmationInteractor,
 ) : SideEffectViewModel<ScanOtpSuccessState, ScanOtpSuccessSideEffect>(ScanOtpSuccessState()),
     KoinComponent {
     fun onIntent(intent: ScanOtpSuccessIntent) {
@@ -56,6 +65,7 @@ internal class ScanOtpSuccessViewModel(
             CreateStandaloneOtpClick -> createStandaloneOtp()
             LinkToResourceClick -> emitSideEffect(NavigateToResourcePicker(scannedTotp.issuer))
             is LinkedResourceReceived -> linkedResourceReceived(intent.resource)
+            is ConfirmedPermissionsResult -> confirmedPermissionsReceived(intent.permissions)
             TrustNewMetadataKey -> viewState.value.metadataKeyToTrust?.let { trustNewMetadataKey(it) }
             TrustedMetadataKeyDeleted -> trustedMetadataKeyDeleted()
             DismissNewMetadataTrustDialog -> updateViewState { copy(showNewMetadataTrustDialog = false) }
@@ -66,55 +76,84 @@ internal class ScanOtpSuccessViewModel(
     private fun createStandaloneOtp() {
         launch {
             updateViewState { copy(showProgress = true) }
-            val resourceCreateActionsInteractor = get<ResourceCreateActionsInteractor>()
-            val defaultType =
-                getDefaultCreateContentTypeUseCase.execute(
-                    GetDefaultCreateContentTypeUseCase.Input(LeadingContentType.TOTP),
-                )
-
-            if (defaultType is GetDefaultCreateContentTypeUseCase.Output.CreationContentType) {
-                performResourceCreateAction(
-                    action = {
-                        resourceCreateActionsInteractor.createGenericResource(
-                            resourceParentFolderId = parentFolderId,
-                            contentType = defaultType.contentType,
-                            metadataJsonModel =
-                                MetadataJsonModel.empty().apply {
-                                    name = scannedTotp.label
-                                    scannedTotp.issuer?.let {
-                                        setMainUri(defaultType.contentType, it)
-                                    }
-                                },
-                            secretJsonModel =
-                                SecretJsonModel.emptyTotp().apply {
-                                    totp = scannedTotp.toTotpSecret()
-                                },
-                        )
-                    },
-                    doOnFailure = { emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.GENERIC_ERROR)) },
-                    doOnCryptoFailure = { emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.ENCRYPTION_ERROR, it)) },
-                    doOnSchemaValidationFailure = ::handleSchemaValidationFailure,
-                    doOnSuccess = {
-                        emitSideEffect(NavigateToOtpList(scannedTotp, otpCreated = true, it.resourceId))
-                    },
-                    doOnCannotCreateWithCurrentConfig = {
-                        emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.CANNOT_CREATE_WITH_CURRENT_CONFIG))
-                    },
-                    doOnMetadataKeyModified = {
-                        updateViewState { copy(metadataKeyToTrust = it, showNewMetadataTrustDialog = true) }
-                    },
-                    doOnMetadataKeyDeleted = {
-                        updateViewState { copy(metadataKeyDeleted = it, showTrustedMetadataKeyDeletedDialog = true) }
-                    },
-                    doOnMetadataKeyVerificationFailure = {
-                        emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.FAILED_TO_VERIFY_METADATA_KEY))
-                    },
+            if (createPermissionsConfirmationInteractor.shouldConfirmPermissions(parentFolderId)) {
+                Timber.d("Creating standalone totp inside a shared folder - navigating to permissions confirmation")
+                updateViewState { copy(isStandaloneOtpCreationPendingConfirmation = true) }
+                emitSideEffect(
+                    NavigateToConfirmPermissions(ConfirmPermissionsMode.Create(requireNotNull(parentFolderId))),
                 )
             } else {
-                Timber.e("Could not determine default content type for TOTP")
+                performCreateStandaloneOtp(confirmedPermissions = null)
             }
             updateViewState { copy(showProgress = false) }
         }
+    }
+
+    private suspend fun performCreateStandaloneOtp(confirmedPermissions: List<PermissionModelUi>?) {
+        val resourceCreateActionsInteractor = get<ResourceCreateActionsInteractor>()
+        val defaultType =
+            getDefaultCreateContentTypeUseCase.execute(
+                GetDefaultCreateContentTypeUseCase.Input(LeadingContentType.TOTP),
+            )
+
+        if (defaultType is GetDefaultCreateContentTypeUseCase.Output.CreationContentType) {
+            val metadataJsonModel =
+                MetadataJsonModel.empty().apply {
+                    name = scannedTotp.label
+                    scannedTotp.issuer?.let {
+                        setMainUri(defaultType.contentType, it)
+                    }
+                }
+            val secretJsonModel =
+                SecretJsonModel.emptyTotp().apply {
+                    totp = scannedTotp.toTotpSecret()
+                }
+            performResourceCreateAction(
+                action = {
+                    if (confirmedPermissions == null) {
+                        resourceCreateActionsInteractor.createGenericResource(
+                            resourceParentFolderId = parentFolderId,
+                            contentType = defaultType.contentType,
+                            metadataJsonModel = metadataJsonModel,
+                            secretJsonModel = secretJsonModel,
+                        )
+                    } else {
+                        resourceCreateActionsInteractor.createGenericResourceWithConfirmedPermissions(
+                            resourceParentFolderId = parentFolderId,
+                            contentType = defaultType.contentType,
+                            metadataJsonModel = metadataJsonModel,
+                            secretJsonModel = secretJsonModel,
+                            confirmedPermissions = confirmedPermissions,
+                        )
+                    }
+                },
+                doOnFailure = { emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.GENERIC_ERROR)) },
+                doOnCryptoFailure = { emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.ENCRYPTION_ERROR, it)) },
+                doOnSchemaValidationFailure = ::handleSchemaValidationFailure,
+                doOnSuccess = {
+                    emitSideEffect(NavigateToOtpList(scannedTotp, otpCreated = true, it.resourceId))
+                },
+                doOnShareFailure = { otpCreatedButNotShared(ToastType.OTP_CREATED_SHARE_FAILED) },
+                doOnFetchFailure = { otpCreatedButNotShared(ToastType.OTP_CREATED_SHARE_FAILED) },
+                doOnPermissionsDrifted = { otpCreatedButNotShared(ToastType.OTP_CREATED_PERMISSIONS_CHANGED) },
+                doOnCannotCreateWithCurrentConfig = {
+                    emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.CANNOT_CREATE_WITH_CURRENT_CONFIG))
+                },
+                doOnMetadataKeyModified = { updateViewState { copy(metadataKeyToTrust = it, showNewMetadataTrustDialog = true) } },
+                doOnMetadataKeyDeleted = { updateViewState { copy(metadataKeyDeleted = it, showTrustedMetadataKeyDeletedDialog = true) } },
+                doOnMetadataKeyVerificationFailure = {
+                    emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.FAILED_TO_VERIFY_METADATA_KEY))
+                },
+            )
+        } else {
+            Timber.e("Could not determine default content type for TOTP")
+        }
+    }
+
+    private fun otpCreatedButNotShared(toastType: ToastType) {
+        Timber.e("Standalone totp created but sharing to the confirmed recipients did not complete.")
+        emitSideEffect(ShowToast(toastType))
+        emitSideEffect(NavigateToOtpList(scannedTotp, otpCreated = true, resourceId = ""))
     }
 
     private fun handleSchemaValidationFailure(entity: SchemaEntity) {
@@ -129,13 +168,57 @@ internal class ScanOtpSuccessViewModel(
     private fun linkedResourceReceived(resource: ResourceUiModel) {
         launch {
             updateViewState { copy(showProgress = true) }
-            val updateOperation = createLinkTotpOperation(resource)
-            performLinkTotpUpdate(updateOperation)
+            if (editPermissionsConfirmationInteractor.shouldConfirmPermissions(resource.resourceId)) {
+                Timber.d("Linking totp to a shared resource - navigating to permissions confirmation")
+                updateViewState { copy(pendingPermissionsConfirmationResource = resource) }
+                emitSideEffect(NavigateToConfirmPermissions(ConfirmPermissionsMode.Edit(resource.resourceId)))
+            } else {
+                val updateOperation = createLinkTotpOperation(resource)
+                performLinkTotpUpdate(updateOperation)
+            }
             updateViewState { copy(showProgress = false) }
         }
     }
 
-    private suspend fun createLinkTotpOperation(resource: ResourceUiModel): suspend () -> Flow<ResourceUpdateActionResult> {
+    private fun confirmedPermissionsReceived(confirmedPermissions: List<PermissionModelUi>) {
+        when {
+            viewState.value.pendingPermissionsConfirmationResource != null ->
+                confirmedLinkPermissionsReceived(confirmedPermissions)
+            viewState.value.isStandaloneOtpCreationPendingConfirmation ->
+                confirmedCreatePermissionsReceived(confirmedPermissions)
+        }
+    }
+
+    private fun confirmedLinkPermissionsReceived(confirmedPermissions: List<PermissionModelUi>) {
+        val resource = viewState.value.pendingPermissionsConfirmationResource ?: return
+        launch {
+            updateViewState { copy(pendingPermissionsConfirmationResource = null, showProgress = true) }
+            val updateOperation = createLinkTotpOperation(resource, confirmedPermissions)
+            performLinkTotpUpdate(updateOperation) { drifted ->
+                updateViewState { copy(pendingPermissionsConfirmationResource = resource) }
+                emitSideEffect(
+                    NavigateToConfirmPermissions(
+                        ConfirmPermissionsMode.Edit(resource.resourceId),
+                        driftedEntityNames = drifted.driftedEntityNames,
+                    ),
+                )
+            }
+            updateViewState { copy(showProgress = false) }
+        }
+    }
+
+    private fun confirmedCreatePermissionsReceived(confirmedPermissions: List<PermissionModelUi>) {
+        launch {
+            updateViewState { copy(isStandaloneOtpCreationPendingConfirmation = false, showProgress = true) }
+            performCreateStandaloneOtp(confirmedPermissions)
+            updateViewState { copy(showProgress = false) }
+        }
+    }
+
+    private suspend fun createLinkTotpOperation(
+        resource: ResourceUiModel,
+        confirmedPermissions: List<PermissionModelUi>? = null,
+    ): suspend () -> Flow<ResourceUpdateActionResult> {
         val slug =
             idToSlugMappingProvider.provideMappingForSelectedAccount()[UUID.fromString(resource.resourceTypeId)]
                 ?: return { emptyFlow() }
@@ -145,20 +228,35 @@ internal class ScanOtpSuccessViewModel(
         return when (ContentType.fromSlug(slug)) {
             is PasswordAndDescription, V5Default, is PasswordDescriptionTotp, V5DefaultWithTotp ->
                 suspend {
-                    resourceUpdateActionsInteractor.updateGenericResource(
-                        updateAction = UpdateAction.ADD_TOTP,
-                        secretModification = {
-                            it.apply { totp = scannedTotp.toTotpSecret() }
-                        },
-                    )
+                    if (confirmedPermissions == null) {
+                        resourceUpdateActionsInteractor.updateGenericResource(
+                            updateAction = UpdateAction.ADD_TOTP,
+                            secretModification = {
+                                it.apply { totp = scannedTotp.toTotpSecret() }
+                            },
+                        )
+                    } else {
+                        resourceUpdateActionsInteractor.updateGenericResourceWithConfirmedPermissions(
+                            UpdateAction.ADD_TOTP,
+                            confirmedPermissions,
+                            secretModification = {
+                                it.apply { totp = scannedTotp.toTotpSecret() }
+                            },
+                        )
+                    }
                 }
             else -> throw IllegalArgumentException("$slug resource type is not possible to link")
         }
     }
 
-    private suspend fun performLinkTotpUpdate(updateOperation: suspend () -> Flow<ResourceUpdateActionResult>) {
+    private suspend fun performLinkTotpUpdate(
+        updateOperation: suspend () -> Flow<ResourceUpdateActionResult>,
+        doOnPermissionsDrifted: (ResourceUpdateActionResult.PermissionsDrifted) -> Unit = {},
+    ) {
         performResourceUpdateAction(
             action = updateOperation,
+            doOnPermissionsDrifted = doOnPermissionsDrifted,
+            doOnShareFailure = { emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.SHARE_FAILED)) },
             doOnFailure = { emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.GENERIC_ERROR)) },
             doOnFetchFailure = { emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.GENERIC_ERROR)) },
             doOnCryptoFailure = { emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.ENCRYPTION_ERROR, it)) },

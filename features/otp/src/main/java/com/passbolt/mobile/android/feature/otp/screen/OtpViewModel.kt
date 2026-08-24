@@ -52,6 +52,7 @@ import com.passbolt.mobile.android.domain.resources.actions.performCommonResourc
 import com.passbolt.mobile.android.domain.resources.actions.performResourceUpdateAction
 import com.passbolt.mobile.android.domain.resources.actions.performSecretPropertyAction
 import com.passbolt.mobile.android.domain.resources.mapper.toOtpItemWrapper
+import com.passbolt.mobile.android.domain.resources.usecase.EditPermissionsConfirmationInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcesUseCase
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
 import com.passbolt.mobile.android.feature.home.screen.ShowSuggestedModel
@@ -61,6 +62,7 @@ import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseSwitchAccou
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseTrustNewKeyDialog
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseTrustedKeyDeletedDialog
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.ConfirmDeleteTotp
+import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.ConfirmedPermissionsResult
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CopyOtp
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CreateTotp
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.DeleteOtp
@@ -76,6 +78,7 @@ import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.TrustMetadataKey
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.TrustNewMetadataKey
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.CopyToClipboard
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.InitiateDataRefresh
+import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToConfirmPermissions
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToCreateResourceForm
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToCreateTotp
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToEditResourceForm
@@ -110,6 +113,7 @@ import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes.
 import com.passbolt.mobile.android.ui.LeadingContentType.TOTP
 import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
 import com.passbolt.mobile.android.ui.OtpItemWrapper
+import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.ResourceUiModel
 import com.passbolt.mobile.android.ui.allReset
 import com.passbolt.mobile.android.ui.contentType
@@ -145,6 +149,7 @@ internal class OtpViewModel(
     private val timerFactory: TimerFactory,
     private val resourceAccessInteractor: ResourceAccessInteractor,
     private val resourceUpdateActionsInteractorFactory: ResourceUpdateActionsInteractorFactory,
+    private val editPermissionsConfirmationInteractor: EditPermissionsConfirmationInteractor,
     private val secretPropertiesActionsInteractorFactory: SecretPropertiesActionsInteractorFactory,
     private val autofillUriMatcher: AutofillUriMatcher,
     private val timeProvider: TimeProvider,
@@ -230,6 +235,7 @@ internal class OtpViewModel(
                 )
             }
             CloseDeleteConfirmationDialog -> updateViewState { copy(showDeleteTotpConfirmationDialog = false) }
+            is ConfirmedPermissionsResult -> confirmedPermissionsReceived(intent.permissions)
             ConfirmDeleteTotp -> {
                 updateViewState { copy(showProgress = true, showDeleteTotpConfirmationDialog = false) }
                 deleteTotp(viewState.value.moreMenuResource)
@@ -327,7 +333,13 @@ internal class OtpViewModel(
                 is Totp, V5TotpStandalone ->
                     deleteStandaloneTotpResource(otpResource.resource)
                 is PasswordDescriptionTotp, V5DefaultWithTotp ->
-                    downgradeToPasswordAndDescriptionResource(otpResource.resource)
+                    if (editPermissionsConfirmationInteractor.shouldConfirmPermissions(otpResource.resource.resourceId)) {
+                        Timber.d("Removing totp from a shared resource - navigating to permissions confirmation")
+                        updateViewState { copy(pendingPermissionsConfirmationResource = otpResource.resource) }
+                        emitSideEffect(NavigateToConfirmPermissions(otpResource.resource.resourceId))
+                    } else {
+                        downgradeToPasswordAndDescriptionResource(otpResource.resource)
+                    }
                 else ->
                     error("$contentType type should not be presented on totp list")
             }
@@ -347,15 +359,42 @@ internal class OtpViewModel(
         )
     }
 
-    private suspend fun downgradeToPasswordAndDescriptionResource(otpResource: ResourceUiModel) {
+    private fun confirmedPermissionsReceived(confirmedPermissions: List<PermissionModelUi>) {
+        val resource = viewState.value.pendingPermissionsConfirmationResource ?: return
+        updateViewState { copy(pendingPermissionsConfirmationResource = null, showProgress = true) }
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            downgradeToPasswordAndDescriptionResource(resource, confirmedPermissions)
+            updateViewState { copy(showProgress = false) }
+        }
+    }
+
+    private suspend fun downgradeToPasswordAndDescriptionResource(
+        otpResource: ResourceUiModel,
+        confirmedPermissions: List<PermissionModelUi>? = null,
+    ) {
         val resourceUpdateActionInteractor = resourceUpdateActionsInteractorFactory.create(otpResource)
         performResourceUpdateAction(
             action = {
-                resourceUpdateActionInteractor.updateGenericResource(
-                    UpdateAction.REMOVE_TOTP,
-                    secretModification = { it.apply { totp = null } },
+                if (confirmedPermissions == null) {
+                    resourceUpdateActionInteractor.updateGenericResource(
+                        UpdateAction.REMOVE_TOTP,
+                        secretModification = { it.apply { totp = null } },
+                    )
+                } else {
+                    resourceUpdateActionInteractor.updateGenericResourceWithConfirmedPermissions(
+                        UpdateAction.REMOVE_TOTP,
+                        confirmedPermissions,
+                        secretModification = { it.apply { totp = null } },
+                    )
+                }
+            },
+            doOnPermissionsDrifted = { drifted ->
+                updateViewState { copy(pendingPermissionsConfirmationResource = otpResource) }
+                emitSideEffect(
+                    NavigateToConfirmPermissions(otpResource.resourceId, driftedEntityNames = drifted.driftedEntityNames),
                 )
             },
+            doOnShareFailure = { emitSideEffect(ShowErrorSnackbar(SnackbarErrorType.SHARE_FAILED)) },
             doOnCryptoFailure = { emitSideEffect(ShowErrorSnackbar(SnackbarErrorType.ENCRYPTION_FAILURE)) },
             doOnFailure = { emitSideEffect(ShowErrorSnackbar(ERROR)) },
             doOnSuccess = {

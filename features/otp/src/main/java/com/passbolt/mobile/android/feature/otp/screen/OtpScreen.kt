@@ -58,6 +58,7 @@ import com.passbolt.mobile.android.core.navigation.AppContext
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
+import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
 import com.passbolt.mobile.android.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
 import com.passbolt.mobile.android.core.ui.empty.EmptyResourceListState
@@ -92,6 +93,7 @@ import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.TrustMetadataKey
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.TrustNewMetadataKey
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.CopyToClipboard
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.InitiateDataRefresh
+import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToConfirmPermissions
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToCreateResourceForm
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToCreateTotp
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToEditResourceForm
@@ -103,6 +105,7 @@ import com.passbolt.mobile.android.feature.otp.screen.ui.ProgressSource.Revealed
 import com.passbolt.mobile.android.feature.otp.screen.ui.ProgressSource.UniversalAutofillCountdown
 import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuBottomSheet
 import com.passbolt.mobile.android.testtags.composetags.Otp
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.OtpItemWrapper
 import com.passbolt.mobile.android.ui.ResourceFormMode
 import kotlinx.coroutines.launch
@@ -177,6 +180,10 @@ internal fun OtpScreen(
                 navigator.navigateToKey(MainResourceForm(ResourceFormMode.Create(it.leadingContentType, null)))
             is NavigateToEditResourceForm ->
                 navigator.navigateToKey(MainResourceForm(ResourceFormMode.Edit(it.resourceId, it.resourceName)))
+            is NavigateToConfirmPermissions ->
+                navigator.navigateToKey(
+                    ConfirmPermissions(ConfirmPermissionsMode.Edit(it.resourceId), it.driftedEntityNames),
+                )
             InitiateDataRefresh -> DataRefreshService.start(context)
             is ShowToast -> Toast.makeText(context, getToastMessage(context, it.type), Toast.LENGTH_SHORT).show()
         }

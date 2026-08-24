@@ -28,21 +28,17 @@ import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAct
 import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAction.REMOVE_PASSWORD
 import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAction.REMOVE_PIN_CODE
 import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAction.REMOVE_TOTP
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.FetchFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
 import com.passbolt.mobile.android.domain.metadata.usecase.GetMetadataTypesSettingsUseCase
 import com.passbolt.mobile.android.domain.passwordexpiry.usecase.PasswordExpiryPoliciesInteractor
 import com.passbolt.mobile.android.domain.passwordpolicies.usecase.GetPasswordPoliciesUseCase
 import com.passbolt.mobile.android.domain.passwordpolicies.usecase.PasswordPoliciesInteractor
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
 import com.passbolt.mobile.android.domain.resources.actions.performResourceCreateAction
 import com.passbolt.mobile.android.domain.resources.actions.performResourceUpdateAction
-import com.passbolt.mobile.android.domain.resources.usecase.FetchResourcePermissionsUseCase
-import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
+import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsConfirmationInteractor
+import com.passbolt.mobile.android.domain.resources.usecase.EditPermissionsConfirmationInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceUseCase
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
 import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.note.NoteFormViewModel
@@ -136,7 +132,6 @@ import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
 import com.passbolt.mobile.android.ui.OtpParseResult
 import com.passbolt.mobile.android.ui.PasswordGeneratorTypeUiModel
 import com.passbolt.mobile.android.ui.PasswordUiModel
-import com.passbolt.mobile.android.ui.PermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.PinCodeUiModel
 import com.passbolt.mobile.android.ui.ResourceAppearanceModel
@@ -147,7 +142,6 @@ import com.passbolt.mobile.android.ui.ResourceFormMode
 import com.passbolt.mobile.android.ui.ResourceFormMode.Create
 import com.passbolt.mobile.android.ui.ResourceFormMode.Edit
 import com.passbolt.mobile.android.ui.ResourceFormUiModel
-import com.passbolt.mobile.android.ui.ResourcePermission
 import com.passbolt.mobile.android.ui.TotpUiModel
 import com.passbolt.mobile.android.ui.contentType
 import kotlinx.coroutines.async
@@ -178,12 +172,8 @@ class ResourceFormViewModel(
     private val resourceUpdateActionsInteractorFactory: ResourceUpdateActionsInteractorFactory,
     private val checkPasswordPropertiesUseCase: CheckPasswordPropertiesUseCase,
     private val getMetadataTypesSettingsUseCase: GetMetadataTypesSettingsUseCase,
-    private val getLocalFolderPermissionsUseCase: GetLocalFolderPermissionsUseCase,
-    private val fetchFolderPermissionsUseCase: FetchFolderPermissionsUseCase,
-    private val fetchResourcePermissionsUseCase: FetchResourcePermissionsUseCase,
-    private val getLocalResourcePermissionsUseCase: GetLocalResourcePermissionsUseCase,
-    private val getPermissionsConfirmationOptOutUseCase: GetPermissionsConfirmationOptOutUseCase,
-    private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
+    private val editPermissionsConfirmationInteractor: EditPermissionsConfirmationInteractor,
+    private val createPermissionsConfirmationInteractor: CreatePermissionsConfirmationInteractor,
 ) : SideEffectViewModel<ResourceFormState, ResourceFormSideEffect>(ResourceFormState(mode = mode)),
     KoinComponent {
     private val uiModel: ResourceFormUiModel by lazy {
@@ -869,53 +859,8 @@ class ResourceFormViewModel(
         }
     }
 
-    private suspend fun shouldConfirmPermissions(): Boolean {
-        val folderId = parentFolderId ?: return false
-        if (getPermissionsConfirmationOptOutUseCase.execute(Unit).isOptedOut) {
-            Timber.d("Permissions confirmation opted out for this session - applying parent folder permissions")
-            return false
-        }
-        val fetchOutput =
-            runAuthenticatedOperation {
-                fetchFolderPermissionsUseCase.execute(FetchFolderPermissionsUseCase.Input(folderId))
-            }
-        return when (fetchOutput) {
-            is FetchFolderPermissionsUseCase.Output.Success -> isShared(fetchOutput.permissions)
-            is FetchFolderPermissionsUseCase.Output.Failure -> {
-                Timber.e(
-                    "Failed to fetch folder permissions to decide on confirmation: ${fetchOutput.message} - " +
-                        "falling back to local permissions",
-                )
-                isSharedLocally(folderId)
-            }
-        }
-    }
-
-    private suspend fun isSharedLocally(folderId: String): Boolean {
-        val folderPermissions =
-            getLocalFolderPermissionsUseCase
-                .execute(GetLocalFolderPermissionsUseCase.Input(folderId))
-                .permissions
-        val currentUserServerId = getSelectedAccountDataUseCase.execute(Unit).serverId
-        val isOperatorDirectOwnershipOnly =
-            folderPermissions.singleOrNull()?.let {
-                it is PermissionModelUi.UserPermissionModel &&
-                    it.user.userId == currentUserServerId &&
-                    it.permission == ResourcePermission.OWNER
-            } == true
-        return folderPermissions.isNotEmpty() && !isOperatorDirectOwnershipOnly
-    }
-
-    private fun isShared(permissions: List<PermissionModel>): Boolean {
-        val currentUserServerId = getSelectedAccountDataUseCase.execute(Unit).serverId
-        val isOperatorDirectOwnershipOnly =
-            permissions.singleOrNull()?.let {
-                it is PermissionModel.UserPermissionModel &&
-                    it.userId == currentUserServerId &&
-                    it.permission == ResourcePermission.OWNER
-            } == true
-        return permissions.isNotEmpty() && !isOperatorDirectOwnershipOnly
-    }
+    private suspend fun shouldConfirmPermissions(): Boolean =
+        createPermissionsConfirmationInteractor.shouldConfirmPermissions(parentFolderId)
 
     private fun updateResource() {
         onValid {
@@ -939,43 +884,11 @@ class ResourceFormViewModel(
     @Suppress("ReturnCount")
     private suspend fun shouldConfirmEditPermissions(): Boolean {
         val resourceId = (mode as? Edit)?.resourceId ?: return false
-        if (getPermissionsConfirmationOptOutUseCase.execute(Unit).isOptedOut) {
-            Timber.d("Permissions confirmation opted out for this session - updating without confirmation")
-            return false
-        }
         if (!resourceModelHandler.isSecretModified()) {
             Timber.d("Secret not modified - updating without permissions confirmation")
             return false
         }
-        val fetchOutput =
-            runAuthenticatedOperation {
-                fetchResourcePermissionsUseCase.execute(FetchResourcePermissionsUseCase.Input(resourceId))
-            }
-        return when (fetchOutput) {
-            is FetchResourcePermissionsUseCase.Output.Success -> isShared(fetchOutput.permissions)
-            is FetchResourcePermissionsUseCase.Output.Failure -> {
-                Timber.e(
-                    "Failed to fetch resource permissions to decide on confirmation: ${fetchOutput.message} - " +
-                        "falling back to local permissions",
-                )
-                isResourceSharedLocally(resourceId)
-            }
-        }
-    }
-
-    private suspend fun isResourceSharedLocally(resourceId: String): Boolean {
-        val resourcePermissions =
-            getLocalResourcePermissionsUseCase
-                .execute(GetLocalResourcePermissionsUseCase.Input(resourceId))
-                .permissions
-        val currentUserServerId = getSelectedAccountDataUseCase.execute(Unit).serverId
-        val isOperatorDirectOwnershipOnly =
-            resourcePermissions.singleOrNull()?.let {
-                it is PermissionModelUi.UserPermissionModel &&
-                    it.user.userId == currentUserServerId &&
-                    it.permission == ResourcePermission.OWNER
-            } == true
-        return resourcePermissions.isNotEmpty() && !isOperatorDirectOwnershipOnly
+        return editPermissionsConfirmationInteractor.shouldConfirmPermissions(resourceId)
     }
 
     private fun checkPasswordAndProceed(onProceed: () -> Unit) {
