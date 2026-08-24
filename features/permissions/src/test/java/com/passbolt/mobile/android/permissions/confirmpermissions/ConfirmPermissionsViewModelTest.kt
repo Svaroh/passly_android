@@ -158,23 +158,23 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         Dispatchers.setMain(testDispatcher)
 
         get<CreatePermissionsSnapshotInteractor>().stub {
-            onBlocking { createForFolder(FOLDER_ID) }
+            on { createForFolder(FOLDER_ID) }
                 .doReturn(CreatePermissionsSnapshotInteractor.Output.Success(SNAPSHOT))
         }
         get<GetPermissionsSnapshotUseCase>().stub {
-            onBlocking { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(SNAPSHOT)
+            on { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(SNAPSHOT)
         }
         get<UsersInteractor>().stub {
-            onBlocking { fetchAndSaveUsers() } doReturn UsersInteractor.Output.Success
+            on { fetchAndSaveUsers() } doReturn UsersInteractor.Output.Success
         }
         get<GroupsInteractor>().stub {
-            onBlocking { fetchAndSaveGroups() } doReturn GroupsInteractor.Output.Success
+            on { fetchAndSaveGroups() } doReturn GroupsInteractor.Output.Success
         }
         get<GetLocalCurrentUserUseCase>().stub {
-            onBlocking { execute(Unit) } doReturn GetLocalCurrentUserUseCase.Output(CURRENT_USER_UI_MODEL)
+            on { execute(Unit) } doReturn GetLocalCurrentUserUseCase.Output(CURRENT_USER_UI_MODEL)
         }
         get<GetFeatureFlagsUseCase>().stub {
-            onBlocking { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(featureFlags(isOptOutAvailable = true))
+            on { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(featureFlags(isOptOutAvailable = true))
         }
     }
 
@@ -214,7 +214,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
     fun `skip switch is hidden when opt out feature flag is off`() =
         runTest {
             get<GetFeatureFlagsUseCase>().stub {
-                onBlocking { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(featureFlags(isOptOutAvailable = false))
+                on { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(featureFlags(isOptOutAvailable = false))
             }
 
             val viewModel = confirmCreateViewModel()
@@ -259,7 +259,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
     fun `snapshot creation failure closes the screen with a failure message`() =
         runTest {
             get<CreatePermissionsSnapshotInteractor>().stub {
-                onBlocking { createForFolder(FOLDER_ID) }
+                on { createForFolder(FOLDER_ID) }
                     .doReturn(
                         CreatePermissionsSnapshotInteractor.Output.Failure(
                             DomainResult.Incomplete.Error(UNKNOWN, "error"),
@@ -294,7 +294,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
     fun `refresh failure does not block the confirmation`() =
         runTest {
             get<UsersInteractor>().stub {
-                onBlocking { fetchAndSaveUsers() } doReturn
+                on { fetchAndSaveUsers() } doReturn
                     UsersInteractor.Output.Failure(AuthenticationState.Authenticated)
             }
 
@@ -469,7 +469,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
                 snapshot(operatorPermission = ResourcePermission.UPDATE, groupMembers = emptyList()),
             )
             get<GetGroupWithUsersUseCase>().stub {
-                onBlocking { execute(GetGroupWithUsersUseCase.Input(ADDED_GROUP_ID)) } doReturn
+                on { execute(GetGroupWithUsersUseCase.Input(ADDED_GROUP_ID)) } doReturn
                     GetGroupWithUsersUseCase.Output(
                         GroupWithUsersModel(
                             group = GroupModel(ADDED_GROUP_ID, "added-group"),
@@ -610,7 +610,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
     fun `resource snapshot creation failure closes the screen with a failure message`() =
         runTest {
             get<CreatePermissionsSnapshotInteractor>().stub {
-                onBlocking { createForResource(RESOURCE_ID) }
+                on { createForResource(RESOURCE_ID) }
                     .doReturn(
                         CreatePermissionsSnapshotInteractor.Output.Failure(
                             DomainResult.Incomplete.Error(UNKNOWN, "error"),
@@ -647,7 +647,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         runTest {
             stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
             get<ResourceShareActionsInteractor>().stub {
-                onBlocking { shareWithConfirmedPermissions(eq(RESOURCE_ID), any()) } doReturn ShareActionResult.Success
+                on { shareWithConfirmedPermissions(eq(RESOURCE_ID), any()) } doReturn ShareActionResult.Success
             }
 
             val viewModel = confirmShareViewModel()
@@ -666,7 +666,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         runTest {
             stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
             get<ResourceShareActionsInteractor>().stub {
-                onBlocking { shareWithConfirmedPermissions(eq(RESOURCE_ID), any()) } doReturn
+                on { shareWithConfirmedPermissions(eq(RESOURCE_ID), any()) } doReturn
                     ShareActionResult.PermissionsDrifted(listOf("drifted-user"))
             }
 
@@ -686,7 +686,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         runTest {
             stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
             get<ResourceShareActionsInteractor>().stub {
-                onBlocking { shareWithConfirmedPermissions(eq(RESOURCE_ID), any()) } doReturn
+                on { shareWithConfirmedPermissions(eq(RESOURCE_ID), any()) } doReturn
                     ShareActionResult.ShareFailure("error")
             }
 
@@ -705,7 +705,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
 
     private fun stubResourceSnapshot(snapshot: PermissionsSnapshot) {
         get<CreatePermissionsSnapshotInteractor>().stub {
-            onBlocking { createForResource(RESOURCE_ID) }
+            on { createForResource(RESOURCE_ID) }
                 .doReturn(CreatePermissionsSnapshotInteractor.Output.Success(snapshot))
         }
         stubStoredSnapshot(snapshot)
@@ -713,7 +713,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
 
     private fun stubFolderSnapshot(snapshot: PermissionsSnapshot) {
         get<CreatePermissionsSnapshotInteractor>().stub {
-            onBlocking { createForFolder(FOLDER_ID) }
+            on { createForFolder(FOLDER_ID) }
                 .doReturn(CreatePermissionsSnapshotInteractor.Output.Success(snapshot))
         }
         stubStoredSnapshot(snapshot)
@@ -721,7 +721,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
 
     private fun stubStoredSnapshot(snapshot: PermissionsSnapshot) {
         get<GetPermissionsSnapshotUseCase>().stub {
-            onBlocking { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(snapshot)
+            on { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(snapshot)
         }
     }
 

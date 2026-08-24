@@ -149,7 +149,7 @@ class ResourcePickerViewModelTest : KoinTest {
         Dispatchers.setMain(testDispatcher)
 
         get<ResourcePickerDataProvider>().stub {
-            onBlocking {
+            on {
                 provideData(
                     anyOrNull(),
                     anyOrNull(),

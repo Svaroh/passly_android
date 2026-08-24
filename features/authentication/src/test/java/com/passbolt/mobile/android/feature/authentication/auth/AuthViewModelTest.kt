@@ -455,7 +455,7 @@ class AuthViewModelTest : KoinTest {
         runTest {
             val signOutUseCase: SignOutUseCase = get()
             signOutUseCase.stub {
-                onBlocking { execute(any()) } doReturn Unit
+                on { execute(any()) } doReturn Unit
             }
 
             viewModel = get(parameters = { parametersOf(AuthConfig.Startup, USER_ID, AppContext.APP) })

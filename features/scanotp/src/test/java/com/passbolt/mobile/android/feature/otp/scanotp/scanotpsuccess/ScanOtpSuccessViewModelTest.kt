@@ -63,10 +63,10 @@ class ScanOtpSuccessViewModelTest : KoinTest {
         Dispatchers.setMain(testDispatcher)
 
         mockEditPermissionsConfirmationInteractor.stub {
-            onBlocking { shouldConfirmPermissions(any()) } doReturn false
+            on { shouldConfirmPermissions(any()) } doReturn false
         }
         mockCreatePermissionsConfirmationInteractor.stub {
-            onBlocking { shouldConfirmPermissions(anyOrNull()) } doReturn false
+            on { shouldConfirmPermissions(anyOrNull()) } doReturn false
         }
     }
 
@@ -79,7 +79,7 @@ class ScanOtpSuccessViewModelTest : KoinTest {
     fun `create standalone totp should create totp and navigate to otp list`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.doReturn(
+                on { execute(any()) }.doReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         ContentType.V5TotpStandalone,
                         MetadataTypeModel.V5,
@@ -89,7 +89,7 @@ class ScanOtpSuccessViewModelTest : KoinTest {
             val mockResourceId = UUID.randomUUID()
             val mockResourceName = "mockResourceName"
             mockResourceCreateActionsInteractor.stub {
-                onBlocking {
+                on {
                     createGenericResource(any(), anyOrNull(), any(), any())
                 }.doReturn(flowOf(ResourceCreateActionResult.Success(mockResourceId.toString(), mockResourceName)))
             }
@@ -111,7 +111,7 @@ class ScanOtpSuccessViewModelTest : KoinTest {
     fun `create standalone totp should show and hide progress`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.doReturn(
+                on { execute(any()) }.doReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         ContentType.V5TotpStandalone,
                         MetadataTypeModel.V5,
@@ -120,7 +120,7 @@ class ScanOtpSuccessViewModelTest : KoinTest {
             }
             val mockResourceId = UUID.randomUUID()
             mockResourceCreateActionsInteractor.stub {
-                onBlocking {
+                on {
                     createGenericResource(any(), anyOrNull(), any(), any())
                 }.doReturn(flowOf(ResourceCreateActionResult.Success(mockResourceId.toString(), "name")))
             }
@@ -173,12 +173,12 @@ class ScanOtpSuccessViewModelTest : KoinTest {
                 }
 
             mockResourceUpdateActionsInteractor.stub {
-                onBlocking {
+                on {
                     updateGenericResource(eq(UpdateAction.ADD_TOTP), any(), any())
                 }.doReturn(flowOf(ResourceUpdateActionResult.Success(mockResourceId.toString(), mockResourceName)))
             }
             mockIdToSlugMappingProvider.stub {
-                onBlocking { provideMappingForSelectedAccount() }.doReturn(
+                on { provideMappingForSelectedAccount() }.doReturn(
                     mapOf(mockResourceTypeId to ContentType.V5DefaultWithTotp.slug),
                 )
             }
@@ -207,7 +207,7 @@ class ScanOtpSuccessViewModelTest : KoinTest {
                     on { resourceId } doReturn mockResourceId.toString()
                 }
             mockEditPermissionsConfirmationInteractor.stub {
-                onBlocking { shouldConfirmPermissions(mockResourceId.toString()) } doReturn true
+                on { shouldConfirmPermissions(mockResourceId.toString()) } doReturn true
             }
 
             val viewModel = get<ScanOtpSuccessViewModel> { parametersOf(mockScannedTotp, null) }
@@ -232,15 +232,15 @@ class ScanOtpSuccessViewModelTest : KoinTest {
                     on { resourceTypeId } doReturn mockResourceTypeId.toString()
                 }
             mockEditPermissionsConfirmationInteractor.stub {
-                onBlocking { shouldConfirmPermissions(mockResourceId.toString()) } doReturn true
+                on { shouldConfirmPermissions(mockResourceId.toString()) } doReturn true
             }
             mockIdToSlugMappingProvider.stub {
-                onBlocking { provideMappingForSelectedAccount() }.doReturn(
+                on { provideMappingForSelectedAccount() }.doReturn(
                     mapOf(mockResourceTypeId to ContentType.V5DefaultWithTotp.slug),
                 )
             }
             mockResourceUpdateActionsInteractor.stub {
-                onBlocking {
+                on {
                     updateGenericResourceWithConfirmedPermissions(eq(UpdateAction.ADD_TOTP), any(), any(), any())
                 }.doReturn(flowOf(ResourceUpdateActionResult.Success(mockResourceId.toString(), "name")))
             }
@@ -276,12 +276,12 @@ class ScanOtpSuccessViewModelTest : KoinTest {
                 }
 
             mockResourceUpdateActionsInteractor.stub {
-                onBlocking {
+                on {
                     updateGenericResource(eq(UpdateAction.ADD_TOTP), any(), any())
                 }.doReturn(flowOf(ResourceUpdateActionResult.Success(mockResourceId.toString(), mockResourceName)))
             }
             mockIdToSlugMappingProvider.stub {
-                onBlocking { provideMappingForSelectedAccount() }.doReturn(
+                on { provideMappingForSelectedAccount() }.doReturn(
                     mapOf(mockResourceTypeId to ContentType.V5Default.slug),
                 )
             }
@@ -305,7 +305,7 @@ class ScanOtpSuccessViewModelTest : KoinTest {
     fun `create standalone totp in a shared folder should navigate to permissions confirmation`() =
         runTest {
             mockCreatePermissionsConfirmationInteractor.stub {
-                onBlocking { shouldConfirmPermissions(PARENT_FOLDER_ID) } doReturn true
+                on { shouldConfirmPermissions(PARENT_FOLDER_ID) } doReturn true
             }
 
             val viewModel = get<ScanOtpSuccessViewModel> { parametersOf(mockScannedTotp, PARENT_FOLDER_ID) }
@@ -322,10 +322,10 @@ class ScanOtpSuccessViewModelTest : KoinTest {
     fun `confirmed permissions should create standalone totp with the confirmed list`() =
         runTest {
             mockCreatePermissionsConfirmationInteractor.stub {
-                onBlocking { shouldConfirmPermissions(PARENT_FOLDER_ID) } doReturn true
+                on { shouldConfirmPermissions(PARENT_FOLDER_ID) } doReturn true
             }
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.doReturn(
+                on { execute(any()) }.doReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         ContentType.V5TotpStandalone,
                         MetadataTypeModel.V5,
@@ -334,7 +334,7 @@ class ScanOtpSuccessViewModelTest : KoinTest {
             }
             val mockResourceId = UUID.randomUUID()
             mockResourceCreateActionsInteractor.stub {
-                onBlocking {
+                on {
                     createGenericResourceWithConfirmedPermissions(any(), anyOrNull(), any(), any(), any())
                 }.doReturn(flowOf(ResourceCreateActionResult.Success(mockResourceId.toString(), "name")))
             }
@@ -360,10 +360,10 @@ class ScanOtpSuccessViewModelTest : KoinTest {
     fun `permissions drift during confirmed standalone totp creation should inform and navigate to otp list`() =
         runTest {
             mockCreatePermissionsConfirmationInteractor.stub {
-                onBlocking { shouldConfirmPermissions(PARENT_FOLDER_ID) } doReturn true
+                on { shouldConfirmPermissions(PARENT_FOLDER_ID) } doReturn true
             }
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.doReturn(
+                on { execute(any()) }.doReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         ContentType.V5TotpStandalone,
                         MetadataTypeModel.V5,
@@ -371,7 +371,7 @@ class ScanOtpSuccessViewModelTest : KoinTest {
                 )
             }
             mockResourceCreateActionsInteractor.stub {
-                onBlocking {
+                on {
                     createGenericResourceWithConfirmedPermissions(any(), anyOrNull(), any(), any(), any())
                 }.doReturn(flowOf(ResourceCreateActionResult.PermissionsDrifted))
             }

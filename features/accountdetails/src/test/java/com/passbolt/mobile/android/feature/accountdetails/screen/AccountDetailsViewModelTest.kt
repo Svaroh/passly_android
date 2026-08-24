@@ -81,7 +81,7 @@ class AccountDetailsViewModelTest : KoinTest {
                         single { mock<UpdateAccountDataUseCase>() }
                         single {
                             mock<UserProfileInteractor> {
-                                onBlocking { fetchAndUpdateUserProfile() } doReturn
+                                on { fetchAndUpdateUserProfile() } doReturn
                                     UserProfileInteractor.Output.Success
                             }
                         }
@@ -137,7 +137,7 @@ class AccountDetailsViewModelTest : KoinTest {
         runTest {
             val userProfileInteractor = get<UserProfileInteractor>()
             userProfileInteractor.stub {
-                onBlocking { fetchAndUpdateUserProfile() } doReturn
+                on { fetchAndUpdateUserProfile() } doReturn
                     UserProfileInteractor.Output.Failure(
                         DomainResult.Incomplete.Error(UNKNOWN, PROFILE_ERROR),
                     )

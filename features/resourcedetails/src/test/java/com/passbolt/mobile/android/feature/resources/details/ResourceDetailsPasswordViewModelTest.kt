@@ -86,7 +86,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
             val password = "secretPassword123"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn
+                on { providePassword() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -114,7 +114,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
             val password = "secretPassword123"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn
+                on { providePassword() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -144,7 +144,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
             val password = "secretPassword123"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn
+                on { providePassword() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -173,7 +173,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
         runTest {
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
+                on { providePassword() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
             }
 
             viewModel = get()
@@ -193,7 +193,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
         runTest {
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn flowOf(SecretPropertyActionResult.FetchFailure())
+                on { providePassword() } doReturn flowOf(SecretPropertyActionResult.FetchFailure())
             }
 
             viewModel = get()
@@ -213,7 +213,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
         runTest {
             val getFeatureFlagsUseCase: GetFeatureFlagsUseCase = get()
             getFeatureFlagsUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetFeatureFlagsUseCase.Output(
                         DEFAULT_FEATURE_FLAGS.copy(isPreviewPasswordAvailable = false),
                     )
@@ -232,7 +232,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
         runTest {
             val getRbacRulesUseCase: GetRbacRulesUseCase = get()
             getRbacRulesUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetRbacRulesUseCase.Output(
                         DEFAULT_RBAC.copy(passwordPreviewRule = DENY),
                     )

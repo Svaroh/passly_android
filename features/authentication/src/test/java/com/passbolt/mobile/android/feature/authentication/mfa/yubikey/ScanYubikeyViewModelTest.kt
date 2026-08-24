@@ -93,7 +93,7 @@ class ScanYubikeyViewModelTest : KoinTest {
         runTest {
             val verifyYubikeyUseCase: VerifyYubikeyUseCase = get()
             verifyYubikeyUseCase.stub {
-                onBlocking { execute(any()) } doReturn VerifyYubikeyUseCase.Output.YubikeyNotFromCurrentUser
+                on { execute(any()) } doReturn VerifyYubikeyUseCase.Output.YubikeyNotFromCurrentUser
             }
 
             viewModel = get(parameters = { parametersOf(AUTH_TOKEN, false, false) })

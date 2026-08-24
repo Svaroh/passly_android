@@ -97,20 +97,20 @@ class ResourceShareActionsInteractorTest : KoinTest {
     @Before
     fun setUp() {
         get<CreatePermissionsSnapshotInteractor>().stub {
-            onBlocking { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.NoDrift
+            on { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.NoDrift
         }
         get<GetPermissionsSnapshotUseCase>().stub {
-            onBlocking { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(SNAPSHOT)
+            on { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(SNAPSHOT)
         }
         get<ConfirmedRecipientsPublicKeysResolver>().stub {
-            onBlocking { resolve(any()) } doReturn CONFIRMED_KEYS
+            on { resolve(any()) } doReturn CONFIRMED_KEYS
         }
         get<ResourceShareInteractor>().stub {
-            onBlocking { simulateAndShareResource(any(), any(), any(), anyOrNull()) } doReturn
+            on { simulateAndShareResource(any(), any(), any(), anyOrNull()) } doReturn
                 ResourceShareInteractor.Output.Success
         }
         get<GetLocalResourceUseCase>().stub {
-            onBlocking { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) } doReturn
+            on { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) } doReturn
                 GetLocalResourceUseCase.Output(resourceModel(PasswordAndDescription.slug))
         }
     }
@@ -119,7 +119,7 @@ class ResourceShareActionsInteractorTest : KoinTest {
     fun `drift detected before the share stops with the drifted names`() =
         runTest {
             get<CreatePermissionsSnapshotInteractor>().stub {
-                onBlocking { detectDriftForResource(RESOURCE_ID) } doReturn
+                on { detectDriftForResource(RESOURCE_ID) } doReturn
                     DriftOutput.DriftDetected(listOf("drifted-user"))
             }
 
@@ -133,7 +133,7 @@ class ResourceShareActionsInteractorTest : KoinTest {
     fun `missing snapshot during the drift check stops with a drift result without names`() =
         runTest {
             get<CreatePermissionsSnapshotInteractor>().stub {
-                onBlocking { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.SnapshotMissing
+                on { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.SnapshotMissing
             }
 
             val result = get<ResourceShareActionsInteractor>().shareWithConfirmedPermissions(RESOURCE_ID, listOf(OPERATOR_UI))
@@ -178,7 +178,7 @@ class ResourceShareActionsInteractorTest : KoinTest {
         runTest {
             stubV5Resource()
             get<ResourceUpdateActionsInteractor>().stub {
-                onBlocking { reEncryptResourceMetadata() } doReturn
+                on { reEncryptResourceMetadata() } doReturn
                     flowOf(ResourceUpdateActionResult.Success(RESOURCE_ID, "name"))
             }
 
@@ -194,7 +194,7 @@ class ResourceShareActionsInteractorTest : KoinTest {
         runTest {
             stubV5Resource()
             get<ResourceUpdateActionsInteractor>().stub {
-                onBlocking { reEncryptResourceMetadata() } doReturn
+                on { reEncryptResourceMetadata() } doReturn
                     flowOf(ResourceUpdateActionResult.MetadataKeyVerificationFailure)
             }
 
@@ -208,7 +208,7 @@ class ResourceShareActionsInteractorTest : KoinTest {
     fun `dry-run drift during the share reloads the confirmation`() =
         runTest {
             get<ResourceShareInteractor>().stub {
-                onBlocking { simulateAndShareResource(any(), any(), any(), anyOrNull()) } doReturn
+                on { simulateAndShareResource(any(), any(), any(), anyOrNull()) } doReturn
                     ResourceShareInteractor.Output.DriftDetected
             }
 
@@ -221,7 +221,7 @@ class ResourceShareActionsInteractorTest : KoinTest {
     fun `share failure is reported`() =
         runTest {
             get<ResourceShareInteractor>().stub {
-                onBlocking { simulateAndShareResource(any(), any(), any(), anyOrNull()) } doReturn
+                on { simulateAndShareResource(any(), any(), any(), anyOrNull()) } doReturn
                     ResourceShareInteractor.Output.ShareFailure(FAILURE)
             }
 
@@ -232,7 +232,7 @@ class ResourceShareActionsInteractorTest : KoinTest {
 
     private fun stubV5Resource() {
         get<GetLocalResourceUseCase>().stub {
-            onBlocking { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) } doReturn
+            on { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) } doReturn
                 GetLocalResourceUseCase.Output(resourceModel(V5Default.slug))
         }
     }

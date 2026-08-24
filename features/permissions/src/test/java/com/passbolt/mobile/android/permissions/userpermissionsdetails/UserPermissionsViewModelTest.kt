@@ -89,7 +89,7 @@ class UserPermissionsViewModelTest : KoinTest {
 
         val getLocalUserUseCase = get<GetLocalUserUseCase>()
         getLocalUserUseCase.stub {
-            onBlocking { execute(GetLocalUserUseCase.Input(USER_WITH_AVATAR.userId)) }
+            on { execute(GetLocalUserUseCase.Input(USER_WITH_AVATAR.userId)) }
                 .doReturn(GetLocalUserUseCase.Output(USER))
         }
     }
@@ -199,7 +199,7 @@ class UserPermissionsViewModelTest : KoinTest {
     fun `snapshot details without an available snapshot should navigate back`() =
         runTest {
             get<GetPermissionsSnapshotUseCase>().stub {
-                onBlocking { execute(Unit) }.doReturn(GetPermissionsSnapshotUseCase.Output(null))
+                on { execute(Unit) }.doReturn(GetPermissionsSnapshotUseCase.Output(null))
             }
 
             viewModel = get(parameters = { parametersOf(PermissionsMode.VIEW, USER_PERMISSION, true) })

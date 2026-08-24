@@ -127,16 +127,16 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
     @Before
     fun setUp() {
         createPermissionsSnapshotInteractor.stub {
-            onBlocking { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.NoDrift
+            on { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.NoDrift
         }
         getPermissionsSnapshotUseCase.stub {
-            onBlocking { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(SNAPSHOT)
+            on { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(SNAPSHOT)
         }
         confirmedRecipientsPublicKeysResolver.stub {
-            onBlocking { resolve(any()) } doReturn CONFIRMED_KEYS
+            on { resolve(any()) } doReturn CONFIRMED_KEYS
         }
         resourceShareInteractor.stub {
-            onBlocking { simulateAndShareResource(any(), any(), any(), anyOrNull()) }
+            on { simulateAndShareResource(any(), any(), any(), anyOrNull()) }
                 .doReturn(ResourceShareInteractor.Output.Success)
         }
         stubSuccessfulUpdate()
@@ -146,7 +146,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
     fun `drift detected stops before any permission changes or update`() =
         runTest {
             createPermissionsSnapshotInteractor.stub {
-                onBlocking { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.DriftDetected(listOf("drifted-user"))
+                on { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.DriftDetected(listOf("drifted-user"))
             }
 
             val result =
@@ -163,7 +163,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
     fun `missing snapshot during the drift check stops with a drift result without names`() =
         runTest {
             createPermissionsSnapshotInteractor.stub {
-                onBlocking { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.SnapshotMissing
+                on { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.SnapshotMissing
             }
 
             val result =
@@ -180,7 +180,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
     fun `dry-run drift during the revocation share stops before the update`() =
         runTest {
             resourceShareInteractor.stub {
-                onBlocking { simulateAndShareResource(any(), any(), any(), anyOrNull()) }
+                on { simulateAndShareResource(any(), any(), any(), anyOrNull()) }
                     .doReturn(ResourceShareInteractor.Output.DriftDetected)
             }
 
@@ -197,7 +197,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
     fun `drift check failure stops before any permission changes or update`() =
         runTest {
             createPermissionsSnapshotInteractor.stub {
-                onBlocking { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.Failure(FAILURE)
+                on { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.Failure(FAILURE)
             }
 
             val result =
@@ -214,7 +214,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
     fun `missing snapshot is treated as drift`() =
         runTest {
             getPermissionsSnapshotUseCase.stub {
-                onBlocking { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(null)
+                on { execute(Unit) } doReturn GetPermissionsSnapshotUseCase.Output(null)
             }
 
             val result =
@@ -299,7 +299,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
     fun `update failure stops before granting access to new recipients`() =
         runTest {
             updateResourceInteractor.stub {
-                onBlocking { execute(any(), any(), any()) }
+                on { execute(any(), any(), any()) }
                     .doReturn(UpdateResourceInteractor.Output.Failure(FAILURE))
             }
 
@@ -318,7 +318,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
     fun `revocation share failure stops before the update`() =
         runTest {
             resourceShareInteractor.stub {
-                onBlocking { simulateAndShareResource(any(), any(), any(), anyOrNull()) }
+                on { simulateAndShareResource(any(), any(), any(), anyOrNull()) }
                     .doReturn(ResourceShareInteractor.Output.ShareFailure(FAILURE))
             }
 
@@ -349,7 +349,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
         runTest {
             stubMappingWithV5Default()
             createPermissionsSnapshotInteractor.stub {
-                onBlocking { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.DriftDetected(listOf("drifted-user"))
+                on { detectDriftForResource(RESOURCE_ID) } doReturn DriftOutput.DriftDetected(listOf("drifted-user"))
             }
 
             val result = interactor.upgradeToV5WithConfirmedPermissions(listOf(OPERATOR_UI, USER_UI)).single()
@@ -377,7 +377,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
 
     private fun stubMappingWithV5Default() {
         mappingProvider.stub {
-            onBlocking { provideMappingForSelectedAccount() } doReturn
+            on { provideMappingForSelectedAccount() } doReturn
                 mapOf(
                     UUID.randomUUID() to PasswordAndDescription.slug,
                     UUID.randomUUID() to V5Default.slug,
@@ -387,25 +387,25 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
 
     private fun stubSuccessfulUpdate() {
         mappingProvider.stub {
-            onBlocking { provideMappingForSelectedAccount() } doReturn mapOf(UUID.randomUUID() to PasswordAndDescription.slug)
+            on { provideMappingForSelectedAccount() } doReturn mapOf(UUID.randomUUID() to PasswordAndDescription.slug)
         }
         getMetadataKeysSettingsUseCase.stub {
-            onBlocking { execute(Unit) } doReturn
+            on { execute(Unit) } doReturn
                 GetMetadataKeysSettingsUseCase.Output(
                     MetadataKeysSettingsModel(allowUsageOfPersonalKeys = false, zeroKnowledgeKeyShare = false),
                 )
         }
         metadataPrivateKeysInteractor.stub {
-            onBlocking { verifyMetadataPrivateKey() } doReturn MetadataPrivateKeysInteractor.Output.KeyIsTrusted
+            on { verifyMetadataPrivateKey() } doReturn MetadataPrivateKeysInteractor.Output.KeyIsTrusted
         }
         getMetadataKeysUseCase.stub {
-            onBlocking { execute(any()) } doReturn emptyList()
+            on { execute(any()) } doReturn emptyList()
         }
         getLocalResourcePermissionsUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalResourcePermissionsUseCase.Output(emptyList())
+            on { execute(any()) } doReturn GetLocalResourcePermissionsUseCase.Output(emptyList())
         }
         secretPropertiesActionsInteractor.stub {
-            onBlocking { provideDecryptedSecret() } doReturn
+            on { provideDecryptedSecret() } doReturn
                 flowOf(
                     SecretPropertyActionResult.Success(
                         "secret",
@@ -415,7 +415,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
                 )
         }
         updateResourceInteractor.stub {
-            onBlocking { execute(any(), any(), any()) }
+            on { execute(any(), any(), any()) }
                 .doReturn(UpdateResourceInteractor.Output.Success(resourceModel()))
         }
     }

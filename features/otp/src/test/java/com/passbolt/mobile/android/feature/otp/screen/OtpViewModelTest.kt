@@ -189,15 +189,15 @@ class OtpViewModelTest : KoinTest {
 
         val getLocalResourcesUseCase = get<GetLocalResourcesUseCase>()
         getLocalResourcesUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalResourcesUseCase.Output(otpResources)
+            on { execute(any()) } doReturn GetLocalResourcesUseCase.Output(otpResources)
         }
 
         get<ResourceAccessInteractor>().stub {
-            onBlocking { canCreateResource(anyOrNull()) } doReturn true
+            on { canCreateResource(anyOrNull()) } doReturn true
         }
 
         get<EditPermissionsConfirmationInteractor>().stub {
-            onBlocking { shouldConfirmPermissions(any()) } doReturn false
+            on { shouldConfirmPermissions(any()) } doReturn false
         }
     }
 
@@ -344,7 +344,7 @@ class OtpViewModelTest : KoinTest {
     private fun mockSuccessfulTotpFetch(otpFlow: Flow<SecretPropertyActionResult<TotpSecret>> = flowOf(totpFetchSuccess)) {
         val secretPropertiesActionsInteractor =
             mock<SecretPropertiesActionsInteractor> {
-                onBlocking { provideOtp() } doReturn otpFlow
+                on { provideOtp() } doReturn otpFlow
             }
         val secretPropertiesActionsInteractorFactory = get<SecretPropertiesActionsInteractorFactory>()
         whenever(secretPropertiesActionsInteractorFactory.create(any())) doReturn secretPropertiesActionsInteractor
@@ -501,7 +501,7 @@ class OtpViewModelTest : KoinTest {
     fun `deleting totp from a shared combined resource should navigate to permissions confirmation`() =
         runTest {
             get<EditPermissionsConfirmationInteractor>().stub {
-                onBlocking { shouldConfirmPermissions(combinedTotpResource.resourceId) } doReturn true
+                on { shouldConfirmPermissions(combinedTotpResource.resourceId) } doReturn true
             }
             viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
@@ -520,13 +520,13 @@ class OtpViewModelTest : KoinTest {
     fun `confirmed permissions should delete totp with the confirmed list`() =
         runTest {
             get<EditPermissionsConfirmationInteractor>().stub {
-                onBlocking { shouldConfirmPermissions(combinedTotpResource.resourceId) } doReturn true
+                on { shouldConfirmPermissions(combinedTotpResource.resourceId) } doReturn true
             }
             get<ResourceUpdateActionsInteractorFactory>().stub {
                 on { create(any()) } doReturn get<ResourceUpdateActionsInteractor>()
             }
             get<ResourceUpdateActionsInteractor>().stub {
-                onBlocking {
+                on {
                     updateGenericResourceWithConfirmedPermissions(eq(UpdateAction.REMOVE_TOTP), any(), any(), any())
                 } doReturn flowOf(ResourceUpdateActionResult.Success(combinedTotpResource.resourceId, "name"))
             }
@@ -550,7 +550,7 @@ class OtpViewModelTest : KoinTest {
     fun `should show error when resource creation not possible`() =
         runTest {
             get<ResourceAccessInteractor>().stub {
-                onBlocking { canCreateResource(anyOrNull()) } doReturn false
+                on { canCreateResource(anyOrNull()) } doReturn false
             }
 
             viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }

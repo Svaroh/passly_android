@@ -102,7 +102,7 @@ internal val mockPasswordPoliciesInteractor = mock<PasswordPoliciesInteractor>()
 internal val mockPasswordExpiryPoliciesInteractor = mock<PasswordExpiryPoliciesInteractor>()
 internal val mockGetFeatureFlagsUseCase =
     mock<GetFeatureFlagsUseCase>().apply {
-        stub { onBlocking { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(DEFAULT_TEST_FEATURE_FLAGS) }
+        stub { on { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(DEFAULT_TEST_FEATURE_FLAGS) }
     }
 internal val mockSecretGenerator = mock<SecretGenerator>()
 internal val mockPinCodeGenerator = mock<PinCodeGenerator>()
@@ -124,7 +124,7 @@ internal val mockGetLocalResourcePermissionsUseCase = mock<GetLocalResourcePermi
 internal val mockGetPermissionsConfirmationOptOutUseCase =
     mock<GetPermissionsConfirmationOptOutUseCase>().apply {
         stub {
-            onBlocking { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false)
+            on { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false)
         }
     }
 internal val mockGetSelectedAccountDataUseCase = mock<GetSelectedAccountDataUseCase>()

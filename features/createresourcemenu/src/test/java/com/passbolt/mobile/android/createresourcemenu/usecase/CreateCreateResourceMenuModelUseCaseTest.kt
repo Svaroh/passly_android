@@ -64,7 +64,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
     @Before
     fun setup() {
         mockResourceTypeIdToSlugMappingProvider.stub {
-            onBlocking { provideMappingForSelectedAccount() }.doReturn(
+            on { provideMappingForSelectedAccount() }.doReturn(
                 buildMap {
                     SupportedContentTypes.allSlugs.forEach {
                         // only map values matter for the tests
@@ -74,7 +74,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
             )
         }
         mockGetMetadataTypesSettingsUseCase.stub {
-            onBlocking { execute(Unit) } doReturn
+            on { execute(Unit) } doReturn
                 GetMetadataTypesSettingsUseCase.Output(
                     metadataTypesSettingsModel =
                         MetadataTypesSettingsModel(
@@ -93,7 +93,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
                 )
         }
         mockGetFeatureFlagsUseCase.stub {
-            onBlocking { execute(Unit) } doReturn
+            on { execute(Unit) } doReturn
                 GetFeatureFlagsUseCase.Output(
                     FeatureFlagsModel(
                         privacyPolicyUrl = null,
@@ -117,7 +117,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
     fun `totp should be disabled when feature flag is turned off`() =
         runTest {
             mockGetFeatureFlagsUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetFeatureFlagsUseCase.Output(
                         FeatureFlagsModel(
                             privacyPolicyUrl = null,
@@ -145,7 +145,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
     fun `folders should be enabled on folders view only `() =
         runTest {
             mockGetFeatureFlagsUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetFeatureFlagsUseCase.Output(
                         FeatureFlagsModel(
                             privacyPolicyUrl = null,
@@ -192,7 +192,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
     fun `password creation for v5 should be blocked if no v5 resource type supported`() =
         runTest {
             mockResourceTypeIdToSlugMappingProvider.stub {
-                onBlocking { provideMappingForSelectedAccount() }.doReturn(
+                on { provideMappingForSelectedAccount() }.doReturn(
                     buildMap {
                         SupportedContentTypes.allSlugs.forEach {
                             // only map values matter for the tests
@@ -204,7 +204,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
                 )
             }
             mockGetMetadataTypesSettingsUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetMetadataTypesSettingsUseCase.Output(
                         metadataTypesSettingsModel =
                             MetadataTypesSettingsModel(
@@ -232,7 +232,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
     fun `password creation for v4 should be blocked if no v4 resource type supported`() =
         runTest {
             mockResourceTypeIdToSlugMappingProvider.stub {
-                onBlocking { provideMappingForSelectedAccount() }.doReturn(
+                on { provideMappingForSelectedAccount() }.doReturn(
                     buildMap {
                         SupportedContentTypes.allSlugs.forEach {
                             // only map values matter for the tests
@@ -244,7 +244,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
                 )
             }
             mockGetMetadataTypesSettingsUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetMetadataTypesSettingsUseCase.Output(
                         metadataTypesSettingsModel =
                             MetadataTypesSettingsModel(
@@ -272,7 +272,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
     fun `totp creation for v5 should be blocked if no v5 resource type supported`() =
         runTest {
             mockResourceTypeIdToSlugMappingProvider.stub {
-                onBlocking { provideMappingForSelectedAccount() }.doReturn(
+                on { provideMappingForSelectedAccount() }.doReturn(
                     buildMap {
                         SupportedContentTypes.allSlugs.forEach {
                             // only map values matter for the tests
@@ -284,7 +284,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
                 )
             }
             mockGetMetadataTypesSettingsUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetMetadataTypesSettingsUseCase.Output(
                         metadataTypesSettingsModel =
                             MetadataTypesSettingsModel(
@@ -312,7 +312,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
     fun `totp creation for v4 should be blocked if no v4 resource type supported`() =
         runTest {
             mockResourceTypeIdToSlugMappingProvider.stub {
-                onBlocking { provideMappingForSelectedAccount() }.doReturn(
+                on { provideMappingForSelectedAccount() }.doReturn(
                     buildMap {
                         SupportedContentTypes.allSlugs.forEach {
                             // only map values matter for the tests
@@ -324,7 +324,7 @@ class CreateCreateResourceMenuModelUseCaseTest : KoinTest {
                 )
             }
             mockGetMetadataTypesSettingsUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetMetadataTypesSettingsUseCase.Output(
                         metadataTypesSettingsModel =
                             MetadataTypesSettingsModel(

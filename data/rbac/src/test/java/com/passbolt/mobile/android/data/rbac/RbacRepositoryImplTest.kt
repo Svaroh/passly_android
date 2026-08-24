@@ -79,7 +79,7 @@ class RbacRepositoryImplTest : KoinTest {
     @Test
     fun `getRbac returns local value and never calls remote`() =
         runTest {
-            local.stub { onBlocking { getRbac(USER_ID) }.thenReturn(DomainResult.Finished(rbac)) }
+            local.stub { on { getRbac(USER_ID) }.thenReturn(DomainResult.Finished(rbac)) }
 
             val result = repository.getRbac(USER_ID)
 
@@ -90,7 +90,7 @@ class RbacRepositoryImplTest : KoinTest {
     @Test
     fun `refreshRbac with remote success returns success and writes to local`() =
         runTest {
-            remote.stub { onBlocking { getRbac() }.thenReturn(DomainResult.Finished(rbac)) }
+            remote.stub { on { getRbac() }.thenReturn(DomainResult.Finished(rbac)) }
 
             val result = repository.refreshRbac(USER_ID)
 
@@ -102,7 +102,7 @@ class RbacRepositoryImplTest : KoinTest {
     fun `refreshRbac with remote failure returns failure and does not write to local`() =
         runTest {
             val failure = DomainResult.Incomplete.Error(UNKNOWN, "boom")
-            remote.stub { onBlocking { getRbac() }.thenReturn(failure) }
+            remote.stub { on { getRbac() }.thenReturn(failure) }
 
             val result = repository.refreshRbac(USER_ID)
 

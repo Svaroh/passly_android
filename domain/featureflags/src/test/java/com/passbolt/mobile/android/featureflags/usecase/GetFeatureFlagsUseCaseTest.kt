@@ -81,7 +81,7 @@ class GetFeatureFlagsUseCaseTest : KoinTest {
                     areFoldersAvailable = true,
                 )
             repository.stub {
-                onBlocking { getFeatureFlags(USER_ID) }.thenReturn(DomainResult.Finished(featureFlags))
+                on { getFeatureFlags(USER_ID) }.thenReturn(DomainResult.Finished(featureFlags))
             }
 
             val result = useCase.execute(Unit)
@@ -93,7 +93,7 @@ class GetFeatureFlagsUseCaseTest : KoinTest {
     fun `failure falls back to defaults mapped to feature flags model`() =
         runTest {
             repository.stub {
-                onBlocking { getFeatureFlags(USER_ID) }.thenReturn(DomainResult.Incomplete.Error(UNKNOWN, null))
+                on { getFeatureFlags(USER_ID) }.thenReturn(DomainResult.Incomplete.Error(UNKNOWN, null))
             }
 
             val result = useCase.execute(Unit)
@@ -105,7 +105,7 @@ class GetFeatureFlagsUseCaseTest : KoinTest {
     fun `notcached failure also falls back to defaults`() =
         runTest {
             repository.stub {
-                onBlocking { getFeatureFlags(USER_ID) }.thenReturn(DomainResult.Incomplete.NotCached)
+                on { getFeatureFlags(USER_ID) }.thenReturn(DomainResult.Incomplete.NotCached)
             }
 
             val result = useCase.execute(Unit)

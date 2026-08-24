@@ -152,7 +152,7 @@ class HomeViewModelTest : KoinTest {
                     single { mock<DetectAutofillConflict>() }
                     single {
                         mock<UserProfileInteractor> {
-                            onBlocking { fetchAndUpdateUserProfile() } doReturn UserProfileInteractor.Output.Success
+                            on { fetchAndUpdateUserProfile() } doReturn UserProfileInteractor.Output.Success
                         }
                     }
                     singleOf(::UserProfileRefreshTrackingFlow)
@@ -200,7 +200,7 @@ class HomeViewModelTest : KoinTest {
         )
 
         get<HomeDataProvider>().stub {
-            onBlocking {
+            on {
                 provideData(
                     any(),
                     any(),
@@ -211,8 +211,8 @@ class HomeViewModelTest : KoinTest {
         }
 
         get<ResourceAccessInteractor>().stub {
-            onBlocking { canCreateResource(anyOrNull()) }.doReturn(true)
-            onBlocking { canShareResource() }.doReturn(true)
+            on { canCreateResource(anyOrNull()) }.doReturn(true)
+            on { canShareResource() }.doReturn(true)
         }
     }
 
@@ -248,7 +248,7 @@ class HomeViewModelTest : KoinTest {
         runTest {
             val errorMessage = "profile fetch failed"
             get<UserProfileInteractor>().stub {
-                onBlocking { fetchAndUpdateUserProfile() } doReturn
+                on { fetchAndUpdateUserProfile() } doReturn
                     UserProfileInteractor.Output.Failure(DomainResult.Incomplete.Error(UNKNOWN, errorMessage))
             }
 
@@ -702,14 +702,14 @@ class HomeViewModelTest : KoinTest {
 
     private fun mockCanCreateResource(canCreate: Boolean) {
         get<ResourceAccessInteractor>().stub {
-            onBlocking { canCreateResource(anyOrNull()) }.doReturn(canCreate)
+            on { canCreateResource(anyOrNull()) }.doReturn(canCreate)
         }
     }
 
     private fun mockHomeData() {
         val homeData = mockResourcesData()
         get<HomeDataProvider>().stub {
-            onBlocking {
+            on {
                 provideData(
                     any(),
                     any(),

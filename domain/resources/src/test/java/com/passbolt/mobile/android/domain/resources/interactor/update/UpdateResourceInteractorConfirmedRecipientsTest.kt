@@ -94,7 +94,7 @@ class UpdateResourceInteractorConfirmedRecipientsTest : KoinTest {
             fetchUsersUseCase = fetchUsersUseCase,
             getResourceTypeIdToSlugMappingUseCase =
                 mock<GetResourceTypeIdToSlugMappingUseCase>().stub {
-                    onBlocking { execute(Unit) } doReturn
+                    on { execute(Unit) } doReturn
                         GetResourceTypeIdToSlugMappingUseCase.Output(
                             mapOf(UUID.randomUUID() to PasswordAndDescription.slug),
                         )
@@ -108,7 +108,7 @@ class UpdateResourceInteractorConfirmedRecipientsTest : KoinTest {
             openPgp = openPgp,
             passwordExpirySettingsUseCase =
                 mock<GetPasswordExpirySettingsUseCase>().stub {
-                    onBlocking { execute(Unit) } doReturn PasswordExpirySettings.defaults()
+                    on { execute(Unit) } doReturn PasswordExpirySettings.defaults()
                 },
             metadataMapper = mock<MetadataMapper>(),
             metadataEncryptor = mock<MetadataEncryptor>(),
@@ -120,21 +120,21 @@ class UpdateResourceInteractorConfirmedRecipientsTest : KoinTest {
             on { get() } doReturn PotentialPassphrase.Passphrase("passphrase".toByteArray())
         }
         jsonSchemaValidationRunner.stub {
-            onBlocking { isSecretValid(any(), any()) } doReturn true
-            onBlocking { isResourceValid(any(), any()) } doReturn true
+            on { isSecretValid(any(), any()) } doReturn true
+            on { isResourceValid(any(), any()) } doReturn true
         }
         fetchUsersUseCase.stub {
-            onBlocking { execute(any()) } doReturn FetchUsersUseCase.Output.Success(listOf(user(USER_A), user(USER_B)))
+            on { execute(any()) } doReturn FetchUsersUseCase.Output.Success(listOf(user(USER_A), user(USER_B)))
         }
         privateKeyRepository.stub {
             on { getPrivateKey(ACCOUNT_ID) } doReturn PrivateKey("private-key")
         }
         openPgp.stub {
-            onBlocking { encryptSignMessageArmored(any(), any(), any(), any()) }
+            on { encryptSignMessageArmored(any(), any(), any(), any()) }
                 .doReturn(OpenPgpResult.Result("encrypted"))
         }
         resourcesRepository.stub {
-            onBlocking { updateResource(any(), any(), any()) } doReturn DomainResult.Incomplete.Error(UNKNOWN, "stop")
+            on { updateResource(any(), any(), any()) } doReturn DomainResult.Incomplete.Error(UNKNOWN, "stop")
         }
     }
 

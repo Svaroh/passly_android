@@ -79,7 +79,7 @@ class PasswordExpiryPoliciesInteractorTest : KoinTest {
         runTest {
             val settings = PasswordExpirySettings.defaults()
             repository.stub {
-                onBlocking { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Finished(settings))
+                on { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Finished(settings))
             }
 
             val output = interactor.fetchAndSavePasswordExpiryPolicies()
@@ -93,7 +93,7 @@ class PasswordExpiryPoliciesInteractorTest : KoinTest {
         runTest {
             val failure = DomainResult.Incomplete.Unauthorized
             repository.stub {
-                onBlocking { getPasswordExpirySettings(USER_ID) }.thenReturn(failure)
+                on { getPasswordExpirySettings(USER_ID) }.thenReturn(failure)
             }
 
             val output = interactor.fetchAndSavePasswordExpiryPolicies()
@@ -110,7 +110,7 @@ class PasswordExpiryPoliciesInteractorTest : KoinTest {
             val providers = emptyList<AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider?>()
             val failure = DomainResult.Incomplete.MfaRequired(providers)
             repository.stub {
-                onBlocking { getPasswordExpirySettings(USER_ID) }.thenReturn(failure)
+                on { getPasswordExpirySettings(USER_ID) }.thenReturn(failure)
             }
 
             val output = interactor.fetchAndSavePasswordExpiryPolicies()
@@ -126,7 +126,7 @@ class PasswordExpiryPoliciesInteractorTest : KoinTest {
         runTest {
             val failure = DomainResult.Incomplete.Error(UNKNOWN, "boom")
             repository.stub {
-                onBlocking { getPasswordExpirySettings(USER_ID) }.thenReturn(failure)
+                on { getPasswordExpirySettings(USER_ID) }.thenReturn(failure)
             }
 
             val output = interactor.fetchAndSavePasswordExpiryPolicies()
@@ -140,7 +140,7 @@ class PasswordExpiryPoliciesInteractorTest : KoinTest {
         runTest {
             val failure = DomainResult.Incomplete.NotCached
             repository.stub {
-                onBlocking { getPasswordExpirySettings(USER_ID) }.thenReturn(failure)
+                on { getPasswordExpirySettings(USER_ID) }.thenReturn(failure)
             }
 
             val output = interactor.fetchAndSavePasswordExpiryPolicies()

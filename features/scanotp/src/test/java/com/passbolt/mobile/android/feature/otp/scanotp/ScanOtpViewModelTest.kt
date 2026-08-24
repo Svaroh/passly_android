@@ -54,7 +54,7 @@ class ScanOtpViewModelTest : KoinTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         qrParser.stub {
-            onBlocking { startParsing(any()) }.then { }
+            on { startParsing(any()) }.then { }
             on { parseResultFlow }.doReturn(parseFlow)
         }
     }

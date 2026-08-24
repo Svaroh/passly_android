@@ -98,10 +98,10 @@ abstract class ResourceFormPermissionsConfirmationTestSetup : KoinTest {
             on { execute(Unit) }.thenReturn(selectedAccountData())
         }
         mockEntropyCalculator.stub {
-            onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+            on { getSecretEntropy(any()) }.thenReturn(0.0)
         }
         mockGetDefaultCreateContentTypeUseCase.stub {
-            onBlocking { execute(any()) }.thenReturn(
+            on { execute(any()) }.thenReturn(
                 GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                     metadataType = MetadataTypeModel.V4,
                     contentType = ContentType.PasswordAndDescription,
@@ -138,10 +138,10 @@ abstract class ResourceFormPermissionsConfirmationTestSetup : KoinTest {
             mockEntropyCalculator,
         )
         mockGetFeatureFlagsUseCase.stub {
-            onBlocking { execute(Unit) }.thenReturn(GetFeatureFlagsUseCase.Output(DEFAULT_TEST_FEATURE_FLAGS))
+            on { execute(Unit) }.thenReturn(GetFeatureFlagsUseCase.Output(DEFAULT_TEST_FEATURE_FLAGS))
         }
         mockGetPermissionsConfirmationOptOutUseCase.stub {
-            onBlocking { execute(Unit) }.thenReturn(GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false))
+            on { execute(Unit) }.thenReturn(GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false))
         }
     }
 
@@ -166,15 +166,15 @@ abstract class ResourceFormPermissionsConfirmationTestSetup : KoinTest {
 
     protected fun stubEditMode() {
         mockGetMetadataTypesSettingsUseCase.stub {
-            onBlocking { execute(Unit) }.thenReturn(
+            on { execute(Unit) }.thenReturn(
                 GetMetadataTypesSettingsUseCase.Output(DEFAULT_METADATA_TYPES_SETTINGS),
             )
         }
         mockGetLocalResourceUseCase.stub {
-            onBlocking { execute(any()) }.thenReturn(GetLocalResourceUseCase.Output(editedResourceModel()))
+            on { execute(any()) }.thenReturn(GetLocalResourceUseCase.Output(editedResourceModel()))
         }
         mockGetEditContentTypeUseCase.stub {
-            onBlocking { execute(any()) }.thenReturn(
+            on { execute(any()) }.thenReturn(
                 GetEditContentTypeUseCase.Output(
                     contentType = ContentType.PasswordAndDescription,
                     metadataType = MetadataTypeModel.V4,
@@ -183,7 +183,7 @@ abstract class ResourceFormPermissionsConfirmationTestSetup : KoinTest {
         }
         val secretInteractorMock = mock<SecretPropertiesActionsInteractor>()
         secretInteractorMock.stub {
-            onBlocking { provideDecryptedSecret() }.thenReturn(
+            on { provideDecryptedSecret() }.thenReturn(
                 flowOf(
                     SecretPropertyActionResult.Success(
                         label = "secret",
@@ -203,28 +203,28 @@ abstract class ResourceFormPermissionsConfirmationTestSetup : KoinTest {
 
     protected fun stubCreateSuccess() {
         mockResourceCreateActionsInteractor.stub {
-            onBlocking { createGenericResource(any(), anyOrNull(), any(), any()) }
+            on { createGenericResource(any(), anyOrNull(), any(), any()) }
                 .thenReturn(flowOf(ResourceCreateActionResult.Success("id", "name")))
         }
     }
 
     protected fun stubUpdateSuccess() {
         mockResourceUpdateActionsInteractor.stub {
-            onBlocking { updateGenericResource(any(), any(), any(), any(), any()) }
+            on { updateGenericResource(any(), any(), any(), any(), any()) }
                 .thenReturn(flowOf(ResourceUpdateActionResult.Success(RESOURCE_ID, "name")))
         }
     }
 
     protected fun stubResourcePermissions(permissions: List<PermissionModel>) {
         mockFetchResourcePermissionsUseCase.stub {
-            onBlocking { execute(FetchResourcePermissionsUseCase.Input(RESOURCE_ID)) }
+            on { execute(FetchResourcePermissionsUseCase.Input(RESOURCE_ID)) }
                 .thenReturn(FetchResourcePermissionsUseCase.Output.Success(permissions))
         }
     }
 
     protected fun stubResourcePermissionsFetchFailure() {
         mockFetchResourcePermissionsUseCase.stub {
-            onBlocking { execute(FetchResourcePermissionsUseCase.Input(RESOURCE_ID)) }
+            on { execute(FetchResourcePermissionsUseCase.Input(RESOURCE_ID)) }
                 .thenReturn(
                     FetchResourcePermissionsUseCase.Output.Failure(
                         DomainResult.Incomplete.Error(DomainResult.Incomplete.Error.Reason.OFFLINE, "offline"),
@@ -235,21 +235,21 @@ abstract class ResourceFormPermissionsConfirmationTestSetup : KoinTest {
 
     protected fun stubLocalResourcePermissions(permissions: List<PermissionModelUi>) {
         mockGetLocalResourcePermissionsUseCase.stub {
-            onBlocking { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) }
+            on { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) }
                 .thenReturn(GetLocalResourcePermissionsUseCase.Output(permissions))
         }
     }
 
     protected fun stubFolderPermissions(permissions: List<PermissionModel>) {
         mockFetchFolderPermissionsUseCase.stub {
-            onBlocking { execute(FetchFolderPermissionsUseCase.Input(FOLDER_ID)) }
+            on { execute(FetchFolderPermissionsUseCase.Input(FOLDER_ID)) }
                 .thenReturn(FetchFolderPermissionsUseCase.Output.Success(permissions))
         }
     }
 
     protected fun stubFolderPermissionsFetchFailure() {
         mockFetchFolderPermissionsUseCase.stub {
-            onBlocking { execute(FetchFolderPermissionsUseCase.Input(FOLDER_ID)) }
+            on { execute(FetchFolderPermissionsUseCase.Input(FOLDER_ID)) }
                 .thenReturn(
                     FetchFolderPermissionsUseCase.Output.Failure(
                         DomainResult.Incomplete.Error(DomainResult.Incomplete.Error.Reason.OFFLINE, "offline"),
@@ -260,7 +260,7 @@ abstract class ResourceFormPermissionsConfirmationTestSetup : KoinTest {
 
     protected fun stubLocalFolderPermissions(permissions: List<PermissionModelUi>) {
         mockGetLocalFolderPermissionsUseCase.stub {
-            onBlocking { execute(GetLocalFolderPermissionsUseCase.Input(FOLDER_ID)) }
+            on { execute(GetLocalFolderPermissionsUseCase.Input(FOLDER_ID)) }
                 .thenReturn(GetLocalFolderPermissionsUseCase.Output(permissions))
         }
     }

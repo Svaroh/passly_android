@@ -169,7 +169,7 @@ class ResourceUpdateActionsInteractorUpgradeTest : KoinTest {
     ): ResourceUpdateActionsInteractor {
         val mappingProvider = mock<ResourceTypeIdToSlugMappingProvider>()
         mappingProvider.stub {
-            onBlocking { provideMappingForSelectedAccount() }.thenReturn(mapping)
+            on { provideMappingForSelectedAccount() }.thenReturn(mapping)
         }
         return ResourceUpdateActionsInteractor(
             existingResource = resourceModel(slug = resourceSlug),

@@ -92,7 +92,7 @@ class GroupPermissionsViewModelTest : KoinTest {
 
         val getGroupWithUsersUseCase = get<GetGroupWithUsersUseCase>()
         getGroupWithUsersUseCase.stub {
-            onBlocking { execute(GetGroupWithUsersUseCase.Input(GROUP.groupId)) }
+            on { execute(GetGroupWithUsersUseCase.Input(GROUP.groupId)) }
                 .doReturn(GetGroupWithUsersUseCase.Output(GROUP_WITH_USERS))
         }
     }
@@ -203,7 +203,7 @@ class GroupPermissionsViewModelTest : KoinTest {
     fun `snapshot details without an available snapshot should navigate back`() =
         runTest {
             get<GetPermissionsSnapshotUseCase>().stub {
-                onBlocking { execute(Unit) }.doReturn(GetPermissionsSnapshotUseCase.Output(null))
+                on { execute(Unit) }.doReturn(GetPermissionsSnapshotUseCase.Output(null))
             }
 
             viewModel = get { parametersOf(GROUP_PERMISSION, PermissionsMode.VIEW, true) }

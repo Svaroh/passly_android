@@ -127,7 +127,7 @@ class FiltersMenuViewModelTest : KoinTest {
                 isPermissionsConfirmationOptOutAvailable = false,
             )
         get<GetFeatureFlagsUseCase>().stub {
-            onBlocking { execute(any()) } doReturn GetFeatureFlagsUseCase.Output(featureFlags)
+            on { execute(any()) } doReturn GetFeatureFlagsUseCase.Output(featureFlags)
         }
 
         val rbacModel =
@@ -139,7 +139,7 @@ class FiltersMenuViewModelTest : KoinTest {
                 foldersUseRule = ALLOW,
             )
         get<GetRbacRulesUseCase>().stub {
-            onBlocking { execute(any()) } doReturn GetRbacRulesUseCase.Output(rbacModel)
+            on { execute(any()) } doReturn GetRbacRulesUseCase.Output(rbacModel)
         }
     }
 

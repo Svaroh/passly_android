@@ -89,7 +89,7 @@ class GroupMemberDetailsViewModelTest : KoinTest {
 
         val getLocalUserUseCase = get<GetLocalUserUseCase>()
         getLocalUserUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalUserUseCase.Output(testUser)
+            on { execute(any()) } doReturn GetLocalUserUseCase.Output(testUser)
         }
     }
 
@@ -136,7 +136,7 @@ class GroupMemberDetailsViewModelTest : KoinTest {
 
             val getLocalUserUseCase = get<GetLocalUserUseCase>()
             getLocalUserUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetLocalUserUseCase.Output(userWithEmptyFields)
+                on { execute(any()) } doReturn GetLocalUserUseCase.Output(userWithEmptyFields)
             }
 
             viewModel = get()
