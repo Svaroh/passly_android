@@ -8,7 +8,6 @@ import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUse
 import com.passbolt.mobile.android.domain.accounts.usecase.RemoveSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.auth.AuthRepository
 import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
 import timber.log.Timber
 
@@ -36,7 +35,6 @@ import timber.log.Timber
  */
 class SignOutUseCase(
     private val passphraseMemoryCache: PassphraseMemoryCache,
-    private val removePermissionsConfirmationOptOutUseCase: RemovePermissionsConfirmationOptOutUseCase,
     private val removePermissionsSnapshotUseCase: RemovePermissionsSnapshotUseCase,
     private val removeSelectedAccountUseCase: RemoveSelectedAccountUseCase,
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
@@ -52,7 +50,6 @@ class SignOutUseCase(
         }
         passphraseMemoryCache.clear()
         getSelectedAccountUseCase.execute(Unit).selectedAccount?.let { selectedAccount ->
-            removePermissionsConfirmationOptOutUseCase.execute(UserIdInput(selectedAccount))
             removePermissionsSnapshotUseCase.execute(UserIdInput(selectedAccount))
             removeSelectedAccountUseCase.execute(Unit)
         }

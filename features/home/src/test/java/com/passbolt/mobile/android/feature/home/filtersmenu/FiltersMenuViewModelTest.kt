@@ -124,7 +124,6 @@ class FiltersMenuViewModelTest : KoinTest {
                 arePasswordPoliciesAvailable = true,
                 canUpdatePasswordPolicies = true,
                 isV5MetadataAvailable = true,
-                isPermissionsConfirmationOptOutAvailable = false,
             )
         get<GetFeatureFlagsUseCase>().stub {
             on { execute(any()) } doReturn GetFeatureFlagsUseCase.Output(featureFlags)

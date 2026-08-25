@@ -39,5 +39,4 @@ fun FeatureFlags.toFeatureFlagsModel(): FeatureFlagsModel =
         arePasswordPoliciesAvailable = arePasswordPoliciesAvailable,
         canUpdatePasswordPolicies = canUpdatePasswordPolicies,
         isV5MetadataAvailable = isV5MetadataAvailable,
-        isPermissionsConfirmationOptOutAvailable = isPermissionsConfirmationOptOutAvailable,
     )

@@ -26,7 +26,6 @@ import com.passbolt.mobile.android.domain.metadata.usecase.GetMetadataTypesSetti
 import com.passbolt.mobile.android.domain.passwordexpiry.usecase.PasswordExpiryPoliciesInteractor
 import com.passbolt.mobile.android.domain.passwordpolicies.usecase.GetPasswordPoliciesUseCase
 import com.passbolt.mobile.android.domain.passwordpolicies.usecase.PasswordPoliciesInteractor
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
 import com.passbolt.mobile.android.domain.resources.actions.SecretPropertiesActionsInteractorFactory
@@ -94,7 +93,6 @@ internal val DEFAULT_TEST_FEATURE_FLAGS =
         arePasswordPoliciesAvailable = false,
         canUpdatePasswordPolicies = false,
         isV5MetadataAvailable = false,
-        isPermissionsConfirmationOptOutAvailable = false,
     )
 
 internal val mockGetPasswordPoliciesUseCase = mock<GetPasswordPoliciesUseCase>()
@@ -121,12 +119,6 @@ internal val mockGetLocalFolderPermissionsUseCase = mock<GetLocalFolderPermissio
 internal val mockFetchFolderPermissionsUseCase = mock<FetchFolderPermissionsUseCase>()
 internal val mockFetchResourcePermissionsUseCase = mock<FetchResourcePermissionsUseCase>()
 internal val mockGetLocalResourcePermissionsUseCase = mock<GetLocalResourcePermissionsUseCase>()
-internal val mockGetPermissionsConfirmationOptOutUseCase =
-    mock<GetPermissionsConfirmationOptOutUseCase>().apply {
-        stub {
-            on { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false)
-        }
-    }
 internal val mockGetSelectedAccountDataUseCase = mock<GetSelectedAccountDataUseCase>()
 
 internal val DEFAULT_FEATURE_FLAGS =
@@ -142,7 +134,6 @@ internal val DEFAULT_FEATURE_FLAGS =
         arePasswordPoliciesAvailable = false,
         canUpdatePasswordPolicies = false,
         isV5MetadataAvailable = false,
-        isPermissionsConfirmationOptOutAvailable = false,
     )
 
 internal val DEFAULT_METADATA_TYPES_SETTINGS =
@@ -210,14 +201,12 @@ internal val testResourceFormModule =
                 getMetadataTypesSettingsUseCase = mockGetMetadataTypesSettingsUseCase,
                 editPermissionsConfirmationInteractor =
                     EditPermissionsConfirmationInteractor(
-                        getPermissionsConfirmationOptOutUseCase = mockGetPermissionsConfirmationOptOutUseCase,
                         fetchResourcePermissionsUseCase = mockFetchResourcePermissionsUseCase,
                         getLocalResourcePermissionsUseCase = mockGetLocalResourcePermissionsUseCase,
                         getSelectedAccountDataUseCase = mockGetSelectedAccountDataUseCase,
                     ),
                 createPermissionsConfirmationInteractor =
                     CreatePermissionsConfirmationInteractor(
-                        getPermissionsConfirmationOptOutUseCase = mockGetPermissionsConfirmationOptOutUseCase,
                         fetchFolderPermissionsUseCase = mockFetchFolderPermissionsUseCase,
                         getLocalFolderPermissionsUseCase = mockGetLocalFolderPermissionsUseCase,
                         getSelectedAccountDataUseCase = mockGetSelectedAccountDataUseCase,

@@ -63,8 +63,4 @@ sealed interface ConfirmPermissionsIntent {
     data class GroupPermissionDeleted(
         val permission: PermissionModelUi.GroupPermissionModel,
     ) : ConfirmPermissionsIntent
-
-    data class SkipConfirmationToggled(
-        val isChecked: Boolean,
-    ) : ConfirmPermissionsIntent
 }

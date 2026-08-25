@@ -30,7 +30,6 @@ import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incompl
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.FetchFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.ui.GroupModel
 import com.passbolt.mobile.android.ui.PermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
@@ -61,7 +60,6 @@ class CreatePermissionsConfirmationInteractorTest : KoinTest {
             printLogger(Level.ERROR)
             modules(
                 module {
-                    single { mock<GetPermissionsConfirmationOptOutUseCase>() }
                     single { mock<FetchFolderPermissionsUseCase>() }
                     single { mock<GetLocalFolderPermissionsUseCase>() }
                     single { mock<GetSelectedAccountDataUseCase>() }
@@ -73,9 +71,6 @@ class CreatePermissionsConfirmationInteractorTest : KoinTest {
 
     @Before
     fun setUp() {
-        get<GetPermissionsConfirmationOptOutUseCase>().stub {
-            on { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false)
-        }
         get<GetSelectedAccountDataUseCase>().stub {
             on { execute(Unit) } doReturn selectedAccountData()
         }
@@ -85,17 +80,6 @@ class CreatePermissionsConfirmationInteractorTest : KoinTest {
     fun `no parent folder does not require the confirmation`() =
         runTest {
             assertThat(get<CreatePermissionsConfirmationInteractor>().shouldConfirmPermissions(null)).isFalse()
-            verifyNoInteractions(get<FetchFolderPermissionsUseCase>())
-        }
-
-    @Test
-    fun `session opt out skips the confirmation without fetching permissions`() =
-        runTest {
-            get<GetPermissionsConfirmationOptOutUseCase>().stub {
-                on { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = true)
-            }
-
-            assertThat(get<CreatePermissionsConfirmationInteractor>().shouldConfirmPermissions(FOLDER_ID)).isFalse()
             verifyNoInteractions(get<FetchFolderPermissionsUseCase>())
         }
 

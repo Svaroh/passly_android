@@ -35,8 +35,6 @@ data class ConfirmPermissionsState(
     val isEditable: Boolean = true,
     val lockedOperatorPermission: PermissionModelUi.UserPermissionModel? = null,
     val indirectAccessWarning: IndirectAccessWarning? = null,
-    val showSkipConfirmationSwitch: Boolean = false,
-    val isSkipConfirmationChecked: Boolean = false,
     val showMetadataKeyModifiedDialog: Boolean = false,
     val newMetadataKeyToTrustModel: NewMetadataKeyToTrustModel? = null,
     val showMetadataKeyDeletedDialog: Boolean = false,

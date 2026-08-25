@@ -30,7 +30,6 @@ import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageCon
 import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.PASSWORD_EXPIRY_KEY
 import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.PASSWORD_POLICIES_KEY
 import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.PASSWORD_POLICIES_UPDATE_KEY
-import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.PERMISSIONS_CONFIRMATION_OPT_OUT_KEY
 import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.PREVIEW_PASSWORD_KEY
 import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.PRIVACY_POLICY_KEY
 import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.RBAC_KEY
@@ -61,11 +60,6 @@ internal class FeatureFlagsLocalDataSourceImpl(
                     arePasswordPoliciesAvailable = it.getBoolean(PASSWORD_POLICIES_KEY, defaults.arePasswordPoliciesAvailable),
                     canUpdatePasswordPolicies = it.getBoolean(PASSWORD_POLICIES_UPDATE_KEY, defaults.canUpdatePasswordPolicies),
                     isV5MetadataAvailable = it.getBoolean(V5_METADATA, defaults.isV5MetadataAvailable),
-                    isPermissionsConfirmationOptOutAvailable =
-                        it.getBoolean(
-                            PERMISSIONS_CONFIRMATION_OPT_OUT_KEY,
-                            defaults.isPermissionsConfirmationOptOutAvailable,
-                        ),
                 ),
             )
         }
@@ -87,7 +81,6 @@ internal class FeatureFlagsLocalDataSourceImpl(
             putBoolean(PASSWORD_POLICIES_KEY, featureFlags.arePasswordPoliciesAvailable)
             putBoolean(PASSWORD_POLICIES_UPDATE_KEY, featureFlags.canUpdatePasswordPolicies)
             putBoolean(V5_METADATA, featureFlags.isV5MetadataAvailable)
-            putBoolean(PERMISSIONS_CONFIRMATION_OPT_OUT_KEY, featureFlags.isPermissionsConfirmationOptOutAvailable)
         }
     }
 

@@ -1,10 +1,7 @@
 package com.passbolt.mobile.android.domain.permissionsconfirmation
 
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
@@ -32,9 +29,6 @@ import org.koin.dsl.module
  */
 val permissionsConfirmationDomainModule =
     module {
-        singleOf(::GetPermissionsConfirmationOptOutUseCase)
         singleOf(::GetPermissionsSnapshotUseCase)
         singleOf(::RemovePermissionsSnapshotUseCase)
-        singleOf(::SetPermissionsConfirmationOptOutUseCase)
-        singleOf(::RemovePermissionsConfirmationOptOutUseCase)
     }

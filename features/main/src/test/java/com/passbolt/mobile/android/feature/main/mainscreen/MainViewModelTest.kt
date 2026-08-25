@@ -80,7 +80,6 @@ private val defaultFeatureFlags =
         arePasswordPoliciesAvailable = false,
         canUpdatePasswordPolicies = false,
         isV5MetadataAvailable = false,
-        isPermissionsConfirmationOptOutAvailable = false,
     )
 
 private val mockGetFeatureFlagsUseCase =
@@ -192,7 +191,6 @@ class MainViewModelTest : KoinTest {
                             arePasswordPoliciesAvailable = true,
                             canUpdatePasswordPolicies = true,
                             isV5MetadataAvailable = false,
-                            isPermissionsConfirmationOptOutAvailable = false,
                         ),
                     )
             }
@@ -223,7 +221,6 @@ class MainViewModelTest : KoinTest {
                             arePasswordPoliciesAvailable = true,
                             canUpdatePasswordPolicies = true,
                             isV5MetadataAvailable = false,
-                            isPermissionsConfirmationOptOutAvailable = false,
                         ),
                     )
             }

@@ -29,7 +29,6 @@ import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDat
 import com.passbolt.mobile.android.domain.folders.usecase.FetchFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.metadata.usecase.GetMetadataTypesSettingsUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionResult
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractor
@@ -133,15 +132,11 @@ abstract class ResourceFormPermissionsConfirmationTestSetup : KoinTest {
             mockFetchFolderPermissionsUseCase,
             mockFetchResourcePermissionsUseCase,
             mockGetLocalResourcePermissionsUseCase,
-            mockGetPermissionsConfirmationOptOutUseCase,
             mockGetSelectedAccountDataUseCase,
             mockEntropyCalculator,
         )
         mockGetFeatureFlagsUseCase.stub {
             on { execute(Unit) }.thenReturn(GetFeatureFlagsUseCase.Output(DEFAULT_TEST_FEATURE_FLAGS))
-        }
-        mockGetPermissionsConfirmationOptOutUseCase.stub {
-            on { execute(Unit) }.thenReturn(GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false))
         }
     }
 

@@ -34,14 +34,12 @@ import com.passbolt.mobile.android.domain.permissionsconfirmation.mapper.toCreat
 import com.passbolt.mobile.android.domain.permissionsconfirmation.mapper.toEditModePermissions
 import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceShareActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ShareActionResult
 import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
 import com.passbolt.mobile.android.domain.users.usecase.UsersInteractor
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
 import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper
 import com.passbolt.mobile.android.mappers.UsersModelMapper
 import com.passbolt.mobile.android.permissions.common.PermissionsListMapper
@@ -54,7 +52,6 @@ import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermiss
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.GroupPermissionModified
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SeePermission
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.ShareRecipientsAdded
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SkipConfirmationToggled
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.TrustNewMetadataKey
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.TrustedMetadataKeyDeleted
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.UserPermissionDeleted
@@ -95,8 +92,6 @@ class ConfirmPermissionsViewModel(
     private val groupsInteractor: GroupsInteractor,
     private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
     private val usersModelMapper: UsersModelMapper,
-    private val getFeatureFlagsUseCase: GetFeatureFlagsUseCase,
-    private val setPermissionsConfirmationOptOutUseCase: SetPermissionsConfirmationOptOutUseCase,
     private val permissionsListMapper: PermissionsListMapper,
     private val coroutineLaunchContext: CoroutineLaunchContext,
 ) : SideEffectViewModel<ConfirmPermissionsState, ConfirmPermissionsSideEffect>(
@@ -105,7 +100,6 @@ class ConfirmPermissionsViewModel(
     init {
         loadSnapshotPermissions()
         refreshUsersAndGroups()
-        loadSkipConfirmationSwitchVisibility()
         showDriftInfoIfReopenedAfterDrift()
     }
 
@@ -125,7 +119,6 @@ class ConfirmPermissionsViewModel(
                 updatePermissions { permissionsListMapper.withModifiedGroupPermission(it, intent.permission) }
             is GroupPermissionDeleted ->
                 updatePermissions { permissionsListMapper.withDeletedGroupPermission(it, intent.permission) }
-            is SkipConfirmationToggled -> updateViewState { copy(isSkipConfirmationChecked = intent.isChecked) }
             TrustNewMetadataKey -> trustNewMetadataKey()
             TrustedMetadataKeyDeleted -> trustedMetadataKeyDeleted()
             DismissMetadataKeyModifiedDialog ->
@@ -232,18 +225,6 @@ class ConfirmPermissionsViewModel(
     private fun showDriftInfoIfReopenedAfterDrift() {
         driftedEntityNames?.let {
             emitSideEffect(ShowPermissionsDriftedSnackbar(it))
-        }
-    }
-
-    private fun loadSkipConfirmationSwitchVisibility() {
-        if (confirmMode !is ConfirmPermissionsMode.Share) {
-            viewModelScope.launch(coroutineLaunchContext.io) {
-                val isOptOutAvailable =
-                    getFeatureFlagsUseCase
-                        .execute(Unit)
-                        .featureFlags.isPermissionsConfirmationOptOutAvailable
-                updateViewState { copy(showSkipConfirmationSwitch = isOptOutAvailable) }
-            }
         }
     }
 
@@ -402,16 +383,10 @@ class ConfirmPermissionsViewModel(
     private fun confirmPermissions() {
         when (confirmMode) {
             is ConfirmPermissionsMode.Share -> performConfirmedShare(confirmMode.resourceId)
-            else ->
-                viewModelScope.launch(coroutineLaunchContext.io) {
-                    if (viewState.value.isSkipConfirmationChecked) {
-                        setPermissionsConfirmationOptOutUseCase.execute(
-                            SetPermissionsConfirmationOptOutUseCase.Input(isOptedOut = true),
-                        )
-                    }
-                    Timber.d("Permissions confirmed for ${viewState.value.permissions.size} recipient(s)")
-                    emitSideEffect(CloseWithPermissionsConfirmed(viewState.value.permissions))
-                }
+            else -> {
+                Timber.d("Permissions confirmed for ${viewState.value.permissions.size} recipient(s)")
+                emitSideEffect(CloseWithPermissionsConfirmed(viewState.value.permissions))
+            }
         }
     }
 
