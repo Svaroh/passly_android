@@ -25,7 +25,6 @@ package com.passbolt.mobile.android.feature.resourceform.main
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.ConfirmedPermissionsResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.NoteChanged
@@ -98,25 +97,6 @@ class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfi
             }
             verify(mockResourceUpdateActionsInteractor).updateGenericResource(any(), any(), any(), any(), any())
             verifyNoInteractions(mockFetchResourcePermissionsUseCase)
-        }
-
-    @Test
-    fun `edit of a shared resource with session opt out should update directly`() =
-        runTest {
-            stubEditMode()
-            stubResourcePermissions(listOf(operatorOwnerPermissionModel(), otherUserPermissionModel()))
-            mockGetPermissionsConfirmationOptOutUseCase.stub {
-                on { execute(Unit) }.thenReturn(GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = true))
-            }
-            stubUpdateSuccess()
-            val viewModel = editModeViewModel()
-            viewModel.onIntent(NoteChanged("changed-note"))
-
-            viewModel.sideEffect.test {
-                viewModel.onIntent(UpdateResource)
-
-                assertIs<NavigateBackWithEditSuccess>(awaitItem())
-            }
         }
 
     @Test

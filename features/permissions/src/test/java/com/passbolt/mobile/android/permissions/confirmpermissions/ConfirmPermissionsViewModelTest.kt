@@ -37,7 +37,6 @@ import com.passbolt.mobile.android.domain.groups.usecase.GroupsInteractor
 import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
 import com.passbolt.mobile.android.domain.permissionsconfirmation.model.PermissionsSnapshot
 import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.SetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceShareActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ShareActionResult
 import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSnapshotInteractor
@@ -45,15 +44,12 @@ import com.passbolt.mobile.android.domain.users.model.GpgKey
 import com.passbolt.mobile.android.domain.users.model.UserProfile
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
 import com.passbolt.mobile.android.domain.users.usecase.UsersInteractor
-import com.passbolt.mobile.android.entity.featureflags.FeatureFlagsModel
-import com.passbolt.mobile.android.featureflags.usecase.GetFeatureFlagsUseCase
 import com.passbolt.mobile.android.mappers.UsersModelMapper
 import com.passbolt.mobile.android.permissions.common.PermissionsListMapper
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.Confirm
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.GroupPermissionDeleted
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SeePermission
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.ShareRecipientsAdded
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SkipConfirmationToggled
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.UserPermissionDeleted
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.UserPermissionModified
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithPermissionsConfirmed
@@ -100,7 +96,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
 import java.time.ZonedDateTime
 import kotlin.test.assertIs
 
@@ -120,8 +115,6 @@ class ConfirmPermissionsViewModelTest : KoinTest {
                     single { mock<UsersInteractor>() }
                     single { mock<GroupsInteractor>() }
                     single { mock<GetLocalCurrentUserUseCase>() }
-                    single { mock<GetFeatureFlagsUseCase>() }
-                    single { mock<SetPermissionsConfirmationOptOutUseCase>() }
                     single { UsersModelMapper() }
                     singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                     singleOf(::SessionRefreshTrackingFlow)
@@ -140,8 +133,6 @@ class ConfirmPermissionsViewModelTest : KoinTest {
                             groupsInteractor = get(),
                             getLocalCurrentUserUseCase = get(),
                             usersModelMapper = get(),
-                            getFeatureFlagsUseCase = get(),
-                            setPermissionsConfirmationOptOutUseCase = get(),
                             permissionsListMapper = get(),
                             coroutineLaunchContext = get(),
                         )
@@ -173,9 +164,6 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         get<GetLocalCurrentUserUseCase>().stub {
             on { execute(Unit) } doReturn GetLocalCurrentUserUseCase.Output(CURRENT_USER_UI_MODEL)
         }
-        get<GetFeatureFlagsUseCase>().stub {
-            on { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(featureFlags(isOptOutAvailable = true))
-        }
     }
 
     @After
@@ -201,31 +189,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         }
 
     @Test
-    fun `skip switch is shown when opt out feature flag is on`() =
-        runTest {
-            val viewModel = confirmCreateViewModel()
-
-            viewModel.viewState.test {
-                assertThat(expectMostRecentItem().showSkipConfirmationSwitch).isTrue()
-            }
-        }
-
-    @Test
-    fun `skip switch is hidden when opt out feature flag is off`() =
-        runTest {
-            get<GetFeatureFlagsUseCase>().stub {
-                on { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(featureFlags(isOptOutAvailable = false))
-            }
-
-            val viewModel = confirmCreateViewModel()
-
-            viewModel.viewState.test {
-                assertThat(expectMostRecentItem().showSkipConfirmationSwitch).isFalse()
-            }
-        }
-
-    @Test
-    fun `confirm publishes confirmed permissions without opt out`() =
+    fun `confirm publishes the confirmed permissions`() =
         runTest {
             val viewModel = confirmCreateViewModel()
             viewModel.viewState.test { expectMostRecentItem() }
@@ -236,23 +200,6 @@ class ConfirmPermissionsViewModelTest : KoinTest {
                 val effect = assertIs<CloseWithPermissionsConfirmed>(awaitItem())
                 assertThat(effect.permissions).hasSize(3)
             }
-            verifyNoInteractions(get<SetPermissionsConfirmationOptOutUseCase>())
-        }
-
-    @Test
-    fun `confirm stores session opt out when skip switch is checked`() =
-        runTest {
-            val viewModel = confirmCreateViewModel()
-            viewModel.viewState.test { expectMostRecentItem() }
-
-            viewModel.onIntent(SkipConfirmationToggled(isChecked = true))
-            viewModel.sideEffect.test {
-                viewModel.onIntent(Confirm)
-
-                assertIs<CloseWithPermissionsConfirmed>(awaitItem())
-            }
-            verify(get<SetPermissionsConfirmationOptOutUseCase>())
-                .execute(SetPermissionsConfirmationOptOutUseCase.Input(isOptedOut = true))
         }
 
     @Test
@@ -638,7 +585,6 @@ class ConfirmPermissionsViewModelTest : KoinTest {
                 assertThat(state.permissions).hasSize(3)
                 assertThat(state.isEditable).isTrue()
                 assertThat(state.lockedOperatorPermission).isNull()
-                assertThat(state.showSkipConfirmationSwitch).isFalse()
             }
         }
 
@@ -658,7 +604,6 @@ class ConfirmPermissionsViewModelTest : KoinTest {
 
                 assertThat(awaitItem()).isEqualTo(CloseWithShareSuccess)
             }
-            verifyNoInteractions(get<SetPermissionsConfirmationOptOutUseCase>())
         }
 
     @Test
@@ -748,22 +693,6 @@ class ConfirmPermissionsViewModelTest : KoinTest {
     private fun confirmShareViewModel() =
         get<ConfirmPermissionsViewModel>(
             parameters = { parametersOf(ConfirmPermissionsMode.Share(RESOURCE_ID), null) },
-        )
-
-    private fun featureFlags(isOptOutAvailable: Boolean) =
-        FeatureFlagsModel(
-            privacyPolicyUrl = null,
-            termsAndConditionsUrl = null,
-            isPreviewPasswordAvailable = true,
-            areFoldersAvailable = true,
-            areTagsAvailable = false,
-            isTotpAvailable = false,
-            isRbacAvailable = false,
-            isPasswordExpiryAvailable = false,
-            arePasswordPoliciesAvailable = false,
-            canUpdatePasswordPolicies = false,
-            isV5MetadataAvailable = false,
-            isPermissionsConfirmationOptOutAvailable = isOptOutAvailable,
         )
 
     private companion object {

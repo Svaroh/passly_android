@@ -193,7 +193,6 @@ class HomeDisplayViewPrefsValidatorTest : KoinTest {
                         arePasswordPoliciesAvailable = true,
                         canUpdatePasswordPolicies = true,
                         isV5MetadataAvailable = false,
-                        isPermissionsConfirmationOptOutAvailable = false,
                     ),
                 ),
             )

@@ -24,7 +24,6 @@
 package com.passbolt.mobile.android.domain.resources.usecase
 
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
 import com.passbolt.mobile.android.ui.PermissionModel
@@ -33,16 +32,11 @@ import com.passbolt.mobile.android.ui.ResourcePermission
 import timber.log.Timber
 
 class EditPermissionsConfirmationInteractor(
-    private val getPermissionsConfirmationOptOutUseCase: GetPermissionsConfirmationOptOutUseCase,
     private val fetchResourcePermissionsUseCase: FetchResourcePermissionsUseCase,
     private val getLocalResourcePermissionsUseCase: GetLocalResourcePermissionsUseCase,
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
 ) {
     suspend fun shouldConfirmPermissions(resourceId: String): Boolean {
-        if (getPermissionsConfirmationOptOutUseCase.execute(Unit).isOptedOut) {
-            Timber.d("Permissions confirmation opted out for this session - updating without confirmation")
-            return false
-        }
         val fetchOutput =
             runAuthenticatedOperation {
                 fetchResourcePermissionsUseCase.execute(FetchResourcePermissionsUseCase.Input(resourceId))

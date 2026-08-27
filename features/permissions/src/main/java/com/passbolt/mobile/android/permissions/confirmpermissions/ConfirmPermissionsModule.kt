@@ -40,8 +40,6 @@ fun Module.confirmPermissionsModule() {
             groupsInteractor = get(),
             getLocalCurrentUserUseCase = get(),
             usersModelMapper = get(),
-            getFeatureFlagsUseCase = get(),
-            setPermissionsConfirmationOptOutUseCase = get(),
             permissionsListMapper = get(),
             coroutineLaunchContext = get(),
         )

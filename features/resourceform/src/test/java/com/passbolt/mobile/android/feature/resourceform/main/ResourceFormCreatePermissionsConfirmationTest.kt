@@ -25,7 +25,6 @@ package com.passbolt.mobile.android.feature.resourceform.main
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.ConfirmedPermissionsResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.CreateResource
@@ -79,24 +78,6 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
     fun `create in a private folder should create directly`() =
         runTest {
             stubFolderPermissions(listOf(operatorOwnerPermissionModel()))
-            stubCreateSuccess()
-            val viewModel = createModeViewModel()
-
-            viewModel.sideEffect.test {
-                viewModel.onIntent(CreateResource)
-
-                assertIs<NavigateBackWithCreateSuccess>(awaitItem())
-            }
-            verify(mockResourceCreateActionsInteractor).createGenericResource(any(), anyOrNull(), any(), any())
-        }
-
-    @Test
-    fun `create in a shared folder with session opt out should create directly`() =
-        runTest {
-            stubFolderPermissions(listOf(operatorOwnerPermissionModel(), otherUserPermissionModel()))
-            mockGetPermissionsConfirmationOptOutUseCase.stub {
-                on { execute(Unit) }.thenReturn(GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = true))
-            }
             stubCreateSuccess()
             val viewModel = createModeViewModel()
 

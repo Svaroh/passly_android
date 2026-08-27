@@ -26,7 +26,6 @@ package com.passbolt.mobile.android.domain.resources.usecase
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.FetchFolderPermissionsUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
 import com.passbolt.mobile.android.ui.PermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
@@ -34,17 +33,12 @@ import com.passbolt.mobile.android.ui.ResourcePermission
 import timber.log.Timber
 
 class CreatePermissionsConfirmationInteractor(
-    private val getPermissionsConfirmationOptOutUseCase: GetPermissionsConfirmationOptOutUseCase,
     private val fetchFolderPermissionsUseCase: FetchFolderPermissionsUseCase,
     private val getLocalFolderPermissionsUseCase: GetLocalFolderPermissionsUseCase,
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
 ) {
     suspend fun shouldConfirmPermissions(parentFolderId: String?): Boolean {
         val folderId = parentFolderId ?: return false
-        if (getPermissionsConfirmationOptOutUseCase.execute(Unit).isOptedOut) {
-            Timber.d("Permissions confirmation opted out for this session - applying parent folder permissions")
-            return false
-        }
         val fetchOutput =
             runAuthenticatedOperation {
                 fetchFolderPermissionsUseCase.execute(FetchFolderPermissionsUseCase.Input(folderId))

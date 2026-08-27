@@ -1,9 +1,6 @@
 package com.passbolt.mobile.android.data.permissionsconfirmation
 
-import com.passbolt.mobile.android.data.permissionsconfirmation.datasource.memory.PermissionsConfirmationMemoryDataSource
 import com.passbolt.mobile.android.data.permissionsconfirmation.datasource.memory.PermissionsSnapshotMemoryDataSource
-import com.passbolt.mobile.android.domain.permissionsconfirmation.PermissionsConfirmationLocalDataSource
-import com.passbolt.mobile.android.domain.permissionsconfirmation.PermissionsConfirmationRepository
 import com.passbolt.mobile.android.domain.permissionsconfirmation.PermissionsSnapshotLocalDataSource
 import com.passbolt.mobile.android.domain.permissionsconfirmation.PermissionsSnapshotRepository
 import org.koin.core.module.dsl.singleOf
@@ -34,8 +31,6 @@ import org.koin.dsl.module
  */
 val permissionsConfirmationDataModule =
     module {
-        singleOf(::PermissionsConfirmationMemoryDataSource) bind PermissionsConfirmationLocalDataSource::class
-        singleOf(::PermissionsConfirmationRepositoryImpl) bind PermissionsConfirmationRepository::class
 
         singleOf(::PermissionsSnapshotMemoryDataSource) bind PermissionsSnapshotLocalDataSource::class
         singleOf(::PermissionsSnapshotRepositoryImpl) bind PermissionsSnapshotRepository::class

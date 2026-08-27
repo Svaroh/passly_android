@@ -61,7 +61,6 @@ import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.fab.AddFloatingActionButton
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
 import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
-import com.passbolt.mobile.android.core.ui.switch.TextSwitch
 import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
 import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
 import com.passbolt.mobile.android.feature.metadatakeytrust.NewMetadataKeyTrustDialog
@@ -72,7 +71,6 @@ import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermiss
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.DismissMetadataKeyModifiedDialog
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.GoBack
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SeePermission
-import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.SkipConfirmationToggled
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.TrustNewMetadataKey
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.TrustedMetadataKeyDeleted
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsSideEffect.CloseWithPermissionsConfirmed
@@ -198,25 +196,16 @@ private fun ConfirmPermissionsScreen(
             )
         },
         bottomBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                if (state.showSkipConfirmationSwitch) {
-                    TextSwitch(
-                        text = stringResource(LocalizationR.string.confirm_permissions_skip_until_session_end),
-                        isChecked = state.isSkipConfirmationChecked,
-                        onCheckedChange = { onIntent(SkipConfirmationToggled(it)) },
-                    )
-                }
-                BottomAppBar(
-                    modifier = Modifier.fillMaxWidth(),
-                    containerColor = MaterialTheme.colorScheme.background,
-                ) {
-                    PrimaryButton(
-                        text = stringResource(LocalizationR.string.save),
-                        onClick = { onIntent(Confirm) },
-                        isEnabled = !state.isLoading,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    )
-                }
+            BottomAppBar(
+                modifier = Modifier.fillMaxWidth(),
+                containerColor = MaterialTheme.colorScheme.background,
+            ) {
+                PrimaryButton(
+                    text = stringResource(LocalizationR.string.save),
+                    onClick = { onIntent(Confirm) },
+                    isEnabled = !state.isLoading,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
             }
         },
         floatingActionButton = {

@@ -28,7 +28,6 @@ import com.passbolt.mobile.android.commontest.session.validSessionTestModule
 import com.passbolt.mobile.android.core.architecture.result.DomainResult
 import com.passbolt.mobile.android.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsConfirmationOptOutUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
 import com.passbolt.mobile.android.ui.GroupModel
 import com.passbolt.mobile.android.ui.PermissionModel
@@ -50,7 +49,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
-import org.mockito.kotlin.verifyNoInteractions
 
 @ExperimentalCoroutinesApi
 class EditPermissionsConfirmationInteractorTest : KoinTest {
@@ -60,7 +58,6 @@ class EditPermissionsConfirmationInteractorTest : KoinTest {
             printLogger(Level.ERROR)
             modules(
                 module {
-                    single { mock<GetPermissionsConfirmationOptOutUseCase>() }
                     single { mock<FetchResourcePermissionsUseCase>() }
                     single { mock<GetLocalResourcePermissionsUseCase>() }
                     single { mock<GetSelectedAccountDataUseCase>() }
@@ -72,24 +69,10 @@ class EditPermissionsConfirmationInteractorTest : KoinTest {
 
     @Before
     fun setUp() {
-        get<GetPermissionsConfirmationOptOutUseCase>().stub {
-            on { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = false)
-        }
         get<GetSelectedAccountDataUseCase>().stub {
             on { execute(Unit) } doReturn selectedAccountData()
         }
     }
-
-    @Test
-    fun `session opt out skips the confirmation without fetching permissions`() =
-        runTest {
-            get<GetPermissionsConfirmationOptOutUseCase>().stub {
-                on { execute(Unit) } doReturn GetPermissionsConfirmationOptOutUseCase.Output(isOptedOut = true)
-            }
-
-            assertThat(get<EditPermissionsConfirmationInteractor>().shouldConfirmPermissions(RESOURCE_ID)).isFalse()
-            verifyNoInteractions(get<FetchResourcePermissionsUseCase>())
-        }
 
     @Test
     fun `shared resource requires the confirmation`() =
