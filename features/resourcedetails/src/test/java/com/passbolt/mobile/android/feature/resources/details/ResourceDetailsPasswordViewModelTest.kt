@@ -25,6 +25,8 @@ package com.passbolt.mobile.android.feature.resources.details
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.InProgress
+import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
 import com.passbolt.mobile.android.domain.rbac.usecase.GetRbacRulesUseCase
 import com.passbolt.mobile.android.domain.resources.actions.SecretPropertiesActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.SecretPropertyActionResult
@@ -243,6 +245,52 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
             viewModel.viewState.drop(2).test {
                 viewModel.onIntent(Initialize(DEFAULT_RESOURCE_MODEL))
                 assertThat(awaitItem().passwordData.showPasswordEyeIcon).isFalse()
+            }
+        }
+
+    @Test
+    fun `password item and eye icon should be shown while data refresh is in progress`() =
+        runTest {
+            get<DataRefreshTrackingFlow>().updateStatus(InProgress(progress = 0.5f))
+
+            viewModel = get()
+            viewModel.onIntent(Initialize(DEFAULT_RESOURCE_MODEL))
+
+            viewModel.viewState.test {
+                val state = awaitItem()
+                assertThat(state.isRefreshing).isTrue()
+                assertThat(state.passwordData.showPasswordItem).isTrue()
+                assertThat(state.passwordData.showPasswordEyeIcon).isTrue()
+            }
+        }
+
+    @Test
+    fun `toggle password visibility should show password while data refresh is in progress`() =
+        runTest {
+            val password = "secretPassword123"
+            val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
+            secretPropertiesActionsInteractor.stub {
+                onBlocking { providePassword() } doReturn
+                    flowOf(
+                        SecretPropertyActionResult.Success(
+                            SecretPropertiesActionsInteractor.SECRET_LABEL,
+                            isSecret = true,
+                            password,
+                        ),
+                    )
+            }
+            get<DataRefreshTrackingFlow>().updateStatus(InProgress(progress = 0.5f))
+
+            viewModel = get()
+            viewModel.onIntent(Initialize(DEFAULT_RESOURCE_MODEL))
+
+            viewModel.viewState.drop(1).test {
+                viewModel.onIntent(TogglePasswordVisibility)
+
+                val state = awaitItem()
+                assertThat(state.isRefreshing).isTrue()
+                assertThat(state.passwordData.isPasswordVisible).isTrue()
+                assertThat(state.passwordData.password).isEqualTo(password)
             }
         }
 }
