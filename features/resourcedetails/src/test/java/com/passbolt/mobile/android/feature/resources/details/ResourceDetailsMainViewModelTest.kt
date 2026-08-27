@@ -26,6 +26,7 @@ package com.passbolt.mobile.android.feature.resources.details
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
+import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.InProgress
 import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
 import com.passbolt.mobile.android.domain.rbac.usecase.GetRbacRulesUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCommonActionResult
@@ -354,6 +355,36 @@ class ResourceDetailsMainViewModelTest : KoinTest {
                 val state = awaitItem()
                 assertThat(state.sharedWithData.canViewPermissions).isFalse()
                 assertThat(state.sharedWithData.permissions).isEmpty()
+            }
+        }
+
+    @Test
+    fun `database backed sections should be loaded only after data refresh finishes`() =
+        runTest {
+            val dataRefreshTrackingFlow: DataRefreshTrackingFlow = get()
+            dataRefreshTrackingFlow.updateStatus(InProgress(progress = 0.5f))
+
+            viewModel = get()
+            viewModel.onIntent(Initialize(DEFAULT_RESOURCE_MODEL))
+
+            viewModel.viewState.test {
+                val duringRefresh = awaitItem()
+                assertThat(duringRefresh.isRefreshing).isTrue()
+                assertThat(duringRefresh.sharedWithData.permissions).isEmpty()
+                assertThat(duringRefresh.metadataData.tags).isEmpty()
+                cancelAndIgnoreRemainingEvents()
+            }
+
+            dataRefreshTrackingFlow.updateStatus(FinishedWithSuccess)
+            testScheduler.advanceUntilIdle()
+
+            viewModel.viewState.test {
+                val afterRefresh = awaitItem()
+                assertThat(afterRefresh.isRefreshing).isFalse()
+                assertThat(afterRefresh.sharedWithData.permissions)
+                    .containsExactly(GROUP_PERMISSION, USER_PERMISSION)
+                assertThat(afterRefresh.metadataData.tags)
+                    .containsExactlyElementsIn(RESOURCE_TAGS.map { it.slug })
             }
         }
 
