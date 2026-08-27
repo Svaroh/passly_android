@@ -46,6 +46,7 @@ import com.passbolt.mobile.android.database.migrations.Migration23to24
 import com.passbolt.mobile.android.database.migrations.Migration24to25
 import com.passbolt.mobile.android.database.migrations.Migration25to26
 import com.passbolt.mobile.android.database.migrations.Migration26to27
+import com.passbolt.mobile.android.database.migrations.Migration27to28
 import com.passbolt.mobile.android.database.migrations.Migration2to3
 import com.passbolt.mobile.android.database.migrations.Migration3to4
 import com.passbolt.mobile.android.database.migrations.Migration4to5
@@ -744,6 +745,52 @@ class DatabaseMigrationsTest {
     }
 
     @Test
+    fun migrate27To28() {
+        helper
+            .createDatabase(TEST_DB, 27)
+            .apply {
+                execSQL(
+                    "INSERT INTO Folder(folderId, name, permission, parentId, isShared, modified, updateState) " +
+                        "VALUES('folderId1', 'parentFolder', 'READ', null, 0, 1644909225833, 'UPDATED')",
+                )
+                execSQL(
+                    "INSERT INTO Folder(folderId, name, permission, parentId, isShared, modified, updateState) " +
+                        "VALUES('folderId2', 'childFolder', 'READ', 'folderId1', 0, 1644909225834, 'UPDATED')",
+                )
+                close()
+            }
+
+        helper
+            .runMigrationsAndValidate(TEST_DB, 28, true, Migration27to28)
+            .apply {
+                val cursor =
+                    query(
+                        "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'index_%'",
+                    )
+                val indexNames = mutableListOf<String>()
+                while (cursor.moveToNext()) {
+                    indexNames.add(cursor.getString(0))
+                }
+                cursor.close()
+
+                assertThat(indexNames).containsAtLeast(
+                    "index_Folder_parentId",
+                    "index_Folder_modified_folderId",
+                    "index_Resource_modified_resourceId",
+                    "index_Resource_expiry_resourceId",
+                    "index_Resource_favouriteId",
+                )
+
+                val childFoldersCursor = query("SELECT count(*) FROM Folder WHERE parentId = 'folderId1'")
+                childFoldersCursor.moveToFirst()
+                assertThat(childFoldersCursor.getInt(0)).isEqualTo(1)
+                childFoldersCursor.close()
+
+                close()
+            }
+    }
+
+    @Test
     fun migrateAll() {
         helper.createDatabase(TEST_DB, 1).apply {
             close()
@@ -781,6 +828,7 @@ class DatabaseMigrationsTest {
                 Migration24to25,
                 Migration25to26,
                 Migration26to27,
+                Migration27to28,
             ).build()
             .apply {
                 openHelper.writableDatabase
