@@ -145,12 +145,14 @@ internal fun AccountsListScreen(
 }
 
 @Composable
-private fun AccountsListScreen(
+fun AccountsListScreen(
     state: AccountsListState,
     onIntent: (AccountsListIntent) -> Unit,
+    modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             if (state.showManageAccountsTopBar) {
                 TitleAppBar(

@@ -264,7 +264,7 @@ fun ResourceDetailsScreen(
 }
 
 @Composable
-private fun ResourceDetailsScreen(
+fun ResourceDetailsScreen(
     state: ResourceDetailsState,
     onIntent: (ResourceDetailsIntent) -> Unit,
     snackbarHostState: SnackbarHostState,

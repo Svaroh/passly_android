@@ -240,7 +240,7 @@ internal fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeScreen(
+fun HomeScreen(
     state: HomeState,
     onIntent: (HomeIntent) -> Unit,
     snackbarHostState: SnackbarHostState,
