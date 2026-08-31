@@ -1,6 +1,7 @@
 plugins {
     id("passbolt.android.library")
     id(libs.plugins.compose.compiler.get().pluginId)
+    alias(libs.plugins.screenshot)
 }
 
 dependencies {
@@ -57,11 +58,21 @@ dependencies {
     testImplementation(platform(libs.koin.bom))
     testImplementation(libs.koin.test.junit)
     testImplementation(libs.kotlin.reflect)
+
+    screenshotTestImplementation(project(":screenshottest"))
+    screenshotTestImplementation(libs.screenshot.validation.api)
+    screenshotTestImplementation(libs.compose.ui.tooling)
 }
 
 android {
     namespace = "com.passbolt.mobile.android.feature.authentication"
     buildFeatures {
         compose = true
+    }
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
+
+    // tolerate sub-pixel antialiasing differences between macOS (dev) and Linux (CI) layoutlib renderers
+    screenshotTests {
+        imageDifferenceThreshold = 0.001f
     }
 }

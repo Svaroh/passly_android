@@ -76,6 +76,7 @@ coreModule("encryptedstorage")
 coreModule("passphrasememorycache")
 coreModule("clipboard")
 coreModule("testtags")
+coreModule("screenshottest")
 
 featureModule("startup")
 featureModule("setup")

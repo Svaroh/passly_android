@@ -199,7 +199,7 @@ internal fun ResourceFormScreen(
 
 @Suppress("CyclomaticComplexMethod")
 @Composable
-private fun ResourceFormScreen(
+fun ResourceFormScreen(
     state: ResourceFormState,
     onIntent: (ResourceFormIntent) -> Unit,
     modifier: Modifier = Modifier,

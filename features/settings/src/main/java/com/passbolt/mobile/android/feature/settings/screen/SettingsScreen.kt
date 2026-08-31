@@ -94,7 +94,7 @@ internal fun SettingsScreen(
 }
 
 @Composable
-private fun SettingsScreen(
+fun SettingsScreen(
     state: SettingsState,
     onIntent: (SettingsIntent) -> Unit,
     modifier: Modifier = Modifier,

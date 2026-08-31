@@ -231,13 +231,14 @@ internal fun AuthScreen(
 }
 
 @Composable
-private fun AuthScreen(
+fun AuthScreen(
     state: AuthState,
     onIntent: (AuthIntent) -> Unit,
     snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        modifier = Modifier.imePadding(),
+        modifier = modifier.imePadding(),
         topBar = {
             TitleAppBar(
                 title = getTitleText(LocalContext.current, state.authReason),
