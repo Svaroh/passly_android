@@ -13,6 +13,7 @@ import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.Sn
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CONNECTION_FAILURE
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.DECRYPTION_ERROR
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.GENERIC
+import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.SERVER_SIGNATURE_INVALID
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.TIME_OUT_OF_SYNC
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.WRONG_PASSPHRASE
 import com.passbolt.mobile.android.core.localization.R as LocalizationR
@@ -46,6 +47,7 @@ internal fun getSnackBarMessage(
                 base
             }
         }
+        SERVER_SIGNATURE_INVALID -> context.getString(LocalizationR.string.auth_error_server_signature_invalid)
         CHALLENGE_INVALID_SIGNATURE -> context.getString(LocalizationR.string.auth_error_invalid_signature)
         CHALLENGE_TOKEN_EXPIRED -> context.getString(LocalizationR.string.auth_error_token_expired)
         CHALLENGE_VERIFICATION_FAILURE -> context.getString(LocalizationR.string.auth_error_challenge_verification_failure)

@@ -5,6 +5,7 @@ import com.passbolt.mobile.android.common.extension.erase
 import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
 import com.passbolt.mobile.android.dto.response.ChallengeResponseDto
 import com.passbolt.mobile.android.gopenpgp.OpenPgp
+import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpFailure
 import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
 
 /**
@@ -51,7 +52,11 @@ class ChallengeDecryptor(
                     cipherText = challenge,
                 )
         ) {
-            is OpenPgpResult.Error -> Output.DecryptionError(decryptedChallenge.error.message)
+            is OpenPgpResult.Error ->
+                when (val failure = decryptedChallenge.error) {
+                    is OpenPgpFailure.SignatureVerificationFailed -> Output.ServerSignatureInvalid(failure.message)
+                    is OpenPgpFailure.Generic -> Output.DecryptionError(failure.message)
+                }
             is OpenPgpResult.Result -> {
                 passphraseCopy.erase()
                 Output.DecryptedChallenge(
@@ -70,6 +75,10 @@ class ChallengeDecryptor(
         ) : Output()
 
         data class DecryptionError(
+            val message: String?,
+        ) : Output()
+
+        data class ServerSignatureInvalid(
             val message: String?,
         ) : Output()
     }

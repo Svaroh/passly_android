@@ -163,6 +163,10 @@ class SignInVerifyInteractor(
                     onError(Error.ChallengeDecryptionError(it))
                 }
             }
+            is ChallengeDecryptor.Output.ServerSignatureInvalid -> {
+                Timber.e("Server signature on the challenge response is invalid: ${challengeDecryptResult.message}")
+                onError(Error.ServerSignatureInvalid)
+            }
         }
     }
 
@@ -257,6 +261,8 @@ class SignInVerifyInteractor(
         data class ChallengeDecryptionError(
             val message: String?,
         ) : Error()
+
+        data object ServerSignatureInvalid : Error()
 
         data class ChallengeVerificationError(
             val type: Type,

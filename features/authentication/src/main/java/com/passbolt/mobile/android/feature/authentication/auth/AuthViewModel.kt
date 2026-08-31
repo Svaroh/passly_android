@@ -76,6 +76,7 @@ import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.Sn
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CONNECTION_FAILURE
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.DECRYPTION_ERROR
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.GENERIC
+import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.SERVER_SIGNATURE_INVALID
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.TIME_OUT_OF_SYNC
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.WRONG_PASSPHRASE
 import com.passbolt.mobile.android.feature.authentication.auth.challenge.MfaStatus
@@ -100,6 +101,7 @@ import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVer
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError.Type.TOKEN_EXPIRED
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.IncorrectPassphrase
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.NoNetwork
+import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ServerSignatureInvalid
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.SignInFailure
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignOutUseCase
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.VerifyPassphraseUseCase
@@ -424,6 +426,7 @@ class AuthViewModel(
                             )
                         }
                     is ChallengeDecryptionError -> emitSideEffect(ShowErrorSnackbar(DECRYPTION_ERROR, it.message))
+                    ServerSignatureInvalid -> emitSideEffect(ShowErrorSnackbar(SERVER_SIGNATURE_INVALID))
                     is ChallengeVerificationError -> {
                         when (it.type) {
                             TOKEN_EXPIRED -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_TOKEN_EXPIRED))

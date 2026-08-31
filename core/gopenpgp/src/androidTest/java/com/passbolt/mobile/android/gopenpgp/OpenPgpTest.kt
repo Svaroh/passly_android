@@ -4,6 +4,7 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.google.common.truth.Truth.assertThat
 import com.passbolt.mobile.android.common.extension.encodeHex
 import com.passbolt.mobile.android.core.gopenpgp.test.R
+import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpFailure
 import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
 import com.proton.gopenpgp.crypto.Crypto
 import kotlinx.coroutines.runBlocking
@@ -329,6 +330,96 @@ class OpenPgpTest : KoinTest {
         }
 
     @Test
+    fun test_decryptVerifyMessageArmored_returnsErrorForUnsignedMessage() =
+        runBlocking {
+            val unsignedMessage = encryptUnsignedMessageTo(gracePublicKey, PLAIN_MESSAGE)
+
+            val result =
+                openPgp.decryptVerifyMessageArmored(
+                    gracePublicKey,
+                    String(gracePrivateKey),
+                    GRACE_KEY_CORRECT_PASSPHRASE,
+                    unsignedMessage,
+                )
+
+            assertIsSignatureVerificationFailure(result)
+        }
+
+    @Test
+    fun test_decryptVerifyMessageArmored_returnsErrorWhenSignedByKeyOtherThanVerificationKey() =
+        runBlocking {
+            val messageSignedByAdmin =
+                (
+                    openPgp.encryptSignMessageArmored(
+                        gracePublicKey,
+                        adminPrivateKey,
+                        ADMIN_KEY_CORRECT_PASSPHRASE,
+                        PLAIN_MESSAGE,
+                    ) as OpenPgpResult.Result
+                ).result
+
+            val result =
+                openPgp.decryptVerifyMessageArmored(
+                    gracePublicKey,
+                    String(gracePrivateKey),
+                    GRACE_KEY_CORRECT_PASSPHRASE,
+                    messageSignedByAdmin,
+                )
+
+            assertIsSignatureVerificationFailure(result)
+        }
+
+    @Test
+    fun test_decryptVerifyMessageArmoredWithPkGeneration_returnsErrorForUnsignedMessage() =
+        runBlocking {
+            val unsignedMessage = encryptUnsignedMessageTo(gracePublicKey, PLAIN_MESSAGE)
+
+            val result =
+                openPgp.decryptVerifyMessageArmored(
+                    String(gracePrivateKey),
+                    GRACE_KEY_CORRECT_PASSPHRASE,
+                    unsignedMessage,
+                )
+
+            assertIsSignatureVerificationFailure(result)
+        }
+
+    @Test
+    fun test_decryptVerifyMessageArmoredWithPkGeneration_returnsErrorWhenSignedByDifferentKey() =
+        runBlocking {
+            val encryptedToGraceSignedByAdmin =
+                (
+                    openPgp.encryptSignMessageArmored(
+                        gracePublicKey,
+                        adminPrivateKey,
+                        ADMIN_KEY_CORRECT_PASSPHRASE,
+                        PLAIN_MESSAGE,
+                    ) as OpenPgpResult.Result
+                ).result
+
+            val result =
+                openPgp.decryptVerifyMessageArmored(
+                    String(gracePrivateKey),
+                    GRACE_KEY_CORRECT_PASSPHRASE,
+                    encryptedToGraceSignedByAdmin,
+                )
+
+            assertIsSignatureVerificationFailure(result)
+        }
+
+    private fun encryptUnsignedMessageTo(
+        recipientPublicKey: String,
+        message: String,
+    ): String =
+        Crypto
+            .pgp()
+            .encryption()
+            .recipient(Crypto.newKeyFromArmored(recipientPublicKey))
+            .new_()
+            .encrypt(message.toByteArray())
+            .armor()
+
+    @Test
     fun test_getKeyFingerprintMatchesServerStyleFingerprintCaseInsensitively() =
         runBlocking {
             val result = openPgp.getKeyFingerprint(gracePublicKey)
@@ -345,6 +436,12 @@ class OpenPgpTest : KoinTest {
 
     private fun <T> assertIsOpenPgpErrorResult(result: OpenPgpResult<T>) {
         assertThat(result).isInstanceOf(OpenPgpResult.Error::class.java)
+    }
+
+    private fun <T> assertIsSignatureVerificationFailure(result: OpenPgpResult<T>) {
+        assertThat(result).isInstanceOf(OpenPgpResult.Error::class.java)
+        assertThat((result as OpenPgpResult.Error).error)
+            .isInstanceOf(OpenPgpFailure.SignatureVerificationFailed::class.java)
     }
 
     private companion object {
