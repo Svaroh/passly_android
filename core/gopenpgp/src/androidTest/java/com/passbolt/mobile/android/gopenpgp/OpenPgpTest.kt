@@ -328,6 +328,17 @@ class OpenPgpTest : KoinTest {
             assertIsOpenPgpErrorResult(result)
         }
 
+    @Test
+    fun test_getKeyFingerprintMatchesServerStyleFingerprintCaseInsensitively() =
+        runBlocking {
+            val result = openPgp.getKeyFingerprint(gracePublicKey)
+
+            assertIsOpenPgpSuccessResult(result)
+            assertThat(
+                (result as OpenPgpResult.Result).result.equals(GRACE_KEY_FINGERPRINT, ignoreCase = true),
+            ).isTrue()
+        }
+
     private fun <T> assertIsOpenPgpSuccessResult(value: OpenPgpResult<T>) {
         assertThat(value).isInstanceOf(OpenPgpResult.Result::class.java)
     }
@@ -338,6 +349,7 @@ class OpenPgpTest : KoinTest {
 
     private companion object {
         private const val PLAIN_MESSAGE = "test message"
+        private const val GRACE_KEY_FINGERPRINT = "63452C7A0AE6FAE8C8C309640BD9E2409BC6A569"
         private val GRACE_KEY_CORRECT_PASSPHRASE = "grace@passbolt.com".toByteArray()
         private val ADMIN_KEY_CORRECT_PASSPHRASE = "admin@passbolt.com".toByteArray()
         private val GRACE_KEY_WRONG_PASSPHRASE = "1111".toByteArray()
