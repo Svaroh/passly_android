@@ -19,6 +19,7 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":mappers"))
     implementation(project(":navigation"))
+    implementation(project(":security"))
     implementation(project(":metadata-domain"))
     implementation(project(":supportedresourcetypes"))
     implementation(project(":secrets-domain"))

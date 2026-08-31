@@ -51,6 +51,7 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavi
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.TotpForm
 import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
 import com.passbolt.mobile.android.core.navigation.compose.results.ResourceFormCompleteResult
+import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.dialogs.UnableToGeneratePasswordAlertDialog
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
@@ -110,6 +111,8 @@ internal fun ResourceFormScreen(
     modifier: Modifier = Modifier,
     navigator: AppNavigator = koinInject(),
 ) {
+    FlagSecureEffect()
+
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resultBus = NavigationResultEventBus.current

@@ -56,6 +56,7 @@ import com.passbolt.mobile.android.core.compose.PassboltTheme
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
+import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.text.TextInput
 import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Default
@@ -87,6 +88,8 @@ internal fun NoteFormScreen(
     navigator: AppNavigator = koinInject(),
     viewModel: NoteFormViewModel = koinViewModel(parameters = { parametersOf(mode, note) }),
 ) {
+    FlagSecureEffect()
+
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val resultBus = NavigationResultEventBus.current
 

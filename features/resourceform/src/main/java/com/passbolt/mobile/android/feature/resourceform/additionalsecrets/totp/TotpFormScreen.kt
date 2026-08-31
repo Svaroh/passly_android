@@ -63,6 +63,7 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavi
 import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
 import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
 import com.passbolt.mobile.android.core.navigation.compose.results.ScanOtpResultEvent
+import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.button.SecondaryIconButton
 import com.passbolt.mobile.android.core.ui.text.TextInput
@@ -104,6 +105,8 @@ internal fun TotpFormScreen(
     navigator: AppNavigator = koinInject(),
     viewModel: TotpFormViewModel = koinViewModel(parameters = { parametersOf(mode, totpUiModel) }),
 ) {
+    FlagSecureEffect()
+
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val resultBus = NavigationResultEventBus.current
 
