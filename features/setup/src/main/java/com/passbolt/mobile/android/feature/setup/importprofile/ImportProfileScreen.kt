@@ -41,6 +41,7 @@ import com.passbolt.mobile.android.core.compose.PassboltTheme
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.SetupNavigationKey.Summary
+import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.text.TextInput
 import com.passbolt.mobile.android.core.ui.textinputfield.StatefulInput.State.Default
@@ -64,6 +65,8 @@ internal fun ImportProfileScreen(
     navigator: AppNavigator = koinInject(),
     viewModel: ImportProfileViewModel = koinViewModel(),
 ) {
+    FlagSecureEffect()
+
     val state = viewModel.viewState.collectAsStateWithLifecycle()
 
     ImportProfileScreen(

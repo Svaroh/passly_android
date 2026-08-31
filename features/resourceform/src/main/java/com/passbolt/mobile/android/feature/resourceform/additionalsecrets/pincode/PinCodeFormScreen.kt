@@ -59,6 +59,7 @@ import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.PinCodeAdvancedGenerationForm
 import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
 import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
+import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.button.SecondaryIconButton
 import com.passbolt.mobile.android.core.ui.text.PasswordInput
@@ -96,6 +97,8 @@ internal fun PinCodeFormScreen(
     navigator: AppNavigator = koinInject(),
     viewModel: PinCodeFormViewModel = koinViewModel(parameters = { parametersOf(mode, pinCodeUiModel) }),
 ) {
+    FlagSecureEffect()
+
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val resultBus = NavigationResultEventBus.current
 

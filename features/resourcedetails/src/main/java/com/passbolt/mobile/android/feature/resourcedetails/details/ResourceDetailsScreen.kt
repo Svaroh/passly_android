@@ -69,6 +69,7 @@ import com.passbolt.mobile.android.core.navigation.compose.results.NavigationRes
 import com.passbolt.mobile.android.core.navigation.compose.results.ResourceDetailsCompleteResult
 import com.passbolt.mobile.android.core.navigation.compose.results.ResourceFormCompleteResult
 import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
+import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
 import com.passbolt.mobile.android.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
 import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
@@ -138,6 +139,8 @@ fun ResourceDetailsScreen(
     navigator: AppNavigator = koinInject(),
     resourceIconProvider: ResourceIconProvider = koinInject(),
 ) {
+    FlagSecureEffect()
+
     val context = LocalContext.current
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }

@@ -59,6 +59,7 @@ import com.passbolt.mobile.android.core.compose.PassboltTheme
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.TransferStatus
+import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.dialogs.CancelAccountTransferAlertDialog
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
@@ -84,6 +85,8 @@ internal fun TransferAccountScreen(
     navigator: AppNavigator = koinInject(),
     viewModel: TransferAccountViewModel = koinViewModel(),
 ) {
+    FlagSecureEffect()
+
     val context = LocalContext.current
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }

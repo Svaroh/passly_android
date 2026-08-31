@@ -60,6 +60,7 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
+import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
 import com.passbolt.mobile.android.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
 import com.passbolt.mobile.android.core.ui.empty.EmptyResourceListState
 import com.passbolt.mobile.android.core.ui.fab.AddFloatingActionButton
@@ -123,6 +124,8 @@ internal fun OtpScreen(
     resourceIconProvider: ResourceIconProvider = koinInject(),
     clipboardAccess: ClipboardAccess = koinInject(),
 ) {
+    FlagSecureEffect()
+
     val context = LocalContext.current
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
