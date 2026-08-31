@@ -97,7 +97,7 @@ internal class AccountDataLocalDataSourceImpl(
         val sharedPreferences = encryptedSharedPreferencesFactory.get(serverFingerprintFileName(userId))
         val serverFingerprint = sharedPreferences.getString(Constants.SERVER_FINGERPRINT_KEY, null)
 
-        return serverFingerprint.isNullOrEmpty() || serverFingerprint == fingerprint
+        return serverFingerprint.isNullOrEmpty() || serverFingerprint.equals(fingerprint, ignoreCase = true)
     }
 
     private fun accountDataFileName(userId: String) = "${AccountDataFileName(userId).name}.xml"
