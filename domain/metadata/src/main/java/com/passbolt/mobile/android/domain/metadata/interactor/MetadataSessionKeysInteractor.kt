@@ -23,6 +23,7 @@ import com.passbolt.mobile.android.dto.PassphraseNotInCacheException
 import com.passbolt.mobile.android.dto.request.SessionKeysBundleDto
 import com.passbolt.mobile.android.dto.response.DecryptedMetadataSessionKeysBundleModel
 import com.passbolt.mobile.android.gopenpgp.OpenPgp
+import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpFailure
 import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
 import com.passbolt.mobile.android.mappers.MetadataMapper
 import com.passbolt.mobile.android.ui.MergedSessionKeys
@@ -279,11 +280,22 @@ class MetadataSessionKeysInteractor(
                     )
             ) {
                 is OpenPgpResult.Error -> {
-                    Timber.e("Error when decrypting session keys bundle")
+                    when (val failure = decryptedBundleResult.error) {
+                        is OpenPgpFailure.SignatureVerificationFailed ->
+                            Timber.e(
+                                "Rejected session keys bundle: ${metadataSessionKeysBundle.id}; " +
+                                    "user's signature verification failed; skipping",
+                            )
+                        is OpenPgpFailure.Generic ->
+                            Timber.e(
+                                "Failed to decrypt session keys bundle: ${metadataSessionKeysBundle.id}, " +
+                                    "skipping; reason: ${failure.message}",
+                            )
+                    }
                     null
                 }
                 is OpenPgpResult.Result -> {
-                    Timber.d("Decrypted session keys bundle")
+                    Timber.d("Decrypted and verified session keys bundle: ${metadataSessionKeysBundle.id}")
                     val parsedBundle =
                         sessionKeysBundleProcessor.processPostFetch(
                             gson.fromJson(

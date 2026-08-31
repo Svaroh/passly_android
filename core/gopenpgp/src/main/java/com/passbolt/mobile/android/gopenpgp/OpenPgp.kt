@@ -1,24 +1,3 @@
-package com.passbolt.mobile.android.gopenpgp
-
-import androidx.annotation.VisibleForTesting
-import com.passbolt.mobile.android.common.extension.decodeHex
-import com.passbolt.mobile.android.common.extension.encodeHex
-import com.passbolt.mobile.android.common.extension.erase
-import com.passbolt.mobile.android.gopenpgp.exception.GopenPgpExceptionParser
-import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
-import com.passbolt.mobile.android.gopenpgp.model.CleartextSignatureVerification
-import com.passbolt.mobile.android.gopenpgp.model.DecryptedMessageAndSessionKey
-import com.passbolt.mobile.android.gopenpgp.model.VerifiedMessage
-import com.proton.gopenpgp.constants.Constants.AES256
-import com.proton.gopenpgp.crypto.Crypto
-import com.proton.gopenpgp.crypto.Key
-import com.proton.gopenpgp.crypto.PGPHandle
-import com.proton.gopenpgp.mobile.Mobile
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import timber.log.Timber
-import java.time.Instant
-
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -41,6 +20,32 @@ import java.time.Instant
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
+
+package com.passbolt.mobile.android.gopenpgp
+
+import androidx.annotation.VisibleForTesting
+import com.passbolt.mobile.android.common.extension.decodeHex
+import com.passbolt.mobile.android.common.extension.encodeHex
+import com.passbolt.mobile.android.common.extension.erase
+import com.passbolt.mobile.android.gopenpgp.exception.GopenPgpExceptionParser
+import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpError
+import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpFailure
+import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
+import com.passbolt.mobile.android.gopenpgp.model.CleartextSignatureVerification
+import com.passbolt.mobile.android.gopenpgp.model.DecryptedMessageAndSessionKey
+import com.passbolt.mobile.android.gopenpgp.model.VerifiedMessage
+import com.proton.gopenpgp.constants.Constants.AES256
+import com.proton.gopenpgp.crypto.Crypto
+import com.proton.gopenpgp.crypto.Key
+import com.proton.gopenpgp.crypto.PGPHandle
+import com.proton.gopenpgp.crypto.VerifiedDataResult
+import com.proton.gopenpgp.crypto.VerifyCleartextResult
+import com.proton.gopenpgp.mobile.Mobile
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.time.Instant
+
 class OpenPgp(
     private val pgpHandle: PGPHandle,
     private val gopenPgpExceptionParser: GopenPgpExceptionParser,
@@ -134,17 +139,26 @@ class OpenPgp(
                         .verificationKey(Crypto.newKeyFromArmored(publicKey))
                         .new_()
 
-                val decrypted =
+                val decryptionResult =
                     decryptionHandle
                         .decrypt(
                             cipherText.toByteArray(),
                             Crypto.Armor,
-                        ).string()
+                        )
+
+                enforceSignature { decryptionResult }
+
+                val decrypted = decryptionResult.string()
 
                 passphraseCopy.erase()
 
                 OpenPgpResult.Result(decrypted)
             }
+        } catch (exception: SignatureVerificationException) {
+            Timber.e(exception, "Signature verification failed during decryptVerifyMessageArmored")
+            OpenPgpResult.Error(
+                OpenPgpFailure.SignatureVerificationFailed(OpenPgpError(exception.cause?.message.orEmpty())),
+            )
         } catch (exception: Exception) {
             Timber.e(exception, "There was an error during decryptVerifyMessageArmored")
             OpenPgpResult.Error(gopenPgpExceptionParser.parseGopenPgpException(exception))
@@ -171,17 +185,26 @@ class OpenPgp(
                         .verificationKey(verificationKey)
                         .new_()
 
-                val decrypted =
+                val decryptionResult =
                     decryptionHandle
                         .decrypt(
                             cipherText.toByteArray(),
                             Crypto.Armor,
-                        ).string()
+                        )
+
+                enforceSignature { decryptionResult }
+
+                val decrypted = decryptionResult.string()
 
                 passphraseCopy.erase()
 
                 OpenPgpResult.Result(decrypted)
             }
+        } catch (exception: SignatureVerificationException) {
+            Timber.e(exception, "Signature verification failed during decryptVerifyMessageArmored (with pk generation)")
+            OpenPgpResult.Error(
+                OpenPgpFailure.SignatureVerificationFailed(OpenPgpError(exception.cause?.message.orEmpty())),
+            )
         } catch (exception: Exception) {
             Timber.e(exception, "There was an error during decryptVerifyMessageArmored (with pk generation)")
             OpenPgpResult.Error(gopenPgpExceptionParser.parseGopenPgpException(exception))
@@ -321,21 +344,20 @@ class OpenPgp(
                 OpenPgpResult.Result(
                     CleartextSignatureVerification(
                         isSignatureVerified =
-                            try {
-                                // signatureError() throws exception if signature is not valid
-                                // returns unit if the signature is valid
-                                verificationResult.signatureError()
+                            run {
+                                enforceCleartextSignature { verificationResult }
                                 true
-                            } catch (e: Exception) {
-                                // go to outer catch - signature is not valid
-                                @Suppress("RethrowCaughtException")
-                                throw e
                             },
                         message = String(verificationResult.cleartext()),
                         keyFingerprint = keyFingerprint,
                     ),
                 )
             }
+        } catch (exception: SignatureVerificationException) {
+            Timber.e(exception, "Signature verification failed during verifyClearTextSignature")
+            return OpenPgpResult.Error(
+                OpenPgpFailure.SignatureVerificationFailed(OpenPgpError(exception.cause?.message.orEmpty())),
+            )
         } catch (exception: Exception) {
             Timber.e(exception, "There was an error during verifyClearTextSignature")
             return OpenPgpResult.Error(gopenPgpExceptionParser.parseGopenPgpException(exception))
@@ -426,8 +448,7 @@ class OpenPgp(
 
                 val decryptionResult = decryptionHandle.decrypt(pgpMessage, Crypto.Armor)
 
-                // throws an exception if signature is not valid
-                decryptionResult.signatureError()
+                enforceSignature { decryptionResult }
                 OpenPgpResult.Result(
                     VerifiedMessage(
                         decryptedMessage = String(decryptionResult.bytes()),
@@ -437,6 +458,11 @@ class OpenPgp(
                     ),
                 )
             }
+        } catch (exception: SignatureVerificationException) {
+            Timber.e(exception, "Signature verification failed during verifySignature")
+            return OpenPgpResult.Error(
+                OpenPgpFailure.SignatureVerificationFailed(OpenPgpError(exception.cause?.message.orEmpty())),
+            )
         } catch (exception: Exception) {
             Timber.e(exception, "There was an error during verifySignature")
             return OpenPgpResult.Error(gopenPgpExceptionParser.parseGopenPgpException(exception))
@@ -468,6 +494,36 @@ class OpenPgp(
     private fun PGPHandle.verificationWithTimeOffset() =
         verify()
             .verifyTime(Instant.now().epochSecond + timeOffsetSeconds)
+
+    /* IMPORTANT
+     * gopenpgp is Go compiled to a native library via gomobile.
+     * Setting a `.verificationKey(...)` on a decryption/verification handle does not make `decrypt()` fail
+     * on a bad or missing signature - verification is only enforced by calling `signatureError()`
+     */
+    private fun enforceSignature(decryptionResult: () -> VerifiedDataResult) {
+        try {
+            decryptionResult().signatureError()
+        } catch (exception: Exception) {
+            throw SignatureVerificationException(exception)
+        }
+    }
+
+    /* IMPORTANT
+     * gopenpgp is Go compiled to a native library via gomobile.
+     * Setting a `.verificationKey(...)` on a decryption/verification handle does not make `decrypt()` fail
+     * on a bad or missing signature - verification is only enforced by calling `signatureError()`
+     */
+    private fun enforceCleartextSignature(cleartextResult: () -> VerifyCleartextResult) {
+        try {
+            cleartextResult().signatureError()
+        } catch (exception: Exception) {
+            throw SignatureVerificationException(exception)
+        }
+    }
+
+    private class SignatureVerificationException(
+        cause: Throwable,
+    ) : Exception(cause)
 
     companion object {
         @VisibleForTesting

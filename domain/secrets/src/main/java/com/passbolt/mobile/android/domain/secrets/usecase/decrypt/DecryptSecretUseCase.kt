@@ -57,7 +57,7 @@ class DecryptSecretUseCase(
             when (decrypted) {
                 is OpenPgpResult.Error -> {
                     Timber.e(decrypted.error.message)
-                    Output.Failure(decrypted.error)
+                    Output.Failure(decrypted.error.pgpError)
                 }
                 is OpenPgpResult.Result -> {
                     passphraseCopy.erase()

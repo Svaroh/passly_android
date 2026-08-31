@@ -137,7 +137,7 @@ class MetadataPrivateKeysHelperInteractor(
             )
 
         return when (pgpMessageSigned) {
-            is OpenPgpResult.Error -> Output.CryptoFailure(pgpMessageSigned.error)
+            is OpenPgpResult.Error -> Output.CryptoFailure(pgpMessageSigned.error.pgpError)
             is OpenPgpResult.Result ->
                 verifySignedSignatureAndSaveToLocalStorage(
                     pgpMessageSigned.result,
@@ -165,7 +165,7 @@ class MetadataPrivateKeysHelperInteractor(
             )
 
         return when (verifiedMessage) {
-            is OpenPgpResult.Error -> Output.CryptoFailure(verifiedMessage.error)
+            is OpenPgpResult.Error -> Output.CryptoFailure(verifiedMessage.error.pgpError)
             is OpenPgpResult.Result -> {
                 val currentUserServerId = requireNotNull(getSelectedAccountDataUseCase.execute(Unit).serverId)
                 val currentUser = getLocalUserUseCase.execute(GetLocalUserUseCase.Input(currentUserServerId)).user
