@@ -28,7 +28,7 @@ import com.passbolt.mobile.android.domain.auth.datasource.DatabasePassphraseLoca
 internal class DatabasePassphraseRepositoryImpl(
     private val localDataSource: DatabasePassphraseLocalDataSource,
 ) : DatabasePassphraseRepository {
-    override fun getDatabasePassphrase(userId: String): String? = localDataSource.getDatabasePassphrase(userId)
+    override fun getDatabasePassphrase(userId: String): ByteArray? = localDataSource.getDatabasePassphrase(userId)
 
     override fun saveDatabasePassphrase(
         userId: String,

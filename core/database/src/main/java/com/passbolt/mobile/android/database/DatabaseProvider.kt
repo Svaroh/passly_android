@@ -35,7 +35,6 @@ import com.passbolt.mobile.android.domain.auth.usecase.GetResourcesDatabasePassp
 import kotlinx.coroutines.suspendCancellableCoroutine
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import timber.log.Timber
-import java.nio.charset.StandardCharsets
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.resume
 
@@ -74,7 +73,7 @@ class DatabaseProvider(
         return instance.computeIfAbsent(currentUser) {
             try {
                 val passphrase = getResourcesDatabasePassphraseUseCase.execute(Unit).passphrase
-                val factory = SupportOpenHelperFactory(passphrase.toByteArray(StandardCharsets.UTF_8))
+                val factory = SupportOpenHelperFactory(passphrase)
                 Room
                     .databaseBuilder(
                         context,
