@@ -25,5 +25,6 @@ package com.passbolt.mobile.android.core.envinfo
 data class EnvInfo(
     val deviceName: String,
     val osName: String,
+    val sdkInt: Int,
     val appName: String,
 )

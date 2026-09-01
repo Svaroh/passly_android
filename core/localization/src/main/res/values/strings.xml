@@ -571,6 +571,12 @@
     <string name="main_update_download_in_progress">Downloading in background. We\'ll notify you once the download finishes.</string>
     <string name="main_update_downloaded_install">Install</string>
 
+    <string name="deprecated_os_warning_title">Outdated Android version</string>
+    <string name="deprecated_os_warning_message">Your device runs an Android version that no longer receives security updates. Passbolt support for this version is scheduled to be phased out.</string>
+    <string name="deprecated_os_warning_call_to_action">To stay protected and keep receiving Passbolt updates, &lt;b>update your device to a newer Android version&lt;/b>.</string>
+    <string name="deprecated_os_warning_acknowledge">I understand</string>
+    <string name="deprecated_os_warning_hide">Don\'t show again</string>
+
     <string name="dialog_encryption_error_title">There was an encryption error</string>
     <string name="dialog_encryption_error_message">There was an encryption error (%s). Please try again.</string>
 
