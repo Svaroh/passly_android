@@ -4,6 +4,7 @@ import com.passbolt.mobile.android.common.usecase.AsyncUseCase
 import com.passbolt.mobile.android.common.usecase.UserIdInput
 import com.passbolt.mobile.android.core.idlingresource.SignOutIdlingResource
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
+import com.passbolt.mobile.android.core.security.runtimeauth.RuntimeAuthenticatedFlag
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.RemoveSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.auth.AuthRepository
@@ -41,10 +42,12 @@ class SignOutUseCase(
     private val authRepository: AuthRepository,
     private val getSessionUseCase: GetSessionUseCase,
     private val signOutIdlingResource: SignOutIdlingResource,
+    private val runtimeAuthenticatedFlag: RuntimeAuthenticatedFlag,
 ) : AsyncUseCase<Unit, Unit> {
     override suspend fun execute(input: Unit) {
         Timber.d("Signing out")
         signOutIdlingResource.setIdle(false)
+        runtimeAuthenticatedFlag.isAuthenticated = false
         getSessionUseCase.execute(Unit).refreshToken?.let {
             authRepository.signOut(it)
         }
