@@ -47,6 +47,8 @@ import org.koin.test.KoinTestRule
 import org.koin.test.inject
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import kotlin.time.Duration
 import kotlin.time.TimedValue
@@ -132,6 +134,7 @@ class GetAndVerifyServerKeysAndTimeInteractorTest : KoinTest {
             interactor.getAndVerifyServerKeys(USER_ID, onError = { }, onSuccess = { success = it })
 
             assertThat(success?.pgpKeyFingerprint).isEqualTo(COMPUTED_FINGERPRINT_UPPER)
+            verify(mockSaveServerPublicRsaKeyUseCase).execute(any())
         }
 
     @Test
@@ -144,6 +147,7 @@ class GetAndVerifyServerKeysAndTimeInteractorTest : KoinTest {
             val error = captureError()
 
             assertThat(error).isEqualTo(Error.IncorrectServerFingerprint(COMPUTED_FINGERPRINT_UPPER))
+            verify(mockSaveServerPublicRsaKeyUseCase, never()).execute(any())
         }
 
     @Test
@@ -158,6 +162,7 @@ class GetAndVerifyServerKeysAndTimeInteractorTest : KoinTest {
             val error = captureError()
 
             assertThat(error).isEqualTo(Error.IncorrectServerFingerprint(COMPUTED_FINGERPRINT_UPPER))
+            verify(mockSaveServerPublicRsaKeyUseCase, never()).execute(any())
         }
 
     private suspend fun stubKeyFetchSuccess(reportedFingerprint: String) {
