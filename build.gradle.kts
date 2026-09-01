@@ -9,6 +9,7 @@ apply(from = "gradle/versions.gradle.kts")
 val androidCommonConfig = AndroidCommonConfig(
     compileSdk = extra["projectCompileSdk"] as Int,
     minSdk = extra["projectMinSdk"] as Int,
+    minFullySupportedSdk = extra["projectMinFullySupportedSdk"] as Int,
     targetSdk = extra["projectTargetSdk"] as Int,
     jvmTarget = 17,
 )

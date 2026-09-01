@@ -1,3 +1,5 @@
 package com.passbolt.mobile.android.feature.startup
 
-data object StartUpState
+data class StartUpState(
+    val showDeprecatedOsWarning: Boolean = false,
+)

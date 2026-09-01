@@ -1,5 +1,6 @@
 package com.passbolt.mobile.android.accountinit
 
+import android.os.Build
 import com.passbolt.mobile.android.common.usecase.UserIdInput
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveCurrentApiUrlUseCase
@@ -54,6 +55,7 @@ class AccountInitializer(
             GlobalPreferencesUpdate(
                 areDebugLogsEnabled = false,
                 isHideRootDialogEnabled = false,
+                deprecatedOsWarningHiddenForSdk = Build.VERSION.SDK_INT,
             ),
         )
     }

@@ -21,18 +21,11 @@
  * @since v1.0
  */
 
-package com.passbolt.mobile.android.data.preferences
+package com.passbolt.mobile.android.feature.startup.deprecatedoswarning
 
-internal const val GLOBAL_PREFERENCES_FILE_NAME = "preferences"
-internal const val KEY_DEBUG_LOGS_ENABLED = "KEY_DEBUG_LOGS_ENABLED"
-internal const val KEY_DEBUG_LOGS_FILE_CREATION_DATE_TIME = "KEY_DEBUG_LOGS_FILE_CREATION_DATE_TIME"
-internal const val KEY_DEBUG_LOGS_LAST_APP_VERSION = "KEY_DEBUG_LOGS_LAST_APP_VERSION"
-internal const val KEY_LAST_USED_HOME_VIEW_ID = "LAST_USED_HOME_VIEW_ID"
-internal const val KEY_USER_SET_HOME_VIEW_ID = "USER_SET_HOME_VIEW_ID"
-internal const val KEY_IS_HIDE_ROOT_DIALOG_ENABLED = "IS_HIDE_ROOT_DIALOG_ENABLED"
-internal const val KEY_IS_AUTH_REQUIRED_ON_EVERY_ENTRY = "IS_AUTH_REQUIRED_ON_EVERY_ENTRY"
-internal const val KEY_CHROME_NATIVE_AUTOFILL_DIALOG_SHOWN = "CHROME_NATIVE_AUTOFILL_DIALOG_SHOWN"
-internal const val KEY_API_FETCH_PAGE_SIZE = "API_FETCH_PAGE_SIZE"
-internal const val KEY_API_FETCH_PAGE_SIZE_MANUAL = "API_FETCH_PAGE_SIZE_MANUAL"
-internal const val KEY_ACCESSIBILITY_POLICIES_CONSENT_GIVEN = "ACCESSIBILITY_POLICIES_CONSENT_GIVEN"
-internal const val KEY_DEPRECATED_OS_WARNING_HIDDEN_FOR_SDK = "DEPRECATED_OS_WARNING_HIDDEN_FOR_SDK"
+import org.koin.core.module.Module
+import org.koin.core.module.dsl.factoryOf
+
+fun Module.deprecatedOsWarningModule() {
+    factoryOf(::DeprecatedOsWarningInteractor)
+}
