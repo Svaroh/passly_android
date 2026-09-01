@@ -27,6 +27,7 @@ import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountDataUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveServerFingerprintUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.GetPassphraseUseCase
+import com.passbolt.mobile.android.domain.auth.usecase.SaveMfaTokenUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.SaveSessionUseCase
 import com.passbolt.mobile.android.domain.inappreview.usecase.InAppReviewInteractor
 import com.passbolt.mobile.android.domain.preferences.usecase.GetGlobalPreferencesUseCase
@@ -132,6 +133,7 @@ class AuthViewModel(
     private val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase,
     private val runtimeAuthenticatedFlag: RuntimeAuthenticatedFlag,
     private val saveSessionUseCase: SaveSessionUseCase,
+    private val saveMfaTokenUseCase: SaveMfaTokenUseCase,
     private val saveSelectedAccountUseCase: SaveSelectedAccountUseCase,
     private val authenticatedAccountFlow: AuthenticatedAccountFlow,
     private val signOutUseCase: SignOutUseCase,
@@ -600,6 +602,9 @@ class AuthViewModel(
             is RefreshPassphrase,
             is Mfa,
             -> {
+                mfaHeader?.let {
+                    saveMfaTokenUseCase.execute(SaveMfaTokenUseCase.Input(userId, it))
+                }
                 runtimeAuthenticatedFlag.isAuthenticated = true
                 emitSideEffect(AuthSuccess(authConfig, appContext))
             }

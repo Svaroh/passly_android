@@ -38,5 +38,10 @@ internal class SessionRepositoryImpl(
         mfaToken: String?,
     ) = localDataSource.saveSession(userId, accessToken, refreshToken, mfaToken)
 
+    override fun saveMfaToken(
+        userId: String,
+        mfaToken: String?,
+    ) = localDataSource.saveMfaToken(userId, mfaToken)
+
     override fun removeSession(userId: String) = localDataSource.removeSession(userId)
 }

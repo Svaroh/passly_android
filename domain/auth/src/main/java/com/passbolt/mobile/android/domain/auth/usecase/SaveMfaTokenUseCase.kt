@@ -1,6 +1,7 @@
-package com.passbolt.mobile.android.domain.auth
+package com.passbolt.mobile.android.domain.auth.usecase
 
-import com.passbolt.mobile.android.domain.auth.model.Session
+import com.passbolt.mobile.android.common.usecase.UseCase
+import com.passbolt.mobile.android.domain.auth.SessionRepository
 
 /**
  * Passbolt - Open source password manager for teams
@@ -24,20 +25,18 @@ import com.passbolt.mobile.android.domain.auth.model.Session
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-interface SessionRepository {
-    fun getSession(userId: String): Session
+class SaveMfaTokenUseCase(
+    private val sessionRepository: SessionRepository,
+) : UseCase<SaveMfaTokenUseCase.Input, Unit> {
+    override fun execute(input: Input) {
+        sessionRepository.saveMfaToken(
+            userId = input.userId,
+            mfaToken = input.mfaToken,
+        )
+    }
 
-    fun saveSession(
-        userId: String,
-        accessToken: String,
-        refreshToken: String,
-        mfaToken: String?,
+    data class Input(
+        val userId: String,
+        val mfaToken: String?,
     )
-
-    fun saveMfaToken(
-        userId: String,
-        mfaToken: String?,
-    )
-
-    fun removeSession(userId: String)
 }

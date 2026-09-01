@@ -45,7 +45,6 @@ val networkingModule =
                     listOf(
                         get<ChangeableBaseUrlInterceptor>(),
                         get<AuthInterceptor>(),
-                        get<CookiesInterceptor.ReceivedCookiesInterceptor>(),
                         get<CookiesInterceptor.AddCookiesInterceptor>(),
                     ),
             )
@@ -66,7 +65,6 @@ val networkingModule =
                     listOf(
                         get<ChangeableBaseUrlInterceptor>(),
                         get<AuthInterceptor>(),
-                        get<CookiesInterceptor.ReceivedCookiesInterceptor>(),
                         get<CookiesInterceptor.AddCookiesInterceptor>(),
                     ),
                 followRedirects = false,
@@ -79,12 +77,9 @@ val networkingModule =
             )
         }
         single {
-            CookiesInterceptor.ReceivedCookiesInterceptor(
-                cookieExtractor = get(),
+            CookiesInterceptor.AddCookiesInterceptor(
+                getSessionUseCase = get(),
             )
-        }
-        single {
-            CookiesInterceptor.AddCookiesInterceptor()
         }
         single { CookieExtractor() }
 

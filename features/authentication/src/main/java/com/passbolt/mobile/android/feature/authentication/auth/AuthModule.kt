@@ -43,6 +43,7 @@ fun Module.authModule() {
             getGlobalPreferencesUseCase = get(),
             runtimeAuthenticatedFlag = get(),
             saveSessionUseCase = get(),
+            saveMfaTokenUseCase = get(),
             saveSelectedAccountUseCase = get(),
             authenticatedAccountFlow = get(),
             signOutUseCase = get(),
