@@ -47,9 +47,10 @@ class ChallengeProvider(
         val passphraseCopy = passphrase.copyOf()
         val privateKey = requireNotNull(privateKeyRepository.getPrivateKey(userId)) { "Unable to restore private key." }.armoredKey
         val tokenExpiry = getVerifyTokenExpiry()
+        val verifyToken = uuidProvider.get()
 
         val challengeJson =
-            ChallengeDto(CHALLENGE_VERSION, domain, uuidProvider.get(), tokenExpiry)
+            ChallengeDto(CHALLENGE_VERSION, domain, verifyToken, tokenExpiry)
                 .run { gson.toJson(this) }
 
         return when (
@@ -63,7 +64,7 @@ class ChallengeProvider(
         ) {
             is OpenPgpResult.Result -> {
                 passphraseCopy.erase()
-                Output.Success(encryptedChallenge.result)
+                Output.Success(encryptedChallenge.result, verifyToken)
             }
             is OpenPgpResult.Error -> Output.WrongPassphrase
         }
@@ -74,6 +75,7 @@ class ChallengeProvider(
     sealed class Output {
         data class Success(
             val challenge: String,
+            val verifyToken: String,
         ) : Output()
 
         data object WrongPassphrase : Output()
