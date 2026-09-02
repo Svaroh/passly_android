@@ -23,7 +23,7 @@ package com.passbolt.mobile.android.domain.auth
  * @since v1.0
  */
 interface DatabasePassphraseRepository {
-    fun getDatabasePassphrase(userId: String): String?
+    fun getDatabasePassphrase(userId: String): ByteArray?
 
     fun saveDatabasePassphrase(
         userId: String,
