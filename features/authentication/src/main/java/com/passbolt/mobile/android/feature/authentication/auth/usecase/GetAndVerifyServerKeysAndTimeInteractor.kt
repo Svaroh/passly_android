@@ -60,8 +60,6 @@ class GetAndVerifyServerKeysAndTimeInteractor(
             return
         }
 
-        saveServerPublicRsaKeyUseCase.execute(SaveServerPublicRsaKeyUseCase.Input(userId, rsaKey.rsaKey))
-
         if (isServerTimeOutOfSync(pgpKey, serverKeys.deviceTimeAtFetchSeconds, getTimeRequestDuration.inWholeSeconds)) {
             onError(Error.TimeIsOutOfSync)
             return
@@ -89,6 +87,7 @@ class GetAndVerifyServerKeysAndTimeInteractor(
             onError(Error.IncorrectServerFingerprint(computedFingerprint))
         } else {
             Timber.d("Server key fingerprint is valid")
+            saveServerPublicRsaKeyUseCase.execute(SaveServerPublicRsaKeyUseCase.Input(userId, rsaKey.rsaKey))
             onSuccess(Success(pgpKey.publicKey, computedFingerprint, rsaKey.rsaKey))
         }
     }
