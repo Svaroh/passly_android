@@ -69,8 +69,8 @@ class DatabaseProvider(
 
     fun get(userId: String): ResourceDatabase {
         System.loadLibrary("sqlcipher")
-        val currentUser = messageDigestHash.sha256(userId)
-        return instance.computeIfAbsent(currentUser) {
+        val databaseName = databaseName(userId)
+        return instance.computeIfAbsent(databaseName) {
             try {
                 val passphrase = getResourcesDatabasePassphraseUseCase.execute(Unit).passphrase
                 val factory = SupportOpenHelperFactory(passphrase)
@@ -78,7 +78,7 @@ class DatabaseProvider(
                     .databaseBuilder(
                         context,
                         ResourceDatabase::class.java,
-                        "${currentUser}_$RESOURCE_DATABASE_NAME",
+                        databaseName,
                     ).addMigrations(
                         Migration1to2,
                         Migration2to3,
@@ -123,17 +123,17 @@ class DatabaseProvider(
 
     suspend fun delete(userId: String) {
         Timber.d("Deleting resources database")
-        val currentUser = messageDigestHash.sha256(userId)
-        if (currentUser in instance.keys) {
-            suspendCancellableCoroutine { continuation ->
-                Thread {
-                    instance[currentUser]?.clearAllTables()
-                    continuation.resume(Unit)
-                }.start()
-            }
-            instance.remove(currentUser)
+        val databaseName = databaseName(userId)
+        suspendCancellableCoroutine { continuation ->
+            Thread {
+                instance.remove(databaseName)?.close()
+                context.deleteDatabase(databaseName)
+                continuation.resume(Unit)
+            }.start()
         }
     }
+
+    private fun databaseName(userId: String) = "${messageDigestHash.sha256(userId)}_$RESOURCE_DATABASE_NAME"
 
     companion object {
         private const val RESOURCE_DATABASE_NAME = "resources.db"

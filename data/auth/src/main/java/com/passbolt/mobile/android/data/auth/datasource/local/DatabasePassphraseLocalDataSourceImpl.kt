@@ -44,5 +44,12 @@ internal class DatabasePassphraseLocalDataSourceImpl(
         }
     }
 
+    override fun removeDatabasePassphrase(userId: String) {
+        val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
+        sharedPreferences.edit {
+            remove(Constants.DATABASE_PASSPHRASE_KEY)
+        }
+    }
+
     private fun fileName(userId: String) = "${Constants.RESOURCE_DATABASE_ALIAS}_$userId.xml"
 }
