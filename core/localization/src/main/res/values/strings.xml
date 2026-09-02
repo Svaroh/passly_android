@@ -190,6 +190,8 @@
     <string name="auth_error_server_signature_invalid">Server signature invalid</string>
     <string name="auth_error_invalid_signature">Challenge verification error (invalid signature)</string>
     <string name="auth_error_token_expired">Challenge verification error (token expired)</string>
+    <string name="auth_error_verify_token_mismatch">Challenge verification error (verify token mismatch)</string>
+    <string name="auth_error_domain_mismatch">Challenge verification error (domain mismatch)</string>
     <string name="auth_error_challenge_verification_failure">Challenge verification failure</string>
     <string name="auth_error_profile_fetch_failure">There was an error during profile update</string>
 

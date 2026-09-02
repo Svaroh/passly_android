@@ -70,9 +70,11 @@ import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.Sn
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_LOCKOUT
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_LOCKOUT_PERMANENT
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_NO_CRYPTO_CIPHER
+import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_DOMAIN_MISMATCH
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_INVALID_SIGNATURE
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_TOKEN_EXPIRED
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_VERIFICATION_FAILURE
+import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_VERIFY_TOKEN_MISMATCH
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CONNECTION_FAILURE
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.DECRYPTION_ERROR
 import com.passbolt.mobile.android.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.GENERIC
@@ -96,9 +98,11 @@ import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVer
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.AccountDoesNotExist
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeDecryptionError
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError
+import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError.Type.DOMAIN_MISMATCH
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError.Type.FAILURE
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError.Type.INVALID_SIGNATURE
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError.Type.TOKEN_EXPIRED
+import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError.Type.VERIFY_TOKEN_MISMATCH
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.IncorrectPassphrase
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.NoNetwork
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ServerSignatureInvalid
@@ -399,7 +403,6 @@ class AuthViewModel(
         }
     }
 
-    @Suppress("LongMethod")
     private suspend fun signIn(
         passphrase: ByteArray,
         serverPublicKey: String,
@@ -411,36 +414,7 @@ class AuthViewModel(
             passphrase,
             userId,
             rsaKey,
-            onError = {
-                passphrase.erase()
-                updateViewState { copy(showProgress = false) }
-                signInIdlingResource.setIdle(true)
-                when (it) {
-                    is AccountDoesNotExist ->
-                        updateViewState {
-                            copy(
-                                showAccountDoesNotExist = true,
-                                accountDoesNotExistLabel = it.label,
-                                accountDoesNotExistEmail = it.email,
-                                accountDoesNotExistUrl = it.serverUrl,
-                            )
-                        }
-                    is ChallengeDecryptionError -> emitSideEffect(ShowErrorSnackbar(DECRYPTION_ERROR, it.message))
-                    ServerSignatureInvalid -> emitSideEffect(ShowErrorSnackbar(SERVER_SIGNATURE_INVALID))
-                    is ChallengeVerificationError -> {
-                        when (it.type) {
-                            TOKEN_EXPIRED -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_TOKEN_EXPIRED))
-                            INVALID_SIGNATURE -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_INVALID_SIGNATURE))
-                            FAILURE -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_VERIFICATION_FAILURE))
-                        }
-                    }
-                    is NoNetwork -> emitSideEffect(ShowErrorSnackbar(CONNECTION_FAILURE))
-                    is SignInServerNotReachable ->
-                        updateViewState { copy(showServerNotReachable = true, serverNotReachableDomain = it.serverUrl) }
-                    is IncorrectPassphrase -> emitSideEffect(ShowErrorSnackbar(WRONG_PASSPHRASE))
-                    is SignInFailure -> emitSideEffect(ShowErrorSnackbar(AUTHENTICATION_ERROR, it.message))
-                }
-            },
+            onError = { handleSignInError(it, passphrase) },
         ) {
             passphrase.erase()
             loginState =
@@ -468,6 +442,44 @@ class AuthViewModel(
                     mfaRequired(it.accessToken, it.challengeResponseDto.mfaProviders)
                 }
             }
+        }
+    }
+
+    private fun handleSignInError(
+        error: SignInVerifyInteractor.Error,
+        passphrase: ByteArray,
+    ) {
+        passphrase.erase()
+        updateViewState { copy(showProgress = false) }
+        signInIdlingResource.setIdle(true)
+        when (error) {
+            is AccountDoesNotExist ->
+                updateViewState {
+                    copy(
+                        showAccountDoesNotExist = true,
+                        accountDoesNotExistLabel = error.label,
+                        accountDoesNotExistEmail = error.email,
+                        accountDoesNotExistUrl = error.serverUrl,
+                    )
+                }
+            is ChallengeDecryptionError -> emitSideEffect(ShowErrorSnackbar(DECRYPTION_ERROR, error.message))
+            ServerSignatureInvalid -> emitSideEffect(ShowErrorSnackbar(SERVER_SIGNATURE_INVALID))
+            is ChallengeVerificationError -> handleChallengeVerificationError(error.type)
+            is NoNetwork -> emitSideEffect(ShowErrorSnackbar(CONNECTION_FAILURE))
+            is SignInServerNotReachable ->
+                updateViewState { copy(showServerNotReachable = true, serverNotReachableDomain = error.serverUrl) }
+            is IncorrectPassphrase -> emitSideEffect(ShowErrorSnackbar(WRONG_PASSPHRASE))
+            is SignInFailure -> emitSideEffect(ShowErrorSnackbar(AUTHENTICATION_ERROR, error.message))
+        }
+    }
+
+    private fun handleChallengeVerificationError(type: ChallengeVerificationError.Type) {
+        when (type) {
+            TOKEN_EXPIRED -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_TOKEN_EXPIRED))
+            INVALID_SIGNATURE -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_INVALID_SIGNATURE))
+            VERIFY_TOKEN_MISMATCH -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_VERIFY_TOKEN_MISMATCH))
+            DOMAIN_MISMATCH -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_DOMAIN_MISMATCH))
+            FAILURE -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_VERIFICATION_FAILURE))
         }
     }
 

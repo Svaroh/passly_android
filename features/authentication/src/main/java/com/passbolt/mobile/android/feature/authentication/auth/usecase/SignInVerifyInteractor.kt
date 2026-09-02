@@ -55,6 +55,7 @@ class SignInVerifyInteractor(
                         SendSignInRequestInput(
                             config = configInput,
                             challenge = challenge.challenge,
+                            sentVerifyToken = challenge.verifyToken,
                             accountData = accountData,
                             serverId = requireNotNull(accountData.serverId),
                         ),
@@ -120,6 +121,8 @@ class SignInVerifyInteractor(
                             config = input.config,
                             currentMfaToken = currentMfaToken,
                             signInResult = result,
+                            sentVerifyToken = input.sentVerifyToken,
+                            sentDomain = input.accountData.url,
                         ),
                     onSuccess = onSuccess,
                     onError = onError,
@@ -152,6 +155,8 @@ class SignInVerifyInteractor(
                             mfaToken = input.signInResult.mfaToken,
                             currentMfaToken = input.currentMfaToken,
                             rsaKey = input.config.serverRsaKey,
+                            sentVerifyToken = input.sentVerifyToken,
+                            sentDomain = input.sentDomain,
                         ),
                     onError = onError,
                     onSuccess = onSuccess,
@@ -176,7 +181,14 @@ class SignInVerifyInteractor(
         onSuccess: suspend (Success) -> Unit,
     ) {
         Timber.d("Verifying challenge")
-        when (val result = challengeVerifier.verify(input.challengeResponseDto, input.rsaKey)) {
+        val verifyResult =
+            challengeVerifier.verify(
+                challengeResponseDto = input.challengeResponseDto,
+                rsaPublicKey = input.rsaKey,
+                sentVerifyToken = input.sentVerifyToken,
+                sentDomain = input.sentDomain,
+            )
+        when (verifyResult) {
             ChallengeVerifier.Output.Failure -> {
                 Timber.e("Challenge verification error")
                 onError(Error.ChallengeVerificationError(Error.ChallengeVerificationError.Type.FAILURE))
@@ -189,13 +201,21 @@ class SignInVerifyInteractor(
                 Timber.e("Challenge verification error: token expired")
                 onError(Error.ChallengeVerificationError(Error.ChallengeVerificationError.Type.TOKEN_EXPIRED))
             }
+            ChallengeVerifier.Output.VerifyTokenMismatch -> {
+                Timber.e("Challenge verification error: verify token mismatch")
+                onError(Error.ChallengeVerificationError(Error.ChallengeVerificationError.Type.VERIFY_TOKEN_MISMATCH))
+            }
+            ChallengeVerifier.Output.DomainMismatch -> {
+                Timber.e("Challenge verification error: domain mismatch")
+                onError(Error.ChallengeVerificationError(Error.ChallengeVerificationError.Type.DOMAIN_MISMATCH))
+            }
             is ChallengeVerifier.Output.Verified -> {
                 Timber.d("Challenge verified with success")
                 onSuccess(
                     Success(
                         challengeResponseDto = input.challengeResponseDto,
-                        accessToken = result.accessToken,
-                        refreshToken = result.refreshToken,
+                        accessToken = verifyResult.accessToken,
+                        refreshToken = verifyResult.refreshToken,
                         mfaToken = input.mfaToken,
                         currentMfaToken = input.currentMfaToken,
                     ),
@@ -214,6 +234,7 @@ class SignInVerifyInteractor(
     private data class SendSignInRequestInput(
         val config: SignInConfigInput,
         val challenge: String,
+        val sentVerifyToken: String,
         val accountData: GetAccountDataUseCase.Output,
         val serverId: String,
     )
@@ -222,6 +243,8 @@ class SignInVerifyInteractor(
         val config: SignInConfigInput,
         val currentMfaToken: String?,
         val signInResult: SignInResult.Success,
+        val sentVerifyToken: String,
+        val sentDomain: String,
     )
 
     private data class VerifyChallengeInput(
@@ -229,6 +252,8 @@ class SignInVerifyInteractor(
         val mfaToken: String?,
         val currentMfaToken: String?,
         val rsaKey: String,
+        val sentVerifyToken: String,
+        val sentDomain: String,
     )
 
     data class Success(
@@ -270,6 +295,8 @@ class SignInVerifyInteractor(
             enum class Type {
                 INVALID_SIGNATURE,
                 TOKEN_EXPIRED,
+                VERIFY_TOKEN_MISMATCH,
+                DOMAIN_MISMATCH,
                 FAILURE,
             }
         }

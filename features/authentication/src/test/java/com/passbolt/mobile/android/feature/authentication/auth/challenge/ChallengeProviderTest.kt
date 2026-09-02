@@ -32,10 +32,12 @@ class ChallengeProviderTest : KoinTest {
             val privateKey = "private_key"
             val domain = "domain"
 
+            val verifyToken = "555a30f6-48f0-42be-beca-d200347f1848"
+
             whenever(openPgp.encryptSignMessageArmored(eq(publicKey), eq(privateKey), any(), any()))
                 .thenReturn(OpenPgpResult.Result(challenge))
             whenever(timeProvider.getCurrentEpochSeconds()).thenReturn(1624448538)
-            whenever(uuidProvider.get()).thenReturn("555a30f6-48f0-42be-beca-d200347f1848")
+            whenever(uuidProvider.get()).thenReturn(verifyToken)
             whenever(privateKeyRepository.getPrivateKey(any())).thenReturn(PrivateKey(privateKey))
 
             val result =
@@ -47,6 +49,7 @@ class ChallengeProviderTest : KoinTest {
                 )
             assertTrue(result is ChallengeProvider.Output.Success)
             assertEquals(challenge, result.challenge)
+            assertEquals(verifyToken, result.verifyToken)
         }
 
     private val challenge =

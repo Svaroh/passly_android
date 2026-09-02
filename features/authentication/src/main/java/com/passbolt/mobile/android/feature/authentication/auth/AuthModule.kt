@@ -5,7 +5,9 @@ import com.passbolt.mobile.android.core.mvp.authentication.MfaProvidersHandler
 import com.passbolt.mobile.android.feature.authentication.auth.challenge.ChallengeDecryptor
 import com.passbolt.mobile.android.feature.authentication.auth.challenge.ChallengeProvider
 import com.passbolt.mobile.android.feature.authentication.auth.challenge.ChallengeVerifier
+import com.passbolt.mobile.android.feature.authentication.auth.challenge.DomainComparator
 import com.passbolt.mobile.android.feature.authentication.auth.challenge.MfaStatusProvider
+import com.passbolt.mobile.android.feature.authentication.auth.challenge.TrailingSlashDomainComparator
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.BiometryInteractor
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetSessionExpiryUseCase
@@ -65,6 +67,7 @@ fun Module.authModule() {
     singleOf(::SignInUseCase)
     singleOf(::ChallengeProvider)
     singleOf(::ChallengeDecryptor)
+    singleOf(::TrailingSlashDomainComparator) bind DomainComparator::class
     singleOf(::ChallengeVerifier)
     singleOf(::VerifyPassphraseUseCase)
     singleOf(::ServerKeysWarmupCache) bind ServerKeysWarmup::class
