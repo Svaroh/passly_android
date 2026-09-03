@@ -337,7 +337,8 @@ class ResourceCreateActionsInteractor(
         val resourceId = createdResource.resourceModel.resourceId
         val resourceName = createdResource.resourceModel.metadataJsonModel.name
         val permissionsToApply = withOperatorRealPermissionId(confirmedPermissions, createdResource)
-        if (permissionsToApply.size <= 1) {
+        if (!hasRecipientsBesidesOperator(permissionsToApply)) {
+            Timber.d("No recipients besides the operator - keeping the created resource private")
             return Success(resourceId, resourceName)
         }
 
@@ -366,6 +367,16 @@ class ResourceCreateActionsInteractor(
                 createPermissionsSnapshotInteractor.detectDriftForFolder(folderId)
             }
         }
+
+    private suspend fun hasRecipientsBesidesOperator(permissionsToApply: List<PermissionModelUi>): Boolean {
+        val currentUserServerId =
+            getLocalCurrentUserUseCase
+                .execute(Unit)
+                .user.id
+        return permissionsToApply.any {
+            it !is PermissionModelUi.UserPermissionModel || it.user.userId != currentUserServerId
+        }
+    }
 
     private suspend fun withOperatorRealPermissionId(
         confirmedPermissions: List<PermissionModelUi>,
