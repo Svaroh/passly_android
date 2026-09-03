@@ -113,7 +113,6 @@ import com.passbolt.mobile.android.gopenpgp.openPgpModule
 import com.passbolt.mobile.android.groupDetailsModule
 import com.passbolt.mobile.android.helpMenuModule
 import com.passbolt.mobile.android.jsonmodel.jsonModelModule
-import com.passbolt.mobile.android.linksapi.linksApiModule
 import com.passbolt.mobile.android.locationDetailsModule
 import com.passbolt.mobile.android.logsModule
 import com.passbolt.mobile.android.mappersModule
@@ -170,7 +169,6 @@ class KoinInitializer : Initializer<Unit> {
                 secretsDataModule,
                 resourceDetailsModule,
                 securityModule,
-                linksApiModule,
                 usersDomainModule,
                 loggerModule,
                 accountDetailsModule,
