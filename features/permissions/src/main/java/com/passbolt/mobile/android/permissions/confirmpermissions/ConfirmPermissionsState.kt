@@ -33,7 +33,6 @@ data class ConfirmPermissionsState(
     val isRefreshingUsersAndGroups: Boolean = false,
     val isApplyingShare: Boolean = false,
     val isEditable: Boolean = true,
-    val lockedOperatorPermission: PermissionModelUi.UserPermissionModel? = null,
     val indirectAccessWarning: IndirectAccessWarning? = null,
     val showMetadataKeyModifiedDialog: Boolean = false,
     val newMetadataKeyToTrustModel: NewMetadataKeyToTrustModel? = null,
