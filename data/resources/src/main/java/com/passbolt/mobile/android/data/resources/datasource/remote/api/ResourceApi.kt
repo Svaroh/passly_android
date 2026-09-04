@@ -49,10 +49,10 @@ internal interface ResourceApi {
         @Query(QUERY_LIMIT) limit: Int,
         // page number
         @Query(QUERY_PAGE) page: Int,
-        // sort by modified date
-        @Query(QUERY_SORT) sort: String = "Resources.modified",
-        // sort direction descending
-        @Query(QUERY_DIRECTION) direction: String = "desc",
+        // sort by name
+        @Query(QUERY_SORT) sort: String = "Resources.name",
+        // sort direction ascending
+        @Query(QUERY_DIRECTION) direction: String = "asc",
     ): BasePaginatedResponse<List<ResourceResponseDto>>
 
     @GET(RESOURCE_BY_ID)
