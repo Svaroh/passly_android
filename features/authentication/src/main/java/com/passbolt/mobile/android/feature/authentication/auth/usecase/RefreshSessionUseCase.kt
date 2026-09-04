@@ -49,8 +49,8 @@ class RefreshSessionUseCase(
                         userId = userId,
                         accessToken = result.value.accessToken,
                         refreshToken = result.value.refreshToken,
-                        mfaToken = result.value.mfaToken,
                     )
+                    sessionRepository.saveMfaToken(userId, result.value.mfaToken)
                     Output.Success
                 }
                 is DomainResult.Incomplete -> Output.Failure

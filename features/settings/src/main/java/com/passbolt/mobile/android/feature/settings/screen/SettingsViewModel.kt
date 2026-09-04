@@ -27,6 +27,7 @@ import androidx.lifecycle.viewModelScope
 import com.passbolt.mobile.android.common.autofill.DetectAutofillConflict
 import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
+import com.passbolt.mobile.android.domain.auth.model.ServerSignOutStatus
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignOutUseCase
 import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.ConfirmSignOut
 import com.passbolt.mobile.android.feature.settings.screen.SettingsIntent.GoToAccounts
@@ -41,6 +42,8 @@ import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.Na
 import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToDebugLogs
 import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToStartUp
 import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToTermsAndLicenses
+import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.ShowToast
+import com.passbolt.mobile.android.feature.settings.screen.ToastType.SERVER_SIGN_OUT_FAILED
 import kotlinx.coroutines.launch
 
 internal class SettingsViewModel(
@@ -76,8 +79,11 @@ internal class SettingsViewModel(
             updateViewState { copy(isSignOutDialogVisible = false, isProgressDialogVisible = true) }
             // wait for full refresh to finish to minimize leaving db in an inconsistent state
             dataRefreshTrackingFlow.awaitIdle()
-            signOutUseCase.execute(Unit)
+            val signOutResult = signOutUseCase.execute(Unit)
             updateViewState { copy(isProgressDialogVisible = false) }
+            if (signOutResult.serverSignOutStatus == ServerSignOutStatus.SIGN_OUT_FAILED) {
+                emitSideEffect(ShowToast(SERVER_SIGN_OUT_FAILED))
+            }
             emitSideEffect(NavigateToStartUp)
         }
     }

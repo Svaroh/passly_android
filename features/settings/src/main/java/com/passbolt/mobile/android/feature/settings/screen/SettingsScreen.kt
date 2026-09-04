@@ -23,6 +23,7 @@
 
 package com.passbolt.mobile.android.feature.settings.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -59,6 +60,7 @@ import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.Na
 import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToDebugLogs
 import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToStartUp
 import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.NavigateToTermsAndLicenses
+import com.passbolt.mobile.android.feature.settings.screen.SettingsSideEffect.ShowToast
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import com.passbolt.mobile.android.core.localization.R as LocalizationR
@@ -89,6 +91,8 @@ internal fun SettingsScreen(
             NavigateToDebugLogs -> navigator.navigateToKey(DebugLogs)
             NavigateToStartUp -> navigator.startNavigationActivity(context, AuthenticationStartUp(AppContext.APP))
             NavigateToTermsAndLicenses -> navigator.navigateToKey(TermsAndLicenses)
+            is ShowToast ->
+                Toast.makeText(context, getToastMessage(context, it.type), Toast.LENGTH_SHORT).show()
         }
     }
 }

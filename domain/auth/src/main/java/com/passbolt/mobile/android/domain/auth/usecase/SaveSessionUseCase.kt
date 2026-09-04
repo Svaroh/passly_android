@@ -33,7 +33,6 @@ class SaveSessionUseCase(
             userId = input.userId,
             accessToken = input.accessToken,
             refreshToken = input.refreshToken,
-            mfaToken = input.mfaToken,
         )
     }
 
@@ -41,6 +40,5 @@ class SaveSessionUseCase(
         val userId: String,
         val refreshToken: String,
         val accessToken: String,
-        val mfaToken: String? = null,
     )
 }

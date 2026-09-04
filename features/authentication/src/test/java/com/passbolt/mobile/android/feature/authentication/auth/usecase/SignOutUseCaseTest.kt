@@ -1,3 +1,27 @@
+package com.passbolt.mobile.android.feature.authentication.auth.usecase
+
+import com.google.common.truth.Truth.assertThat
+import com.passbolt.mobile.android.common.usecase.UserIdInput
+import com.passbolt.mobile.android.core.architecture.result.DomainResult
+import com.passbolt.mobile.android.core.idlingresource.SignOutIdlingResource
+import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
+import com.passbolt.mobile.android.core.security.runtimeauth.RuntimeAuthenticatedFlag
+import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
+import com.passbolt.mobile.android.domain.accounts.usecase.RemoveSelectedAccountUseCase
+import com.passbolt.mobile.android.domain.auth.AuthRepository
+import com.passbolt.mobile.android.domain.auth.SessionRepository
+import com.passbolt.mobile.android.domain.auth.model.ServerSignOutStatus
+import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
+
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -20,83 +44,97 @@
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
+class SignOutUseCaseTest {
+    private val passphraseMemoryCache = mock<PassphraseMemoryCache>()
+    private val removePermissionsSnapshotUseCase = mock<RemovePermissionsSnapshotUseCase>()
+    private val removeSelectedAccountUseCase = mock<RemoveSelectedAccountUseCase>()
+    private val getSelectedAccountUseCase = mock<GetSelectedAccountUseCase>()
+    private val authRepository = mock<AuthRepository>()
+    private val getSessionUseCase = mock<GetSessionUseCase>()
+    private val sessionRepository = mock<SessionRepository>()
+    private val signOutIdlingResource = mock<SignOutIdlingResource>()
+    private val runtimeAuthenticatedFlag = RuntimeAuthenticatedFlag()
 
-package com.passbolt.mobile.android.feature.authentication.auth.usecase
-
-import com.google.common.truth.Truth.assertThat
-import com.passbolt.mobile.android.core.architecture.result.DomainResult
-import com.passbolt.mobile.android.core.idlingresource.SignOutIdlingResource
-import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.security.runtimeauth.RuntimeAuthenticatedFlag
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.RemoveSelectedAccountUseCase
-import com.passbolt.mobile.android.domain.auth.AuthRepository
-import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
-import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
-import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.koin.core.logger.Level
-import org.koin.core.module.dsl.factoryOf
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
-import org.koin.test.KoinTest
-import org.koin.test.KoinTestRule
-import org.koin.test.get
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.stub
-
-class SignOutUseCaseTest : KoinTest {
-    @get:Rule
-    val koinTestRule =
-        KoinTestRule.create {
-            printLogger(Level.ERROR)
-            modules(
-                listOf(
-                    module {
-                        single { mock<PassphraseMemoryCache>() }
-                        single { mock<RemovePermissionsSnapshotUseCase>() }
-                        single { mock<RemoveSelectedAccountUseCase>() }
-                        single { mock<GetSelectedAccountUseCase>() }
-                        single { mock<AuthRepository>() }
-                        single { mock<GetSessionUseCase>() }
-                        singleOf(::SignOutIdlingResource)
-                        single { RuntimeAuthenticatedFlag() }
-                        factoryOf(::SignOutUseCase)
-                    },
-                ),
-            )
-        }
-
-    private lateinit var getSessionUseCase: GetSessionUseCase
-    private lateinit var getSelectedAccountUseCase: GetSelectedAccountUseCase
-    private lateinit var authRepository: AuthRepository
-    private lateinit var runtimeAuthenticatedFlag: RuntimeAuthenticatedFlag
-    private lateinit var useCase: SignOutUseCase
-
-    @Before
-    fun setUp() {
-        getSessionUseCase = get()
-        getSelectedAccountUseCase = get()
-        authRepository = get()
-        runtimeAuthenticatedFlag = get()
-        useCase = get()
-    }
+    private val useCase =
+        SignOutUseCase(
+            passphraseMemoryCache = passphraseMemoryCache,
+            removePermissionsSnapshotUseCase = removePermissionsSnapshotUseCase,
+            removeSelectedAccountUseCase = removeSelectedAccountUseCase,
+            getSelectedAccountUseCase = getSelectedAccountUseCase,
+            authRepository = authRepository,
+            getSessionUseCase = getSessionUseCase,
+            sessionRepository = sessionRepository,
+            signOutIdlingResource = signOutIdlingResource,
+            runtimeAuthenticatedFlag = runtimeAuthenticatedFlag,
+        )
 
     @Test
-    fun `sign out should reset runtime authenticated flag`() =
+    fun `should return SIGNED_OUT and clear local state when server sign out finishes`() =
+        runTest {
+            whenever(getSessionUseCase.execute(Unit)) doReturn GetSessionUseCase.Output(null, REFRESH_TOKEN, null)
+            whenever(getSelectedAccountUseCase.execute(Unit)) doReturn GetSelectedAccountUseCase.Output(USER_ID)
+            whenever(authRepository.signOut(REFRESH_TOKEN)) doReturn DomainResult.Finished(Unit)
+
+            val output = useCase.execute(Unit)
+
+            assertThat(output.serverSignOutStatus).isEqualTo(ServerSignOutStatus.SIGNED_OUT)
+            verify(passphraseMemoryCache).clear()
+            verify(sessionRepository).removeSession(USER_ID)
+            verify(removePermissionsSnapshotUseCase).execute(UserIdInput(USER_ID))
+            verify(removeSelectedAccountUseCase).execute(Unit)
+        }
+
+    @Test
+    fun `should return SIGN_OUT_FAILED and still clear local state when server sign out is incomplete`() =
+        runTest {
+            whenever(getSessionUseCase.execute(Unit)) doReturn GetSessionUseCase.Output(null, REFRESH_TOKEN, null)
+            whenever(getSelectedAccountUseCase.execute(Unit)) doReturn GetSelectedAccountUseCase.Output(USER_ID)
+            whenever(authRepository.signOut(REFRESH_TOKEN)) doReturn DomainResult.Incomplete.Unauthorized
+
+            val output = useCase.execute(Unit)
+
+            assertThat(output.serverSignOutStatus).isEqualTo(ServerSignOutStatus.SIGN_OUT_FAILED)
+            verify(passphraseMemoryCache).clear()
+            verify(sessionRepository).removeSession(USER_ID)
+            verify(removeSelectedAccountUseCase).execute(Unit)
+        }
+
+    @Test
+    fun `should return NO_ACTIVE_SESSION and skip server request when refresh token is missing`() =
+        runTest {
+            whenever(getSessionUseCase.execute(Unit)) doReturn GetSessionUseCase.Output(null, null, null)
+            whenever(getSelectedAccountUseCase.execute(Unit)) doReturn GetSelectedAccountUseCase.Output(USER_ID)
+
+            val output = useCase.execute(Unit)
+
+            assertThat(output.serverSignOutStatus).isEqualTo(ServerSignOutStatus.NO_ACTIVE_SESSION)
+            verify(authRepository, never()).signOut(any())
+            verify(sessionRepository).removeSession(USER_ID)
+            verify(removeSelectedAccountUseCase).execute(Unit)
+        }
+
+    @Test
+    fun `should skip local cleanup when there is no selected account`() =
+        runTest {
+            whenever(getSessionUseCase.execute(Unit)) doReturn GetSessionUseCase.Output(null, REFRESH_TOKEN, null)
+            whenever(getSelectedAccountUseCase.execute(Unit)) doReturn GetSelectedAccountUseCase.Output(null)
+            whenever(authRepository.signOut(REFRESH_TOKEN)) doReturn DomainResult.Finished(Unit)
+
+            val output = useCase.execute(Unit)
+
+            assertThat(output.serverSignOutStatus).isEqualTo(ServerSignOutStatus.SIGNED_OUT)
+            verify(passphraseMemoryCache).clear()
+            verify(sessionRepository, never()).removeSession(any())
+            verify(removeSelectedAccountUseCase, never()).execute(Unit)
+        }
+
+    @Test
+    fun `should reset runtime authenticated flag on sign out`() =
         runTest {
             runtimeAuthenticatedFlag.isAuthenticated = true
-            getSessionUseCase.stub {
-                on { execute(Unit) }.thenReturn(GetSessionUseCase.Output(ACCESS_TOKEN, REFRESH_TOKEN, mfaToken = null))
-            }
-            getSelectedAccountUseCase.stub {
-                on { execute(Unit) }.thenReturn(GetSelectedAccountUseCase.Output(USER_ID))
-            }
-            authRepository.stub {
-                onBlocking { signOut(REFRESH_TOKEN) }.thenReturn(DomainResult.Finished(Unit))
-            }
+            whenever(getSessionUseCase.execute(Unit)) doReturn GetSessionUseCase.Output(null, REFRESH_TOKEN, null)
+            whenever(getSelectedAccountUseCase.execute(Unit)) doReturn GetSelectedAccountUseCase.Output(USER_ID)
+            whenever(authRepository.signOut(REFRESH_TOKEN)) doReturn DomainResult.Finished(Unit)
 
             useCase.execute(Unit)
 
@@ -104,15 +142,11 @@ class SignOutUseCaseTest : KoinTest {
         }
 
     @Test
-    fun `sign out should reset runtime authenticated flag when there is no session and no selected account`() =
+    fun `should reset runtime authenticated flag when there is no session and no selected account`() =
         runTest {
             runtimeAuthenticatedFlag.isAuthenticated = true
-            getSessionUseCase.stub {
-                on { execute(Unit) }.thenReturn(GetSessionUseCase.Output(null, null, null))
-            }
-            getSelectedAccountUseCase.stub {
-                on { execute(Unit) }.thenReturn(GetSelectedAccountUseCase.Output(null))
-            }
+            whenever(getSessionUseCase.execute(Unit)) doReturn GetSessionUseCase.Output(null, null, null)
+            whenever(getSelectedAccountUseCase.execute(Unit)) doReturn GetSelectedAccountUseCase.Output(null)
 
             useCase.execute(Unit)
 
@@ -121,7 +155,6 @@ class SignOutUseCaseTest : KoinTest {
 
     private companion object {
         private const val USER_ID = "user-id"
-        private const val ACCESS_TOKEN = "access-token"
         private const val REFRESH_TOKEN = "refresh-token"
     }
 }

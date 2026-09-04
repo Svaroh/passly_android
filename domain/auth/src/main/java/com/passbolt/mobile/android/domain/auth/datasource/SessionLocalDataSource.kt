@@ -31,7 +31,6 @@ interface SessionLocalDataSource {
         userId: String,
         accessToken: String,
         refreshToken: String,
-        mfaToken: String?,
     )
 
     fun saveMfaToken(
@@ -40,4 +39,6 @@ interface SessionLocalDataSource {
     )
 
     fun removeSession(userId: String)
+
+    fun removeMfaToken(userId: String)
 }

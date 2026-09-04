@@ -31,7 +31,6 @@ interface SessionRepository {
         userId: String,
         accessToken: String,
         refreshToken: String,
-        mfaToken: String?,
     )
 
     fun saveMfaToken(

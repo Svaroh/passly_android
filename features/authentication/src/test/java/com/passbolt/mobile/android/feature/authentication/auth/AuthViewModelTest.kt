@@ -16,6 +16,7 @@ import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountDataUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveServerFingerprintUseCase
+import com.passbolt.mobile.android.domain.auth.model.ServerSignOutStatus
 import com.passbolt.mobile.android.domain.auth.usecase.GetPassphraseUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.SaveMfaTokenUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.SaveSessionUseCase
@@ -489,7 +490,7 @@ class AuthViewModelTest : KoinTest {
         runTest {
             val signOutUseCase: SignOutUseCase = get()
             signOutUseCase.stub {
-                on { execute(any()) } doReturn Unit
+                on { execute(any()) } doReturn SignOutUseCase.Output(ServerSignOutStatus.SIGNED_OUT)
             }
 
             viewModel = get(parameters = { parametersOf(AuthConfig.Startup, USER_ID, AppContext.APP) })
