@@ -40,7 +40,6 @@ import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsSna
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
 import com.passbolt.mobile.android.domain.users.usecase.UsersInteractor
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
-import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper
 import com.passbolt.mobile.android.mappers.UsersModelMapper
 import com.passbolt.mobile.android.permissions.common.PermissionsListMapper
 import com.passbolt.mobile.android.permissions.confirmpermissions.ConfirmPermissionsIntent.AddPermission
@@ -74,7 +73,6 @@ import com.passbolt.mobile.android.ui.PermissionModelUi.GroupPermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi.UserPermissionModel
 import com.passbolt.mobile.android.ui.PermissionsMode.EDIT
 import com.passbolt.mobile.android.ui.PermissionsMode.VIEW
-import com.passbolt.mobile.android.ui.ResourcePermission
 import com.passbolt.mobile.android.ui.UserWithAvatar
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -164,18 +162,8 @@ class ConfirmPermissionsViewModel(
         snapshot: PermissionsSnapshot,
         operator: UserWithAvatar,
     ) {
-        updateViewState {
-            copy(
-                isEditable = snapshot.isUserOwner(operator.userId),
-                lockedOperatorPermission =
-                    UserPermissionModel(
-                        ResourcePermission.OWNER,
-                        SharePermissionsModelMapper.TEMPORARY_NEW_PERMISSION_ID,
-                        operator,
-                    ),
-            )
-        }
-        updatePermissions { snapshot.toCreateModePermissions(operator) }
+        updateViewState { copy(isEditable = snapshot.isUserOwner(operator.userId)) }
+        updatePermissions { snapshot.toCreateModePermissions() }
     }
 
     private fun showEditModePermissions(

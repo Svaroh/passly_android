@@ -172,7 +172,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
     }
 
     @Test
-    fun `snapshot permissions are shown with operator as owner`() =
+    fun `create mode shows the operator at their folder-derived permission`() =
         runTest {
             val viewModel = confirmCreateViewModel()
 
@@ -182,15 +182,31 @@ class ConfirmPermissionsViewModelTest : KoinTest {
                 assertThat(state.permissions).hasSize(3)
                 val userPermissions = state.permissions.filterIsInstance<PermissionModelUi.UserPermissionModel>()
                 assertThat(userPermissions.single { it.user.userId == OPERATOR_ID }.permission)
-                    .isEqualTo(ResourcePermission.OWNER)
+                    .isEqualTo(ResourcePermission.UPDATE)
                 assertThat(userPermissions.single { it.user.userId == USER_ID }.permission)
                     .isEqualTo(ResourcePermission.READ)
             }
         }
 
     @Test
+    fun `create mode with group-derived operator access shows no direct operator permission`() =
+        runTest {
+            stubFolderSnapshot(groupOnlySnapshot())
+
+            val viewModel = confirmCreateViewModel()
+
+            viewModel.viewState.test {
+                val permissions = expectMostRecentItem().permissions
+                assertThat(permissions.filterIsInstance<PermissionModelUi.UserPermissionModel>()).isEmpty()
+                assertThat(permissions.filterIsInstance<PermissionModelUi.GroupPermissionModel>()).hasSize(1)
+            }
+        }
+
+    @Test
     fun `confirm publishes the confirmed permissions`() =
         runTest {
+            stubFolderSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+
             val viewModel = confirmCreateViewModel()
             viewModel.viewState.test { expectMostRecentItem() }
 
@@ -255,28 +271,16 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         }
 
     @Test
-    fun `operator permission cannot be downgraded or removed`() =
+    fun `create mode operator permission is editable and not locked when the operator owns the folder`() =
         runTest {
+            stubFolderSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+
             val viewModel = confirmCreateViewModel()
             val operatorPermission = operatorPermission(viewModel)
 
-            viewModel.onIntent(UserPermissionModified(operatorPermission.copy(permission = ResourcePermission.READ)))
-            viewModel.onIntent(UserPermissionDeleted(operatorPermission))
+            viewModel.onIntent(UserPermissionModified(operatorPermission.copy(permission = ResourcePermission.UPDATE)))
 
-            assertThat(operatorPermission(viewModel).permission).isEqualTo(ResourcePermission.OWNER)
-        }
-
-    @Test
-    fun `operator permission opens details in view mode`() =
-        runTest {
-            val viewModel = confirmCreateViewModel()
-
-            viewModel.sideEffect.test {
-                viewModel.onIntent(SeePermission(operatorPermission(viewModel)))
-
-                val effect = assertIs<NavigateToUserPermissionDetails>(awaitItem())
-                assertThat(effect.mode).isEqualTo(PermissionsMode.VIEW)
-            }
+            assertThat(operatorPermission(viewModel).permission).isEqualTo(ResourcePermission.UPDATE)
         }
 
     @Test
@@ -741,6 +745,21 @@ class ConfirmPermissionsViewModelTest : KoinTest {
             users = listOf(userProfile(OPERATOR_ID), userProfile(USER_ID)).associateBy { it.id },
             created = ZonedDateTime.now(),
         )
+
+        private fun groupOnlySnapshot() =
+            PermissionsSnapshot(
+                permissions =
+                    listOf(
+                        PermissionModel.GroupPermissionModel(
+                            ResourcePermission.OWNER,
+                            "perm-group",
+                            GroupModel(GROUP_ID, "group"),
+                        ),
+                    ),
+                groupsMembers = mapOf(GROUP_ID to listOf(OPERATOR_ID)),
+                users = emptyMap(),
+                created = ZonedDateTime.now(),
+            )
 
         private val SNAPSHOT = snapshot(operatorPermission = ResourcePermission.UPDATE)
 

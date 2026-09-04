@@ -28,52 +28,22 @@ import com.passbolt.mobile.android.domain.users.model.UserProfile
 import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper.Companion.TEMPORARY_NEW_PERMISSION_ID
 import com.passbolt.mobile.android.ui.PermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
-import com.passbolt.mobile.android.ui.ResourcePermission
 import com.passbolt.mobile.android.ui.UserWithAvatar
 
-// in create mode the operator is the sole owner of the new item - the operator's folder-derived
-// permission is replaced by a locked owner permission
-fun PermissionsSnapshot.toCreateModePermissions(currentUser: UserWithAvatar): List<PermissionModelUi> {
-    val groupsPermissions =
-        permissions
-            .filterIsInstance<PermissionModel.GroupPermissionModel>()
-            .map {
-                PermissionModelUi.GroupPermissionModel(
-                    permission = it.permission,
-                    permissionId = TEMPORARY_NEW_PERMISSION_ID,
-                    group = it.group,
-                )
-            }
-    val otherUsersPermissions =
-        permissions
-            .filterIsInstance<PermissionModel.UserPermissionModel>()
-            .filter { it.userId != currentUser.userId }
-            .mapNotNull { permission ->
-                users[permission.userId]?.let { user ->
-                    PermissionModelUi.UserPermissionModel(
-                        permission = permission.permission,
-                        permissionId = TEMPORARY_NEW_PERMISSION_ID,
-                        user = user.toUserWithAvatar(),
-                    )
-                }
-            }
-    val currentUserPermission =
-        PermissionModelUi.UserPermissionModel(
-            permission = ResourcePermission.OWNER,
-            permissionId = TEMPORARY_NEW_PERMISSION_ID,
-            user = currentUser,
-        )
-    return groupsPermissions + otherUsersPermissions + currentUserPermission
-}
+// in create mode the new resource inherits the parent folder's permission set as-is - the operator
+// carries their folder-derived permission and new permissions get a temporary id
+fun PermissionsSnapshot.toCreateModePermissions(): List<PermissionModelUi> = toPermissionModelUis { TEMPORARY_NEW_PERMISSION_ID }
 
-fun PermissionsSnapshot.toEditModePermissions(): List<PermissionModelUi> {
+fun PermissionsSnapshot.toEditModePermissions(): List<PermissionModelUi> = toPermissionModelUis { realPermissionId -> realPermissionId }
+
+private fun PermissionsSnapshot.toPermissionModelUis(permissionId: (String) -> String): List<PermissionModelUi> {
     val groupsPermissions =
         permissions
             .filterIsInstance<PermissionModel.GroupPermissionModel>()
             .map {
                 PermissionModelUi.GroupPermissionModel(
                     permission = it.permission,
-                    permissionId = it.permissionId,
+                    permissionId = permissionId(it.permissionId),
                     group = it.group,
                 )
             }
@@ -84,7 +54,7 @@ fun PermissionsSnapshot.toEditModePermissions(): List<PermissionModelUi> {
                 users[permission.userId]?.let { user ->
                     PermissionModelUi.UserPermissionModel(
                         permission = permission.permission,
-                        permissionId = permission.permissionId,
+                        permissionId = permissionId(permission.permissionId),
                         user = user.toUserWithAvatar(),
                     )
                 }

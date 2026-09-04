@@ -36,40 +36,37 @@ import java.time.ZonedDateTime
 
 class PermissionsSnapshotUiMappingTest {
     @Test
-    fun `operator folder permission is replaced with a locked owner permission`() {
+    fun `operator carries their folder-derived permission unchanged`() {
         val snapshot =
             snapshot(
                 permissions =
                     listOf(
                         userPermission(OPERATOR_ID, ResourcePermission.UPDATE),
-                        userPermission(USER_ID, ResourcePermission.READ),
+                        userPermission(USER_ID, ResourcePermission.OWNER),
                     ),
                 users = listOf(userProfile(OPERATOR_ID), userProfile(USER_ID)),
             )
 
-        val result = snapshot.toCreateModePermissions(operatorWithAvatar())
+        val result = snapshot.toCreateModePermissions()
 
         val userPermissions = result.filterIsInstance<PermissionModelUi.UserPermissionModel>()
-        val operatorPermission = userPermissions.single { it.user.userId == OPERATOR_ID }
-        assertThat(operatorPermission.permission).isEqualTo(ResourcePermission.OWNER)
-        assertThat(userPermissions.single { it.user.userId == USER_ID }.permission).isEqualTo(ResourcePermission.READ)
+        assertThat(userPermissions.single { it.user.userId == OPERATOR_ID }.permission).isEqualTo(ResourcePermission.UPDATE)
+        assertThat(userPermissions.single { it.user.userId == USER_ID }.permission).isEqualTo(ResourcePermission.OWNER)
         assertThat(result).hasSize(2)
     }
 
     @Test
-    fun `operator owner permission is appended when not present in folder permissions`() {
+    fun `no direct operator permission is added when access is group-derived`() {
         val snapshot =
             snapshot(
                 permissions = listOf(groupPermission(GROUP_ID)),
                 users = emptyList(),
             )
 
-        val result = snapshot.toCreateModePermissions(operatorWithAvatar())
+        val result = snapshot.toCreateModePermissions()
 
-        val operatorPermission = result.filterIsInstance<PermissionModelUi.UserPermissionModel>().single()
-        assertThat(operatorPermission.user.userId).isEqualTo(OPERATOR_ID)
-        assertThat(operatorPermission.permission).isEqualTo(ResourcePermission.OWNER)
-        assertThat(result).hasSize(2)
+        assertThat(result.filterIsInstance<PermissionModelUi.UserPermissionModel>()).isEmpty()
+        assertThat(result.filterIsInstance<PermissionModelUi.GroupPermissionModel>()).hasSize(1)
     }
 
     @Test
@@ -84,10 +81,9 @@ class PermissionsSnapshotUiMappingTest {
                 users = listOf(userProfile(USER_ID)),
             )
 
-        val result = snapshot.toCreateModePermissions(operatorWithAvatar())
+        val result = snapshot.toCreateModePermissions()
 
         assertThat(result.map { it.permissionId }).containsExactly(
-            TEMPORARY_NEW_PERMISSION_ID,
             TEMPORARY_NEW_PERMISSION_ID,
             TEMPORARY_NEW_PERMISSION_ID,
         )
@@ -101,7 +97,7 @@ class PermissionsSnapshotUiMappingTest {
                 users = listOf(userProfile(USER_ID)),
             )
 
-        val result = snapshot.toCreateModePermissions(operatorWithAvatar())
+        val result = snapshot.toCreateModePermissions()
 
         val user = result.filterIsInstance<PermissionModelUi.UserPermissionModel>().single { it.user.userId == USER_ID }.user
         assertThat(user.firstName).isEqualTo("first-$USER_ID")
@@ -114,11 +110,15 @@ class PermissionsSnapshotUiMappingTest {
     fun `user permissions without a fetched profile are skipped`() {
         val snapshot =
             snapshot(
-                permissions = listOf(userPermission(USER_ID, ResourcePermission.READ)),
-                users = emptyList(),
+                permissions =
+                    listOf(
+                        userPermission(USER_ID, ResourcePermission.READ),
+                        userPermission(OPERATOR_ID, ResourcePermission.OWNER),
+                    ),
+                users = listOf(userProfile(OPERATOR_ID)),
             )
 
-        val result = snapshot.toCreateModePermissions(operatorWithAvatar())
+        val result = snapshot.toCreateModePermissions()
 
         val userIds = result.filterIsInstance<PermissionModelUi.UserPermissionModel>().map { it.user.userId }
         assertThat(userIds).containsExactly(OPERATOR_ID)
@@ -149,8 +149,6 @@ class PermissionsSnapshotUiMappingTest {
             permissionId = "permission-$groupId",
             group = GroupModel(groupId, "group-name"),
         )
-
-    private fun operatorWithAvatar() = userProfile(OPERATOR_ID).toUserWithAvatar()
 
     private fun userProfile(userId: String) =
         UserProfile(
