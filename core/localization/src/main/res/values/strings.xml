@@ -438,6 +438,7 @@
     <string name="settings_debug_logs">Debug, logs</string>
     <string name="settings_disable">Disable</string>
     <string name="settings_sign_out">Sign out</string>
+    <string name="settings_sign_out_server_error">Signed out on this device. The server session may still be active.</string>
     <string name="settings_title">Settings</string>
     <string name="settings_disable_biometric_confirmation_message">After disabling biometric you will need to login by using your passphrase.</string>
     <string name="settings_turn_on_biometric_title">Turn on biometric authentication</string>

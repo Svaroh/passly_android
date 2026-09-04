@@ -1,4 +1,4 @@
-package com.passbolt.mobile.android.feature.settings.screen
+package com.passbolt.mobile.android.domain.auth.model
 
 /**
  * Passbolt - Open source password manager for teams
@@ -22,22 +22,8 @@ package com.passbolt.mobile.android.feature.settings.screen
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-internal sealed interface SettingsSideEffect {
-    object NavigateToAppSettings : SettingsSideEffect
-
-    object NavigateToAccounts : SettingsSideEffect
-
-    object NavigateToTermsAndLicenses : SettingsSideEffect
-
-    object NavigateToDebugLogs : SettingsSideEffect
-
-    object NavigateToStartUp : SettingsSideEffect
-
-    data class ShowToast(
-        val type: ToastType,
-    ) : SettingsSideEffect
-}
-
-internal enum class ToastType {
-    SERVER_SIGN_OUT_FAILED,
+enum class ServerSignOutStatus {
+    SIGNED_OUT,
+    SIGN_OUT_FAILED,
+    NO_ACTIVE_SESSION,
 }

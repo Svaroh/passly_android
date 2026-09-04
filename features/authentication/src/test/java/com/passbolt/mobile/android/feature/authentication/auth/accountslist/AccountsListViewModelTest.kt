@@ -8,6 +8,7 @@ import com.passbolt.mobile.android.domain.accounts.usecase.GetAllAccountsDataUse
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveCurrentApiUrlUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveSelectedAccountUseCase
+import com.passbolt.mobile.android.domain.auth.model.ServerSignOutStatus
 import com.passbolt.mobile.android.entity.account.Account
 import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.AddAccount
 import com.passbolt.mobile.android.feature.authentication.accountslist.AccountsListIntent.ConfirmRemoveAccount
@@ -302,7 +303,7 @@ class AccountsListViewModelTest : KoinTest {
 
             val signOutUseCase = get<SignOutUseCase>()
             signOutUseCase.stub {
-                on { execute(Unit) } doReturn Unit
+                on { execute(Unit) } doReturn SignOutUseCase.Output(ServerSignOutStatus.SIGNED_OUT)
             }
 
             viewModel = get(parameters = { parametersOf(ManageAccount) })

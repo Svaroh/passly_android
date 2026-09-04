@@ -49,7 +49,6 @@ internal class SessionLocalDataSourceImpl(
         userId: String,
         accessToken: String,
         refreshToken: String,
-        mfaToken: String?,
     ) {
         Timber.d("Saving session.")
         try {
@@ -57,7 +56,6 @@ internal class SessionLocalDataSourceImpl(
             sharedPreferences.edit {
                 putString(Constants.ACCESS_TOKEN_KEY, accessToken)
                 putString(Constants.REFRESH_TOKEN_KEY, refreshToken)
-                putString(Constants.MFA_TOKEN_KEY, mfaToken)
             }
         } catch (e: Exception) {
             Timber.e(e, "There was an error while saving the session")
@@ -91,6 +89,20 @@ internal class SessionLocalDataSourceImpl(
             }
         } catch (e: Exception) {
             Timber.e(e, "There was an error while removing the session")
+            throw e
+        }
+        removeMfaToken(userId)
+    }
+
+    override fun removeMfaToken(userId: String) {
+        Timber.d("Removing MFA token.")
+        try {
+            val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
+            sharedPreferences.edit {
+                remove(Constants.MFA_TOKEN_KEY)
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "There was an error while removing the MFA token")
             throw e
         }
     }

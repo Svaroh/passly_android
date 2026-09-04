@@ -1,5 +1,3 @@
-package com.passbolt.mobile.android.feature.settings.screen
-
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -22,22 +20,17 @@ package com.passbolt.mobile.android.feature.settings.screen
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-internal sealed interface SettingsSideEffect {
-    object NavigateToAppSettings : SettingsSideEffect
 
-    object NavigateToAccounts : SettingsSideEffect
+package com.passbolt.mobile.android.feature.settings.screen
 
-    object NavigateToTermsAndLicenses : SettingsSideEffect
+import android.content.Context
+import com.passbolt.mobile.android.feature.settings.screen.ToastType.SERVER_SIGN_OUT_FAILED
+import com.passbolt.mobile.android.core.localization.R as LocalizationR
 
-    object NavigateToDebugLogs : SettingsSideEffect
-
-    object NavigateToStartUp : SettingsSideEffect
-
-    data class ShowToast(
-        val type: ToastType,
-    ) : SettingsSideEffect
-}
-
-internal enum class ToastType {
-    SERVER_SIGN_OUT_FAILED,
-}
+internal fun getToastMessage(
+    context: Context,
+    type: ToastType,
+): String =
+    when (type) {
+        SERVER_SIGN_OUT_FAILED -> context.getString(LocalizationR.string.settings_sign_out_server_error)
+    }
