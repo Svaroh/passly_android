@@ -107,7 +107,6 @@ featureModule("resourceform")
 featureModule("metadatakeytrust")
 featureModule("accessibilitypolicies")
 
-serviceModule("linksapi")
 serviceModule("pwnedpasswordsapi")
 
 modelModule("dto")
