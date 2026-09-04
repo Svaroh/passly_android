@@ -17,6 +17,7 @@ import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUse
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveServerFingerprintUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.GetPassphraseUseCase
+import com.passbolt.mobile.android.domain.auth.usecase.SaveMfaTokenUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.SaveSessionUseCase
 import com.passbolt.mobile.android.domain.inappreview.usecase.InAppReviewInteractor
 import com.passbolt.mobile.android.domain.preferences.PreferencesDefaults
@@ -105,6 +106,7 @@ class AuthViewModelTest : KoinTest {
                     single { mock<BiometryInteractor>() }
                     single { mock<GetGlobalPreferencesUseCase>() }
                     single { mock<SaveSessionUseCase>() }
+                    single { mock<SaveMfaTokenUseCase>() }
                     single { mock<SaveSelectedAccountUseCase>() }
                     single {
                         AuthenticatedAccountFlow(
@@ -141,6 +143,7 @@ class AuthViewModelTest : KoinTest {
                             getGlobalPreferencesUseCase = get(),
                             runtimeAuthenticatedFlag = get(),
                             saveSessionUseCase = get(),
+                            saveMfaTokenUseCase = get(),
                             saveSelectedAccountUseCase = get(),
                             authenticatedAccountFlow = get(),
                             signOutUseCase = get(),
@@ -373,6 +376,36 @@ class AuthViewModelTest : KoinTest {
         }
 
     @Test
+    fun `mfa succeeded with mfa config persists mfa token for current user`() =
+        runTest {
+            val saveMfaTokenUseCase: SaveMfaTokenUseCase = get()
+
+            viewModel = get(parameters = { parametersOf(AuthConfig.Mfa("totp"), USER_ID, AppContext.APP) })
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(MfaSucceeded(MFA_HEADER))
+                assertIs<AuthSuccess>(awaitItem())
+            }
+
+            verify(saveMfaTokenUseCase).execute(SaveMfaTokenUseCase.Input(USER_ID, MFA_HEADER))
+        }
+
+    @Test
+    fun `mfa succeeded without header does not persist mfa token`() =
+        runTest {
+            val saveMfaTokenUseCase: SaveMfaTokenUseCase = get()
+
+            viewModel = get(parameters = { parametersOf(AuthConfig.Mfa("totp"), USER_ID, AppContext.APP) })
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(MfaSucceeded(null))
+                assertIs<AuthSuccess>(awaitItem())
+            }
+
+            verify(saveMfaTokenUseCase, never()).execute(any())
+        }
+
+    @Test
     fun `refresh session tries refresh first on passphrase verified`() =
         runTest {
             val verifyPassphraseUseCase: VerifyPassphraseUseCase = get()
@@ -587,6 +620,7 @@ class AuthViewModelTest : KoinTest {
 
     private companion object {
         const val USER_ID = "test-user-id"
+        const val MFA_HEADER = "passbolt_mfa=test-mfa-token"
         const val TYPED_PASSPHRASE = "typed-passphrase"
         const val BIOMETRIC_PASSPHRASE = "biometric-passphrase"
 
