@@ -243,6 +243,10 @@ class ResourceUpdateActionsInteractor(
             .snapshot
             ?.toEditModePermissions()
             ?.let { snapshotPermissions ->
+                val operatorUserId =
+                    getLocalCurrentUserUseCase
+                        .execute(Unit)
+                        .user.id
                 ConfirmedPermissionsDelta(
                     snapshotPermissions = snapshotPermissions,
                     retainedPermissions =
@@ -250,6 +254,10 @@ class ResourceUpdateActionsInteractor(
                             it.permissionId == SharePermissionsModelMapper.TEMPORARY_NEW_PERMISSION_ID
                         },
                     confirmedPermissions = confirmedPermissions,
+                    operatorSnapshotPermission =
+                        snapshotPermissions
+                            .filterIsInstance<UserPermissionModel>()
+                            .find { it.user.userId == operatorUserId },
                 )
             }
 
@@ -259,7 +267,11 @@ class ResourceUpdateActionsInteractor(
     ): ResourceUpdateActionResult? =
         if (delta.hasRevocationsOrModifications) {
             Timber.d("Applying the confirmed permission revocations and modifications before the update")
-            applyConfirmedPermissionsDelta(delta.retainedPermissions, delta.snapshotPermissions, confirmedRecipientsPublicKeys)
+            applyConfirmedPermissionsDelta(
+                delta.operatorSafeRetainedPermissions,
+                delta.snapshotPermissions,
+                confirmedRecipientsPublicKeys,
+            )
         } else {
             null
         }
@@ -268,9 +280,13 @@ class ResourceUpdateActionsInteractor(
         delta: ConfirmedPermissionsDelta,
         confirmedRecipientsPublicKeys: Map<String, String>,
     ): ResourceUpdateActionResult? =
-        if (delta.hasNewRecipients) {
-            Timber.d("Granting access to the confirmed new recipients after the update")
-            applyConfirmedPermissionsDelta(delta.confirmedPermissions, delta.retainedPermissions, confirmedRecipientsPublicKeys)
+        if (delta.hasNewRecipients || delta.hasOperatorOwnChange) {
+            Timber.d("Applying the confirmed additions and the operator's own change after the update")
+            applyConfirmedPermissionsDelta(
+                delta.confirmedPermissions,
+                delta.operatorSafeRetainedPermissions,
+                confirmedRecipientsPublicKeys,
+            )
         } else {
             null
         }
@@ -279,14 +295,33 @@ class ResourceUpdateActionsInteractor(
         val snapshotPermissions: List<PermissionModelUi>,
         val retainedPermissions: List<PermissionModelUi>,
         val confirmedPermissions: List<PermissionModelUi>,
+        val operatorSnapshotPermission: UserPermissionModel?,
     ) {
+        val operatorSafeRetainedPermissions: List<PermissionModelUi>
+            get() =
+                if (operatorSnapshotPermission == null) {
+                    retainedPermissions
+                } else {
+                    retainedPermissions.filterNot {
+                        it is UserPermissionModel && it.user.userId == operatorSnapshotPermission.user.userId
+                    } + operatorSnapshotPermission
+                }
+
+        val hasOperatorOwnChange: Boolean
+            get() =
+                operatorSnapshotPermission != null &&
+                    confirmedPermissions.none {
+                        it.permissionId == operatorSnapshotPermission.permissionId &&
+                            it.permission == operatorSnapshotPermission.permission
+                    }
+
         val hasNewRecipients: Boolean
             get() = retainedPermissions.size != confirmedPermissions.size
 
         val hasRevocationsOrModifications: Boolean
             get() =
                 snapshotPermissions.any { snapshotPermission ->
-                    retainedPermissions.none {
+                    operatorSafeRetainedPermissions.none {
                         it.permissionId == snapshotPermission.permissionId && it.permission == snapshotPermission.permission
                     }
                 }

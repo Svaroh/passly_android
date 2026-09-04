@@ -50,6 +50,7 @@ import com.passbolt.mobile.android.jsonmodel.jsonModelModule
 import com.passbolt.mobile.android.mappers.SharePermissionsModelMapper.Companion.TEMPORARY_NEW_PERMISSION_ID
 import com.passbolt.mobile.android.supportedresourceTypes.ContentType.PasswordAndDescription
 import com.passbolt.mobile.android.supportedresourceTypes.ContentType.V5Default
+import com.passbolt.mobile.android.ui.GpgKeyUiModel
 import com.passbolt.mobile.android.ui.MetadataJsonModel
 import com.passbolt.mobile.android.ui.MetadataKeyTypeModel.PERSONAL
 import com.passbolt.mobile.android.ui.MetadataKeysSettingsModel
@@ -58,6 +59,8 @@ import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.ResourcePermission
 import com.passbolt.mobile.android.ui.ResourceUiModel
 import com.passbolt.mobile.android.ui.UpdateResourceModel
+import com.passbolt.mobile.android.ui.UserProfileUiModel
+import com.passbolt.mobile.android.ui.UserUiModel
 import com.passbolt.mobile.android.ui.UserWithAvatar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -73,6 +76,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.stub
@@ -102,6 +106,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
     private val metadataPrivateKeysInteractor = mock<MetadataPrivateKeysInteractor>()
     private val getMetadataKeysUseCase = mock<GetLocalMetadataKeysUseCase>()
     private val getLocalResourcePermissionsUseCase = mock<GetLocalResourcePermissionsUseCase>()
+    private val getLocalCurrentUserUseCase = mock<GetLocalCurrentUserUseCase>()
     private val mappingProvider = mock<ResourceTypeIdToSlugMappingProvider>()
 
     private val interactor =
@@ -111,7 +116,7 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
             updateResourceInteractor = updateResourceInteractor,
             resourceTypesUpdateGraph = mock<ResourceTypesUpdatesAdjacencyGraph>(),
             updateLocalResourceUseCase = mock<UpdateLocalResourceUseCase>(),
-            getLocalCurrentUserUseCase = mock<GetLocalCurrentUserUseCase>(),
+            getLocalCurrentUserUseCase = getLocalCurrentUserUseCase,
             metadataPrivateKeysInteractor = metadataPrivateKeysInteractor,
             getLocalFolderPermissionsUseCase = mock<GetLocalFolderPermissionsUseCase>(),
             getLocalResourcePermissionsUseCase = getLocalResourcePermissionsUseCase,
@@ -134,6 +139,9 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
         }
         confirmedRecipientsPublicKeysResolver.stub {
             on { resolve(any()) } doReturn CONFIRMED_KEYS
+        }
+        getLocalCurrentUserUseCase.stub {
+            on { execute(Unit) } doReturn GetLocalCurrentUserUseCase.Output(OPERATOR_USER)
         }
         resourceShareInteractor.stub {
             on { simulateAndShareResource(any(), any(), any(), anyOrNull()) }
@@ -254,6 +262,51 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
             assertThat(additionCallRecipients).containsExactly(OPERATOR_PERMISSION_ID, TEMPORARY_NEW_PERMISSION_ID)
             assertThat(additionCallExisting).containsExactly(OPERATOR_PERMISSION_ID)
         }
+
+    @Test
+    fun `operator self-removal is applied in a single share after the update`() =
+        runTest {
+            val result =
+                interactor
+                    .updateGenericResourceWithConfirmedPermissions(PasswordAndDescription, listOf(USER_UI))
+                    .single()
+
+            assertIs<ResourceUpdateActionResult.Success>(result)
+            val recipientsCaptor = argumentCaptor<List<PermissionModelUi>>()
+            verify(resourceShareInteractor, times(1))
+                .simulateAndShareResource(any(), recipientsCaptor.capture(), any(), anyOrNull())
+            val orderVerifier = inOrder(updateResourceInteractor, resourceShareInteractor)
+            orderVerifier.verify(updateResourceInteractor).execute(any(), any(), any())
+            orderVerifier
+                .verify(resourceShareInteractor)
+                .simulateAndShareResource(any(), any(), any(), anyOrNull())
+            assertThat(recipientsCaptor.firstValue.map { it.permissionId }).containsExactly(USER_PERMISSION_ID)
+        }
+
+    @Test
+    fun `operator self-downgrade is held at the snapshot level until the final share`() =
+        runTest {
+            val confirmedPermissions = listOf(OPERATOR_UI.copy(permission = ResourcePermission.UPDATE))
+
+            val result =
+                interactor
+                    .updateGenericResourceWithConfirmedPermissions(PasswordAndDescription, confirmedPermissions)
+                    .single()
+
+            assertIs<ResourceUpdateActionResult.Success>(result)
+            val recipientsCaptor = argumentCaptor<List<PermissionModelUi>>()
+            verify(resourceShareInteractor, times(2))
+                .simulateAndShareResource(any(), recipientsCaptor.capture(), any(), anyOrNull())
+            verify(updateResourceInteractor).execute(any(), any(), any())
+
+            assertThat(operatorRecipient(recipientsCaptor.firstValue).permission).isEqualTo(ResourcePermission.OWNER)
+            assertThat(operatorRecipient(recipientsCaptor.secondValue).permission).isEqualTo(ResourcePermission.UPDATE)
+        }
+
+    private fun operatorRecipient(recipients: List<PermissionModelUi>) =
+        recipients
+            .filterIsInstance<PermissionModelUi.UserPermissionModel>()
+            .single { it.user.userId == OPERATOR_ID }
 
     @Test
     fun `identity secret modification marks the secret as unchanged for the update`() =
@@ -430,6 +483,32 @@ class ResourceUpdateActionsInteractorConfirmedPermissionsTest : KoinTest {
 
         private val FAILURE = DomainResult.Incomplete.Error(UNKNOWN, "error")
         private val CONFIRMED_KEYS = mapOf(OPERATOR_ID to "key-operator", USER_ID to "key-user", ADDED_USER_ID to "key-added")
+
+        private val OPERATOR_USER =
+            UserUiModel(
+                id = OPERATOR_ID,
+                userName = "$OPERATOR_ID@passbolt.com",
+                disabled = false,
+                gpgKey =
+                    GpgKeyUiModel(
+                        id = "gpg-$OPERATOR_ID",
+                        armoredKey = "armored-key-$OPERATOR_ID",
+                        fingerprint = "fingerprint-$OPERATOR_ID",
+                        bits = 2048,
+                        uid = null,
+                        keyId = "key-$OPERATOR_ID",
+                        type = null,
+                        keyExpirationDate = null,
+                        keyCreationDate = null,
+                    ),
+                profile =
+                    UserProfileUiModel(
+                        username = "$OPERATOR_ID@passbolt.com",
+                        firstName = "first-$OPERATOR_ID",
+                        lastName = "last-$OPERATOR_ID",
+                        avatarUrl = null,
+                    ),
+            )
 
         private val OPERATOR_UI = userPermissionUi(OPERATOR_ID, OPERATOR_PERMISSION_ID, ResourcePermission.OWNER)
         private val USER_UI = userPermissionUi(USER_ID, USER_PERMISSION_ID, ResourcePermission.READ)

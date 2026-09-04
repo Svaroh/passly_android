@@ -484,7 +484,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
                 assertThat(assertIs<NavigateToGroupPermissionDetails>(awaitItem()).mode).isEqualTo(PermissionsMode.EDIT)
 
                 viewModel.onIntent(SeePermission(operatorPermission(viewModel)))
-                assertThat(assertIs<NavigateToUserPermissionDetails>(awaitItem()).mode).isEqualTo(PermissionsMode.VIEW)
+                assertThat(assertIs<NavigateToUserPermissionDetails>(awaitItem()).mode).isEqualTo(PermissionsMode.EDIT)
             }
         }
 
@@ -530,7 +530,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         }
 
     @Test
-    fun `edit mode operator permission cannot be modified or removed`() =
+    fun `edit mode operator permission can be downgraded`() =
         runTest {
             stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
 
@@ -538,11 +538,26 @@ class ConfirmPermissionsViewModelTest : KoinTest {
             val operatorRow = operatorPermission(viewModel)
 
             viewModel.onIntent(UserPermissionModified(operatorRow.copy(permission = ResourcePermission.READ)))
-            viewModel.onIntent(UserPermissionDeleted(operatorRow))
 
-            val enforcedOperatorRow = operatorPermission(viewModel)
-            assertThat(enforcedOperatorRow.permission).isEqualTo(ResourcePermission.OWNER)
-            assertThat(enforcedOperatorRow.permissionId).isEqualTo("perm-operator")
+            val modifiedOperatorRow = operatorPermission(viewModel)
+            assertThat(modifiedOperatorRow.permission).isEqualTo(ResourcePermission.READ)
+            assertThat(modifiedOperatorRow.permissionId).isEqualTo("perm-operator")
+        }
+
+    @Test
+    fun `edit mode operator permission can be removed`() =
+        runTest {
+            stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
+
+            val viewModel = confirmEditViewModel()
+
+            viewModel.onIntent(UserPermissionDeleted(operatorPermission(viewModel)))
+
+            val userIds =
+                viewModel.viewState.value.permissions
+                    .filterIsInstance<PermissionModelUi.UserPermissionModel>()
+                    .map { it.user.userId }
+            assertThat(userIds).doesNotContain(OPERATOR_ID)
         }
 
     @Test
@@ -578,7 +593,7 @@ class ConfirmPermissionsViewModelTest : KoinTest {
         }
 
     @Test
-    fun `share mode shows snapshot permissions without a locked operator row`() =
+    fun `share mode shows snapshot permissions`() =
         runTest {
             stubResourceSnapshot(snapshot(operatorPermission = ResourcePermission.OWNER))
 
@@ -588,7 +603,6 @@ class ConfirmPermissionsViewModelTest : KoinTest {
                 val state = expectMostRecentItem()
                 assertThat(state.permissions).hasSize(3)
                 assertThat(state.isEditable).isTrue()
-                assertThat(state.lockedOperatorPermission).isNull()
             }
         }
 

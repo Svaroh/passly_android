@@ -138,8 +138,9 @@ class ConfirmPermissionsViewModel(
                     updateViewState { copy(isPreparingPermissions = false) }
                     when (confirmMode) {
                         is ConfirmPermissionsMode.Create -> showCreateModePermissions(output.snapshot, operator)
-                        is ConfirmPermissionsMode.Edit -> showEditModePermissions(output.snapshot, operator)
-                        is ConfirmPermissionsMode.Share -> showShareModePermissions(output.snapshot, operator)
+                        is ConfirmPermissionsMode.Edit,
+                        is ConfirmPermissionsMode.Share,
+                        -> showEditModePermissions(output.snapshot, operator)
                     }
                 }
                 is CreatePermissionsSnapshotInteractor.Output.Failure -> {
@@ -167,23 +168,6 @@ class ConfirmPermissionsViewModel(
     }
 
     private fun showEditModePermissions(
-        snapshot: PermissionsSnapshot,
-        operator: UserWithAvatar,
-    ) {
-        val editPermissions = snapshot.toEditModePermissions()
-        updateViewState {
-            copy(
-                isEditable = snapshot.isUserOwner(operator.userId),
-                lockedOperatorPermission =
-                    editPermissions
-                        .filterIsInstance<UserPermissionModel>()
-                        .find { it.user.userId == operator.userId },
-            )
-        }
-        updatePermissions { editPermissions }
-    }
-
-    private fun showShareModePermissions(
         snapshot: PermissionsSnapshot,
         operator: UserWithAvatar,
     ) {
@@ -218,12 +202,7 @@ class ConfirmPermissionsViewModel(
 
     private fun updatePermissions(transform: (List<PermissionModelUi>) -> List<PermissionModelUi>) {
         updateViewState {
-            copy(
-                permissions =
-                    permissionsListMapper.sorted(
-                        transform(permissions).withEnforcedOperatorOwnership(lockedOperatorPermission),
-                    ),
-            )
+            copy(permissions = permissionsListMapper.sorted(transform(permissions)))
         }
         refreshIndirectAccessWarning()
     }
@@ -311,31 +290,11 @@ class ConfirmPermissionsViewModel(
         }
     }
 
-    private fun List<PermissionModelUi>.withEnforcedOperatorOwnership(
-        lockedOperatorPermission: UserPermissionModel?,
-    ): List<PermissionModelUi> {
-        if (lockedOperatorPermission == null) return this
-        return filterNot { it is UserPermissionModel && it.user.userId == lockedOperatorPermission.user.userId } +
-            lockedOperatorPermission
-    }
-
     private fun permissionClick(permission: PermissionModelUi) {
         val detailsMode = if (viewState.value.isEditable) EDIT else VIEW
         when (permission) {
             is GroupPermissionModel -> emitSideEffect(NavigateToGroupPermissionDetails(permission, detailsMode))
-            is UserPermissionModel -> {
-                val isLockedOperatorPermission =
-                    permission.user.userId ==
-                        viewState.value.lockedOperatorPermission
-                            ?.user
-                            ?.userId
-                emitSideEffect(
-                    NavigateToUserPermissionDetails(
-                        permission = permission,
-                        mode = if (isLockedOperatorPermission) VIEW else detailsMode,
-                    ),
-                )
-            }
+            is UserPermissionModel -> emitSideEffect(NavigateToUserPermissionDetails(permission, detailsMode))
         }
     }
 
