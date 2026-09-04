@@ -1,7 +1,7 @@
 package com.passbolt.mobile.android.domain.auth.usecase
 
 import com.passbolt.mobile.android.common.usecase.UseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
+import com.passbolt.mobile.android.common.usecase.UserIdInput
 import com.passbolt.mobile.android.domain.auth.DatabasePassphraseRepository
 
 /**
@@ -28,13 +28,11 @@ import com.passbolt.mobile.android.domain.auth.DatabasePassphraseRepository
  */
 class GetResourcesDatabasePassphraseUseCase(
     private val databasePassphraseRepository: DatabasePassphraseRepository,
-    private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
-) : UseCase<Unit, GetResourcesDatabasePassphraseUseCase.Output> {
-    override fun execute(input: Unit): Output {
-        val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
+) : UseCase<UserIdInput, GetResourcesDatabasePassphraseUseCase.Output> {
+    override fun execute(input: UserIdInput): Output {
         val passphrase =
-            requireNotNull(databasePassphraseRepository.getDatabasePassphrase(userId)) {
-                "Database passphrase not found for the selected account"
+            requireNotNull(databasePassphraseRepository.getDatabasePassphrase(input.userId)) {
+                "Database passphrase not found for account"
             }
 
         return Output(passphrase)

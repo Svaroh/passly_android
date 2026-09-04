@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.withTransaction
 import com.passbolt.mobile.android.common.hash.MessageDigestHash
+import com.passbolt.mobile.android.common.usecase.UserIdInput
 import com.passbolt.mobile.android.database.migrations.Migration10to11
 import com.passbolt.mobile.android.database.migrations.Migration11to12
 import com.passbolt.mobile.android.database.migrations.Migration12to13
@@ -72,7 +73,7 @@ class DatabaseProvider(
         val currentUser = messageDigestHash.sha256(userId)
         return instance.computeIfAbsent(currentUser) {
             try {
-                val passphrase = getResourcesDatabasePassphraseUseCase.execute(Unit).passphrase
+                val passphrase = getResourcesDatabasePassphraseUseCase.execute(UserIdInput(userId)).passphrase
                 val factory = SupportOpenHelperFactory(passphrase)
                 Room
                     .databaseBuilder(
