@@ -70,3 +70,11 @@ val AppTypography =
                 letterSpacing = 0.sp,
             ),
     )
+
+val FingerprintTextStyle =
+    TextStyle(
+        fontFamily = Inconsolata,
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+        letterSpacing = 0.sp,
+    )

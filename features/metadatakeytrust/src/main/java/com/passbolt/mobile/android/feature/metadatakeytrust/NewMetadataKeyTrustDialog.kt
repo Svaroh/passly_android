@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.passbolt.mobile.android.core.compose.FingerprintText
 import com.passbolt.mobile.android.core.formatter.FingerprintFormatter
 import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
 import com.passbolt.mobile.android.ui.MetadataKeyModification
@@ -141,17 +142,9 @@ fun NewMetadataKeyTrustDialog(
 
                     Spacer(modifier = Modifier.height(60.dp))
 
-                    Text(
-                        text =
-                            fingerprintFormatter
-                                .format(
-                                    newKeyToTrustModel.metadataPrivateKey.fingerprint,
-                                    appendMiddleSpacing = true,
-                                )?.uppercase()
-                                .orEmpty(),
-                        style = MaterialTheme.typography.displayMedium,
-                        color = colorResource(CoreUiR.color.text_primary),
-                        textAlign = TextAlign.Center,
+                    FingerprintText(
+                        fingerprint = newKeyToTrustModel.metadataPrivateKey.fingerprint,
+                        fingerprintFormatter = fingerprintFormatter,
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
@@ -232,7 +225,7 @@ private fun NewMetadataKeyTrustDialogPreview() {
                     modified = ZonedDateTime.now(),
                     modifiedBy = UUID.randomUUID(),
                     pgpMessage = "--- PGP MESSAGE ---",
-                    fingerprint = "AAABBBCCCDDD",
+                    fingerprint = "03F60E958F4CB29DBE4BE4EB3BD91E325CC7D42C",
                     domain = "",
                 ),
             signedUsername = "john.doe@passbolt.com",
