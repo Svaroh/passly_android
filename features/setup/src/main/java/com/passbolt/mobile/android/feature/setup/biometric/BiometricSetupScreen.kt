@@ -73,7 +73,6 @@ import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.BiometricAuthenticationSuccess
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ConfirmKeyPermanentlyInvalidated
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.DismissKeyPermanentlyInvalidated
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.KeyPermanentlyInvalidated
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.MaybeLater
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ResumeView
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.UseBiometric
@@ -120,9 +119,6 @@ fun BiometricSetupScreen(
                     },
                     onAuthenticationError = { error ->
                         viewModel.onIntent(BiometricAuthenticationError(error))
-                    },
-                    onKeyPermanentlyInvalidated = { exception ->
-                        viewModel.onIntent(KeyPermanentlyInvalidated(exception))
                     },
                 )
             NavigateToAppSystemSettings -> navigator.openAppOsSettings(context)

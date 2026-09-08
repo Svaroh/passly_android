@@ -1,5 +1,6 @@
 package com.passbolt.mobile.android.feature.setup.biometric
 
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import com.passbolt.mobile.android.common.BiometricInformationProvider
 import com.passbolt.mobile.android.core.autofill.AutofillInformationProvider
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
@@ -17,7 +18,6 @@ import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ConfirmKeyPermanentlyInvalidated
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.DismissKeyPermanentlyInvalidated
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.GoToApp
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.KeyPermanentlyInvalidated
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.MaybeLater
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ResumeView
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.UseBiometric
@@ -80,11 +80,6 @@ class BiometricSetupViewModel(
                 }
             UseBiometric -> useBiometric()
             MaybeLater -> saveAccountData()
-            is KeyPermanentlyInvalidated -> {
-                Timber.e(intent.exception)
-                biometryInteractor.disableBiometry()
-                updateViewState { copy(showKeyChangesDetected = true) }
-            }
             DismissKeyPermanentlyInvalidated -> updateViewState { copy(showKeyChangesDetected = false) }
             ConfirmKeyPermanentlyInvalidated -> emitSideEffect(StartAuthActivity)
             GoToApp -> emitSideEffect(NavigateToAccessibilityPolicies)
@@ -104,8 +99,14 @@ class BiometricSetupViewModel(
     }
 
     private fun showBiometricPrompt() {
-        val cipher = biometricCipher.getBiometricEncryptCipher()
-        emitSideEffect(ShowBiometricPrompt(cipher))
+        try {
+            val cipher = biometricCipher.getBiometricEncryptCipher()
+            emitSideEffect(ShowBiometricPrompt(cipher))
+        } catch (exception: KeyPermanentlyInvalidatedException) {
+            Timber.e(exception)
+            biometryInteractor.disableBiometry()
+            updateViewState { copy(showKeyChangesDetected = true) }
+        }
     }
 
     private fun saveAccountData(authenticatedCipher: Cipher? = null) {

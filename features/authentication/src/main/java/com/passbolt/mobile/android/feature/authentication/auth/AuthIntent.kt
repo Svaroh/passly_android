@@ -23,8 +23,6 @@ sealed interface AuthIntent {
         val error: BiometricAuthError,
     ) : AuthIntent
 
-    data object BiometricKeyInvalidated : AuthIntent
-
     data object ForgotPassword : AuthIntent
 
     data object ConfirmSetupLeave : AuthIntent
