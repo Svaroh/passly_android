@@ -52,7 +52,6 @@ import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettin
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.GoToDefaultFilter
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.GoToExpertSettings
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.Initialize
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.InvalidateBiometricKeyPermanently
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.RefreshedPassphrase
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.ShowBiometryError
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.ToggleBiometric
@@ -105,7 +104,6 @@ internal class AppSettingsViewModel(
             CanceledBiometricAuth -> {}
             is ErroredBiometricAuth -> biometricAuthError(intent.error)
             is FinalizedBiometricAuth -> finalizedBiometricAuth(intent.cipher)
-            is InvalidateBiometricKeyPermanently -> invalidateBiometricKey(intent.exception)
             is ShowBiometryError -> biometryShowError(intent.exception)
             CancelConfirmKeyChange -> updateViewState { copy(isKeyChangesDialogDetectedVisible = false) }
             ConfirmKeyChangeClick -> {
@@ -199,7 +197,13 @@ internal class AppSettingsViewModel(
     }
 
     fun authenticateUsingBiometryPrompt() {
-        emitSideEffect(LaunchBiometricPrompt(biometricCipher.getBiometricEncryptCipher()))
+        try {
+            emitSideEffect(LaunchBiometricPrompt(biometricCipher.getBiometricEncryptCipher()))
+        } catch (exception: KeyPermanentlyInvalidatedException) {
+            invalidateBiometricKey(exception)
+        } catch (exception: Exception) {
+            biometryShowError(exception)
+        }
     }
 
     fun disableBiometric() {

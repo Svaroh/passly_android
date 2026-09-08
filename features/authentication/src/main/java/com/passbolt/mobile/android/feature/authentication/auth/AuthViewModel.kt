@@ -37,7 +37,6 @@ import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.Access
 import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.AuthenticateUsingBiometry
 import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.BiometricAuthenticationError
 import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.BiometricAuthenticationSuccess
-import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.BiometricKeyInvalidated
 import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.ChooseOtherMfaProvider
 import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.ConfirmSetupLeave
 import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.ConnectToExistingAccount
@@ -191,11 +190,6 @@ class AuthViewModel(
             is AuthenticateUsingBiometry -> authenticateUsingBiometry()
             is BiometricAuthenticationSuccess -> biometricAuthenticationSuccess(intent.cipher)
             is BiometricAuthenticationError -> biometricAuthenticationError(intent.error)
-            is BiometricKeyInvalidated -> {
-                biometryInteractor.disableBiometry()
-                updateViewState { copy(showBiometricButton = false) }
-                emitSideEffect(ShowErrorSnackbar(BIOMETRIC_CHANGED))
-            }
             is ForgotPassword -> updateViewState { copy(showForgotPasswordDialog = true) }
             is GoBack -> goBack()
             is ConfirmSetupLeave -> {

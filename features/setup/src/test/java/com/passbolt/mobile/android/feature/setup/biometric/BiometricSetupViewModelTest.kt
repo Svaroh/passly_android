@@ -41,7 +41,6 @@ import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ConfirmKeyPermanentlyInvalidated
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.DismissKeyPermanentlyInvalidated
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.GoToApp
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.KeyPermanentlyInvalidated
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.MaybeLater
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ResumeView
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.UseBiometric
@@ -71,6 +70,7 @@ import org.koin.test.get
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import javax.crypto.Cipher
@@ -276,15 +276,19 @@ class BiometricSetupViewModelTest : KoinTest {
     @Test
     fun `key permanently invalidated should disable biometry and show key changes detected`() =
         runTest {
+            val biometricInformationProvider: BiometricInformationProvider = get()
+            val biometricCipher: BiometricCipher = get()
             val biometryInteractor: BiometryInteractor = get()
+            whenever(biometricInformationProvider.hasBiometricSetUp()) doReturn true
+            whenever(biometricCipher.getBiometricEncryptCipher()) doThrow
+                KeyPermanentlyInvalidatedException("Key invalidated")
             viewModel = get()
-            val exception = KeyPermanentlyInvalidatedException("Key invalidated")
 
             viewModel.viewState.test {
                 val initialState = awaitItem()
                 assertThat(initialState.showKeyChangesDetected).isFalse()
 
-                viewModel.onIntent(KeyPermanentlyInvalidated(exception))
+                viewModel.onIntent(UseBiometric)
 
                 val updatedState = awaitItem()
                 assertThat(updatedState.showKeyChangesDetected).isTrue()
@@ -297,10 +301,14 @@ class BiometricSetupViewModelTest : KoinTest {
     @Test
     fun `dismiss key permanently invalidated should hide key changes detected dialog`() =
         runTest {
+            val biometricInformationProvider: BiometricInformationProvider = get()
+            val biometricCipher: BiometricCipher = get()
+            whenever(biometricInformationProvider.hasBiometricSetUp()) doReturn true
+            whenever(biometricCipher.getBiometricEncryptCipher()) doThrow
+                KeyPermanentlyInvalidatedException("Key invalidated")
             viewModel = get()
-            val exception = KeyPermanentlyInvalidatedException("Key invalidated")
 
-            viewModel.onIntent(KeyPermanentlyInvalidated(exception))
+            viewModel.onIntent(UseBiometric)
 
             viewModel.viewState.test {
                 val stateWithDialog = awaitItem()

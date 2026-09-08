@@ -1,5 +1,6 @@
 package com.passbolt.mobile.android.feature.settings.appsettings
 
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.passbolt.mobile.android.common.BiometricInformationProvider
@@ -44,6 +45,7 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.util.UUID
@@ -235,6 +237,32 @@ class AppSettingsViewModelTest : KoinTest {
 
                 assertThat(awaitItem().isBiometricEnabled).isTrue()
             }
+        }
+
+    @OptIn(ExperimentalTime::class)
+    @Test
+    fun `enable biometric should disable biometry and show key changes dialog when key is invalidated`() =
+        runTest {
+            val checkIfPassphraseFileExistsUseCase: CheckIfPassphraseFileExistsUseCase = get()
+            whenever(checkIfPassphraseFileExistsUseCase.execute(any())) doReturn
+                CheckIfPassphraseFileExistsUseCase.Output(
+                    passphraseFileExists = false,
+                )
+            val biometricInformationProvider: BiometricInformationProvider = get()
+            whenever(biometricInformationProvider.hasBiometricSetUp()) doReturn true
+            val passphraseMemoryCache: PassphraseMemoryCache = get()
+            whenever(passphraseMemoryCache.hasPassphrase()) doReturn true
+            val biometricCipher: BiometricCipher = get()
+            whenever(biometricCipher.getBiometricEncryptCipher()) doThrow
+                KeyPermanentlyInvalidatedException("Key invalidated")
+
+            viewModel = get()
+            viewModel.onIntent(AppSettingsIntent.ToggleBiometric)
+
+            viewModel.viewState.test {
+                assertThat(awaitItem().isKeyChangesDialogDetectedVisible).isTrue()
+            }
+            verify(get<BiometryInteractor>()).disableBiometry()
         }
 
     @OptIn(ExperimentalTime::class)
