@@ -23,13 +23,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.passbolt.mobile.android.core.compose.FingerprintText
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.formatter.FingerprintFormatter
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
@@ -209,18 +208,9 @@ private fun UserHeader(
         Spacer(modifier = Modifier.height(24.dp))
 
         if (user?.gpgKey?.fingerprint != null) {
-            Text(
-                text =
-                    fingerprintFormatter.formatWithRawFallback(
-                        user.gpgKey.fingerprint,
-                        appendMiddleSpacing = false,
-                    ),
-                style =
-                    MaterialTheme.typography.bodyMedium.copy(
-                        fontFamily = FontFamily(Font(CoreUiR.font.inconsolata)),
-                        fontSize = 18.sp,
-                    ),
-                color = colorResource(CoreUiR.color.text_secondary),
+            FingerprintText(
+                fingerprint = user.gpgKey.fingerprint,
+                fingerprintFormatter = fingerprintFormatter,
             )
         }
     }

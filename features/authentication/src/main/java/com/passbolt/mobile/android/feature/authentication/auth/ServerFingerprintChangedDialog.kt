@@ -23,15 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.passbolt.mobile.android.core.compose.FingerprintText
 import com.passbolt.mobile.android.core.compose.PassboltTheme
 import com.passbolt.mobile.android.core.formatter.FingerprintFormatter
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
@@ -110,13 +107,9 @@ private fun ServerFingerprintChangedContent(
 
             Spacer(modifier = Modifier.height(60.dp))
 
-            Text(
-                text = fingerprintFormatter.formatWithRawFallback(fingerprint, appendMiddleSpacing = true),
-                fontFamily = FontFamily(Font(CoreUiR.font.inconsolata)),
-                fontWeight = FontWeight.Medium,
-                fontSize = 20.sp,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center,
+            FingerprintText(
+                fingerprint = fingerprint,
+                fingerprintFormatter = fingerprintFormatter,
                 modifier = Modifier.padding(horizontal = 40.dp),
             )
 
