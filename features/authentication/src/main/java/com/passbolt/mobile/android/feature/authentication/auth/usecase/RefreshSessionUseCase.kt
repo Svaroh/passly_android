@@ -60,10 +60,12 @@ class RefreshSessionUseCase(
                             accessToken = result.value.accessToken,
                             refreshToken = result.value.refreshToken,
                         )
-                        saveMfaToken(
-                            userId = userId,
-                            mfaToken = result.value.mfaToken,
-                        )
+                        result.value.mfaToken?.let { echoedMfaToken ->
+                            saveMfaToken(
+                                userId = userId,
+                                mfaToken = echoedMfaToken,
+                            )
+                        }
                     }
                     Timber.d("[Session] Backend session refresh succeeded")
                     CompletedRefresh(userId, Output.Success)

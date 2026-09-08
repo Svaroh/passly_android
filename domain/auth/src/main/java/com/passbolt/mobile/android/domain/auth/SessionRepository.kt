@@ -35,8 +35,10 @@ interface SessionRepository {
 
     fun saveMfaToken(
         userId: String,
-        mfaToken: String?,
+        mfaToken: String,
     )
 
     fun removeSession(userId: String)
+
+    fun removeMfaToken(userId: String)
 }

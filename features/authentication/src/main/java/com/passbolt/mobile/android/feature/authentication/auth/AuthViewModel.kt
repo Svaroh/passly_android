@@ -510,7 +510,9 @@ class AuthViewModel(
                     refreshToken = currentLoginState.refreshToken,
                 ),
             )
-            saveMfaTokenUseCase.execute(SaveMfaTokenUseCase.Input(userId, currentLoginState.mfaToken))
+            currentLoginState.mfaToken?.let {
+                saveMfaTokenUseCase.execute(SaveMfaTokenUseCase.Input(userId, it))
+            }
         }
         saveServerFingerprintUseCase.execute(
             SaveServerFingerprintUseCase.Input(userId, currentLoginState.fingerprint),

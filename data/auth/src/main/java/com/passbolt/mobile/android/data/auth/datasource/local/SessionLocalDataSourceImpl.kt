@@ -65,7 +65,7 @@ internal class SessionLocalDataSourceImpl(
 
     override fun saveMfaToken(
         userId: String,
-        mfaToken: String?,
+        mfaToken: String,
     ) {
         Timber.d("Saving MFA token.")
         try {
@@ -91,7 +91,6 @@ internal class SessionLocalDataSourceImpl(
             Timber.e(e, "There was an error while removing the session")
             throw e
         }
-        removeMfaToken(userId)
     }
 
     override fun removeMfaToken(userId: String) {
