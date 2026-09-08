@@ -47,7 +47,6 @@ import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.get
 import org.mockito.kotlin.any
-import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doSuspendableAnswer
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -125,7 +124,7 @@ class RefreshSessionUseCaseTest : KoinTest {
             )
             verify(mockAuthRepository, times(1)).refreshSession(CURRENT_REFRESH_TOKEN, SERVER_USER_ID)
             verify(mockSessionRepository, times(1)).saveSession(USER_ID, ROTATED_ACCESS_TOKEN, ROTATED_REFRESH_TOKEN)
-            verify(mockSessionRepository, times(1)).saveMfaToken(USER_ID, null)
+            verify(mockSessionRepository, never()).saveMfaToken(any(), any())
         }
 
     @Test
@@ -151,7 +150,7 @@ class RefreshSessionUseCaseTest : KoinTest {
             )
             verify(mockAuthRepository, times(1)).refreshSession(CURRENT_REFRESH_TOKEN, SERVER_USER_ID)
             verify(mockSessionRepository, never()).saveSession(any(), any(), any())
-            verify(mockSessionRepository, never()).saveMfaToken(any(), anyOrNull())
+            verify(mockSessionRepository, never()).saveMfaToken(any(), any())
         }
 
     @Test
@@ -172,11 +171,48 @@ class RefreshSessionUseCaseTest : KoinTest {
             verify(mockAuthRepository, times(2)).refreshSession(CURRENT_REFRESH_TOKEN, SERVER_USER_ID)
         }
 
+    @Test
+    fun `refresh should keep the stored mfa token when the response carries no mfa cookie`() =
+        runTest {
+            mockAuthRepository.stub {
+                on { refreshSession(CURRENT_REFRESH_TOKEN, SERVER_USER_ID) }.thenReturn(
+                    DomainResult.Finished(RefreshedSession(ROTATED_ACCESS_TOKEN, ROTATED_REFRESH_TOKEN, mfaToken = null)),
+                )
+            }
+            val useCase = get<RefreshSessionUseCase>()
+
+            val result = useCase.execute(Unit)
+
+            assertThat(result).isEqualTo(RefreshSessionUseCase.Output.Success)
+            verify(mockSessionRepository).saveSession(USER_ID, ROTATED_ACCESS_TOKEN, ROTATED_REFRESH_TOKEN)
+            verify(mockSessionRepository, never()).saveMfaToken(any(), any())
+            verify(mockSessionRepository, never()).removeMfaToken(any())
+        }
+
+    @Test
+    fun `refresh should save the mfa cookie echoed by the response`() =
+        runTest {
+            mockAuthRepository.stub {
+                on { refreshSession(CURRENT_REFRESH_TOKEN, SERVER_USER_ID) }.thenReturn(
+                    DomainResult.Finished(
+                        RefreshedSession(ROTATED_ACCESS_TOKEN, ROTATED_REFRESH_TOKEN, mfaToken = ECHOED_MFA_TOKEN),
+                    ),
+                )
+            }
+            val useCase = get<RefreshSessionUseCase>()
+
+            val result = useCase.execute(Unit)
+
+            assertThat(result).isEqualTo(RefreshSessionUseCase.Output.Success)
+            verify(mockSessionRepository).saveMfaToken(USER_ID, ECHOED_MFA_TOKEN)
+        }
+
     private companion object {
         private const val USER_ID = "userId"
         private const val SERVER_USER_ID = "serverUserId"
         private const val CURRENT_REFRESH_TOKEN = "currentRefreshToken"
         private const val ROTATED_ACCESS_TOKEN = "rotatedAccessToken"
         private const val ROTATED_REFRESH_TOKEN = "rotatedRefreshToken"
+        private const val ECHOED_MFA_TOKEN = "passbolt_mfa=echoedMfaToken"
     }
 }

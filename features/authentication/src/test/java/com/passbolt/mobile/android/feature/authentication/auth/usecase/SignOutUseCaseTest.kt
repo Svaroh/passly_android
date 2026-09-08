@@ -80,6 +80,7 @@ class SignOutUseCaseTest {
             assertThat(output.serverSignOutStatus).isEqualTo(ServerSignOutStatus.SIGNED_OUT)
             verify(passphraseMemoryCache).clear()
             verify(sessionRepository).removeSession(USER_ID)
+            verify(sessionRepository, never()).removeMfaToken(any())
             verify(removePermissionsSnapshotUseCase).execute(UserIdInput(USER_ID))
             verify(removeSelectedAccountUseCase).execute(Unit)
         }

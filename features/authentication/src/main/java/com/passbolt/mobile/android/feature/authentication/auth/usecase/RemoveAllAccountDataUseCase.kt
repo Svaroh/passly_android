@@ -64,6 +64,7 @@ class RemoveAllAccountDataUseCase(
         passphraseRepository.removePassphrase(userIdInput.userId)
         privateKeyRepository.removePrivateKey(userIdInput.userId)
         sessionRepository.removeSession(userIdInput.userId)
+        sessionRepository.removeMfaToken(userIdInput.userId)
         removeAccountUseCase.execute(userIdInput)
         removeServerPublicRsaKeyUseCase.execute(userIdInput)
         databaseProvider.delete(userIdInput.userId)

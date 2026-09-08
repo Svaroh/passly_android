@@ -37,6 +37,6 @@ class SaveMfaTokenUseCase(
 
     data class Input(
         val userId: String,
-        val mfaToken: String?,
+        val mfaToken: String,
     )
 }

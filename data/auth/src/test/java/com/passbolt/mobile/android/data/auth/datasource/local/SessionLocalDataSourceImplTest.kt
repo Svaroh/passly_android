@@ -68,14 +68,14 @@ class SessionLocalDataSourceImplTest {
     }
 
     @Test
-    fun `removeSession should remove access, refresh and mfa token keys`() {
+    fun `removeSession should remove only access and refresh token keys and keep the mfa token`() {
         whenever(editor.remove(any())) doReturn editor
 
         dataSource.removeSession(USER_ID)
 
         verify(editor).remove(Constants.ACCESS_TOKEN_KEY)
         verify(editor).remove(Constants.REFRESH_TOKEN_KEY)
-        verify(editor).remove(Constants.MFA_TOKEN_KEY)
+        verify(editor, never()).remove(Constants.MFA_TOKEN_KEY)
     }
 
     @Test

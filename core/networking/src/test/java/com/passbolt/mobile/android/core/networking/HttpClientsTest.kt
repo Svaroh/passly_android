@@ -25,7 +25,6 @@ package com.passbolt.mobile.android.core.networking
 
 import com.google.common.truth.Truth.assertThat
 import com.passbolt.mobile.android.core.networking.AuthPaths.AUTH_SIGN_IN
-import com.passbolt.mobile.android.core.networking.AuthPaths.MFA_VERIFICATION_TOTP
 import com.passbolt.mobile.android.domain.accounts.usecase.GetCurrentApiUrlUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
 import okhttp3.Interceptor
@@ -51,7 +50,7 @@ class HttpClientsTest : KoinTest {
         }
     private val getSessionUseCase =
         mock<GetSessionUseCase> {
-            on { execute(Unit) } doReturn GetSessionUseCase.Output(ACCESS_TOKEN, REFRESH_TOKEN, null)
+            on { execute(Unit) } doReturn GetSessionUseCase.Output(ACCESS_TOKEN, REFRESH_TOKEN, MFA_COOKIE)
         }
 
     @get:Rule
@@ -70,7 +69,6 @@ class HttpClientsTest : KoinTest {
     fun `sign in on sub-path api should be sent without access token and mfa cookie`() {
         AUTHENTICATED_CLIENTS.forEach { clientName ->
             val client = get<OkHttpClient>(named(clientName))
-            receiveMfaCookie(client)
 
             val sent = send(client, "$PLACEHOLDER_BASE_URL$AUTH_SIGN_IN")
 
@@ -84,7 +82,6 @@ class HttpClientsTest : KoinTest {
     fun `authenticated request on sub-path api should be sent with access token and mfa cookie`() {
         AUTHENTICATED_CLIENTS.forEach { clientName ->
             val client = get<OkHttpClient>(named(clientName))
-            receiveMfaCookie(client)
 
             val sent = send(client, "$PLACEHOLDER_BASE_URL/resources.json")
 
@@ -94,20 +91,11 @@ class HttpClientsTest : KoinTest {
         }
     }
 
-    private fun receiveMfaCookie(client: OkHttpClient) {
-        send(
-            client,
-            "$PLACEHOLDER_BASE_URL$MFA_VERIFICATION_TOTP",
-            responseSetCookie = "$MFA_COOKIE; path=/; secure; httponly",
-        )
-    }
-
     private fun send(
         client: OkHttpClient,
         url: String,
-        responseSetCookie: String? = null,
     ): Request {
-        val server = FakeServer(responseSetCookie)
+        val server = FakeServer()
         client
             .newBuilder()
             .addInterceptor(server)
@@ -118,9 +106,7 @@ class HttpClientsTest : KoinTest {
         return server.receivedRequest
     }
 
-    private class FakeServer(
-        private val setCookie: String?,
-    ) : Interceptor {
+    private class FakeServer : Interceptor {
         lateinit var receivedRequest: Request
 
         override fun intercept(chain: Interceptor.Chain): Response {
@@ -132,7 +118,6 @@ class HttpClientsTest : KoinTest {
                 .code(200)
                 .message("OK")
                 .body("".toResponseBody())
-                .apply { setCookie?.let { addHeader(SET_COOKIE_HEADER, it) } }
                 .build()
         }
     }
@@ -145,6 +130,5 @@ class HttpClientsTest : KoinTest {
         private const val MFA_COOKIE = "passbolt_mfa=mfa-jwt"
         private const val AUTHORIZATION_HEADER = "Authorization"
         private const val COOKIE_HEADER = "Cookie"
-        private const val SET_COOKIE_HEADER = "Set-Cookie"
     }
 }
