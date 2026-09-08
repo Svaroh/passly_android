@@ -8,7 +8,7 @@ import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.U
 import com.passbolt.mobile.android.core.mvp.authentication.CompleteAuthenticatedOutput
 import com.passbolt.mobile.android.core.mvp.authentication.IncompleteAuthenticatedOutput
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
+import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.metadata.usecase.DeleteTrustedMetadataKeyUseCase
@@ -81,7 +81,7 @@ class MetadataPrivateKeysHelperInteractor(
         )
     }
 
-    suspend fun trustNewKey(model: NewMetadataKeyToTrustModel): Output {
+    suspend fun trustNewKey(model: NewMetadataKeyToTrustModel): Output =
         try {
             val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
             val currentUserPrivateKey = requireNotNull(privateKeyRepository.getPrivateKey(userId)?.armoredKey)
@@ -89,23 +89,21 @@ class MetadataPrivateKeysHelperInteractor(
                 requireNotNull(
                     (openPgp.generatePublicKey(currentUserPrivateKey) as? OpenPgpResult.Result),
                 ).result
-            val passphrase =
-                requireNotNull(
-                    (passphraseMemoryCache.get() as? PotentialPassphrase.Passphrase)?.passphrase,
+            passphraseMemoryCache.usePassphraseCopy(
+                onPassphraseNotPresent = { error("Passphrase not present in cache") },
+            ) { passphrase ->
+                signTheKeyAndAddToLocalStorageAndPushToBackend(
+                    metadataPrivateKey = model.metadataPrivateKey,
+                    privateKey = currentUserPrivateKey,
+                    passphrase = passphrase,
+                    publicKey = currentUserSigningKey,
                 )
-
-            return signTheKeyAndAddToLocalStorageAndPushToBackend(
-                metadataPrivateKey = model.metadataPrivateKey,
-                privateKey = currentUserPrivateKey,
-                passphrase = passphrase,
-                publicKey = currentUserSigningKey,
-            )
+            }
         } catch (e: Exception) {
             val errorMessage = "Error while preparing the signed metadata key"
             Timber.e(e, errorMessage)
-            return Output.CryptoFailure(OpenPgpError(errorMessage))
+            Output.CryptoFailure(OpenPgpError(errorMessage))
         }
-    }
 
     suspend fun deletedTrustedMetadataPrivateKey() {
         deleteTrustedMetadataKeyUseCase.execute(Unit)

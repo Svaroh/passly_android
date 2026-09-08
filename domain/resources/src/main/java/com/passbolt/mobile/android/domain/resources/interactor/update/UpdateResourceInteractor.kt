@@ -29,7 +29,7 @@ import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseO
 import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
 import com.passbolt.mobile.android.core.mvp.authentication.toAuthenticationState
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
+import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.passwordexpiry.usecase.GetPasswordExpirySettingsUseCase
 import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
@@ -79,28 +79,26 @@ class UpdateResourceInteractor(
         secretInput: SecretInput,
         confirmedRecipientsPublicKeys: Map<String, String> = emptyMap(),
     ): Output {
-        val passphrase =
-            when (val result = passphraseMemoryCache.get()) {
-                is PotentialPassphrase.Passphrase -> result.passphrase
-                is PotentialPassphrase.PassphraseNotPresent -> return Output.PasswordExpired
+        return passphraseMemoryCache.usePassphraseCopy(
+            onPassphraseNotPresent = { Output.PasswordExpired },
+        ) { passphrase ->
+            if (!isSecretValid(
+                    PlainSecretValidationWrapper(secretInput.secretJsonModel.json, resourceInput.contentType)
+                        .validationPlainSecret,
+                    resourceInput.contentType,
+                )
+            ) {
+                return Output.JsonSchemaValidationFailure(SECRET)
+            }
+            if (!isResourceValid(resourceInput.metadataJsonModel.json, resourceInput.contentType)) {
+                return Output.JsonSchemaValidationFailure(RESOURCE)
             }
 
-        if (!isSecretValid(
-                PlainSecretValidationWrapper(secretInput.secretJsonModel.json, resourceInput.contentType)
-                    .validationPlainSecret,
-                resourceInput.contentType,
-            )
-        ) {
-            return Output.JsonSchemaValidationFailure(SECRET)
-        }
-        if (!isResourceValid(resourceInput.metadataJsonModel.json, resourceInput.contentType)) {
-            return Output.JsonSchemaValidationFailure(RESOURCE)
-        }
-
-        return if (secretInput.secretChanged) {
-            updateWithChangedSecret(resourceInput, secretInput, passphrase, confirmedRecipientsPublicKeys)
-        } else {
-            updateWithUnchangedSecret(resourceInput, secretInput, passphrase)
+            if (secretInput.secretChanged) {
+                updateWithChangedSecret(resourceInput, secretInput, passphrase, confirmedRecipientsPublicKeys)
+            } else {
+                updateWithUnchangedSecret(resourceInput, secretInput, passphrase)
+            }
         }
     }
 

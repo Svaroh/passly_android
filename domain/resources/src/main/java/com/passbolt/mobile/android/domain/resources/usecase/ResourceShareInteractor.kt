@@ -6,7 +6,7 @@ import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseO
 import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
 import com.passbolt.mobile.android.core.mvp.authentication.UnauthenticatedReason
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
+import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
@@ -135,8 +135,12 @@ class ResourceShareInteractor(
             }
             is SecretInteractor.Output.Success -> {
                 Timber.d("Secret fetched")
-                val passphrase = passphraseMemoryCache.get()
-                if (passphrase is PotentialPassphrase.Passphrase) {
+                passphraseMemoryCache.usePassphraseCopy(
+                    onPassphraseNotPresent = {
+                        Timber.d("Passphrase not in cache")
+                        Output.Unauthorized(AuthenticationState.Unauthenticated.Reason.Passphrase)
+                    },
+                ) { passphrase ->
                     Timber.d("Using passphrase from cache")
                     val sharePermissions =
                         sharePermissionsModelMapper
@@ -147,7 +151,7 @@ class ResourceShareInteractor(
                             )
                     val secretsData =
                         prepareEncryptedSecretsData(
-                            passphrase.passphrase,
+                            passphrase,
                             secretOutput.decryptedSecret,
                             newUsers,
                             recipientsPublicKeys,
@@ -174,9 +178,6 @@ class ResourceShareInteractor(
                             Output.Success
                         }
                     }
-                } else {
-                    Timber.d("Passphrase not in cache")
-                    Output.Unauthorized(AuthenticationState.Unauthenticated.Reason.Passphrase)
                 }
             }
         }

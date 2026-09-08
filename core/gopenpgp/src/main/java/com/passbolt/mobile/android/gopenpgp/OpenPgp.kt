@@ -57,16 +57,15 @@ class OpenPgp(
         privateKey: String,
         passphrase: ByteArray,
         message: String,
-    ): OpenPgpResult<String> =
-        try {
+    ): OpenPgpResult<String> {
+        val passphraseCopy = passphrase.copyOf()
+        return try {
             withContext(Dispatchers.Default) {
-                val passphraseCopy = passphrase.copyOf()
-
                 val encryptionHandle =
                     pgpHandle
                         .encryptionWithTimeOffset()
                         .recipient(Crypto.newKeyFromArmored(publicKey))
-                        .signingKey(Crypto.newPrivateKeyFromArmored(privateKey, passphrase))
+                        .signingKey(Crypto.newPrivateKeyFromArmored(privateKey, passphraseCopy))
                         .new_()
 
                 val encrypted =
@@ -75,27 +74,26 @@ class OpenPgp(
                             message.toByteArray(),
                         ).armor()
 
-                passphraseCopy.erase()
-
                 OpenPgpResult.Result(encrypted)
             }
         } catch (exception: Exception) {
             Timber.e(exception, "There was an error during encryptSignMessageArmored")
             OpenPgpResult.Error(gopenPgpExceptionParser.parseGopenPgpException(exception))
         } finally {
+            passphraseCopy.erase()
             Mobile.freeOSMemory()
         }
+    }
 
     suspend fun encryptSignMessageArmored(
         privateKey: String,
         passphrase: ByteArray,
         message: String,
-    ): OpenPgpResult<String> =
-        try {
+    ): OpenPgpResult<String> {
+        val passphraseCopy = passphrase.copyOf()
+        return try {
             withContext(Dispatchers.Default) {
-                val passphraseCopy = passphrase.copyOf()
-
-                val signingKey = Crypto.newPrivateKeyFromArmored(privateKey, passphrase)
+                val signingKey = Crypto.newPrivateKeyFromArmored(privateKey, passphraseCopy)
                 val recipient = signingKey.toPublic()
 
                 val encryptionHandle =
@@ -111,31 +109,30 @@ class OpenPgp(
                             message.toByteArray(),
                         ).armor()
 
-                passphraseCopy.erase()
-
                 OpenPgpResult.Result(encrypted)
             }
         } catch (exception: Exception) {
             Timber.e(exception, "There was an error during encryptSignMessageArmored (with pk generation)")
             OpenPgpResult.Error(gopenPgpExceptionParser.parseGopenPgpException(exception))
         } finally {
+            passphraseCopy.erase()
             Mobile.freeOSMemory()
         }
+    }
 
     suspend fun decryptVerifyMessageArmored(
         publicKey: String,
         privateKey: String,
         passphrase: ByteArray,
         cipherText: String,
-    ): OpenPgpResult<String> =
-        try {
+    ): OpenPgpResult<String> {
+        val passphraseCopy = passphrase.copyOf()
+        return try {
             withContext(Dispatchers.Default) {
-                val passphraseCopy = passphrase.copyOf()
-
                 val decryptionHandle =
                     pgpHandle
                         .decryptionWithTimeOffset()
-                        .decryptionKey(Crypto.newPrivateKeyFromArmored(privateKey, passphrase))
+                        .decryptionKey(Crypto.newPrivateKeyFromArmored(privateKey, passphraseCopy))
                         .verificationKey(Crypto.newKeyFromArmored(publicKey))
                         .new_()
 
@@ -150,8 +147,6 @@ class OpenPgp(
 
                 val decrypted = decryptionResult.string()
 
-                passphraseCopy.erase()
-
                 OpenPgpResult.Result(decrypted)
             }
         } catch (exception: SignatureVerificationException) {
@@ -163,19 +158,20 @@ class OpenPgp(
             Timber.e(exception, "There was an error during decryptVerifyMessageArmored")
             OpenPgpResult.Error(gopenPgpExceptionParser.parseGopenPgpException(exception))
         } finally {
+            passphraseCopy.erase()
             Mobile.freeOSMemory()
         }
+    }
 
     suspend fun decryptVerifyMessageArmored(
         privateKey: String,
         passphrase: ByteArray,
         cipherText: String,
-    ): OpenPgpResult<String> =
-        try {
+    ): OpenPgpResult<String> {
+        val passphraseCopy = passphrase.copyOf()
+        return try {
             withContext(Dispatchers.Default) {
-                val passphraseCopy = passphrase.copyOf()
-
-                val decryptionKey = Crypto.newPrivateKeyFromArmored(privateKey, passphrase)
+                val decryptionKey = Crypto.newPrivateKeyFromArmored(privateKey, passphraseCopy)
                 val verificationKey = Crypto.newKey(decryptionKey.publicKey)
 
                 val decryptionHandle =
@@ -196,8 +192,6 @@ class OpenPgp(
 
                 val decrypted = decryptionResult.string()
 
-                passphraseCopy.erase()
-
                 OpenPgpResult.Result(decrypted)
             }
         } catch (exception: SignatureVerificationException) {
@@ -209,20 +203,19 @@ class OpenPgp(
             Timber.e(exception, "There was an error during decryptVerifyMessageArmored (with pk generation)")
             OpenPgpResult.Error(gopenPgpExceptionParser.parseGopenPgpException(exception))
         } finally {
+            passphraseCopy.erase()
             Mobile.freeOSMemory()
         }
+    }
 
     suspend fun unlockKey(
         privateKey: String?,
         passphrase: ByteArray,
-    ): OpenPgpResult<Boolean> =
-        try {
+    ): OpenPgpResult<Boolean> {
+        val passphraseCopy = passphrase.copyOf()
+        return try {
             withContext(Dispatchers.Default) {
-                val passphraseCopy = passphrase.copyOf()
-
                 val unlockedKey = Key(privateKey).unlock(passphraseCopy)
-
-                passphraseCopy.erase()
 
                 OpenPgpResult.Result(unlockedKey.isUnlocked)
             }
@@ -230,22 +223,23 @@ class OpenPgp(
             Timber.e(exception, "There was an error during unlockKey")
             OpenPgpResult.Error(gopenPgpExceptionParser.parseGopenPgpException(exception))
         } finally {
+            passphraseCopy.erase()
             Mobile.freeOSMemory()
         }
+    }
 
     suspend fun decryptMessageArmored(
         privateKey: String,
         passphrase: ByteArray,
         cipherText: String,
-    ): OpenPgpResult<String> =
-        try {
+    ): OpenPgpResult<String> {
+        val passphraseCopy = passphrase.copyOf()
+        return try {
             withContext(Dispatchers.Default) {
-                val passphraseCopy = passphrase.copyOf()
-
                 val decryptionHandle =
                     pgpHandle
                         .decryptionWithTimeOffset()
-                        .decryptionKey(Crypto.newPrivateKeyFromArmored(privateKey, passphrase))
+                        .decryptionKey(Crypto.newPrivateKeyFromArmored(privateKey, passphraseCopy))
                         .new_()
 
                 val decrypted =
@@ -255,30 +249,29 @@ class OpenPgp(
                             Crypto.Armor,
                         ).string()
 
-                passphraseCopy.erase()
-
                 OpenPgpResult.Result(decrypted)
             }
         } catch (exception: Exception) {
             Timber.e(exception, "There was an error during decryptMessageArmored")
             OpenPgpResult.Error(gopenPgpExceptionParser.parseGopenPgpException(exception))
         } finally {
+            passphraseCopy.erase()
             Mobile.freeOSMemory()
         }
+    }
 
     suspend fun decryptSessionKey(
         privateKey: String,
         passphrase: ByteArray,
         cipherText: String,
-    ): OpenPgpResult<String> =
-        try {
+    ): OpenPgpResult<String> {
+        val passphraseCopy = passphrase.copyOf()
+        return try {
             withContext(Dispatchers.Default) {
-                val passphraseCopy = passphrase.copyOf()
-
                 val decryptionHandle =
                     pgpHandle
                         .decryptionWithTimeOffset()
-                        .decryptionKey(Crypto.newPrivateKeyFromArmored(privateKey, passphrase))
+                        .decryptionKey(Crypto.newPrivateKeyFromArmored(privateKey, passphraseCopy))
                         .new_()
 
                 val decryptedSessionKey =
@@ -286,16 +279,16 @@ class OpenPgp(
                         Crypto.newPGPMessageFromArmored(cipherText).keyPacket,
                     )
 
-                passphraseCopy.erase()
-
                 OpenPgpResult.Result(decryptedSessionKey.key.encodeHex())
             }
         } catch (exception: Exception) {
             Timber.e(exception, "There was an error during decryptSessionKey")
             OpenPgpResult.Error(gopenPgpExceptionParser.parseGopenPgpException(exception))
         } finally {
+            passphraseCopy.erase()
             Mobile.freeOSMemory()
         }
+    }
 
     suspend fun generatePublicKey(privateKey: String): OpenPgpResult<String> =
         try {
@@ -437,12 +430,13 @@ class OpenPgp(
         armoredPublicKey: String,
         pgpMessage: ByteArray,
     ): OpenPgpResult<VerifiedMessage> {
+        val passphraseCopy = passphrase.copyOf()
         return try {
             withContext(Dispatchers.Default) {
                 val decryptionHandle =
                     pgpHandle
                         .decryptionWithTimeOffset()
-                        .decryptionKey(Crypto.newPrivateKeyFromArmored(armoredPrivateKey, passphrase))
+                        .decryptionKey(Crypto.newPrivateKeyFromArmored(armoredPrivateKey, passphraseCopy))
                         .verificationKey(Crypto.newKeyFromArmored(armoredPublicKey))
                         .new_()
 
@@ -467,6 +461,7 @@ class OpenPgp(
             Timber.e(exception, "There was an error during verifySignature")
             return OpenPgpResult.Error(gopenPgpExceptionParser.parseGopenPgpException(exception))
         } finally {
+            passphraseCopy.erase()
             Mobile.freeOSMemory()
         }
     }

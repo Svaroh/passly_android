@@ -42,30 +42,33 @@ class ChallengeDecryptor(
         challenge: String,
     ): Output {
         val passphraseCopy = passphrase.copyOf()
-        val privateKey = requireNotNull(privateKeyRepository.getPrivateKey(userId)) { "Unable to restore private key." }.armoredKey
-        return when (
-            val decryptedChallenge =
-                openPgp.decryptVerifyMessageArmored(
-                    publicKey = serverPublicKey,
-                    privateKey = privateKey,
-                    passphrase = passphrase,
-                    cipherText = challenge,
-                )
-        ) {
-            is OpenPgpResult.Error ->
-                when (val failure = decryptedChallenge.error) {
-                    is OpenPgpFailure.SignatureVerificationFailed -> Output.ServerSignatureInvalid(failure.message)
-                    is OpenPgpFailure.Generic -> Output.DecryptionError(failure.message)
-                }
-            is OpenPgpResult.Result -> {
-                passphraseCopy.erase()
-                Output.DecryptedChallenge(
-                    gson.fromJson(
-                        decryptedChallenge.result,
-                        ChallengeResponseDto::class.java,
-                    ),
-                )
+        try {
+            val privateKey =
+                requireNotNull(privateKeyRepository.getPrivateKey(userId)) { "Unable to restore private key." }.armoredKey
+            return when (
+                val decryptedChallenge =
+                    openPgp.decryptVerifyMessageArmored(
+                        publicKey = serverPublicKey,
+                        privateKey = privateKey,
+                        passphrase = passphraseCopy,
+                        cipherText = challenge,
+                    )
+            ) {
+                is OpenPgpResult.Error ->
+                    when (val failure = decryptedChallenge.error) {
+                        is OpenPgpFailure.SignatureVerificationFailed -> Output.ServerSignatureInvalid(failure.message)
+                        is OpenPgpFailure.Generic -> Output.DecryptionError(failure.message)
+                    }
+                is OpenPgpResult.Result ->
+                    Output.DecryptedChallenge(
+                        gson.fromJson(
+                            decryptedChallenge.result,
+                            ChallengeResponseDto::class.java,
+                        ),
+                    )
             }
+        } finally {
+            passphraseCopy.erase()
         }
     }
 

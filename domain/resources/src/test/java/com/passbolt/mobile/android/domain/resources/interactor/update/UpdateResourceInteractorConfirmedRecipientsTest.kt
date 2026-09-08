@@ -214,6 +214,22 @@ class UpdateResourceInteractorConfirmedRecipientsTest : KoinTest {
             assertThat(dtoCaptor.firstValue.secrets).hasSize(2)
         }
 
+    @Test
+    fun `cached passphrase copy is wiped after execute`() =
+        runTest {
+            val cachedPassphraseCopy = "passphrase".toByteArray()
+            passphraseMemoryCache.stub {
+                on { get() } doReturn PotentialPassphrase.Passphrase(cachedPassphraseCopy)
+            }
+
+            interactor.execute(
+                resourceInput = updateResourceModel(),
+                secretInput = secretInput(),
+            )
+
+            assertThat(cachedPassphraseCopy.all { it == 0.toByte() }).isTrue()
+        }
+
     private fun updateResourceModel() =
         UpdateResourceModel(
             contentType = PasswordAndDescription,

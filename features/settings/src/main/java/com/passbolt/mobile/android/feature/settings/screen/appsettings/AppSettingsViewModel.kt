@@ -29,7 +29,7 @@ import com.passbolt.mobile.android.common.autofill.DetectAutofillConflict
 import com.passbolt.mobile.android.common.usecase.UserIdInput
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
+import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.CheckIfPassphraseFileExistsUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.RemovePassphraseUseCase
@@ -152,18 +152,21 @@ internal class AppSettingsViewModel(
     }
 
     private fun finalizedBiometricAuth(authenticatedCipher: Cipher?) {
-        val passphrase = passphraseMemoryCache.get()
-        if (passphrase is PotentialPassphrase.Passphrase && authenticatedCipher != null) {
+        if (authenticatedCipher == null) {
+            Timber.e("Error during turning biometrics on. Authenticated cipher is missing.")
+            return
+        }
+        passphraseMemoryCache.usePassphraseCopy(
+            onPassphraseNotPresent = { Timber.e("Error during turing biometrics on. Passphrase not in cache after auth.") },
+        ) { passphrase ->
             savePassphraseUseCase.execute(
                 SavePassphraseUseCase.Input(
-                    passphrase.passphrase,
+                    passphrase,
                     authenticatedCipher,
                 ),
             )
             saveBiometricKeyUseCase.execute(SaveBiometricKeyUseCase.Input(BiometricKey(authenticatedCipher.iv)))
             updateViewState { copy(isBiometricEnabled = true) }
-        } else {
-            Timber.e("Error during turing biometrics on. Passphrase not in cache after auth.")
         }
     }
 

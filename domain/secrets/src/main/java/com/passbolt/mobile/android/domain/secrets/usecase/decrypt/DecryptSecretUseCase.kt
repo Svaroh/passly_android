@@ -23,12 +23,11 @@
 
 package com.passbolt.mobile.android.domain.secrets.usecase.decrypt
 
-import com.passbolt.mobile.android.common.extension.erase
 import com.passbolt.mobile.android.common.usecase.AsyncUseCase
 import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
 import com.passbolt.mobile.android.core.mvp.authentication.UnauthenticatedReason
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
+import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
 import com.passbolt.mobile.android.gopenpgp.OpenPgp
@@ -45,13 +44,13 @@ class DecryptSecretUseCase(
     override suspend fun execute(input: Input): Output {
         val userId =
             requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
-        val potentialPassphrase = passphraseMemoryCache.get()
-        return if (potentialPassphrase is PotentialPassphrase.Passphrase) {
-            val passphraseCopy = potentialPassphrase.passphrase.copyOf()
+        return passphraseMemoryCache.usePassphraseCopy(
+            onPassphraseNotPresent = { Output.Unauthorized(AuthenticationState.Unauthenticated.Reason.Passphrase) },
+        ) { passphrase ->
             val decrypted =
                 gopenPgp.decryptMessageArmored(
                     requireNotNull(privateKeyRepository.getPrivateKey(userId)) { "Unable to restore private key." }.armoredKey,
-                    passphraseCopy,
+                    passphrase,
                     input.encryptedSecret,
                 )
             when (decrypted) {
@@ -59,13 +58,8 @@ class DecryptSecretUseCase(
                     Timber.e(decrypted.error.message)
                     Output.Failure(decrypted.error.pgpError)
                 }
-                is OpenPgpResult.Result -> {
-                    passphraseCopy.erase()
-                    Output.DecryptedSecret(decrypted.result)
-                }
+                is OpenPgpResult.Result -> Output.DecryptedSecret(decrypted.result)
             }
-        } else {
-            Output.Unauthorized(AuthenticationState.Unauthenticated.Reason.Passphrase)
         }
     }
 

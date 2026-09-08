@@ -5,7 +5,7 @@ import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseO
 import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
 import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Passphrase
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
+import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.metadata.model.MetadataKeyPurpose.ENCRYPT
 import com.passbolt.mobile.android.domain.metadata.usecase.GetTrustedMetadataKeyUseCase
@@ -138,42 +138,41 @@ class MetadataPrivateKeysInteractor(
             return Output.CannotValidateSignature.CannotGetUser
         }
 
-        val potentialPassphrase = passphraseMemoryCache.get()
-        if (potentialPassphrase is PotentialPassphrase.PassphraseNotPresent) {
-            Timber.d("Passphrase is not present in cache")
-            return Output.Failure(AuthenticationState.Unauthenticated(Passphrase))
-        }
-        val passphrase = (potentialPassphrase as PotentialPassphrase.Passphrase).passphrase
-
-        Timber.d("Verifying key signature")
-        val verifiedMessage =
-            openPgp.verifySignature(
-                armoredPrivateKey = currentUserPrivateKey,
-                passphrase = passphrase,
-                armoredPublicKey = userWhoModifiedTheKey.gpgKey.armoredKey,
-                pgpMessage = backendMetadataPrivateKey.pgpMessage.toByteArray(),
-            )
-
-        when (verifiedMessage) {
-            is OpenPgpResult.Error -> {
-                Timber.e("Signature is invalid: ${verifiedMessage.error.message}")
-                return Output.CannotValidateSignature.SignatureInvalid(
-                    keyFingerprint = userWhoModifiedTheKey.gpgKey.fingerprint,
-                    signedUsername = userWhoModifiedTheKey.userName,
-                    signedName = userWhoModifiedTheKey.fullName,
+        return passphraseMemoryCache.usePassphraseCopy(
+            onPassphraseNotPresent = {
+                Timber.d("Passphrase is not present in cache")
+                Output.Failure(AuthenticationState.Unauthenticated(Passphrase))
+            },
+        ) { passphrase ->
+            Timber.d("Verifying key signature")
+            val verifiedMessage =
+                openPgp.verifySignature(
+                    armoredPrivateKey = currentUserPrivateKey,
+                    passphrase = passphrase,
+                    armoredPublicKey = userWhoModifiedTheKey.gpgKey.armoredKey,
+                    pgpMessage = backendMetadataPrivateKey.pgpMessage.toByteArray(),
                 )
-            }
-            is OpenPgpResult.Result<VerifiedMessage> -> {
-                return verifyWithBackendKeyPresentWithValidSignature(
-                    localTrustedKey = localTrustedKey,
-                    currentUserPrivateKey = currentUserPrivateKey,
-                    currentUserPrivateKeyPassphrase = passphrase,
-                    currentUserSigningKeyFingerprint = currentUserSigningKeyFingerprint,
-                    currentUserSigningKey = currentUserSigningKey,
-                    verifiedMessage = verifiedMessage.result,
-                    backendMetadataPrivateKey = backendMetadataPrivateKey,
-                    userWhoModifiedTheKey = userWhoModifiedTheKey,
-                )
+
+            when (verifiedMessage) {
+                is OpenPgpResult.Error -> {
+                    Timber.e("Signature is invalid: ${verifiedMessage.error.message}")
+                    Output.CannotValidateSignature.SignatureInvalid(
+                        keyFingerprint = userWhoModifiedTheKey.gpgKey.fingerprint,
+                        signedUsername = userWhoModifiedTheKey.userName,
+                        signedName = userWhoModifiedTheKey.fullName,
+                    )
+                }
+                is OpenPgpResult.Result<VerifiedMessage> ->
+                    verifyWithBackendKeyPresentWithValidSignature(
+                        localTrustedKey = localTrustedKey,
+                        currentUserPrivateKey = currentUserPrivateKey,
+                        currentUserPrivateKeyPassphrase = passphrase,
+                        currentUserSigningKeyFingerprint = currentUserSigningKeyFingerprint,
+                        currentUserSigningKey = currentUserSigningKey,
+                        verifiedMessage = verifiedMessage.result,
+                        backendMetadataPrivateKey = backendMetadataPrivateKey,
+                        userWhoModifiedTheKey = userWhoModifiedTheKey,
+                    )
             }
         }
     }
