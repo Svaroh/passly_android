@@ -41,9 +41,9 @@ val networkingModule =
         single(named(DEFAULT_HTTP_CLIENT)) {
             provideHttpClient(
                 loggingInterceptor = get(),
-                interceptors =
+                baseUrlInterceptor = get(),
+                placeholderUrlInterceptors =
                     listOf(
-                        get<ChangeableBaseUrlInterceptor>(),
                         get<AuthInterceptor>(),
                         get<CookiesInterceptor.AddCookiesInterceptor>(),
                     ),
@@ -52,18 +52,15 @@ val networkingModule =
         single(named(COIL_HTTP_CLIENT)) {
             provideHttpClient(
                 loggingInterceptor = get(),
-                interceptors =
-                    listOf(
-                        get<ChangeableBaseUrlInterceptor>(),
-                    ),
+                baseUrlInterceptor = get(),
             )
         }
         single(named(NO_REDIRECT_HTTP_CLIENT)) {
             provideHttpClient(
                 loggingInterceptor = get(),
-                interceptors =
+                baseUrlInterceptor = get(),
+                placeholderUrlInterceptors =
                     listOf(
-                        get<ChangeableBaseUrlInterceptor>(),
                         get<AuthInterceptor>(),
                         get<CookiesInterceptor.AddCookiesInterceptor>(),
                     ),
@@ -127,7 +124,8 @@ private fun provideHttpLogger(): HttpLoggingInterceptor.Logger =
 
 private fun provideHttpClient(
     loggingInterceptor: HttpLoggingInterceptor,
-    interceptors: List<Interceptor> = emptyList(),
+    baseUrlInterceptor: ChangeableBaseUrlInterceptor,
+    placeholderUrlInterceptors: List<Interceptor> = emptyList(),
     followRedirects: Boolean = true,
 ) = OkHttpClient
     .Builder()
@@ -136,8 +134,9 @@ private fun provideHttpClient(
     .writeTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
     .readTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
     .apply {
-        interceptors.forEach { addInterceptor(it) }
-    }.followRedirects(followRedirects)
+        placeholderUrlInterceptors.forEach { addInterceptor(it) }
+    }.addInterceptor(baseUrlInterceptor)
+    .followRedirects(followRedirects)
     .build()
 
 const val DEFAULT_HTTP_CLIENT = "DEFAULT_HTTP_CLIENT"
