@@ -34,4 +34,6 @@ internal class DatabasePassphraseRepositoryImpl(
         userId: String,
         passphrase: String,
     ) = localDataSource.saveDatabasePassphrase(userId, passphrase)
+
+    override fun removeDatabasePassphrase(userId: String) = localDataSource.removeDatabasePassphrase(userId)
 }

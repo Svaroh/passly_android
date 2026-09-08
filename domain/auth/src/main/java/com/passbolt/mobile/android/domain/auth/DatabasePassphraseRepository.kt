@@ -29,4 +29,6 @@ interface DatabasePassphraseRepository {
         userId: String,
         passphrase: String,
     )
+
+    fun removeDatabasePassphrase(userId: String)
 }
