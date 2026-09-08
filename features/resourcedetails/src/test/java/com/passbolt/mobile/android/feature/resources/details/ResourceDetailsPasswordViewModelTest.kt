@@ -270,7 +270,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
             val password = "secretPassword123"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn
+                on { providePassword() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
