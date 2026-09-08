@@ -98,6 +98,7 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(CreateResource)
+                testDispatcher.scheduler.advanceUntilIdle()
 
                 assertThat(awaitItem()).isEqualTo(NavigateToConfirmPermissions(ConfirmPermissionsMode.Create(FOLDER_ID)))
             }

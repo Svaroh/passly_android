@@ -17,6 +17,7 @@ import com.passbolt.mobile.android.feature.authentication.auth.usecase.RefreshSe
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.RemoveAllAccountDataUseCase
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.ServerKeysWarmup
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.ServerKeysWarmupCache
+import com.passbolt.mobile.android.feature.authentication.auth.usecase.SessionRefreshLock
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInUseCase
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignInVerifyInteractor
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.SignOutUseCase
@@ -77,6 +78,7 @@ fun Module.authModule() {
     singleOf(::GopenPgpTimeUpdater)
     singleOf(::PostSignInActionsInteractor)
     singleOf(::RefreshSessionUseCase)
+    singleOf(::SessionRefreshLock)
     singleOf(::SignOutUseCase)
     singleOf(::BiometryInteractor)
     singleOf(::SignInIdlingResource)

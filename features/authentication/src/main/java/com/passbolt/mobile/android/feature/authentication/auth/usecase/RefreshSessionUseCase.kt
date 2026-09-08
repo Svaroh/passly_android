@@ -7,6 +7,7 @@ import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountDataUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.auth.AuthRepository
 import com.passbolt.mobile.android.domain.auth.SessionRepository
+import com.passbolt.mobile.android.feature.authentication.auth.usecase.SessionRefreshLock.CompletedRefresh
 import timber.log.Timber
 
 /**
@@ -36,28 +37,45 @@ class RefreshSessionUseCase(
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
     private val getAccountDataUseCase: GetAccountDataUseCase,
     private val sessionRepository: SessionRepository,
+    private val sessionRefreshLock: SessionRefreshLock,
 ) : AsyncUseCase<Unit, RefreshSessionUseCase.Output> {
     override suspend fun execute(input: Unit): Output =
+        sessionRefreshLock.refreshOrShareOutcome(
+            currentUserId = { getSelectedAccountUseCase.execute(Unit).selectedAccount },
+            refresh = { refreshSessionForSelectedAccount() },
+        )
+
+    private suspend fun refreshSessionForSelectedAccount(): CompletedRefresh =
         try {
             val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
             val serverUserId = requireNotNull(getAccountDataUseCase.execute(UserIdInput(userId)).serverId)
-            val refreshToken = requireNotNull(sessionRepository.getSession(userId).refreshToken)
+            val singleUseRefreshToken = requireNotNull(sessionRepository.getSession(userId).refreshToken)
 
-            when (val result = authRepository.refreshSession(refreshToken, serverUserId)) {
+            Timber.d("[Session] Refreshing backend session")
+            when (val result = authRepository.refreshSession(singleUseRefreshToken, serverUserId)) {
                 is DomainResult.Finished -> {
-                    sessionRepository.saveSession(
-                        userId = userId,
-                        accessToken = result.value.accessToken,
-                        refreshToken = result.value.refreshToken,
-                    )
-                    sessionRepository.saveMfaToken(userId, result.value.mfaToken)
-                    Output.Success
+                    with(sessionRepository) {
+                        saveSession(
+                            userId = userId,
+                            accessToken = result.value.accessToken,
+                            refreshToken = result.value.refreshToken,
+                        )
+                        saveMfaToken(
+                            userId = userId,
+                            mfaToken = result.value.mfaToken,
+                        )
+                    }
+                    Timber.d("[Session] Backend session refresh succeeded")
+                    CompletedRefresh(userId, Output.Success)
                 }
-                is DomainResult.Incomplete -> Output.Failure
+                is DomainResult.Incomplete -> {
+                    Timber.d("[Session] Backend session refresh request did not succeed")
+                    CompletedRefresh(userId, Output.Failure)
+                }
             }
         } catch (throwable: Throwable) {
-            Timber.e(throwable)
-            Output.Failure
+            Timber.e(throwable, "[Session] Backend session refresh attempt failed")
+            CompletedRefresh(userId = null, output = Output.Failure)
         }
 
     sealed class Output {

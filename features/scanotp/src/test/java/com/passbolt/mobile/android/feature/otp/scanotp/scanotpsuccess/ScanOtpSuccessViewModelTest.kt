@@ -343,9 +343,11 @@ class ScanOtpSuccessViewModelTest : KoinTest {
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(CreateStandaloneOtpClick)
+                testDispatcher.scheduler.advanceUntilIdle()
                 awaitItem()
 
                 viewModel.onIntent(ConfirmedPermissionsResult(emptyList()))
+                testDispatcher.scheduler.advanceUntilIdle()
 
                 val sideEffect = awaitItem()
                 assertIs<NavigateToOtpList>(sideEffect)
