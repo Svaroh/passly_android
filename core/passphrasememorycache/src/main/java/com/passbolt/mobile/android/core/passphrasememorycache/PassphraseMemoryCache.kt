@@ -144,3 +144,17 @@ class PassphraseMemoryCache(
         private const val TIMER_REPEAT_TIMES = CACHE_EXPIRATION_MILLIS / TIMER_TICK_MILLIS
     }
 }
+
+inline fun <T> PassphraseMemoryCache.usePassphraseCopy(
+    onPassphraseNotPresent: () -> T,
+    action: (passphraseCopy: ByteArray) -> T,
+): T =
+    when (val potentialPassphrase = get()) {
+        is PotentialPassphrase.Passphrase ->
+            try {
+                action(potentialPassphrase.passphrase)
+            } finally {
+                potentialPassphrase.passphrase.erase()
+            }
+        is PotentialPassphrase.PassphraseNotPresent -> onPassphraseNotPresent()
+    }

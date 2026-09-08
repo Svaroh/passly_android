@@ -1,5 +1,6 @@
 package com.passbolt.mobile.android.serializers.gson
 
+import com.passbolt.mobile.android.common.extension.erase
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.metadata.usecase.db.GetLocalMetadataKeyUseCase
 import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
@@ -21,13 +22,13 @@ class MetadataEncryptor(
         usersPrivateKeyPassphrase: ByteArray,
     ): Output =
         try {
-            val (key, passphrase) =
+            val (key, passphraseCopy) =
                 when (metadataKeyTypeModel) {
                     MetadataKeyTypeModel.PERSONAL -> {
                         val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
                         val privateKey = privateKeyRepository.getPrivateKey(userId)?.armoredKey
                         require(privateKey != null) { "Selected user private key not found" }
-                        privateKey to usersPrivateKeyPassphrase
+                        privateKey to usersPrivateKeyPassphrase.copyOf()
                     }
                     MetadataKeyTypeModel.SHARED -> {
                         val metadataPrivateKey =
@@ -42,16 +43,20 @@ class MetadataEncryptor(
                         metadataPrivateKey.keyData to metadataPrivateKey.passphrase.toByteArray()
                     }
                 }
-            val encryptedMeta =
-                openPgp.encryptSignMessageArmored(
-                    key,
-                    passphrase,
-                    metadataJsonString,
-                )
+            try {
+                val encryptedMeta =
+                    openPgp.encryptSignMessageArmored(
+                        key,
+                        passphraseCopy,
+                        metadataJsonString,
+                    )
 
-            when (encryptedMeta) {
-                is OpenPgpResult.Error -> Output.Failure(RuntimeException(encryptedMeta.error.message))
-                is OpenPgpResult.Result -> Output.Success(encryptedMeta.result)
+                when (encryptedMeta) {
+                    is OpenPgpResult.Error -> Output.Failure(RuntimeException(encryptedMeta.error.message))
+                    is OpenPgpResult.Result -> Output.Success(encryptedMeta.result)
+                }
+            } finally {
+                passphraseCopy.erase()
             }
         } catch (exception: Exception) {
             Timber.e(exception, "Exception during metadata encryption")

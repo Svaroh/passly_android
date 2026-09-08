@@ -23,9 +23,10 @@
 
 package com.passbolt.mobile.android.serializers.gson
 
+import com.passbolt.mobile.android.common.extension.erase
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
+import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.metadata.sessionkeys.ForeignModel.RESOURCE
 import com.passbolt.mobile.android.domain.metadata.sessionkeys.SessionKeysMemoryCache
@@ -114,13 +115,18 @@ class MetadataDecryptor(
                         "Metadata private key for resource id=(${resource.id}) not found, skipping"
                     }
 
-                    Crypto
-                        .newPrivateKeyFromArmored(
-                            metadataPrivateKey.keyData,
-                            metadataPrivateKey.passphrase.toByteArray(),
-                        ).also {
-                            cachedSharedKeys[resource.metadataKeyId.toString()] = it
-                        }
+                    val passphraseCopy = metadataPrivateKey.passphrase.toByteArray()
+                    try {
+                        Crypto
+                            .newPrivateKeyFromArmored(
+                                metadataPrivateKey.keyData,
+                                passphraseCopy,
+                            ).also {
+                                cachedSharedKeys[resource.metadataKeyId.toString()] = it
+                            }
+                    } finally {
+                        passphraseCopy.erase()
+                    }
                 }
             }
             PERSONAL -> personalKey()
@@ -133,9 +139,11 @@ class MetadataDecryptor(
                 val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
                 val privateKey = privateKeyRepository.getPrivateKey(userId)?.armoredKey
                 require(privateKey != null) { "Selected user private key not found" }
-                val passphrase = passphraseMemoryCache.get()
-                require(passphrase is PotentialPassphrase.Passphrase) { "Passphrase not present in cache" }
-                Crypto.newPrivateKeyFromArmored(privateKey, passphrase.passphrase).also { cachedPersonalKey = it }
+                passphraseMemoryCache.usePassphraseCopy(
+                    onPassphraseNotPresent = { error("Passphrase not present in cache") },
+                ) { passphrase ->
+                    Crypto.newPrivateKeyFromArmored(privateKey, passphrase).also { cachedPersonalKey = it }
+                }
             }
         }
     }

@@ -25,6 +25,7 @@ package com.passbolt.mobile.android.domain.metadata.interactor
 
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.google.common.truth.Truth.assertThat
+import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
 import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
@@ -53,6 +54,7 @@ import org.koin.test.KoinTestRule
 import org.koin.test.inject
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.never
 import org.mockito.kotlin.reset
@@ -159,9 +161,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
         mockPrivateKeyRepository.stub {
             on { getPrivateKey(any()) } doReturn PrivateKey(String(gracePrivateKey))
         }
-        mockPassphraseMemoryCache.stub {
-            on { get() } doReturn PotentialPassphrase.Passphrase("grace@passbolt.com".toByteArray())
-        }
+        mockPassphraseMemoryCache.stubFreshCopiesOf("grace@passbolt.com".toByteArray())
 
         mockSaveTrustedMetadataKeyUseCase.stub {
             on { execute(any()) } doReturn Unit
@@ -747,6 +747,12 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
             verify(mockUpdateMetadataPrivateKeyUseCase, never()).execute(any())
             assertThat(result).isInstanceOf(MetadataPrivateKeysInteractor.Output.KeyIsTrusted::class.java)
         }
+
+    private fun PassphraseMemoryCache.stubFreshCopiesOf(passphrase: ByteArray) {
+        stub {
+            on { get() } doAnswer { PotentialPassphrase.Passphrase(passphrase.copyOf()) }
+        }
+    }
 
     private companion object {
         private const val GRACE_USER_ID = "640ebc06-5ec1-5322-a1ae-6120ed2f3a74"

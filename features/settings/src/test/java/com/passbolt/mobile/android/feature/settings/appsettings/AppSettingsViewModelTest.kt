@@ -43,6 +43,7 @@ import org.koin.test.get
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -212,9 +213,12 @@ class AppSettingsViewModelTest : KoinTest {
             whenever(biometricInformationProvider.hasBiometricSetUp()) doReturn true
             val passphraseMemoryCache: PassphraseMemoryCache = get()
             whenever(passphraseMemoryCache.hasPassphrase()) doReturn true
-            whenever(passphraseMemoryCache.get()) doReturn Passphrase(PASSPHRASE)
+            passphraseMemoryCache.stubFreshCopiesOf(PASSPHRASE)
             val biometricCipher: BiometricCipher = get()
             whenever(biometricCipher.getBiometricEncryptCipher()) doReturn mock<Cipher>()
+
+            val savePassphraseUseCase: SavePassphraseUseCase = get()
+            val savedPassphraseSnapshots = snapshotSavedPassphrases(savePassphraseUseCase)
 
             viewModel = get()
             viewModel.onIntent(AppSettingsIntent.ToggleBiometric)
@@ -227,9 +231,11 @@ class AppSettingsViewModelTest : KoinTest {
                 whenever(authenticatedCipher.iv) doReturn ByteArray(256)
                 viewModel.onIntent(AppSettingsIntent.FinalizedBiometricAuth(authenticatedCipher))
 
+                assertThat(savedPassphraseSnapshots).hasSize(1)
+                assertThat(savedPassphraseSnapshots.single()).isEqualTo(PASSPHRASE)
                 argumentCaptor<SavePassphraseUseCase.Input> {
-                    verify(get<SavePassphraseUseCase>()).execute(capture())
-                    assertThat(firstValue.passphrase).isEqualTo(PASSPHRASE)
+                    verify(savePassphraseUseCase).execute(capture())
+                    assertThat(firstValue.passphrase.all { it == 0.toByte() }).isTrue()
                 }
                 verify(get<SaveBiometricKeyUseCase>()).execute(any())
 
@@ -257,21 +263,26 @@ class AppSettingsViewModelTest : KoinTest {
             viewModel = get()
             viewModel.onIntent(AppSettingsIntent.ToggleBiometric)
 
+            val savePassphraseUseCase: SavePassphraseUseCase = get()
+            val savedPassphraseSnapshots = snapshotSavedPassphrases(savePassphraseUseCase)
+
             viewModel.viewState.drop(1).test {
                 viewModel.sideEffect.test {
                     assertThat(awaitItem()).isInstanceOf(AppSettingsSideEffect.NavigateToGetPassphrase::class.java)
                 }
                 whenever(passphraseMemoryCache.hasPassphrase()) doReturn true
-                whenever(passphraseMemoryCache.get()) doReturn Passphrase(PASSPHRASE)
+                passphraseMemoryCache.stubFreshCopiesOf(PASSPHRASE)
                 viewModel.onIntent(AppSettingsIntent.RefreshedPassphrase)
 
                 val authenticatedCipher = mock<Cipher>()
                 whenever(authenticatedCipher.iv) doReturn ByteArray(256)
                 viewModel.onIntent(AppSettingsIntent.FinalizedBiometricAuth(authenticatedCipher))
 
+                assertThat(savedPassphraseSnapshots).hasSize(1)
+                assertThat(savedPassphraseSnapshots.single()).isEqualTo(PASSPHRASE)
                 argumentCaptor<SavePassphraseUseCase.Input> {
-                    verify(get<SavePassphraseUseCase>()).execute(capture())
-                    assertThat(firstValue.passphrase).isEqualTo(PASSPHRASE)
+                    verify(savePassphraseUseCase).execute(capture())
+                    assertThat(firstValue.passphrase.all { it == 0.toByte() }).isTrue()
                 }
                 verify(get<SaveBiometricKeyUseCase>()).execute(any())
 
@@ -326,6 +337,18 @@ class AppSettingsViewModelTest : KoinTest {
 
             assertThat(viewModel.viewState.value.isAutofillConflictDetected).isFalse()
         }
+
+    private fun PassphraseMemoryCache.stubFreshCopiesOf(passphrase: ByteArray) {
+        whenever(get()).thenAnswer { Passphrase(passphrase.copyOf()) }
+    }
+
+    private fun snapshotSavedPassphrases(savePassphraseUseCase: SavePassphraseUseCase): List<ByteArray> {
+        val snapshots = mutableListOf<ByteArray>()
+        doAnswer { invocation ->
+            snapshots += (invocation.arguments[0] as SavePassphraseUseCase.Input).passphrase.copyOf()
+        }.whenever(savePassphraseUseCase).execute(any())
+        return snapshots
+    }
 
     private companion object {
         private val SELECTED_ACCOUNT_ID = UUID.randomUUID().toString()

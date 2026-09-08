@@ -45,28 +45,30 @@ class ChallengeProvider(
         userId: String,
     ): Output {
         val passphraseCopy = passphrase.copyOf()
-        val privateKey = requireNotNull(privateKeyRepository.getPrivateKey(userId)) { "Unable to restore private key." }.armoredKey
-        val tokenExpiry = getVerifyTokenExpiry()
-        val verifyToken = uuidProvider.get()
+        try {
+            val privateKey =
+                requireNotNull(privateKeyRepository.getPrivateKey(userId)) { "Unable to restore private key." }.armoredKey
+            val tokenExpiry = getVerifyTokenExpiry()
+            val verifyToken = uuidProvider.get()
 
-        val challengeJson =
-            ChallengeDto(CHALLENGE_VERSION, domain, verifyToken, tokenExpiry)
-                .run { gson.toJson(this) }
+            val challengeJson =
+                ChallengeDto(CHALLENGE_VERSION, domain, verifyToken, tokenExpiry)
+                    .run { gson.toJson(this) }
 
-        return when (
-            val encryptedChallenge =
-                openPgp.encryptSignMessageArmored(
-                    publicKey = serverPublicKey,
-                    privateKey = privateKey,
-                    passphrase = passphraseCopy,
-                    message = challengeJson,
-                )
-        ) {
-            is OpenPgpResult.Result -> {
-                passphraseCopy.erase()
-                Output.Success(encryptedChallenge.result, verifyToken)
+            return when (
+                val encryptedChallenge =
+                    openPgp.encryptSignMessageArmored(
+                        publicKey = serverPublicKey,
+                        privateKey = privateKey,
+                        passphrase = passphraseCopy,
+                        message = challengeJson,
+                    )
+            ) {
+                is OpenPgpResult.Result -> Output.Success(encryptedChallenge.result, verifyToken)
+                is OpenPgpResult.Error -> Output.WrongPassphrase
             }
-            is OpenPgpResult.Error -> Output.WrongPassphrase
+        } finally {
+            passphraseCopy.erase()
         }
     }
 

@@ -78,7 +78,7 @@ import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.get
 import org.mockito.kotlin.any
-import org.mockito.kotlin.argThat
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -513,7 +513,12 @@ class AuthViewModelTest : KoinTest {
                     PotentialPassphrase.Passphrase(BIOMETRIC_PASSPHRASE.toByteArray()),
                 )
 
+            val cachedPassphraseSnapshots = mutableListOf<ByteArray>()
             val passphraseMemoryCache: PassphraseMemoryCache = get()
+            doAnswer { invocation ->
+                cachedPassphraseSnapshots += (invocation.arguments[0] as ByteArray).copyOf()
+                Unit
+            }.whenever(passphraseMemoryCache).set(any())
 
             viewModel = get(parameters = { parametersOf(AuthConfig.RefreshPassphrase, USER_ID, AppContext.APP) })
 
@@ -522,10 +527,31 @@ class AuthViewModelTest : KoinTest {
                 assertIs<AuthSuccess>(awaitItem())
             }
 
-            verify(passphraseMemoryCache).set(
-                argThat { contentEquals(BIOMETRIC_PASSPHRASE.toByteArray()) },
-            )
-            verify(passphraseMemoryCache, never()).set(argThat { isEmpty() })
+            assertThat(cachedPassphraseSnapshots).hasSize(1)
+            assertThat(cachedPassphraseSnapshots.single()).isEqualTo(BIOMETRIC_PASSPHRASE.toByteArray())
+        }
+
+    @Test
+    fun `biometric passphrase source array is wiped after the flow completes`() =
+        runTest {
+            val mockCipher = mock<Cipher>()
+            whenever(mockCipher.iv) doReturn ByteArray(0)
+
+            val biometricSource = BIOMETRIC_PASSPHRASE.toByteArray()
+            val getPassphraseUseCase: GetPassphraseUseCase = get()
+            whenever(getPassphraseUseCase.execute(any())) doReturn
+                GetPassphraseUseCase.Output(
+                    PotentialPassphrase.Passphrase(biometricSource),
+                )
+
+            viewModel = get(parameters = { parametersOf(AuthConfig.RefreshPassphrase, USER_ID, AppContext.APP) })
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(BiometricAuthenticationSuccess(mockCipher))
+                assertIs<AuthSuccess>(awaitItem())
+            }
+
+            assertThat(biometricSource.all { it == 0.toByte() }).isTrue()
         }
 
     @Test

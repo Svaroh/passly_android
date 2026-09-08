@@ -20,6 +20,7 @@ import com.passbolt.mobile.android.core.navigation.AppContext
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
 import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
 import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase.Passphrase
+import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
 import com.passbolt.mobile.android.core.security.rootdetection.RootDetector
 import com.passbolt.mobile.android.core.security.runtimeauth.RuntimeAuthenticatedFlag
 import com.passbolt.mobile.android.domain.accounts.AuthenticatedAccountFlow
@@ -298,23 +299,27 @@ class AuthViewModel(
 
     private fun signIn() {
         emitSideEffect(HideKeyboard)
-        validatePassphrase(passphrase.copyOf())
+        validatePassphrase(passphrase)
     }
 
-    private fun validatePassphrase(passphrase: ByteArray) {
+    private fun validatePassphrase(typedPassphrase: ByteArray) {
+        val passphrase = typedPassphrase.copyOf()
         launch {
-            val privateKey =
-                requireNotNull(getPrivateKeyUseCase.execute(UserIdInput(userId)).privateKey) {
-                    "Unable to restore private key."
-                }.armoredKey
-            val isPassphraseCorrect =
-                verifyPassphraseUseCase.execute(VerifyPassphraseUseCase.Input(privateKey, passphrase)).isCorrect
-            if (isPassphraseCorrect) {
-                passphraseMemoryCache.set(passphrase)
-                onPassphraseVerified(passphrase)
-            } else {
+            try {
+                val privateKey =
+                    requireNotNull(getPrivateKeyUseCase.execute(UserIdInput(userId)).privateKey) {
+                        "Unable to restore private key."
+                    }.armoredKey
+                val isPassphraseCorrect =
+                    verifyPassphraseUseCase.execute(VerifyPassphraseUseCase.Input(privateKey, passphrase)).isCorrect
+                if (isPassphraseCorrect) {
+                    passphraseMemoryCache.set(passphrase)
+                    onPassphraseVerified(passphrase)
+                } else {
+                    emitSideEffect(ShowErrorSnackbar(WRONG_PASSPHRASE))
+                }
+            } finally {
                 passphrase.erase()
-                emitSideEffect(ShowErrorSnackbar(WRONG_PASSPHRASE))
             }
         }
     }
@@ -330,29 +335,32 @@ class AuthViewModel(
             is Mfa,
             -> {
                 runtimeAuthenticatedFlag.isAuthenticated = true
-                passphrase.erase()
                 emitSideEffect(AuthSuccess(authConfig, appContext))
             }
             is AuthConfig.RefreshSession -> performRefreshSession(passphrase)
         }
     }
 
-    private fun performRefreshSession(passphrase: ByteArray) {
+    private fun performRefreshSession(verifiedPassphrase: ByteArray) {
+        val passphrase = verifiedPassphrase.copyOf()
         updateViewState { copy(showProgress = true) }
         signInIdlingResource.setIdle(false)
         launch {
-            val refreshSessionResult = refreshSessionUseCase.execute(Unit)
-            updateViewState { copy(showProgress = false) }
-            signInIdlingResource.setIdle(true)
-            when (refreshSessionResult) {
-                is RefreshSessionUseCase.Output.Success -> {
-                    passphrase.erase()
-                    runtimeAuthenticatedFlag.isAuthenticated = true
-                    emitSideEffect(AuthSuccess(authConfig, appContext))
+            try {
+                val refreshSessionResult = refreshSessionUseCase.execute(Unit)
+                updateViewState { copy(showProgress = false) }
+                signInIdlingResource.setIdle(true)
+                when (refreshSessionResult) {
+                    is RefreshSessionUseCase.Output.Success -> {
+                        runtimeAuthenticatedFlag.isAuthenticated = true
+                        emitSideEffect(AuthSuccess(authConfig, appContext))
+                    }
+                    is RefreshSessionUseCase.Output.Failure -> {
+                        performFullSignIn(passphrase)
+                    }
                 }
-                is RefreshSessionUseCase.Output.Failure -> {
-                    performFullSignIn(passphrase)
-                }
+            } finally {
+                passphrase.erase()
             }
         }
     }
@@ -366,41 +374,46 @@ class AuthViewModel(
     }
 
     @Suppress("LongMethod")
-    private fun performFullSignIn(passphrase: ByteArray) {
+    private fun performFullSignIn(verifiedPassphrase: ByteArray) {
+        val passphrase = verifiedPassphrase.copyOf()
         signInIdlingResource.setIdle(false)
         updateViewState { copy(showProgress = true) }
         launch {
-            getAndVerifyServerKeysInteractor.getAndVerifyServerKeys(
-                userId,
-                onError = {
-                    updateViewState { copy(showProgress = false) }
-                    when (it) {
-                        is Generic -> {
-                            emitSideEffect(ShowErrorSnackbar(GENERIC))
-                        }
-                        is IncorrectServerFingerprint -> {
-                            updateViewState {
-                                copy(
-                                    showServerFingerprintChanged = true,
-                                    serverFingerprintChangedFingerprint = it.fingerprint,
-                                )
+            try {
+                getAndVerifyServerKeysInteractor.getAndVerifyServerKeys(
+                    userId,
+                    onError = {
+                        updateViewState { copy(showProgress = false) }
+                        when (it) {
+                            is Generic -> {
+                                emitSideEffect(ShowErrorSnackbar(GENERIC))
+                            }
+                            is IncorrectServerFingerprint -> {
+                                updateViewState {
+                                    copy(
+                                        showServerFingerprintChanged = true,
+                                        serverFingerprintChangedFingerprint = it.fingerprint,
+                                    )
+                                }
+                            }
+                            is ServerNotReachable -> {
+                                updateViewState {
+                                    copy(showServerNotReachable = true, serverNotReachableDomain = it.serverUrl)
+                                }
+                            }
+                            is ServerKeysNoNetwork -> {
+                                emitSideEffect(ShowErrorSnackbar(CONNECTION_FAILURE))
+                            }
+                            is TimeIsOutOfSync -> {
+                                emitSideEffect(ShowErrorSnackbar(TIME_OUT_OF_SYNC))
                             }
                         }
-                        is ServerNotReachable -> {
-                            updateViewState {
-                                copy(showServerNotReachable = true, serverNotReachableDomain = it.serverUrl)
-                            }
-                        }
-                        is ServerKeysNoNetwork -> {
-                            emitSideEffect(ShowErrorSnackbar(CONNECTION_FAILURE))
-                        }
-                        is TimeIsOutOfSync -> {
-                            emitSideEffect(ShowErrorSnackbar(TIME_OUT_OF_SYNC))
-                        }
-                    }
-                },
-            ) {
-                signIn(passphrase.copyOf(), it.pgpKey, it.rsaKey, it.pgpKeyFingerprint)
+                    },
+                ) {
+                    signIn(passphrase, it.pgpKey, it.rsaKey, it.pgpKeyFingerprint)
+                }
+            } finally {
+                passphrase.erase()
             }
         }
     }
@@ -418,7 +431,6 @@ class AuthViewModel(
             rsaKey,
             onError = { handleSignInError(it, passphrase) },
         ) {
-            passphrase.erase()
             loginState =
                 LoginState(
                     accessToken = it.accessToken,
@@ -488,7 +500,7 @@ class AuthViewModel(
     private fun signInSuccess(updateSession: Boolean = true) {
         Timber.d("Authentication success")
         runtimeAuthenticatedFlag.isAuthenticated = true
-        passphraseMemoryCache.set(passphrase.copyOf())
+        passphraseMemoryCache.set(passphrase)
         val currentLoginState = requireNotNull(loginState)
         if (updateSession) {
             saveSessionUseCase.execute(
@@ -543,18 +555,22 @@ class AuthViewModel(
                         return
                     }
             if (potentialPassphrase is Passphrase) {
-                passphraseMemoryCache.set(potentialPassphrase.passphrase)
-                passphrase.erase()
-                passphrase = potentialPassphrase.passphrase.copyOf()
-                updateViewState { copy(passphrase = "", isAuthButtonEnabled = false) }
-                when (authConfig) {
-                    is RefreshPassphrase,
-                    is Mfa,
-                    -> {
-                        runtimeAuthenticatedFlag.isAuthenticated = true
-                        emitSideEffect(AuthSuccess(authConfig, appContext))
+                try {
+                    passphraseMemoryCache.set(potentialPassphrase.passphrase)
+                    passphrase.erase()
+                    passphrase = potentialPassphrase.passphrase.copyOf()
+                    updateViewState { copy(passphrase = "", isAuthButtonEnabled = false) }
+                    when (authConfig) {
+                        is RefreshPassphrase,
+                        is Mfa,
+                        -> {
+                            runtimeAuthenticatedFlag.isAuthenticated = true
+                            emitSideEffect(AuthSuccess(authConfig, appContext))
+                        }
+                        else -> performSignIn(passphrase)
                     }
-                    else -> performSignIn(passphrase.copyOf())
+                } finally {
+                    potentialPassphrase.passphrase.erase()
                 }
             } else {
                 emitSideEffect(ShowErrorSnackbar(GENERIC))
@@ -670,10 +686,10 @@ class AuthViewModel(
 
     private fun retry() {
         updateViewState { copy(showFetchFeatureFlagsError = false) }
-        passphraseMemoryCache.get().let {
-            if (it is Passphrase) {
-                performSignIn(it.passphrase)
-            }
+        passphraseMemoryCache.usePassphraseCopy(
+            onPassphraseNotPresent = {},
+        ) { passphrase ->
+            performSignIn(passphrase)
         }
     }
 
