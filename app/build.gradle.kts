@@ -249,6 +249,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.truth)
     testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.androidx.navigation3.runtime)
     testImplementation(project(":commontest"))
 
     androidTestImplementation(project(":testtags"))
