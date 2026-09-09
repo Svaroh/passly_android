@@ -1,14 +1,6 @@
-package com.passbolt.mobile.android.core.security.flagsecure
-
-import android.app.Activity
-import android.view.WindowManager
-import com.passbolt.mobile.android.core.security.BuildConfig
-import com.passbolt.mobile.android.core.security.flagsecure.WindowFlagAction.APPLY_FLAG
-import com.passbolt.mobile.android.core.security.flagsecure.WindowFlagAction.CLEAR_FLAG
-
 /**
  * Passbolt - Open source password manager for teams
- * Copyright (c) 2021 Passbolt SA
+ * Copyright (c) 2026 Passbolt SA
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
  * Public License (AGPL) as published by the Free Software Foundation version 3.
@@ -29,23 +21,10 @@ import com.passbolt.mobile.android.core.security.flagsecure.WindowFlagAction.CLE
  * @since v1.0
  */
 
-class FlagSecureSetter(
-    private val flagSecureRegistry: FlagSecureRegistry,
-) {
-    fun set(activity: Activity) {
-        if (flagSecureRegistry.addActivity(activity) == APPLY_FLAG && !BuildConfig.DEBUG) {
-            activity.window.setFlags(
-                WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE,
-            )
-        }
-    }
+package com.passbolt.mobile.android.core.security.flagsecure
 
-    fun remove(activity: Activity) {
-        if (flagSecureRegistry.removeActivity(activity) == CLEAR_FLAG && !BuildConfig.DEBUG) {
-            activity.window.clearFlags(
-                WindowManager.LayoutParams.FLAG_SECURE,
-            )
-        }
-    }
+enum class WindowFlagAction {
+    APPLY_FLAG,
+    CLEAR_FLAG,
+    NO_ACTION_NEEDED,
 }

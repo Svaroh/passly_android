@@ -1,5 +1,6 @@
 package com.passbolt.mobile.android.core.security
 
+import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureRegistry
 import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureSetter
 import com.passbolt.mobile.android.core.security.rootdetection.RootDetector
 import com.passbolt.mobile.android.core.security.rootdetection.RootDetectorImpl
@@ -33,7 +34,8 @@ import org.koin.dsl.module
 
 val securityModule =
     module {
-        single { FlagSecureSetter() }
+        single { FlagSecureRegistry() }
+        single { FlagSecureSetter(flagSecureRegistry = get()) }
         factory { RootBeer(androidContext()) }
         single<RootDetector> {
             RootDetectorImpl(
