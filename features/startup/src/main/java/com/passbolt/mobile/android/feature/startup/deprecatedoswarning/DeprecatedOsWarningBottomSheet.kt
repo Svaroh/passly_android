@@ -88,7 +88,7 @@ private fun DeprecatedOsWarningContent(
         )
 
         Icon(
-            painter = painterResource(CoreUiR.drawable.ic_alert_triangle),
+            painter = painterResource(CoreUiR.drawable.ic_warning),
             contentDescription = null,
             tint = colorResource(CoreUiR.color.warning),
             modifier =
