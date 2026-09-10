@@ -1255,7 +1255,7 @@
   {
     "groupId": "androidx.databinding",
     "artifactId": "viewbinding",
-    "version": "9.3.2",
+    "version": "9.4.0",
     "spdxLicenses": [
       {
         "identifier": "Apache-2.0",
@@ -3532,7 +3532,7 @@
   {
     "groupId": "com.squareup.okio",
     "artifactId": "okio",
-    "version": "3.18.1",
+    "version": "3.18.2",
     "name": "okio",
     "spdxLicenses": [
       {
@@ -3548,7 +3548,7 @@
   {
     "groupId": "com.squareup.okio",
     "artifactId": "okio-jvm",
-    "version": "3.18.1",
+    "version": "3.18.2",
     "name": "okio",
     "spdxLicenses": [
       {
@@ -3756,7 +3756,7 @@
   {
     "groupId": "io.coil-kt.coil3",
     "artifactId": "coil",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "name": "coil",
     "spdxLicenses": [
       {
@@ -3772,7 +3772,7 @@
   {
     "groupId": "io.coil-kt.coil3",
     "artifactId": "coil-android",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "name": "coil",
     "spdxLicenses": [
       {
@@ -3788,7 +3788,7 @@
   {
     "groupId": "io.coil-kt.coil3",
     "artifactId": "coil-compose",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "name": "coil-compose",
     "spdxLicenses": [
       {
@@ -3804,7 +3804,7 @@
   {
     "groupId": "io.coil-kt.coil3",
     "artifactId": "coil-compose-android",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "name": "coil-compose",
     "spdxLicenses": [
       {
@@ -3820,7 +3820,7 @@
   {
     "groupId": "io.coil-kt.coil3",
     "artifactId": "coil-compose-core",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "name": "coil-compose-core",
     "spdxLicenses": [
       {
@@ -3836,7 +3836,7 @@
   {
     "groupId": "io.coil-kt.coil3",
     "artifactId": "coil-compose-core-android",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "name": "coil-compose-core",
     "spdxLicenses": [
       {
@@ -3852,7 +3852,7 @@
   {
     "groupId": "io.coil-kt.coil3",
     "artifactId": "coil-core",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "name": "coil-core",
     "spdxLicenses": [
       {
@@ -3868,7 +3868,7 @@
   {
     "groupId": "io.coil-kt.coil3",
     "artifactId": "coil-core-android",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "name": "coil-core",
     "spdxLicenses": [
       {
@@ -3884,7 +3884,7 @@
   {
     "groupId": "io.coil-kt.coil3",
     "artifactId": "coil-network-core",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "name": "coil-network-core",
     "spdxLicenses": [
       {
@@ -3900,7 +3900,7 @@
   {
     "groupId": "io.coil-kt.coil3",
     "artifactId": "coil-network-core-android",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "name": "coil-network-core",
     "spdxLicenses": [
       {
@@ -3916,7 +3916,7 @@
   {
     "groupId": "io.coil-kt.coil3",
     "artifactId": "coil-network-okhttp",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "name": "coil-network-okhttp",
     "spdxLicenses": [
       {
@@ -3932,7 +3932,7 @@
   {
     "groupId": "io.coil-kt.coil3",
     "artifactId": "coil-network-okhttp-android",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "name": "coil-network-okhttp",
     "spdxLicenses": [
       {
