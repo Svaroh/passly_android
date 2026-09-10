@@ -1,10 +1,7 @@
 package com.passbolt.mobile.android.core.networking.interceptor
 
-import com.passbolt.mobile.android.core.networking.PLACEHOLDER_BASE_URL
-import com.passbolt.mobile.android.domain.accounts.usecase.GetCurrentApiUrlUseCase
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import okhttp3.Interceptor
-import okhttp3.Response
+import okhttp3.HttpUrl
+import okhttp3.Request
 
 /**
  * Passbolt - Open source password manager for teams
@@ -28,22 +25,18 @@ import okhttp3.Response
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-class ChangeableBaseUrlInterceptor(
-    private val getCurrentApiUrlUseCase: GetCurrentApiUrlUseCase,
-) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val oldRequest = chain.request()
-        val oldUrl = oldRequest.url
-        val baseUrl: String = getCurrentApiUrlUseCase.execute(Unit).currentUrl
-        val newUrl = oldUrl.toString().replaceBaseUrlWithNew(baseUrl)
-        val newRequest =
-            oldRequest
-                .newBuilder()
-                .url(newUrl)
-                .tagApiOrigin(baseUrl.toHttpUrlOrNull()?.let { ApiOrigin(it) })
-                .build()
-        return chain.proceed(newRequest)
-    }
+
+internal data class ApiOrigin(
+    val scheme: String,
+    val host: String,
+    val port: Int,
+) {
+    constructor(url: HttpUrl) : this(scheme = url.scheme, host = url.host, port = url.port)
+
+    fun matches(url: HttpUrl) = scheme == url.scheme && host == url.host && port == url.port
 }
 
-private fun String.replaceBaseUrlWithNew(newUrl: String) = replace(PLACEHOLDER_BASE_URL, newUrl)
+internal fun Request.Builder.tagApiOrigin(apiOrigin: ApiOrigin?): Request.Builder = tag(ApiOrigin::class.java, apiOrigin)
+
+internal val Request.apiOrigin: ApiOrigin?
+    get() = tag(ApiOrigin::class.java)

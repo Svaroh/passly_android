@@ -4,6 +4,7 @@ import com.passbolt.mobile.android.common.CookieExtractor
 import com.passbolt.mobile.android.core.networking.interceptor.AuthInterceptor
 import com.passbolt.mobile.android.core.networking.interceptor.ChangeableBaseUrlInterceptor
 import com.passbolt.mobile.android.core.networking.interceptor.CookiesInterceptor
+import com.passbolt.mobile.android.core.networking.interceptor.StripForeignOriginCredentialsInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -129,6 +130,7 @@ private fun provideHttpClient(
     followRedirects: Boolean = true,
 ) = OkHttpClient
     .Builder()
+    .addNetworkInterceptor(StripForeignOriginCredentialsInterceptor())
     .addNetworkInterceptor(loggingInterceptor)
     .connectTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
     .writeTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))

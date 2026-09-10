@@ -42,6 +42,6 @@ internal class AuthInterceptor(
                 AuthPaths.AUTH_VERIFY,
                 AuthPaths.AUTH_JWT_REFRESH,
             )
-        private const val AUTH_HEADER = "Authorization"
+        internal const val AUTH_HEADER = "Authorization"
     }
 }
