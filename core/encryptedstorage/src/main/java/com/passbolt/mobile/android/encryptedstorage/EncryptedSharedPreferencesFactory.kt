@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import timber.log.Timber
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Passbolt - Open source password manager for teams
@@ -33,17 +34,21 @@ class EncryptedSharedPreferencesFactory internal constructor(
     private val context: Context,
     private val masterKey: MasterKey,
 ) {
+    private val openedPreferences = ConcurrentHashMap<String, SharedPreferences>()
+
     fun get(fileName: String): SharedPreferences =
-        try {
-            EncryptedSharedPreferences.create(
-                context,
-                fileName,
-                masterKey,
-                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
-            )
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to open encrypted preferences")
-            throw e
+        openedPreferences.computeIfAbsent(fileName) {
+            try {
+                EncryptedSharedPreferences.create(
+                    context,
+                    fileName,
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
+                )
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to open encrypted preferences")
+                throw e
+            }
         }
 }

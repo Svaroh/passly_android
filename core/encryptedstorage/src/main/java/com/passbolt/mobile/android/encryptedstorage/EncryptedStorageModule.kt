@@ -31,19 +31,19 @@ import org.koin.dsl.module
 val encryptedStorageModule =
     module {
         cryptoModule()
-        factory {
+        single {
             EncryptedFileFactory(
                 context = androidApplication(),
                 masterKey = get(),
             )
         }
-        factory {
+        single {
             EncryptedSharedPreferencesFactory(
                 context = androidApplication(),
                 masterKey = get(),
             )
         }
-        factory {
+        single {
             MasterKey
                 .Builder(androidApplication())
                 .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
