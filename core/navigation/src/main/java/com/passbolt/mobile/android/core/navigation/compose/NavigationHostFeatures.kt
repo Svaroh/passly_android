@@ -1,0 +1,98 @@
+package com.passbolt.mobile.android.core.navigation.compose
+
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.ACCOUNT_DETAILS
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.AUTHENTICATION
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.AUTOFILL_ENCOURAGEMENTS
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.CREATE_FOLDER
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.FOLDER_DETAILS
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.GROUP_DETAILS
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.HOME
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.LOCATION_DETAILS
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.LOGS
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.OTP
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.PERMISSIONS
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.RESOURCE_DETAILS
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.RESOURCE_FORM
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.RESOURCE_PICKER
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.SCAN_OTP
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.SETTINGS
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.SETUP
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.TAGS_DETAILS
+import com.passbolt.mobile.android.core.navigation.compose.base.Feature.TRANSFER_ACCOUNT_TO_ANOTHER_DEVICE
+
+/**
+ * Passbolt - Open source password manager for teams
+ * Copyright (c) 2021 Passbolt SA
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+ * Public License (AGPL) as published by the Free Software Foundation version 3.
+ *
+ * The name "Passbolt" is a registered trademark of Passbolt SA, and Passbolt SA hereby declines to grant a trademark
+ * license to "Passbolt" pursuant to the GNU Affero General Public License version 3 Section 7(e), without a separate
+ * agreement with Passbolt SA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License along with this program. If not,
+ * see GNU Affero General Public License v3 (http://www.gnu.org/licenses/agpl-3.0.html).
+ *
+ * @copyright Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link https://www.passbolt.com Passbolt (tm)
+ * @since v1.0
+ */
+
+object NavigationHostFeatures {
+    val home: Set<Feature> =
+        setOf(
+            HOME,
+            RESOURCE_FORM,
+            SCAN_OTP,
+            RESOURCE_PICKER,
+            PERMISSIONS,
+            GROUP_DETAILS,
+            RESOURCE_DETAILS,
+            FOLDER_DETAILS,
+            CREATE_FOLDER,
+            TAGS_DETAILS,
+            LOCATION_DETAILS,
+            ACCOUNT_DETAILS,
+            TRANSFER_ACCOUNT_TO_ANOTHER_DEVICE,
+        )
+
+    val otp: Set<Feature> =
+        setOf(
+            OTP,
+            SCAN_OTP,
+            RESOURCE_FORM,
+            RESOURCE_PICKER,
+            PERMISSIONS,
+            GROUP_DETAILS,
+            ACCOUNT_DETAILS,
+            TRANSFER_ACCOUNT_TO_ANOTHER_DEVICE,
+        )
+
+    val settings: Set<Feature> =
+        setOf(
+            SETTINGS,
+            LOGS,
+            ACCOUNT_DETAILS,
+            TRANSFER_ACCOUNT_TO_ANOTHER_DEVICE,
+            AUTOFILL_ENCOURAGEMENTS,
+        )
+
+    val authentication: Set<Feature> =
+        setOf(
+            AUTHENTICATION,
+            LOGS,
+        )
+
+    val setup: Set<Feature> =
+        setOf(
+            SETUP,
+            LOGS,
+            AUTOFILL_ENCOURAGEMENTS,
+        )
+}
