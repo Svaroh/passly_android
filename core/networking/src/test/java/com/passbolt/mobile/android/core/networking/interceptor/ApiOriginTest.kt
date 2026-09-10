@@ -1,10 +1,8 @@
 package com.passbolt.mobile.android.core.networking.interceptor
 
-import com.passbolt.mobile.android.core.networking.PLACEHOLDER_BASE_URL
-import com.passbolt.mobile.android.domain.accounts.usecase.GetCurrentApiUrlUseCase
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import okhttp3.Interceptor
-import okhttp3.Response
+import com.google.common.truth.Truth.assertThat
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import org.junit.Test
 
 /**
  * Passbolt - Open source password manager for teams
@@ -28,22 +26,27 @@ import okhttp3.Response
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-class ChangeableBaseUrlInterceptor(
-    private val getCurrentApiUrlUseCase: GetCurrentApiUrlUseCase,
-) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val oldRequest = chain.request()
-        val oldUrl = oldRequest.url
-        val baseUrl: String = getCurrentApiUrlUseCase.execute(Unit).currentUrl
-        val newUrl = oldUrl.toString().replaceBaseUrlWithNew(baseUrl)
-        val newRequest =
-            oldRequest
-                .newBuilder()
-                .url(newUrl)
-                .tagApiOrigin(baseUrl.toHttpUrlOrNull()?.let { ApiOrigin(it) })
-                .build()
-        return chain.proceed(newRequest)
+
+class ApiOriginTest {
+    private val apiOrigin = ApiOrigin("https://example.com/passbolt".toHttpUrl())
+
+    @Test
+    fun `should match any path and query on the api origin`() {
+        assertThat(apiOrigin.matches("https://example.com/other/path.json?query=1".toHttpUrl())).isTrue()
+    }
+
+    @Test
+    fun `should match the api origin with an explicit default port`() {
+        assertThat(apiOrigin.matches("https://example.com:443/passbolt/resources.json".toHttpUrl())).isTrue()
+    }
+
+    @Test
+    fun `should match the api host regardless of letter case`() {
+        assertThat(apiOrigin.matches("https://EXAMPLE.com/passbolt/resources.json".toHttpUrl())).isTrue()
+    }
+
+    @Test
+    fun `should not match a subdomain of the api host`() {
+        assertThat(apiOrigin.matches("https://api.example.com/passbolt/resources.json".toHttpUrl())).isFalse()
     }
 }
-
-private fun String.replaceBaseUrlWithNew(newUrl: String) = replace(PLACEHOLDER_BASE_URL, newUrl)

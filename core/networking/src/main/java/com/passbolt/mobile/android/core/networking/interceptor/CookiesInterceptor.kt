@@ -49,7 +49,7 @@ class CookiesInterceptor {
     }
 
     companion object {
-        private const val COOKIE_HEADER = "Cookie"
+        internal const val COOKIE_HEADER = "Cookie"
 
         private val ANONYMOUS_PATHS =
             setOf(
