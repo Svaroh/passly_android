@@ -82,7 +82,7 @@ class ResourceTypesRepositoryImplTest : KoinTest {
     @Test
     fun `getResourceTypes returns the local value`() =
         runTest {
-            local.stub { onBlocking { getResourceTypes(USER_ID) }.thenReturn(DomainResult.Finished(resourceTypes)) }
+            local.stub { on { getResourceTypes(USER_ID) }.thenReturn(DomainResult.Finished(resourceTypes)) }
 
             val result = repository.getResourceTypes(USER_ID)
 
@@ -93,7 +93,7 @@ class ResourceTypesRepositoryImplTest : KoinTest {
     fun `getResourceTypeIdToSlugMapping returns the local mapping`() =
         runTest {
             local.stub {
-                onBlocking { getResourceTypeIdToSlugMapping(USER_ID) }.thenReturn(DomainResult.Finished(idToSlugMapping))
+                on { getResourceTypeIdToSlugMapping(USER_ID) }.thenReturn(DomainResult.Finished(idToSlugMapping))
             }
 
             val result = repository.getResourceTypeIdToSlugMapping(USER_ID)

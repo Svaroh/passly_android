@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.withTransaction
 import com.passbolt.mobile.android.common.hash.MessageDigestHash
+import com.passbolt.mobile.android.common.usecase.UserIdInput
 import com.passbolt.mobile.android.database.migrations.Migration10to11
 import com.passbolt.mobile.android.database.migrations.Migration11to12
 import com.passbolt.mobile.android.database.migrations.Migration12to13
@@ -22,6 +23,7 @@ import com.passbolt.mobile.android.database.migrations.Migration23to24
 import com.passbolt.mobile.android.database.migrations.Migration24to25
 import com.passbolt.mobile.android.database.migrations.Migration25to26
 import com.passbolt.mobile.android.database.migrations.Migration26to27
+import com.passbolt.mobile.android.database.migrations.Migration27to28
 import com.passbolt.mobile.android.database.migrations.Migration2to3
 import com.passbolt.mobile.android.database.migrations.Migration3to4
 import com.passbolt.mobile.android.database.migrations.Migration4to5
@@ -34,7 +36,6 @@ import com.passbolt.mobile.android.domain.auth.usecase.GetResourcesDatabasePassp
 import kotlinx.coroutines.suspendCancellableCoroutine
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import timber.log.Timber
-import java.nio.charset.StandardCharsets
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.resume
 
@@ -69,16 +70,16 @@ class DatabaseProvider(
 
     fun get(userId: String): ResourceDatabase {
         System.loadLibrary("sqlcipher")
-        val currentUser = messageDigestHash.sha256(userId)
-        return instance.computeIfAbsent(currentUser) {
+        val databaseName = databaseName(userId)
+        return instance.computeIfAbsent(databaseName) {
             try {
-                val passphrase = getResourcesDatabasePassphraseUseCase.execute(Unit).passphrase
-                val factory = SupportOpenHelperFactory(passphrase.toByteArray(StandardCharsets.UTF_8))
+                val passphrase = getResourcesDatabasePassphraseUseCase.execute(UserIdInput(userId)).passphrase
+                val factory = SupportOpenHelperFactory(passphrase)
                 Room
                     .databaseBuilder(
                         context,
                         ResourceDatabase::class.java,
-                        "${currentUser}_$RESOURCE_DATABASE_NAME",
+                        databaseName,
                     ).addMigrations(
                         Migration1to2,
                         Migration2to3,
@@ -106,6 +107,7 @@ class DatabaseProvider(
                         Migration24to25,
                         Migration25to26,
                         Migration26to27,
+                        Migration27to28,
                     ).openHelperFactory(factory)
                     .build()
             } catch (e: Exception) {
@@ -122,17 +124,17 @@ class DatabaseProvider(
 
     suspend fun delete(userId: String) {
         Timber.d("Deleting resources database")
-        val currentUser = messageDigestHash.sha256(userId)
-        if (currentUser in instance.keys) {
-            suspendCancellableCoroutine { continuation ->
-                Thread {
-                    instance[currentUser]?.clearAllTables()
-                    continuation.resume(Unit)
-                }.start()
-            }
-            instance.remove(currentUser)
+        val databaseName = databaseName(userId)
+        suspendCancellableCoroutine { continuation ->
+            Thread {
+                instance.remove(databaseName)?.close()
+                context.deleteDatabase(databaseName)
+                continuation.resume(Unit)
+            }.start()
         }
     }
+
+    private fun databaseName(userId: String) = "${messageDigestHash.sha256(userId)}_$RESOURCE_DATABASE_NAME"
 
     companion object {
         private const val RESOURCE_DATABASE_NAME = "resources.db"

@@ -30,6 +30,7 @@ import com.passbolt.mobile.android.domain.resources.model.ResourcesPage
 import com.passbolt.mobile.android.dto.request.CreateResourceDto
 import com.passbolt.mobile.android.entity.resource.ResourceUpdateState
 import com.passbolt.mobile.android.ui.HomeDisplayViewModel
+import com.passbolt.mobile.android.ui.PermissionModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.TagModel
 import kotlinx.coroutines.flow.Flow
@@ -53,6 +54,8 @@ interface ResourcesRepository {
     ): DomainResult<Resource>
 
     suspend fun deleteResource(resourceId: String): DomainResult<Unit>
+
+    suspend fun fetchResourcePermissions(resourceId: String): DomainResult<List<PermissionModel>>
 
     suspend fun getLocalResource(
         resourceId: String,

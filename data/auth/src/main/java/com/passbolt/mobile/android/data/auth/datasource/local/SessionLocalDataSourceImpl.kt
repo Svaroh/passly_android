@@ -1,5 +1,6 @@
 package com.passbolt.mobile.android.data.auth.datasource.local
 
+import androidx.core.content.edit
 import com.passbolt.mobile.android.domain.auth.datasource.SessionLocalDataSource
 import com.passbolt.mobile.android.domain.auth.model.Session
 import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
@@ -48,19 +49,32 @@ internal class SessionLocalDataSourceImpl(
         userId: String,
         accessToken: String,
         refreshToken: String,
-        mfaToken: String?,
     ) {
         Timber.d("Saving session.")
         try {
             val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
-            with(sharedPreferences.edit()) {
+            sharedPreferences.edit {
                 putString(Constants.ACCESS_TOKEN_KEY, accessToken)
                 putString(Constants.REFRESH_TOKEN_KEY, refreshToken)
-                putString(Constants.MFA_TOKEN_KEY, mfaToken)
-                apply()
             }
         } catch (e: Exception) {
             Timber.e(e, "There was an error while saving the session")
+            throw e
+        }
+    }
+
+    override fun saveMfaToken(
+        userId: String,
+        mfaToken: String,
+    ) {
+        Timber.d("Saving MFA token.")
+        try {
+            val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
+            sharedPreferences.edit {
+                putString(Constants.MFA_TOKEN_KEY, mfaToken)
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "There was an error while saving the MFA token")
             throw e
         }
     }
@@ -69,13 +83,25 @@ internal class SessionLocalDataSourceImpl(
         Timber.d("Removing session.")
         try {
             val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
-            with(sharedPreferences.edit()) {
+            sharedPreferences.edit {
                 remove(Constants.ACCESS_TOKEN_KEY)
                 remove(Constants.REFRESH_TOKEN_KEY)
-                apply()
             }
         } catch (e: Exception) {
             Timber.e(e, "There was an error while removing the session")
+            throw e
+        }
+    }
+
+    override fun removeMfaToken(userId: String) {
+        Timber.d("Removing MFA token.")
+        try {
+            val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
+            sharedPreferences.edit {
+                remove(Constants.MFA_TOKEN_KEY)
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "There was an error while removing the MFA token")
             throw e
         }
     }

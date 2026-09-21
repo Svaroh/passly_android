@@ -6,7 +6,7 @@ import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseO
 import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
 import com.passbolt.mobile.android.core.mvp.authentication.UnauthenticatedReason
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
+import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
@@ -57,11 +57,14 @@ class ResourceShareInteractor(
     suspend fun simulateAndShareResource(
         resourceId: String,
         recipients: List<PermissionModelUi>,
+        recipientsPublicKeys: Map<String, String> = emptyMap(),
+        existingPermissions: List<PermissionModelUi>? = null,
     ): Output {
         val existingResourcePermissions =
-            getLocalResourcePermissionsUseCase
-                .execute(GetLocalResourcePermissionsUseCase.Input(resourceId))
-                .permissions
+            existingPermissions
+                ?: getLocalResourcePermissionsUseCase
+                    .execute(GetLocalResourcePermissionsUseCase.Input(resourceId))
+                    .permissions
 
         val simulateSharePermissions =
             sharePermissionsModelMapper
@@ -79,8 +82,28 @@ class ResourceShareInteractor(
                 )
         ) {
             is SimulateShareResourceUseCase.Output.Success -> {
-                Timber.d("Share simulation success; Starting to share resource")
-                shareResource(resourceId, recipients, existingResourcePermissions, simulateShareOutput.value.added)
+                val unconfirmedRecipients =
+                    if (recipientsPublicKeys.isEmpty()) {
+                        emptyList()
+                    } else {
+                        simulateShareOutput.value.added.filter { it.userId !in recipientsPublicKeys }
+                    }
+                if (unconfirmedRecipients.isNotEmpty()) {
+                    Timber.e(
+                        "Permissions drift detected - share simulation reported " +
+                            "${unconfirmedRecipients.size} recipient(s) outside of the confirmed snapshot",
+                    )
+                    Output.DriftDetected
+                } else {
+                    Timber.d("Share simulation success; Starting to share resource")
+                    shareResource(
+                        resourceId,
+                        recipients,
+                        existingResourcePermissions,
+                        simulateShareOutput.value.added,
+                        recipientsPublicKeys,
+                    )
+                }
             }
             is SimulateShareResourceUseCase.Output.Failure -> {
                 Timber.e("Share simulation failure: %s", simulateShareOutput.message)
@@ -95,6 +118,7 @@ class ResourceShareInteractor(
         recipients: List<PermissionModelUi>,
         existingPermissions: List<PermissionModelUi>,
         newUsers: List<ShareRecipient>,
+        recipientsPublicKeys: Map<String, String>,
     ): Output {
         return when (val secretOutput = secretInteractor.fetchAndDecrypt(resourceId)) {
             is SecretInteractor.Output.DecryptFailure -> {
@@ -111,8 +135,12 @@ class ResourceShareInteractor(
             }
             is SecretInteractor.Output.Success -> {
                 Timber.d("Secret fetched")
-                val passphrase = passphraseMemoryCache.get()
-                if (passphrase is PotentialPassphrase.Passphrase) {
+                passphraseMemoryCache.usePassphraseCopy(
+                    onPassphraseNotPresent = {
+                        Timber.d("Passphrase not in cache")
+                        Output.Unauthorized(AuthenticationState.Unauthenticated.Reason.Passphrase)
+                    },
+                ) { passphrase ->
                     Timber.d("Using passphrase from cache")
                     val sharePermissions =
                         sharePermissionsModelMapper
@@ -123,9 +151,10 @@ class ResourceShareInteractor(
                             )
                     val secretsData =
                         prepareEncryptedSecretsData(
-                            passphrase.passphrase,
+                            passphrase,
                             secretOutput.decryptedSecret,
                             newUsers,
+                            recipientsPublicKeys,
                         )
                     if (secretsData.any { it is EncryptedSecretOrError.Error }) {
                         return Output.SecretEncryptFailure(
@@ -149,9 +178,6 @@ class ResourceShareInteractor(
                             Output.Success
                         }
                     }
-                } else {
-                    Timber.d("Passphrase not in cache")
-                    Output.Unauthorized(AuthenticationState.Unauthenticated.Reason.Passphrase)
                 }
             }
         }
@@ -161,17 +187,24 @@ class ResourceShareInteractor(
         passphrase: ByteArray,
         decryptedSecret: String,
         addedUsers: List<ShareRecipient>,
+        recipientsPublicKeys: Map<String, String>,
     ): List<EncryptedSecretOrError> {
         val encryptedSecretsForAddedUsers = mutableListOf<EncryptedSecretOrError>()
         addedUsers
-            .map { getLocalUserUseCase.execute(GetLocalUserUseCase.Input(it.userId)).user }
-            .forEach { user ->
+            .forEach { recipient ->
                 val currentUserId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
                 val privateKey =
                     requireNotNull(privateKeyRepository.getPrivateKey(currentUserId)) {
                         "Unable to restore private key."
                     }.armoredKey
-                val publicKey = user.gpgKey.armoredKey
+                val publicKey = recipientPublicKey(recipient.userId, recipientsPublicKeys)
+                if (publicKey == null) {
+                    Timber.e("Public key not available for one of the recipients")
+                    encryptedSecretsForAddedUsers.add(
+                        EncryptedSecretOrError.Error("Public key not available for one of the recipients"),
+                    )
+                    return@forEach
+                }
 
                 val encryptedSecret =
                     openPgp.encryptSignMessageArmored(
@@ -186,7 +219,7 @@ class ResourceShareInteractor(
                         is OpenPgpResult.Error -> EncryptedSecretOrError.Error(encryptedSecret.error.message)
                         is OpenPgpResult.Result ->
                             EncryptedSecretOrError.EncryptedSecret(
-                                user.id,
+                                recipient.userId,
                                 encryptedSecret.result,
                             )
                     },
@@ -194,6 +227,23 @@ class ResourceShareInteractor(
             }
         return encryptedSecretsForAddedUsers
     }
+
+    private suspend fun recipientPublicKey(
+        userId: String,
+        recipientsPublicKeys: Map<String, String>,
+    ): String? =
+        if (recipientsPublicKeys.isNotEmpty()) {
+            recipientsPublicKeys[userId]
+        } else {
+            try {
+                getLocalUserUseCase
+                    .execute(GetLocalUserUseCase.Input(userId))
+                    .user.gpgKey.armoredKey
+            } catch (exception: NullPointerException) {
+                Timber.e(exception, "Recipient user not found in the local storage")
+                null
+            }
+        }
 
     sealed class Output : AuthenticatedUseCaseOutput {
         override val authenticationState: AuthenticationState
@@ -240,5 +290,7 @@ class ResourceShareInteractor(
         ) : Output()
 
         data object Success : Output()
+
+        data object DriftDetected : Output()
     }
 }

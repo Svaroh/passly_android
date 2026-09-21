@@ -53,7 +53,15 @@ import com.passbolt.mobile.android.supportedresourceTypes.ContentType
 import com.passbolt.mobile.android.ui.ResourcePickerListItem
 import com.passbolt.mobile.android.ui.ResourcePickerListItem.Selection.NOT_SELECTABLE_NO_PERMISSION
 import com.passbolt.mobile.android.ui.ResourcePickerListItem.Selection.NOT_SELECTABLE_UNSUPPORTED_RESOURCE_TYPE
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class ResourcePickerViewModel(
     private val suggestionUri: String?,
@@ -61,9 +69,33 @@ internal class ResourcePickerViewModel(
     private val dataRefreshTrackingFlow: DataRefreshTrackingFlow,
     private val resourcePickerDataProvider: ResourcePickerDataProvider,
 ) : SideEffectViewModel<ResourcePickerState, ResourcePickerSideEffect>(ResourcePickerState()) {
+    private val searchQueryFlow = MutableStateFlow("")
+
     init {
         loadResources()
         synchronizeWithDataRefresh()
+        observeSearchQuery()
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeSearchQuery() {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            searchQueryFlow
+                .drop(1)
+                .debounce(SEARCH_DEBOUNCE)
+                .collectLatest { searchQuery ->
+                    Timber.d("Applying search query (length: ${searchQuery.length})")
+                    try {
+                        loadResourcesData(searchQuery)
+                        updateViewState { copy(isSearching = false) }
+                    } catch (exception: CancellationException) {
+                        throw exception
+                    } catch (exception: Exception) {
+                        Timber.e(exception, "Failed to apply the search query")
+                        updateViewState { copy(isSearching = false) }
+                    }
+                }
+        }
     }
 
     fun onIntent(intent: ResourcePickerIntent) {
@@ -79,26 +111,22 @@ internal class ResourcePickerViewModel(
     }
 
     private fun searchQueryChanged(query: String) {
-        val searchEndIcon = if (query.isBlank()) NONE else CLEAR
-        viewModelScope.launch {
-            updateViewState {
-                copy(
-                    searchQuery = query,
-                    searchInputEndIconMode = searchEndIcon,
-                )
-            }
-            loadResources()
+        if (query == searchQueryFlow.value) {
+            return
+        }
+        searchQueryFlow.value = query
+        updateViewState {
+            copy(
+                searchQuery = query,
+                searchInputEndIconMode = if (query.isBlank()) NONE else CLEAR,
+                isSearching = true,
+            )
         }
     }
 
     private fun searchEndIconAction() {
         when (viewState.value.searchInputEndIconMode) {
-            CLEAR -> {
-                searchQueryChanged("")
-                updateViewState {
-                    copy(searchInputEndIconMode = NONE)
-                }
-            }
+            CLEAR -> searchQueryChanged("")
             else -> {
                 // no-op
             }
@@ -158,14 +186,18 @@ internal class ResourcePickerViewModel(
 
     private fun loadResources() {
         viewModelScope.launch(coroutineLaunchContext.io) {
-            val data =
-                resourcePickerDataProvider.provideData(
-                    searchQuery = viewState.value.searchQuery.takeIf { it.isNotBlank() },
-                    suggestionUri = suggestionUri,
-                )
-
-            updateViewState { copy(resourcePickerData = data) }
+            loadResourcesData(viewState.value.searchQuery)
         }
+    }
+
+    private suspend fun loadResourcesData(searchQuery: String) {
+        val data =
+            resourcePickerDataProvider.provideData(
+                searchQuery = searchQuery.takeIf { it.isNotBlank() },
+                suggestionUri = suggestionUri,
+            )
+
+        updateViewState { copy(resourcePickerData = data) }
     }
 
     private fun synchronizeWithDataRefresh() {
@@ -190,6 +222,8 @@ internal class ResourcePickerViewModel(
     }
 
     internal companion object {
+        val SEARCH_DEBOUNCE = 300.milliseconds
+
         internal val SELECTABLE_RESOURCE_TYPES_SLUGS =
             setOf(
                 ContentType.PasswordAndDescription.slug,

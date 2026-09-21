@@ -84,7 +84,7 @@ private val defaultFeatureFlags =
 
 private val mockGetFeatureFlagsUseCase =
     mock<GetFeatureFlagsUseCase> {
-        onBlocking { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(defaultFeatureFlags)
+        on { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(defaultFeatureFlags)
     }
 
 private val testMainModule =
@@ -177,7 +177,7 @@ class MainViewModelTest : KoinTest {
     fun `totp should be visible based on feature flag`() =
         runTest {
             mockGetFeatureFlagsUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetFeatureFlagsUseCase.Output(
                         FeatureFlagsModel(
                             privacyPolicyUrl = null,
@@ -207,7 +207,7 @@ class MainViewModelTest : KoinTest {
     fun `bottom nav should update after data refresh completes`() =
         runTest {
             mockGetFeatureFlagsUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetFeatureFlagsUseCase.Output(
                         FeatureFlagsModel(
                             privacyPolicyUrl = null,

@@ -62,14 +62,14 @@ fun WarningBanner(
         Icon(
             painter = painterResource(R.drawable.ic_alert_triangle),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onBackground,
+            tint = colorResource(R.color.black),
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = text,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = colorResource(R.color.black),
         )
     }
 }

@@ -86,7 +86,7 @@ class EnterTotpViewModelTest : KoinTest {
         runTest {
             val verifyTotpUseCase: VerifyTotpUseCase = get()
             verifyTotpUseCase.stub {
-                onBlocking { execute(any()) } doReturn VerifyTotpUseCase.Output.Unauthorized
+                on { execute(any()) } doReturn VerifyTotpUseCase.Output.Unauthorized
             }
 
             val refreshSessionUseCase: RefreshSessionUseCase = get()
@@ -108,7 +108,7 @@ class EnterTotpViewModelTest : KoinTest {
         runTest {
             val verifyTotpUseCase: VerifyTotpUseCase = get()
             verifyTotpUseCase.stub {
-                onBlocking { execute(any()) } doReturn VerifyTotpUseCase.Output.WrongCode
+                on { execute(any()) } doReturn VerifyTotpUseCase.Output.WrongCode
             }
 
             viewModel = get(parameters = { parametersOf(AUTH_TOKEN, false, false) })
@@ -181,7 +181,7 @@ class EnterTotpViewModelTest : KoinTest {
         runTest {
             val verifyTotpUseCase: VerifyTotpUseCase = get()
             verifyTotpUseCase.stub {
-                onBlocking { execute(any()) } doReturn VerifyTotpUseCase.Output.Success(mfaHeader = null)
+                on { execute(any()) } doReturn VerifyTotpUseCase.Output.Success(mfaHeader = null)
             }
 
             viewModel = get(parameters = { parametersOf(AUTH_TOKEN, false, false) })

@@ -92,11 +92,11 @@ class PermissionRecipientsViewModelTest : KoinTest {
         Dispatchers.setMain(testDispatcher)
 
         get<GetLocalGroupsUseCase>().stub {
-            onBlocking { execute(GetLocalGroupsUseCase.Input(emptyList())) }
+            on { execute(GetLocalGroupsUseCase.Input(emptyList())) }
                 .doReturn(GetLocalGroupsUseCase.Output(listOf(GROUP)))
         }
         get<GetLocalUsersUseCase>().stub {
-            onBlocking { execute(GetLocalUsersUseCase.Input(emptyList())) }
+            on { execute(GetLocalUsersUseCase.Input(emptyList())) }
                 .doReturn(GetLocalUsersUseCase.Output(listOf(USER)))
         }
     }
@@ -271,7 +271,7 @@ class PermissionRecipientsViewModelTest : KoinTest {
                 )
 
             get<GetLocalGroupsUseCase>().stub {
-                onBlocking { execute(GetLocalGroupsUseCase.Input(listOf(EXISTING_GROUP.groupId))) }
+                on { execute(GetLocalGroupsUseCase.Input(listOf(EXISTING_GROUP.groupId))) }
                     .doReturn(GetLocalGroupsUseCase.Output(listOf(GROUP)))
             }
 

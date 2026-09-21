@@ -91,7 +91,7 @@ class UsersRepositoryImplTest : KoinTest {
     @Test
     fun `refreshUsers with remote success returns success and writes to local`() =
         runTest {
-            remote.stub { onBlocking { getUsers() }.thenReturn(DomainResult.Finished(users)) }
+            remote.stub { on { getUsers() }.thenReturn(DomainResult.Finished(users)) }
 
             val result = repository.refreshUsers(SELECTED_ACCOUNT_ID)
 
@@ -103,7 +103,7 @@ class UsersRepositoryImplTest : KoinTest {
     fun `refreshUsers with remote failure returns failure and does not write to local`() =
         runTest {
             val failure = DomainResult.Incomplete.Error(UNKNOWN, "boom")
-            remote.stub { onBlocking { getUsers() }.thenReturn(failure) }
+            remote.stub { on { getUsers() }.thenReturn(failure) }
 
             val result = repository.refreshUsers(SELECTED_ACCOUNT_ID)
 

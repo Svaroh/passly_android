@@ -179,7 +179,7 @@ class HomeDisplayViewPrefsValidatorTest : KoinTest {
         areTagsAvailable: Boolean,
     ) {
         getFeatureFlagsUseCase.stub {
-            onBlocking { execute(Unit) }.thenReturn(
+            on { execute(Unit) }.thenReturn(
                 GetFeatureFlagsUseCase.Output(
                     FeatureFlagsModel(
                         privacyPolicyUrl = null,
@@ -204,7 +204,7 @@ class HomeDisplayViewPrefsValidatorTest : KoinTest {
         tagsUseRule: RbacRuleModel,
     ) {
         getRbacRulesUseCase.stub {
-            onBlocking { execute(Unit) }.thenReturn(
+            on { execute(Unit) }.thenReturn(
                 GetRbacRulesUseCase.Output(
                     RbacModel(
                         passwordPreviewRule = ALLOW,

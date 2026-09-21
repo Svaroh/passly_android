@@ -83,7 +83,7 @@ class V5TotpResourceFormViewModelTest : KoinTest {
         runTest {
             Dispatchers.setMain(testDispatcher)
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V5,
                         contentType = ContentType.V5TotpStandalone,

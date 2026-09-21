@@ -6,7 +6,16 @@ import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAct
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionResult
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionResult
 import com.passbolt.mobile.android.domain.resources.usecase.GetDefaultCreateContentTypeUseCase
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.ConfirmedPermissionsResult
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.CreateStandaloneOtpClick
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkToResourceClick
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkedResourceReceived
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToConfirmPermissions
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToOtpList
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToResourcePicker
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowToast
 import com.passbolt.mobile.android.supportedresourceTypes.ContentType
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.MetadataJsonModel
 import com.passbolt.mobile.android.ui.MetadataTypeModel
 import com.passbolt.mobile.android.ui.OtpParseResult
@@ -33,6 +42,8 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import java.util.UUID
 import kotlin.test.assertIs
 
@@ -50,6 +61,13 @@ class ScanOtpSuccessViewModelTest : KoinTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
+
+        mockEditPermissionsConfirmationInteractor.stub {
+            on { shouldConfirmPermissions(any()) } doReturn false
+        }
+        mockCreatePermissionsConfirmationInteractor.stub {
+            on { shouldConfirmPermissions(anyOrNull()) } doReturn false
+        }
     }
 
     @After
@@ -61,7 +79,7 @@ class ScanOtpSuccessViewModelTest : KoinTest {
     fun `create standalone totp should create totp and navigate to otp list`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.doReturn(
+                on { execute(any()) }.doReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         ContentType.V5TotpStandalone,
                         MetadataTypeModel.V5,
@@ -71,7 +89,7 @@ class ScanOtpSuccessViewModelTest : KoinTest {
             val mockResourceId = UUID.randomUUID()
             val mockResourceName = "mockResourceName"
             mockResourceCreateActionsInteractor.stub {
-                onBlocking {
+                on {
                     createGenericResource(any(), anyOrNull(), any(), any())
                 }.doReturn(flowOf(ResourceCreateActionResult.Success(mockResourceId.toString(), mockResourceName)))
             }
@@ -79,11 +97,10 @@ class ScanOtpSuccessViewModelTest : KoinTest {
             val viewModel = get<ScanOtpSuccessViewModel> { parametersOf(mockScannedTotp, null) }
 
             viewModel.sideEffect.test {
-                viewModel.onIntent(ScanOtpSuccessIntent.CreateStandaloneOtpClick)
-                testDispatcher.scheduler.advanceUntilIdle()
+                viewModel.onIntent(CreateStandaloneOtpClick)
 
                 val sideEffect = awaitItem()
-                assertIs<ScanOtpSuccessSideEffect.NavigateToOtpList>(sideEffect)
+                assertIs<NavigateToOtpList>(sideEffect)
                 assertThat(sideEffect.totp).isEqualTo(mockScannedTotp)
                 assertThat(sideEffect.otpCreated).isTrue()
                 assertThat(sideEffect.resourceId).isEqualTo(mockResourceId.toString())
@@ -94,7 +111,7 @@ class ScanOtpSuccessViewModelTest : KoinTest {
     fun `create standalone totp should show and hide progress`() =
         runTest {
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.doReturn(
+                on { execute(any()) }.doReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         ContentType.V5TotpStandalone,
                         MetadataTypeModel.V5,
@@ -103,7 +120,7 @@ class ScanOtpSuccessViewModelTest : KoinTest {
             }
             val mockResourceId = UUID.randomUUID()
             mockResourceCreateActionsInteractor.stub {
-                onBlocking {
+                on {
                     createGenericResource(any(), anyOrNull(), any(), any())
                 }.doReturn(flowOf(ResourceCreateActionResult.Success(mockResourceId.toString(), "name")))
             }
@@ -114,12 +131,10 @@ class ScanOtpSuccessViewModelTest : KoinTest {
                 val initialState = awaitItem()
                 assertThat(initialState.showProgress).isFalse()
 
-                viewModel.onIntent(ScanOtpSuccessIntent.CreateStandaloneOtpClick)
+                viewModel.onIntent(CreateStandaloneOtpClick)
 
                 val progressShown = awaitItem()
                 assertThat(progressShown.showProgress).isTrue()
-
-                testDispatcher.scheduler.advanceUntilIdle()
 
                 val progressHidden = awaitItem()
                 assertThat(progressHidden.showProgress).isFalse()
@@ -132,10 +147,10 @@ class ScanOtpSuccessViewModelTest : KoinTest {
             val viewModel = get<ScanOtpSuccessViewModel> { parametersOf(mockScannedTotp, null) }
 
             viewModel.sideEffect.test {
-                viewModel.onIntent(ScanOtpSuccessIntent.LinkToResourceClick)
+                viewModel.onIntent(LinkToResourceClick)
 
                 val sideEffect = awaitItem()
-                assertIs<ScanOtpSuccessSideEffect.NavigateToResourcePicker>(sideEffect)
+                assertIs<NavigateToResourcePicker>(sideEffect)
                 assertThat(sideEffect.suggestedUri).isEqualTo(mockScannedTotp.issuer)
             }
         }
@@ -152,17 +167,18 @@ class ScanOtpSuccessViewModelTest : KoinTest {
                 }
             val mockLinkResourceModel =
                 mock<ResourceUiModel> {
+                    on { resourceId } doReturn mockResourceId.toString()
                     on { resourceTypeId } doReturn mockResourceTypeId.toString()
                     on { metadataJsonModel } doReturn mockMetadataJsonModel
                 }
 
             mockResourceUpdateActionsInteractor.stub {
-                onBlocking {
+                on {
                     updateGenericResource(eq(UpdateAction.ADD_TOTP), any(), any())
                 }.doReturn(flowOf(ResourceUpdateActionResult.Success(mockResourceId.toString(), mockResourceName)))
             }
             mockIdToSlugMappingProvider.stub {
-                onBlocking { provideMappingForSelectedAccount() }.doReturn(
+                on { provideMappingForSelectedAccount() }.doReturn(
                     mapOf(mockResourceTypeId to ContentType.V5DefaultWithTotp.slug),
                 )
             }
@@ -171,16 +187,75 @@ class ScanOtpSuccessViewModelTest : KoinTest {
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(
-                    ScanOtpSuccessIntent.LinkedResourceReceived(mockLinkResourceModel),
+                    LinkedResourceReceived(mockLinkResourceModel),
                 )
-                testDispatcher.scheduler.advanceUntilIdle()
 
                 val sideEffect = awaitItem()
-                assertIs<ScanOtpSuccessSideEffect.NavigateToOtpList>(sideEffect)
+                assertIs<NavigateToOtpList>(sideEffect)
                 assertThat(sideEffect.totp).isEqualTo(mockScannedTotp)
                 assertThat(sideEffect.otpCreated).isTrue()
                 assertThat(sideEffect.resourceId).isEqualTo(mockResourceId.toString())
             }
+        }
+
+    @Test
+    fun `link totp to a shared resource should navigate to permissions confirmation`() =
+        runTest {
+            val mockResourceId = UUID.randomUUID()
+            val mockLinkResourceModel =
+                mock<ResourceUiModel> {
+                    on { resourceId } doReturn mockResourceId.toString()
+                }
+            mockEditPermissionsConfirmationInteractor.stub {
+                on { shouldConfirmPermissions(mockResourceId.toString()) } doReturn true
+            }
+
+            val viewModel = get<ScanOtpSuccessViewModel> { parametersOf(mockScannedTotp, null) }
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(LinkedResourceReceived(mockLinkResourceModel))
+
+                assertThat(awaitItem())
+                    .isEqualTo(NavigateToConfirmPermissions(ConfirmPermissionsMode.Edit(mockResourceId.toString())))
+            }
+            verifyNoInteractions(mockResourceUpdateActionsInteractor)
+        }
+
+    @Test
+    fun `confirmed permissions should link totp with the confirmed list`() =
+        runTest {
+            val mockResourceId = UUID.randomUUID()
+            val mockResourceTypeId = UUID.randomUUID()
+            val mockLinkResourceModel =
+                mock<ResourceUiModel> {
+                    on { resourceId } doReturn mockResourceId.toString()
+                    on { resourceTypeId } doReturn mockResourceTypeId.toString()
+                }
+            mockEditPermissionsConfirmationInteractor.stub {
+                on { shouldConfirmPermissions(mockResourceId.toString()) } doReturn true
+            }
+            mockIdToSlugMappingProvider.stub {
+                on { provideMappingForSelectedAccount() }.doReturn(
+                    mapOf(mockResourceTypeId to ContentType.V5DefaultWithTotp.slug),
+                )
+            }
+            mockResourceUpdateActionsInteractor.stub {
+                on {
+                    updateGenericResourceWithConfirmedPermissions(eq(UpdateAction.ADD_TOTP), any(), any(), any())
+                }.doReturn(flowOf(ResourceUpdateActionResult.Success(mockResourceId.toString(), "name")))
+            }
+
+            val viewModel = get<ScanOtpSuccessViewModel> { parametersOf(mockScannedTotp, null) }
+            viewModel.sideEffect.test {
+                viewModel.onIntent(LinkedResourceReceived(mockLinkResourceModel))
+                awaitItem()
+
+                viewModel.onIntent(ConfirmedPermissionsResult(emptyList()))
+
+                assertIs<NavigateToOtpList>(awaitItem())
+            }
+            verify(mockResourceUpdateActionsInteractor)
+                .updateGenericResourceWithConfirmedPermissions(eq(UpdateAction.ADD_TOTP), any(), any(), any())
         }
 
     @Test
@@ -195,17 +270,18 @@ class ScanOtpSuccessViewModelTest : KoinTest {
                 }
             val mockLinkResourceModel =
                 mock<ResourceUiModel> {
+                    on { resourceId } doReturn mockResourceId.toString()
                     on { resourceTypeId } doReturn mockResourceTypeId.toString()
                     on { metadataJsonModel } doReturn mockMetadataJsonModel
                 }
 
             mockResourceUpdateActionsInteractor.stub {
-                onBlocking {
+                on {
                     updateGenericResource(eq(UpdateAction.ADD_TOTP), any(), any())
                 }.doReturn(flowOf(ResourceUpdateActionResult.Success(mockResourceId.toString(), mockResourceName)))
             }
             mockIdToSlugMappingProvider.stub {
-                onBlocking { provideMappingForSelectedAccount() }.doReturn(
+                on { provideMappingForSelectedAccount() }.doReturn(
                     mapOf(mockResourceTypeId to ContentType.V5Default.slug),
                 )
             }
@@ -214,19 +290,112 @@ class ScanOtpSuccessViewModelTest : KoinTest {
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(
-                    ScanOtpSuccessIntent.LinkedResourceReceived(mockLinkResourceModel),
+                    LinkedResourceReceived(mockLinkResourceModel),
                 )
-                testDispatcher.scheduler.advanceUntilIdle()
 
                 val sideEffect = awaitItem()
-                assertIs<ScanOtpSuccessSideEffect.NavigateToOtpList>(sideEffect)
+                assertIs<NavigateToOtpList>(sideEffect)
                 assertThat(sideEffect.totp).isEqualTo(mockScannedTotp)
                 assertThat(sideEffect.otpCreated).isTrue()
                 assertThat(sideEffect.resourceId).isEqualTo(mockResourceId.toString())
             }
         }
 
+    @Test
+    fun `create standalone totp in a shared folder should navigate to permissions confirmation`() =
+        runTest {
+            mockCreatePermissionsConfirmationInteractor.stub {
+                on { shouldConfirmPermissions(PARENT_FOLDER_ID) } doReturn true
+            }
+
+            val viewModel = get<ScanOtpSuccessViewModel> { parametersOf(mockScannedTotp, PARENT_FOLDER_ID) }
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(CreateStandaloneOtpClick)
+
+                assertThat(awaitItem())
+                    .isEqualTo(NavigateToConfirmPermissions(ConfirmPermissionsMode.Create(PARENT_FOLDER_ID)))
+            }
+        }
+
+    @Test
+    fun `confirmed permissions should create standalone totp with the confirmed list`() =
+        runTest {
+            mockCreatePermissionsConfirmationInteractor.stub {
+                on { shouldConfirmPermissions(PARENT_FOLDER_ID) } doReturn true
+            }
+            mockGetDefaultCreateContentTypeUseCase.stub {
+                on { execute(any()) }.doReturn(
+                    GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
+                        ContentType.V5TotpStandalone,
+                        MetadataTypeModel.V5,
+                    ),
+                )
+            }
+            val mockResourceId = UUID.randomUUID()
+            mockResourceCreateActionsInteractor.stub {
+                on {
+                    createGenericResourceWithConfirmedPermissions(any(), anyOrNull(), any(), any(), any())
+                }.doReturn(flowOf(ResourceCreateActionResult.Success(mockResourceId.toString(), "name")))
+            }
+
+            val viewModel = get<ScanOtpSuccessViewModel> { parametersOf(mockScannedTotp, PARENT_FOLDER_ID) }
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(CreateStandaloneOtpClick)
+                testDispatcher.scheduler.advanceUntilIdle()
+                awaitItem()
+
+                viewModel.onIntent(ConfirmedPermissionsResult(emptyList()))
+                testDispatcher.scheduler.advanceUntilIdle()
+
+                val sideEffect = awaitItem()
+                assertIs<NavigateToOtpList>(sideEffect)
+                assertThat(sideEffect.otpCreated).isTrue()
+                assertThat(sideEffect.resourceId).isEqualTo(mockResourceId.toString())
+            }
+            verify(mockResourceCreateActionsInteractor)
+                .createGenericResourceWithConfirmedPermissions(any(), anyOrNull(), any(), any(), any())
+        }
+
+    @Test
+    fun `permissions drift during confirmed standalone totp creation should inform and navigate to otp list`() =
+        runTest {
+            mockCreatePermissionsConfirmationInteractor.stub {
+                on { shouldConfirmPermissions(PARENT_FOLDER_ID) } doReturn true
+            }
+            mockGetDefaultCreateContentTypeUseCase.stub {
+                on { execute(any()) }.doReturn(
+                    GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
+                        ContentType.V5TotpStandalone,
+                        MetadataTypeModel.V5,
+                    ),
+                )
+            }
+            mockResourceCreateActionsInteractor.stub {
+                on {
+                    createGenericResourceWithConfirmedPermissions(any(), anyOrNull(), any(), any(), any())
+                }.doReturn(flowOf(ResourceCreateActionResult.PermissionsDrifted))
+            }
+
+            val viewModel = get<ScanOtpSuccessViewModel> { parametersOf(mockScannedTotp, PARENT_FOLDER_ID) }
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(CreateStandaloneOtpClick)
+                awaitItem()
+
+                viewModel.onIntent(ConfirmedPermissionsResult(emptyList()))
+
+                assertThat(awaitItem()).isEqualTo(ShowToast(ToastType.OTP_CREATED_PERMISSIONS_CHANGED))
+                val sideEffect = awaitItem()
+                assertIs<NavigateToOtpList>(sideEffect)
+                assertThat(sideEffect.otpCreated).isTrue()
+            }
+        }
+
     private companion object {
+        private const val PARENT_FOLDER_ID = "parent-folder-id"
+
         val mockScannedTotp =
             OtpParseResult.OtpQr.TotpQr(
                 label = "label",

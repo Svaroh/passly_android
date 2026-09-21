@@ -41,4 +41,13 @@ internal class GroupsRemoteDataSourceImpl(
         callWithHandler(responseHandler) { groupsApi.getGroups().body }
             .toDomainResult()
             .map { groups -> groups.map { it.toDomain() } }
+
+    override suspend fun getGroupsByIds(groupIds: List<String>): DomainResult<List<GroupWithMembers>> {
+        val groupIdsSet = groupIds.toSet()
+        return callWithHandler(responseHandler) { groupsApi.getGroups(hasIds = groupIds).body }
+            .toDomainResult()
+            // the has-id filter may not be supported on older backends according to specs
+            // -> filter also after reception
+            .map { groups -> groups.map { it.toDomain() }.filter { it.group.id in groupIdsSet } }
+    }
 }

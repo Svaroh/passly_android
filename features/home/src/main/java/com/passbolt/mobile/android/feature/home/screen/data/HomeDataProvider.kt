@@ -53,7 +53,6 @@ import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Tags
 import com.passbolt.mobile.android.ui.RbacRuleModel.ALLOW
 import com.passbolt.mobile.android.ui.ResourceUiModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 class HomeDataProvider(
@@ -241,7 +240,7 @@ class HomeDataProvider(
                 }
             }
         } else {
-            flowOf(PagingData.empty())
+            settledEmptyPagingData()
         }
 
     private suspend fun getTagsHomeData(

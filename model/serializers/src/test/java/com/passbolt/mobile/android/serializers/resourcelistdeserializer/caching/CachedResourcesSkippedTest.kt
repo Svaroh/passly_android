@@ -79,10 +79,10 @@ class CachedResourcesSkippedTest : KoinTest {
     @Before
     fun setup() {
         mockGetSelectedAccountUseCase.stub {
-            onBlocking { execute(Unit) } doReturn GetSelectedAccountUseCase.Output("selectedAccountId")
+            on { execute(Unit) } doReturn GetSelectedAccountUseCase.Output("selectedAccountId")
         }
         mockGetLocalResourceTypesUseCase.stub {
-            onBlocking { execute(Unit) }.doReturn(
+            on { execute(Unit) }.doReturn(
                 GetLocalResourceTypesUseCase.Output(
                     listOf(
                         ResourceTypeModel(UUID.randomUUID(), PasswordString.slug, "", deleted = null),
@@ -108,7 +108,7 @@ class CachedResourcesSkippedTest : KoinTest {
             val localEncryptedMetadata = "local encrypted metadata"
 
             mockIdToSlugMappingUseCase.stub {
-                onBlocking { execute(Unit) }.doReturn(
+                on { execute(Unit) }.doReturn(
                     GetResourceTypeIdToSlugMappingUseCase.Output(
                         mapOf(testedResourceTypeUuid to V5DefaultWithTotp.slug),
                     ),
@@ -168,7 +168,7 @@ class CachedResourcesSkippedTest : KoinTest {
             val backendEncryptedMetadata = "backend encrypted metadata"
 
             mockIdToSlugMappingUseCase.stub {
-                onBlocking { execute(Unit) }.doReturn(
+                on { execute(Unit) }.doReturn(
                     GetResourceTypeIdToSlugMappingUseCase.Output(
                         mapOf(testedResourceTypeUuid to V5DefaultWithTotp.slug),
                     ),
@@ -208,13 +208,13 @@ class CachedResourcesSkippedTest : KoinTest {
             )
 
             mockMetadataDecryptor.stub {
-                onBlocking { decryptMetadata(any()) }.doAnswer { invocation ->
+                on { decryptMetadata(any()) }.doAnswer { invocation ->
                     val param = invocation.arguments[0] as ResourceResponseV5Dto
                     Success(param.metadata)
                 }
             }
             mockJsonSchemaValidationRunner.stub {
-                onBlocking { isResourceValid(any(), any()) }.doReturn(true)
+                on { isResourceValid(any(), any()) }.doReturn(true)
             }
 
             val listJson = gson.toJson(backendResource)
@@ -239,7 +239,7 @@ class CachedResourcesSkippedTest : KoinTest {
             val localEncryptedMetadata = "local encrypted metadata"
 
             mockIdToSlugMappingUseCase.stub {
-                onBlocking { execute(Unit) }.doReturn(
+                on { execute(Unit) }.doReturn(
                     GetResourceTypeIdToSlugMappingUseCase.Output(
                         mapOf(testedResourceTypeUuid to PasswordAndDescription.slug),
                     ),
@@ -301,7 +301,7 @@ class CachedResourcesSkippedTest : KoinTest {
             val resourceId = UUID.randomUUID()
 
             mockIdToSlugMappingUseCase.stub {
-                onBlocking { execute(Unit) }.doReturn(
+                on { execute(Unit) }.doReturn(
                     GetResourceTypeIdToSlugMappingUseCase.Output(
                         mapOf(testedResourceTypeUuid to PasswordAndDescription.slug),
                     ),
@@ -342,7 +342,7 @@ class CachedResourcesSkippedTest : KoinTest {
             )
 
             mockJsonSchemaValidationRunner.stub {
-                onBlocking { isResourceDocumentValid(any(), any()) }.doReturn(true)
+                on { isResourceDocumentValid(any(), any()) }.doReturn(true)
             }
 
             val listJson = gson.toJson(backendResource)

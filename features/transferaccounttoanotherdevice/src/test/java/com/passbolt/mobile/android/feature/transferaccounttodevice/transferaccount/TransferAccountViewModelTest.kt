@@ -80,7 +80,9 @@ import org.mockito.kotlin.stub
 import org.mockito.kotlin.whenever
 import java.time.ZonedDateTime
 import kotlin.test.assertIs
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
+import kotlin.time.times
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TransferAccountViewModelTest : KoinTest {
@@ -141,7 +143,7 @@ class TransferAccountViewModelTest : KoinTest {
         runTest {
             val parametersGenerator: CreateTransferInputParametersGenerator = get()
             parametersGenerator.stub {
-                onBlocking { calculateCreateTransferParameters() } doReturn CreateTransferInputParametersGenerator.Output.Error
+                on { calculateCreateTransferParameters() } doReturn CreateTransferInputParametersGenerator.Output.Error
             }
 
             viewModel = get()
@@ -159,7 +161,7 @@ class TransferAccountViewModelTest : KoinTest {
         runTest {
             val parametersGenerator: CreateTransferInputParametersGenerator = get()
             parametersGenerator.stub {
-                onBlocking { calculateCreateTransferParameters() } doReturn
+                on { calculateCreateTransferParameters() } doReturn
                     CreateTransferInputParametersGenerator.Output.Parameters(
                         keyJson = TEST_KEY_JSON,
                         totalPagesCount = 3,
@@ -169,7 +171,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             val createTransferUseCase: CreateTransferUseCase = get()
             createTransferUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     CreateTransferUseCase.Output.Failure(
                         DomainResult.Incomplete.Error(SERVER, "Server create error"),
                     )
@@ -191,7 +193,7 @@ class TransferAccountViewModelTest : KoinTest {
         runTest {
             val parametersGenerator: CreateTransferInputParametersGenerator = get()
             parametersGenerator.stub {
-                onBlocking { calculateCreateTransferParameters() } doReturn
+                on { calculateCreateTransferParameters() } doReturn
                     CreateTransferInputParametersGenerator.Output.Parameters(
                         keyJson = TEST_KEY_JSON,
                         totalPagesCount = 3,
@@ -201,12 +203,12 @@ class TransferAccountViewModelTest : KoinTest {
 
             val createTransferUseCase: CreateTransferUseCase = get()
             createTransferUseCase.stub {
-                onBlocking { execute(any()) } doReturn CreateTransferUseCase.Output.Success(TEST_CREATE_TRANSFER_MODEL)
+                on { execute(any()) } doReturn CreateTransferUseCase.Output.Success(TEST_CREATE_TRANSFER_MODEL)
             }
 
             val qrDataGenerator: TransferQrCodesDataGenerator = get()
             qrDataGenerator.stub {
-                onBlocking { generateQrCodesDataPages(any()) } doReturn TransferQrCodesDataGenerator.Output.Error
+                on { generateQrCodesDataPages(any()) } doReturn TransferQrCodesDataGenerator.Output.Error
             }
 
             viewModel = get()
@@ -224,7 +226,7 @@ class TransferAccountViewModelTest : KoinTest {
         runTest {
             val parametersGenerator: CreateTransferInputParametersGenerator = get()
             parametersGenerator.stub {
-                onBlocking { calculateCreateTransferParameters() } doReturn
+                on { calculateCreateTransferParameters() } doReturn
                     CreateTransferInputParametersGenerator.Output.Parameters(
                         keyJson = TEST_KEY_JSON,
                         totalPagesCount = 3,
@@ -234,18 +236,18 @@ class TransferAccountViewModelTest : KoinTest {
 
             val createTransferUseCase: CreateTransferUseCase = get()
             createTransferUseCase.stub {
-                onBlocking { execute(any()) } doReturn CreateTransferUseCase.Output.Success(TEST_CREATE_TRANSFER_MODEL)
+                on { execute(any()) } doReturn CreateTransferUseCase.Output.Success(TEST_CREATE_TRANSFER_MODEL)
             }
 
             val qrPages = listOf("qr-page-0", "qr-page-1", "qr-page-2")
             val qrDataGenerator: TransferQrCodesDataGenerator = get()
             qrDataGenerator.stub {
-                onBlocking { generateQrCodesDataPages(any()) } doReturn TransferQrCodesDataGenerator.Output.QrPages(qrPages)
+                on { generateQrCodesDataPages(any()) } doReturn TransferQrCodesDataGenerator.Output.QrPages(qrPages)
             }
 
             val viewTransferUseCase: ViewTransferUseCase = get()
             viewTransferUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     ViewTransferUseCase.Output.Success(
                         TEST_TRANSFER_MODEL.copy(currentPage = 0),
                     )
@@ -272,7 +274,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             val viewTransferUseCase: ViewTransferUseCase = get()
             viewTransferUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     ViewTransferUseCase.Output.Success(
                         TEST_TRANSFER_MODEL.copy(currentPage = 1),
                     )
@@ -280,7 +282,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             viewModel = get()
 
-            advanceTimeBy(TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY_MILLIS + 100)
+            advanceTimeBy(TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY + 100.milliseconds)
 
             viewModel.viewState.test {
                 val state = awaitItem()
@@ -299,7 +301,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             val viewTransferUseCase: ViewTransferUseCase = get()
             viewTransferUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     ViewTransferUseCase.Output.Failure(
                         DomainResult.Incomplete.Error(SERVER, "Server fetch error"),
                     )
@@ -307,7 +309,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             viewModel = get()
 
-            advanceTimeBy(TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY_MILLIS + 100)
+            advanceTimeBy(TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY + 100.milliseconds)
 
             viewModel.sideEffect.test {
                 val effect = awaitItem()
@@ -327,7 +329,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             val viewTransferUseCase: ViewTransferUseCase = get()
             viewTransferUseCase.stub {
-                onBlocking { execute(any()) }
+                on { execute(any()) }
                     .doReturn(ViewTransferUseCase.Output.Success(TEST_TRANSFER_MODEL.copy(currentPage = 0)))
                     .doReturn(ViewTransferUseCase.Output.Success(TEST_TRANSFER_MODEL.copy(currentPage = 1)))
                     .doReturn(
@@ -342,7 +344,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             viewModel = get()
 
-            advanceTimeBy(10 * TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY_MILLIS + 100)
+            advanceTimeBy(10 * TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY + 100.milliseconds)
 
             viewModel.sideEffect.test {
                 val effect = awaitItem()
@@ -359,7 +361,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             val viewTransferUseCase: ViewTransferUseCase = get()
             viewTransferUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     ViewTransferUseCase.Output.Success(
                         TEST_TRANSFER_MODEL.copy(status = Status.ERROR),
                     )
@@ -367,7 +369,7 @@ class TransferAccountViewModelTest : KoinTest {
 
             viewModel = get()
 
-            advanceTimeBy(TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY_MILLIS + 100)
+            advanceTimeBy(TransferAccountViewModel.GET_TRANSFER_LOOP_INTERVAL_DELAY + 100.milliseconds)
 
             viewModel.sideEffect.test {
                 val effect = awaitItem()
@@ -461,7 +463,7 @@ class TransferAccountViewModelTest : KoinTest {
     private fun setupSuccessfulInitialization() {
         val parametersGenerator: CreateTransferInputParametersGenerator = get()
         parametersGenerator.stub {
-            onBlocking { calculateCreateTransferParameters() } doReturn
+            on { calculateCreateTransferParameters() } doReturn
                 CreateTransferInputParametersGenerator.Output.Parameters(
                     keyJson = TEST_KEY_JSON,
                     totalPagesCount = 3,
@@ -471,18 +473,18 @@ class TransferAccountViewModelTest : KoinTest {
 
         val createTransferUseCase: CreateTransferUseCase = get()
         createTransferUseCase.stub {
-            onBlocking { execute(any()) } doReturn CreateTransferUseCase.Output.Success(TEST_CREATE_TRANSFER_MODEL)
+            on { execute(any()) } doReturn CreateTransferUseCase.Output.Success(TEST_CREATE_TRANSFER_MODEL)
         }
 
         val qrPages = listOf("qr-page-0", "qr-page-1", "qr-page-2")
         val qrDataGenerator: TransferQrCodesDataGenerator = get()
         qrDataGenerator.stub {
-            onBlocking { generateQrCodesDataPages(any()) } doReturn TransferQrCodesDataGenerator.Output.QrPages(qrPages)
+            on { generateQrCodesDataPages(any()) } doReturn TransferQrCodesDataGenerator.Output.QrPages(qrPages)
         }
 
         val viewTransferUseCase: ViewTransferUseCase = get()
         viewTransferUseCase.stub {
-            onBlocking { execute(any()) } doReturn ViewTransferUseCase.Output.Success(TEST_TRANSFER_MODEL)
+            on { execute(any()) } doReturn ViewTransferUseCase.Output.Success(TEST_TRANSFER_MODEL)
         }
     }
 

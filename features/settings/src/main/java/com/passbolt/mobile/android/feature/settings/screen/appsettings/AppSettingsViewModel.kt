@@ -29,7 +29,7 @@ import com.passbolt.mobile.android.common.autofill.DetectAutofillConflict
 import com.passbolt.mobile.android.common.usecase.UserIdInput
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
+import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.CheckIfPassphraseFileExistsUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.RemovePassphraseUseCase
@@ -52,7 +52,6 @@ import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettin
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.GoToDefaultFilter
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.GoToExpertSettings
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.Initialize
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.InvalidateBiometricKeyPermanently
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.RefreshedPassphrase
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.ShowBiometryError
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.ToggleBiometric
@@ -105,7 +104,6 @@ internal class AppSettingsViewModel(
             CanceledBiometricAuth -> {}
             is ErroredBiometricAuth -> biometricAuthError(intent.error)
             is FinalizedBiometricAuth -> finalizedBiometricAuth(intent.cipher)
-            is InvalidateBiometricKeyPermanently -> invalidateBiometricKey(intent.exception)
             is ShowBiometryError -> biometryShowError(intent.exception)
             CancelConfirmKeyChange -> updateViewState { copy(isKeyChangesDialogDetectedVisible = false) }
             ConfirmKeyChangeClick -> {
@@ -152,18 +150,21 @@ internal class AppSettingsViewModel(
     }
 
     private fun finalizedBiometricAuth(authenticatedCipher: Cipher?) {
-        val passphrase = passphraseMemoryCache.get()
-        if (passphrase is PotentialPassphrase.Passphrase && authenticatedCipher != null) {
+        if (authenticatedCipher == null) {
+            Timber.e("Error during turning biometrics on. Authenticated cipher is missing.")
+            return
+        }
+        passphraseMemoryCache.usePassphraseCopy(
+            onPassphraseNotPresent = { Timber.e("Error during turing biometrics on. Passphrase not in cache after auth.") },
+        ) { passphrase ->
             savePassphraseUseCase.execute(
                 SavePassphraseUseCase.Input(
-                    passphrase.passphrase,
+                    passphrase,
                     authenticatedCipher,
                 ),
             )
             saveBiometricKeyUseCase.execute(SaveBiometricKeyUseCase.Input(BiometricKey(authenticatedCipher.iv)))
             updateViewState { copy(isBiometricEnabled = true) }
-        } else {
-            Timber.e("Error during turing biometrics on. Passphrase not in cache after auth.")
         }
     }
 
@@ -199,7 +200,13 @@ internal class AppSettingsViewModel(
     }
 
     fun authenticateUsingBiometryPrompt() {
-        emitSideEffect(LaunchBiometricPrompt(biometricCipher.getBiometricEncryptCipher()))
+        try {
+            emitSideEffect(LaunchBiometricPrompt(biometricCipher.getBiometricEncryptCipher()))
+        } catch (exception: KeyPermanentlyInvalidatedException) {
+            invalidateBiometricKey(exception)
+        } catch (exception: Exception) {
+            biometryShowError(exception)
+        }
     }
 
     fun disableBiometric() {

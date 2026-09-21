@@ -24,6 +24,7 @@
 package com.passbolt.mobile.android.data.biometrickey.datasource.local
 
 import android.util.Base64
+import androidx.core.content.edit
 import com.passbolt.mobile.android.data.biometrickey.BiometricKeyIvFileName
 import com.passbolt.mobile.android.domain.biometrickey.BiometricKeyLocalDataSource
 import com.passbolt.mobile.android.domain.biometrickey.model.BiometricKey
@@ -50,10 +51,9 @@ internal class BiometricKeyLocalDataSourceImpl(
         biometricKey: BiometricKey,
     ) {
         val fileName = BiometricKeyIvFileName(userId)
-        with(encryptedSharedPreferencesFactory.get(fileName.name).edit()) {
+        encryptedSharedPreferencesFactory.get(fileName.name).edit {
             val encodedIv = Base64.encodeToString(biometricKey.iv, Base64.DEFAULT)
             putString(IV_KEY, encodedIv)
-            apply()
         }
     }
 

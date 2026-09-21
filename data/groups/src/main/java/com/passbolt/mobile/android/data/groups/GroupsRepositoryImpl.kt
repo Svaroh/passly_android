@@ -60,4 +60,7 @@ internal class GroupsRepositoryImpl(
                 localDataSource.upsertGroups(it.value, userId)
             }
         }
+
+    override suspend fun fetchGroupsByIds(groupIds: List<String>): DomainResult<List<GroupWithMembers>> =
+        remoteDataSource.getGroupsByIds(groupIds)
 }

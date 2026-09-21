@@ -57,8 +57,11 @@ val challengeTestModule =
                 uuidProvider = get(),
             )
         }
+        factory<DomainComparator> { TrailingSlashDomainComparator() }
         factory {
-            ChallengeVerifier()
+            ChallengeVerifier(
+                domainComparator = get(),
+            )
         }
         factory { timeProvider }
         factory { uuidProvider }

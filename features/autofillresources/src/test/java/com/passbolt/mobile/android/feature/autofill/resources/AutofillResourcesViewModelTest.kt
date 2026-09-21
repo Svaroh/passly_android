@@ -133,7 +133,7 @@ class AutofillResourcesViewModelTest : KoinTest {
     private fun stubDecryptedSecret(result: SecretPropertyActionResult<SecretJsonModel>) {
         val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
         secretPropertiesActionsInteractor.stub {
-            onBlocking { provideDecryptedSecret() } doReturn flowOf(result)
+            on { provideDecryptedSecret() } doReturn flowOf(result)
         }
     }
 
@@ -317,7 +317,7 @@ class AutofillResourcesViewModelTest : KoinTest {
 
             val getLocalResourceUseCase: GetLocalResourceUseCase = get()
             getLocalResourceUseCase.stub {
-                onBlocking { execute(GetLocalResourceUseCase.Input(TEST_RESOURCE_ID)) } doReturn
+                on { execute(GetLocalResourceUseCase.Input(TEST_RESOURCE_ID)) } doReturn
                     GetLocalResourceUseCase.Output(testResource)
             }
 

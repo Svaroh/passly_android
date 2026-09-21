@@ -81,7 +81,7 @@ class V4PasswordResourceFormViewModelTest : KoinTest {
         runTest {
             Dispatchers.setMain(testDispatcher)
             mockGetDefaultCreateContentTypeUseCase.stub {
-                onBlocking { execute(any()) }.thenReturn(
+                on { execute(any()) }.thenReturn(
                     GetDefaultCreateContentTypeUseCase.Output.CreationContentType(
                         metadataType = MetadataTypeModel.V4,
                         contentType = ContentType.PasswordAndDescription,
@@ -89,7 +89,7 @@ class V4PasswordResourceFormViewModelTest : KoinTest {
                 )
             }
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             viewModel = get { parametersOf(mode) }

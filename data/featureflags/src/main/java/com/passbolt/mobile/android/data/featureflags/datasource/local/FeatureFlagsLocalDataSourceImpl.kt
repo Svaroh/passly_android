@@ -24,6 +24,7 @@
 package com.passbolt.mobile.android.data.featureflags.datasource.local
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.passbolt.mobile.android.core.architecture.result.DomainResult
 import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.FOLDERS_KEY
 import com.passbolt.mobile.android.data.featureflags.datasource.local.StorageConstants.PASSWORD_EXPIRY_KEY
@@ -68,7 +69,7 @@ internal class FeatureFlagsLocalDataSourceImpl(
         userId: String,
         featureFlags: FeatureFlags,
     ) {
-        with(sharedPreferences(userId).edit()) {
+        sharedPreferences(userId).edit {
             putString(PRIVACY_POLICY_KEY, featureFlags.privacyPolicyUrl)
             putString(TERMS_AND_CONDITIONS_KEY, featureFlags.termsAndConditionsUrl)
             putBoolean(PREVIEW_PASSWORD_KEY, featureFlags.isPreviewPasswordAvailable)
@@ -80,7 +81,6 @@ internal class FeatureFlagsLocalDataSourceImpl(
             putBoolean(PASSWORD_POLICIES_KEY, featureFlags.arePasswordPoliciesAvailable)
             putBoolean(PASSWORD_POLICIES_UPDATE_KEY, featureFlags.canUpdatePasswordPolicies)
             putBoolean(V5_METADATA, featureFlags.isV5MetadataAvailable)
-            apply()
         }
     }
 

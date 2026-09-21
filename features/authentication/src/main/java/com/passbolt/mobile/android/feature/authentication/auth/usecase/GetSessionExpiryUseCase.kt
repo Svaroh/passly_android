@@ -41,21 +41,21 @@ class GetSessionExpiryUseCase(
 ) : UseCase<Unit, GetSessionExpiryUseCase.Output> {
     override fun execute(input: Unit): Output {
         val userId = getSelectedAccountUseCase.execute(Unit).selectedAccount
-        userId?.let {
+        return userId?.let {
             val accessToken = sessionRepository.getSession(it).accessToken
             val rsaPublicKey = getServerRsaPublicKeyUseCase.execute(UserIdInput(userId)).rsaKey
 
             val verifier: Verifier = RSAVerifier.newVerifier(rsaPublicKey)
 
-            return try {
+            try {
                 val accessTokenJwt = JWT.getDecoder().decode(accessToken, verifier)
                 Output.JwtWillExpire(accessTokenJwt.expiration)
-            } catch (exception: JWTExpiredException) {
+            } catch (_: JWTExpiredException) {
                 Output.JwtAlreadyExpired
-            } catch (exception: Exception) {
+            } catch (_: Exception) {
                 Output.NoJwt
             }
-        } ?: return Output.NoJwt
+        } ?: Output.NoJwt
     }
 
     sealed class Output {

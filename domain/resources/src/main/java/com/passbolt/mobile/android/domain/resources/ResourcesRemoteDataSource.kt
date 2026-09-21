@@ -27,12 +27,15 @@ import com.passbolt.mobile.android.domain.resources.model.Resource
 import com.passbolt.mobile.android.domain.resources.model.ResourceWithAttributes
 import com.passbolt.mobile.android.domain.resources.model.ResourcesPage
 import com.passbolt.mobile.android.dto.request.CreateResourceDto
+import com.passbolt.mobile.android.ui.PermissionModel
 
 interface ResourcesRemoteDataSource {
     suspend fun getResourcesPage(
         limit: Int,
         page: Int,
     ): DomainResult<ResourcesPage>
+
+    suspend fun getResourcePermissions(resourceId: String): DomainResult<List<PermissionModel>>
 
     suspend fun createResource(
         resource: CreateResourceDto,

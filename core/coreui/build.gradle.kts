@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.glance.material3)
     debugImplementation(libs.compose.ui.tooling.preview)
 
+    screenshotTestImplementation(project(":screenshottest"))
     screenshotTestImplementation(libs.screenshot.validation.api)
     screenshotTestImplementation(libs.compose.ui.tooling)
 }

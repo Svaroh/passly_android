@@ -7,10 +7,12 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode.SCAN_FOR_RESULT
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode.SCAN_WITH_SUCCESS_SCREEN
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpSuccess
+import com.passbolt.mobile.android.core.navigation.compose.results.PermissionsConfirmedResult
 import com.passbolt.mobile.android.core.navigation.compose.results.ResourcePickerResultEvent
 import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
 import com.passbolt.mobile.android.feature.otp.scanotp.ScanOtpMode
 import com.passbolt.mobile.android.feature.otp.scanotp.compose.ScanOtpScreen
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.ConfirmedPermissionsResult
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkedResourceReceived
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessScreen
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessViewModel
@@ -37,6 +39,9 @@ class ScanOtpFeatureNavigation : FeatureModuleNavigation {
 
                 ResultEffect<ResourcePickerResultEvent> { result ->
                     viewModel.onIntent(LinkedResourceReceived(result.resource))
+                }
+                ResultEffect<PermissionsConfirmedResult> { result ->
+                    viewModel.onIntent(ConfirmedPermissionsResult(result.permissions))
                 }
 
                 PassboltTheme {

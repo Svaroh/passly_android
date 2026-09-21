@@ -11,10 +11,14 @@ import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCa
 import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
 import com.passbolt.mobile.android.core.security.rootdetection.RootDetector
 import com.passbolt.mobile.android.core.security.runtimeauth.RuntimeAuthenticatedFlag
+import com.passbolt.mobile.android.domain.accounts.AuthenticatedAccountFlow
 import com.passbolt.mobile.android.domain.accounts.usecase.GetAccountDataUseCase
+import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.SaveServerFingerprintUseCase
+import com.passbolt.mobile.android.domain.auth.model.ServerSignOutStatus
 import com.passbolt.mobile.android.domain.auth.usecase.GetPassphraseUseCase
+import com.passbolt.mobile.android.domain.auth.usecase.SaveMfaTokenUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.SaveSessionUseCase
 import com.passbolt.mobile.android.domain.inappreview.usecase.InAppReviewInteractor
 import com.passbolt.mobile.android.domain.preferences.PreferencesDefaults
@@ -73,10 +77,10 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.get
-import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
-import org.mockito.kotlin.argThat
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.reset
 import org.mockito.kotlin.stub
@@ -103,7 +107,15 @@ class AuthViewModelTest : KoinTest {
                     single { mock<BiometryInteractor>() }
                     single { mock<GetGlobalPreferencesUseCase>() }
                     single { mock<SaveSessionUseCase>() }
+                    single { mock<SaveMfaTokenUseCase>() }
                     single { mock<SaveSelectedAccountUseCase>() }
+                    single {
+                        AuthenticatedAccountFlow(
+                            mock<GetSelectedAccountUseCase> {
+                                on { execute(Unit) } doReturn GetSelectedAccountUseCase.Output(null)
+                            },
+                        )
+                    }
                     single { mock<SignOutUseCase>() }
                     single { mock<SaveServerFingerprintUseCase>() }
                     single { mock<MfaStatusProvider>() }
@@ -132,7 +144,9 @@ class AuthViewModelTest : KoinTest {
                             getGlobalPreferencesUseCase = get(),
                             runtimeAuthenticatedFlag = get(),
                             saveSessionUseCase = get(),
+                            saveMfaTokenUseCase = get(),
                             saveSelectedAccountUseCase = get(),
+                            authenticatedAccountFlow = get(),
                             signOutUseCase = get(),
                             saveServerFingerprintUseCase = get(),
                             mfaStatusProvider = get(),
@@ -169,6 +183,7 @@ class AuthViewModelTest : KoinTest {
                 apiFetchPageSize = PreferencesDefaults.API_FETCH_PAGE_SIZE,
                 isApiFetchPageSizeManuallySet = false,
                 accessibilityPoliciesConsentGiven = false,
+                deprecatedOsWarningHiddenForSdk = null,
             )
 
         val getAccountDataUseCase: GetAccountDataUseCase = get()
@@ -362,6 +377,36 @@ class AuthViewModelTest : KoinTest {
         }
 
     @Test
+    fun `mfa succeeded with mfa config persists mfa token for current user`() =
+        runTest {
+            val saveMfaTokenUseCase: SaveMfaTokenUseCase = get()
+
+            viewModel = get(parameters = { parametersOf(AuthConfig.Mfa("totp"), USER_ID, AppContext.APP) })
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(MfaSucceeded(MFA_HEADER))
+                assertIs<AuthSuccess>(awaitItem())
+            }
+
+            verify(saveMfaTokenUseCase).execute(SaveMfaTokenUseCase.Input(USER_ID, MFA_HEADER))
+        }
+
+    @Test
+    fun `mfa succeeded without header does not persist mfa token`() =
+        runTest {
+            val saveMfaTokenUseCase: SaveMfaTokenUseCase = get()
+
+            viewModel = get(parameters = { parametersOf(AuthConfig.Mfa("totp"), USER_ID, AppContext.APP) })
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(MfaSucceeded(null))
+                assertIs<AuthSuccess>(awaitItem())
+            }
+
+            verify(saveMfaTokenUseCase, never()).execute(any())
+        }
+
+    @Test
     fun `refresh session tries refresh first on passphrase verified`() =
         runTest {
             val verifyPassphraseUseCase: VerifyPassphraseUseCase = get()
@@ -445,7 +490,7 @@ class AuthViewModelTest : KoinTest {
         runTest {
             val signOutUseCase: SignOutUseCase = get()
             signOutUseCase.stub {
-                onBlocking { execute(any()) } doReturn Unit
+                on { execute(any()) } doReturn SignOutUseCase.Output(ServerSignOutStatus.SIGNED_OUT)
             }
 
             viewModel = get(parameters = { parametersOf(AuthConfig.Startup, USER_ID, AppContext.APP) })
@@ -468,7 +513,12 @@ class AuthViewModelTest : KoinTest {
                     PotentialPassphrase.Passphrase(BIOMETRIC_PASSPHRASE.toByteArray()),
                 )
 
+            val cachedPassphraseSnapshots = mutableListOf<ByteArray>()
             val passphraseMemoryCache: PassphraseMemoryCache = get()
+            doAnswer { invocation ->
+                cachedPassphraseSnapshots += (invocation.arguments[0] as ByteArray).copyOf()
+                Unit
+            }.whenever(passphraseMemoryCache).set(any())
 
             viewModel = get(parameters = { parametersOf(AuthConfig.RefreshPassphrase, USER_ID, AppContext.APP) })
 
@@ -477,10 +527,31 @@ class AuthViewModelTest : KoinTest {
                 assertIs<AuthSuccess>(awaitItem())
             }
 
-            verify(passphraseMemoryCache).set(
-                argThat { contentEquals(BIOMETRIC_PASSPHRASE.toByteArray()) },
-            )
-            verify(passphraseMemoryCache, never()).set(argThat { isEmpty() })
+            assertThat(cachedPassphraseSnapshots).hasSize(1)
+            assertThat(cachedPassphraseSnapshots.single()).isEqualTo(BIOMETRIC_PASSPHRASE.toByteArray())
+        }
+
+    @Test
+    fun `biometric passphrase source array is wiped after the flow completes`() =
+        runTest {
+            val mockCipher = mock<Cipher>()
+            whenever(mockCipher.iv) doReturn ByteArray(0)
+
+            val biometricSource = BIOMETRIC_PASSPHRASE.toByteArray()
+            val getPassphraseUseCase: GetPassphraseUseCase = get()
+            whenever(getPassphraseUseCase.execute(any())) doReturn
+                GetPassphraseUseCase.Output(
+                    PotentialPassphrase.Passphrase(biometricSource),
+                )
+
+            viewModel = get(parameters = { parametersOf(AuthConfig.RefreshPassphrase, USER_ID, AppContext.APP) })
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(BiometricAuthenticationSuccess(mockCipher))
+                assertIs<AuthSuccess>(awaitItem())
+            }
+
+            assertThat(biometricSource.all { it == 0.toByte() }).isTrue()
         }
 
     @Test
@@ -576,6 +647,7 @@ class AuthViewModelTest : KoinTest {
 
     private companion object {
         const val USER_ID = "test-user-id"
+        const val MFA_HEADER = "passbolt_mfa=test-mfa-token"
         const val TYPED_PASSPHRASE = "typed-passphrase"
         const val BIOMETRIC_PASSPHRASE = "biometric-passphrase"
 

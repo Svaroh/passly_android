@@ -7,6 +7,7 @@ sealed interface GroupPermissionsSideEffect {
 
     data class NavigateToGroupMembers(
         val groupId: String,
+        val fromSnapshot: Boolean = false,
     ) : GroupPermissionsSideEffect
 
     data class SetUpdatedPermissionResult(

@@ -41,7 +41,6 @@ import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ConfirmKeyPermanentlyInvalidated
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.DismissKeyPermanentlyInvalidated
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.GoToApp
-import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.KeyPermanentlyInvalidated
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.MaybeLater
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.ResumeView
 import com.passbolt.mobile.android.feature.setup.biometric.BiometricSetupIntent.UseBiometric
@@ -71,6 +70,7 @@ import org.koin.test.get
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import javax.crypto.Cipher
@@ -202,7 +202,7 @@ class BiometricSetupViewModelTest : KoinTest {
         runTest {
             val passphraseMemoryCache: PassphraseMemoryCache = get()
             val autofillInformationProvider: AutofillInformationProvider = get()
-            whenever(passphraseMemoryCache.get()) doReturn PotentialPassphrase.Passphrase(TEST_PASSPHRASE)
+            passphraseMemoryCache.stubFreshCopiesOf(TEST_PASSPHRASE)
             whenever(autofillInformationProvider.isAutofillServiceSupported()) doReturn true
             whenever(autofillInformationProvider.isPassboltAutofillServiceSet()) doReturn false
 
@@ -222,7 +222,7 @@ class BiometricSetupViewModelTest : KoinTest {
         runTest {
             val passphraseMemoryCache: PassphraseMemoryCache = get()
             val autofillInformationProvider: AutofillInformationProvider = get()
-            whenever(passphraseMemoryCache.get()) doReturn PotentialPassphrase.Passphrase(TEST_PASSPHRASE)
+            passphraseMemoryCache.stubFreshCopiesOf(TEST_PASSPHRASE)
             whenever(autofillInformationProvider.isAutofillServiceSupported()) doReturn true
             whenever(autofillInformationProvider.isPassboltAutofillServiceSet()) doReturn true
 
@@ -242,7 +242,7 @@ class BiometricSetupViewModelTest : KoinTest {
         runTest {
             val passphraseMemoryCache: PassphraseMemoryCache = get()
             val autofillInformationProvider: AutofillInformationProvider = get()
-            whenever(passphraseMemoryCache.get()) doReturn PotentialPassphrase.Passphrase(TEST_PASSPHRASE)
+            passphraseMemoryCache.stubFreshCopiesOf(TEST_PASSPHRASE)
             whenever(autofillInformationProvider.isAutofillServiceSupported()) doReturn false
 
             viewModel = get()
@@ -276,15 +276,19 @@ class BiometricSetupViewModelTest : KoinTest {
     @Test
     fun `key permanently invalidated should disable biometry and show key changes detected`() =
         runTest {
+            val biometricInformationProvider: BiometricInformationProvider = get()
+            val biometricCipher: BiometricCipher = get()
             val biometryInteractor: BiometryInteractor = get()
+            whenever(biometricInformationProvider.hasBiometricSetUp()) doReturn true
+            whenever(biometricCipher.getBiometricEncryptCipher()) doThrow
+                KeyPermanentlyInvalidatedException("Key invalidated")
             viewModel = get()
-            val exception = KeyPermanentlyInvalidatedException("Key invalidated")
 
             viewModel.viewState.test {
                 val initialState = awaitItem()
                 assertThat(initialState.showKeyChangesDetected).isFalse()
 
-                viewModel.onIntent(KeyPermanentlyInvalidated(exception))
+                viewModel.onIntent(UseBiometric)
 
                 val updatedState = awaitItem()
                 assertThat(updatedState.showKeyChangesDetected).isTrue()
@@ -297,10 +301,14 @@ class BiometricSetupViewModelTest : KoinTest {
     @Test
     fun `dismiss key permanently invalidated should hide key changes detected dialog`() =
         runTest {
+            val biometricInformationProvider: BiometricInformationProvider = get()
+            val biometricCipher: BiometricCipher = get()
+            whenever(biometricInformationProvider.hasBiometricSetUp()) doReturn true
+            whenever(biometricCipher.getBiometricEncryptCipher()) doThrow
+                KeyPermanentlyInvalidatedException("Key invalidated")
             viewModel = get()
-            val exception = KeyPermanentlyInvalidatedException("Key invalidated")
 
-            viewModel.onIntent(KeyPermanentlyInvalidated(exception))
+            viewModel.onIntent(UseBiometric)
 
             viewModel.viewState.test {
                 val stateWithDialog = awaitItem()
@@ -372,7 +380,7 @@ class BiometricSetupViewModelTest : KoinTest {
             val mockAuthenticatedCipher = mock<Cipher>()
             whenever(mockAuthenticatedCipher.iv) doReturn TEST_AUTHENTICATED_IV
 
-            whenever(passphraseMemoryCache.get()) doReturn PotentialPassphrase.Passphrase(TEST_PASSPHRASE)
+            passphraseMemoryCache.stubFreshCopiesOf(TEST_PASSPHRASE)
             whenever(autofillInformationProvider.isAutofillServiceSupported()) doReturn true
             whenever(autofillInformationProvider.isPassboltAutofillServiceSet()) doReturn false
 
@@ -391,6 +399,31 @@ class BiometricSetupViewModelTest : KoinTest {
 
     @OptIn(ExperimentalTime::class)
     @Test
+    fun `biometric authentication success wipes the cached passphrase copy after use`() =
+        runTest {
+            val passphraseMemoryCache: PassphraseMemoryCache = get()
+            val autofillInformationProvider: AutofillInformationProvider = get()
+
+            val mockAuthenticatedCipher = mock<Cipher>()
+            whenever(mockAuthenticatedCipher.iv) doReturn TEST_AUTHENTICATED_IV
+
+            val cachedPassphraseCopy = TEST_PASSPHRASE.copyOf()
+            whenever(passphraseMemoryCache.get()) doReturn PotentialPassphrase.Passphrase(cachedPassphraseCopy)
+            whenever(autofillInformationProvider.isAutofillServiceSupported()) doReturn true
+            whenever(autofillInformationProvider.isPassboltAutofillServiceSet()) doReturn true
+
+            viewModel = get()
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(BiometricAuthenticationSuccess(mockAuthenticatedCipher))
+                assertIs<NavigateToAccessibilityPolicies>(awaitItem())
+            }
+
+            assertThat(cachedPassphraseCopy.all { it == 0.toByte() }).isTrue()
+        }
+
+    @OptIn(ExperimentalTime::class)
+    @Test
     fun `biometric authentication success with cipher and autofill set should navigate to home`() =
         runTest {
             val passphraseMemoryCache: PassphraseMemoryCache = get()
@@ -401,7 +434,7 @@ class BiometricSetupViewModelTest : KoinTest {
             val mockAuthenticatedCipher = mock<Cipher>()
             whenever(mockAuthenticatedCipher.iv) doReturn TEST_AUTHENTICATED_IV
 
-            whenever(passphraseMemoryCache.get()) doReturn PotentialPassphrase.Passphrase(TEST_PASSPHRASE)
+            passphraseMemoryCache.stubFreshCopiesOf(TEST_PASSPHRASE)
             whenever(autofillInformationProvider.isAutofillServiceSupported()) doReturn true
             whenever(autofillInformationProvider.isPassboltAutofillServiceSet()) doReturn true
 
@@ -424,7 +457,7 @@ class BiometricSetupViewModelTest : KoinTest {
         runTest {
             val passphraseMemoryCache: PassphraseMemoryCache = get()
             val autofillInformationProvider: AutofillInformationProvider = get()
-            whenever(passphraseMemoryCache.get()) doReturn PotentialPassphrase.Passphrase(TEST_PASSPHRASE)
+            passphraseMemoryCache.stubFreshCopiesOf(TEST_PASSPHRASE)
             whenever(autofillInformationProvider.isAutofillServiceSupported()) doReturn true
             whenever(autofillInformationProvider.isPassboltAutofillServiceSet()) doReturn false
 
@@ -514,6 +547,10 @@ class BiometricSetupViewModelTest : KoinTest {
                 assertThat(effect.errorType).isEqualTo(SnackbarErrorType.AUTHENTICATION_GENERIC)
             }
         }
+
+    private fun PassphraseMemoryCache.stubFreshCopiesOf(passphrase: ByteArray) {
+        whenever(get()).thenAnswer { PotentialPassphrase.Passphrase(passphrase.copyOf()) }
+    }
 
     companion object {
         private val TEST_PASSPHRASE = "testPassphrase123".toByteArray()

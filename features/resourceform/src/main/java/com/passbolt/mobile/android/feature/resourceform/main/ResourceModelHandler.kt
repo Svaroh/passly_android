@@ -1,5 +1,6 @@
 package com.passbolt.mobile.android.feature.resourceform.main
 
+import com.passbolt.mobile.android.common.hash.MessageDigestHash
 import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
 import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAction
 import com.passbolt.mobile.android.core.resourcetypes.graph.redesigned.UpdateAction.ADD_CUSTOM_FIELDS
@@ -81,11 +82,14 @@ class ResourceModelHandler(
     private val getLocalResourceUseCase: GetLocalResourceUseCase,
     private val defaultValues: DefaultValues,
     private val secretPropertiesActionsInteractorFactory: SecretPropertiesActionsInteractorFactory,
+    private val messageDigestHash: MessageDigestHash,
 ) {
     lateinit var resourceMetadata: MetadataJsonModel
     lateinit var resourceSecret: SecretJsonModel
     lateinit var metadataType: MetadataTypeModel
     lateinit var contentType: ContentType
+
+    private var originalEditSecretFingerprint: String? = null
 
     suspend fun initializeModelForCreation(leadingContentType: LeadingContentType) {
         val initialContentTypeToCreate =
@@ -140,6 +144,7 @@ class ResourceModelHandler(
             val secretPropertiesActionsInteractor = secretPropertiesActionsInteractorFactory.create(resource)
             val secret = secretPropertiesActionsInteractor.provideDecryptedSecret().single()
             resourceSecret = (secret as SecretPropertyActionResult.Success<SecretJsonModel>).result
+            originalEditSecretFingerprint = secretFingerprint(getResourceSecretWithRequiredFields())
 
             Timber.d("Initialized edition model with content type: $contentType and metadata type: $metadataType")
         } catch (e: Exception) {
@@ -254,6 +259,16 @@ class ResourceModelHandler(
     private fun resourceHasNoPassword(): Boolean = resourceSecret.getPassword(contentType).isNullOrBlank()
 
     private fun resourceHasNoNote(): Boolean = resourceSecret.description.isNullOrBlank()
+
+    fun isSecretModified(): Boolean {
+        val originalFingerprint =
+            checkNotNull(originalEditSecretFingerprint) {
+                "Secret modification tracking is available only after initialization for edition"
+            }
+        return secretFingerprint(getResourceSecretWithRequiredFields()) != originalFingerprint
+    }
+
+    private fun secretFingerprint(secret: SecretJsonModel): String = messageDigestHash.sha256(secret.json.orEmpty())
 
     @Suppress("CyclomaticComplexMethod")
     fun getResourceSecretWithRequiredFields(): SecretJsonModel =

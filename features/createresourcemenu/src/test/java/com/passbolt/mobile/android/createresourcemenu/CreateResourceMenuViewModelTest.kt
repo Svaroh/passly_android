@@ -93,7 +93,7 @@ class CreateResourceMenuViewModelTest : KoinTest {
 
         val createCreateResourceMenuModelUseCase: CreateCreateResourceMenuModelUseCase = get()
         createCreateResourceMenuModelUseCase.stub {
-            onBlocking { execute(any()) } doReturn
+            on { execute(any()) } doReturn
                 CreateCreateResourceMenuModelUseCase.Output(
                     model =
                         CreateResourceMenuModel(
@@ -134,7 +134,7 @@ class CreateResourceMenuViewModelTest : KoinTest {
         runTest {
             val createCreateResourceMenuModelUseCase: CreateCreateResourceMenuModelUseCase = get()
             createCreateResourceMenuModelUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     CreateCreateResourceMenuModelUseCase.Output(
                         model =
                             CreateResourceMenuModel(
@@ -166,7 +166,7 @@ class CreateResourceMenuViewModelTest : KoinTest {
         runTest {
             val createCreateResourceMenuModelUseCase: CreateCreateResourceMenuModelUseCase = get()
             createCreateResourceMenuModelUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     CreateCreateResourceMenuModelUseCase.Output(
                         model =
                             CreateResourceMenuModel(

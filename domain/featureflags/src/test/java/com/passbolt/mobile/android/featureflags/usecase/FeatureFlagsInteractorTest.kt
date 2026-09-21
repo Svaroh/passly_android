@@ -77,7 +77,7 @@ class FeatureFlagsInteractorTest : KoinTest {
         runTest {
             val featureFlags = FeatureFlags.defaults().copy(isRbacAvailable = true)
             repository.stub {
-                onBlocking { refreshFeatureFlags(USER_ID) }.thenReturn(DomainResult.Finished(featureFlags))
+                on { refreshFeatureFlags(USER_ID) }.thenReturn(DomainResult.Finished(featureFlags))
             }
 
             val result = interactor.fetchAndSaveFeatureFlags()
@@ -89,7 +89,7 @@ class FeatureFlagsInteractorTest : KoinTest {
     fun `refresh failure returns failure`() =
         runTest {
             repository.stub {
-                onBlocking { refreshFeatureFlags(USER_ID) }.thenReturn(DomainResult.Incomplete.Error(UNKNOWN, "boom"))
+                on { refreshFeatureFlags(USER_ID) }.thenReturn(DomainResult.Incomplete.Error(UNKNOWN, "boom"))
             }
 
             val result = interactor.fetchAndSaveFeatureFlags()

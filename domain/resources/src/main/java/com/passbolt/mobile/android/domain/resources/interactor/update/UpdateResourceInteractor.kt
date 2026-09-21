@@ -29,7 +29,7 @@ import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseO
 import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
 import com.passbolt.mobile.android.core.mvp.authentication.toAuthenticationState
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
+import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.passwordexpiry.usecase.GetPasswordExpirySettingsUseCase
 import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
@@ -57,6 +57,7 @@ import com.passbolt.mobile.android.ui.MetadataJsonModel
 import com.passbolt.mobile.android.ui.ResourceUiModel
 import com.passbolt.mobile.android.ui.UpdateResourceModel
 import com.passbolt.mobile.android.ui.UserUiModel
+import timber.log.Timber
 import java.time.ZonedDateTime
 
 class UpdateResourceInteractor(
@@ -72,40 +73,97 @@ class UpdateResourceInteractor(
     private val metadataMapper: MetadataMapper,
     private val metadataEncryptor: MetadataEncryptor,
 ) {
+    @Suppress("ReturnCount")
     suspend fun execute(
         resourceInput: UpdateResourceModel,
         secretInput: SecretInput,
+        confirmedRecipientsPublicKeys: Map<String, String> = emptyMap(),
     ): Output {
-        val passphrase =
-            when (val result = passphraseMemoryCache.get()) {
-                is PotentialPassphrase.Passphrase -> result.passphrase
-                is PotentialPassphrase.PassphraseNotPresent -> return Output.PasswordExpired
+        return passphraseMemoryCache.usePassphraseCopy(
+            onPassphraseNotPresent = { Output.PasswordExpired },
+        ) { passphrase ->
+            if (!isSecretValid(
+                    PlainSecretValidationWrapper(secretInput.secretJsonModel.json, resourceInput.contentType)
+                        .validationPlainSecret,
+                    resourceInput.contentType,
+                )
+            ) {
+                return Output.JsonSchemaValidationFailure(SECRET)
+            }
+            if (!isResourceValid(resourceInput.metadataJsonModel.json, resourceInput.contentType)) {
+                return Output.JsonSchemaValidationFailure(RESOURCE)
             }
 
-        val isSecretValid =
-            isSecretValid(
-                PlainSecretValidationWrapper(secretInput.secretJsonModel.json, resourceInput.contentType)
-                    .validationPlainSecret,
-                resourceInput.contentType,
-            )
-        val isResourceValid = isResourceValid(resourceInput.metadataJsonModel.json, resourceInput.contentType)
+            if (secretInput.secretChanged) {
+                updateWithChangedSecret(resourceInput, secretInput, passphrase, confirmedRecipientsPublicKeys)
+            } else {
+                updateWithUnchangedSecret(resourceInput, secretInput, passphrase)
+            }
+        }
+    }
 
-        return when (
+    private suspend fun updateWithUnchangedSecret(
+        resourceInput: UpdateResourceModel,
+        secretInput: SecretInput,
+        passphrase: ByteArray,
+    ): Output {
+        Timber.d("Secret not changed - updating the resource without the secrets payload")
+        return updateResource(secretInput, passphrase, resourceInput, secrets = null)
+    }
+
+    private suspend fun updateWithChangedSecret(
+        resourceInput: UpdateResourceModel,
+        secretInput: SecretInput,
+        passphrase: ByteArray,
+        confirmedRecipientsPublicKeys: Map<String, String>,
+    ): Output =
+        when (
             val usersWhoHaveAccess =
                 fetchUsersUseCase.execute(FetchUsersUseCase.Input(listOf(resourceInput.resourceId)))
         ) {
             is FetchUsersUseCase.Output.Failure -> Output.Failure(usersWhoHaveAccess.incomplete)
             is FetchUsersUseCase.Output.Success -> {
-                if (isSecretValid && isResourceValid) {
-                    updateResource(secretInput, passphrase, usersWhoHaveAccess.users, resourceInput)
+                val hasUnconfirmedRecipients =
+                    confirmedRecipientsPublicKeys.isNotEmpty() &&
+                        usersWhoHaveAccess.users.any { it.id !in confirmedRecipientsPublicKeys }
+                if (hasUnconfirmedRecipients) {
+                    Timber.e("Resource has recipients that were not confirmed - aborting the update")
+                    Output.OpenPgpError("Resource has recipients that were not confirmed")
                 } else {
-                    if (!isSecretValid) {
-                        Output.JsonSchemaValidationFailure(SECRET)
-                    } else {
-                        Output.JsonSchemaValidationFailure(RESOURCE)
-                    }
+                    encryptSecretsAndUpdateResource(
+                        secretInput,
+                        passphrase,
+                        usersWhoHaveAccess.users,
+                        resourceInput,
+                        confirmedRecipientsPublicKeys,
+                    )
                 }
             }
+        }
+
+    private suspend fun encryptSecretsAndUpdateResource(
+        secretInput: SecretInput,
+        passphrase: ByteArray,
+        usersWhoHaveAccess: List<UserUiModel>,
+        resourceInput: UpdateResourceModel,
+        confirmedRecipientsPublicKeys: Map<String, String>,
+    ): Output {
+        val encryptedSecrets =
+            encrypt(secretInput.secretJsonModel.json!!, passphrase, usersWhoHaveAccess, confirmedRecipientsPublicKeys)
+        return if (encryptedSecrets.any { it is EncryptedSecretOrError.Error }) {
+            Output.OpenPgpError(
+                encryptedSecrets.filterIsInstance<EncryptedSecretOrError.Error>().first().message,
+            )
+        } else {
+            updateResource(
+                secretInput,
+                passphrase,
+                resourceInput,
+                secrets =
+                    encryptedSecrets
+                        .filterIsInstance<EncryptedSecretOrError.EncryptedSecret>()
+                        .map { EncryptedSecret(it.userId, it.data) },
+            )
         }
     }
 
@@ -113,69 +171,61 @@ class UpdateResourceInteractor(
     private suspend fun updateResource(
         secretInput: SecretInput,
         passphrase: ByteArray,
-        usersWhoHaveAccess: List<UserUiModel>,
         resourceInput: UpdateResourceModel,
+        secrets: List<EncryptedSecret>?,
     ): Output {
-        val encryptedSecrets = encrypt(secretInput.secretJsonModel.json!!, passphrase, usersWhoHaveAccess)
-        return if (encryptedSecrets.any { it is EncryptedSecretOrError.Error }) {
-            Output.OpenPgpError(
-                encryptedSecrets.filterIsInstance<EncryptedSecretOrError.Error>().first().message,
-            )
-        } else {
-            val secrets = encryptedSecrets.filterIsInstance<EncryptedSecretOrError.EncryptedSecret>()
-            val createResourceDto =
-                if (SupportedContentTypes.v4Slugs.contains(resourceInput.contentType.slug)) {
-                    CreateV4ResourceDto(
-                        name = resourceInput.metadataJsonModel.name,
-                        resourceTypeId = getResourceTypeIdForSlug(resourceInput.contentType.slug),
-                        secrets = secrets.map { EncryptedSecret(it.userId, it.data) },
-                        username = resourceInput.metadataJsonModel.username,
-                        uri = resourceInput.metadataJsonModel.uri,
-                        description = resourceInput.metadataJsonModel.description,
-                        folderParentId = resourceInput.folderId,
-                        expiry = getResourceExpiry(resourceInput, secretInput),
-                    )
-                } else {
-                    resourceInput.apply {
-                        this.metadataJsonModel.objectType = MetadataJsonModel.OBJECT_TYPE
-                        this.metadataJsonModel.resourceTypeId = getResourceTypeIdForSlug(contentType.slug)
-                    }
-
-                    val encryptedMetadata =
-                        metadataEncryptor.encryptMetadata(
-                            resourceInput.metadataKeyType!!,
-                            resourceInput.metadataKeyId!!,
-                            resourceInput.metadataJsonModel.json!!,
-                            passphrase,
-                        )
-                    when (encryptedMetadata) {
-                        is MetadataEncryptor.Output.Success ->
-                            CreateV5ResourceDto(
-                                resourceTypeId = getResourceTypeIdForSlug(resourceInput.contentType.slug),
-                                secrets = secrets.map { EncryptedSecret(it.userId, it.data) },
-                                folderParentId = resourceInput.folderId,
-                                expiry = getResourceExpiry(resourceInput, secretInput),
-                                metadata = encryptedMetadata.encryptedMetadata,
-                                metadataKeyId = resourceInput.metadataKeyId,
-                                metadataKeyType = metadataMapper.mapToDto(resourceInput.metadataKeyType),
-                            )
-                        is MetadataEncryptor.Output.Failure -> return Output.OpenPgpError(
-                            encryptedMetadata.error?.message.orEmpty(),
-                        )
-                    }
+        val createResourceDto =
+            if (SupportedContentTypes.v4Slugs.contains(resourceInput.contentType.slug)) {
+                CreateV4ResourceDto(
+                    name = resourceInput.metadataJsonModel.name,
+                    resourceTypeId = getResourceTypeIdForSlug(resourceInput.contentType.slug),
+                    secrets = secrets,
+                    username = resourceInput.metadataJsonModel.username,
+                    uri = resourceInput.metadataJsonModel.uri,
+                    description = resourceInput.metadataJsonModel.description,
+                    folderParentId = resourceInput.folderId,
+                    expiry = getResourceExpiry(resourceInput, secretInput),
+                )
+            } else {
+                resourceInput.apply {
+                    this.metadataJsonModel.objectType = MetadataJsonModel.OBJECT_TYPE
+                    this.metadataJsonModel.resourceTypeId = getResourceTypeIdForSlug(contentType.slug)
                 }
 
-            when (
-                val result =
-                    resourcesRepository.updateResource(
-                        resourceInput.resourceId,
-                        createResourceDto,
-                        resourceInput.contentType.slug,
+                val encryptedMetadata =
+                    metadataEncryptor.encryptMetadata(
+                        resourceInput.metadataKeyType!!,
+                        resourceInput.metadataKeyId!!,
+                        resourceInput.metadataJsonModel.json!!,
+                        passphrase,
                     )
-            ) {
-                is DomainResult.Incomplete -> Output.Failure(result)
-                is DomainResult.Finished -> Output.Success(result.value.toUiModel())
+                when (encryptedMetadata) {
+                    is MetadataEncryptor.Output.Success ->
+                        CreateV5ResourceDto(
+                            resourceTypeId = getResourceTypeIdForSlug(resourceInput.contentType.slug),
+                            secrets = secrets,
+                            folderParentId = resourceInput.folderId,
+                            expiry = getResourceExpiry(resourceInput, secretInput),
+                            metadata = encryptedMetadata.encryptedMetadata,
+                            metadataKeyId = resourceInput.metadataKeyId,
+                            metadataKeyType = metadataMapper.mapToDto(resourceInput.metadataKeyType),
+                        )
+                    is MetadataEncryptor.Output.Failure -> return Output.OpenPgpError(
+                        encryptedMetadata.error?.message.orEmpty(),
+                    )
+                }
             }
+
+        return when (
+            val result =
+                resourcesRepository.updateResource(
+                    resourceInput.resourceId,
+                    createResourceDto,
+                    resourceInput.contentType.slug,
+                )
+        ) {
+            is DomainResult.Incomplete -> Output.Failure(result)
+            is DomainResult.Finished -> Output.Success(result.value.toUiModel())
         }
     }
 
@@ -211,11 +261,12 @@ class UpdateResourceInteractor(
         plainSecret: String,
         passphrase: ByteArray,
         usersWhoHaveAccess: List<UserUiModel>,
+        confirmedRecipientsPublicKeys: Map<String, String>,
     ): List<EncryptedSecretOrError> =
         usersWhoHaveAccess.mapTo(mutableListOf()) {
             val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
             val privateKey = requireNotNull(privateKeyRepository.getPrivateKey(userId)) { "Unable to restore private key." }.armoredKey
-            val publicKey = it.gpgKey.armoredKey
+            val publicKey = confirmedRecipientsPublicKeys[it.id] ?: it.gpgKey.armoredKey
 
             when (
                 val encryptedSecret =

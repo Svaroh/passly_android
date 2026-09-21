@@ -82,7 +82,7 @@ class GetPasswordExpirySettingsUseCaseTest : KoinTest {
                     defaultExpiryPeriodDays = 90,
                 )
             repository.stub {
-                onBlocking { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Finished(settings))
+                on { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Finished(settings))
             }
 
             val result = useCase.execute(Unit)
@@ -94,7 +94,7 @@ class GetPasswordExpirySettingsUseCaseTest : KoinTest {
     fun `failure falls back to defaults`() =
         runTest {
             repository.stub {
-                onBlocking { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Incomplete.Error(UNKNOWN, null))
+                on { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Incomplete.Error(UNKNOWN, null))
             }
 
             val result = useCase.execute(Unit)
@@ -106,7 +106,7 @@ class GetPasswordExpirySettingsUseCaseTest : KoinTest {
     fun `notcached failure also falls back to defaults`() =
         runTest {
             repository.stub {
-                onBlocking { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Incomplete.NotCached)
+                on { getPasswordExpirySettings(USER_ID) }.thenReturn(DomainResult.Incomplete.NotCached)
             }
 
             val result = useCase.execute(Unit)

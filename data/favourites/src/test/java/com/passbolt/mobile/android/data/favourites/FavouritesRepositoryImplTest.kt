@@ -68,7 +68,7 @@ class FavouritesRepositoryImplTest : KoinTest {
     @Test
     fun `addToFavourites delegates to remote and returns its result`() =
         runTest {
-            remote.stub { onBlocking { addToFavourites(RESOURCE_ID) }.thenReturn(DomainResult.Finished(FAVOURITE_ID)) }
+            remote.stub { on { addToFavourites(RESOURCE_ID) }.thenReturn(DomainResult.Finished(FAVOURITE_ID)) }
 
             val result = repository.addToFavourites(RESOURCE_ID)
 
@@ -80,7 +80,7 @@ class FavouritesRepositoryImplTest : KoinTest {
     fun `addToFavourites propagates remote failure`() =
         runTest {
             val failure = DomainResult.Incomplete.Error(UNKNOWN, "boom")
-            remote.stub { onBlocking { addToFavourites(RESOURCE_ID) }.thenReturn(failure) }
+            remote.stub { on { addToFavourites(RESOURCE_ID) }.thenReturn(failure) }
 
             val result = repository.addToFavourites(RESOURCE_ID)
 
@@ -90,7 +90,7 @@ class FavouritesRepositoryImplTest : KoinTest {
     @Test
     fun `removeFromFavourites delegates to remote and returns its result`() =
         runTest {
-            remote.stub { onBlocking { removeFromFavourites(FAVOURITE_ID) }.thenReturn(DomainResult.Finished(Unit)) }
+            remote.stub { on { removeFromFavourites(FAVOURITE_ID) }.thenReturn(DomainResult.Finished(Unit)) }
 
             val result = repository.removeFromFavourites(FAVOURITE_ID)
 
@@ -101,7 +101,7 @@ class FavouritesRepositoryImplTest : KoinTest {
     @Test
     fun `removeFromFavourites propagates remote failure`() =
         runTest {
-            remote.stub { onBlocking { removeFromFavourites(FAVOURITE_ID) }.thenReturn(DomainResult.Incomplete.Unauthorized) }
+            remote.stub { on { removeFromFavourites(FAVOURITE_ID) }.thenReturn(DomainResult.Incomplete.Unauthorized) }
 
             val result = repository.removeFromFavourites(FAVOURITE_ID)
 

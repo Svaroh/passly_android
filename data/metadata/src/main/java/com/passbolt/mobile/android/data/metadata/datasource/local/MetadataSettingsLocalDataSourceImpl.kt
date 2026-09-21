@@ -24,6 +24,7 @@
 package com.passbolt.mobile.android.data.metadata.datasource.local
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.passbolt.mobile.android.data.metadata.datasource.local.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V4_FOLDERS
 import com.passbolt.mobile.android.data.metadata.datasource.local.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V4_RESOURCES
 import com.passbolt.mobile.android.data.metadata.datasource.local.MetadataTypesStorageConstants.ALLOW_CREATION_OF_V4_TAGS
@@ -81,10 +82,9 @@ internal class MetadataSettingsLocalDataSourceImpl(
         metadataKeysSettings: MetadataKeysSettings,
         userId: String,
     ) {
-        with(settingsPreferences(userId).edit()) {
+        settingsPreferences(userId).edit {
             putBoolean(ALLOW_USAGE_OF_PERSONAL_KEYS, metadataKeysSettings.allowUsageOfPersonalKeys)
             putBoolean(ZERO_KNOWLEDGE_KEY_SHARE, metadataKeysSettings.zeroKnowledgeKeyShare)
-            apply()
         }
     }
 
@@ -109,7 +109,7 @@ internal class MetadataSettingsLocalDataSourceImpl(
         metadataTypesSettings: MetadataTypesSettings,
         userId: String,
     ) {
-        with(settingsPreferences(userId).edit()) {
+        settingsPreferences(userId).edit {
             putString(DEFAULT_METADATA_TYPE, metadataTypesSettings.defaultMetadataType.name)
             putString(DEFAULT_FOLDER_TYPE, metadataTypesSettings.defaultFolderType.name)
             putString(DEFAULT_TAG_TYPE, metadataTypesSettings.defaultTagType.name)
@@ -121,7 +121,6 @@ internal class MetadataSettingsLocalDataSourceImpl(
             putBoolean(ALLOW_CREATION_OF_V4_TAGS, metadataTypesSettings.allowCreationOfV4Tags)
             putBoolean(ALLOW_V4_V5_UPGRADE, metadataTypesSettings.allowV4V5Upgrade)
             putBoolean(ALLOW_V5_V4_DOWNGRADE, metadataTypesSettings.allowV5V4Downgrade)
-            apply()
         }
     }
 
@@ -169,7 +168,7 @@ internal class MetadataSettingsLocalDataSourceImpl(
         trustedMetadataKey: TrustedMetadataKey,
         userId: String,
     ) {
-        with(trustedKeyPreferences(userId).edit()) {
+        trustedKeyPreferences(userId).edit {
             putString(TRUSTED_MD_KEY_ID, trustedMetadataKey.id.toString())
             putString(TRUSTED_MD_KEY_USER_ID, trustedMetadataKey.userId.toString())
             putString(TRUSTED_MD_KEY_KEY_DATA, trustedMetadataKey.keyData)
@@ -183,14 +182,12 @@ internal class MetadataSettingsLocalDataSourceImpl(
             putString(TRUSTED_MD_KEY_SIGNED_USERNAME, trustedMetadataKey.signedUsername)
             putLong(TRUSTED_MD_SIGNATURE_CREATION_TIMESTAMP, trustedMetadataKey.signatureCreationTimestampSeconds)
             putString(TRUSTED_MD_KEY_SIGNED_NAME, trustedMetadataKey.signedName)
-            apply()
         }
     }
 
     override suspend fun deleteTrustedMetadataKey(userId: String) {
-        with(trustedKeyPreferences(userId).edit()) {
+        trustedKeyPreferences(userId).edit {
             clear()
-            apply()
         }
     }
 }

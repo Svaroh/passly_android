@@ -116,7 +116,7 @@ class KeyInspectorViewModelTest : KoinTest {
 
         val fetchCurrentUserUseCase = get<FetchCurrentUserUseCase>()
         fetchCurrentUserUseCase.stub {
-            onBlocking { execute(Unit) } doReturn user
+            on { execute(Unit) } doReturn user
         }
 
         val fingerprintFormatter: FingerprintFormatter = get()
@@ -163,7 +163,7 @@ class KeyInspectorViewModelTest : KoinTest {
             val errorMessage = "errorMessage"
             val fetchCurrentUserUseCase: FetchCurrentUserUseCase = get()
             fetchCurrentUserUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     FetchCurrentUserUseCase.Output.Failure(
                         DomainResult.Incomplete.Error(UNKNOWN, errorMessage),
                     ),

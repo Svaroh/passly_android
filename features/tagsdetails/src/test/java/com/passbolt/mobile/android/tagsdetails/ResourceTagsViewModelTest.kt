@@ -123,12 +123,12 @@ class ResourceTagsViewModelTest : KoinTest {
 
         val getLocalResourceUseCase = get<GetLocalResourceUseCase>()
         getLocalResourceUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalResourceUseCase.Output(testResource)
+            on { execute(any()) } doReturn GetLocalResourceUseCase.Output(testResource)
         }
 
         val getLocalResourceTagsUseCase = get<GetLocalResourceTagsUseCase>()
         getLocalResourceTagsUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalResourceTagsUseCase.Output(testTags)
+            on { execute(any()) } doReturn GetLocalResourceTagsUseCase.Output(testTags)
         }
     }
 
@@ -204,7 +204,7 @@ class ResourceTagsViewModelTest : KoinTest {
         runTest {
             val getLocalResourceUseCase = get<GetLocalResourceUseCase>()
             getLocalResourceUseCase.stub {
-                onBlocking { execute(any()) } doThrow IllegalStateException("The query result was empty")
+                on { execute(any()) } doThrow IllegalStateException("The query result was empty")
             }
 
             viewModel = get { parametersOf(testResource.resourceId) }
@@ -221,7 +221,7 @@ class ResourceTagsViewModelTest : KoinTest {
         runTest {
             val getLocalResourceTagsUseCase = get<GetLocalResourceTagsUseCase>()
             getLocalResourceTagsUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetLocalResourceTagsUseCase.Output(emptyList())
+                on { execute(any()) } doReturn GetLocalResourceTagsUseCase.Output(emptyList())
             }
 
             viewModel = get { parametersOf(testResource.resourceId) }

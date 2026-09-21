@@ -52,6 +52,7 @@ import com.passbolt.mobile.android.domain.resources.actions.performCommonResourc
 import com.passbolt.mobile.android.domain.resources.actions.performResourceUpdateAction
 import com.passbolt.mobile.android.domain.resources.actions.performSecretPropertyAction
 import com.passbolt.mobile.android.domain.resources.mapper.toOtpItemWrapper
+import com.passbolt.mobile.android.domain.resources.usecase.EditPermissionsConfirmationInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcesUseCase
 import com.passbolt.mobile.android.feature.authentication.session.runAuthenticatedOperation
 import com.passbolt.mobile.android.feature.home.screen.ShowSuggestedModel
@@ -61,6 +62,7 @@ import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseSwitchAccou
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseTrustNewKeyDialog
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CloseTrustedKeyDeletedDialog
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.ConfirmDeleteTotp
+import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.ConfirmedPermissionsResult
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CopyOtp
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.CreateTotp
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.DeleteOtp
@@ -76,6 +78,7 @@ import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.TrustMetadataKey
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.TrustNewMetadataKey
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.CopyToClipboard
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.InitiateDataRefresh
+import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToConfirmPermissions
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToCreateResourceForm
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToCreateTotp
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToEditResourceForm
@@ -110,6 +113,7 @@ import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes.
 import com.passbolt.mobile.android.ui.LeadingContentType.TOTP
 import com.passbolt.mobile.android.ui.NewMetadataKeyToTrustModel
 import com.passbolt.mobile.android.ui.OtpItemWrapper
+import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.ResourceUiModel
 import com.passbolt.mobile.android.ui.allReset
 import com.passbolt.mobile.android.ui.contentType
@@ -119,13 +123,19 @@ import com.passbolt.mobile.android.ui.refreshingNone
 import com.passbolt.mobile.android.ui.refreshingOnly
 import com.passbolt.mobile.android.ui.replaceOnId
 import com.passbolt.mobile.android.ui.revealed
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 internal class OtpViewModel(
@@ -139,6 +149,7 @@ internal class OtpViewModel(
     private val timerFactory: TimerFactory,
     private val resourceAccessInteractor: ResourceAccessInteractor,
     private val resourceUpdateActionsInteractorFactory: ResourceUpdateActionsInteractorFactory,
+    private val editPermissionsConfirmationInteractor: EditPermissionsConfirmationInteractor,
     private val secretPropertiesActionsInteractorFactory: SecretPropertiesActionsInteractorFactory,
     private val autofillUriMatcher: AutofillUriMatcher,
     private val timeProvider: TimeProvider,
@@ -149,8 +160,11 @@ internal class OtpViewModel(
     private var universalCountdownJob: Job? = null
     private var fetchTotpJob: Job? = null
 
+    private val searchQueryFlow = MutableStateFlow("")
+
     init {
         loadUserAvatar()
+        observeSearchQuery()
         updateViewState { copy(universalCountdownSeconds = currentRemainingCountdownSeconds()) }
         dataRefreshJob?.cancel()
         dataRefreshJob =
@@ -179,7 +193,6 @@ internal class OtpViewModel(
         otpsCounterJob?.cancel()
         universalCountdownJob?.cancel()
         fetchTotpJob?.cancel()
-        super.onCleared()
     }
 
     private fun onCanCreateResource(function: () -> Unit) {
@@ -221,6 +234,7 @@ internal class OtpViewModel(
                 )
             }
             CloseDeleteConfirmationDialog -> updateViewState { copy(showDeleteTotpConfirmationDialog = false) }
+            is ConfirmedPermissionsResult -> confirmedPermissionsReceived(intent.permissions)
             ConfirmDeleteTotp -> {
                 updateViewState { copy(showProgress = true, showDeleteTotpConfirmationDialog = false) }
                 deleteTotp(viewState.value.moreMenuResource)
@@ -267,13 +281,7 @@ internal class OtpViewModel(
                     updateViewState { copy(showAccountSwitchBottomSheet = true) }
                 }
             }
-            CLEAR ->
-                updateViewState {
-                    copy(
-                        searchQuery = "",
-                        searchInputEndIconMode = AVATAR,
-                    )
-                }
+            CLEAR -> searchQueryChanged("")
             NONE -> {
                 // no-op
             }
@@ -324,7 +332,13 @@ internal class OtpViewModel(
                 is Totp, V5TotpStandalone ->
                     deleteStandaloneTotpResource(otpResource.resource)
                 is PasswordDescriptionTotp, V5DefaultWithTotp ->
-                    downgradeToPasswordAndDescriptionResource(otpResource.resource)
+                    if (editPermissionsConfirmationInteractor.shouldConfirmPermissions(otpResource.resource.resourceId)) {
+                        Timber.d("Removing totp from a shared resource - navigating to permissions confirmation")
+                        updateViewState { copy(pendingPermissionsConfirmationResource = otpResource.resource) }
+                        emitSideEffect(NavigateToConfirmPermissions(otpResource.resource.resourceId))
+                    } else {
+                        downgradeToPasswordAndDescriptionResource(otpResource.resource)
+                    }
                 else ->
                     error("$contentType type should not be presented on totp list")
             }
@@ -344,15 +358,42 @@ internal class OtpViewModel(
         )
     }
 
-    private suspend fun downgradeToPasswordAndDescriptionResource(otpResource: ResourceUiModel) {
+    private fun confirmedPermissionsReceived(confirmedPermissions: List<PermissionModelUi>) {
+        val resource = viewState.value.pendingPermissionsConfirmationResource ?: return
+        updateViewState { copy(pendingPermissionsConfirmationResource = null, showProgress = true) }
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            downgradeToPasswordAndDescriptionResource(resource, confirmedPermissions)
+            updateViewState { copy(showProgress = false) }
+        }
+    }
+
+    private suspend fun downgradeToPasswordAndDescriptionResource(
+        otpResource: ResourceUiModel,
+        confirmedPermissions: List<PermissionModelUi>? = null,
+    ) {
         val resourceUpdateActionInteractor = resourceUpdateActionsInteractorFactory.create(otpResource)
         performResourceUpdateAction(
             action = {
-                resourceUpdateActionInteractor.updateGenericResource(
-                    UpdateAction.REMOVE_TOTP,
-                    secretModification = { it.apply { totp = null } },
+                if (confirmedPermissions == null) {
+                    resourceUpdateActionInteractor.updateGenericResource(
+                        UpdateAction.REMOVE_TOTP,
+                        secretModification = { it.apply { totp = null } },
+                    )
+                } else {
+                    resourceUpdateActionInteractor.updateGenericResourceWithConfirmedPermissions(
+                        UpdateAction.REMOVE_TOTP,
+                        confirmedPermissions,
+                        secretModification = { it.apply { totp = null } },
+                    )
+                }
+            },
+            doOnPermissionsDrifted = { drifted ->
+                updateViewState { copy(pendingPermissionsConfirmationResource = otpResource) }
+                emitSideEffect(
+                    NavigateToConfirmPermissions(otpResource.resourceId, driftedEntityNames = drifted.driftedEntityNames),
                 )
             },
+            doOnShareFailure = { emitSideEffect(ShowErrorSnackbar(SnackbarErrorType.SHARE_FAILED)) },
             doOnCryptoFailure = { emitSideEffect(ShowErrorSnackbar(SnackbarErrorType.ENCRYPTION_FAILURE)) },
             doOnFailure = { emitSideEffect(ShowErrorSnackbar(ERROR)) },
             doOnSuccess = {
@@ -429,16 +470,38 @@ internal class OtpViewModel(
     }
 
     private fun searchQueryChanged(searchQuery: String) {
-        val searchEndIcon = if (searchQuery.isNotBlank()) CLEAR else AVATAR
+        if (searchQuery == searchQueryFlow.value) {
+            return
+        }
+        searchQueryFlow.value = searchQuery
+        updateViewState {
+            copy(
+                searchInputEndIconMode = if (searchQuery.isNotBlank()) CLEAR else AVATAR,
+                isSearching = true,
+            )
+        }
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeSearchQuery() {
         viewModelScope.launch(coroutineLaunchContext.io) {
-            val filteredOtps = getOtpResources(searchQuery)
-            updateViewState {
-                copy(
-                    searchInputEndIconMode = searchEndIcon,
-                    searchQuery = searchQuery,
-                    filteredOtps = filteredOtps,
-                )
-            }
+            searchQueryFlow
+                .drop(1)
+                .debounce(SEARCH_DEBOUNCE)
+                .collectLatest { searchQuery ->
+                    Timber.d("Applying search query (length: ${searchQuery.length})")
+                    try {
+                        val filteredOtps = getOtpResources(searchQuery)
+                        updateViewState {
+                            copy(searchQuery = searchQuery, filteredOtps = filteredOtps, isSearching = false)
+                        }
+                    } catch (exception: CancellationException) {
+                        throw exception
+                    } catch (exception: Exception) {
+                        Timber.e(exception, "Failed to apply the search query")
+                        updateViewState { copy(isSearching = false) }
+                    }
+                }
         }
     }
 
@@ -606,5 +669,9 @@ internal class OtpViewModel(
         Timber.e("Invalid TOTP parameters")
         emitSideEffect(ShowErrorSnackbar(INVALID_TOTP_PARAMETERS))
         updateOtpLists { refreshingNone() }
+    }
+
+    companion object {
+        val SEARCH_DEBOUNCE = 300.milliseconds
     }
 }

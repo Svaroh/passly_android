@@ -8,11 +8,13 @@ import com.passbolt.mobile.android.core.navigation.compose.base.EntryProviderIns
 import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.Otp
 import com.passbolt.mobile.android.core.navigation.compose.results.OtpScanCompleteResult
+import com.passbolt.mobile.android.core.navigation.compose.results.PermissionsConfirmedResult
 import com.passbolt.mobile.android.core.navigation.compose.results.ResourceFormCompleteResult
 import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
 import com.passbolt.mobile.android.feature.home.screen.ResourceHandlingStrategy
 import com.passbolt.mobile.android.feature.home.screen.ResourceHandlingStrategyProvider
 import com.passbolt.mobile.android.feature.home.screen.ShowSuggestedModel.DoNotShow
+import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.ConfirmedPermissionsResult
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.OtpQRScanReturned
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.ResourceFormReturned
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.RevealOtp
@@ -53,6 +55,9 @@ class OtpFeatureNavigation : FeatureModuleNavigation {
                 }
                 ResultEffect<ResourceFormCompleteResult> { result ->
                     viewModel.onIntent(ResourceFormReturned(result.resourceCreated, result.resourceEdited, result.resourceName))
+                }
+                ResultEffect<PermissionsConfirmedResult> { result ->
+                    viewModel.onIntent(ConfirmedPermissionsResult(result.permissions))
                 }
 
                 PassboltTheme {

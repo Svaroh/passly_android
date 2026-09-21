@@ -71,13 +71,8 @@ internal class AccountDataLocalDataSourceImpl(
     }
 
     override fun removeAccountData(userId: String) {
-        val sharedPreferences = encryptedSharedPreferencesFactory.get(accountDataFileName(userId))
-        sharedPreferences.edit {
-            remove(USER_FIRST_NAME_KEY)
-            remove(USER_LAST_NAME_KEY)
-            remove(EMAIL_KEY)
-            remove(URL_KEY)
-        }
+        encryptedSharedPreferencesFactory.get(accountDataFileName(userId)).edit { clear() }
+        encryptedSharedPreferencesFactory.get(serverFingerprintFileName(userId)).edit { clear() }
     }
 
     override fun saveServerFingerprint(
@@ -97,7 +92,7 @@ internal class AccountDataLocalDataSourceImpl(
         val sharedPreferences = encryptedSharedPreferencesFactory.get(serverFingerprintFileName(userId))
         val serverFingerprint = sharedPreferences.getString(Constants.SERVER_FINGERPRINT_KEY, null)
 
-        return serverFingerprint.isNullOrEmpty() || serverFingerprint == fingerprint
+        return serverFingerprint.isNullOrEmpty() || serverFingerprint.equals(fingerprint, ignoreCase = true)
     }
 
     private fun accountDataFileName(userId: String) = "${AccountDataFileName(userId).name}.xml"

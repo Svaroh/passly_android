@@ -139,7 +139,7 @@ open class SingleResourceDeserializer(
         return if (resourceTypeSlug != null) {
             jsonSchemaValidationRunner.isResourceValid(resourceJson, resourceTypeSlug)
         } else {
-            return false
+            false
         }
     }
 

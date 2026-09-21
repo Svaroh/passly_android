@@ -2,6 +2,7 @@ plugins {
     id("passbolt.android.library")
     id(libs.plugins.compose.compiler.get().pluginId)
     id(libs.plugins.kotlin.serialization.get().pluginId)
+    alias(libs.plugins.screenshot)
 }
 
 dependencies {
@@ -19,12 +20,16 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":mappers"))
     implementation(project(":navigation"))
+    implementation(project(":security"))
     implementation(project(":metadata-domain"))
     implementation(project(":supportedresourcetypes"))
     implementation(project(":secrets-domain"))
     implementation(project(":jsonmodel"))
     implementation(project(":resourcetypes"))
     implementation(project(":resources-domain"))
+    implementation(project(":folders-domain"))
+    implementation(project(":accounts-domain"))
+    implementation(project(":permissionsconfirmation-domain"))
     implementation(project(":serializers"))
     implementation(project(":metadatakeytrust"))
     implementation(project(":idlingresource"))
@@ -52,11 +57,21 @@ dependencies {
     testImplementation(libs.gson)
     testImplementation(libs.json.path)
     testImplementation(libs.json.assert)
+
+    screenshotTestImplementation(project(":screenshottest"))
+    screenshotTestImplementation(libs.screenshot.validation.api)
+    screenshotTestImplementation(libs.compose.ui.tooling)
 }
 
 android {
     namespace = "com.passbolt.mobile.android.feature.resourceform"
     buildFeatures {
         compose = true
+    }
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
+
+    // tolerate sub-pixel antialiasing differences between macOS (dev) and Linux (CI) layoutlib renderers
+    screenshotTests {
+        imageDifferenceThreshold = 0.001f
     }
 }

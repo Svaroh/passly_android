@@ -53,7 +53,7 @@ class CheckPasswordPropertiesUseCaseTest : KoinTest {
         runTest {
             val password = "test1234567890"
             mockPwnedPasswordRepository.stub {
-                onBlocking { getPwnedPasswordsSuffixes(any()) }.thenReturn(
+                on { getPwnedPasswordsSuffixes(any()) }.thenReturn(
                     NetworkResult.Success(
                         "08f70a062457f0763adc66e0c0fe17a150a:10",
                     ),
@@ -71,7 +71,7 @@ class CheckPasswordPropertiesUseCaseTest : KoinTest {
         runTest {
             val password = "test1234567890"
             mockPwnedPasswordRepository.stub {
-                onBlocking { getPwnedPasswordsSuffixes(any()) }.thenReturn(
+                on { getPwnedPasswordsSuffixes(any()) }.thenReturn(
                     NetworkResult.Success(
                         "08f70a062457f0763adc66e0c0fe17a150b:10\n" +
                             "08f70a062457f0763adc66e0c0fe17a150c:10\n" +

@@ -49,4 +49,6 @@ interface GroupsRepository {
     ): GroupWithUsers
 
     suspend fun refreshGroups(userId: String): DomainResult<List<GroupWithMembers>>
+
+    suspend fun fetchGroupsByIds(groupIds: List<String>): DomainResult<List<GroupWithMembers>>
 }

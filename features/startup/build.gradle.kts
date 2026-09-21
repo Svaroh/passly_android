@@ -6,6 +6,8 @@ plugins {
 dependencies {
     implementation(project(":uimodel"))
     implementation(project(":accounts-domain"))
+    implementation(project(":envinfo"))
+    implementation(project(":preferences-domain"))
     implementation(project(":coreui"))
     implementation(project(":navigation"))
     implementation(project(":common"))
@@ -26,8 +28,13 @@ dependencies {
     testImplementation(project(":commontest"))
 }
 
+val androidConfig = extensions.getByType<AndroidCommonConfig>()
+
 android {
     namespace = "com.passbolt.mobile.android.feature.startup"
+    defaultConfig {
+        buildConfigField("int", "MIN_FULLY_SUPPORTED_SDK", "${androidConfig.minFullySupportedSdk}")
+    }
     buildFeatures {
         buildConfig = true
         compose = true

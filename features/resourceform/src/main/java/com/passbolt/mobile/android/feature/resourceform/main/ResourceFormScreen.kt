@@ -37,6 +37,7 @@ import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
+import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.AdditionalUrisForm
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.AdvancedSecretGenerationForm
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.AppearanceForm
@@ -50,6 +51,7 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavi
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.TotpForm
 import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
 import com.passbolt.mobile.android.core.navigation.compose.results.ResourceFormCompleteResult
+import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.dialogs.UnableToGeneratePasswordAlertDialog
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
@@ -75,6 +77,7 @@ import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEff
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToAdditionalUris
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToAdvancedSecretGeneration
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToAppearance
+import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToConfirmPermissions
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToCustomFields
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToDescription
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormSideEffect.NavigateToNote
@@ -108,6 +111,8 @@ internal fun ResourceFormScreen(
     modifier: Modifier = Modifier,
     navigator: AppNavigator = koinInject(),
 ) {
+    FlagSecureEffect()
+
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resultBus = NavigationResultEventBus.current
@@ -154,6 +159,8 @@ internal fun ResourceFormScreen(
                 )
             NavigateToScanOtp ->
                 navigator.navigateToKey(ScanOtp(ScanOtpMode.SCAN_FOR_RESULT))
+            is NavigateToConfirmPermissions ->
+                navigator.navigateToKey(ConfirmPermissions(sideEffect.confirmMode, sideEffect.driftedEntityNames))
             is NavigateBackWithCreateSuccess -> {
                 resultBus.sendResult(
                     result =
@@ -195,7 +202,7 @@ internal fun ResourceFormScreen(
 
 @Suppress("CyclomaticComplexMethod")
 @Composable
-private fun ResourceFormScreen(
+fun ResourceFormScreen(
     state: ResourceFormState,
     onIntent: (ResourceFormIntent) -> Unit,
     modifier: Modifier = Modifier,
@@ -465,6 +472,8 @@ private fun getSnackbarMessage(
                 LocalizationR.string.common_password_policies_fetch_failed
             SnackbarMessage.PASSWORD_EXPIRY_FETCH_FAILED ->
                 LocalizationR.string.common_password_expiry_fetch_failed
+            SnackbarMessage.RESOURCE_EDITED_SHARE_FAILED ->
+                LocalizationR.string.resource_form_edited_share_failed
         },
     )
 
@@ -480,6 +489,9 @@ private fun getToastMessage(
                 LocalizationR.string.dialog_unable_to_generate_password_message
             ToastMessage.CREATE_INITIALIZATION_ERROR -> LocalizationR.string.resource_form_create_init_error
             ToastMessage.EDIT_INITIALIZATION_ERROR -> LocalizationR.string.resource_form_edit_init_error
+            ToastMessage.RESOURCE_CREATED_SHARE_FAILED -> LocalizationR.string.resource_form_created_share_failed
+            ToastMessage.RESOURCE_CREATED_PERMISSIONS_CHANGED ->
+                LocalizationR.string.resource_form_created_permissions_changed
         },
         *args.toTypedArray(),
     )

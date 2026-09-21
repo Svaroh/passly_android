@@ -9,6 +9,8 @@ import com.passbolt.mobile.android.domain.accounts.usecase.IsServerFingerprintCo
 import com.passbolt.mobile.android.domain.auth.usecase.FetchServerPublicPgpKeyUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.SaveServerPublicRsaKeyUseCase
+import com.passbolt.mobile.android.gopenpgp.OpenPgp
+import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
 import timber.log.Timber
 
 /**
@@ -39,6 +41,7 @@ class GetAndVerifyServerKeysAndTimeInteractor(
     private val isServerFingerprintCorrectUseCase: IsServerFingerprintCorrectUseCase,
     private val getAccountDataUseCase: GetAccountDataUseCase,
     private val gopenPgpTimeUpdater: GopenPgpTimeUpdater,
+    private val openPgp: OpenPgp,
 ) {
     suspend fun getAndVerifyServerKeys(
         userId: String,
@@ -50,50 +53,113 @@ class GetAndVerifyServerKeysAndTimeInteractor(
         val (pgpKey, getTimeRequestDuration) = serverKeys.timedPgp
         val rsaKey = serverKeys.rsa
 
-        if (pgpKey is FetchServerPublicPgpKeyUseCase.Output.Success &&
-            rsaKey is FetchServerPublicRsaKeyUseCase.Output.Success
+        if (pgpKey !is FetchServerPublicPgpKeyUseCase.Output.Success ||
+            rsaKey !is FetchServerPublicRsaKeyUseCase.Output.Success
         ) {
-            saveServerPublicRsaKeyUseCase.execute(SaveServerPublicRsaKeyUseCase.Input(userId, rsaKey.rsaKey))
-            Timber.d("Getting server pgp and rsa keys succeeded")
-            Timber.d("Checking if time adjustment is needed")
-            val timeUpdateResult =
-                gopenPgpTimeUpdater.updateTimeIfNeeded(
-                    pgpKey.serverTime,
-                    serverKeys.deviceTimeAtFetchSeconds,
-                    getTimeRequestDuration.inWholeSeconds,
-                )
-            if (timeUpdateResult == GopenPgpTimeUpdater.Result.TIME_DELTA_TOO_BIG_FOR_SYNC) {
-                onError(Error.TimeIsOutOfSync)
+            onError(mapKeysFetchFailure(userId, pgpKey, rsaKey))
+            return
+        }
+
+        if (isServerTimeOutOfSync(pgpKey, serverKeys.deviceTimeAtFetchMillis, getTimeRequestDuration.inWholeMilliseconds)) {
+            onError(Error.TimeIsOutOfSync)
+            return
+        }
+
+        verifyServerFingerprint(userId, pgpKey, rsaKey, onError, onSuccess)
+    }
+
+    private suspend fun verifyServerFingerprint(
+        userId: String,
+        pgpKey: FetchServerPublicPgpKeyUseCase.Output.Success,
+        rsaKey: FetchServerPublicRsaKeyUseCase.Output.Success,
+        onError: (Error) -> Unit,
+        onSuccess: suspend (Success) -> Unit,
+    ) {
+        val computedFingerprint =
+            computeServerKeyFingerprint(pgpKey.publicKey) ?: run {
+                onError(Error.Generic)
                 return
             }
-            Timber.d("Verifying server fingerprint")
-            val input = IsServerFingerprintCorrectUseCase.Input(userId, pgpKey.fingerprint)
-            if (!isServerFingerprintCorrectUseCase.execute(input).isCorrect) {
-                Timber.d("Server key fingerprint has changed")
-                onError(Error.IncorrectServerFingerprint(pgpKey.fingerprint))
-            } else {
-                Timber.d("Server key fingerprint is valid")
-                onSuccess(Success(pgpKey.publicKey, pgpKey.fingerprint, rsaKey.rsaKey))
-            }
+
+        val rejection = calculateFingerprintRejectionReason(userId, computedFingerprint, pgpKey.fingerprint)
+        if (rejection != null) {
+            Timber.e(rejection.logMessage)
+            onError(Error.IncorrectServerFingerprint(computedFingerprint))
         } else {
-            val pgpIncomplete = (pgpKey as? FetchServerPublicPgpKeyUseCase.Output.Failure)?.incomplete
-            val rsaIncomplete = (rsaKey as? FetchServerPublicRsaKeyUseCase.Output.Failure)?.incomplete
-            when {
-                pgpIncomplete.isNoNetwork() || rsaIncomplete.isNoNetwork() -> {
-                    Timber.d("No network connection")
-                    onError(Error.NoNetwork)
-                }
-                pgpIncomplete.isServerNotReachable() || rsaIncomplete.isServerNotReachable() -> {
-                    Timber.d("Server is not reachable")
-                    val accountData = getAccountDataUseCase.execute(UserIdInput(userId))
-                    onError(Error.ServerNotReachable(accountData.url))
-                }
-                else -> {
-                    Timber.d("Generic error occurred")
-                    onError(Error.Generic)
-                }
+            Timber.d("Server key fingerprint is valid")
+            saveServerPublicRsaKeyUseCase.execute(SaveServerPublicRsaKeyUseCase.Input(userId, rsaKey.rsaKey))
+            onSuccess(Success(pgpKey.publicKey, computedFingerprint, rsaKey.rsaKey))
+        }
+    }
+
+    private fun isServerTimeOutOfSync(
+        pgpKey: FetchServerPublicPgpKeyUseCase.Output.Success,
+        deviceTimeAtFetchMillis: Long,
+        getTimeRequestDurationMillis: Long,
+    ): Boolean =
+        gopenPgpTimeUpdater.updateTimeIfNeeded(
+            pgpKey.serverTime,
+            deviceTimeAtFetchMillis,
+            getTimeRequestDurationMillis,
+        ) == GopenPgpTimeUpdater.Result.TIME_DELTA_TOO_BIG_FOR_SYNC
+
+    private suspend fun computeServerKeyFingerprint(publicKey: String): String? =
+        when (val result = openPgp.getKeyFingerprint(publicKey)) {
+            is OpenPgpResult.Result -> result.result.uppercase()
+            is OpenPgpResult.Error -> {
+                Timber.e("Unable to compute server key fingerprint from key data: ${result.error.message}")
+                null
             }
         }
+
+    private fun isServerFingerprintTrusted(
+        userId: String,
+        fingerprint: String,
+    ): Boolean = isServerFingerprintCorrectUseCase.execute(IsServerFingerprintCorrectUseCase.Input(userId, fingerprint)).isCorrect
+
+    private fun calculateFingerprintRejectionReason(
+        userId: String,
+        computedFingerprint: String,
+        reportedFingerprint: String,
+    ): FingerprintRejection? {
+        if (!computedFingerprint.equals(reportedFingerprint, ignoreCase = true)) {
+            return FingerprintRejection.FINGERPRINT_NOT_MATCHING_KEY
+        }
+        return if (isServerFingerprintTrusted(userId, computedFingerprint)) {
+            null
+        } else {
+            FingerprintRejection.FINGERPRINT_CHANGED
+        }
+    }
+
+    private fun mapKeysFetchFailure(
+        userId: String,
+        pgpKey: FetchServerPublicPgpKeyUseCase.Output,
+        rsaKey: FetchServerPublicRsaKeyUseCase.Output,
+    ): Error {
+        val pgpIncomplete = (pgpKey as? FetchServerPublicPgpKeyUseCase.Output.Failure)?.incomplete
+        val rsaIncomplete = (rsaKey as? FetchServerPublicRsaKeyUseCase.Output.Failure)?.incomplete
+        return when {
+            pgpIncomplete.isNoNetwork() || rsaIncomplete.isNoNetwork() -> {
+                Timber.d("No network connection")
+                Error.NoNetwork
+            }
+            pgpIncomplete.isServerNotReachable() || rsaIncomplete.isServerNotReachable() -> {
+                Timber.d("Server is not reachable")
+                Error.ServerNotReachable(getAccountDataUseCase.execute(UserIdInput(userId)).url)
+            }
+            else -> {
+                Timber.d("Generic error occurred")
+                Error.Generic
+            }
+        }
+    }
+
+    private enum class FingerprintRejection(
+        val logMessage: String,
+    ) {
+        FINGERPRINT_NOT_MATCHING_KEY("Server-reported fingerprint does not match its key data"),
+        FINGERPRINT_CHANGED("Server key fingerprint changed from the saved value"),
     }
 
     data class Success(

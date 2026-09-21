@@ -33,7 +33,6 @@ import com.passbolt.mobile.android.resourcepicker.screen.ResourcePickerViewModel
 import com.passbolt.mobile.android.supportedresourceTypes.SupportedContentTypes.allSlugs
 import com.passbolt.mobile.android.ui.ResourceUiModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 class ResourcePickerDataProvider(
@@ -74,7 +73,7 @@ class ResourcePickerDataProvider(
                         }
                     }
             } else {
-                flowOf(PagingData.empty())
+                settledEmptyPagingData()
             }
 
         return ResourcePickerData(

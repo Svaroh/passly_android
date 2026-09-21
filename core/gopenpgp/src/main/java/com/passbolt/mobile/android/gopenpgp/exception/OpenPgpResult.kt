@@ -28,6 +28,6 @@ sealed class OpenPgpResult<out T> {
     ) : OpenPgpResult<T>()
 
     data class Error(
-        val error: OpenPgpError,
+        val error: OpenPgpFailure,
     ) : OpenPgpResult<Nothing>()
 }

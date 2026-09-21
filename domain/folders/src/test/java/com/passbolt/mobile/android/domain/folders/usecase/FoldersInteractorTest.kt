@@ -98,6 +98,7 @@ class FoldersInteractorTest : KoinTest {
                     apiFetchPageSize = FOLDERS_PAGE_SIZE,
                     isApiFetchPageSizeManuallySet = false,
                     accessibilityPoliciesConsentGiven = true,
+                    deprecatedOsWarningHiddenForSdk = null,
                 ),
             )
     }
@@ -216,7 +217,7 @@ class FoldersInteractorTest : KoinTest {
         runTest {
             stubFoldersAvailable(true)
             get<SetLocalFoldersUpdateStateUseCase>().stub {
-                onBlocking { execute(any()) }.thenThrow(android.database.SQLException())
+                on { execute(any()) }.thenThrow(android.database.SQLException())
             }
 
             val result = foldersInteractor.fetchAndSaveFolders()
@@ -240,7 +241,7 @@ class FoldersInteractorTest : KoinTest {
 
     private fun stubFoldersAvailable(available: Boolean) {
         get<GetFeatureFlagsUseCase>().stub {
-            onBlocking { execute(any()) }.doReturn(
+            on { execute(any()) }.doReturn(
                 GetFeatureFlagsUseCase.Output(
                     featureFlags =
                         FeatureFlagsModel(
@@ -267,7 +268,7 @@ class FoldersInteractorTest : KoinTest {
         totalCount: Int,
     ) {
         get<GetFoldersPaginatedUseCase>().stub {
-            onBlocking {
+            on {
                 execute(
                     GetFoldersPaginatedUseCase.Input(page = page, limit = FOLDERS_PAGE_SIZE),
                 )
@@ -282,7 +283,7 @@ class FoldersInteractorTest : KoinTest {
 
     private fun stubFoldersPaginatedFailure(page: Int) {
         get<GetFoldersPaginatedUseCase>().stub {
-            onBlocking {
+            on {
                 execute(
                     GetFoldersPaginatedUseCase.Input(page = page, limit = FOLDERS_PAGE_SIZE),
                 )

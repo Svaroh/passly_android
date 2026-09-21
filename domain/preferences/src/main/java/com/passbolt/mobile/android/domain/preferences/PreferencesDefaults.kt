@@ -23,6 +23,11 @@
 
 package com.passbolt.mobile.android.domain.preferences
 
+import com.passbolt.mobile.android.ui.DefaultFilterUiModel
+import com.passbolt.mobile.android.ui.HomeDisplayViewUiModel
+
 object PreferencesDefaults {
     const val API_FETCH_PAGE_SIZE = 2_000
+    val LAST_USED_HOME_VIEW = HomeDisplayViewUiModel.ALL_ITEMS
+    val USER_SET_HOME_VIEW = DefaultFilterUiModel.LAST_USED
 }

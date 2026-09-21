@@ -1,5 +1,6 @@
 package com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -36,16 +37,19 @@ import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ResourcePicker
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
+import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import com.passbolt.mobile.android.core.navigation.compose.results.NavigationResultEventBus
 import com.passbolt.mobile.android.core.navigation.compose.results.OtpScanCompleteResult
 import com.passbolt.mobile.android.core.ui.button.PrimaryButton
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.CreateStandaloneOtpClick
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkToResourceClick
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToConfirmPermissions
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToOtpList
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToResourcePicker
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowErrorSnackbar
 import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowSuccessSnackbar
+import com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowToast
 import com.passbolt.mobile.android.ui.OtpParseResult
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -93,6 +97,10 @@ internal fun ScanOtpSuccessScreen(
             }
             is NavigateToResourcePicker ->
                 navigator.navigateToKey(ResourcePicker(sideEffect.suggestedUri))
+            is NavigateToConfirmPermissions ->
+                navigator.navigateToKey(
+                    ConfirmPermissions(sideEffect.confirmMode, sideEffect.driftedEntityNames),
+                )
             is ShowErrorSnackbar ->
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar(getErrorSnackbarMessage(context, sideEffect))
@@ -101,6 +109,10 @@ internal fun ScanOtpSuccessScreen(
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar(getSuccessSnackbarMessage(context, sideEffect))
                 }
+            is ShowToast ->
+                Toast
+                    .makeText(context, getToastMessage(context, sideEffect), Toast.LENGTH_LONG)
+                    .show()
         }
     }
 }

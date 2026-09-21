@@ -61,6 +61,7 @@ import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationDetails
 import com.passbolt.mobile.android.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationItem
+import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
 import com.passbolt.mobile.android.core.navigation.compose.keys.TagsDetailsNavigationKey.ResourceTags
@@ -68,6 +69,7 @@ import com.passbolt.mobile.android.core.navigation.compose.results.NavigationRes
 import com.passbolt.mobile.android.core.navigation.compose.results.ResourceDetailsCompleteResult
 import com.passbolt.mobile.android.core.navigation.compose.results.ResourceFormCompleteResult
 import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
+import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
 import com.passbolt.mobile.android.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
 import com.passbolt.mobile.android.core.ui.snackbar.ColoredSnackbarVisuals
@@ -115,7 +117,9 @@ import com.passbolt.mobile.android.feature.resourcedetails.details.ui.SharedWith
 import com.passbolt.mobile.android.feature.resourcedetails.details.ui.TotpSection
 import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheet
 import com.passbolt.mobile.android.testtags.composetags.ResourceDetails
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.PermissionsItem
+import com.passbolt.mobile.android.ui.PermissionsMode
 import com.passbolt.mobile.android.ui.ResourceFormMode
 import com.passbolt.mobile.android.ui.ResourceUiModel
 import com.passbolt.mobile.android.ui.isExpired
@@ -135,6 +139,8 @@ fun ResourceDetailsScreen(
     navigator: AppNavigator = koinInject(),
     resourceIconProvider: ResourceIconProvider = koinInject(),
 ) {
+    FlagSecureEffect()
+
     val context = LocalContext.current
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -187,9 +193,13 @@ fun ResourceDetailsScreen(
                     ),
                 )
             is NavigateToResourcePermissions ->
-                navigator.navigateToKey(
-                    Permissions(sideEffect.resourceId, sideEffect.mode, PermissionsItem.RESOURCE),
-                )
+                if (sideEffect.mode == PermissionsMode.EDIT) {
+                    navigator.navigateToKey(ConfirmPermissions(ConfirmPermissionsMode.Share(sideEffect.resourceId)))
+                } else {
+                    navigator.navigateToKey(
+                        Permissions(sideEffect.resourceId, sideEffect.mode, PermissionsItem.RESOURCE),
+                    )
+                }
             is NavigateToResourceTags -> navigator.navigateToKey(ResourceTags(sideEffect.resourceId))
             is NavigateToResourceLocation ->
                 navigator.navigateToKey(
@@ -257,7 +267,7 @@ fun ResourceDetailsScreen(
 }
 
 @Composable
-private fun ResourceDetailsScreen(
+fun ResourceDetailsScreen(
     state: ResourceDetailsState,
     onIntent: (ResourceDetailsIntent) -> Unit,
     snackbarHostState: SnackbarHostState,

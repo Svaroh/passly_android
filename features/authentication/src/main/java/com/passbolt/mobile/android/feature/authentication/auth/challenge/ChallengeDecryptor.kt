@@ -5,6 +5,7 @@ import com.passbolt.mobile.android.common.extension.erase
 import com.passbolt.mobile.android.domain.privatekey.PrivateKeyRepository
 import com.passbolt.mobile.android.dto.response.ChallengeResponseDto
 import com.passbolt.mobile.android.gopenpgp.OpenPgp
+import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpFailure
 import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
 
 /**
@@ -41,26 +42,33 @@ class ChallengeDecryptor(
         challenge: String,
     ): Output {
         val passphraseCopy = passphrase.copyOf()
-        val privateKey = requireNotNull(privateKeyRepository.getPrivateKey(userId)) { "Unable to restore private key." }.armoredKey
-        return when (
-            val decryptedChallenge =
-                openPgp.decryptVerifyMessageArmored(
-                    publicKey = serverPublicKey,
-                    privateKey = privateKey,
-                    passphrase = passphrase,
-                    cipherText = challenge,
-                )
-        ) {
-            is OpenPgpResult.Error -> Output.DecryptionError(decryptedChallenge.error.message)
-            is OpenPgpResult.Result -> {
-                passphraseCopy.erase()
-                Output.DecryptedChallenge(
-                    gson.fromJson(
-                        decryptedChallenge.result,
-                        ChallengeResponseDto::class.java,
-                    ),
-                )
+        try {
+            val privateKey =
+                requireNotNull(privateKeyRepository.getPrivateKey(userId)) { "Unable to restore private key." }.armoredKey
+            return when (
+                val decryptedChallenge =
+                    openPgp.decryptVerifyMessageArmored(
+                        publicKey = serverPublicKey,
+                        privateKey = privateKey,
+                        passphrase = passphraseCopy,
+                        cipherText = challenge,
+                    )
+            ) {
+                is OpenPgpResult.Error ->
+                    when (val failure = decryptedChallenge.error) {
+                        is OpenPgpFailure.SignatureVerificationFailed -> Output.ServerSignatureInvalid(failure.message)
+                        is OpenPgpFailure.Generic -> Output.DecryptionError(failure.message)
+                    }
+                is OpenPgpResult.Result ->
+                    Output.DecryptedChallenge(
+                        gson.fromJson(
+                            decryptedChallenge.result,
+                            ChallengeResponseDto::class.java,
+                        ),
+                    )
             }
+        } finally {
+            passphraseCopy.erase()
         }
     }
 
@@ -70,6 +78,10 @@ class ChallengeDecryptor(
         ) : Output()
 
         data class DecryptionError(
+            val message: String?,
+        ) : Output()
+
+        data class ServerSignatureInvalid(
             val message: String?,
         ) : Output()
     }

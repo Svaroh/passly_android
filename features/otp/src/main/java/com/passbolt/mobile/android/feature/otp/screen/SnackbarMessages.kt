@@ -16,6 +16,7 @@ import com.passbolt.mobile.android.feature.otp.screen.SnackbarErrorType.INVALID_
 import com.passbolt.mobile.android.feature.otp.screen.SnackbarErrorType.NO_SHARED_KEY_ACCESS
 import com.passbolt.mobile.android.feature.otp.screen.SnackbarErrorType.RESOURCE_SCHEMA_INVALID
 import com.passbolt.mobile.android.feature.otp.screen.SnackbarErrorType.SECRET_SCHEMA_INVALID
+import com.passbolt.mobile.android.feature.otp.screen.SnackbarErrorType.SHARE_FAILED
 import com.passbolt.mobile.android.feature.otp.screen.SnackbarSuccessType.METADATA_KEY_IS_TRUSTED
 import com.passbolt.mobile.android.feature.otp.screen.SnackbarSuccessType.RESOURCE_CREATED
 import com.passbolt.mobile.android.feature.otp.screen.SnackbarSuccessType.RESOURCE_DELETED
@@ -47,6 +48,7 @@ internal fun getSuccessMessage(
         METADATA_KEY_IS_TRUSTED -> context.getString(R.string.common_metadata_key_is_trusted)
     }
 
+@Suppress("CyclomaticComplexMethod")
 internal fun getErrorMessage(
     context: Context,
     type: SnackbarErrorType,
@@ -60,6 +62,7 @@ internal fun getErrorMessage(
         ERROR ->
             context.getString(LocalizationR.string.common_failure_format, additionalErrorMessage.orEmpty())
         FAILED_TO_DELETE_RESOURCE -> context.getString(LocalizationR.string.otp_failed_to_delete)
+        SHARE_FAILED -> context.getString(LocalizationR.string.resource_permissions_share_failed)
         ENCRYPTION_FAILURE -> context.getString(LocalizationR.string.common_encryption_failure)
         RESOURCE_SCHEMA_INVALID -> context.getString(LocalizationR.string.common_json_schema_resource_validation_error)
         SECRET_SCHEMA_INVALID -> context.getString(LocalizationR.string.common_json_schema_secret_validation_error)

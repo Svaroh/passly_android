@@ -45,6 +45,8 @@ import androidx.compose.ui.unit.dp
 private const val PRIMARY_LINE_WIDTH_FRACTION = 0.5f
 private const val SECONDARY_LINE_WIDTH_FRACTION = 0.3f
 
+internal val RESOURCE_ITEM_PLACEHOLDER_HEIGHT = 64.dp
+
 /**
  * Loading skeleton shown for not-yet-loaded paging placeholders. Mirrors [ResourceItem]'s fixed 64.dp
  * row height and icon/text layout so swapping a placeholder for a real item never shifts scroll position.
@@ -56,7 +58,7 @@ fun ResourceItemPlaceholder(modifier: Modifier = Modifier) {
         modifier =
             modifier
                 .fillMaxWidth()
-                .height(64.dp)
+                .height(RESOURCE_ITEM_PLACEHOLDER_HEIGHT)
                 .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

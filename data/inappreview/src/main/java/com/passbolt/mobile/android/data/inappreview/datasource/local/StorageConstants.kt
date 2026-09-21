@@ -25,4 +25,4 @@ package com.passbolt.mobile.android.data.inappreview.datasource.local
 
 internal const val KEY_IN_APP_REVIEW_INTERVAL_START_DATE = "IN_APP_REVIEW_INTERVAL_START_DATE"
 internal const val KEY_SIGN_IN_COUNT = "SIGN_IN_COUNT"
-internal const val KEY_IN_APP_REVIEW_SHOW_MODE = "IN_APP_REVIEW_SHOW_MODE"
+internal const val KEY_IN_APP_REVIEW_SHOW_MODE_ID = "IN_APP_REVIEW_SHOW_MODE_ID"

@@ -2,6 +2,7 @@ package com.passbolt.mobile.android.permissions
 
 import com.passbolt.mobile.android.core.navigation.compose.base.Feature
 import com.passbolt.mobile.android.core.navigation.compose.base.FeatureModuleNavigation
+import com.passbolt.mobile.android.permissions.confirmpermissions.confirmPermissionsModule
 import com.passbolt.mobile.android.permissions.grouppermissionsdetails.groupPermissionsModule
 import com.passbolt.mobile.android.permissions.navigation.PermissionsFeatureNavigation
 import com.passbolt.mobile.android.permissions.permissionrecipients.permissionRecipientsModule
@@ -40,6 +41,7 @@ val permissionsModule =
         }
 
         permissionsModule()
+        confirmPermissionsModule()
         groupPermissionsModule()
         userPermissionsModule()
         permissionRecipientsModule()

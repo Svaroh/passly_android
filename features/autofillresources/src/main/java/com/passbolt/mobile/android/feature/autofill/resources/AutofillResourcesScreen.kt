@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreOwner
 import com.passbolt.mobile.android.core.compose.PassboltTheme
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
 import com.passbolt.mobile.android.core.navigation.ActivityIntents
@@ -23,6 +27,7 @@ import com.passbolt.mobile.android.core.navigation.AutofillType
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.NavigationActivity.Start
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
+import com.passbolt.mobile.android.domain.accounts.AuthenticatedAccountFlow
 import com.passbolt.mobile.android.feature.authentication.compose.AuthenticationHandler
 import com.passbolt.mobile.android.feature.autofill.resources.AutofillResourcesIntent.UserAuthenticated
 import com.passbolt.mobile.android.feature.autofill.resources.AutofillResourcesSideEffect.AutofillReturn
@@ -47,8 +52,10 @@ fun AutofillResourcesScreen(
             parameters = { parametersOf(autofillUri) },
         ),
     appNavigator: AppNavigator = koinInject(),
+    authenticatedAccountFlow: AuthenticatedAccountFlow = koinInject(),
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
+    val authenticatedAccount by authenticatedAccountFlow.authenticatedAccount.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val activity = LocalActivity.current
 
@@ -93,6 +100,7 @@ fun AutofillResourcesScreen(
         showHome = state.showHome,
         showProgress = state.showProgress,
         autofillType = autofillType,
+        authenticatedAccount = authenticatedAccount,
         modifier = modifier,
     )
 }
@@ -102,6 +110,7 @@ private fun AutofillResourcesScreen(
     showHome: Boolean,
     showProgress: Boolean,
     autofillType: AutofillType,
+    authenticatedAccount: String?,
     modifier: Modifier = Modifier,
 ) {
     PassboltTheme {
@@ -113,9 +122,15 @@ private fun AutofillResourcesScreen(
                         .consumeWindowInsets(innerPadding),
             ) {
                 if (showHome) {
-                    when (autofillType) {
-                        AutofillType.CREDENTIALS, AutofillType.CREDENTIALS_AND_TOTP -> HomeTabContent()
-                        AutofillType.TOTP -> TotpTabContent()
+                    key(authenticatedAccount) {
+                        CompositionLocalProvider(
+                            LocalViewModelStoreOwner provides rememberViewModelStoreOwner(),
+                        ) {
+                            when (autofillType) {
+                                AutofillType.CREDENTIALS, AutofillType.CREDENTIALS_AND_TOTP -> HomeTabContent()
+                                AutofillType.TOTP -> TotpTabContent()
+                            }
+                        }
                     }
                 }
 

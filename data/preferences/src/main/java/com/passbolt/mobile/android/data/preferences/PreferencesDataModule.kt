@@ -25,7 +25,9 @@ package com.passbolt.mobile.android.data.preferences
 
 import android.app.ActivityManager
 import com.passbolt.mobile.android.data.preferences.datasource.local.AccountPreferencesLocalDataSourceImpl
+import com.passbolt.mobile.android.data.preferences.datasource.local.DefaultFilterSerializer
 import com.passbolt.mobile.android.data.preferences.datasource.local.GlobalPreferencesLocalDataSourceImpl
+import com.passbolt.mobile.android.data.preferences.datasource.local.HomeDisplayViewSerializer
 import com.passbolt.mobile.android.domain.preferences.AccountPreferencesLocalDataSource
 import com.passbolt.mobile.android.domain.preferences.AccountPreferencesRepository
 import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesLocalDataSource
@@ -38,6 +40,8 @@ import org.koin.dsl.module
 
 val preferencesDataModule =
     module {
+        singleOf(::HomeDisplayViewSerializer)
+        singleOf(::DefaultFilterSerializer)
         singleOf(::GlobalPreferencesLocalDataSourceImpl) bind GlobalPreferencesLocalDataSource::class
         singleOf(::AccountPreferencesLocalDataSourceImpl) bind AccountPreferencesLocalDataSource::class
         singleOf(::GlobalPreferencesRepositoryImpl) bind GlobalPreferencesRepository::class

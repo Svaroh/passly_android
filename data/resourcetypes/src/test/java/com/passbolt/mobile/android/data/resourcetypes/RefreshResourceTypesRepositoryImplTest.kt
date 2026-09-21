@@ -89,7 +89,7 @@ class RefreshResourceTypesRepositoryImplTest : KoinTest {
     @Test
     fun `refreshResourceTypes with remote success returns success and writes to local`() =
         runTest {
-            remote.stub { onBlocking { getResourceTypes() }.thenReturn(DomainResult.Finished(resourceTypes)) }
+            remote.stub { on { getResourceTypes() }.thenReturn(DomainResult.Finished(resourceTypes)) }
 
             val result = repository.refreshResourceTypes(USER_ID)
 
@@ -101,7 +101,7 @@ class RefreshResourceTypesRepositoryImplTest : KoinTest {
     fun `refreshResourceTypes with remote failure returns failure and does not write to local`() =
         runTest {
             val failure = DomainResult.Incomplete.Error(UNKNOWN, "boom")
-            remote.stub { onBlocking { getResourceTypes() }.thenReturn(failure) }
+            remote.stub { on { getResourceTypes() }.thenReturn(failure) }
 
             val result = repository.refreshResourceTypes(USER_ID)
 

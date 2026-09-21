@@ -35,9 +35,7 @@ import com.passbolt.mobile.android.core.navigation.AppContext
 import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode.AVATAR
 import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode.CLEAR
 import com.passbolt.mobile.android.core.ui.search.SearchInputEndIconMode.NONE
-import com.passbolt.mobile.android.domain.accounts.AccountSwitchFlow
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderDetailsUseCase
 import com.passbolt.mobile.android.domain.metadata.interactor.ResourceAccessInteractor
 import com.passbolt.mobile.android.domain.preferences.mapper.toHomeDisplayViewModel
@@ -75,7 +73,6 @@ import com.passbolt.mobile.android.feature.home.screen.HomeIntent.EditResource
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.FolderCreateReturned
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.Initialize
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.LaunchResourceWebsite
-import com.passbolt.mobile.android.feature.home.screen.HomeIntent.OnResume
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.OpenCreateResourceMenu
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.OpenFiltersBottomSheet
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.OpenFolderMoreMenu
@@ -123,31 +120,36 @@ import com.passbolt.mobile.android.ui.HomeDisplayViewModel
 import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Folders
 import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Groups
 import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Tags
+import com.passbolt.mobile.android.ui.LeadingContentType
 import com.passbolt.mobile.android.ui.LeadingContentType.PASSWORD
 import com.passbolt.mobile.android.ui.LeadingContentType.PIN_CODE
 import com.passbolt.mobile.android.ui.LeadingContentType.STANDALONE_NOTE
 import com.passbolt.mobile.android.ui.LeadingContentType.TOTP
 import com.passbolt.mobile.android.ui.ResourceMoreMenuModel.FavouriteOption
 import com.passbolt.mobile.android.ui.ResourcePermission
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class HomeViewModel(
     private val coroutineLaunchContext: CoroutineLaunchContext,
     private val dataRefreshTrackingFlow: DataRefreshTrackingFlow,
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
-    private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
     private val getHomeDisplayViewPreferencesUseCase: GetHomeDisplayViewPreferencesUseCase,
     private val homeDataProvider: HomeDataProvider,
     private val getLocalFolderUseCase: GetLocalFolderDetailsUseCase,
     private val resourceAccessInteractor: ResourceAccessInteractor,
     private val detectAutofillConflict: DetectAutofillConflict,
-    private val accountSwitchFlow: AccountSwitchFlow,
     private val userProfileInteractor: UserProfileInteractor,
     private val userProfileRefreshTrackingFlow: UserProfileRefreshTrackingFlow,
 ) : SideEffectViewModel<HomeState, HomeSideEffect>(HomeState()),
@@ -160,13 +162,40 @@ internal class HomeViewModel(
         get() = get { parametersOf(requireNotNull(viewState.value.moreMenuResource)) }
 
     private var dataRefreshJob: Job? = null
-    private var accountSwitchJob: Job? = null
     private var lastInitializeIntent: Initialize? = null
-    private var loadedAccountId: String? = null
+
+    private val searchQueryFlow = MutableStateFlow("")
 
     init {
         loadUserAvatar()
         refreshUserProfile()
+        observeSearchQuery()
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeSearchQuery() {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            searchQueryFlow
+                .drop(1)
+                .debounce(SEARCH_DEBOUNCE)
+                .collectLatest { searchQuery ->
+                    Timber.d("Applying search query (length: ${searchQuery.length})")
+                    try {
+                        val homeData =
+                            getHomeData(
+                                viewState.value.homeView,
+                                searchQuery,
+                                viewState.value.showSuggestedModel,
+                            )
+                        updateViewState { copy(homeData = homeData, isSearching = false) }
+                    } catch (exception: CancellationException) {
+                        throw exception
+                    } catch (exception: Exception) {
+                        Timber.e(exception, "Failed to apply the search query")
+                        updateViewState { copy(isSearching = false) }
+                    }
+                }
+        }
     }
 
     private fun loadUserAvatar() {
@@ -214,13 +243,12 @@ internal class HomeViewModel(
             CloseFolderMoreMenu -> updateViewState { copy(showFolderMoreMenuBottomSheet = false) }
             ViewFolderDetails -> viewFolderDetails()
             ConfirmDeleteResource -> deleteResource()
-            CreateNote -> createNote()
-            CreatePassword -> createPassword()
+            CreateNote -> createResource(STANDALONE_NOTE)
+            CreatePassword -> createResource(PASSWORD)
             CreateTotp -> createTotp()
             CreateFolder -> createFolder()
-            CreatePinCode -> createPinCode()
+            CreatePinCode -> createResource(PIN_CODE)
             is Initialize -> initialize(intent)
-            OnResume -> refreshForChangedAccount()
             is OpenResourceMenu -> openResourceMoreMenu(intent)
             is Search -> searchQueryChanged(intent.searchQuery)
             SearchEndIconAction -> searchEndIconAction()
@@ -278,36 +306,12 @@ internal class HomeViewModel(
         }
     }
 
-    private fun createPassword() {
+    private fun createResource(leadingContentType: LeadingContentType) {
         updateViewState { copy(showCreateResourceBottomSheet = false) }
         withResourceAccess({ resourceAccessInteractor.canCreateResource(viewState.value.currentFolderId) }) {
             emitSideEffect(
                 NavigateToCreateResourceForm(
-                    leadingContentType = PASSWORD,
-                    folderId = viewState.value.currentFolderId,
-                ),
-            )
-        }
-    }
-
-    private fun createNote() {
-        updateViewState { copy(showCreateResourceBottomSheet = false) }
-        withResourceAccess({ resourceAccessInteractor.canCreateResource(viewState.value.currentFolderId) }) {
-            emitSideEffect(
-                NavigateToCreateResourceForm(
-                    leadingContentType = STANDALONE_NOTE,
-                    folderId = viewState.value.currentFolderId,
-                ),
-            )
-        }
-    }
-
-    private fun createPinCode() {
-        updateViewState { copy(showCreateResourceBottomSheet = false) }
-        withResourceAccess({ resourceAccessInteractor.canCreateResource(viewState.value.currentFolderId) }) {
-            emitSideEffect(
-                NavigateToCreateResourceForm(
-                    leadingContentType = PIN_CODE,
+                    leadingContentType = leadingContentType,
                     folderId = viewState.value.currentFolderId,
                 ),
             )
@@ -451,12 +455,7 @@ internal class HomeViewModel(
                     updateViewState { copy(showAccountSwitchBottomSheet = true) }
                 }
             }
-            CLEAR -> {
-                searchQueryChanged("")
-                updateViewState {
-                    copy(searchInputEndIconMode = AVATAR)
-                }
-            }
+            CLEAR -> searchQueryChanged("")
             NONE -> {
                 // no-op
             }
@@ -464,16 +463,16 @@ internal class HomeViewModel(
     }
 
     private fun searchQueryChanged(searchQuery: String) {
-        val searchEndIcon = if (searchQuery.isNotBlank()) CLEAR else AVATAR
-        viewModelScope.launch {
-            val homeData = getHomeData(viewState.value.homeView, searchQuery, viewState.value.showSuggestedModel)
-            updateViewState {
-                copy(
-                    searchInputEndIconMode = searchEndIcon,
-                    searchQuery = searchQuery,
-                    homeData = homeData,
-                )
-            }
+        if (searchQuery == searchQueryFlow.value) {
+            return
+        }
+        searchQueryFlow.value = searchQuery
+        updateViewState {
+            copy(
+                searchInputEndIconMode = if (searchQuery.isNotBlank()) CLEAR else AVATAR,
+                searchQuery = searchQuery,
+                isSearching = true,
+            )
         }
     }
 
@@ -495,7 +494,6 @@ internal class HomeViewModel(
             return
         }
         lastInitializeIntent = intent
-        loadedAccountId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
         val filterPreferences = getHomeDisplayViewPreferencesUseCase.execute(Unit)
 
         viewModelScope.launch {
@@ -519,47 +517,6 @@ internal class HomeViewModel(
                 viewModelScope.launch(coroutineLaunchContext.io) {
                     synchronizeWithDataRefresh()
                 }
-            accountSwitchJob?.cancel()
-            accountSwitchJob =
-                viewModelScope.launch(coroutineLaunchContext.io) {
-                    accountSwitchFlow.selectedAccountFlow
-                        .drop(1)
-                        .collect { switchedAccountId ->
-                            loadedAccountId = switchedAccountId
-                            loadUserAvatar()
-                            val homeData =
-                                getHomeData(
-                                    viewState.value.homeView,
-                                    viewState.value.searchQuery,
-                                    intent.showSuggestedModel,
-                                )
-                            updateViewState { copy(homeData = homeData) }
-                        }
-                }
-        }
-    }
-
-    /*
-    Unlike the app's Home, the autofill flow does NOT recreate this activity when
-    switching accounts: finishAffinity would destroy the pending autofill request
-    this activity holds, so it is only reordered to front and
-    its ViewModels survive with stale, previous-account state.
-     */
-    private fun refreshForChangedAccount() {
-        val loadedAccount = loadedAccountId ?: return
-        val selectedAccountId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
-        if (selectedAccountId != loadedAccount) {
-            loadedAccountId = selectedAccountId
-            viewModelScope.launch {
-                loadUserAvatar()
-                val homeData =
-                    getHomeData(
-                        viewState.value.homeView,
-                        viewState.value.searchQuery,
-                        viewState.value.showSuggestedModel,
-                    )
-                updateViewState { copy(homeData = homeData) }
-            }
         }
     }
 
@@ -664,5 +621,9 @@ internal class HomeViewModel(
                 emitSideEffect(ShowErrorSnackbar(NO_SHARED_KEY_ACCESS))
             }
         }
+    }
+
+    companion object {
+        val SEARCH_DEBOUNCE = 300.milliseconds
     }
 }
