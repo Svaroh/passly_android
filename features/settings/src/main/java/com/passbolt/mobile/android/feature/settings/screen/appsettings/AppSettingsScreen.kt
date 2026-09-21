@@ -59,9 +59,9 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigati
 import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.DefaultFilter
 import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.ExpertSettings
 import com.passbolt.mobile.android.core.ui.R
-import com.passbolt.mobile.android.core.ui.dialogs.CancelAccountTransferAlertDialog
 import com.passbolt.mobile.android.core.ui.dialogs.ConfigureBiometricAlertDialog
 import com.passbolt.mobile.android.core.ui.dialogs.DisableBiometricAlertDialog
+import com.passbolt.mobile.android.core.ui.dialogs.KeyChangesDetectedAlertDialog
 import com.passbolt.mobile.android.core.ui.menu.OpenableSettingsItem
 import com.passbolt.mobile.android.core.ui.menu.SwitchableSettingsItem
 import com.passbolt.mobile.android.core.ui.topbar.BackNavigationIcon
@@ -81,7 +81,6 @@ import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettin
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.GoToDefaultFilter
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.GoToExpertSettings
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.Initialize
-import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.InvalidateBiometricKeyPermanently
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.RefreshedPassphrase
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsIntent.ToggleBiometric
 import com.passbolt.mobile.android.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToAutofill
@@ -185,7 +184,6 @@ private fun AppSettingsSideEffectsHandler(
                     onAuthenticationSuccess = { onIntent(FinalizedBiometricAuth(it)) },
                     onAuthenticationCancelled = { onIntent(CanceledBiometricAuth) },
                     onAuthenticationError = { onIntent(ErroredBiometricAuth(it)) },
-                    onKeyPermanentlyInvalidated = { exception -> onIntent(InvalidateBiometricKeyPermanently(exception)) },
                 )
             is AppSettingsSideEffect.ShowErrorSnackbar ->
                 environment.coroutineScope.launch {
@@ -286,7 +284,7 @@ private fun AppSettingsScreen(
                 onDismiss = { onIntent(CancelConfigureBiometric) },
             )
 
-            CancelAccountTransferAlertDialog(
+            KeyChangesDetectedAlertDialog(
                 isVisible = state.isKeyChangesDialogDetectedVisible,
                 onConfirm = { onIntent(ConfirmKeyChangeClick) },
                 onDismiss = { onIntent(CancelConfirmKeyChange) },

@@ -37,6 +37,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -44,11 +45,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.passbolt.mobile.android.core.clipboard.ClipboardAccess
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
+import com.passbolt.mobile.android.core.compose.rememberDebouncedBoolean
 import com.passbolt.mobile.android.core.fulldatarefresh.service.DataRefreshService
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.BottomTab
@@ -57,12 +57,13 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.FolderDetailsNav
 import com.passbolt.mobile.android.core.navigation.compose.keys.HomeNavigationKey
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
-import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
+import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
 import com.passbolt.mobile.android.core.navigation.compose.keys.SettingsNavigationKey.Autofill
 import com.passbolt.mobile.android.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
 import com.passbolt.mobile.android.core.ui.fab.AddFloatingActionButton
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
+import com.passbolt.mobile.android.core.ui.progressindicator.SearchProgressIndicator
 import com.passbolt.mobile.android.core.ui.pulltorefresh.SlidingFeedbackPullToRefreshBox
 import com.passbolt.mobile.android.core.ui.scaffold.HomeScaffold
 import com.passbolt.mobile.android.core.ui.search.SearchInput
@@ -91,7 +92,6 @@ import com.passbolt.mobile.android.feature.home.screen.HomeIntent.DeleteResource
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.EditResource
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.Initialize
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.LaunchResourceWebsite
-import com.passbolt.mobile.android.feature.home.screen.HomeIntent.OnResume
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.OpenCreateResourceMenu
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.OpenFiltersBottomSheet
 import com.passbolt.mobile.android.feature.home.screen.HomeIntent.OpenFolderMoreMenu
@@ -116,11 +116,10 @@ import com.passbolt.mobile.android.feature.home.screen.snackbar.AutofillConflict
 import com.passbolt.mobile.android.feature.home.switchaccount.SwitchAccountBottomSheet
 import com.passbolt.mobile.android.resourcemoremenu.ResourceMoreMenuBottomSheet
 import com.passbolt.mobile.android.testtags.composetags.Home
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.FiltersMenuModel
 import com.passbolt.mobile.android.ui.HomeDisplayViewModel
 import com.passbolt.mobile.android.ui.HomeDisplayViewModel.Folders
-import com.passbolt.mobile.android.ui.PermissionsItem
-import com.passbolt.mobile.android.ui.PermissionsMode
 import com.passbolt.mobile.android.ui.ResourceFormMode
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -165,10 +164,6 @@ internal fun HomeScreen(
                 appContext = resourceHandlingStrategy.appContext,
             ),
         )
-    }
-
-    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        viewModel.onIntent(OnResume)
     }
 
     HomeScreen(
@@ -228,7 +223,7 @@ internal fun HomeScreen(
             is NavigateToResourceUri -> navigator.openExternalWebsite(context, it.url)
             is NavigateToShare ->
                 navigator.navigateToKey(
-                    Permissions(it.resourceModel.resourceId, PermissionsMode.EDIT, PermissionsItem.RESOURCE),
+                    ConfirmPermissions(ConfirmPermissionsMode.Share(it.resourceModel.resourceId)),
                 )
             is NavigateToCreateFolder ->
                 navigator.navigateToKey(
@@ -245,7 +240,7 @@ internal fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeScreen(
+fun HomeScreen(
     state: HomeState,
     onIntent: (HomeIntent) -> Unit,
     snackbarHostState: SnackbarHostState,
@@ -255,6 +250,12 @@ private fun HomeScreen(
 ) {
     val activity = LocalActivity.current
     val context = LocalContext.current
+
+    val homeListData = rememberHomeListData(state)
+    val isAnyListRefreshing = rememberIsAnyListRefreshing(homeListData)
+    val isListLoading = state.isSearching || isAnyListRefreshing
+    val isSearchRunning = state.isSearching || (isAnyListRefreshing && state.searchQuery.isNotBlank())
+    val showSearchProgress = rememberDebouncedBoolean(isSearchRunning && !state.isRefreshing)
 
     HomeScaffold(
         snackbarHostState = snackbarHostState,
@@ -309,7 +310,17 @@ private fun HomeScreen(
                         .fillMaxSize()
                         .padding(paddingValues),
             ) {
-                HomeResourceList(state, navigator, resourceHandlingStrategy, onIntent)
+                HomeResourceList(
+                    state = state,
+                    homeListData = homeListData,
+                    isListLoading = isListLoading,
+                    navigator = navigator,
+                    resourceHandlingStrategy = resourceHandlingStrategy,
+                    onIntent = onIntent,
+                )
+                if (showSearchProgress) {
+                    SearchProgressIndicator(modifier = Modifier.align(Alignment.TopCenter))
+                }
             }
         },
     )

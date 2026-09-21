@@ -7,6 +7,7 @@ import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUse
 import com.passbolt.mobile.android.domain.accounts.usecase.RemoveAccountDataUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.RemoveAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.RemoveSelectedAccountUseCase
+import com.passbolt.mobile.android.domain.auth.DatabasePassphraseRepository
 import com.passbolt.mobile.android.domain.auth.PassphraseRepository
 import com.passbolt.mobile.android.domain.auth.SessionRepository
 import com.passbolt.mobile.android.domain.auth.usecase.RemoveServerPublicRsaKeyUseCase
@@ -45,6 +46,7 @@ class RemoveAllAccountDataUseCase(
     private val removeAccountUseCase: RemoveAccountUseCase,
     private val removeServerPublicRsaKeyUseCase: RemoveServerPublicRsaKeyUseCase,
     private val databaseProvider: DatabaseProvider,
+    private val databasePassphraseRepository: DatabasePassphraseRepository,
 ) : AsyncUseCase<UserIdInput, Unit> {
     override suspend fun execute(input: UserIdInput) {
         Timber.d("Removing all account data")
@@ -62,8 +64,10 @@ class RemoveAllAccountDataUseCase(
         passphraseRepository.removePassphrase(userIdInput.userId)
         privateKeyRepository.removePrivateKey(userIdInput.userId)
         sessionRepository.removeSession(userIdInput.userId)
+        sessionRepository.removeMfaToken(userIdInput.userId)
         removeAccountUseCase.execute(userIdInput)
         removeServerPublicRsaKeyUseCase.execute(userIdInput)
         databaseProvider.delete(userIdInput.userId)
+        databasePassphraseRepository.removeDatabasePassphrase(userIdInput.userId)
     }
 }

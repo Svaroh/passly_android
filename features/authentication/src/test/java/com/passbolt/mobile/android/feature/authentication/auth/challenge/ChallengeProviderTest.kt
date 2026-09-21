@@ -1,6 +1,8 @@
 package com.passbolt.mobile.android.feature.authentication.auth.challenge
 
 import com.passbolt.mobile.android.domain.privatekey.model.PrivateKey
+import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpError
+import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpFailure
 import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -32,10 +34,12 @@ class ChallengeProviderTest : KoinTest {
             val privateKey = "private_key"
             val domain = "domain"
 
+            val verifyToken = "555a30f6-48f0-42be-beca-d200347f1848"
+
             whenever(openPgp.encryptSignMessageArmored(eq(publicKey), eq(privateKey), any(), any()))
                 .thenReturn(OpenPgpResult.Result(challenge))
             whenever(timeProvider.getCurrentEpochSeconds()).thenReturn(1624448538)
-            whenever(uuidProvider.get()).thenReturn("555a30f6-48f0-42be-beca-d200347f1848")
+            whenever(uuidProvider.get()).thenReturn(verifyToken)
             whenever(privateKeyRepository.getPrivateKey(any())).thenReturn(PrivateKey(privateKey))
 
             val result =
@@ -47,6 +51,45 @@ class ChallengeProviderTest : KoinTest {
                 )
             assertTrue(result is ChallengeProvider.Output.Success)
             assertEquals(challenge, result.challenge)
+            assertEquals(verifyToken, result.verifyToken)
+        }
+
+    @Test
+    fun `passphrase copy is wiped after use on success and failure but caller array is intact`() =
+        runTest {
+            val publicKey = "public_key"
+            val privateKey = "private_key"
+            val passphrasesPassedToPgp = mutableListOf<ByteArray>()
+            val passphraseContentsAtPgpCall = mutableListOf<ByteArray>()
+
+            whenever(timeProvider.getCurrentEpochSeconds()).thenReturn(1624448538)
+            whenever(uuidProvider.get()).thenReturn("555a30f6-48f0-42be-beca-d200347f1848")
+            whenever(privateKeyRepository.getPrivateKey(any())).thenReturn(PrivateKey(privateKey))
+            whenever(openPgp.encryptSignMessageArmored(eq(publicKey), eq(privateKey), any(), any()))
+                .thenAnswer { invocation ->
+                    val pgpPassphraseInput = invocation.arguments[2] as ByteArray
+                    passphrasesPassedToPgp += pgpPassphraseInput
+                    passphraseContentsAtPgpCall += pgpPassphraseInput.copyOf()
+                    OpenPgpResult.Result(challenge)
+                }
+            val callerPassphrase = "pass".toByteArray()
+
+            challengeProvider.get("domain", publicKey, callerPassphrase, "userId")
+
+            whenever(openPgp.encryptSignMessageArmored(eq(publicKey), eq(privateKey), any(), any()))
+                .thenAnswer { invocation ->
+                    val pgpPassphraseInput = invocation.arguments[2] as ByteArray
+                    passphrasesPassedToPgp += pgpPassphraseInput
+                    passphraseContentsAtPgpCall += pgpPassphraseInput.copyOf()
+                    OpenPgpResult.Error(OpenPgpFailure.Generic(OpenPgpError("wrong passphrase")))
+                }
+
+            challengeProvider.get("domain", publicKey, callerPassphrase, "userId")
+
+            assertEquals(2, passphraseContentsAtPgpCall.size)
+            assertTrue(passphraseContentsAtPgpCall.all { it.contentEquals("pass".toByteArray()) })
+            assertTrue(passphrasesPassedToPgp.all { pgpInput -> pgpInput.all { it == 0.toByte() } })
+            assertTrue(callerPassphrase.contentEquals("pass".toByteArray()))
         }
 
     private val challenge =

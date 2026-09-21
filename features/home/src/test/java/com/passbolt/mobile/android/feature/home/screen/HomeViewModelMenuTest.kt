@@ -36,9 +36,7 @@ import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
 import com.passbolt.mobile.android.commontest.session.validSessionTestModule
 import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackingFlow
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
-import com.passbolt.mobile.android.domain.accounts.AccountSwitchFlow
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
-import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderDetailsUseCase
 import com.passbolt.mobile.android.domain.metadata.interactor.ResourceAccessInteractor
 import com.passbolt.mobile.android.domain.preferences.usecase.GetHomeDisplayViewPreferencesUseCase
@@ -123,7 +121,6 @@ class HomeViewModelMenuTest : KoinTest {
                     singleOf(::DataRefreshTrackingFlow)
                     singleOf(::SessionRefreshTrackingFlow)
                     single { mock<GetSelectedAccountDataUseCase>() }
-                    single { mock<GetSelectedAccountUseCase> { on { execute(Unit) } doReturn GetSelectedAccountUseCase.Output("userId") } }
                     single { mock<GetHomeDisplayViewPreferencesUseCase>() }
                     single { mock<HomeDataProvider>() }
                     single { mock<GetLocalFolderDetailsUseCase>() }
@@ -131,11 +128,10 @@ class HomeViewModelMenuTest : KoinTest {
                     single { mock<DetectAutofillConflict>() }
                     single {
                         mock<UserProfileInteractor> {
-                            onBlocking { fetchAndUpdateUserProfile() } doReturn UserProfileInteractor.Output.Success
+                            on { fetchAndUpdateUserProfile() } doReturn UserProfileInteractor.Output.Success
                         }
                     }
                     singleOf(::UserProfileRefreshTrackingFlow)
-                    single { AccountSwitchFlow(mock { on { execute(any()) } doReturn GetSelectedAccountUseCase.Output("id1") }) }
                     single(named(JSON_MODEL_GSON)) { GsonBuilder().serializeNulls().create() }
                     single {
                         Configuration
@@ -180,7 +176,7 @@ class HomeViewModelMenuTest : KoinTest {
         )
 
         get<HomeDataProvider>().stub {
-            onBlocking {
+            on {
                 provideData(
                     any(),
                     any(),
@@ -191,8 +187,8 @@ class HomeViewModelMenuTest : KoinTest {
         }
 
         get<ResourceAccessInteractor>().stub {
-            onBlocking { canCreateResource(anyOrNull()) }.doReturn(true)
-            onBlocking { canShareResource() }.doReturn(true)
+            on { canCreateResource(anyOrNull()) }.doReturn(true)
+            on { canShareResource() }.doReturn(true)
         }
     }
 

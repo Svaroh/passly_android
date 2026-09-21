@@ -1,12 +1,18 @@
 package com.passbolt.mobile.android.feature.authentication.auth.usecase
 
 import com.passbolt.mobile.android.common.usecase.AsyncUseCase
+import com.passbolt.mobile.android.common.usecase.UserIdInput
+import com.passbolt.mobile.android.core.architecture.result.DomainResult
 import com.passbolt.mobile.android.core.idlingresource.SignOutIdlingResource
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
+import com.passbolt.mobile.android.core.security.runtimeauth.RuntimeAuthenticatedFlag
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.RemoveSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.auth.AuthRepository
+import com.passbolt.mobile.android.domain.auth.SessionRepository
+import com.passbolt.mobile.android.domain.auth.model.ServerSignOutStatus
 import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
 import timber.log.Timber
 
 /**
@@ -33,22 +39,46 @@ import timber.log.Timber
  */
 class SignOutUseCase(
     private val passphraseMemoryCache: PassphraseMemoryCache,
+    private val removePermissionsSnapshotUseCase: RemovePermissionsSnapshotUseCase,
     private val removeSelectedAccountUseCase: RemoveSelectedAccountUseCase,
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
     private val authRepository: AuthRepository,
     private val getSessionUseCase: GetSessionUseCase,
+    private val sessionRepository: SessionRepository,
     private val signOutIdlingResource: SignOutIdlingResource,
-) : AsyncUseCase<Unit, Unit> {
-    override suspend fun execute(input: Unit) {
+    private val runtimeAuthenticatedFlag: RuntimeAuthenticatedFlag,
+) : AsyncUseCase<Unit, SignOutUseCase.Output> {
+    override suspend fun execute(input: Unit): Output {
         Timber.d("Signing out")
         signOutIdlingResource.setIdle(false)
-        getSessionUseCase.execute(Unit).refreshToken?.let {
-            authRepository.signOut(it)
-        }
+        runtimeAuthenticatedFlag.isAuthenticated = false
+        val serverSignOutStatus = signOutFromServer()
         passphraseMemoryCache.clear()
-        getSelectedAccountUseCase.execute(Unit).selectedAccount?.let {
+        getSelectedAccountUseCase.execute(Unit).selectedAccount?.let { selectedAccount ->
+            sessionRepository.removeSession(selectedAccount)
+            removePermissionsSnapshotUseCase.execute(UserIdInput(selectedAccount))
             removeSelectedAccountUseCase.execute(Unit)
         }
         signOutIdlingResource.setIdle(true)
+        return Output(serverSignOutStatus)
     }
+
+    private suspend fun signOutFromServer(): ServerSignOutStatus {
+        val refreshToken = getSessionUseCase.execute(Unit).refreshToken
+        return if (refreshToken == null) {
+            ServerSignOutStatus.NO_ACTIVE_SESSION
+        } else {
+            when (authRepository.signOut(refreshToken)) {
+                is DomainResult.Finished -> ServerSignOutStatus.SIGNED_OUT
+                is DomainResult.Incomplete -> {
+                    Timber.w("Server sign out request failed; continuing with local sign out")
+                    ServerSignOutStatus.SIGN_OUT_FAILED
+                }
+            }
+        }
+    }
+
+    data class Output(
+        val serverSignOutStatus: ServerSignOutStatus,
+    )
 }

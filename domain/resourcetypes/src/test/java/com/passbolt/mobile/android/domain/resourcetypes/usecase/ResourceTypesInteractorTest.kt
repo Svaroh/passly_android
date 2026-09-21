@@ -85,7 +85,7 @@ class ResourceTypesInteractorTest : KoinTest {
     fun `fetchAndSaveResourceTypes returns Success and invalidates the cached mapping on refresh success`() =
         runTest {
             refreshResourceTypesRepository.stub {
-                onBlocking { refreshResourceTypes(SELECTED_ACCOUNT_ID) }.thenReturn(DomainResult.Finished(resourceTypes))
+                on { refreshResourceTypes(SELECTED_ACCOUNT_ID) }.thenReturn(DomainResult.Finished(resourceTypes))
             }
 
             val result = interactor.fetchAndSaveResourceTypes()
@@ -98,7 +98,7 @@ class ResourceTypesInteractorTest : KoinTest {
     fun `fetchAndSaveResourceTypes returns Failure and keeps the cached mapping on refresh failure`() =
         runTest {
             val failure = DomainResult.Incomplete.NotCached
-            refreshResourceTypesRepository.stub { onBlocking { refreshResourceTypes(SELECTED_ACCOUNT_ID) }.thenReturn(failure) }
+            refreshResourceTypesRepository.stub { on { refreshResourceTypes(SELECTED_ACCOUNT_ID) }.thenReturn(failure) }
 
             val result = interactor.fetchAndSaveResourceTypes()
 

@@ -26,6 +26,7 @@ package com.passbolt.mobile.android.feature.resources.details
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
+import com.passbolt.mobile.android.common.datarefresh.DataRefreshStatus.InProgress
 import com.passbolt.mobile.android.common.datarefresh.DataRefreshTrackingFlow
 import com.passbolt.mobile.android.domain.rbac.usecase.GetRbacRulesUseCase
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCommonActionResult
@@ -171,7 +172,7 @@ class ResourceDetailsMainViewModelTest : KoinTest {
             viewModel = get()
             viewModel.onIntent(Initialize(DEFAULT_RESOURCE_MODEL))
             get<GetLocalResourceUseCase>().stub {
-                onBlocking { execute(any()) } doThrow
+                on { execute(any()) } doThrow
                     IllegalStateException("The query result was empty, but expected a single row")
             }
 
@@ -191,7 +192,7 @@ class ResourceDetailsMainViewModelTest : KoinTest {
             val username = "john.doe@example.com"
             val resourcePropertiesActionsInteractor: ResourcePropertiesActionsInteractor = get()
             resourcePropertiesActionsInteractor.stub {
-                onBlocking { provideUsername() } doReturn
+                on { provideUsername() } doReturn
                     flowOf(
                         ResourcePropertyActionResult(
                             ResourcePropertiesActionsInteractor.USERNAME_LABEL,
@@ -220,7 +221,7 @@ class ResourceDetailsMainViewModelTest : KoinTest {
             val url = "https://www.passbolt.com"
             val resourcePropertiesActionsInteractor: ResourcePropertiesActionsInteractor = get()
             resourcePropertiesActionsInteractor.stub {
-                onBlocking { provideMainUri() } doReturn
+                on { provideMainUri() } doReturn
                     flowOf(
                         ResourcePropertyActionResult(
                             ResourcePropertiesActionsInteractor.URL_LABEL,
@@ -273,7 +274,7 @@ class ResourceDetailsMainViewModelTest : KoinTest {
             val resourceName = DEFAULT_RESOURCE_MODEL.metadataJsonModel.name
             val resourceCommonActionsInteractor: ResourceCommonActionsInteractor = get()
             resourceCommonActionsInteractor.stub {
-                onBlocking { deleteResource() } doReturn
+                on { deleteResource() } doReturn
                     flowOf(
                         ResourceCommonActionResult.Success(resourceName),
                     )
@@ -297,7 +298,7 @@ class ResourceDetailsMainViewModelTest : KoinTest {
         runTest {
             val resourceCommonActionsInteractor: ResourceCommonActionsInteractor = get()
             resourceCommonActionsInteractor.stub {
-                onBlocking { deleteResource() } doReturn flowOf(ResourceCommonActionResult.Failure)
+                on { deleteResource() } doReturn flowOf(ResourceCommonActionResult.Failure)
             }
 
             viewModel = get()
@@ -318,7 +319,7 @@ class ResourceDetailsMainViewModelTest : KoinTest {
         runTest {
             val getRbacRulesUseCase: GetRbacRulesUseCase = get()
             getRbacRulesUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetRbacRulesUseCase.Output(
                         DEFAULT_RBAC.copy(tagsUseRule = DENY),
                     )
@@ -340,7 +341,7 @@ class ResourceDetailsMainViewModelTest : KoinTest {
         runTest {
             val getRbacRulesUseCase: GetRbacRulesUseCase = get()
             getRbacRulesUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetRbacRulesUseCase.Output(
                         DEFAULT_RBAC.copy(shareViewRule = DENY),
                     )
@@ -358,11 +359,41 @@ class ResourceDetailsMainViewModelTest : KoinTest {
         }
 
     @Test
+    fun `database backed sections should be loaded only after data refresh finishes`() =
+        runTest {
+            val dataRefreshTrackingFlow: DataRefreshTrackingFlow = get()
+            dataRefreshTrackingFlow.updateStatus(InProgress(progress = 0.5f))
+
+            viewModel = get()
+            viewModel.onIntent(Initialize(DEFAULT_RESOURCE_MODEL))
+
+            viewModel.viewState.test {
+                val duringRefresh = awaitItem()
+                assertThat(duringRefresh.isRefreshing).isTrue()
+                assertThat(duringRefresh.sharedWithData.permissions).isEmpty()
+                assertThat(duringRefresh.metadataData.tags).isEmpty()
+                cancelAndIgnoreRemainingEvents()
+            }
+
+            dataRefreshTrackingFlow.updateStatus(FinishedWithSuccess)
+            testScheduler.advanceUntilIdle()
+
+            viewModel.viewState.test {
+                val afterRefresh = awaitItem()
+                assertThat(afterRefresh.isRefreshing).isFalse()
+                assertThat(afterRefresh.sharedWithData.permissions)
+                    .containsExactly(GROUP_PERMISSION, USER_PERMISSION)
+                assertThat(afterRefresh.metadataData.tags)
+                    .containsExactlyElementsIn(RESOURCE_TAGS.map { it.slug })
+            }
+        }
+
+    @Test
     fun `folder location should not be shown when disabled by rbac`() =
         runTest {
             val getRbacRulesUseCase: GetRbacRulesUseCase = get()
             getRbacRulesUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetRbacRulesUseCase.Output(
                         DEFAULT_RBAC.copy(foldersUseRule = DENY),
                     )

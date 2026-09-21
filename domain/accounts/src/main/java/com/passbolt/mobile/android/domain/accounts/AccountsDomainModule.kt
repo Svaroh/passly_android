@@ -52,7 +52,7 @@ val accountsDomainModule =
         singleOf(::RemoveAccountDataUseCase)
         singleOf(::SaveServerFingerprintUseCase)
         singleOf(::IsServerFingerprintCorrectUseCase)
-        singleOf(::AccountSwitchFlow)
+        singleOf(::AuthenticatedAccountFlow)
         singleOf(::GetSelectedAccountUseCase)
         singleOf(::SaveSelectedAccountUseCase)
         singleOf(::RemoveSelectedAccountUseCase)

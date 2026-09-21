@@ -220,23 +220,29 @@ class ResourceDetailsViewModel(
     }
 
     private suspend fun loadResourceDetails() {
-        // Wait for data refresh if in progress and refresh resource afterwards
-        if (dataRefreshTrackingFlow.isInProgress()) {
-            dataRefreshTrackingFlow.awaitIdle()
-            val refreshedResource =
-                getLocalResourceUseCase
-                    .execute(GetLocalResourceUseCase.Input(resource.resourceId))
-                    .resource
-            updateViewState { copy(resourceData = resourceData.copy(resourceModel = refreshedResource)) }
-        }
-
         val featureFlags = getFeatureFlagsUseCase.execute(Unit).featureFlags
         val rbac = getRbacRulesUseCase.execute(Unit).rbacModel
 
         loadAndDisplayResource(rbac, featureFlags)
+        if (dataRefreshTrackingFlow.isInProgress()) {
+            dataRefreshTrackingFlow.awaitIdle()
+            reloadAndDisplayResource(rbac, featureFlags)
+        }
         loadAndDisplayPermissions(rbac)
         loadAndDisplayTags(rbac, featureFlags)
         loadAndDisplayLocation(rbac)
+    }
+
+    private suspend fun reloadAndDisplayResource(
+        rbac: RbacModel,
+        featureFlags: FeatureFlagsModel,
+    ) {
+        val refreshedResource =
+            getLocalResourceUseCase
+                .execute(GetLocalResourceUseCase.Input(resource.resourceId))
+                .resource
+        updateViewState { copy(resourceData = resourceData.copy(resourceModel = refreshedResource)) }
+        loadAndDisplayResource(rbac, featureFlags)
     }
 
     private suspend fun loadAndDisplayResource(

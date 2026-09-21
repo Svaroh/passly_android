@@ -70,12 +70,8 @@ internal class InAppReviewLocalDataSourceImpl(
 
     override fun getInAppReviewShowMode(userId: String): InAppReviewShowMode =
         sharedPreferences(userId).let {
-            inAppReviewShowSerializer.deserialize(
-                it.getInt(
-                    KEY_IN_APP_REVIEW_SHOW_MODE,
-                    InAppReviewShowSerializer.InAppReviewShowModeEnum.FIRST_SHOW.ordinal,
-                ),
-            )
+            inAppReviewShowSerializer.deserialize(it.getString(KEY_IN_APP_REVIEW_SHOW_MODE_ID, null))
+                ?: InAppReviewShowMode.FirstShow()
         }
 
     override fun saveInAppReviewShowMode(
@@ -83,8 +79,8 @@ internal class InAppReviewLocalDataSourceImpl(
         showMode: InAppReviewShowMode,
     ) {
         sharedPreferences(userId).edit {
-            putInt(
-                KEY_IN_APP_REVIEW_SHOW_MODE,
+            putString(
+                KEY_IN_APP_REVIEW_SHOW_MODE_ID,
                 inAppReviewShowSerializer.serialize(showMode),
             )
         }

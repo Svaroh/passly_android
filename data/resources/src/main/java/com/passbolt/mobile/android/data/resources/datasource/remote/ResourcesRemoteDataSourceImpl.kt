@@ -38,6 +38,7 @@ import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdTo
 import com.passbolt.mobile.android.dto.request.CreateResourceDto
 import com.passbolt.mobile.android.mappers.PermissionsModelMapper
 import com.passbolt.mobile.android.mappers.ResourceModelMapper
+import com.passbolt.mobile.android.ui.PermissionModel
 import com.passbolt.mobile.android.ui.ResourceUiModelWithAttributes
 
 internal class ResourcesRemoteDataSourceImpl(
@@ -71,6 +72,11 @@ internal class ResourcesRemoteDataSourceImpl(
                 )
             }
     }
+
+    override suspend fun getResourcePermissions(resourceId: String): DomainResult<List<PermissionModel>> =
+        callWithHandler(responseHandler) { resourceApi.getResource(resourceId).body }
+            .toDomainResult()
+            .map { resource -> resource.permissions.orEmpty().map(permissionsModelMapper::map) }
 
     override suspend fun createResource(
         resource: CreateResourceDto,

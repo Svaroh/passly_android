@@ -1,0 +1,4 @@
+[submodule "screenshots"]
+	path = screenshots
+	url = ../passbolt-android-screenshot-testing.git
+	branch = develop

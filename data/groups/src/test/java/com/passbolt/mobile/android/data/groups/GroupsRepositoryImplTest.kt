@@ -87,7 +87,7 @@ class GroupsRepositoryImplTest : KoinTest {
     @Test
     fun `refreshGroups with remote success returns success and writes to local`() =
         runTest {
-            remote.stub { onBlocking { getGroups() }.thenReturn(DomainResult.Finished(groupsWithMembers)) }
+            remote.stub { on { getGroups() }.thenReturn(DomainResult.Finished(groupsWithMembers)) }
 
             val result = repository.refreshGroups(USER_ID)
 
@@ -99,7 +99,7 @@ class GroupsRepositoryImplTest : KoinTest {
     fun `refreshGroups with remote failure returns failure and does not write to local`() =
         runTest {
             val failure = DomainResult.Incomplete.Error(UNKNOWN, "boom")
-            remote.stub { onBlocking { getGroups() }.thenReturn(failure) }
+            remote.stub { on { getGroups() }.thenReturn(failure) }
 
             val result = repository.refreshGroups(USER_ID)
 

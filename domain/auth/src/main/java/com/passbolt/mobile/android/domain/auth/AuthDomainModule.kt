@@ -10,6 +10,7 @@ import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.RemoveAllAccountsPassphrasesUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.RemovePassphraseUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.RemoveServerPublicRsaKeyUseCase
+import com.passbolt.mobile.android.domain.auth.usecase.SaveMfaTokenUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.SavePassphraseUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.SaveResourcesDatabasePassphraseUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.SaveServerPublicRsaKeyUseCase
@@ -48,6 +49,7 @@ val authDomainModule =
         singleOf(::RemoveServerPublicRsaKeyUseCase)
         singleOf(::GetSessionUseCase)
         singleOf(::SaveSessionUseCase)
+        singleOf(::SaveMfaTokenUseCase)
         singleOf(::GetPassphraseUseCase)
         singleOf(::SavePassphraseUseCase)
         singleOf(::RemovePassphraseUseCase)

@@ -33,6 +33,11 @@ internal sealed interface OtpSideEffect {
         val leadingContentType: LeadingContentType,
     ) : OtpSideEffect
 
+    data class NavigateToConfirmPermissions(
+        val resourceId: String,
+        val driftedEntityNames: List<String>? = null,
+    ) : OtpSideEffect
+
     data class NavigateToEditResourceForm(
         val resourceId: String,
         val resourceName: String,
@@ -72,6 +77,7 @@ internal enum class SnackbarErrorType {
     FAILED_TO_REFRESH_DATA,
     NO_SHARED_KEY_ACCESS,
     INVALID_TOTP_PARAMETERS,
+    SHARE_FAILED,
     ERROR,
 }
 

@@ -42,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -51,16 +52,20 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.passbolt.mobile.android.core.clipboard.ClipboardAccess
 import com.passbolt.mobile.android.core.compose.SideEffectDispatcher
+import com.passbolt.mobile.android.core.compose.rememberDebouncedBoolean
 import com.passbolt.mobile.android.core.fulldatarefresh.service.DataRefreshService
 import com.passbolt.mobile.android.core.navigation.AppContext
 import com.passbolt.mobile.android.core.navigation.compose.AppNavigator
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
 import com.passbolt.mobile.android.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
+import com.passbolt.mobile.android.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
+import com.passbolt.mobile.android.core.security.flagsecure.FlagSecureEffect
 import com.passbolt.mobile.android.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
 import com.passbolt.mobile.android.core.ui.empty.EmptyResourceListState
 import com.passbolt.mobile.android.core.ui.fab.AddFloatingActionButton
 import com.passbolt.mobile.android.core.ui.progressdialog.ProgressDialog
+import com.passbolt.mobile.android.core.ui.progressindicator.SearchProgressIndicator
 import com.passbolt.mobile.android.core.ui.pulltorefresh.SlidingFeedbackPullToRefreshBox
 import com.passbolt.mobile.android.core.ui.scaffold.HomeScaffold
 import com.passbolt.mobile.android.core.ui.search.SearchInput
@@ -89,6 +94,7 @@ import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.TrustMetadataKey
 import com.passbolt.mobile.android.feature.otp.screen.OtpIntent.TrustNewMetadataKey
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.CopyToClipboard
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.InitiateDataRefresh
+import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToConfirmPermissions
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToCreateResourceForm
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToCreateTotp
 import com.passbolt.mobile.android.feature.otp.screen.OtpSideEffect.NavigateToEditResourceForm
@@ -100,6 +106,7 @@ import com.passbolt.mobile.android.feature.otp.screen.ui.ProgressSource.Revealed
 import com.passbolt.mobile.android.feature.otp.screen.ui.ProgressSource.UniversalAutofillCountdown
 import com.passbolt.mobile.android.otpmoremenu.OtpMoreMenuBottomSheet
 import com.passbolt.mobile.android.testtags.composetags.Otp
+import com.passbolt.mobile.android.ui.ConfirmPermissionsMode
 import com.passbolt.mobile.android.ui.OtpItemWrapper
 import com.passbolt.mobile.android.ui.ResourceFormMode
 import kotlinx.coroutines.launch
@@ -117,6 +124,8 @@ internal fun OtpScreen(
     resourceIconProvider: ResourceIconProvider = koinInject(),
     clipboardAccess: ClipboardAccess = koinInject(),
 ) {
+    FlagSecureEffect()
+
     val context = LocalContext.current
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -174,6 +183,10 @@ internal fun OtpScreen(
                 navigator.navigateToKey(MainResourceForm(ResourceFormMode.Create(it.leadingContentType, null)))
             is NavigateToEditResourceForm ->
                 navigator.navigateToKey(MainResourceForm(ResourceFormMode.Edit(it.resourceId, it.resourceName)))
+            is NavigateToConfirmPermissions ->
+                navigator.navigateToKey(
+                    ConfirmPermissions(ConfirmPermissionsMode.Edit(it.resourceId), it.driftedEntityNames),
+                )
             InitiateDataRefresh -> DataRefreshService.start(context)
             is ShowToast -> Toast.makeText(context, getToastMessage(context, it.type), Toast.LENGTH_SHORT).show()
         }
@@ -228,6 +241,7 @@ fun OtpScreen(
         content =
             { paddingValues ->
                 val context = LocalContext.current
+                val showSearchProgress = rememberDebouncedBoolean(state.isSearching && !state.isRefreshing)
                 SlidingFeedbackPullToRefreshBox(
                     isRefreshing = state.isRefreshing,
                     refreshProgress = state.refreshProgress,
@@ -296,6 +310,9 @@ fun OtpScreen(
                                 )
                             }
                         }
+                    }
+                    if (showSearchProgress) {
+                        SearchProgressIndicator(modifier = Modifier.align(Alignment.TopCenter))
                     }
                 }
                 if (state.showOtpMoreBottomSheet) {

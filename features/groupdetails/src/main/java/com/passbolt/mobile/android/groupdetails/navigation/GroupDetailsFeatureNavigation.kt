@@ -12,11 +12,11 @@ class GroupDetailsFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =
         {
             entry<GroupMembers> { key ->
-                PassboltTheme { GroupMembersScreen(groupId = key.groupId) }
+                PassboltTheme { GroupMembersScreen(groupId = key.groupId, fromSnapshot = key.fromSnapshot) }
             }
 
             entry<GroupMemberDetails> { key ->
-                PassboltTheme { GroupMemberDetailsScreen(userId = key.userId) }
+                PassboltTheme { GroupMemberDetailsScreen(userId = key.userId, fromSnapshot = key.fromSnapshot) }
             }
         }
 }

@@ -32,11 +32,13 @@ internal interface GroupsApi {
     @GET(GROUPS)
     suspend fun getGroups(
         @Query(QUERY_CONTAIN_USER) containingUser: Int = 1,
+        @Query(QUERY_HAS_ID) hasIds: List<String>? = null,
     ): BaseResponse<List<GroupsResponseDto>>
 
     private companion object {
         private const val GROUPS = "groups.json"
 
         private const val QUERY_CONTAIN_USER = "contain[user]"
+        private const val QUERY_HAS_ID = "filter[has-id][]"
     }
 }

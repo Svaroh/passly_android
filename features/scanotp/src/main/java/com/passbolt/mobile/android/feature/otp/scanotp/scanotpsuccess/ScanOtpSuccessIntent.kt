@@ -1,5 +1,6 @@
 package com.passbolt.mobile.android.feature.otp.scanotp.scanotpsuccess
 
+import com.passbolt.mobile.android.ui.PermissionModelUi
 import com.passbolt.mobile.android.ui.ResourceUiModel
 
 sealed interface ScanOtpSuccessIntent {
@@ -9,6 +10,10 @@ sealed interface ScanOtpSuccessIntent {
 
     data class LinkedResourceReceived(
         val resource: ResourceUiModel,
+    ) : ScanOtpSuccessIntent
+
+    data class ConfirmedPermissionsResult(
+        val permissions: List<PermissionModelUi>,
     ) : ScanOtpSuccessIntent
 
     data object TrustNewMetadataKey : ScanOtpSuccessIntent

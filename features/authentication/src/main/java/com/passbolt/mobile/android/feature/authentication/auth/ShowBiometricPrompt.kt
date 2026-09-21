@@ -1,6 +1,5 @@
 package com.passbolt.mobile.android.feature.authentication.auth
 
-import android.security.keystore.KeyPermanentlyInvalidatedException
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentActivity
@@ -21,7 +20,6 @@ fun showBiometricPrompt(
     onAuthenticationSuccess: (Cipher?) -> Unit,
     onAuthenticationError: (BiometricAuthError) -> Unit,
     onAuthenticationCancelled: () -> Unit,
-    onKeyPermanentlyInvalidated: (KeyPermanentlyInvalidatedException) -> Unit,
 ) {
     try {
         val biometricPrompt =
@@ -67,8 +65,6 @@ fun showBiometricPrompt(
                 .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
                 .build()
         biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(biometricEncryptionCipher))
-    } catch (e: KeyPermanentlyInvalidatedException) {
-        onKeyPermanentlyInvalidated(e)
     } catch (e: Exception) {
         Timber.e(e, "Error showing biometric prompt")
         onAuthenticationError(BiometricAuthError.GENERIC)

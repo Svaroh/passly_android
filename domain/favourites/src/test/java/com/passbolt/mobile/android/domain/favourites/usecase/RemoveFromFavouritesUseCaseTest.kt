@@ -69,7 +69,7 @@ class RemoveFromFavouritesUseCaseTest : KoinTest {
     @Test
     fun `success stays authenticated`() =
         runTest {
-            repository.stub { onBlocking { removeFromFavourites(FAVOURITE_ID) }.thenReturn(DomainResult.Finished(Unit)) }
+            repository.stub { on { removeFromFavourites(FAVOURITE_ID) }.thenReturn(DomainResult.Finished(Unit)) }
 
             val output = useCase.execute(RemoveFromFavouritesUseCase.Input(FAVOURITE_ID))
 
@@ -81,7 +81,7 @@ class RemoveFromFavouritesUseCaseTest : KoinTest {
     fun `unauthorized failure surfaces as session re-auth`() =
         runTest {
             val failure = DomainResult.Incomplete.Unauthorized
-            repository.stub { onBlocking { removeFromFavourites(FAVOURITE_ID) }.thenReturn(failure) }
+            repository.stub { on { removeFromFavourites(FAVOURITE_ID) }.thenReturn(failure) }
 
             val output = useCase.execute(RemoveFromFavouritesUseCase.Input(FAVOURITE_ID))
 
@@ -96,7 +96,7 @@ class RemoveFromFavouritesUseCaseTest : KoinTest {
         runTest {
             val providers = emptyList<AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider?>()
             val failure = DomainResult.Incomplete.MfaRequired(providers)
-            repository.stub { onBlocking { removeFromFavourites(FAVOURITE_ID) }.thenReturn(failure) }
+            repository.stub { on { removeFromFavourites(FAVOURITE_ID) }.thenReturn(failure) }
 
             val output = useCase.execute(RemoveFromFavouritesUseCase.Input(FAVOURITE_ID))
 
@@ -110,7 +110,7 @@ class RemoveFromFavouritesUseCaseTest : KoinTest {
     fun `unknown failure stays authenticated`() =
         runTest {
             val failure = DomainResult.Incomplete.Error(UNKNOWN, "boom")
-            repository.stub { onBlocking { removeFromFavourites(FAVOURITE_ID) }.thenReturn(failure) }
+            repository.stub { on { removeFromFavourites(FAVOURITE_ID) }.thenReturn(failure) }
 
             val output = useCase.execute(RemoveFromFavouritesUseCase.Input(FAVOURITE_ID))
 

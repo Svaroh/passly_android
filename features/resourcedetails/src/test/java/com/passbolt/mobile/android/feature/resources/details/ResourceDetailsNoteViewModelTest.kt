@@ -83,7 +83,7 @@ class ResourceDetailsNoteViewModelTest : KoinTest {
             val note = "This is a secret note"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideNote() } doReturn
+                on { provideNote() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -111,7 +111,7 @@ class ResourceDetailsNoteViewModelTest : KoinTest {
             val note = "This is a secret note"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideNote() } doReturn
+                on { provideNote() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -141,7 +141,7 @@ class ResourceDetailsNoteViewModelTest : KoinTest {
             val note = "This is a secret note"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideNote() } doReturn
+                on { provideNote() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -169,7 +169,7 @@ class ResourceDetailsNoteViewModelTest : KoinTest {
         runTest {
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideNote() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
+                on { provideNote() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
             }
 
             viewModel = get()
@@ -189,7 +189,7 @@ class ResourceDetailsNoteViewModelTest : KoinTest {
         runTest {
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideNote() } doReturn flowOf(SecretPropertyActionResult.FetchFailure())
+                on { provideNote() } doReturn flowOf(SecretPropertyActionResult.FetchFailure())
             }
 
             viewModel = get()

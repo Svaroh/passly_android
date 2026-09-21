@@ -1,5 +1,6 @@
 package com.passbolt.mobile.android.data.auth.datasource.local
 
+import androidx.core.content.edit
 import com.passbolt.mobile.android.domain.auth.datasource.AuthLocalDataSource
 import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFactory
 
@@ -38,17 +39,15 @@ internal class AuthLocalDataSourceImpl(
         rsaKey: String,
     ) {
         val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
-        with(sharedPreferences.edit()) {
+        sharedPreferences.edit {
             putString(SERVER_RSA_KEY_KEY, rsaKey)
-            apply()
         }
     }
 
     override fun removeServerRsaKey(userId: String) {
         val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
-        with(sharedPreferences.edit()) {
+        sharedPreferences.edit {
             remove(SERVER_RSA_KEY_KEY)
-            apply()
         }
     }
 

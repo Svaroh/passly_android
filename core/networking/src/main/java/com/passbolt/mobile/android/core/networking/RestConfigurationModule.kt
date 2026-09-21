@@ -4,6 +4,7 @@ import com.passbolt.mobile.android.common.CookieExtractor
 import com.passbolt.mobile.android.core.networking.interceptor.AuthInterceptor
 import com.passbolt.mobile.android.core.networking.interceptor.ChangeableBaseUrlInterceptor
 import com.passbolt.mobile.android.core.networking.interceptor.CookiesInterceptor
+import com.passbolt.mobile.android.core.networking.interceptor.StripForeignOriginCredentialsInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -41,11 +42,10 @@ val networkingModule =
         single(named(DEFAULT_HTTP_CLIENT)) {
             provideHttpClient(
                 loggingInterceptor = get(),
-                interceptors =
+                baseUrlInterceptor = get(),
+                placeholderUrlInterceptors =
                     listOf(
-                        get<ChangeableBaseUrlInterceptor>(),
                         get<AuthInterceptor>(),
-                        get<CookiesInterceptor.ReceivedCookiesInterceptor>(),
                         get<CookiesInterceptor.AddCookiesInterceptor>(),
                     ),
             )
@@ -53,20 +53,16 @@ val networkingModule =
         single(named(COIL_HTTP_CLIENT)) {
             provideHttpClient(
                 loggingInterceptor = get(),
-                interceptors =
-                    listOf(
-                        get<ChangeableBaseUrlInterceptor>(),
-                    ),
+                baseUrlInterceptor = get(),
             )
         }
         single(named(NO_REDIRECT_HTTP_CLIENT)) {
             provideHttpClient(
                 loggingInterceptor = get(),
-                interceptors =
+                baseUrlInterceptor = get(),
+                placeholderUrlInterceptors =
                     listOf(
-                        get<ChangeableBaseUrlInterceptor>(),
                         get<AuthInterceptor>(),
-                        get<CookiesInterceptor.ReceivedCookiesInterceptor>(),
                         get<CookiesInterceptor.AddCookiesInterceptor>(),
                     ),
                 followRedirects = false,
@@ -79,12 +75,9 @@ val networkingModule =
             )
         }
         single {
-            CookiesInterceptor.ReceivedCookiesInterceptor(
-                cookieExtractor = get(),
+            CookiesInterceptor.AddCookiesInterceptor(
+                getSessionUseCase = get(),
             )
-        }
-        single {
-            CookiesInterceptor.AddCookiesInterceptor()
         }
         single { CookieExtractor() }
 
@@ -132,17 +125,20 @@ private fun provideHttpLogger(): HttpLoggingInterceptor.Logger =
 
 private fun provideHttpClient(
     loggingInterceptor: HttpLoggingInterceptor,
-    interceptors: List<Interceptor> = emptyList(),
+    baseUrlInterceptor: ChangeableBaseUrlInterceptor,
+    placeholderUrlInterceptors: List<Interceptor> = emptyList(),
     followRedirects: Boolean = true,
 ) = OkHttpClient
     .Builder()
+    .addNetworkInterceptor(StripForeignOriginCredentialsInterceptor())
     .addNetworkInterceptor(loggingInterceptor)
     .connectTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
     .writeTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
     .readTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
     .apply {
-        interceptors.forEach { addInterceptor(it) }
-    }.followRedirects(followRedirects)
+        placeholderUrlInterceptors.forEach { addInterceptor(it) }
+    }.addInterceptor(baseUrlInterceptor)
+    .followRedirects(followRedirects)
     .build()
 
 const val DEFAULT_HTTP_CLIENT = "DEFAULT_HTTP_CLIENT"

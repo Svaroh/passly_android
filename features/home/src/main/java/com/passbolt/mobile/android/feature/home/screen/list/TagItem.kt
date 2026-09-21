@@ -102,7 +102,6 @@ private fun TagWithCountItemPreview() {
                 slug = "Personal",
                 isShared = false,
                 taggedResourcesCount = 5,
-                searchCriteria = "Personal",
             ),
         onClick = {},
     )
@@ -118,7 +117,6 @@ private fun SharedTagWithCountItemPreview() {
                 slug = "Shared Tag with a very long name that should be truncated",
                 isShared = true,
                 taggedResourcesCount = 25,
-                searchCriteria = "Shared Tag",
             ),
         onClick = {},
     )

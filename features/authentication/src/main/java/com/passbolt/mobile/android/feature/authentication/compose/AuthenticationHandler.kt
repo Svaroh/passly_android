@@ -42,7 +42,9 @@ import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackin
 import com.passbolt.mobile.android.core.navigation.ActivityIntents
 import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
 import com.passbolt.mobile.android.core.navigation.ActivityIntents.AuthConfig.RefreshSession
+import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.GetSessionUseCase
+import com.passbolt.mobile.android.domain.auth.usecase.SaveMfaTokenUseCase
 import com.passbolt.mobile.android.feature.authentication.mfa.MfaDialogState
 import com.passbolt.mobile.android.feature.authentication.mfa.MfaResult
 import com.passbolt.mobile.android.feature.authentication.mfa.duo.AuthWithDuoScreen
@@ -63,6 +65,8 @@ fun AuthenticationHandler(
     sessionRefreshTrackingFlow: SessionRefreshTrackingFlow = koinInject(),
     mfaProvidersHandler: MfaProvidersHandler = koinInject(),
     getSessionUseCase: GetSessionUseCase = koinInject(),
+    getSelectedAccountUseCase: GetSelectedAccountUseCase = koinInject(),
+    saveMfaTokenUseCase: SaveMfaTokenUseCase = koinInject(),
 ) {
     val context = LocalContext.current
 
@@ -109,7 +113,14 @@ fun AuthenticationHandler(
             onMfaResult = { result ->
                 mfaDialogState = null
                 when (result) {
-                    is MfaResult.Succeeded -> sessionRefreshTrackingFlow.notifySessionRefreshed()
+                    is MfaResult.Succeeded -> {
+                        result.mfaHeader?.let { mfaHeader ->
+                            getSelectedAccountUseCase.execute(Unit).selectedAccount?.let { userId ->
+                                saveMfaTokenUseCase.execute(SaveMfaTokenUseCase.Input(userId, mfaHeader))
+                            }
+                        }
+                        sessionRefreshTrackingFlow.notifySessionRefreshed()
+                    }
                     is MfaResult.OtherProvider -> {
                         mfaDialogState =
                             toMfaDialogState(

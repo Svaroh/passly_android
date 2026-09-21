@@ -14,22 +14,14 @@ import com.passbolt.mobile.android.core.mvp.authentication.SessionRefreshTrackin
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderDetailsUseCase
 import com.passbolt.mobile.android.domain.folders.usecase.GetLocalFolderPermissionsUseCase
-import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
 import com.passbolt.mobile.android.domain.metadata.interactor.ResourceAccessInteractor
-import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
-import com.passbolt.mobile.android.domain.resources.usecase.ResourceShareInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
 import com.passbolt.mobile.android.domain.resources.usecase.db.GetLocalResourceUseCase
 import com.passbolt.mobile.android.jsonmodel.JSON_MODEL_GSON
 import com.passbolt.mobile.android.jsonmodel.jsonpathops.JsonPathJsonPathOps
 import com.passbolt.mobile.android.jsonmodel.jsonpathops.JsonPathsOps
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.GroupPermissionDeleted
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.GroupPermissionModified
+import com.passbolt.mobile.android.permissions.common.PermissionsListMapper
 import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.MainButtonIntent
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.UserPermissionDeleted
-import com.passbolt.mobile.android.permissions.permissions.PermissionsIntent.UserPermissionModified
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.CloseWithShareSuccess
-import com.passbolt.mobile.android.permissions.permissions.PermissionsSideEffect.InitiateDataRefresh
 import com.passbolt.mobile.android.ui.GroupModel
 import com.passbolt.mobile.android.ui.MetadataJsonModel
 import com.passbolt.mobile.android.ui.PermissionModelUi
@@ -57,7 +49,6 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.get
-import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
@@ -78,14 +69,12 @@ class PermissionsViewModelTest : KoinTest {
                     single { mock<GetLocalFolderPermissionsUseCase>() }
                     single { mock<GetLocalResourceUseCase>() }
                     single { mock<GetLocalFolderDetailsUseCase>() }
-                    single { mock<ResourceShareInteractor>() }
-                    single { mock<MetadataPrivateKeysHelperInteractor>() }
-                    single { mock<ResourceUpdateActionsInteractorFactory>() }
                     single { mock<ResourceAccessInteractor>() }
                     singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                     singleOf(::SessionRefreshTrackingFlow)
                     singleOf(::DataRefreshTrackingFlow)
                     factory { PermissionModelUiComparator() }
+                    factory { PermissionsListMapper(get()) }
                     single(named(JSON_MODEL_GSON)) { GsonBuilder().serializeNulls().create() }
                     single {
                         Configuration
@@ -105,13 +94,10 @@ class PermissionsViewModelTest : KoinTest {
                             getLocalResourceUseCase = get(),
                             getLocalFolderPermissionsUseCase = get(),
                             getLocalFolderUseCase = get(),
-                            permissionModelUiComparator = get(),
-                            resourceShareInteractor = get(),
-                            metadataPrivateKeysHelperInteractor = get(),
+                            permissionsListMapper = get(),
                             resourceAccessInteractor = get(),
                             dataRefreshTrackingFlow = get(),
                             coroutineLaunchContext = get(),
-                            resourceUpdateActionsInteractorFactory = get(),
                         )
                     }
                 },
@@ -126,15 +112,15 @@ class PermissionsViewModelTest : KoinTest {
         Dispatchers.setMain(testDispatcher)
 
         get<GetLocalResourcePermissionsUseCase>().stub {
-            onBlocking { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) }
+            on { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) }
                 .doReturn(GetLocalResourcePermissionsUseCase.Output(GROUP_PERMISSIONS + USER_PERMISSIONS))
         }
         get<GetLocalResourceUseCase>().stub {
-            onBlocking { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
+            on { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
                 .doReturn(GetLocalResourceUseCase.Output(RESOURCE_MODEL))
         }
         get<ResourceAccessInteractor>().stub {
-            onBlocking { canShareResource() } doReturn true
+            on { canShareResource() } doReturn true
         }
     }
 
@@ -144,25 +130,10 @@ class PermissionsViewModelTest : KoinTest {
     }
 
     @Test
-    fun `save button and add user button should be shown in edit mode`() =
-        runTest {
-            val viewModel =
-                get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.EDIT, PermissionsItem.RESOURCE) },
-                )
-
-            viewModel.viewState.test {
-                val state = awaitItem()
-                assertThat(state.showSaveButton).isTrue()
-                assertThat(state.showAddUserButton).isTrue()
-            }
-        }
-
-    @Test
     fun `edit button should be shown in view mode and if owner`() =
         runTest {
             get<GetLocalResourceUseCase>().stub {
-                onBlocking { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
+                on { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
                     .doReturn(GetLocalResourceUseCase.Output(RESOURCE_MODEL.copy(permission = ResourcePermission.OWNER)))
             }
 
@@ -181,10 +152,10 @@ class PermissionsViewModelTest : KoinTest {
     fun `error should be shown when sharing not possible`() =
         runTest {
             get<ResourceAccessInteractor>().stub {
-                onBlocking { canShareResource() } doReturn false
+                on { canShareResource() } doReturn false
             }
             get<GetLocalResourceUseCase>().stub {
-                onBlocking { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
+                on { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
                     .doReturn(GetLocalResourceUseCase.Output(RESOURCE_MODEL.copy(permission = ResourcePermission.OWNER)))
             }
 
@@ -202,10 +173,30 @@ class PermissionsViewModelTest : KoinTest {
         }
 
     @Test
+    fun `edit permissions should open the share confirmation`() =
+        runTest {
+            get<GetLocalResourceUseCase>().stub {
+                on { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) }
+                    .doReturn(GetLocalResourceUseCase.Output(RESOURCE_MODEL.copy(permission = ResourcePermission.OWNER)))
+            }
+
+            val viewModel =
+                get<PermissionsViewModel>(
+                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
+                )
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(MainButtonIntent)
+
+                assertThat(awaitItem()).isEqualTo(PermissionsSideEffect.NavigateToShareResource(RESOURCE_ID))
+            }
+        }
+
+    @Test
     fun `empty state should be shown when there are no permissions`() =
         runTest {
             get<GetLocalResourcePermissionsUseCase>().stub {
-                onBlocking { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) }
+                on { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) }
                     .doReturn(GetLocalResourcePermissionsUseCase.Output(emptyList()))
             }
 
@@ -231,128 +222,6 @@ class PermissionsViewModelTest : KoinTest {
             viewModel.viewState.test {
                 val state = awaitItem()
                 assertThat(state.permissions).containsExactlyElementsIn(GROUP_PERMISSIONS + USER_PERMISSIONS)
-            }
-        }
-
-    @Test
-    fun `should show warning if there is not at least one owner permission`() =
-        runTest {
-            val viewModel =
-                get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.EDIT, PermissionsItem.RESOURCE) },
-                )
-
-            viewModel.sideEffect.test {
-                viewModel.onIntent(MainButtonIntent)
-                val effect = awaitItem()
-                assertIs<PermissionsSideEffect.ShowErrorSnackbar>(effect)
-                assertThat(effect.type).isEqualTo(SnackbarErrorType.ONE_OWNER_REQUIRED)
-            }
-        }
-
-    @Test
-    fun `should not show deleted user permission`() =
-        runTest {
-            val viewModel =
-                get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
-                )
-
-            viewModel.onIntent(UserPermissionDeleted(USER_PERMISSIONS[0]))
-
-            viewModel.viewState.test {
-                val state = awaitItem()
-                assertThat(state.permissions).containsExactlyElementsIn(GROUP_PERMISSIONS)
-            }
-        }
-
-    @Test
-    fun `should not show deleted group permission`() =
-        runTest {
-            val viewModel =
-                get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
-                )
-
-            viewModel.onIntent(GroupPermissionDeleted(GROUP_PERMISSIONS[0]))
-
-            viewModel.viewState.test {
-                val state = awaitItem()
-                assertThat(state.permissions).containsExactlyElementsIn(USER_PERMISSIONS)
-            }
-        }
-
-    @Test
-    fun `user permission modification should be reflected`() =
-        runTest {
-            val viewModel =
-                get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
-                )
-
-            val modifiedPermission =
-                PermissionModelUi.UserPermissionModel(
-                    ResourcePermission.OWNER,
-                    "permId",
-                    USER_PERMISSIONS[0].user.copy(),
-                )
-            viewModel.onIntent(UserPermissionModified(modifiedPermission))
-
-            viewModel.viewState.test {
-                val state = awaitItem()
-                assertThat(state.permissions).contains(GROUP_PERMISSIONS[0])
-                val userPermissions = state.permissions.filterIsInstance<PermissionModelUi.UserPermissionModel>()
-                assertThat(userPermissions).hasSize(1)
-                assertThat(userPermissions[0].permission).isEqualTo(ResourcePermission.OWNER)
-            }
-        }
-
-    @Test
-    fun `group permission modification should be reflected`() =
-        runTest {
-            val viewModel =
-                get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.VIEW, PermissionsItem.RESOURCE) },
-                )
-
-            val modifiedPermission =
-                PermissionModelUi.GroupPermissionModel(
-                    ResourcePermission.OWNER,
-                    "permId",
-                    GROUP_PERMISSIONS[0].group.copy(),
-                )
-            viewModel.onIntent(GroupPermissionModified(modifiedPermission))
-
-            viewModel.viewState.test {
-                val state = awaitItem()
-                assertThat(state.permissions).contains(USER_PERMISSIONS[0])
-                val groupPermissions = state.permissions.filterIsInstance<PermissionModelUi.GroupPermissionModel>()
-                assertThat(groupPermissions).hasSize(1)
-                assertThat(groupPermissions[0].permission).isEqualTo(ResourcePermission.OWNER)
-            }
-        }
-
-    @Test
-    fun `should initiate data refresh and close with share success after successful share`() =
-        runTest {
-            val ownerPermissions = GROUP_PERMISSIONS + USER_PERMISSIONS[0].copy(permission = ResourcePermission.OWNER)
-            get<GetLocalResourcePermissionsUseCase>().stub {
-                onBlocking { execute(GetLocalResourcePermissionsUseCase.Input(RESOURCE_ID)) }
-                    .doReturn(GetLocalResourcePermissionsUseCase.Output(ownerPermissions))
-            }
-            get<ResourceShareInteractor>().stub {
-                onBlocking { simulateAndShareResource(any(), any()) }
-                    .doReturn(ResourceShareInteractor.Output.Success)
-            }
-            val viewModel =
-                get<PermissionsViewModel>(
-                    parameters = { parametersOf(RESOURCE_ID, PermissionsMode.EDIT, PermissionsItem.RESOURCE) },
-                )
-
-            viewModel.sideEffect.test {
-                viewModel.onIntent(MainButtonIntent)
-                assertIs<InitiateDataRefresh>(awaitItem())
-                assertIs<CloseWithShareSuccess>(awaitItem())
             }
         }
 

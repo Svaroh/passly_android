@@ -49,11 +49,20 @@ internal interface ResourceApi {
         @Query(QUERY_LIMIT) limit: Int,
         // page number
         @Query(QUERY_PAGE) page: Int,
-        // sort by modified date
-        @Query(QUERY_SORT) sort: String = "Resources.modified",
-        // sort direction descending
-        @Query(QUERY_DIRECTION) direction: String = "desc",
+        // sort by name
+        @Query(QUERY_SORT) sort: String = "Resources.name",
+        // sort direction ascending
+        @Query(QUERY_DIRECTION) direction: String = "asc",
     ): BasePaginatedResponse<List<ResourceResponseDto>>
+
+    @GET(RESOURCE_BY_ID)
+    suspend fun getResource(
+        @Path(PATH_RESOURCE_ID) resourceId: String,
+        // always return with current user permission
+        @Query(QUERY_CONTAIN_PERMISSION) containingPermission: Int? = 1,
+        // always return with all permissions
+        @Query(QUERY_CONTAIN_PERMISSIONS) containingPermissions: Int? = 1,
+    ): BaseResponse<ResourceResponseDto>
 
     @DELETE(RESOURCE_BY_ID)
     suspend fun deleteResource(

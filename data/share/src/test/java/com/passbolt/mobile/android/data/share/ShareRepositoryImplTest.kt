@@ -71,7 +71,7 @@ class ShareRepositoryImplTest : KoinTest {
             val permissions = listOf(newPermission())
             val expected =
                 DomainResult.Finished(ShareChanges(added = listOf(ShareRecipient("u1")), removed = emptyList()))
-            remote.stub { onBlocking { simulateShareResource(RESOURCE_ID, permissions) }.thenReturn(expected) }
+            remote.stub { on { simulateShareResource(RESOURCE_ID, permissions) }.thenReturn(expected) }
 
             val result = repository.simulateShareResource(RESOURCE_ID, permissions)
 
@@ -85,7 +85,7 @@ class ShareRepositoryImplTest : KoinTest {
             val permissions = listOf(newPermission())
             val secrets = listOf(EncryptedSecret(RESOURCE_ID, "u1", "cipher"))
             remote.stub {
-                onBlocking { shareResource(RESOURCE_ID, permissions, secrets) }.thenReturn(DomainResult.Finished(Unit))
+                on { shareResource(RESOURCE_ID, permissions, secrets) }.thenReturn(DomainResult.Finished(Unit))
             }
 
             val result = repository.shareResource(RESOURCE_ID, permissions, secrets)
@@ -98,7 +98,7 @@ class ShareRepositoryImplTest : KoinTest {
     fun `shareFolder delegates to remote and returns its result`() =
         runTest {
             val permissions = listOf(newPermission())
-            remote.stub { onBlocking { shareFolder(FOLDER_ID, permissions) }.thenReturn(DomainResult.Finished(Unit)) }
+            remote.stub { on { shareFolder(FOLDER_ID, permissions) }.thenReturn(DomainResult.Finished(Unit)) }
 
             val result = repository.shareFolder(FOLDER_ID, permissions)
 

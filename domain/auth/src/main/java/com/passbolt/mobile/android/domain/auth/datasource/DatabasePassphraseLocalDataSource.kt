@@ -23,10 +23,12 @@ package com.passbolt.mobile.android.domain.auth.datasource
  * @since v1.0
  */
 interface DatabasePassphraseLocalDataSource {
-    fun getDatabasePassphrase(userId: String): String?
+    fun getDatabasePassphrase(userId: String): ByteArray?
 
     fun saveDatabasePassphrase(
         userId: String,
         passphrase: String,
     )
+
+    fun removeDatabasePassphrase(userId: String)
 }

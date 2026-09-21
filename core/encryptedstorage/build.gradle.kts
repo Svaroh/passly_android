@@ -7,6 +7,8 @@ dependencies {
     implementation(libs.security)
     implementation(platform(libs.koin.bom))
     implementation(libs.koin)
+
+    androidTestImplementation(libs.android.tests.runner)
 }
 
 android {

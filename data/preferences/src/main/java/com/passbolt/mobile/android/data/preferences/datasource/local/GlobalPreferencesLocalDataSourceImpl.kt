@@ -23,6 +23,7 @@
 
 package com.passbolt.mobile.android.data.preferences.datasource.local
 
+import androidx.core.content.edit
 import com.passbolt.mobile.android.data.preferences.GLOBAL_PREFERENCES_FILE_NAME
 import com.passbolt.mobile.android.data.preferences.KEY_ACCESSIBILITY_POLICIES_CONSENT_GIVEN
 import com.passbolt.mobile.android.data.preferences.KEY_API_FETCH_PAGE_SIZE
@@ -30,6 +31,7 @@ import com.passbolt.mobile.android.data.preferences.KEY_API_FETCH_PAGE_SIZE_MANU
 import com.passbolt.mobile.android.data.preferences.KEY_DEBUG_LOGS_ENABLED
 import com.passbolt.mobile.android.data.preferences.KEY_DEBUG_LOGS_FILE_CREATION_DATE_TIME
 import com.passbolt.mobile.android.data.preferences.KEY_DEBUG_LOGS_LAST_APP_VERSION
+import com.passbolt.mobile.android.data.preferences.KEY_DEPRECATED_OS_WARNING_HIDDEN_FOR_SDK
 import com.passbolt.mobile.android.data.preferences.KEY_IS_AUTH_REQUIRED_ON_EVERY_ENTRY
 import com.passbolt.mobile.android.data.preferences.KEY_IS_HIDE_ROOT_DIALOG_ENABLED
 import com.passbolt.mobile.android.domain.preferences.GlobalPreferencesLocalDataSource
@@ -57,6 +59,8 @@ internal class GlobalPreferencesLocalDataSourceImpl(
         val isApiFetchPageSizeManuallySet = sharedPreferences.getBoolean(KEY_API_FETCH_PAGE_SIZE_MANUAL, false)
         val accessibilityPoliciesConsentGiven =
             sharedPreferences.getBoolean(KEY_ACCESSIBILITY_POLICIES_CONSENT_GIVEN, false)
+        val deprecatedOsWarningHiddenForSdk =
+            sharedPreferences.getInt(KEY_DEPRECATED_OS_WARNING_HIDDEN_FOR_SDK, -1).let { if (it == -1) null else it }
         return GlobalPreferencesUiModel(
             areDebugLogsEnabled = areDebugLogsEnabled,
             debugLogFileCreationDateTime = debugLogsCreationDateTime,
@@ -66,12 +70,13 @@ internal class GlobalPreferencesLocalDataSourceImpl(
             apiFetchPageSize = apiFetchPageSize,
             isApiFetchPageSizeManuallySet = isApiFetchPageSizeManuallySet,
             accessibilityPoliciesConsentGiven = accessibilityPoliciesConsentGiven,
+            deprecatedOsWarningHiddenForSdk = deprecatedOsWarningHiddenForSdk,
         )
     }
 
     override fun updateGlobalPreferences(update: GlobalPreferencesUpdate) {
         val sharedPreferences = encryptedSharedPreferencesFactory.get("$GLOBAL_PREFERENCES_FILE_NAME.xml")
-        with(sharedPreferences.edit()) {
+        sharedPreferences.edit {
             update.areDebugLogsEnabled?.let {
                 putBoolean(KEY_DEBUG_LOGS_ENABLED, it)
             }
@@ -96,7 +101,9 @@ internal class GlobalPreferencesLocalDataSourceImpl(
             update.accessibilityPoliciesConsentGiven?.let {
                 putBoolean(KEY_ACCESSIBILITY_POLICIES_CONSENT_GIVEN, it)
             }
-            apply()
+            update.deprecatedOsWarningHiddenForSdk?.let {
+                putInt(KEY_DEPRECATED_OS_WARNING_HIDDEN_FOR_SDK, it)
+            }
         }
     }
 }

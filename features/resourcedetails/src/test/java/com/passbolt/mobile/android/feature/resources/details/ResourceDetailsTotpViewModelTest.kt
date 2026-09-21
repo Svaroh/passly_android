@@ -95,7 +95,7 @@ class ResourceDetailsTotpViewModelTest : KoinTest {
 
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideOtp() } doReturn
+                on { provideOtp() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -107,7 +107,7 @@ class ResourceDetailsTotpViewModelTest : KoinTest {
 
             val totpParametersProvider: TotpParametersProvider = get()
             totpParametersProvider.stub {
-                onBlocking { provideOtpParameters(any(), any(), any(), any()) } doReturn
+                on { provideOtpParameters(any(), any(), any(), any()) } doReturn
                     OtpParametersResult.OtpParameters(otpValue, secondsValid = 25)
             }
 
@@ -137,7 +137,7 @@ class ResourceDetailsTotpViewModelTest : KoinTest {
 
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideOtp() } doReturn
+                on { provideOtp() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -149,7 +149,7 @@ class ResourceDetailsTotpViewModelTest : KoinTest {
 
             val totpParametersProvider: TotpParametersProvider = get()
             totpParametersProvider.stub {
-                onBlocking { provideOtpParameters(any(), any(), any(), any()) } doReturn
+                on { provideOtpParameters(any(), any(), any(), any()) } doReturn
                     OtpParametersResult.OtpParameters(otpValue, secondsValid = 25)
             }
 
@@ -171,7 +171,7 @@ class ResourceDetailsTotpViewModelTest : KoinTest {
         runTest {
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideOtp() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
+                on { provideOtp() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
             }
 
             viewModel = get()

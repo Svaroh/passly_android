@@ -70,7 +70,6 @@ import com.passbolt.mobile.android.core.ui.topbar.TitleAppBar
 import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.AcceptChangedServerFingerprint
 import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.AccessLogs
 import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.AuthenticateUsingBiometry
-import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.BiometricKeyInvalidated
 import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.ConfirmSetupLeave
 import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.ConnectToExistingAccount
 import com.passbolt.mobile.android.feature.authentication.auth.AuthIntent.DismissConfirmSetupLeave
@@ -189,9 +188,6 @@ internal fun AuthScreen(
                         viewModel.onIntent(AuthIntent.BiometricAuthenticationError(error))
                     },
                     onAuthenticationCancelled = {},
-                    onKeyPermanentlyInvalidated = {
-                        viewModel.onIntent(BiometricKeyInvalidated)
-                    },
                 )
             }
             is HideKeyboard -> focusManager.clearFocus()
@@ -231,13 +227,14 @@ internal fun AuthScreen(
 }
 
 @Composable
-private fun AuthScreen(
+fun AuthScreen(
     state: AuthState,
     onIntent: (AuthIntent) -> Unit,
     snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        modifier = Modifier.imePadding(),
+        modifier = modifier.imePadding(),
         topBar = {
             TitleAppBar(
                 title = getTitleText(LocalContext.current, state.authReason),

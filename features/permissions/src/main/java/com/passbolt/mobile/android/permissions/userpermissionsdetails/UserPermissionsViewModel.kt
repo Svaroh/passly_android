@@ -3,6 +3,8 @@ package com.passbolt.mobile.android.permissions.userpermissionsdetails
 import androidx.lifecycle.viewModelScope
 import com.passbolt.mobile.android.core.compose.SideEffectViewModel
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
+import com.passbolt.mobile.android.domain.users.mapper.toUserModel
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalUserUseCase
 import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsIntent.CancelPermissionDelete
 import com.passbolt.mobile.android.permissions.userpermissionsdetails.UserPermissionsIntent.ConfirmPermissionDelete
@@ -22,7 +24,9 @@ import kotlinx.coroutines.launch
 class UserPermissionsViewModel(
     mode: PermissionsMode,
     permission: UserPermissionModel,
+    fromSnapshot: Boolean,
     private val getLocalUserUseCase: GetLocalUserUseCase,
+    private val getPermissionsSnapshotUseCase: GetPermissionsSnapshotUseCase,
     private val coroutineLaunchContext: CoroutineLaunchContext,
 ) : SideEffectViewModel<UserPermissionsState, UserPermissionsSideEffect>(
         initialState =
@@ -32,7 +36,11 @@ class UserPermissionsViewModel(
             ),
     ) {
     init {
-        loadUserDetails(permission.user.userId)
+        if (fromSnapshot) {
+            loadSnapshotUserDetails(permission.user.userId)
+        } else {
+            loadUserDetails(permission.user.userId)
+        }
     }
 
     fun onIntent(intent: UserPermissionsIntent) {
@@ -43,6 +51,19 @@ class UserPermissionsViewModel(
             DeletePermission -> updateViewState { copy(isDeleteConfirmationVisible = true) }
             CancelPermissionDelete -> updateViewState { copy(isDeleteConfirmationVisible = false) }
             ConfirmPermissionDelete -> deletePermission()
+        }
+    }
+
+    private fun loadSnapshotUserDetails(userId: String) {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            val snapshot = getPermissionsSnapshotUseCase.execute(Unit).snapshot
+            when {
+                // the snapshot is not available (i.e. after process death) - close instead of showing unconfirmed
+                snapshot == null -> emitSideEffect(NavigateBack)
+                userId in snapshot.users -> updateViewState { copy(user = requireNotNull(snapshot.users[userId]).toUserModel()) }
+                // not part of the snapshot - a recipient added from the local search during confirmation
+                else -> loadUserDetails(userId)
+            }
         }
     }
 

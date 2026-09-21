@@ -174,7 +174,6 @@ private fun SharedFolderItemPreview() {
             isShared = true,
             subItemsCount = 12,
             path = "Parent Folder",
-            searchCriteria = "Shared Team Folder",
         )
 
     MaterialTheme {

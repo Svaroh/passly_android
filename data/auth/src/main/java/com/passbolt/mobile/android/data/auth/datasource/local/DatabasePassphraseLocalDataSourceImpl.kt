@@ -29,9 +29,9 @@ import com.passbolt.mobile.android.encryptedstorage.EncryptedSharedPreferencesFa
 internal class DatabasePassphraseLocalDataSourceImpl(
     private val encryptedSharedPreferencesFactory: EncryptedSharedPreferencesFactory,
 ) : DatabasePassphraseLocalDataSource {
-    override fun getDatabasePassphrase(userId: String): String? {
+    override fun getDatabasePassphrase(userId: String): ByteArray? {
         val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
-        return sharedPreferences.getString(Constants.DATABASE_PASSPHRASE_KEY, null)
+        return sharedPreferences.getString(Constants.DATABASE_PASSPHRASE_KEY, null)?.toByteArray(Charsets.UTF_8)
     }
 
     override fun saveDatabasePassphrase(
@@ -41,6 +41,13 @@ internal class DatabasePassphraseLocalDataSourceImpl(
         val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
         sharedPreferences.edit {
             putString(Constants.DATABASE_PASSPHRASE_KEY, passphrase)
+        }
+    }
+
+    override fun removeDatabasePassphrase(userId: String) {
+        val sharedPreferences = encryptedSharedPreferencesFactory.get(fileName(userId))
+        sharedPreferences.edit {
+            remove(Constants.DATABASE_PASSPHRASE_KEY)
         }
     }
 

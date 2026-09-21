@@ -53,7 +53,7 @@ class CanCreateResourceUseCase(
                         .allowCreationOfV5Resources
 
                 if (!v5CreationAllowed) {
-                    return Output(canCreateResource = false)
+                    Output(canCreateResource = false)
                 } else {
                     val hasEncryptionKeys =
                         getLocalMetadataKeysUseCase

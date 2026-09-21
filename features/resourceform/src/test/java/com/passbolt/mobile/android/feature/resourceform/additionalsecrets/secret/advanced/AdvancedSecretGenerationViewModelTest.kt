@@ -79,13 +79,13 @@ class AdvancedSecretGenerationViewModelTest : KoinTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         mockSecretGenerator.stub {
-            onBlocking { generatePassword(any()) }.thenReturn(
+            on { generatePassword(any()) }.thenReturn(
                 SecretGenerator.SecretGenerationResult.Success(
                     password = "pwd1!".map { Codepoint(it.code) },
                     entropy = 100.0,
                 ),
             )
-            onBlocking { generatePassphrase(any()) }.thenReturn(
+            on { generatePassphrase(any()) }.thenReturn(
                 SecretGenerator.SecretGenerationResult.Success(
                     password = "phrase".map { Codepoint(it.code) },
                     entropy = 100.0,
@@ -222,7 +222,7 @@ class AdvancedSecretGenerationViewModelTest : KoinTest {
     fun `low entropy generation result clears preview and exposes minimum entropy`() =
         runTest {
             mockSecretGenerator.stub {
-                onBlocking { generatePassword(any()) }.thenReturn(
+                on { generatePassword(any()) }.thenReturn(
                     SecretGenerator.SecretGenerationResult.FailedToGenerateLowEntropy(80),
                 )
             }
@@ -258,7 +258,7 @@ class AdvancedSecretGenerationViewModelTest : KoinTest {
     fun `save preferences does not emit when preview is empty`() =
         runTest {
             mockSecretGenerator.stub {
-                onBlocking { generatePassword(any()) }.thenReturn(
+                on { generatePassword(any()) }.thenReturn(
                     SecretGenerator.SecretGenerationResult.FailedToGenerateLowEntropy(80),
                 )
             }

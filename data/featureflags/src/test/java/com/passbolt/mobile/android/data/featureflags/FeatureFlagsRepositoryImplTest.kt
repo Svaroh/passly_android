@@ -79,7 +79,7 @@ class FeatureFlagsRepositoryImplTest : KoinTest {
     @Test
     fun `getFeatureFlags returns local value and never calls remote`() =
         runTest {
-            local.stub { onBlocking { getFeatureFlags(USER_ID) }.thenReturn(DomainResult.Finished(featureFlags)) }
+            local.stub { on { getFeatureFlags(USER_ID) }.thenReturn(DomainResult.Finished(featureFlags)) }
 
             val result = repository.getFeatureFlags(USER_ID)
 
@@ -90,7 +90,7 @@ class FeatureFlagsRepositoryImplTest : KoinTest {
     @Test
     fun `refreshFeatureFlags with remote success returns success and writes to local`() =
         runTest {
-            remote.stub { onBlocking { getFeatureFlags() }.thenReturn(DomainResult.Finished(featureFlags)) }
+            remote.stub { on { getFeatureFlags() }.thenReturn(DomainResult.Finished(featureFlags)) }
 
             val result = repository.refreshFeatureFlags(USER_ID)
 
@@ -102,7 +102,7 @@ class FeatureFlagsRepositoryImplTest : KoinTest {
     fun `refreshFeatureFlags with remote failure returns failure and does not write to local`() =
         runTest {
             val failure = DomainResult.Incomplete.Error(UNKNOWN, "boom")
-            remote.stub { onBlocking { getFeatureFlags() }.thenReturn(failure) }
+            remote.stub { on { getFeatureFlags() }.thenReturn(failure) }
 
             val result = repository.refreshFeatureFlags(USER_ID)
 

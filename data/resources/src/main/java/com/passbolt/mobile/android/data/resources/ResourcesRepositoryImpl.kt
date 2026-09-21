@@ -54,6 +54,8 @@ internal class ResourcesRepositoryImpl(
 
     override suspend fun deleteResource(resourceId: String) = remoteDataSource.deleteResource(resourceId)
 
+    override suspend fun fetchResourcePermissions(resourceId: String) = remoteDataSource.getResourcePermissions(resourceId)
+
     override suspend fun getLocalResource(
         resourceId: String,
         userId: String,

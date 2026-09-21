@@ -25,6 +25,7 @@ package com.passbolt.mobile.android.domain.metadata.interactor
 
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.google.common.truth.Truth.assertThat
+import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
 import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
@@ -53,6 +54,7 @@ import org.koin.test.KoinTestRule
 import org.koin.test.inject
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.never
 import org.mockito.kotlin.reset
@@ -91,14 +93,14 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
         }
 
         mockMetadataKeysInteractor.stub {
-            onBlocking { fetchAndSaveMetadataKeys() } doReturn MetadataKeysInteractor.Output.Success
+            on { fetchAndSaveMetadataKeys() } doReturn MetadataKeysInteractor.Output.Success
         }
         mockUpdateMetadataPrivateKeyUseCase.stub {
-            onBlocking { execute(any()) } doReturn UpdateMetadataPrivateKeyUseCase.Output.Success
+            on { execute(any()) } doReturn UpdateMetadataPrivateKeyUseCase.Output.Success
         }
 
         mockGetLocalUserUseCase.stub {
-            onBlocking { execute(GetLocalUserUseCase.Input(GRACE_USER_ID)) } doReturn
+            on { execute(GetLocalUserUseCase.Input(GRACE_USER_ID)) } doReturn
                 GetLocalUserUseCase.Output(
                     UserUiModel(
                         id = GRACE_USER_ID,
@@ -125,7 +127,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
                             ),
                     ),
                 )
-            onBlocking { execute(GetLocalUserUseCase.Input(ADMIN_USER_ID)) } doReturn
+            on { execute(GetLocalUserUseCase.Input(ADMIN_USER_ID)) } doReturn
                 GetLocalUserUseCase.Output(
                     UserUiModel(
                         id = ADMIN_USER_ID,
@@ -159,18 +161,16 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
         mockPrivateKeyRepository.stub {
             on { getPrivateKey(any()) } doReturn PrivateKey(String(gracePrivateKey))
         }
-        mockPassphraseMemoryCache.stub {
-            on { get() } doReturn PotentialPassphrase.Passphrase("grace@passbolt.com".toByteArray())
-        }
+        mockPassphraseMemoryCache.stubFreshCopiesOf("grace@passbolt.com".toByteArray())
 
         mockSaveTrustedMetadataKeyUseCase.stub {
-            onBlocking { execute(any()) } doReturn Unit
+            on { execute(any()) } doReturn Unit
         }
         mockDeleteTrustedMetadataKeyUseCase.stub {
-            onBlocking { execute(any()) } doReturn Unit
+            on { execute(any()) } doReturn Unit
         }
         mockGetSelectedAccountDataUseCase.stub {
-            onBlocking { execute(any()) } doReturn
+            on { execute(any()) } doReturn
                 GetSelectedAccountDataUseCase.Output(
                     firstName = "Grace",
                     lastName = "Hopper",
@@ -193,10 +193,10 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
     fun correctOutputShouldBeReturnedWhenThereIsNoKeyServerSideAndNoKeyLocally() =
         runTest {
             mockGetLocalMetadataKeysUseCase.stub {
-                onBlocking { execute(any()) } doReturn emptyList()
+                on { execute(any()) } doReturn emptyList()
             }
             mockGetTrustedMetadataKeyUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetTrustedMetadataKeyUseCase.Output.NoTrustedKey
+                on { execute(any()) } doReturn GetTrustedMetadataKeyUseCase.Output.NoTrustedKey
             }
 
             val result = metadataPrivateKeysInteractor.verifyMetadataPrivateKey()
@@ -210,10 +210,10 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
     fun correctOutputShouldBeReturnedWhenThereIsNoKeyServerSideAndThereIsAKeyLocally() =
         runTest {
             mockGetLocalMetadataKeysUseCase.stub {
-                onBlocking { execute(any()) } doReturn emptyList()
+                on { execute(any()) } doReturn emptyList()
             }
             mockGetTrustedMetadataKeyUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     GetTrustedMetadataKeyUseCase.Output.TrustedKey(
                         id = UUID.randomUUID(),
                         userId = UUID.randomUUID(),
@@ -239,10 +239,86 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
         }
 
     @Test
+    fun correctOutputShouldBeReturnedWhenBackendKeyIsNotSharedWithCurrentUserAndNoKeyLocally() =
+        runTest {
+            mockGetLocalMetadataKeysUseCase.stub {
+                on { execute(any()) } doReturn
+                    listOf(
+                        ParsedMetadataKeyModel(
+                            id = UUID.randomUUID(),
+                            armoredKey = "",
+                            fingerprint = "",
+                            modified = ZonedDateTime.now(),
+                            expired = null,
+                            deleted = null,
+                            metadataPrivateKeys = emptyList(),
+                        ),
+                    )
+            }
+            mockGetTrustedMetadataKeyUseCase.stub {
+                on { execute(any()) } doReturn GetTrustedMetadataKeyUseCase.Output.NoTrustedKey
+            }
+
+            val result = metadataPrivateKeysInteractor.verifyMetadataPrivateKey()
+
+            verify(mockSaveTrustedMetadataKeyUseCase, never()).execute(any())
+            verify(mockUpdateMetadataPrivateKeyUseCase, never()).execute(any())
+            assertThat(result).isInstanceOf(MetadataPrivateKeysInteractor.Output.NoMetadataKey::class.java)
+        }
+
+    @Test
+    fun correctOutputShouldBeReturnedWhenBackendKeyIsNotSharedWithCurrentUserAndThereIsAKeyLocally() =
+        runTest {
+            mockGetLocalMetadataKeysUseCase.stub {
+                on { execute(any()) } doReturn
+                    listOf(
+                        ParsedMetadataKeyModel(
+                            id = UUID.randomUUID(),
+                            armoredKey = "",
+                            fingerprint = "",
+                            modified = ZonedDateTime.now(),
+                            expired = null,
+                            deleted = null,
+                            metadataPrivateKeys = emptyList(),
+                        ),
+                    )
+            }
+            mockGetTrustedMetadataKeyUseCase.stub {
+                on { execute(any()) } doReturn
+                    GetTrustedMetadataKeyUseCase.Output.TrustedKey(
+                        id = UUID.randomUUID(),
+                        userId = UUID.fromString(GRACE_USER_ID),
+                        keyData = "",
+                        passphrase = "",
+                        created = ZonedDateTime.now(),
+                        createdBy = UUID.fromString(GRACE_USER_ID),
+                        modified = ZonedDateTime.now(),
+                        modifiedBy = UUID.fromString(GRACE_USER_ID),
+                        keyPgpMessage = "",
+                        signingKeyFingerprint = "63452C7A0AE6FAE8C8C309640BD9E2409BC6A569",
+                        signatureCreationTimestampSeconds = GRACE_SIGNED_PGP_MESSAGE_SIGNATURE_TIME_SECONDS,
+                        signedUsername = "grace@passbolt.com",
+                        signedName = "Grace Hopper",
+                    )
+            }
+
+            val result = metadataPrivateKeysInteractor.verifyMetadataPrivateKey()
+
+            verify(mockSaveTrustedMetadataKeyUseCase, never()).execute(any())
+            verify(mockUpdateMetadataPrivateKeyUseCase, never()).execute(any())
+            assertThat(result).isInstanceOf(MetadataPrivateKeysInteractor.Output.TrustedKeyDeleted::class.java)
+            with(result as MetadataPrivateKeysInteractor.Output.TrustedKeyDeleted) {
+                assertThat(keyFingerprint).isEqualTo("63452C7A0AE6FAE8C8C309640BD9E2409BC6A569")
+                assertThat(signedUsername).isEqualTo("grace@passbolt.com")
+                assertThat(signedName).isEqualTo("Grace Hopper")
+            }
+        }
+
+    @Test
     fun correctOutputShouldBeReturnedWhenThereIsBackendKeySignedByCurrentUserAndNoLocalKey() =
         runTest {
             mockGetLocalMetadataKeysUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     listOf(
                         ParsedMetadataKeyModel(
                             id = UUID.randomUUID(),
@@ -271,7 +347,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
                     )
             }
             mockGetTrustedMetadataKeyUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetTrustedMetadataKeyUseCase.Output.NoTrustedKey
+                on { execute(any()) } doReturn GetTrustedMetadataKeyUseCase.Output.NoTrustedKey
             }
 
             val result = metadataPrivateKeysInteractor.verifyMetadataPrivateKey()
@@ -342,7 +418,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
     fun correctOutputShouldBeReturnedWhenThereIsBackendKeyNotSignedByCurrentUserAndNoLocalKey() =
         runTest {
             mockGetLocalMetadataKeysUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     listOf(
                         ParsedMetadataKeyModel(
                             id = UUID.randomUUID(),
@@ -371,7 +447,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
                     )
             }
             mockGetTrustedMetadataKeyUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetTrustedMetadataKeyUseCase.Output.NoTrustedKey
+                on { execute(any()) } doReturn GetTrustedMetadataKeyUseCase.Output.NoTrustedKey
             }
 
             val result = metadataPrivateKeysInteractor.verifyMetadataPrivateKey()
@@ -401,7 +477,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
     fun correctOutputShouldBeReturnedWhenThereIsMatchingBackendAndLocalKey() =
         runTest {
             mockGetLocalMetadataKeysUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     listOf(
                         ParsedMetadataKeyModel(
                             id = UUID.randomUUID(),
@@ -430,7 +506,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
                     )
             }
             mockGetTrustedMetadataKeyUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     GetTrustedMetadataKeyUseCase.Output.TrustedKey(
                         id = UUID.randomUUID(),
                         userId = UUID.fromString(GRACE_USER_ID),
@@ -459,7 +535,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
     fun correctOutputShouldBeReturnedWhenThereIsBackendAndLocalKeyAndBackendKeyIsNotSigned() =
         runTest {
             mockGetLocalMetadataKeysUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     listOf(
                         ParsedMetadataKeyModel(
                             id = UUID.randomUUID(),
@@ -488,7 +564,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
                     )
             }
             mockGetTrustedMetadataKeyUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     GetTrustedMetadataKeyUseCase.Output.TrustedKey(
                         id = UUID.randomUUID(),
                         userId = UUID.fromString(GRACE_USER_ID),
@@ -531,7 +607,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
     fun correctOutputShouldBeReturnedWhenThereIsSignedBackendAndLocalKeyButBackendKeyIsOlder() =
         runTest {
             mockGetLocalMetadataKeysUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     listOf(
                         ParsedMetadataKeyModel(
                             id = UUID.randomUUID(),
@@ -560,7 +636,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
                     )
             }
             mockGetTrustedMetadataKeyUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     GetTrustedMetadataKeyUseCase.Output.TrustedKey(
                         id = UUID.randomUUID(),
                         userId = UUID.fromString(GRACE_USER_ID),
@@ -603,7 +679,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
     fun correctOutputShouldBeReturnedWhenThereIsSignedBackendAndLocalKeyButBackendKeyIsYounger() =
         runTest {
             mockGetLocalMetadataKeysUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     listOf(
                         ParsedMetadataKeyModel(
                             id = UUID.randomUUID(),
@@ -632,7 +708,7 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
                     )
             }
             mockGetTrustedMetadataKeyUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     GetTrustedMetadataKeyUseCase.Output.TrustedKey(
                         id = UUID.randomUUID(),
                         userId = UUID.fromString(GRACE_USER_ID),
@@ -671,6 +747,12 @@ class MetadataPrivateKeysInteractorTest : KoinTest {
             verify(mockUpdateMetadataPrivateKeyUseCase, never()).execute(any())
             assertThat(result).isInstanceOf(MetadataPrivateKeysInteractor.Output.KeyIsTrusted::class.java)
         }
+
+    private fun PassphraseMemoryCache.stubFreshCopiesOf(passphrase: ByteArray) {
+        stub {
+            on { get() } doAnswer { PotentialPassphrase.Passphrase(passphrase.copyOf()) }
+        }
+    }
 
     private companion object {
         private const val GRACE_USER_ID = "640ebc06-5ec1-5322-a1ae-6120ed2f3a74"

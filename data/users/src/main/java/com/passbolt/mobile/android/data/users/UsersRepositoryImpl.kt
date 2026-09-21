@@ -37,6 +37,8 @@ internal class UsersRepositoryImpl(
 
     override suspend fun getUsers(hasAccessTo: List<String>?): DomainResult<List<UserProfile>> = remoteDataSource.getUsers(hasAccessTo)
 
+    override suspend fun getUsersByIds(userIds: List<String>): DomainResult<List<UserProfile>> = remoteDataSource.getUsersByIds(userIds)
+
     override suspend fun getLocalUser(
         selectedAccountId: String,
         userId: String,

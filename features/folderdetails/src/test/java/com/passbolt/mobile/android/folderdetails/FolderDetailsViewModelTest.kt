@@ -123,22 +123,22 @@ class FolderDetailsViewModelTest : KoinTest {
 
         val getLocalFolderDetailsUseCase = get<GetLocalFolderDetailsUseCase>()
         getLocalFolderDetailsUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalFolderDetailsUseCase.Output(testFolder)
+            on { execute(any()) } doReturn GetLocalFolderDetailsUseCase.Output(testFolder)
         }
 
         val getLocalFolderLocationUseCase = get<GetLocalFolderLocationUseCase>()
         getLocalFolderLocationUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalFolderLocationUseCase.Output(testParentFolders)
+            on { execute(any()) } doReturn GetLocalFolderLocationUseCase.Output(testParentFolders)
         }
 
         val getLocalFolderPermissionsUseCase = get<GetLocalFolderPermissionsUseCase>()
         getLocalFolderPermissionsUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalFolderPermissionsUseCase.Output(testPermissions)
+            on { execute(any()) } doReturn GetLocalFolderPermissionsUseCase.Output(testPermissions)
         }
 
         val getRbacRulesUseCase = get<GetRbacRulesUseCase>()
         getRbacRulesUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetRbacRulesUseCase.Output(testRbacModelWithPermissions)
+            on { execute(any()) } doReturn GetRbacRulesUseCase.Output(testRbacModelWithPermissions)
         }
     }
 
@@ -170,7 +170,7 @@ class FolderDetailsViewModelTest : KoinTest {
         runTest {
             val getRbacRulesUseCase = get<GetRbacRulesUseCase>()
             getRbacRulesUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetRbacRulesUseCase.Output(testRbacModelWithoutPermissions)
+                on { execute(any()) } doReturn GetRbacRulesUseCase.Output(testRbacModelWithoutPermissions)
             }
 
             viewModel = get { parametersOf(testFolder.folderId) }
@@ -290,7 +290,7 @@ class FolderDetailsViewModelTest : KoinTest {
         runTest {
             val getLocalFolderDetailsUseCase = get<GetLocalFolderDetailsUseCase>()
             getLocalFolderDetailsUseCase.stub {
-                onBlocking { execute(any()) } doThrow IllegalStateException("The query result was empty")
+                on { execute(any()) } doThrow IllegalStateException("The query result was empty")
             }
 
             viewModel = get { parametersOf(testFolder.folderId) }

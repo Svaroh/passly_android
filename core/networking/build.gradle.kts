@@ -18,6 +18,8 @@ dependencies {
     implementation(platform(libs.koin.bom))
     implementation(libs.koin)
     implementation(libs.gson)
+
+    testImplementation(libs.mockwebserver)
 }
 
 android {

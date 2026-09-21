@@ -27,6 +27,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.passbolt.mobile.android.commontest.TestCoroutineLaunchContext
 import com.passbolt.mobile.android.core.mvp.coroutinecontext.CoroutineLaunchContext
+import com.passbolt.mobile.android.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalUserUseCase
 import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.GoBack
 import com.passbolt.mobile.android.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.Initialize
@@ -70,6 +71,7 @@ class GroupMemberDetailsViewModelTest : KoinTest {
                 listOf(
                     module {
                         single { mock<GetLocalUserUseCase>() }
+                        single { mock<GetPermissionsSnapshotUseCase>() }
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                         factoryOf(::GroupMemberDetailsViewModel)
                     },
@@ -87,7 +89,7 @@ class GroupMemberDetailsViewModelTest : KoinTest {
 
         val getLocalUserUseCase = get<GetLocalUserUseCase>()
         getLocalUserUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalUserUseCase.Output(testUser)
+            on { execute(any()) } doReturn GetLocalUserUseCase.Output(testUser)
         }
     }
 
@@ -134,7 +136,7 @@ class GroupMemberDetailsViewModelTest : KoinTest {
 
             val getLocalUserUseCase = get<GetLocalUserUseCase>()
             getLocalUserUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetLocalUserUseCase.Output(userWithEmptyFields)
+                on { execute(any()) } doReturn GetLocalUserUseCase.Output(userWithEmptyFields)
             }
 
             viewModel = get()

@@ -42,6 +42,7 @@ import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector
 import com.passbolt.mobile.android.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetViewModel
 import com.passbolt.mobile.android.gopenpgp.OpenPgp
 import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpError
+import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpFailure
 import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -174,7 +175,7 @@ class KeyInspectorBottomSheetViewModelTest : KoinTest {
 
             val mockOpenPgp = get<OpenPgp>()
             whenever(mockOpenPgp.generatePublicKey(mockPrivateKey)) doReturn
-                OpenPgpResult.Error(OpenPgpError(errorMessage))
+                OpenPgpResult.Error(OpenPgpFailure.Generic(OpenPgpError(errorMessage)))
 
             viewModel = get()
             viewModel.onIntent(ExportPublicKey)

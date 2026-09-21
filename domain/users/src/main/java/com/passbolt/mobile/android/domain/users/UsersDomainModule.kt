@@ -26,6 +26,7 @@ package com.passbolt.mobile.android.domain.users
 import com.passbolt.mobile.android.domain.users.profile.UserProfileInteractor
 import com.passbolt.mobile.android.domain.users.profile.UserProfileRefreshTrackingFlow
 import com.passbolt.mobile.android.domain.users.usecase.FetchCurrentUserUseCase
+import com.passbolt.mobile.android.domain.users.usecase.FetchUsersByIdsUseCase
 import com.passbolt.mobile.android.domain.users.usecase.FetchUsersUseCase
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalCurrentUserUseCase
 import com.passbolt.mobile.android.domain.users.usecase.GetLocalUserUseCase
@@ -38,6 +39,7 @@ val usersDomainModule =
     module {
         singleOf(::FetchCurrentUserUseCase)
         singleOf(::FetchUsersUseCase)
+        singleOf(::FetchUsersByIdsUseCase)
         singleOf(::GetLocalUsersUseCase)
         singleOf(::GetLocalUserUseCase)
         singleOf(::GetLocalCurrentUserUseCase)

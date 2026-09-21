@@ -10,6 +10,8 @@ import com.passbolt.mobile.android.domain.metadata.interactor.MetadataPrivateKey
 import com.passbolt.mobile.android.domain.resources.actions.ResourceCreateActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractor
 import com.passbolt.mobile.android.domain.resources.actions.ResourceUpdateActionsInteractorFactory
+import com.passbolt.mobile.android.domain.resources.usecase.CreatePermissionsConfirmationInteractor
+import com.passbolt.mobile.android.domain.resources.usecase.EditPermissionsConfirmationInteractor
 import com.passbolt.mobile.android.domain.resources.usecase.GetDefaultCreateContentTypeUseCase
 import com.passbolt.mobile.android.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
 import com.passbolt.mobile.android.jsonmodel.JSON_MODEL_GSON
@@ -28,6 +30,8 @@ internal val mockResourceUpdateActionsInteractor = mock<ResourceUpdateActionsInt
 internal val mockResourceUpdateActionsInteractorFactory = ResourceUpdateActionsInteractorFactory { mockResourceUpdateActionsInteractor }
 internal val mockGetDefaultCreateContentTypeUseCase = mock<GetDefaultCreateContentTypeUseCase>()
 internal val mockMetadataPrivateKeysHelperInteractor = mock<MetadataPrivateKeysHelperInteractor>()
+internal val mockEditPermissionsConfirmationInteractor = mock<EditPermissionsConfirmationInteractor>()
+internal val mockCreatePermissionsConfirmationInteractor = mock<CreatePermissionsConfirmationInteractor>()
 
 internal val testScanOtpSuccessModule =
     module {
@@ -36,6 +40,8 @@ internal val testScanOtpSuccessModule =
         single { mockIdToSlugMappingProvider }
         single { mockGetDefaultCreateContentTypeUseCase }
         single { mockMetadataPrivateKeysHelperInteractor }
+        single { mockEditPermissionsConfirmationInteractor }
+        single { mockCreatePermissionsConfirmationInteractor }
         singleOf(::SessionRefreshTrackingFlow)
         factory { params ->
             ScanOtpSuccessViewModel(
@@ -45,6 +51,8 @@ internal val testScanOtpSuccessModule =
                 getDefaultCreateContentTypeUseCase = get(),
                 metadataPrivateKeysHelperInteractor = get(),
                 resourceUpdateActionsInteractorFactory = get(),
+                editPermissionsConfirmationInteractor = get(),
+                createPermissionsConfirmationInteractor = get(),
             )
         }
         single(named(JSON_MODEL_GSON)) { Gson() }

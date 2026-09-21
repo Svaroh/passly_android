@@ -8,7 +8,9 @@ fun Module.userPermissionsModule() {
         UserPermissionsViewModel(
             mode = params.get(),
             permission = params.get(),
+            fromSnapshot = params.get(),
             getLocalUserUseCase = get(),
+            getPermissionsSnapshotUseCase = get(),
             coroutineLaunchContext = get(),
         )
     }

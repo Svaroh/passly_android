@@ -29,6 +29,7 @@ import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSide
 import com.passbolt.mobile.android.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.WRONG_CODE
 import kotlinx.coroutines.delay
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 class EnterTotpViewModel(
     hasOtherProvider: Boolean,
@@ -114,7 +115,7 @@ class EnterTotpViewModel(
     private fun totpError() {
         launch {
             updateViewState { copy(otpTextColor = EnterTotpState.OtpTextColor.ERROR) }
-            delay(CLEAR_INPUT_DELAY_MILLIS)
+            delay(CLEAR_INPUT_DELAY)
             updateViewState { copy(otpTextColor = EnterTotpState.OtpTextColor.DEFAULT) }
             emitSideEffect(ClearOtp)
         }
@@ -131,6 +132,6 @@ class EnterTotpViewModel(
     }
 
     private companion object {
-        private const val CLEAR_INPUT_DELAY_MILLIS = 1000L
+        private val CLEAR_INPUT_DELAY = 1000L.milliseconds
     }
 }

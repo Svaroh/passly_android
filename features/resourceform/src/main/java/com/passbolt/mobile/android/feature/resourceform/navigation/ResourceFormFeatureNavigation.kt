@@ -15,6 +15,7 @@ import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavi
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.PinCodeForm
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.TotpAdvancedSettingsForm
 import com.passbolt.mobile.android.core.navigation.compose.keys.ResourceFormNavigationKey.TotpForm
+import com.passbolt.mobile.android.core.navigation.compose.results.PermissionsConfirmedResult
 import com.passbolt.mobile.android.core.navigation.compose.results.ResultEffect
 import com.passbolt.mobile.android.core.navigation.compose.results.ScanOtpResultEvent
 import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.customfields.CustomFieldsFormScreen
@@ -28,6 +29,7 @@ import com.passbolt.mobile.android.feature.resourceform.additionalsecrets.totp.a
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.AdditionalUrisResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.AdvancedSecretGenerationResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.AppearanceResult
+import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.ConfirmedPermissionsResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.CustomFieldsResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.DescriptionResult
 import com.passbolt.mobile.android.feature.resourceform.main.ResourceFormIntent.NoteResult
@@ -94,6 +96,9 @@ class ResourceFormFeatureNavigation : FeatureModuleNavigation {
                     viewModel.onIntent(
                         ScanOtpResult(result.isManualCreationChosen, result.scannedTotp),
                     )
+                }
+                ResultEffect<PermissionsConfirmedResult> { result ->
+                    viewModel.onIntent(ConfirmedPermissionsResult(result.permissions))
                 }
 
                 PassboltTheme {

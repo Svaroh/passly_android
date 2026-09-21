@@ -34,6 +34,8 @@ import com.passbolt.mobile.android.domain.auth.usecase.FetchServerPublicPgpKeyUs
 import com.passbolt.mobile.android.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
 import com.passbolt.mobile.android.domain.auth.usecase.SaveServerPublicRsaKeyUseCase
 import com.passbolt.mobile.android.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error
+import com.passbolt.mobile.android.gopenpgp.OpenPgp
+import com.passbolt.mobile.android.gopenpgp.exception.OpenPgpResult
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -45,6 +47,8 @@ import org.koin.test.KoinTestRule
 import org.koin.test.inject
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import kotlin.time.Duration
 import kotlin.time.TimedValue
@@ -55,6 +59,7 @@ class GetAndVerifyServerKeysAndTimeInteractorTest : KoinTest {
     private val mockIsServerFingerprintCorrectUseCase = mock<IsServerFingerprintCorrectUseCase>()
     private val mockGetAccountDataUseCase = mock<GetAccountDataUseCase>()
     private val mockGopenPgpTimeUpdater = mock<GopenPgpTimeUpdater>()
+    private val mockOpenPgp = mock<OpenPgp>()
     private val interactor: GetAndVerifyServerKeysAndTimeInteractor by inject()
 
     @get:Rule
@@ -68,6 +73,7 @@ class GetAndVerifyServerKeysAndTimeInteractorTest : KoinTest {
                     factory { mockIsServerFingerprintCorrectUseCase }
                     factory { mockGetAccountDataUseCase }
                     factory { mockGopenPgpTimeUpdater }
+                    factory { mockOpenPgp }
                     factoryOf(::GetAndVerifyServerKeysAndTimeInteractor)
                 },
             )
@@ -110,9 +116,73 @@ class GetAndVerifyServerKeysAndTimeInteractorTest : KoinTest {
             ServerKeysResult(
                 timedPgp = TimedValue(FetchServerPublicPgpKeyUseCase.Output.Failure(incomplete), Duration.ZERO),
                 rsa = FetchServerPublicRsaKeyUseCase.Output.Failure(incomplete),
-                deviceTimeAtFetchSeconds = 0L,
+                deviceTimeAtFetchMillis = 0L,
             ),
         )
+    }
+
+    @Test
+    fun `valid computed fingerprint maps to success`() =
+        runTest {
+            stubKeyFetchSuccess(reportedFingerprint = COMPUTED_FINGERPRINT_UPPER)
+            whenever(mockOpenPgp.getKeyFingerprint(PGP_KEY))
+                .thenReturn(OpenPgpResult.Result(COMPUTED_FINGERPRINT_LOWER))
+            whenever(mockIsServerFingerprintCorrectUseCase.execute(any()))
+                .thenReturn(IsServerFingerprintCorrectUseCase.Output(true))
+
+            var success: GetAndVerifyServerKeysAndTimeInteractor.Success? = null
+            interactor.getAndVerifyServerKeys(USER_ID, onError = { }, onSuccess = { success = it })
+
+            assertThat(success?.pgpKeyFingerprint).isEqualTo(COMPUTED_FINGERPRINT_UPPER)
+            verify(mockSaveServerPublicRsaKeyUseCase).execute(any())
+        }
+
+    @Test
+    fun `reported fingerprint not matching key data maps to IncorrectServerFingerprint`() =
+        runTest {
+            stubKeyFetchSuccess(reportedFingerprint = "0000000000000000000000000000000000000000")
+            whenever(mockOpenPgp.getKeyFingerprint(PGP_KEY))
+                .thenReturn(OpenPgpResult.Result(COMPUTED_FINGERPRINT_LOWER))
+
+            val error = captureError()
+
+            assertThat(error).isEqualTo(Error.IncorrectServerFingerprint(COMPUTED_FINGERPRINT_UPPER))
+            verify(mockSaveServerPublicRsaKeyUseCase, never()).execute(any())
+        }
+
+    @Test
+    fun `computed fingerprint not matching pinned one maps to IncorrectServerFingerprint`() =
+        runTest {
+            stubKeyFetchSuccess(reportedFingerprint = COMPUTED_FINGERPRINT_UPPER)
+            whenever(mockOpenPgp.getKeyFingerprint(PGP_KEY))
+                .thenReturn(OpenPgpResult.Result(COMPUTED_FINGERPRINT_LOWER))
+            whenever(mockIsServerFingerprintCorrectUseCase.execute(any()))
+                .thenReturn(IsServerFingerprintCorrectUseCase.Output(false))
+
+            val error = captureError()
+
+            assertThat(error).isEqualTo(Error.IncorrectServerFingerprint(COMPUTED_FINGERPRINT_UPPER))
+            verify(mockSaveServerPublicRsaKeyUseCase, never()).execute(any())
+        }
+
+    private suspend fun stubKeyFetchSuccess(reportedFingerprint: String) {
+        whenever(mockServerKeysWarmup.fetchOrAwait(USER_ID)).thenReturn(
+            ServerKeysResult(
+                timedPgp =
+                    TimedValue(
+                        FetchServerPublicPgpKeyUseCase.Output.Success(
+                            publicKey = PGP_KEY,
+                            fingerprint = reportedFingerprint,
+                            serverTime = 0L,
+                        ),
+                        Duration.ZERO,
+                    ),
+                rsa = FetchServerPublicRsaKeyUseCase.Output.Success(RSA_KEY),
+                deviceTimeAtFetchMillis = 0L,
+            ),
+        )
+        whenever(mockGopenPgpTimeUpdater.updateTimeIfNeeded(any(), any(), any()))
+            .thenReturn(GopenPgpTimeUpdater.Result.TIME_SYNCED)
     }
 
     private suspend fun captureError(): Error? {
@@ -124,5 +194,9 @@ class GetAndVerifyServerKeysAndTimeInteractorTest : KoinTest {
     private companion object {
         const val USER_ID = "userId"
         const val SERVER_URL = "https://passbolt.local"
+        const val PGP_KEY = "server-pgp-key-data"
+        const val RSA_KEY = "server-rsa-key-data"
+        const val COMPUTED_FINGERPRINT_LOWER = "63452c7a0ae6fae8c8c309640bd9e2409bc6a569"
+        const val COMPUTED_FINGERPRINT_UPPER = "63452C7A0AE6FAE8C8C309640BD9E2409BC6A569"
     }
 }

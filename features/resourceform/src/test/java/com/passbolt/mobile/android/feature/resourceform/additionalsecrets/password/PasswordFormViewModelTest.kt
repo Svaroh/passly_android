@@ -67,7 +67,7 @@ class PasswordFormViewModelTest : KoinTest {
     fun `initialize should show correct state`() =
         runTest {
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             viewModel =
@@ -92,7 +92,7 @@ class PasswordFormViewModelTest : KoinTest {
     fun `password text change should trigger entropy recalculation`() =
         runTest {
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             viewModel =
@@ -103,7 +103,7 @@ class PasswordFormViewModelTest : KoinTest {
                 )
 
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy("test") }.thenReturn(65.0)
+                on { getSecretEntropy("test") }.thenReturn(65.0)
             }
 
             viewModel.onIntent(PasswordFormIntent.PasswordTextChanged("test"))
@@ -120,7 +120,7 @@ class PasswordFormViewModelTest : KoinTest {
     fun `main uri text change should update state`() =
         runTest {
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             viewModel =
@@ -141,7 +141,7 @@ class PasswordFormViewModelTest : KoinTest {
     fun `username text change should update state`() =
         runTest {
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             viewModel =
@@ -162,7 +162,7 @@ class PasswordFormViewModelTest : KoinTest {
     fun `apply should emit ApplyAndGoBack side effect with correct model`() =
         runTest {
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
 
             viewModel =
@@ -208,7 +208,7 @@ class PasswordFormViewModelTest : KoinTest {
     fun `generate password success should update state`() =
         runTest {
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
             val generatedCodepoints = "generated123!".toCodepoints()
             whenever(mockGetPasswordPoliciesUseCase.execute(any())).thenReturn(
@@ -240,7 +240,7 @@ class PasswordFormViewModelTest : KoinTest {
     fun `generate password failure should show unable to generate password dialog`() =
         runTest {
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
             whenever(mockGetPasswordPoliciesUseCase.execute(any())).thenReturn(
                 defaultPasswordPolicies,
@@ -270,7 +270,7 @@ class PasswordFormViewModelTest : KoinTest {
     fun `dismiss unable to generate password should hide the dialog`() =
         runTest {
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
             whenever(mockGetPasswordPoliciesUseCase.execute(any())).thenReturn(
                 defaultPasswordPolicies,
@@ -300,7 +300,7 @@ class PasswordFormViewModelTest : KoinTest {
     fun `open advanced secret generation emits navigate side effect with loaded settings`() =
         runTest {
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
             }
             whenever(mockGetPasswordPoliciesUseCase.execute(any())).thenReturn(
                 defaultPasswordPolicies,
@@ -329,8 +329,8 @@ class PasswordFormViewModelTest : KoinTest {
     fun `advanced secret generation result applies generated secret and settings`() =
         runTest {
             mockEntropyCalculator.stub {
-                onBlocking { getSecretEntropy(any()) }.thenReturn(0.0)
-                onBlocking { getSecretEntropy("advanced-secret") }.thenReturn(130.0)
+                on { getSecretEntropy(any()) }.thenReturn(0.0)
+                on { getSecretEntropy("advanced-secret") }.thenReturn(130.0)
             }
 
             viewModel =

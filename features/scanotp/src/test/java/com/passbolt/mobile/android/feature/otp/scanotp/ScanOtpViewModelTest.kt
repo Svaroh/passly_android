@@ -54,7 +54,7 @@ class ScanOtpViewModelTest : KoinTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         qrParser.stub {
-            onBlocking { startParsing(any()) }.then { }
+            on { startParsing(any()) }.then { }
             on { parseResultFlow }.doReturn(parseFlow)
         }
     }
@@ -101,12 +101,14 @@ class ScanOtpViewModelTest : KoinTest {
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(Initialize(scanningFlow, ScanOtpMode.SCAN_FOR_RESULT))
+                testDispatcher.scheduler.advanceUntilIdle()
                 assertIs<RequestCameraPermission>(awaitItem())
 
                 whenever(cameraInformationProvider.isCameraPermissionGranted()).thenReturn(true)
                 viewModel.onIntent(GrantCameraPermission)
 
                 parseFlow.emit(mockTotpQr)
+                testDispatcher.scheduler.advanceUntilIdle()
 
                 val sideEffect = awaitItem()
                 assertIs<SetResultAndNavigateBack>(sideEffect)

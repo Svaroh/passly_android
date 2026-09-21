@@ -108,6 +108,6 @@ class DiceTest : KoinTest {
             val words = passphrase.split(separator).map { it.replace(separator, "") }
 
             assertThat(words.size).isEqualTo(wordsCount)
-            assertThat(words.all { it.all { letter -> letter.isUpperCase() } }).isTrue()
+            assertThat(words.none { it.any { letter -> letter.isLowerCase() } }).isTrue()
         }
 }

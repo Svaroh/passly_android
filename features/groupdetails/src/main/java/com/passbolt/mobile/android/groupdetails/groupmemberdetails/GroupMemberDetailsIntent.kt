@@ -28,5 +28,6 @@ internal sealed interface GroupMemberDetailsIntent {
 
     data class Initialize(
         val userId: String,
+        val fromSnapshot: Boolean = false,
     ) : GroupMemberDetailsIntent
 }

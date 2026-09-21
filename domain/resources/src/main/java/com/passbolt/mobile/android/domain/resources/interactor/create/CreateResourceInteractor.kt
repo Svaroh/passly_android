@@ -29,7 +29,7 @@ import com.passbolt.mobile.android.core.mvp.authentication.AuthenticatedUseCaseO
 import com.passbolt.mobile.android.core.mvp.authentication.AuthenticationState
 import com.passbolt.mobile.android.core.mvp.authentication.toAuthenticationState
 import com.passbolt.mobile.android.core.passphrasememorycache.PassphraseMemoryCache
-import com.passbolt.mobile.android.core.passphrasememorycache.PotentialPassphrase
+import com.passbolt.mobile.android.core.passphrasememorycache.usePassphraseCopy
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import com.passbolt.mobile.android.domain.accounts.usecase.GetSelectedAccountUseCase
 import com.passbolt.mobile.android.domain.passwordexpiry.usecase.GetPasswordExpirySettingsUseCase
@@ -74,48 +74,45 @@ class CreateResourceInteractor(
     suspend fun execute(
         resourceInput: CreateResourceModel,
         secretInput: SecretJsonModel,
-    ): Output {
-        val passphrase =
-            when (val result = passphraseMemoryCache.get()) {
-                is PotentialPassphrase.Passphrase -> result.passphrase
-                is PotentialPassphrase.PassphraseNotPresent -> return Output.PasswordExpired
-            }
-
-        if (resourceInput.contentType.slug in SupportedContentTypes.v5Slugs) {
-            val resourceTypeId = getResourceTypeIdForSlug(resourceInput.contentType.slug)
-            secretInput.apply {
-                this.objectType = SecretJsonModel.OBJECT_TYPE
-                this.resourceTypeId = resourceTypeId
-            }
-            resourceInput.apply {
-                this.metadataJsonModel.objectType = MetadataJsonModel.OBJECT_TYPE
-                this.metadataJsonModel.resourceTypeId = resourceTypeId
-            }
-        }
-
-        val isSecretValid =
-            isSecretValid(
-                PlainSecretValidationWrapper(secretInput.json, resourceInput.contentType)
-                    .validationPlainSecret,
-                resourceInput.contentType,
-            )
-        val isResourceValid = isResourceValid(resourceInput.metadataJsonModel.json, resourceInput.contentType)
-
-        return if (isSecretValid && isResourceValid) {
-            when (val encryptedSecret = encryptSecret(secretInput.json!!, passphrase)) {
-                is EncryptedSecretOrError.Error -> Output.OpenPgpError(encryptedSecret.message)
-                is EncryptedSecretOrError.EncryptedSecret -> {
-                    createResource(resourceInput, encryptedSecret, passphrase)
+    ): Output =
+        passphraseMemoryCache.usePassphraseCopy(
+            onPassphraseNotPresent = { Output.PasswordExpired },
+        ) { passphrase ->
+            if (resourceInput.contentType.slug in SupportedContentTypes.v5Slugs) {
+                val resourceTypeId = getResourceTypeIdForSlug(resourceInput.contentType.slug)
+                secretInput.apply {
+                    this.objectType = SecretJsonModel.OBJECT_TYPE
+                    this.resourceTypeId = resourceTypeId
+                }
+                resourceInput.apply {
+                    this.metadataJsonModel.objectType = MetadataJsonModel.OBJECT_TYPE
+                    this.metadataJsonModel.resourceTypeId = resourceTypeId
                 }
             }
-        } else {
-            if (!isSecretValid) {
-                Output.JsonSchemaValidationFailure(SECRET)
+
+            val isSecretValid =
+                isSecretValid(
+                    PlainSecretValidationWrapper(secretInput.json, resourceInput.contentType)
+                        .validationPlainSecret,
+                    resourceInput.contentType,
+                )
+            val isResourceValid = isResourceValid(resourceInput.metadataJsonModel.json, resourceInput.contentType)
+
+            if (isSecretValid && isResourceValid) {
+                when (val encryptedSecret = encryptSecret(secretInput.json!!, passphrase)) {
+                    is EncryptedSecretOrError.Error -> Output.OpenPgpError(encryptedSecret.message)
+                    is EncryptedSecretOrError.EncryptedSecret -> {
+                        createResource(resourceInput, encryptedSecret, passphrase)
+                    }
+                }
             } else {
-                Output.JsonSchemaValidationFailure(RESOURCE)
+                if (!isSecretValid) {
+                    Output.JsonSchemaValidationFailure(SECRET)
+                } else {
+                    Output.JsonSchemaValidationFailure(RESOURCE)
+                }
             }
         }
-    }
 
     private suspend fun createResource(
         resourceInput: CreateResourceModel,
