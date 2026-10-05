@@ -34,6 +34,7 @@ import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import net.svaroh.passly.domain.users.usecase.FetchCurrentUserUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalCurrentUserUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase.Output.JwtWillExpire
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CopyFingerprint
@@ -69,6 +70,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.stub
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import java.time.ZonedDateTime
 import java.util.UUID
@@ -84,6 +86,7 @@ class KeyInspectorViewModelTest : KoinTest {
                 listOf(
                     module {
                         single { mock<FetchCurrentUserUseCase>() }
+                        single { mock<GetLocalCurrentUserUseCase>() }
                         single { mock<GetSelectedAccountDataUseCase>() }
                         single { mock<DateFormatter>() }
                         single { mock<FingerprintFormatter>() }
@@ -117,6 +120,11 @@ class KeyInspectorViewModelTest : KoinTest {
         val fetchCurrentUserUseCase = get<FetchCurrentUserUseCase>()
         fetchCurrentUserUseCase.stub {
             on { execute(Unit) } doReturn user
+        }
+
+        val getLocalCurrentUserUseCase = get<GetLocalCurrentUserUseCase>()
+        getLocalCurrentUserUseCase.stub {
+            onBlocking { execute(Unit) } doReturn GetLocalCurrentUserUseCase.Output(user.userUiModel)
         }
 
         val fingerprintFormatter: FingerprintFormatter = get()
@@ -161,6 +169,11 @@ class KeyInspectorViewModelTest : KoinTest {
     fun `error should be shown when key data fails to fetch`() =
         runTest {
             val errorMessage = "errorMessage"
+            // no local copy of the user, so this account has to ask the server
+            val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase = get()
+            getLocalCurrentUserUseCase.stub {
+                onBlocking { execute(Unit) } doAnswer { throw IllegalStateException("no local user") }
+            }
             val fetchCurrentUserUseCase: FetchCurrentUserUseCase = get()
             fetchCurrentUserUseCase.stub {
                 on { execute(Unit) }.thenReturn(
@@ -177,6 +190,20 @@ class KeyInspectorViewModelTest : KoinTest {
                 assertThat(effect).isInstanceOf(ShowErrorSnackbar::class.java)
                 assertThat((effect as ShowErrorSnackbar).type).isEqualTo(FAILED_TO_FETCH_KEY)
             }
+        }
+
+    @OptIn(ExperimentalTime::class)
+    @Test
+    fun `key data should be read locally without asking the server`() =
+        runTest {
+            viewModel = get()
+
+            viewModel.viewState.test {
+                assertThat(awaitItem().fingerprint).isEqualTo(user.userModel.gpgKey.fingerprint)
+            }
+
+            val fetchCurrentUserUseCase: FetchCurrentUserUseCase = get()
+            verifyNoInteractions(fetchCurrentUserUseCase)
         }
 
     @OptIn(ExperimentalTime::class)

@@ -162,7 +162,11 @@ class CreateResourceInteractor(
             val result = resourcesRepository.createResource(createResourceDto, resourceInput.contentType.slug)
         ) {
             is DomainResult.Incomplete -> Output.Failure(result)
-            is DomainResult.Finished -> Output.Success(result.value.toUiModel())
+            is DomainResult.Finished ->
+                Output.Success(
+                    resource = result.value.toUiModel(),
+                    armoredSecretForCurrentUser = encryptedSecret.data,
+                )
         }
     }
 
@@ -242,6 +246,8 @@ class CreateResourceInteractor(
 
         data class Success(
             val resource: ResourceUiModelWithAttributes,
+            /** Ciphertext just encrypted for this device's account, ready to be stored in the local replica. */
+            val armoredSecretForCurrentUser: String,
         ) : Output()
 
         data class Failure(

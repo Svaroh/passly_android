@@ -84,7 +84,6 @@ import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToCreateTotp
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToEditResourceForm
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.ShowSuccessSnackbar
-import net.svaroh.passly.feature.otp.screen.OtpSideEffect.ShowToast
 import net.svaroh.passly.feature.otp.screen.SnackbarErrorType.CANNOT_UPDATE_WITH_CURRENT_CONFIGURATION
 import net.svaroh.passly.feature.otp.screen.SnackbarErrorType.DECRYPTION_FAILURE
 import net.svaroh.passly.feature.otp.screen.SnackbarErrorType.ERROR
@@ -101,7 +100,6 @@ import net.svaroh.passly.feature.otp.screen.SnackbarSuccessType.METADATA_KEY_IS_
 import net.svaroh.passly.feature.otp.screen.SnackbarSuccessType.RESOURCE_CREATED
 import net.svaroh.passly.feature.otp.screen.SnackbarSuccessType.RESOURCE_DELETED
 import net.svaroh.passly.feature.otp.screen.SnackbarSuccessType.RESOURCE_EDITED
-import net.svaroh.passly.feature.otp.screen.ToastType.WAIT_FOR_DATA_REFRESH_FINISH
 import net.svaroh.passly.jsonmodel.delegates.TotpSecret
 import net.svaroh.passly.serializers.jsonschema.SchemaEntity.RESOURCE
 import net.svaroh.passly.serializers.jsonschema.SchemaEntity.SECRET
@@ -273,13 +271,8 @@ internal class OtpViewModel(
     private fun searchEndIconAction() {
         when (viewState.value.searchInputEndIconMode) {
             AVATAR -> {
-                viewModelScope.launch(coroutineLaunchContext.io) {
-                    if (dataRefreshTrackingFlow.isInProgress()) {
-                        emitSideEffect(ShowToast(WAIT_FOR_DATA_REFRESH_FINISH))
-                        dataRefreshTrackingFlow.awaitIdle()
-                    }
-                    updateViewState { copy(showAccountSwitchBottomSheet = true) }
-                }
+                // opened straight away: the list is served from the local replica, so there is nothing to wait for
+                updateViewState { copy(showAccountSwitchBottomSheet = true) }
             }
             CLEAR -> searchQueryChanged("")
             NONE -> {
@@ -606,9 +599,17 @@ internal class OtpViewModel(
     private suspend fun synchronizeWithDataRefresh() {
         dataRefreshTrackingFlow.dataRefreshStatusFlow.collect {
             when (it) {
-                is InProgress -> updateViewState { copy(isRefreshing = true, refreshProgress = it.progress) }
+                // silent unless the user asked for it, see HomeViewModel for the reasoning
+                is InProgress -> updateViewState {
+                    copy(
+                        isRefreshing = dataRefreshTrackingFlow.isUserInitiated,
+                        refreshProgress = it.progress,
+                    )
+                }
                 FinishedWithFailure -> {
-                    emitSideEffect(ShowErrorSnackbar(FAILED_TO_REFRESH_DATA))
+                    if (dataRefreshTrackingFlow.isUserInitiated) {
+                        emitSideEffect(ShowErrorSnackbar(FAILED_TO_REFRESH_DATA))
+                    }
                     updateViewState { copy(isRefreshing = false) }
                 }
                 FinishedWithSuccess -> {

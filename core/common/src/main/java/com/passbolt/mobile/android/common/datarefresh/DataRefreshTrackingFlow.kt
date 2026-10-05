@@ -34,6 +34,22 @@ class DataRefreshTrackingFlow {
         get() = _dataRefreshStatusFlow
     private val _dataRefreshStatusFlow = MutableStateFlow<DataRefreshStatus>(NotCompleted)
 
+    /**
+     * Whether the refresh currently being tracked was asked for by the user.
+     *
+     * A background refresh must stay invisible: with a local replica there is nothing for the user to wait for, and a
+     * server that cannot be reached is a freshness problem, not an application error. Progress and failures are only
+     * worth showing to someone who explicitly pulled to refresh.
+     */
+    @Volatile
+    var isUserInitiated: Boolean = false
+        private set
+
+    fun startTracking(isUserInitiated: Boolean) {
+        this.isUserInitiated = isUserInitiated
+        _dataRefreshStatusFlow.value = InProgress(progress = 0f)
+    }
+
     fun updateStatus(newStatus: DataRefreshStatus) {
         _dataRefreshStatusFlow.value = newStatus
     }

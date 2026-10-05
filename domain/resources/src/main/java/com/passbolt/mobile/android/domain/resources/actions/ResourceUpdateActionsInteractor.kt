@@ -25,6 +25,8 @@ package net.svaroh.passly.domain.resources.actions
 
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction
+import net.svaroh.passly.core.secrets.usecase.db.RemoveLocalSecretUseCase
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.folders.usecase.GetLocalFolderPermissionsUseCase
 import net.svaroh.passly.domain.metadata.interactor.MetadataPrivateKeysInteractor
 import net.svaroh.passly.domain.metadata.interactor.MetadataPrivateKeysInteractor.Output.TrustedKeyDeleted
@@ -88,6 +90,8 @@ class ResourceUpdateActionsInteractor(
     private val getPermissionsSnapshotUseCase: GetPermissionsSnapshotUseCase,
     private val resourceShareInteractor: ResourceShareInteractor,
     private val confirmedRecipientsPublicKeysResolver: ConfirmedRecipientsPublicKeysResolver,
+    private val upsertLocalSecretsUseCase: UpsertLocalSecretsUseCase,
+    private val removeLocalSecretUseCase: RemoveLocalSecretUseCase,
 ) {
     suspend fun updateGenericResource(
         newContentType: ContentType,
@@ -609,6 +613,10 @@ class ResourceUpdateActionsInteractor(
                 updateLocalResourceUseCase.execute(
                     UpdateLocalResourceUseCase.Input(operationResult.resource),
                 )
+                refreshLocalSecret(
+                    operationResult.resource.resourceId,
+                    operationResult.armoredSecretForCurrentUser,
+                )
                 ResourceUpdateActionResult.Success(
                     operationResult.resource.resourceId,
                     operationResult.resource.metadataJsonModel.name,
@@ -617,6 +625,38 @@ class ResourceUpdateActionsInteractor(
             is UpdateResourceInteractor.Output.JsonSchemaValidationFailure ->
                 ResourceUpdateActionResult.JsonSchemaValidationFailure(operationResult.entity)
         }
+
+    /**
+     * Replaces the locally stored ciphertext with the block that was just encrypted for this account, so an offline
+     * read after an edit returns the new secret rather than the previous one. If the account was somehow not among
+     * the recipients, the now-stale copy is dropped instead.
+     */
+    private suspend fun refreshLocalSecret(
+        resourceId: String,
+        armoredSecret: String?,
+    ) {
+        try {
+            if (armoredSecret == null) {
+                removeLocalSecretUseCase.execute(RemoveLocalSecretUseCase.Input(resourceId))
+            } else {
+                upsertLocalSecretsUseCase.execute(
+                    UpsertLocalSecretsUseCase.Input(
+                        secrets =
+                            listOf(
+                                UpsertLocalSecretsUseCase.LocalSecret(
+                                    resourceId = resourceId,
+                                    secretId = null,
+                                    armoredData = armoredSecret,
+                                    modified = null,
+                                ),
+                            ),
+                    ),
+                )
+            }
+        } catch (exception: Exception) {
+            Timber.e(exception, "Could not refresh the local copy of the updated secret")
+        }
+    }
 }
 
 @Suppress("LongParameterList")

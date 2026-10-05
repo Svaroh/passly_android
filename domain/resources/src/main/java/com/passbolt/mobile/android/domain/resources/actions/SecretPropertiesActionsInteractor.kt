@@ -137,11 +137,18 @@ class SecretPropertiesActionsInteractor(
                 }
             }
 
+    /**
+     * Reading a secret is local work: [SecretInteractor] serves the stored ciphertext and only asks the network for a
+     * secret this device has never seen. Checking the server session before that read is what made showing a password
+     * hang exactly as signing in did - a session probe is itself a request, so an unreachable server spent the whole
+     * connection budget before anything was shown, and a device with no session at all was sent to the sign in
+     * screen for data it already held. The passphrase is still required, and asking for it stays local.
+     */
     private suspend fun fetchAndDecrypt(): Flow<SecretFetchAndDecryptResult> =
         flowOf(
             when (
                 val output =
-                    runAuthenticatedOperation {
+                    runAuthenticatedOperation(requiresSession = false) {
                         secretInteractor.fetchAndDecrypt(resource.resourceId)
                     }
             ) {

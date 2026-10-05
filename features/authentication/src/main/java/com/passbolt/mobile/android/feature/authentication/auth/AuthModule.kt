@@ -19,6 +19,7 @@ import net.svaroh.passly.feature.authentication.auth.usecase.ServerKeysWarmup
 import net.svaroh.passly.feature.authentication.auth.usecase.ServerKeysWarmupCache
 import net.svaroh.passly.feature.authentication.auth.usecase.SessionRefreshLock
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.VerifyPassphraseUseCase
@@ -60,6 +61,8 @@ fun Module.authModule() {
             refreshSessionUseCase = get(),
             mfaProvidersHandler = get(),
             serverKeysWarmup = get(),
+            hasLocalReplicaUseCase = get(),
+            backgroundSignInExecutor = get(),
         )
     }
 
@@ -75,6 +78,7 @@ fun Module.authModule() {
     singleOf(::ServerKeysWarmupCache) bind ServerKeysWarmup::class
     singleOf(::GetAndVerifyServerKeysAndTimeInteractor)
     singleOf(::SignInVerifyInteractor)
+    singleOf(::BackgroundSignInExecutor)
     singleOf(::GopenPgpTimeUpdater)
     singleOf(::PostSignInActionsInteractor)
     singleOf(::RefreshSessionUseCase)

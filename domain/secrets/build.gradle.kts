@@ -12,6 +12,8 @@ dependencies {
     implementation(project(":supportedresourcetypes"))
     implementation(project(":passphrasememorycache"))
     implementation(project(":privatekey-domain"))
+    implementation(project(":database"))
+    implementation(project(":entity"))
     implementation(project(":jsonmodel"))
 
     implementation(platform(libs.koin.bom))

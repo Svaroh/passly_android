@@ -27,6 +27,7 @@ import net.svaroh.passly.core.architecture.result.map
 import net.svaroh.passly.core.networking.ResponseHandler
 import net.svaroh.passly.core.networking.callWithHandler
 import net.svaroh.passly.core.networking.toDomainResult
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.data.resources.datasource.remote.api.ResourceApi
 import net.svaroh.passly.data.resources.mapper.toUiModel
 import net.svaroh.passly.domain.resources.ResourcesRemoteDataSource
@@ -40,6 +41,9 @@ import net.svaroh.passly.mappers.PermissionsModelMapper
 import net.svaroh.passly.mappers.ResourceModelMapper
 import net.svaroh.passly.ui.PermissionModel
 import net.svaroh.passly.ui.ResourceUiModelWithAttributes
+import timber.log.Timber
+import java.time.ZonedDateTime
+import java.time.format.DateTimeParseException
 
 internal class ResourcesRemoteDataSourceImpl(
     private val resourceApi: ResourceApi,
@@ -69,9 +73,28 @@ internal class ResourcesRemoteDataSourceImpl(
                                 it.favorite?.id?.toString(),
                             ).toDomain()
                         },
+                    secrets =
+                        response.body.mapNotNull { resource ->
+                            resource.secrets?.firstOrNull()?.let { secret ->
+                                UpsertLocalSecretsUseCase.LocalSecret(
+                                    resourceId = resource.id.toString(),
+                                    secretId = secret.id?.toString(),
+                                    armoredData = secret.data,
+                                    modified = secret.modified?.let(::parseModified),
+                                )
+                            }
+                        },
                 )
             }
     }
+
+    private fun parseModified(modified: String): ZonedDateTime? =
+        try {
+            ZonedDateTime.parse(modified)
+        } catch (exception: DateTimeParseException) {
+            Timber.w(exception, "Could not parse the secret modification date, storing the secret without it")
+            null
+        }
 
     override suspend fun getResourcePermissions(resourceId: String): DomainResult<List<PermissionModel>> =
         callWithHandler(responseHandler) { resourceApi.getResource(resourceId).body }

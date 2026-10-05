@@ -47,6 +47,7 @@ import net.svaroh.passly.database.migrations.Migration24to25
 import net.svaroh.passly.database.migrations.Migration25to26
 import net.svaroh.passly.database.migrations.Migration26to27
 import net.svaroh.passly.database.migrations.Migration27to28
+import net.svaroh.passly.database.migrations.Migration28to29
 import net.svaroh.passly.database.migrations.Migration2to3
 import net.svaroh.passly.database.migrations.Migration3to4
 import net.svaroh.passly.database.migrations.Migration4to5
@@ -791,6 +792,64 @@ class DatabaseMigrationsTest {
     }
 
     @Test
+    fun migrate28To29() {
+        helper
+            .createDatabase(TEST_DB, 28)
+            .apply {
+                execSQL("INSERT INTO ResourceType VALUES('1', 'name', 'slug', null)")
+                execSQL(
+                    "INSERT INTO Resource VALUES('resId', null, 'READ', '1', null, 1644909225833, null, null, null, 'UPDATED')",
+                )
+                close()
+            }
+
+        helper
+            .runMigrationsAndValidate(TEST_DB, 29, true, Migration28to29)
+            .apply {
+                execSQL(
+                    "INSERT INTO Secret VALUES('resId', 'secretId', '-----BEGIN PGP MESSAGE-----', 1644909225833, 1644909225900)",
+                )
+
+                val cursor = query("SELECT armoredData FROM Secret WHERE resourceId = 'resId'")
+                cursor.moveToFirst()
+                assertThat(cursor.getString(0)).isEqualTo("-----BEGIN PGP MESSAGE-----")
+                cursor.close()
+
+                close()
+            }
+    }
+
+    @Test
+    fun deletingAResourceRemovesItsSecret() {
+        helper
+            .createDatabase(TEST_DB, 28)
+            .apply {
+                execSQL("INSERT INTO ResourceType VALUES('1', 'resourceTypeName', 'resourceTypeSlug', null)")
+                execSQL(
+                    "INSERT INTO Resource VALUES('resId', null, 'READ', '1', 'favouriteId', 1644909225833, null, null, null, 'UPDATED')",
+                )
+                close()
+            }
+
+        helper
+            .runMigrationsAndValidate(TEST_DB, 29, true, Migration28to29)
+            .apply {
+                execSQL("PRAGMA foreign_keys = ON")
+                execSQL(
+                    "INSERT INTO Secret VALUES('resId', 'secretId', 'armored', 1644909225833, 1644909225900)",
+                )
+                execSQL("DELETE FROM Resource WHERE resourceId = 'resId'")
+
+                val cursor = query("SELECT count(*) FROM Secret")
+                cursor.moveToFirst()
+                assertThat(cursor.getInt(0)).isEqualTo(0)
+                cursor.close()
+
+                close()
+            }
+    }
+
+    @Test
     fun migrateAll() {
         helper.createDatabase(TEST_DB, 1).apply {
             close()
@@ -829,6 +888,7 @@ class DatabaseMigrationsTest {
                 Migration25to26,
                 Migration26to27,
                 Migration27to28,
+                Migration28to29,
             ).build()
             .apply {
                 openHelper.writableDatabase

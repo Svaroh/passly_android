@@ -28,11 +28,13 @@ import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
 import net.svaroh.passly.domain.accounts.usecase.SaveSelectedAccountUseCase
 import net.svaroh.passly.domain.accounts.usecase.SaveServerFingerprintUseCase
 import net.svaroh.passly.domain.auth.usecase.GetPassphraseUseCase
+import net.svaroh.passly.domain.auth.usecase.HasLocalReplicaUseCase
 import net.svaroh.passly.domain.auth.usecase.SaveMfaTokenUseCase
 import net.svaroh.passly.domain.auth.usecase.SaveSessionUseCase
 import net.svaroh.passly.domain.inappreview.usecase.InAppReviewInteractor
 import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.domain.privatekey.usecase.GetPrivateKeyUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.AcceptChangedServerFingerprint
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.AccessLogs
@@ -86,6 +88,7 @@ import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatus
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatusProvider
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatusProvider.MfaState
 import net.svaroh.passly.feature.authentication.auth.usecase.BiometryInteractor
+import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error.Generic
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error.IncorrectServerFingerprint
@@ -151,6 +154,8 @@ class AuthViewModel(
     private val refreshSessionUseCase: RefreshSessionUseCase,
     private val mfaProvidersHandler: MfaProvidersHandler,
     private val serverKeysWarmup: ServerKeysWarmup,
+    private val hasLocalReplicaUseCase: HasLocalReplicaUseCase,
+    private val backgroundSignInExecutor: BackgroundSignInExecutor,
 ) : SideEffectViewModel<AuthState, AuthSideEffect>(
         AuthState(
             authReason = mapAuthReason(authConfig),
@@ -359,11 +364,37 @@ class AuthViewModel(
         }
     }
 
+    /**
+     * Unlocking never waits for the server.
+     *
+     * The passphrase has already been checked against the locally stored private key, which is the only check that
+     * decides whether this person may open their own vault. Once an account carries a local replica the vault is
+     * shown immediately and the server session is obtained in the background, because that session is needed for
+     * synchronisation only. Contacting the server first used to add the full connection budget to every start
+     * whenever the domain resolved but the site did not answer.
+     *
+     * Two cases still go through the server here: an account with no replica has nothing to show without it, and
+     * account setup has to prove the account really works before it is treated as usable.
+     */
     private fun performSignIn(passphrase: ByteArray) {
         if (authConfig is AuthConfig.RefreshSession) {
             performRefreshSession(passphrase)
-        } else {
+        } else if (authConfig is Setup) {
             performFullSignIn(passphrase)
+        } else {
+            launch {
+                // the local database key is stored per selected account, so the account being unlocked has to become
+                // the selected one before its replica can even be inspected
+                saveSelectedAccountUseCase.execute(UserIdInput(userId))
+                if (hasLocalReplicaUseCase.execute(UserIdInput(userId)).hasLocalReplica) {
+                    Timber.d("Unlocking with the local replica, signing in in the background")
+                    unlockWithLocalReplica()
+                    backgroundSignInExecutor.signIn(userId, passphrase.copyOf())
+                } else {
+                    Timber.d("No local replica yet, the server is needed for this sign in")
+                    performFullSignIn(passphrase)
+                }
+            }
         }
     }
 
@@ -391,12 +422,10 @@ class AuthViewModel(
                                 }
                             }
                             is ServerNotReachable -> {
-                                updateViewState {
-                                    copy(showServerNotReachable = true, serverNotReachableDomain = it.serverUrl)
-                                }
+                                launch { onServerNotReachable(it.serverUrl) }
                             }
                             is ServerKeysNoNetwork -> {
-                                emitSideEffect(ShowErrorSnackbar(CONNECTION_FAILURE))
+                                launch { onServerNotReachable("") }
                             }
                             is TimeIsOutOfSync -> {
                                 emitSideEffect(ShowErrorSnackbar(TIME_OUT_OF_SYNC))
@@ -412,6 +441,39 @@ class AuthViewModel(
         }
     }
 
+    /**
+     * The passphrase has already been verified locally at this point, so an unreachable server says nothing about
+     * whether this person may use their own data. If the account carries a local replica, unlocking continues and
+     * the app runs on local data until synchronisation becomes possible again; only an account that has never
+     * synchronised still needs the server to get going.
+     */
+    private suspend fun onServerNotReachable(serverUrl: String) {
+        // the local database key is stored per selected account, so the account being unlocked has to become the
+        // selected one before its replica can even be inspected
+        saveSelectedAccountUseCase.execute(UserIdInput(userId))
+
+        if (hasLocalReplicaUseCase.execute(UserIdInput(userId)).hasLocalReplica) {
+            Timber.d("Server is not reachable, continuing with the local replica")
+            unlockWithLocalReplica()
+        } else {
+            Timber.d("Server is not reachable and there is no local replica to fall back on")
+            updateViewState {
+                copy(showServerNotReachable = true, serverNotReachableDomain = serverUrl)
+            }
+        }
+    }
+
+    private fun unlockWithLocalReplica() {
+        runtimeAuthenticatedFlag.isAuthenticated = true
+        passphraseMemoryCache.set(passphrase.copyOf())
+        // no session is saved: there is no session to save, and the stored one - stale or not - stays untouched
+        loginState = null
+        updateViewState { copy(showProgress = false) }
+        signInIdlingResource.setIdle(true)
+        emitSideEffect(AuthSuccess(authConfig, appContext))
+    }
+
+    @Suppress("LongMethod")
     private suspend fun signIn(
         passphrase: ByteArray,
         serverPublicKey: String,

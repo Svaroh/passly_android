@@ -251,6 +251,8 @@ class PasskeyCredentialProviderActivity :
         }
 
     private suspend fun fetchPasskeySecret(resourceId: String): SecretFetchOutcome {
+        // the interactor answers from the local replica when it has the secret, so the session refresh below is
+        // reached only for a passkey this device never stored - it is not part of the normal, offline capable path
         val initialOutput = mapSecretInteractorOutput(secretInteractor.fetchAndDecrypt(resourceId))
         if (initialOutput !is SecretFetchOutcome.NeedsAuthentication ||
             initialOutput.authConfig !is RefreshSession

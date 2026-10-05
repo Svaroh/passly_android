@@ -27,6 +27,7 @@ import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
 import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
 import net.svaroh.passly.core.mvp.authentication.IncompleteAuthenticatedOutput
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.resources.ResourcesRepository
 import net.svaroh.passly.domain.resources.mapper.toUiModel
 import net.svaroh.passly.ui.ResourceUiModelWithAttributes
@@ -41,6 +42,7 @@ class GetResourcesPaginatedUseCase(
                 Output.Success(
                     totalCount = result.value.totalCount,
                     resources = result.value.resources.map { it.toUiModel() },
+                    secrets = result.value.secrets,
                 )
         }
 
@@ -53,6 +55,7 @@ class GetResourcesPaginatedUseCase(
         data class Success(
             val totalCount: Int,
             val resources: List<ResourceUiModelWithAttributes>,
+            val secrets: List<UpsertLocalSecretsUseCase.LocalSecret>,
         ) : Output(),
             CompleteAuthenticatedOutput
 

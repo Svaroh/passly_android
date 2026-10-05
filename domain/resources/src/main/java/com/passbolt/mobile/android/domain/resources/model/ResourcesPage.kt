@@ -23,7 +23,10 @@
 
 package net.svaroh.passly.domain.resources.model
 
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
+
 data class ResourcesPage(
     val totalCount: Int,
     val resources: List<ResourceWithAttributes>,
+    val secrets: List<UpsertLocalSecretsUseCase.LocalSecret> = emptyList(),
 )

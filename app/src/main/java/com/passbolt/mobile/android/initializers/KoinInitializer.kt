@@ -46,6 +46,7 @@ import net.svaroh.passly.core.passwordgenerator.passwordGeneratorModule
 import net.svaroh.passly.core.qrscan.barcodeScanModule
 import net.svaroh.passly.core.resourcetypes.resourceTypesModule
 import net.svaroh.passly.core.security.securityModule
+import net.svaroh.passly.core.sync.syncModule
 import net.svaroh.passly.createFolderModule
 import net.svaroh.passly.createresourcemenu.createResourceMenuModule
 import net.svaroh.passly.data.accounts.accountsDataModule
@@ -241,6 +242,7 @@ class KoinInitializer : Initializer<Unit> {
                 permissionsModule,
                 navigationModule,
                 clipboardModule,
+                syncModule,
             )
     }
 }

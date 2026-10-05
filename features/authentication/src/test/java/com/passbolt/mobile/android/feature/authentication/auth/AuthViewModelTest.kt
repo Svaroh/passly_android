@@ -18,6 +18,7 @@ import net.svaroh.passly.domain.accounts.usecase.SaveSelectedAccountUseCase
 import net.svaroh.passly.domain.accounts.usecase.SaveServerFingerprintUseCase
 import net.svaroh.passly.domain.auth.model.ServerSignOutStatus
 import net.svaroh.passly.domain.auth.usecase.GetPassphraseUseCase
+import net.svaroh.passly.domain.auth.usecase.HasLocalReplicaUseCase
 import net.svaroh.passly.domain.auth.usecase.SaveMfaTokenUseCase
 import net.svaroh.passly.domain.auth.usecase.SaveSessionUseCase
 import net.svaroh.passly.domain.inappreview.usecase.InAppReviewInteractor
@@ -25,6 +26,7 @@ import net.svaroh.passly.domain.preferences.PreferencesDefaults
 import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.domain.privatekey.model.PrivateKey
 import net.svaroh.passly.domain.privatekey.usecase.GetPrivateKeyUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.BiometricAuthenticationError
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.BiometricAuthenticationSuccess
@@ -48,6 +50,7 @@ import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErro
 import net.svaroh.passly.feature.authentication.auth.AuthState.RefreshAuthReason.PASSPHRASE
 import net.svaroh.passly.feature.authentication.auth.AuthState.RefreshAuthReason.SESSION
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatusProvider
+import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.feature.authentication.auth.usecase.BiometryInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.PostSignInActionsInteractor
@@ -125,6 +128,8 @@ class AuthViewModelTest : KoinTest {
                     single { mock<PostSignInActionsInteractor>() }
                     single { mock<RefreshSessionUseCase>() }
                     single { mock<ServerKeysWarmup>() }
+                    single { mock<HasLocalReplicaUseCase>() }
+                    single { mock<BackgroundSignInExecutor>() }
                     single { RuntimeAuthenticatedFlag() }
                     singleOf(::SignInIdlingResource)
                     factoryOf(::MfaProvidersHandler)
@@ -158,6 +163,8 @@ class AuthViewModelTest : KoinTest {
                             refreshSessionUseCase = get(),
                             mfaProvidersHandler = get(),
                             serverKeysWarmup = get(),
+                            hasLocalReplicaUseCase = get(),
+                            backgroundSignInExecutor = get(),
                         )
                     }
                 },

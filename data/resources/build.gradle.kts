@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation(project(":resourcetypes-domain"))
     implementation(project(":resources-domain"))
+    implementation(project(":secrets-domain"))
     implementation(project(":architecture"))
     implementation(project(":common"))
     implementation(project(":networking"))

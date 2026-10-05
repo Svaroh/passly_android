@@ -188,6 +188,7 @@ dependencies {
     implementation(project(":envinfo"))
     implementation(project(":idlingresource"))
     implementation(project(":entity"))
+    implementation(project(":sync"))
     implementation(project(":transferaccounttoanotherdevice"))
     implementation(project(":otp"))
     implementation(project(":otpcore"))

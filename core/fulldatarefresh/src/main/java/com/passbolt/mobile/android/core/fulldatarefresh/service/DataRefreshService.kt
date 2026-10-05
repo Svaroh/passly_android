@@ -60,11 +60,13 @@ class DataRefreshService : LifecycleService() {
             accessibilityServiceNotificationFactory.getDataServiceNotification(this),
         )
 
+        val isUserInitiated = intent?.getBooleanExtra(EXTRA_USER_INITIATED, false) == true
+
         if (refreshJob?.isActive != true) {
             refreshJob =
                 lifecycleScope.launch {
                     try {
-                        fullDataRefreshExecutor.performFullDataRefresh()
+                        fullDataRefreshExecutor.performFullDataRefresh(isUserInitiated)
                     } finally {
                         stopForeground(ServiceCompat.STOP_FOREGROUND_REMOVE)
                         stopSelf()
@@ -100,8 +102,20 @@ class DataRefreshService : LifecycleService() {
     }
 
     companion object {
-        fun start(context: Context) {
-            context.startForegroundService(Intent(context, DataRefreshService::class.java))
+        private const val EXTRA_USER_INITIATED = "user_initiated"
+
+        /**
+         * @param isUserInitiated true when someone pulled to refresh or triggered a refresh by acting on data.
+         * A background refresh is silent: no progress indicator and no error if the server cannot be reached.
+         */
+        fun start(
+            context: Context,
+            isUserInitiated: Boolean = false,
+        ) {
+            context.startForegroundService(
+                Intent(context, DataRefreshService::class.java)
+                    .putExtra(EXTRA_USER_INITIATED, isUserInitiated),
+            )
         }
     }
 }

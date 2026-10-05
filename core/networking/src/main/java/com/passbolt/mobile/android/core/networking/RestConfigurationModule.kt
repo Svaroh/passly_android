@@ -132,9 +132,10 @@ private fun provideHttpClient(
     .Builder()
     .addNetworkInterceptor(StripForeignOriginCredentialsInterceptor())
     .addNetworkInterceptor(loggingInterceptor)
-    .connectTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
+    .connectTimeout(Duration.ofSeconds(CONNECT_TIMEOUT_SECONDS))
     .writeTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
     .readTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
+    .callTimeout(Duration.ofSeconds(CALL_TIMEOUT_SECONDS))
     .apply {
         placeholderUrlInterceptors.forEach { addInterceptor(it) }
     }.addInterceptor(baseUrlInterceptor)

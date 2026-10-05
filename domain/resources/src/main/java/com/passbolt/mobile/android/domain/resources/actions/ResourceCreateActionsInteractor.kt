@@ -23,6 +23,7 @@
 
 package net.svaroh.passly.domain.resources.actions
 
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.folders.usecase.GetLocalFolderPermissionsUseCase
 import net.svaroh.passly.domain.folders.usecase.GetLocalParentFolderPermissionsToApplyToNewItemUseCase
 import net.svaroh.passly.domain.folders.usecase.ItemIdResourceId
@@ -86,6 +87,7 @@ class ResourceCreateActionsInteractor(
     private val resourceTypeIdToSlugMappingProvider: ResourceTypeIdToSlugMappingProvider,
     private val createPermissionsSnapshotInteractor: CreatePermissionsSnapshotInteractor,
     private val confirmedRecipientsPublicKeysResolver: ConfirmedRecipientsPublicKeysResolver,
+    private val upsertLocalSecretsUseCase: UpsertLocalSecretsUseCase,
 ) {
     suspend fun createGenericResource(
         contentType: ContentType,
@@ -295,6 +297,10 @@ class ResourceCreateActionsInteractor(
                 addLocalResourcePermissionsUseCase.execute(
                     AddLocalResourcePermissionsUseCase.Input(listOf(operationResult.resource)),
                 )
+                storeSecretLocally(
+                    operationResult.resource.resourceModel.resourceId,
+                    operationResult.armoredSecretForCurrentUser,
+                )
                 applyPermissions(operationResult.resource)
             }
             is CreateResourceInteractor.Output.JsonSchemaValidationFailure ->
@@ -398,6 +404,33 @@ class ResourceCreateActionsInteractor(
             } else {
                 it
             }
+        }
+    }
+
+    /**
+     * Keeps the local replica autonomous right after a create: the ciphertext was produced on this device, so there
+     * is no reason to make the user go back to the server to read what they just typed.
+     */
+    private suspend fun storeSecretLocally(
+        resourceId: String,
+        armoredSecret: String,
+    ) {
+        try {
+            upsertLocalSecretsUseCase.execute(
+                UpsertLocalSecretsUseCase.Input(
+                    secrets =
+                        listOf(
+                            UpsertLocalSecretsUseCase.LocalSecret(
+                                resourceId = resourceId,
+                                secretId = null,
+                                armoredData = armoredSecret,
+                                modified = null,
+                            ),
+                        ),
+                ),
+            )
+        } catch (exception: Exception) {
+            Timber.e(exception, "Could not store the created secret locally")
         }
     }
 

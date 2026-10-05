@@ -77,6 +77,7 @@ coreModule("passphrasememorycache")
 coreModule("clipboard")
 coreModule("testtags")
 coreModule("screenshottest")
+coreModule("sync")
 
 featureModule("startup")
 featureModule("setup")

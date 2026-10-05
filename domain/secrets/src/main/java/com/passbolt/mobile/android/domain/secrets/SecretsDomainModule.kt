@@ -23,6 +23,9 @@
 
 package net.svaroh.passly.domain.secrets
 
+import net.svaroh.passly.core.secrets.usecase.db.GetLocalSecretUseCase
+import net.svaroh.passly.core.secrets.usecase.db.RemoveLocalSecretUseCase
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.secrets.parser.SecretParser
 import net.svaroh.passly.domain.secrets.usecase.decrypt.DecryptSecretUseCase
 import net.svaroh.passly.domain.secrets.usecase.decrypt.FetchSecretUseCase
@@ -36,4 +39,7 @@ val secretsDomainModule =
         singleOf(::DecryptSecretUseCase)
         singleOf(::SecretInteractor)
         singleOf(::SecretParser)
+        singleOf(::GetLocalSecretUseCase)
+        singleOf(::UpsertLocalSecretsUseCase)
+        singleOf(::RemoveLocalSecretUseCase)
     }

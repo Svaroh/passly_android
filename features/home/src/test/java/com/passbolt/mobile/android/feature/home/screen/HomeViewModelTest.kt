@@ -478,7 +478,7 @@ class HomeViewModelTest : KoinTest {
             viewModel.onIntent(Initialize(DoNotShow, NotLoaded))
 
             viewModel.viewState.drop(2).test {
-                dataRefreshFlow.updateStatus(InProgress(progress = 0f))
+                dataRefreshFlow.startTracking(isUserInitiated = true)
                 val inProgress = awaitItem()
                 assertThat(inProgress.isRefreshing).isTrue()
                 assertThat(inProgress.canCreateResource).isFalse()
@@ -518,7 +518,7 @@ class HomeViewModelTest : KoinTest {
             viewModel.onIntent(Initialize(DoNotShow, null))
 
             viewModel.viewState.drop(2).test {
-                dataRefreshFlow.updateStatus(InProgress(progress = 0f))
+                dataRefreshFlow.startTracking(isUserInitiated = true)
                 val inProgress = awaitItem()
                 assertThat(inProgress.isRefreshing).isTrue()
                 assertThat(inProgress.canCreateResource).isFalse()
@@ -526,13 +526,36 @@ class HomeViewModelTest : KoinTest {
                 dataRefreshFlow.updateStatus(FinishedWithFailure)
                 val finished = awaitItem()
                 assertThat(finished.isRefreshing).isFalse()
-                assertThat(finished.canCreateResource).isFalse()
+                // whether a resource can be created is decided by the local replica, so a refresh that could not
+                // reach the server must not take the create button away
+                assertThat(finished.canCreateResource).isTrue()
 
                 viewModel.sideEffect.test {
                     val effect = awaitItem()
                     assertIs<ShowErrorSnackbar>(effect)
                     assertThat(effect.type).isEqualTo(FAILED_TO_REFRESH_DATA)
                 }
+            }
+        }
+
+    @Test
+    fun `should stay silent when a background refresh fails`() =
+        runTest {
+            val dataRefreshFlow: DataRefreshTrackingFlow = get()
+            mockHomeData()
+            viewModel = get()
+            viewModel.onIntent(Initialize(DoNotShow, null))
+
+            viewModel.sideEffect.test {
+                dataRefreshFlow.startTracking(isUserInitiated = false)
+                // no spinner: the list is served from the local replica, so there is nothing to wait for
+                assertThat(viewModel.viewState.value.isRefreshing).isFalse()
+
+                dataRefreshFlow.updateStatus(FinishedWithFailure)
+                assertThat(viewModel.viewState.value.isRefreshing).isFalse()
+
+                // and no error snackbar: an unreachable server only means the data is less fresh
+                expectNoEvents()
             }
         }
 

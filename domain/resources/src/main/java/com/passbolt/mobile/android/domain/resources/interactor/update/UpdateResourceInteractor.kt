@@ -225,7 +225,14 @@ class UpdateResourceInteractor(
                 )
         ) {
             is DomainResult.Incomplete -> Output.Failure(result)
-            is DomainResult.Finished -> Output.Success(result.value.toUiModel())
+            is DomainResult.Finished ->
+                Output.Success(
+                    resource = result.value.toUiModel(),
+                    armoredSecretForCurrentUser =
+                        secrets
+                            ?.firstOrNull { it.userId == getSelectedAccountUseCase.execute(Unit).selectedAccount }
+                            ?.data,
+                )
         }
     }
 
@@ -314,6 +321,11 @@ class UpdateResourceInteractor(
 
         data class Success(
             val resource: ResourceUiModel,
+            /**
+             * Ciphertext just re-encrypted for this device's account. Null only if the account somehow was not among
+             * the users the resource was encrypted for, in which case the stale local copy is dropped instead.
+             */
+            val armoredSecretForCurrentUser: String?,
         ) : Output()
 
         data class Failure(

@@ -6,6 +6,7 @@ import net.svaroh.passly.common.usecase.UserIdInput
 import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState
 import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
 import net.svaroh.passly.domain.resources.usecase.GetResourcesPaginatedUseCase.Output.Failure
@@ -58,10 +59,10 @@ class ResourceInteractor(
     private val globalPreferencesRepository: GlobalPreferencesRepository,
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
     private val databaseTransactionRunner: DatabaseTransactionRunner,
+    private val upsertLocalSecretsUseCase: UpsertLocalSecretsUseCase,
 ) {
     private val selectedAccountId: String
         get() = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
-
     @Suppress("ReturnCount")
     suspend fun fetchAndSaveResources(onPageProcessed: suspend (processedPages: Int, totalPages: Int) -> Unit = { _, _ -> }): Output {
         try {
@@ -89,7 +90,7 @@ class ResourceInteractor(
                 is Failure -> return Output.Failure(firstPageResult.authenticationState)
                 is Success -> {
                     // process first page
-                    processResources(firstPageResult.resources)
+                    processResources(firstPageResult.resources, firstPageResult.secrets)
 
                     // process remaining pages
                     val totalPages = ceil(firstPageResult.totalCount.toDouble() / pageSize).toInt()
@@ -104,7 +105,7 @@ class ResourceInteractor(
                         ) {
                             is Failure -> return Output.Failure(pageResult.authenticationState)
                             is Success -> {
-                                processResources(pageResult.resources)
+                                processResources(pageResult.resources, pageResult.secrets)
                                 onPageProcessed(page, totalPages)
                             }
                         }
@@ -129,10 +130,19 @@ class ResourceInteractor(
         }
     }
 
-    private suspend fun processResources(resources: List<ResourceUiModelWithAttributes>) {
+    private suspend fun processResources(
+        resources: List<ResourceUiModelWithAttributes>,
+        secrets: List<UpsertLocalSecretsUseCase.LocalSecret>,
+    ) {
         databaseTransactionRunner.runInTransaction {
             upsertLocalResourcesUseCase.execute(
                 UpsertLocalResourcesUseCase.Input(resources.map { it.resourceModel }, selectedAccountId),
+            )
+
+            // secrets are stored right after their resources so that autonomy is reached page by page - an interrupted
+            // first refresh still leaves everything it managed to download fully usable offline
+            upsertLocalSecretsUseCase.execute(
+                UpsertLocalSecretsUseCase.Input(secrets),
             )
 
             addLocalTagsUseCase.execute(

@@ -126,6 +126,8 @@ val resourcesDomainModule =
                 getPermissionsSnapshotUseCase = get(),
                 resourceShareInteractor = get(),
                 confirmedRecipientsPublicKeysResolver = get(),
+                upsertLocalSecretsUseCase = get(),
+                removeLocalSecretUseCase = get(),
             )
         }
         factory<ResourceUpdateActionsInteractorFactory> {
@@ -147,6 +149,7 @@ val resourcesDomainModule =
                 resourceTypeIdToSlugMappingProvider = get(),
                 createPermissionsSnapshotInteractor = get(),
                 confirmedRecipientsPublicKeysResolver = get(),
+                upsertLocalSecretsUseCase = get(),
             )
         }
     }

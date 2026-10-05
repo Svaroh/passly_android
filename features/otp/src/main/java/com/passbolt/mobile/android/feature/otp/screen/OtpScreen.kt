@@ -187,7 +187,7 @@ internal fun OtpScreen(
                 navigator.navigateToKey(
                     ConfirmPermissions(ConfirmPermissionsMode.Edit(it.resourceId), it.driftedEntityNames),
                 )
-            InitiateDataRefresh -> DataRefreshService.start(context)
+            InitiateDataRefresh -> DataRefreshService.start(context, isUserInitiated = true)
             is ShowToast -> Toast.makeText(context, getToastMessage(context, it.type), Toast.LENGTH_SHORT).show()
         }
     }
@@ -245,7 +245,7 @@ fun OtpScreen(
                 SlidingFeedbackPullToRefreshBox(
                     isRefreshing = state.isRefreshing,
                     refreshProgress = state.refreshProgress,
-                    onRefresh = { DataRefreshService.start(context) },
+                    onRefresh = { DataRefreshService.start(context, isUserInitiated = true) },
                     modifier =
                         Modifier
                             .fillMaxSize()

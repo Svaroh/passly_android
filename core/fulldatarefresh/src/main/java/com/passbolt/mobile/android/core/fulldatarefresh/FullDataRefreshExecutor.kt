@@ -41,12 +41,12 @@ class FullDataRefreshExecutor(
     private val dataRefreshTrackingFlow: DataRefreshTrackingFlow,
     private val coroutineLaunchContext: CoroutineLaunchContext,
 ) {
-    suspend fun performFullDataRefresh() {
+    suspend fun performFullDataRefresh(isUserInitiated: Boolean = false) {
         Timber.d("Full data refresh initiated")
         if (!dataRefreshTrackingFlow.isInProgress()) {
-            dataRefreshTrackingFlow.updateStatus(InProgress(progress = 0f))
+            dataRefreshTrackingFlow.startTracking(isUserInitiated)
             val output =
-                runAuthenticatedOperation {
+                runAuthenticatedOperation(canPromptForAuthentication = isUserInitiated) {
                     withContext(coroutineLaunchContext.default) {
                         homeDataInteractor.refreshAllHomeScreenData { progress ->
                             dataRefreshTrackingFlow.updateStatus(InProgress(progress))
