@@ -1,7 +1,7 @@
 package net.svaroh.passly.core.networking
 
+import java.io.IOException
 import java.net.HttpURLConnection
-import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 /**
@@ -45,8 +45,17 @@ sealed class NetworkResult<T : Any> {
                     this is ServerError &&
                     mfaStatus is MfaStatus.Required
 
+        /**
+         * Whether the request never produced an answer from the server.
+         *
+         * Anything that fails at the transport level belongs here, not only a read that timed out: a refused
+         * connection, a host with no route, a call cut short by the overall call timeout and a failed TLS handshake
+         * all mean the same thing to the caller - the server said nothing. Narrowing this to SocketTimeoutException
+         * left the most common "site is down" cases looking like generic errors, which hid the local replica behind
+         * an error message instead of unlocking with it.
+         */
         val isServerNotReachable: Boolean
-            get() = exception is SocketTimeoutException
+            get() = exception is IOException && exception !is UnknownHostException
 
         val isNoNetworkException: Boolean
             get() = exception is UnknownHostException

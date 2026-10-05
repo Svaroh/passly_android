@@ -29,6 +29,7 @@ import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.formatter.DateFormatter
 import net.svaroh.passly.core.formatter.FingerprintFormatter
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.users.usecase.db.GetLocalCurrentUserUseCase
 import net.svaroh.passly.core.users.user.FetchCurrentUserUseCase
 import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CloseMoreMenu
@@ -42,10 +43,13 @@ import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspec
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.NavigateUp
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.mappers.AccountModelMapper
+import net.svaroh.passly.ui.GpgKeyModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 internal class KeyInspectorViewModel(
     private val fetchCurrentUserUseCase: FetchCurrentUserUseCase,
+    private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
     private val dateFormatter: DateFormatter,
     private val fingerprintFormatter: FingerprintFormatter,
@@ -74,22 +78,43 @@ internal class KeyInspectorViewModel(
         fetchKeyData()
     }
 
+    /**
+     * The replica already holds this key.
+     *
+     * Every field on this screen - fingerprint, length, uid, dates, algorithm - is stored in the local users table,
+     * so asking the server for them turns an instant screen into a wait, and an error message, whenever the server
+     * cannot be reached. The network is used only when the account has no local copy of its own user yet.
+     */
     private suspend fun fetchKeyData() {
+        val localKey =
+            try {
+                getLocalCurrentUserUseCase.execute(Unit).user.gpgKey
+            } catch (exception: Exception) {
+                Timber.d(exception, "No local copy of the current user, asking the server")
+                null
+            }
+
+        if (localKey != null) {
+            showKeyData(localKey)
+            return
+        }
+
         when (val keyData = runAuthenticatedOperation { fetchCurrentUserUseCase.execute(Unit) }) {
             is FetchCurrentUserUseCase.Output.Failure<*> -> emitSideEffect(ShowErrorSnackbar(FAILED_TO_FETCH_KEY, keyData.message))
-            is FetchCurrentUserUseCase.Output.Success -> {
-                val keyData = keyData.userModel.gpgKey
-                updateViewState {
-                    copy(
-                        fingerprint = fingerprintFormatter.format(keyData.fingerprint, appendMiddleSpacing = false).orEmpty(),
-                        keyLength = keyData.bits,
-                        uid = keyData.uid.orEmpty(),
-                        created = keyData.keyCreationDate?.let { dateFormatter.format(it) }.orEmpty(),
-                        expires = keyData.keyExpirationDate?.let { dateFormatter.format(it) }.orEmpty(),
-                        algorithm = keyData.type.orEmpty(),
-                    )
-                }
-            }
+            is FetchCurrentUserUseCase.Output.Success -> showKeyData(keyData.userModel.gpgKey)
+        }
+    }
+
+    private fun showKeyData(keyData: GpgKeyModel) {
+        updateViewState {
+            copy(
+                fingerprint = fingerprintFormatter.format(keyData.fingerprint, appendMiddleSpacing = false).orEmpty(),
+                keyLength = keyData.bits,
+                uid = keyData.uid.orEmpty(),
+                created = keyData.keyCreationDate?.let { dateFormatter.format(it) }.orEmpty(),
+                expires = keyData.keyExpirationDate?.let { dateFormatter.format(it) }.orEmpty(),
+                algorithm = keyData.type.orEmpty(),
+            )
         }
     }
 

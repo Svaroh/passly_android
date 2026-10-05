@@ -137,9 +137,10 @@ private fun provideHttpClient(
 ) = OkHttpClient
     .Builder()
     .addNetworkInterceptor(loggingInterceptor)
-    .connectTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
+    .connectTimeout(Duration.ofSeconds(CONNECT_TIMEOUT_SECONDS))
     .writeTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
     .readTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
+    .callTimeout(Duration.ofSeconds(CALL_TIMEOUT_SECONDS))
     .apply {
         interceptors.forEach { addInterceptor(it) }
     }.followRedirects(followRedirects)

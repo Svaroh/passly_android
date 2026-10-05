@@ -27,3 +27,21 @@ package net.svaroh.passly.core.networking
 const val PLACEHOLDER_BASE_URL = "https://passbolt.baseurl.placeholder"
 
 const val TIMEOUT_SECONDS = 30L
+
+/**
+ * How long a single connection attempt may take.
+ *
+ * A host that is down but still resolves keeps the socket hanging, and OkHttp retries every address it got from DNS,
+ * so this budget is spent once per address. Ten seconds is generous for a reachable server and short enough that an
+ * unreachable one is recognised quickly.
+ */
+const val CONNECT_TIMEOUT_SECONDS = 10L
+
+/**
+ * Upper bound for a whole call, DNS, redirects and every connection attempt included.
+ *
+ * Without it the per-attempt timeouts multiply by the number of addresses, which is how an unreachable host turned
+ * into a minutes-long wait. It is deliberately well above the read timeout: this is a guard against pathological
+ * retries, not a budget for a legitimately large response on a slow link.
+ */
+const val CALL_TIMEOUT_SECONDS = 60L

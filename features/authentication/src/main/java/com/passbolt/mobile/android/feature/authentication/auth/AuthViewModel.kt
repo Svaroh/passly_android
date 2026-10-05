@@ -76,6 +76,7 @@ import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatus
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatusProvider
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatusProvider.MfaState
 import net.svaroh.passly.feature.authentication.auth.usecase.BiometryInteractor
+import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error.Generic
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error.IncorrectServerFingerprint
@@ -133,6 +134,7 @@ class AuthViewModel(
     private val refreshSessionUseCase: RefreshSessionUseCase,
     private val mfaProvidersHandler: MfaProvidersHandler,
     private val hasLocalReplicaUseCase: HasLocalReplicaUseCase,
+    private val backgroundSignInExecutor: BackgroundSignInExecutor,
 ) : SideEffectViewModel<AuthState, AuthSideEffect>(
         AuthState(
             authReason = mapAuthReason(authConfig),
@@ -331,11 +333,37 @@ class AuthViewModel(
         }
     }
 
+    /**
+     * Unlocking never waits for the server.
+     *
+     * The passphrase has already been checked against the locally stored private key, which is the only check that
+     * decides whether this person may open their own vault. Once an account carries a local replica the vault is
+     * shown immediately and the server session is obtained in the background, because that session is needed for
+     * synchronisation only. Contacting the server first used to add the full connection budget to every start
+     * whenever the domain resolved but the site did not answer.
+     *
+     * Two cases still go through the server here: an account with no replica has nothing to show without it, and
+     * account setup has to prove the account really works before it is treated as usable.
+     */
     private fun performSignIn(passphrase: ByteArray) {
         if (authConfig is AuthConfig.RefreshSession) {
             performRefreshSession(passphrase)
-        } else {
+        } else if (authConfig is Setup) {
             performFullSignIn(passphrase)
+        } else {
+            launch {
+                // the local database key is stored per selected account, so the account being unlocked has to become
+                // the selected one before its replica can even be inspected
+                saveSelectedAccountUseCase.execute(UserIdInput(userId))
+                if (hasLocalReplicaUseCase.execute(UserIdInput(userId)).hasLocalReplica) {
+                    Timber.d("Unlocking with the local replica, signing in in the background")
+                    unlockWithLocalReplica()
+                    backgroundSignInExecutor.signIn(userId, passphrase.copyOf())
+                } else {
+                    Timber.d("No local replica yet, the server is needed for this sign in")
+                    performFullSignIn(passphrase)
+                }
+            }
         }
     }
 
