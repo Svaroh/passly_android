@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":database"))
     implementation(project(":entity"))
     implementation(project(":jsonmodel"))
+    implementation(libs.room.runtime)
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin)

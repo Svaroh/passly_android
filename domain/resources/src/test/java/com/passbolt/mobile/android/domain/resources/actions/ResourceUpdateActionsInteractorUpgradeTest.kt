@@ -37,6 +37,8 @@ import net.svaroh.passly.domain.resources.usecase.ResourceShareInteractor
 import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
 import net.svaroh.passly.domain.resources.usecase.db.UpdateLocalResourceUseCase
 import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.core.secrets.usecase.db.RemoveLocalSecretUseCase
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.users.usecase.GetLocalCurrentUserUseCase
 import net.svaroh.passly.jsonmodel.jsonModelModule
 import net.svaroh.passly.supportedresourceTypes.ContentType
@@ -188,6 +190,8 @@ class ResourceUpdateActionsInteractorUpgradeTest : KoinTest {
             getPermissionsSnapshotUseCase = mock<GetPermissionsSnapshotUseCase>(),
             resourceShareInteractor = mock<ResourceShareInteractor>(),
             confirmedRecipientsPublicKeysResolver = mock<ConfirmedRecipientsPublicKeysResolver>(),
+            upsertLocalSecretsUseCase = mock<UpsertLocalSecretsUseCase>(),
+            removeLocalSecretUseCase = mock<RemoveLocalSecretUseCase>(),
         )
     }
 

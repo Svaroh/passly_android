@@ -19,8 +19,8 @@
 package net.svaroh.passly.core.secrets.usecase.db
 
 import net.svaroh.passly.common.usecase.AsyncUseCase
-import net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase
 import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 
 /**
  * Drops the local copy of one secret.
@@ -31,11 +31,12 @@ import net.svaroh.passly.database.DatabaseProvider
  */
 class RemoveLocalSecretUseCase(
     private val databaseProvider: DatabaseProvider,
-) : AsyncUseCase<RemoveLocalSecretUseCase.Input, Unit>,
-    SelectedAccountUseCase {
+    private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
+) : AsyncUseCase<RemoveLocalSecretUseCase.Input, Unit> {
     override suspend fun execute(input: Input) {
+        val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
         databaseProvider
-            .get(selectedAccountId)
+            .get(userId)
             .secretsDao()
             .delete(input.resourceId)
     }

@@ -18,7 +18,7 @@ import net.svaroh.passly.domain.accounts.usecase.SaveSelectedAccountUseCase
 import net.svaroh.passly.domain.accounts.usecase.SaveServerFingerprintUseCase
 import net.svaroh.passly.domain.auth.model.ServerSignOutStatus
 import net.svaroh.passly.domain.auth.usecase.GetPassphraseUseCase
-import net.svaroh.passly.domain.auth.usecase.HasLocalReplicaUseCase
+import net.svaroh.passly.database.usecase.HasLocalReplicaUseCase
 import net.svaroh.passly.domain.auth.usecase.SaveMfaTokenUseCase
 import net.svaroh.passly.domain.auth.usecase.SaveSessionUseCase
 import net.svaroh.passly.domain.inappreview.usecase.InAppReviewInteractor
@@ -26,7 +26,6 @@ import net.svaroh.passly.domain.preferences.PreferencesDefaults
 import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.domain.privatekey.model.PrivateKey
 import net.svaroh.passly.domain.privatekey.usecase.GetPrivateKeyUseCase
-import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.BiometricAuthenticationError
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.BiometricAuthenticationSuccess

@@ -20,16 +20,15 @@ package net.svaroh.passly.resourcemoremenu.usecase
 
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
-import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
-import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
 import net.svaroh.passly.jsonmodel.jsonModelModule
 import net.svaroh.passly.supportedresourceTypes.ContentType
 import net.svaroh.passly.ui.MetadataJsonModel
 import net.svaroh.passly.ui.RbacModel
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
 import net.svaroh.passly.ui.ResourcePermission
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level
@@ -51,33 +50,26 @@ class CreateResourceMoreMenuModelUseCaseTest : KoinTest {
 
     private val getLocalResourceUseCase = mock<GetLocalResourceUseCase>()
     private val getRbacRulesUseCase = mock<GetRbacRulesUseCase>()
-    private val idToSlugMappingProvider = mock<ResourceTypeIdToSlugMappingProvider>()
     private val useCase =
         CreateResourceMoreMenuModelUseCase(
             getLocalResourceUseCase,
             getRbacRulesUseCase,
-            idToSlugMappingProvider,
         )
 
     @Test
     fun `edit action should be hidden for passkey resources`() =
         runTest {
-            val resourceTypeId = UUID.randomUUID()
             getLocalResourceUseCase.stub {
                 onBlocking { execute(GetLocalResourceUseCase.Input(RESOURCE_ID)) } doReturn
                     GetLocalResourceUseCase.Output(
                         resourceModel(
-                            resourceTypeId = resourceTypeId,
+                            slug = ContentType.V5Passkey.slug,
                             permission = ResourcePermission.OWNER,
                         ),
                     )
             }
             getRbacRulesUseCase.stub {
                 onBlocking { execute(Unit) } doReturn GetRbacRulesUseCase.Output(ALLOW_ALL_RBAC)
-            }
-            idToSlugMappingProvider.stub {
-                onBlocking { provideMappingForSelectedAccount() } doReturn
-                    mapOf(resourceTypeId to ContentType.V5Passkey.slug)
             }
 
             val model = useCase.execute(CreateResourceMoreMenuModelUseCase.Input(RESOURCE_ID)).resourceMenuModel
@@ -90,11 +82,12 @@ class CreateResourceMoreMenuModelUseCaseTest : KoinTest {
         }
 
     private fun resourceModel(
-        resourceTypeId: UUID,
+        slug: String,
         permission: ResourcePermission,
-    ) = ResourceModel(
+    ) = ResourceUiModel(
         resourceId = RESOURCE_ID,
-        resourceTypeId = resourceTypeId.toString(),
+        resourceTypeId = UUID.randomUUID().toString(),
+        slug = slug,
         folderId = null,
         permission = permission,
         favouriteId = null,

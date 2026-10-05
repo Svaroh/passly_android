@@ -1,7 +1,6 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
 import net.svaroh.passly.common.usecase.UserIdInput
-<<<<<<< HEAD
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.TIMEOUT
@@ -12,13 +11,6 @@ import net.svaroh.passly.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
 import net.svaroh.passly.domain.auth.usecase.SaveServerPublicRsaKeyUseCase
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
-=======
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.accountdata.IsServerFingerprintCorrectUseCase
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import net.svaroh.passly.core.networking.NetworkResult
->>>>>>> c85de2f9a (Store secrets locally so the app works without the server (#5))
 import timber.log.Timber
 
 /**

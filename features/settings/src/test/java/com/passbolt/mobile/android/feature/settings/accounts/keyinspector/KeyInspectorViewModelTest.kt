@@ -199,7 +199,7 @@ class KeyInspectorViewModelTest : KoinTest {
             viewModel = get()
 
             viewModel.viewState.test {
-                assertThat(awaitItem().fingerprint).isEqualTo(user.userModel.gpgKey.fingerprint)
+                assertThat(awaitItem().fingerprint).isEqualTo(user.userUiModel.gpgKey.fingerprint)
             }
 
             val fetchCurrentUserUseCase: FetchCurrentUserUseCase = get()

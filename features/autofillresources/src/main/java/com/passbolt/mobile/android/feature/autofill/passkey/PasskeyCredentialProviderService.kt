@@ -45,9 +45,9 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourcesUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesUseCase
 import net.svaroh.passly.supportedresourceTypes.ContentType
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -168,7 +168,7 @@ class PasskeyCredentialProviderService :
     }
 
     private fun buildCredentialEntry(
-        resource: ResourceModel,
+        resource: ResourceUiModel,
         option: BeginGetPublicKeyCredentialOption,
         optionIndex: Int,
     ): PublicKeyCredentialEntry {
@@ -253,7 +253,7 @@ class PasskeyCredentialProviderService :
             CREATE_PUBLIC_KEY_CREDENTIAL_REQUEST_SUBTYPE ||
             candidateQueryData.containsKey(CREDENTIAL_BUNDLE_KEY_REQUEST_JSON)
 
-    private fun ResourceModel.matchesRpId(rpId: String): Boolean {
+    private fun ResourceUiModel.matchesRpId(rpId: String): Boolean {
         val candidates =
             buildList {
                 runCatching { metadataJsonModel.uri }.getOrNull()?.let(::add)

@@ -34,9 +34,4 @@ internal fun Module.pinCodeFormModule() {
             pinCodeGenerator = get(),
         )
     }
-    single {
-        HasLocalReplicaUseCase(
-            databaseProvider = get(),
-        )
-    }
 }

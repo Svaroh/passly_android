@@ -18,6 +18,7 @@ import net.svaroh.passly.domain.resources.usecase.db.RemoveLocalResourcePermissi
 import net.svaroh.passly.domain.resources.usecase.db.RemoveLocalResourcesWithUpdateStateUseCase
 import net.svaroh.passly.domain.resources.usecase.db.RemoveLocalUrisUseCase
 import net.svaroh.passly.domain.resources.usecase.db.SetLocalResourcesUpdateStateUseCase
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.resources.usecase.db.UpsertLocalResourcesUseCase
 import net.svaroh.passly.domain.tags.usecase.AddLocalTagsUseCase
 import net.svaroh.passly.domain.tags.usecase.RemoveLocalTagsUseCase
@@ -100,6 +101,7 @@ class ResourceInteractorTest : KoinTest {
                     single { mock<RemoveLocalResourcesWithUpdateStateUseCase>() }
                     single { mock<GlobalPreferencesRepository>() }
                     single { mock<GetSelectedAccountUseCase>() }
+                    single { mock<UpsertLocalSecretsUseCase>() }
                     singleOf(::PassThroughTransactionRunner) bind DatabaseTransactionRunner::class
                     single(named(JSON_MODEL_GSON)) { Gson() }
                     single {
@@ -258,6 +260,7 @@ class ResourceInteractorTest : KoinTest {
                 GetResourcesPaginatedUseCase.Output.Success(
                     totalCount = totalCount,
                     resources = resources,
+                    secrets = emptyList(),
                 ),
             )
         }

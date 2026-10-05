@@ -33,6 +33,7 @@ import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_NOTE
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.REMOVE_FROM_FAVOURITES
 import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.supportedresourceTypes.ContentType
 import net.svaroh.passly.ui.contentType
 import net.svaroh.passly.ui.isFavourite
 

@@ -47,16 +47,16 @@ import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.RefreshSession
-import net.svaroh.passly.core.resources.interactor.create.CreateResourceInteractor
-import net.svaroh.passly.core.resources.usecase.db.AddLocalResourcePermissionsUseCase
-import net.svaroh.passly.core.resources.usecase.db.AddLocalResourceUseCase
-import net.svaroh.passly.core.secrets.usecase.decrypt.SecretInteractor
-import net.svaroh.passly.core.secrets.usecase.decrypt.parser.SecretJsonModel
-import net.svaroh.passly.core.users.usecase.db.GetLocalCurrentUserUseCase
+import net.svaroh.passly.domain.resources.interactor.create.CreateResourceInteractor
+import net.svaroh.passly.domain.resources.usecase.db.AddLocalResourcePermissionsUseCase
+import net.svaroh.passly.domain.resources.usecase.db.AddLocalResourceUseCase
+import net.svaroh.passly.domain.secrets.usecase.decrypt.SecretInteractor
+import net.svaroh.passly.domain.secrets.model.SecretJsonModel
+import net.svaroh.passly.domain.users.usecase.GetLocalCurrentUserUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
-import net.svaroh.passly.metadata.usecase.GetMetadataKeysSettingsUseCase
-import net.svaroh.passly.metadata.usecase.db.GetLocalMetadataKeysUseCase
-import net.svaroh.passly.metadata.usecase.db.GetLocalMetadataKeysUseCase.MetadataKeyPurpose.ENCRYPT
+import net.svaroh.passly.domain.metadata.usecase.GetMetadataKeysSettingsUseCase
+import net.svaroh.passly.domain.metadata.usecase.db.GetLocalMetadataKeysUseCase
+import net.svaroh.passly.domain.metadata.model.MetadataKeyPurpose.ENCRYPT
 import net.svaroh.passly.supportedresourceTypes.ContentType
 import net.svaroh.passly.ui.CreateResourceModel
 import net.svaroh.passly.ui.MetadataJsonModel
@@ -339,11 +339,11 @@ class PasskeyCredentialProviderActivity :
             }
             is CreateResourceInteractor.Output.PasswordExpired ->
                 PasskeyResourceCreateOutcome.NeedsAuthentication(RefreshPassphrase)
-            is CreateResourceInteractor.Output.Failure<*> ->
+            is CreateResourceInteractor.Output.Failure ->
                 output.authenticationState.toAuthConfig()?.let(PasskeyResourceCreateOutcome::NeedsAuthentication)
                     ?: PasskeyResourceCreateOutcome.Failure(
-                        output.response.exception.message ?: "Unable to save this passkey.",
-                        output.response.exception,
+                        output.message ?: "Unable to save this passkey.",
+                        null,
                     )
             is CreateResourceInteractor.Output.OpenPgpError ->
                 PasskeyResourceCreateOutcome.Failure(output.message ?: "Unable to encrypt this passkey.", null)
@@ -362,7 +362,7 @@ class PasskeyCredentialProviderActivity :
                 ) {
                     SecretFetchOutcome.NeedsAuthentication(RefreshSession)
                 } else {
-                    SecretFetchOutcome.Failure("Unable to fetch this passkey.", output.exception)
+                    SecretFetchOutcome.Failure("Unable to fetch this passkey.", null)
                 }
             }
             is SecretInteractor.Output.DecryptFailure ->

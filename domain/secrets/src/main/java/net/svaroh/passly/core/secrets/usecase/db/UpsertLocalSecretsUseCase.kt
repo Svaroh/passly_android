@@ -19,8 +19,8 @@
 package net.svaroh.passly.core.secrets.usecase.db
 
 import net.svaroh.passly.common.usecase.AsyncUseCase
-import net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase
 import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import net.svaroh.passly.entity.secret.Secret
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -33,12 +33,13 @@ import java.time.ZonedDateTime
  */
 class UpsertLocalSecretsUseCase(
     private val databaseProvider: DatabaseProvider,
-) : AsyncUseCase<UpsertLocalSecretsUseCase.Input, Unit>,
-    SelectedAccountUseCase {
+    private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
+) : AsyncUseCase<UpsertLocalSecretsUseCase.Input, Unit> {
     override suspend fun execute(input: Input) {
         if (input.secrets.isEmpty()) return
 
-        val database = databaseProvider.get(selectedAccountId)
+        val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
+        val database = databaseProvider.get(userId)
         val knownResourceIds =
             input.secrets
                 .map { it.resourceId }

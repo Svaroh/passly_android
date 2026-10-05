@@ -43,7 +43,7 @@ import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspec
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.NavigateUp
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.mappers.AccountModelMapper
-import net.svaroh.passly.ui.GpgKeyModel
+import net.svaroh.passly.ui.GpgKeyUiModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -105,7 +105,7 @@ internal class KeyInspectorViewModel(
         }
     }
 
-    private fun showKeyData(keyData: GpgKeyModel) {
+    private fun showKeyData(keyData: GpgKeyUiModel) {
         updateViewState {
             copy(
                 fingerprint = fingerprintFormatter.format(keyData.fingerprint, appendMiddleSpacing = false).orEmpty(),

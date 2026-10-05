@@ -34,10 +34,12 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordAndDescripti
 import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordString
 import net.svaroh.passly.supportedresourceTypes.ContentType.Totp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5CustomFields
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PinCodeStandalone
 import net.svaroh.passly.ui.DecryptedSecretOrError
 import kotlinx.coroutines.test.runTest
+import java.util.UUID
 import net.jimblackler.jsonschemafriend.SchemaStore
 import org.junit.Before
 import org.junit.Rule
@@ -265,13 +267,7 @@ class SecretParserTest : KoinTest {
                     "transports": ["internal"]
                 }
                 """.trimIndent()
-            mockIdToSlugMappingProvider.stub {
-                onBlocking { provideMappingForSelectedAccount() }.doReturn(
-                    mapOf(resourceTypeId to V5Passkey.slug),
-                )
-            }
-
-            val secretResult = secretParser.parseSecret(resourceTypeId.toString(), secret)
+            val secretResult = secretParser.parseSecret(V5Passkey.slug, secret)
 
             assertThat(secretResult).isInstanceOf(DecryptedSecretOrError.DecryptedSecret::class.java)
             val parsedSecret = (secretResult as DecryptedSecretOrError.DecryptedSecret).secret

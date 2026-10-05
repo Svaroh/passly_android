@@ -23,9 +23,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import net.svaroh.passly.common.extension.erase
-import net.svaroh.passly.core.accounts.usecase.accountdata.SaveServerFingerprintUseCase
-import net.svaroh.passly.core.authenticationcore.session.SaveSessionUseCase
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.accounts.usecase.SaveServerFingerprintUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveMfaTokenUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveSessionUseCase
 import timber.log.Timber
 
 /**
@@ -43,6 +44,7 @@ class BackgroundSignInExecutor(
     private val getAndVerifyServerKeysInteractor: GetAndVerifyServerKeysAndTimeInteractor,
     private val signInVerifyInteractor: SignInVerifyInteractor,
     private val saveSessionUseCase: SaveSessionUseCase,
+    private val saveMfaTokenUseCase: SaveMfaTokenUseCase,
     private val saveServerFingerprintUseCase: SaveServerFingerprintUseCase,
     coroutineLaunchContext: CoroutineLaunchContext,
 ) {
@@ -95,9 +97,16 @@ class BackgroundSignInExecutor(
                         userId = userId,
                         accessToken = signInResult.accessToken,
                         refreshToken = signInResult.refreshToken,
-                        mfaToken = signInResult.mfaToken,
                     ),
                 )
+                signInResult.mfaToken?.let { token ->
+                    saveMfaTokenUseCase.execute(
+                        SaveMfaTokenUseCase.Input(
+                            userId = userId,
+                            mfaToken = token,
+                        ),
+                    )
+                }
                 saveServerFingerprintUseCase.execute(
                     SaveServerFingerprintUseCase.Input(userId, serverKeys.pgpKeyFingerprint),
                 )

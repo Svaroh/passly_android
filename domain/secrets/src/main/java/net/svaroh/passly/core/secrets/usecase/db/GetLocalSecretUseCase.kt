@@ -19,8 +19,8 @@
 package net.svaroh.passly.core.secrets.usecase.db
 
 import net.svaroh.passly.common.usecase.AsyncUseCase
-import net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase
 import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 
 /**
  * Reads the locally stored OpenPGP ciphertext of a secret.
@@ -30,12 +30,13 @@ import net.svaroh.passly.database.DatabaseProvider
  */
 class GetLocalSecretUseCase(
     private val databaseProvider: DatabaseProvider,
-) : AsyncUseCase<GetLocalSecretUseCase.Input, GetLocalSecretUseCase.Output>,
-    SelectedAccountUseCase {
+    private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
+) : AsyncUseCase<GetLocalSecretUseCase.Input, GetLocalSecretUseCase.Output> {
     override suspend fun execute(input: Input): Output {
+        val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
         val secret =
             databaseProvider
-                .get(selectedAccountId)
+                .get(userId)
                 .secretsDao()
                 .getSecret(input.resourceId)
 
