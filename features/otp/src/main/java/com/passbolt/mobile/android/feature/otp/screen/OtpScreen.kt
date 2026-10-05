@@ -159,7 +159,7 @@ internal fun OtpScreen(
                 navigator.navigateToKey(MainResourceForm(ResourceFormMode.Create(it.leadingContentType, null)))
             is NavigateToEditResourceForm ->
                 navigator.navigateToKey(MainResourceForm(ResourceFormMode.Edit(it.resourceId, it.resourceName)))
-            InitiateDataRefresh -> DataRefreshService.start(context)
+            InitiateDataRefresh -> DataRefreshService.start(context, isUserInitiated = true)
             is ShowToast -> Toast.makeText(context, getToastMessage(context, it.type), Toast.LENGTH_SHORT).show()
         }
     }
@@ -205,7 +205,7 @@ fun OtpScreen(
                 val context = LocalContext.current
                 PullToRefreshBox(
                     isRefreshing = state.isRefreshing,
-                    onRefresh = { DataRefreshService.start(context) },
+                    onRefresh = { DataRefreshService.start(context, isUserInitiated = true) },
                     modifier =
                         Modifier
                             .fillMaxSize()

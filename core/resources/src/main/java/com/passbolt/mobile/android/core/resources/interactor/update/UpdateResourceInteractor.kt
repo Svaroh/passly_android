@@ -173,7 +173,14 @@ class UpdateResourceInteractor(
                     )
             ) {
                 is NetworkResult.Failure -> Output.Failure(response)
-                is NetworkResult.Success -> Output.Success(resourceModelMapper.map(response.value.body))
+                is NetworkResult.Success ->
+                    Output.Success(
+                        resource = resourceModelMapper.map(response.value.body),
+                        armoredSecretForCurrentUser =
+                            secrets
+                                .firstOrNull { it.userId == getSelectedAccountUseCase.execute(Unit).selectedAccount }
+                                ?.data,
+                    )
             }
         }
     }
@@ -272,6 +279,11 @@ class UpdateResourceInteractor(
 
         data class Success(
             val resource: ResourceModel,
+            /**
+             * Ciphertext just re-encrypted for this device's account. Null only if the account somehow was not among
+             * the users the resource was encrypted for, in which case the stale local copy is dropped instead.
+             */
+            val armoredSecretForCurrentUser: String?,
         ) : Output()
 
         data class Failure<T : Any>(

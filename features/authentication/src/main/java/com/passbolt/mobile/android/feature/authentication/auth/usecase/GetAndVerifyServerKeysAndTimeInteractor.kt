@@ -3,6 +3,9 @@ package net.svaroh.passly.feature.authentication.auth.usecase
 import net.svaroh.passly.common.usecase.UserIdInput
 import net.svaroh.passly.core.accounts.usecase.accountdata.GetAccountDataUseCase
 import net.svaroh.passly.core.accounts.usecase.accountdata.IsServerFingerprintCorrectUseCase
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import net.svaroh.passly.core.networking.NetworkResult
 import timber.log.Timber
 import kotlin.time.measureTimedValue
 
@@ -42,8 +45,16 @@ class GetAndVerifyServerKeysAndTimeInteractor(
         onSuccess: suspend (Success) -> Unit,
     ) {
         Timber.d("Getting server pgp and rsa keys")
-        val (pgpKey, getTimeRequestDuration) = measureTimedValue { fetchServerPublicPgpKeyUseCase.execute(Unit) }
-        val rsaKey = fetchServerPublicRsaKeyUseCase.execute(Unit)
+        // the two keys are independent, so they are fetched at once: run one after the other, an unreachable server
+        // costs two full connection budgets before the caller is told anything
+        val (timedPgpKey, rsaKey) =
+            coroutineScope {
+                val pgpKeyRequest = async { measureTimedValue { fetchServerPublicPgpKeyUseCase.execute(Unit) } }
+                val rsaKeyRequest = async { fetchServerPublicRsaKeyUseCase.execute(Unit) }
+                pgpKeyRequest.await() to rsaKeyRequest.await()
+            }
+        val pgpKey = timedPgpKey.value
+        val getTimeRequestDuration = timedPgpKey.duration
 
         if (pgpKey is FetchServerPublicPgpKeyUseCase.Output.Success &&
             rsaKey is FetchServerPublicRsaKeyUseCase.Output.Success
@@ -67,13 +78,10 @@ class GetAndVerifyServerKeysAndTimeInteractor(
                 onSuccess(Success(pgpKey.publicKey, pgpKey.fingerprint, rsaKey.rsaKey))
             }
         } else {
-            if ((pgpKey as? FetchServerPublicPgpKeyUseCase.Output.Failure)
-                    ?.error
-                    ?.isServerNotReachable == true ||
-                (rsaKey as? FetchServerPublicRsaKeyUseCase.Output.Failure)
-                    ?.error
-                    ?.isServerNotReachable == true
-            ) {
+            val pgpFailure = (pgpKey as? FetchServerPublicPgpKeyUseCase.Output.Failure)?.error
+            val rsaFailure = (rsaKey as? FetchServerPublicRsaKeyUseCase.Output.Failure)?.error
+
+            if (isUnreachable(pgpFailure) || isUnreachable(rsaFailure)) {
                 Timber.d("Server is not reachable")
                 val accountData = getAccountDataUseCase.execute(UserIdInput(userId))
                 onError(Error.ServerNotReachable(accountData.url))
@@ -83,6 +91,16 @@ class GetAndVerifyServerKeysAndTimeInteractor(
             }
         }
     }
+
+    /**
+     * "Cannot be reached" has to cover having no network at all, not only a server that answers too slowly.
+     *
+     * A timeout raises SocketTimeoutException, but the far more common offline case - flight mode, no signal, no DNS -
+     * raises UnknownHostException. Treating only the former as unreachable made every real offline start fall through
+     * to a generic error, which is exactly the situation the local replica exists for.
+     */
+    private fun isUnreachable(failure: NetworkResult.Failure<*>?): Boolean =
+        failure != null && (failure.isServerNotReachable || failure.isNoNetworkException)
 
     data class Success(
         val pgpKey: String,

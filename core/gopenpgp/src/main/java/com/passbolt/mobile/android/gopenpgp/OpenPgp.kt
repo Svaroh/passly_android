@@ -45,6 +45,13 @@ class OpenPgp(
     private val pgpHandle: PGPHandle,
     private val gopenPgpExceptionParser: GopenPgpExceptionParser,
 ) {
+    /**
+     * Offset between this device's clock and the server's, learned during sign in.
+     *
+     * Zero means "use the device clock", which is deliberately also the offline behaviour: crypto must keep working
+     * when the server cannot be asked for the time, so this must never become a value that has to be fetched before
+     * decryption is allowed.
+     */
     private var timeOffsetSeconds: Long = 0L
 
     suspend fun encryptSignMessageArmored(

@@ -213,7 +213,7 @@ internal fun HomeScreen(
                         ),
                     ),
                 )
-            InitiateDataRefresh -> DataRefreshService.start(context)
+            InitiateDataRefresh -> DataRefreshService.start(context, isUserInitiated = true)
             is NavigateToResourceUri -> navigator.openExternalWebsite(context, it.url)
             is NavigateToShare ->
                 navigator.navigateToKey(
@@ -290,7 +290,7 @@ private fun HomeScreen(
         content = { paddingValues ->
             PullToRefreshBox(
                 isRefreshing = state.isRefreshing,
-                onRefresh = { DataRefreshService.start(context) },
+                onRefresh = { DataRefreshService.start(context, isUserInitiated = true) },
                 modifier =
                     Modifier
                         .fillMaxSize()

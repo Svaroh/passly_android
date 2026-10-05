@@ -19,6 +19,7 @@ import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
 import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.core.security.rootdetection.RootDetector
 import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
+import net.svaroh.passly.database.usecase.HasLocalReplicaUseCase
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.BiometricAuthenticationSuccess
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.ConnectToExistingAccount
@@ -39,6 +40,7 @@ import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErro
 import net.svaroh.passly.feature.authentication.auth.AuthState.RefreshAuthReason.PASSPHRASE
 import net.svaroh.passly.feature.authentication.auth.AuthState.RefreshAuthReason.SESSION
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatusProvider
+import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.feature.authentication.auth.usecase.BiometryInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.PostSignInActionsInteractor
@@ -103,6 +105,8 @@ class AuthViewModelTest : KoinTest {
                     single { mock<InAppReviewInteractor>() }
                     single { mock<PostSignInActionsInteractor>() }
                     single { mock<RefreshSessionUseCase>() }
+                    single { mock<HasLocalReplicaUseCase>() }
+                    single { mock<BackgroundSignInExecutor>() }
                     single { RuntimeAuthenticatedFlag() }
                     singleOf(::SignInIdlingResource)
                     factoryOf(::MfaProvidersHandler)
@@ -133,6 +137,8 @@ class AuthViewModelTest : KoinTest {
                             postSignInActionsInteractor = get(),
                             refreshSessionUseCase = get(),
                             mfaProvidersHandler = get(),
+                            hasLocalReplicaUseCase = get(),
+                            backgroundSignInExecutor = get(),
                         )
                     }
                 },

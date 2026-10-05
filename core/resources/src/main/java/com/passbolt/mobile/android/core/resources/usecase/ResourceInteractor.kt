@@ -13,6 +13,7 @@ import net.svaroh.passly.core.resources.usecase.db.RemoveLocalResourcesWithUpdat
 import net.svaroh.passly.core.resources.usecase.db.RemoveLocalUrisUseCase
 import net.svaroh.passly.core.resources.usecase.db.SetLocalResourcesUpdateStateUseCase
 import net.svaroh.passly.core.resources.usecase.db.UpsertLocalResourcesUseCase
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.core.tags.usecase.db.AddLocalTagsUseCase
 import net.svaroh.passly.core.tags.usecase.db.RemoveLocalTagsUseCase
 import net.svaroh.passly.entity.resource.ResourceUpdateState.PENDING
@@ -52,6 +53,7 @@ class ResourceInteractor(
     private val addLocalResourcePermissionsUseCase: AddLocalResourcePermissionsUseCase,
     private val setLocalResourcesUpdateStateUseCase: SetLocalResourcesUpdateStateUseCase,
     private val removeLocalResourcesWithUpdateStateUseCase: RemoveLocalResourcesWithUpdateStateUseCase,
+    private val upsertLocalSecretsUseCase: UpsertLocalSecretsUseCase,
 ) : SelectedAccountUseCase {
     @Suppress("ReturnCount")
     suspend fun fetchAndSaveResources(): Output {
@@ -78,7 +80,7 @@ class ResourceInteractor(
                 is Failure<*> -> return Output.Failure(firstPageResult.authenticationState)
                 is Success -> {
                     // process first page
-                    processResources(firstPageResult.resources)
+                    processResources(firstPageResult.resources, firstPageResult.secrets)
 
                     // process remaining pages
                     val totalPages = ceil(firstPageResult.pagination.count.toDouble() / RESOURCES_PAGE_SIZE).toInt()
@@ -91,7 +93,7 @@ class ResourceInteractor(
                                 )
                         ) {
                             is Failure<*> -> return Output.Failure(pageResult.authenticationState)
-                            is Success -> processResources(pageResult.resources)
+                            is Success -> processResources(pageResult.resources, pageResult.secrets)
                         }
                     }
 
@@ -114,9 +116,18 @@ class ResourceInteractor(
         }
     }
 
-    private suspend fun processResources(resources: List<ResourceModelWithAttributes>) {
+    private suspend fun processResources(
+        resources: List<ResourceModelWithAttributes>,
+        secrets: List<UpsertLocalSecretsUseCase.LocalSecret>,
+    ) {
         upsertLocalResourcesUseCase.execute(
             UpsertLocalResourcesUseCase.Input(resources.map { it.resourceModel }, selectedAccountId),
+        )
+
+        // secrets are stored right after their resources so that autonomy is reached page by page - an interrupted
+        // first refresh still leaves everything it managed to download fully usable offline
+        upsertLocalSecretsUseCase.execute(
+            UpsertLocalSecretsUseCase.Input(secrets),
         )
 
         addLocalTagsUseCase.execute(

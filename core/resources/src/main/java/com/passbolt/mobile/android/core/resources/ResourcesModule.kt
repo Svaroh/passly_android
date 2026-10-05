@@ -120,6 +120,8 @@ val resourcesModule =
                 getMetadataKeysSettingsUseCase = get(),
                 getMetadataKeysUseCase = get(),
                 resourceTypeIdToSlugMappingProvider = get(),
+                upsertLocalSecretsUseCase = get(),
+                removeLocalSecretUseCase = get(),
             )
         }
         factory<ResourceUpdateActionsInteractorFactory> {
@@ -139,6 +141,7 @@ val resourcesModule =
                 getLocalCurrentUserUseCase = get(),
                 metadataPrivateKeysInteractor = get(),
                 resourceTypeIdToSlugMappingProvider = get(),
+                upsertLocalSecretsUseCase = get(),
             )
         }
     }

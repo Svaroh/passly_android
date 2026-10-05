@@ -5,6 +5,7 @@ import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState
 import net.svaroh.passly.core.networking.MfaTypeProvider
 import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.dto.PassphraseNotInCacheException
 import net.svaroh.passly.dto.response.Pagination
 import net.svaroh.passly.mappers.PermissionsModelMapper
@@ -12,6 +13,9 @@ import net.svaroh.passly.mappers.ResourceModelMapper
 import net.svaroh.passly.mappers.TagsModelMapper
 import net.svaroh.passly.passboltapi.resource.ResourceRepository
 import net.svaroh.passly.ui.ResourceModelWithAttributes
+import timber.log.Timber
+import java.time.ZonedDateTime
+import java.time.format.DateTimeParseException
 
 /**
  * Passbolt - Open source password manager for teams
@@ -47,15 +51,35 @@ class GetResourcesPaginatedUseCase(
             is NetworkResult.Success ->
                 Output.Success(
                     pagination = response.value.header.pagination,
-                    response.value.body.map {
-                        ResourceModelWithAttributes(
-                            resourceModelMapper.map(it),
-                            it.tags?.map { tag -> tagModelMapper.map(tag) }.orEmpty(),
-                            it.permissions?.map { permission -> permissionsModelMapper.map(permission) }.orEmpty(),
-                            it.favorite?.id?.toString(),
-                        )
-                    },
+                    resources =
+                        response.value.body.map {
+                            ResourceModelWithAttributes(
+                                resourceModelMapper.map(it),
+                                it.tags?.map { tag -> tagModelMapper.map(tag) }.orEmpty(),
+                                it.permissions?.map { permission -> permissionsModelMapper.map(permission) }.orEmpty(),
+                                it.favorite?.id?.toString(),
+                            )
+                        },
+                    secrets =
+                        response.value.body.mapNotNull { resource ->
+                            resource.secrets?.firstOrNull()?.let { secret ->
+                                UpsertLocalSecretsUseCase.LocalSecret(
+                                    resourceId = resource.id.toString(),
+                                    secretId = secret.id?.toString(),
+                                    armoredData = secret.data,
+                                    modified = secret.modified?.let(::parseModified),
+                                )
+                            }
+                        },
                 )
+        }
+
+    private fun parseModified(modified: String): ZonedDateTime? =
+        try {
+            ZonedDateTime.parse(modified)
+        } catch (exception: DateTimeParseException) {
+            Timber.w(exception, "Could not parse the secret modification date, storing the secret without it")
+            null
         }
 
     data class Input(
@@ -87,6 +111,7 @@ class GetResourcesPaginatedUseCase(
         data class Success(
             val pagination: Pagination,
             val resources: List<ResourceModelWithAttributes>,
+            val secrets: List<UpsertLocalSecretsUseCase.LocalSecret>,
         ) : Output()
 
         class Failure<T : Any>(

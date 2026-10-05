@@ -23,22 +23,70 @@
 
 package net.svaroh.passly.core.secrets.usecase.decrypt
 
+import net.svaroh.passly.core.accounts.usecase.SelectedAccountUseCase
 import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState
 import net.svaroh.passly.core.mvp.authentication.UnauthenticatedReason
+import net.svaroh.passly.core.secrets.usecase.db.GetLocalSecretUseCase
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.gopenpgp.exception.OpenPgpError
 import retrofit2.HttpException
+import timber.log.Timber
 import java.net.HttpURLConnection
 
+/**
+ * Resolves the plain secret of a resource, local copy first.
+ *
+ * The local ciphertext is authoritative for reading: it is the same armored block the server holds, it never
+ * expires, and reaching for it does not need a session, a network or a server that still exists. The network is
+ * consulted only when this device has never stored the secret - a resource that appeared through some path that did
+ * not carry secrets yet. Whatever the network returns is written to the local store, so the same resource is
+ * autonomous from then on.
+ */
 class SecretInteractor(
     private val fetchSecretUseCase: FetchSecretUseCase,
     private val decryptSecretUseCase: DecryptSecretUseCase,
-) {
+    private val getLocalSecretUseCase: GetLocalSecretUseCase,
+    private val upsertLocalSecretsUseCase: UpsertLocalSecretsUseCase,
+) : SelectedAccountUseCase {
     suspend fun fetchAndDecrypt(resourceId: String): Output =
+        when (val local = getLocalSecretUseCase.execute(GetLocalSecretUseCase.Input(resourceId))) {
+            is GetLocalSecretUseCase.Output.Cached -> decrypt(local.armoredSecret)
+            is GetLocalSecretUseCase.Output.NotCached -> fetchDecryptAndCache(resourceId)
+        }
+
+    private suspend fun fetchDecryptAndCache(resourceId: String): Output =
         when (val response = fetchSecretUseCase.execute(FetchSecretUseCase.Input(resourceId))) {
-            is FetchSecretUseCase.Output.EncryptedSecret -> decrypt(response.encryptedSecret)
+            is FetchSecretUseCase.Output.EncryptedSecret -> {
+                cache(resourceId, response.encryptedSecret)
+                decrypt(response.encryptedSecret)
+            }
             is FetchSecretUseCase.Output.Failure -> Output.FetchFailure(response.exception)
         }
+
+    private suspend fun cache(
+        resourceId: String,
+        armoredSecret: String,
+    ) {
+        try {
+            upsertLocalSecretsUseCase.execute(
+                UpsertLocalSecretsUseCase.Input(
+                    secrets =
+                        listOf(
+                            UpsertLocalSecretsUseCase.LocalSecret(
+                                resourceId = resourceId,
+                                secretId = null,
+                                armoredData = armoredSecret,
+                                modified = null,
+                            ),
+                        ),
+                ),
+            )
+        } catch (exception: Exception) {
+            // failing to cache must not fail the read the user asked for
+            Timber.e(exception, "Could not store the secret of resource locally")
+        }
+    }
 
     private suspend fun decrypt(encryptedSecret: String): Output =
         when (val output = decryptSecretUseCase.execute(DecryptSecretUseCase.Input(encryptedSecret))) {

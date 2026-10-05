@@ -55,9 +55,31 @@ class AuthenticatedOperationRunner : KoinComponent {
     private val appForegroundListener: AppForegroundListener by inject()
     private val sessionRefreshTrackingFlow: SessionRefreshTrackingFlow by inject()
 
-    suspend fun <OUTPUT : AuthenticatedUseCaseOutput> runOperation(request: suspend () -> OUTPUT): OUTPUT {
-        val needFullSignIn = isFullSignInNeeded()
+    /**
+     * @param requiresSession false for an operation that a synchronised device can serve on its own, such as reading
+     * a secret that is already stored locally. Probing the session up front means a request to the server, so for
+     * local work it turns an instant read into the full connection budget whenever the server cannot be reached -
+     * and, with no session at all, into an authentication screen for data that needs none. A passphrase that is no
+     * longer in memory is still asked for: that check and that prompt are local.
+     *
+     * @param canPromptForAuthentication false for work the user did not ask for, such as a background refresh.
+     * Such an operation may fail quietly, but it must never put an authentication screen in front of someone who
+     * only opened the app: the local replica is readable without a server session, so a missing session is a
+     * synchronisation problem, not a reason to demand the passphrase again.
+     */
+    @Suppress("ReturnCount")
+    suspend fun <OUTPUT : AuthenticatedUseCaseOutput> runOperation(
+        canPromptForAuthentication: Boolean = true,
+        requiresSession: Boolean = true,
+        request: suspend () -> OUTPUT,
+    ): OUTPUT {
+        val needFullSignIn = if (requiresSession) isFullSignInNeeded() else false
         val needPassphraseRefresh = isPassphraseRefreshNeeded()
+
+        if (!canPromptForAuthentication && (needFullSignIn || needPassphraseRefresh)) {
+            Timber.d("[Session] No usable session for a background operation, skipping it silently")
+            return request.invoke()
+        }
 
         // session is refreshed proactively to avoid waiting for the first request to fail
         // bot local and backend sessions are checked
@@ -67,11 +89,15 @@ class AuthenticatedOperationRunner : KoinComponent {
         val response = request.invoke()
         val authenticationState = response.authenticationState
         return if (authenticationState is Unauthenticated) {
+            if (!canPromptForAuthentication) {
+                Timber.d("[Session] Background operation is unauthenticated, leaving it to the next refresh")
+                return response
+            }
             // sometimes even with proactive refresh we may receive Unauthenticated state from backend
             // i.e. after server key rotation for all the users
             Timber.d("[Session] Operation is unauthenticated, starting UI authentication")
             authenticateUsingSignInUi(authenticationState.reason)
-            runOperation(request)
+            runOperation(canPromptForAuthentication, requiresSession, request)
         } else {
             response
         }
@@ -164,5 +190,8 @@ class AuthenticatedOperationRunner : KoinComponent {
  * Runs an operation which requires authentication using AuthenticatedOperationRunner
  * @see AuthenticatedOperationRunner
  */
-suspend fun <OUTPUT : AuthenticatedUseCaseOutput> runAuthenticatedOperation(request: suspend () -> OUTPUT): OUTPUT =
-    AuthenticatedOperationRunner().runOperation(request)
+suspend fun <OUTPUT : AuthenticatedUseCaseOutput> runAuthenticatedOperation(
+    canPromptForAuthentication: Boolean = true,
+    requiresSession: Boolean = true,
+    request: suspend () -> OUTPUT,
+): OUTPUT = AuthenticatedOperationRunner().runOperation(canPromptForAuthentication, requiresSession, request)

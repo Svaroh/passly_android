@@ -19,6 +19,7 @@ import net.svaroh.passly.feature.authentication.auth.usecase.RemoveAllAccountDat
 import net.svaroh.passly.feature.authentication.auth.usecase.RemoveServerPublicRsaKeyUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.SaveServerPublicRsaKeyUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.VerifyPassphraseUseCase
@@ -56,6 +57,8 @@ fun Module.authModule() {
             postSignInActionsInteractor = get(),
             refreshSessionUseCase = get(),
             mfaProvidersHandler = get(),
+            hasLocalReplicaUseCase = get(),
+            backgroundSignInExecutor = get(),
         )
     }
 
@@ -71,6 +74,7 @@ fun Module.authModule() {
     singleOf(::VerifyPassphraseUseCase)
     singleOf(::GetAndVerifyServerKeysAndTimeInteractor)
     singleOf(::SignInVerifyInteractor)
+    singleOf(::BackgroundSignInExecutor)
     singleOf(::GopenPgpTimeUpdater)
     singleOf(::PostSignInActionsInteractor)
     singleOf(::RefreshSessionUseCase)
