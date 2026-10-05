@@ -94,7 +94,6 @@ import net.svaroh.passly.feature.home.screen.HomeSideEffect.NavigateToResourceUr
 import net.svaroh.passly.feature.home.screen.HomeSideEffect.NavigateToShare
 import net.svaroh.passly.feature.home.screen.HomeSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.home.screen.HomeSideEffect.ShowSuccessSnackbar
-import net.svaroh.passly.feature.home.screen.HomeSideEffect.ShowToast
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.DECRYPTION_FAILURE
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_DELETE_PASSKEY
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_DELETE_RESOURCE
@@ -107,7 +106,6 @@ import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_CREATE
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_DELETED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_EDITED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_SHARED
-import net.svaroh.passly.feature.home.screen.ToastType.WAIT_FOR_DATA_REFRESH_FINISH
 import net.svaroh.passly.feature.home.screen.data.HomeDataProvider
 import net.svaroh.passly.mappers.HomeDisplayViewMapper
 import net.svaroh.passly.metadata.usecase.CanCreateResourceUseCase
@@ -398,13 +396,8 @@ internal class HomeViewModel(
     private fun searchEndIconAction() {
         when (viewState.value.searchInputEndIconMode) {
             AVATAR -> {
-                viewModelScope.launch(coroutineLaunchContext.io) {
-                    if (dataRefreshTrackingFlow.isInProgress()) {
-                        emitSideEffect(ShowToast(WAIT_FOR_DATA_REFRESH_FINISH))
-                        dataRefreshTrackingFlow.awaitIdle()
-                    }
-                    updateViewState { copy(showAccountSwitchBottomSheet = true) }
-                }
+                // opened straight away: the list is served from the local replica, so there is nothing to wait for
+                updateViewState { copy(showAccountSwitchBottomSheet = true) }
             }
             CLEAR -> {
                 searchQueryChanged("")
@@ -544,10 +537,26 @@ internal class HomeViewModel(
     private suspend fun synchronizeWithDataRefresh(showSuggestedModel: ShowSuggestedModel) {
         dataRefreshTrackingFlow.dataRefreshStatusFlow.collect {
             when (it) {
-                InProgress -> updateViewState { copy(isRefreshing = true, canCreateResource = false) }
+                // a background refresh stays silent: the list is served from the local replica either way, so a
+                // spinner has nothing to make the user wait for and an unreachable server is not an app error
+                InProgress ->
+                    updateViewState {
+                        copy(
+                            isRefreshing = dataRefreshTrackingFlow.isUserInitiated,
+                            // creation is held back only while the user waits on a refresh they asked for; a
+                            // background one must not take the button away from someone who is just using the app
+                            canCreateResource = if (dataRefreshTrackingFlow.isUserInitiated) false else canCreateResource,
+                        )
+                    }
                 FinishedWithFailure -> {
-                    emitSideEffect(ShowErrorSnackbar(FAILED_TO_REFRESH_DATA))
-                    updateViewState { copy(isRefreshing = false, canCreateResource = false) }
+                    if (dataRefreshTrackingFlow.isUserInitiated) {
+                        emitSideEffect(ShowErrorSnackbar(FAILED_TO_REFRESH_DATA))
+                    }
+                    // whether a resource can be created is decided by the replica - metadata settings, local keys and
+                    // the folder in view - so a refresh that could not reach the server has no say in it. Leaving it
+                    // false here made the create button disappear for good on a device that is simply offline.
+                    val showCreateResourceButton = shouldShowCreateButton()
+                    updateViewState { copy(isRefreshing = false, canCreateResource = showCreateResourceButton) }
                 }
                 FinishedWithSuccess -> {
                     val showCreateResourceButton = shouldShowCreateButton()

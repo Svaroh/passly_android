@@ -44,13 +44,15 @@ class FullDataRefreshExecutor(
     private val job = SupervisorJob()
     private val scope = CoroutineScope(job + coroutineLaunchContext.ui)
 
-    fun performFullDataRefresh() {
+    fun performFullDataRefresh(isUserInitiated: Boolean = false) {
         scope.launch {
             Timber.d("Full data refresh initiated")
             if (!dataRefreshTrackingFlow.isInProgress()) {
-                dataRefreshTrackingFlow.updateStatus(InProgress)
+                dataRefreshTrackingFlow.startTracking(isUserInitiated)
                 val output =
-                    runAuthenticatedOperation {
+                    // a refresh nobody asked for never demands the passphrase: opening the app would otherwise
+                    // ask for it a second time whenever the session did not survive the process
+                    runAuthenticatedOperation(canPromptForAuthentication = isUserInitiated) {
                         homeDataInteractor.refreshAllHomeScreenData()
                     }
 
@@ -64,12 +66,14 @@ class FullDataRefreshExecutor(
         }
     }
 
-    suspend fun susPerformFullDataRefresh() {
+    suspend fun susPerformFullDataRefresh(isUserInitiated: Boolean = false) {
         Timber.d("Full data refresh initiated")
         if (!dataRefreshTrackingFlow.isInProgress()) {
-            dataRefreshTrackingFlow.updateStatus(InProgress)
+            dataRefreshTrackingFlow.startTracking(isUserInitiated)
             val output =
-                runAuthenticatedOperation {
+                // a refresh nobody asked for never demands the passphrase: opening the app would otherwise
+                // ask for it a second time whenever the session did not survive the process
+                runAuthenticatedOperation(canPromptForAuthentication = isUserInitiated) {
                     homeDataInteractor.refreshAllHomeScreenData()
                 }
 

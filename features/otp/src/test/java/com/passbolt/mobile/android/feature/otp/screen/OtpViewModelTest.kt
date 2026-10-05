@@ -256,7 +256,7 @@ class OtpViewModelTest : KoinTest {
 
             viewModel.viewState.drop(1).test {
                 val dataRefreshStatusFlow = get<DataRefreshTrackingFlow>()
-                dataRefreshStatusFlow.updateStatus(InProgress)
+                dataRefreshStatusFlow.startTracking(isUserInitiated = true)
                 val state = awaitItem()
                 assertThat(state.isRefreshing).isTrue()
 
