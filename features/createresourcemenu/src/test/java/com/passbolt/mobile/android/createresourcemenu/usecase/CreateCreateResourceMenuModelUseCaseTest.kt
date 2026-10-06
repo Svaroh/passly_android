@@ -1,5 +1,6 @@
 package net.svaroh.passly.createresourcemenu.usecase
 
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.domain.metadata.usecase.GetMetadataTypesSettingsUseCase
 import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
@@ -14,7 +15,6 @@ import net.svaroh.passly.ui.HomeDisplayViewModel.RecentlyModified
 import net.svaroh.passly.ui.HomeDisplayViewModel.SharedWithMe
 import net.svaroh.passly.ui.MetadataTypeModel
 import net.svaroh.passly.ui.MetadataTypesSettingsModel
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.extension.toSingleLine
 import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
@@ -79,7 +80,6 @@ import net.svaroh.passly.locationdetails.data.flattenTree
 import net.svaroh.passly.locationdetails.ui.ExpandableFolderItem
 import net.svaroh.passly.locationdetails.ui.LocationItem
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf

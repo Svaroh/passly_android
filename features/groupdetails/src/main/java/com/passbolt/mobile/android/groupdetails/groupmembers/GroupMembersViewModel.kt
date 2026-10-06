@@ -24,6 +24,7 @@
 package net.svaroh.passly.groupdetails.groupmembers
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.domain.groups.usecase.GetGroupWithUsersUseCase
@@ -35,7 +36,6 @@ import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.Initialize
 import net.svaroh.passly.groupdetails.groupmembers.GroupMembersSideEffect.NavigateToMemberDetails
 import net.svaroh.passly.groupdetails.groupmembers.GroupMembersSideEffect.NavigateUp
 import net.svaroh.passly.ui.PermissionModel
-import kotlinx.coroutines.launch
 
 internal class GroupMembersViewModel(
     private val getGroupWithUsersUseCase: GetGroupWithUsersUseCase,

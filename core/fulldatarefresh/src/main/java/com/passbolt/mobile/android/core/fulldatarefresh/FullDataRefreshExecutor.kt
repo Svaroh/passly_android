@@ -1,5 +1,7 @@
 package net.svaroh.passly.core.fulldatarefresh
 
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
@@ -8,8 +10,6 @@ import net.svaroh.passly.core.fulldatarefresh.HomeDataInteractor.Output.Failure
 import net.svaroh.passly.core.fulldatarefresh.HomeDataInteractor.Output.Success
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import kotlin.time.Duration.Companion.milliseconds
 

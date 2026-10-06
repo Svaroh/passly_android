@@ -24,6 +24,7 @@
 package net.svaroh.passly.feature.setup.welcome
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.accounts.AccountKitParser
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.security.rootdetection.RootDetector
@@ -52,7 +53,6 @@ import net.svaroh.passly.ui.AccountSetupDataModel
 import net.svaroh.passly.ui.ResultStatus
 import net.svaroh.passly.ui.ResultStatus.Failure
 import net.svaroh.passly.ui.ResultStatus.Success
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
 internal class WelcomeViewModel(

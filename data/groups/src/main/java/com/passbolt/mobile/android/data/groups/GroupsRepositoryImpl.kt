@@ -24,6 +24,7 @@
 package net.svaroh.passly.data.groups
 
 import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.domain.groups.GroupsRepository
 import net.svaroh.passly.domain.groups.datasource.GroupsLocalDataSource
@@ -32,7 +33,6 @@ import net.svaroh.passly.domain.groups.model.Group
 import net.svaroh.passly.domain.groups.model.GroupWithItemsCount
 import net.svaroh.passly.domain.groups.model.GroupWithMembers
 import net.svaroh.passly.domain.groups.model.GroupWithUsers
-import kotlinx.coroutines.flow.Flow
 
 internal class GroupsRepositoryImpl(
     private val localDataSource: GroupsLocalDataSource,

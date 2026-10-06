@@ -56,6 +56,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.AccessibilityPoliciesConsent
@@ -81,7 +82,6 @@ import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSe
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.ToggleNativeAutofill
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.UpdateAutofillState
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.conflict.AutofillConflictBanner
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR

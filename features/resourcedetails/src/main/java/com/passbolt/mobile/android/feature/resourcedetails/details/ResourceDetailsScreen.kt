@@ -55,6 +55,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.clipboard.ClipboardAccess
 import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
@@ -124,7 +125,6 @@ import net.svaroh.passly.ui.ResourceFormMode
 import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.isExpired
 import net.svaroh.passly.ui.isFavourite
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.ui.R as CoreUiR

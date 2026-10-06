@@ -25,6 +25,13 @@ package net.svaroh.passly.feature.transferaccounttodevice.transferaccount
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.SERVER
@@ -54,13 +61,6 @@ import net.svaroh.passly.ui.CreateTransferUiModel
 import net.svaroh.passly.ui.Status
 import net.svaroh.passly.ui.TransferAccountStatusType
 import net.svaroh.passly.ui.TransferUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

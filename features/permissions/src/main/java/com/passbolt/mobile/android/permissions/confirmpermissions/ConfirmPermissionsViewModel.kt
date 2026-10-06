@@ -24,6 +24,8 @@
 package net.svaroh.passly.permissions.confirmpermissions
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.validation.validation
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
@@ -74,8 +76,6 @@ import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
 import net.svaroh.passly.ui.PermissionsMode.EDIT
 import net.svaroh.passly.ui.PermissionsMode.VIEW
 import net.svaroh.passly.ui.UserWithAvatar
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ConfirmPermissionsViewModel(

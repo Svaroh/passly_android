@@ -27,6 +27,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.domain.metadata.model.MetadataKeyPurpose.DECRYPT
 import net.svaroh.passly.domain.metadata.usecase.db.GetLocalMetadataKeysUseCase
 import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
@@ -37,7 +38,6 @@ import net.svaroh.passly.dto.response.ResourceResponseV5Dto
 import net.svaroh.passly.serializers.gson.validation.JsonSchemaValidationRunner
 import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes
 import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.allSlugs
-import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf

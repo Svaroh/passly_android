@@ -25,6 +25,9 @@ package net.svaroh.passly.feature.resourceform.main
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.domain.resources.actions.ResourceCreateActionResult
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.ConfirmedPermissionsResult
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.CreateResource
@@ -32,9 +35,6 @@ import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.Naviga
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToConfirmPermissions
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.ShowToast
 import net.svaroh.passly.ui.ConfirmPermissionsMode
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull

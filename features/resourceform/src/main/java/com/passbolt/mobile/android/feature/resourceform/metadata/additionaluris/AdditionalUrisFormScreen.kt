@@ -61,6 +61,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
@@ -91,7 +92,6 @@ import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.ResourceFormMode
 import net.svaroh.passly.ui.ResourceFormMode.Create
 import net.svaroh.passly.ui.ResourceFormMode.Edit
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import java.util.UUID

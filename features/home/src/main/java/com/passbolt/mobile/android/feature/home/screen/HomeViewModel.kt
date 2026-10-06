@@ -23,7 +23,12 @@
 package net.svaroh.passly.feature.home.screen
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
@@ -35,7 +40,6 @@ import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.navigation.AppContext
-import net.svaroh.passly.domain.resources.usecase.ResourceContentTypeProvider
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.AVATAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.CLEAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.NONE
@@ -50,6 +54,7 @@ import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInterac
 import net.svaroh.passly.domain.resources.actions.performCommonResourceAction
 import net.svaroh.passly.domain.resources.actions.performResourcePropertyAction
 import net.svaroh.passly.domain.resources.actions.performSecretPropertyAction
+import net.svaroh.passly.domain.resources.usecase.ResourceContentTypeProvider
 import net.svaroh.passly.domain.users.profile.UserProfileInteractor
 import net.svaroh.passly.domain.users.profile.UserProfileInteractor.Output.Failure
 import net.svaroh.passly.domain.users.profile.UserProfileInteractor.Output.Success
@@ -131,11 +136,6 @@ import net.svaroh.passly.ui.LeadingContentType.STANDALONE_NOTE
 import net.svaroh.passly.ui.LeadingContentType.TOTP
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf

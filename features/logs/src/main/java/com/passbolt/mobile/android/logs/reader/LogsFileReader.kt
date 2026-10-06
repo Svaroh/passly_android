@@ -1,8 +1,8 @@
 package net.svaroh.passly.logs.reader
 
+import kotlinx.coroutines.withContext
 import net.svaroh.passly.core.logger.LogFilesManager
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import kotlinx.coroutines.withContext
 import java.io.File
 
 internal class LogsFileReader(

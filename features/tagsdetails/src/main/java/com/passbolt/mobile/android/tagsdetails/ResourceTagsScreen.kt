@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
@@ -72,7 +73,6 @@ import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.NavigateToHome
 import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.ShowContentNotAvailable
 import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.isFavourite
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf

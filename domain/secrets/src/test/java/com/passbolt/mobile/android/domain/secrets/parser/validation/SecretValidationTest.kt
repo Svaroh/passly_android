@@ -26,6 +26,8 @@ package net.svaroh.passly.domain.secrets.parser.validation
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import kotlinx.coroutines.test.runTest
+import net.jimblackler.jsonschemafriend.SchemaStore
 import net.svaroh.passly.domain.secrets.parser.mockJSFSchemaRepository
 import net.svaroh.passly.domain.secrets.parser.testParserModule
 import net.svaroh.passly.jsonmodel.JSON_MODEL_GSON
@@ -41,8 +43,6 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
-import kotlinx.coroutines.test.runTest
-import net.jimblackler.jsonschemafriend.SchemaStore
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

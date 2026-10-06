@@ -24,6 +24,8 @@ package net.svaroh.passly.feature.home.screen.data
 
 import androidx.paging.PagingData
 import androidx.paging.filter
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import net.svaroh.passly.common.urimatcher.AutofillUriMatcher
 import net.svaroh.passly.domain.folders.usecase.GetLocalDirectChildFoldersPaginatedUseCase
 import net.svaroh.passly.domain.folders.usecase.GetLocalSubFoldersForFolderPaginatedUseCase
@@ -52,8 +54,6 @@ import net.svaroh.passly.ui.HomeDisplayViewModel.SharedWithMe
 import net.svaroh.passly.ui.HomeDisplayViewModel.Tags
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
 import net.svaroh.passly.ui.ResourceUiModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class HomeDataProvider(
     private val getLocalResourcesPaginatedUseCase: GetLocalResourcesPaginatedUseCase,

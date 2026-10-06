@@ -23,13 +23,13 @@
 package net.svaroh.passly.domain.resources
 
 import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import net.svaroh.passly.domain.resources.model.Resource
 import net.svaroh.passly.domain.resources.model.ResourceWithAttributes
 import net.svaroh.passly.entity.resource.ResourceUpdateState
 import net.svaroh.passly.ui.HomeDisplayViewModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.TagModel
-import kotlinx.coroutines.flow.Flow
 
 @Suppress("TooManyFunctions")
 interface ResourcesLocalDataSource {

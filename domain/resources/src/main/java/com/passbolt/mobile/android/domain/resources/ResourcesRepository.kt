@@ -23,6 +23,7 @@
 package net.svaroh.passly.domain.resources
 
 import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.domain.resources.model.Resource
 import net.svaroh.passly.domain.resources.model.ResourceWithAttributes
@@ -33,7 +34,6 @@ import net.svaroh.passly.ui.HomeDisplayViewModel
 import net.svaroh.passly.ui.PermissionModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.TagModel
-import kotlinx.coroutines.flow.Flow
 
 @Suppress("TooManyFunctions")
 interface ResourcesRepository {

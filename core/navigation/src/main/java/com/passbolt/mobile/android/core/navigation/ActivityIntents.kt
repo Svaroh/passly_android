@@ -2,13 +2,13 @@ package net.svaroh.passly.core.navigation
 
 import android.content.Context
 import android.content.Intent
+import kotlinx.serialization.json.Json
 import net.svaroh.passly.core.navigation.constants.Authentication
 import net.svaroh.passly.core.navigation.constants.Autofillresources
 import net.svaroh.passly.core.navigation.constants.Main
 import net.svaroh.passly.core.navigation.constants.Setup
 import net.svaroh.passly.core.navigation.constants.Startup
 import net.svaroh.passly.ui.AccountSetupDataModel
-import kotlinx.serialization.json.Json
 import java.io.Serializable
 
 /**

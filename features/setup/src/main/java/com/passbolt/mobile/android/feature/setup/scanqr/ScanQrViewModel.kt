@@ -24,6 +24,8 @@
 package net.svaroh.passly.feature.setup.scanqr
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.HttpsVerifier
 import net.svaroh.passly.common.UuidProvider
 import net.svaroh.passly.common.usecase.FetchFileAsStringUseCase
@@ -74,8 +76,6 @@ import net.svaroh.passly.feature.setup.scanqr.qrparser.ScanQrParser
 import net.svaroh.passly.ui.AccountSetupDataModel
 import net.svaroh.passly.ui.ResultStatus
 import net.svaroh.passly.ui.Status
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.properties.Delegates
 

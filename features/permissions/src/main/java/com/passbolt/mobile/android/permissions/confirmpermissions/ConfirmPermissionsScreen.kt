@@ -47,6 +47,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.fulldatarefresh.service.DataRefreshService
 import net.svaroh.passly.core.navigation.compose.AppNavigator
@@ -84,7 +85,6 @@ import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEf
 import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowSuccessSnackbar
 import net.svaroh.passly.permissions.confirmpermissions.ConfirmPermissionsSideEffect.ShowToast
 import net.svaroh.passly.permissions.permissions.ui.PermissionsList
-import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR
 import net.svaroh.passly.core.ui.R as CoreUiR

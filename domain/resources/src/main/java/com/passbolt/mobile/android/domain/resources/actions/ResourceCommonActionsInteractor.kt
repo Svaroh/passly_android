@@ -23,6 +23,9 @@
 
 package net.svaroh.passly.domain.resources.actions
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.single
 import net.svaroh.passly.domain.favourites.FavouritesInteractor
 import net.svaroh.passly.domain.resources.usecase.DeleteResourceUseCase
 import net.svaroh.passly.domain.resources.usecase.db.UpdateLocalResourceUseCase
@@ -31,9 +34,6 @@ import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.REMOVE_FROM_FAVOURITES
 import net.svaroh.passly.ui.ResourceUiModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.single
 import timber.log.Timber
 
 class ResourceCommonActionsInteractor(

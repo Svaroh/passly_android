@@ -2,6 +2,13 @@ package net.svaroh.passly.feature.settings
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.domain.auth.model.ServerSignOutStatus
@@ -13,13 +20,6 @@ import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToSt
 import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.ShowToast
 import net.svaroh.passly.feature.settings.screen.SettingsViewModel
 import net.svaroh.passly.feature.settings.screen.ToastType.SERVER_SIGN_OUT_FAILED
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

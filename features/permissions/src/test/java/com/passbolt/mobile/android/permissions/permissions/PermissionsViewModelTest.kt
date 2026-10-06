@@ -7,6 +7,12 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.commontest.session.validSessionTestModule
@@ -30,12 +36,6 @@ import net.svaroh.passly.ui.PermissionsMode
 import net.svaroh.passly.ui.ResourcePermission
 import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.UserWithAvatar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

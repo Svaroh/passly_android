@@ -23,15 +23,15 @@
 
 package net.svaroh.passly.benchmark.pagesize.sweep
 
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.benchmark.pagesize.appstate.DecryptionPassphrase
 import net.svaroh.passly.benchmark.pagesize.appstate.LocalResourceStore
 import net.svaroh.passly.benchmark.pagesize.fixture.ResourceCorpus
 import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
 import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
 import net.svaroh.passly.domain.resources.usecase.ResourceInteractor
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.runBlocking
 import java.util.Locale
 import java.util.UUID
 

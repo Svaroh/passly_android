@@ -25,8 +25,8 @@ package net.svaroh.passly.domain.accounts
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import kotlinx.coroutines.test.runTest
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock

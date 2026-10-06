@@ -26,12 +26,12 @@ package net.svaroh.passly.feature.home.screen.data
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import net.svaroh.passly.domain.folders.model.FolderWithCountAndPath
 import net.svaroh.passly.ui.GroupWithCount
 import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.TagWithCount
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
 data class HomeData(
     val suggestedResourceList: Flow<PagingData<ResourceUiModel>> = settledEmptyPagingData(),

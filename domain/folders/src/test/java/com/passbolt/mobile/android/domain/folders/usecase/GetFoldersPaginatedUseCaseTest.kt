@@ -24,6 +24,8 @@
 package net.svaroh.passly.domain.folders.usecase
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState
@@ -32,8 +34,6 @@ import net.svaroh.passly.domain.folders.model.FolderModel
 import net.svaroh.passly.domain.folders.model.FolderModelWithAttributes
 import net.svaroh.passly.domain.folders.model.FoldersPage
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level

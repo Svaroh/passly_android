@@ -1,14 +1,14 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
-import net.svaroh.passly.common.time.TimeProvider
-import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.domain.auth.usecase.FetchServerPublicPgpKeyUseCase
-import net.svaroh.passly.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import net.svaroh.passly.common.time.TimeProvider
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.auth.usecase.FetchServerPublicPgpKeyUseCase
+import net.svaroh.passly.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
 import timber.log.Timber
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock

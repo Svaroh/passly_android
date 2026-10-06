@@ -2,6 +2,12 @@ package net.svaroh.passly.feature.authentication.auth.accountslist
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.ManageAccount
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.Startup
 import net.svaroh.passly.domain.accounts.usecase.GetAllAccountsDataUseCase
@@ -29,12 +35,6 @@ import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
 import net.svaroh.passly.mappers.AccountModelMapper
 import net.svaroh.passly.ui.AccountModelUi
 import net.svaroh.passly.ui.AccountModelUi.AddNewAccount
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

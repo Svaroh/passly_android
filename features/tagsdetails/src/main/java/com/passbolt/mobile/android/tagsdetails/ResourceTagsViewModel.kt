@@ -24,6 +24,7 @@
 package net.svaroh.passly.tagsdetails
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
@@ -39,7 +40,6 @@ import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.NavigateToHome
 import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.ShowContentNotAvailable
 import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.tagsdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class ResourceTagsViewModel(

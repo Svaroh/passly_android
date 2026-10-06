@@ -27,6 +27,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import net.svaroh.passly.data.groups.mapper.toDomain
 import net.svaroh.passly.data.groups.mapper.toEntity
 import net.svaroh.passly.database.DatabaseProvider
@@ -38,8 +40,6 @@ import net.svaroh.passly.domain.groups.model.GroupWithMembers
 import net.svaroh.passly.domain.groups.model.GroupWithUsers
 import net.svaroh.passly.entity.group.GroupUpdateState.PENDING
 import net.svaroh.passly.entity.group.UsersAndGroupCrossRef
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 internal class GroupsLocalDataSourceImpl(
     private val databaseProvider: DatabaseProvider,

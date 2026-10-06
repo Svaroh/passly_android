@@ -24,6 +24,7 @@
 package net.svaroh.passly.logs
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.logs.LogsIntent.GoBack
 import net.svaroh.passly.logs.LogsIntent.ShareLogs
@@ -31,7 +32,6 @@ import net.svaroh.passly.logs.LogsSideEffect.NavigateToLogsShareSheet
 import net.svaroh.passly.logs.LogsSideEffect.NavigateUp
 import net.svaroh.passly.logs.LogsSideEffect.ScrollLogsToLastLine
 import net.svaroh.passly.logs.reader.LogsReader
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
 internal class LogsViewModel(

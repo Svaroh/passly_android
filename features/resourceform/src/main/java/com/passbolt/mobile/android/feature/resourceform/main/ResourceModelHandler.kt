@@ -1,5 +1,6 @@
 package net.svaroh.passly.feature.resourceform.main
 
+import kotlinx.coroutines.flow.single
 import net.svaroh.passly.common.hash.MessageDigestHash
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction
@@ -51,7 +52,6 @@ import net.svaroh.passly.ui.ResourceFormUiModel.Secret.NOTE
 import net.svaroh.passly.ui.ResourceFormUiModel.Secret.PASSWORD
 import net.svaroh.passly.ui.ResourceFormUiModel.Secret.PIN_CODE
 import net.svaroh.passly.ui.ResourceFormUiModel.Secret.TOTP
-import kotlinx.coroutines.flow.single
 import timber.log.Timber
 
 /**

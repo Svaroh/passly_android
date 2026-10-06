@@ -1,6 +1,7 @@
 package net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.usecase.UserIdInput
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
@@ -20,7 +21,6 @@ import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspec
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult.Error
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult.Result
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class KeyInspectorBottomSheetViewModel(

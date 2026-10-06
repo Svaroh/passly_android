@@ -1,10 +1,10 @@
 package net.svaroh.passly.core.passwordgenerator
 
+import kotlinx.coroutines.flow.takeWhile
 import net.svaroh.passly.core.passwordgenerator.codepoints.Codepoint
 import net.svaroh.passly.core.passwordgenerator.codepoints.toCodepoints
 import net.svaroh.passly.core.passwordgenerator.dice.Dice
 import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
-import kotlinx.coroutines.flow.takeWhile
 
 /**
  * Passbolt - Open source password manager for teams

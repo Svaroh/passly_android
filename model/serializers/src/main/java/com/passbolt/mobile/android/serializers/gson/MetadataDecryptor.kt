@@ -23,6 +23,11 @@
 
 package net.svaroh.passly.serializers.gson
 
+import com.proton.gopenpgp.crypto.Crypto
+import com.proton.gopenpgp.crypto.Key
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import net.svaroh.passly.common.extension.erase
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
@@ -37,11 +42,6 @@ import net.svaroh.passly.dto.response.ResourceResponseV5Dto
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import net.svaroh.passly.ui.ParsedMetadataKeyModel
-import com.proton.gopenpgp.crypto.Crypto
-import com.proton.gopenpgp.crypto.Key
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 

@@ -1,11 +1,11 @@
 package net.svaroh.passly.core.navigation.compose.keys
 
 import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
 import net.svaroh.passly.ui.ConfirmPermissionsMode
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.PermissionsItem
 import net.svaroh.passly.ui.PermissionsMode
-import kotlinx.serialization.Serializable
 
 sealed interface PermissionsNavigationKey : NavKey {
     @Serializable

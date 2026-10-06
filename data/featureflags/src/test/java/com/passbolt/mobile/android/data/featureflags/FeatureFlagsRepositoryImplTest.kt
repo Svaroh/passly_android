@@ -24,12 +24,12 @@
 package net.svaroh.passly.data.featureflags
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import net.svaroh.passly.featureflags.FeatureFlagsLocalDataSource
 import net.svaroh.passly.featureflags.FeatureFlagsRemoteDataSource
 import net.svaroh.passly.featureflags.model.FeatureFlags
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

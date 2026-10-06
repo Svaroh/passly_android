@@ -23,11 +23,11 @@
 
 package net.svaroh.passly.benchmark.pagesize.appstate
 
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.database.DatabaseProvider
 import net.svaroh.passly.domain.resources.usecase.db.RemoveLocalResourcesWithUpdateStateUseCase
 import net.svaroh.passly.domain.resources.usecase.db.SetLocalResourcesUpdateStateUseCase
 import net.svaroh.passly.entity.resource.ResourceUpdateState.PENDING
-import kotlinx.coroutines.runBlocking
 
 class LocalResourceStore(
     private val setLocalResourcesUpdateStateUseCase: SetLocalResourcesUpdateStateUseCase,

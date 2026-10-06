@@ -2,9 +2,9 @@ package net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.read
 
 import android.content.res.AssetManager
 import com.google.gson.Gson
+import kotlinx.coroutines.withContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.ui.OpenSourceLicensesModel
-import kotlinx.coroutines.withContext
 
 internal class LicensesAssetsReader(
     private val assetsManager: AssetManager,

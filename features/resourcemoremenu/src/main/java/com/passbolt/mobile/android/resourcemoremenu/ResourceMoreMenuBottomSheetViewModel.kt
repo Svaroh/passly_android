@@ -24,6 +24,7 @@
 package net.svaroh.passly.resourcemoremenu
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.idlingresource.CreateMenuModelIdlingResource
@@ -46,7 +47,6 @@ import net.svaroh.passly.resourcemoremenu.usecase.CreateResourceMoreMenuModelUse
 import net.svaroh.passly.ui.ResourceMoreMenuModel
 import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_METADATA_DESCRIPTION
 import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_NOTE
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ResourceMoreMenuBottomSheetViewModel(

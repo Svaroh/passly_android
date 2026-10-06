@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
@@ -51,7 +52,6 @@ import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEf
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowSuccessSnackbar
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowToast
 import net.svaroh.passly.ui.OtpParseResult
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf

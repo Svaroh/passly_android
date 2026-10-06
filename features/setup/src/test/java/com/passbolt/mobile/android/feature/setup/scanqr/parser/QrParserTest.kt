@@ -2,18 +2,18 @@ package net.svaroh.passly.feature.setup.scanqr.parser
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
-import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult.NoBarcodeInRange
-import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult.SingleBarcode
-import net.svaroh.passly.feature.setup.di.testModule
-import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult
-import net.svaroh.passly.feature.setup.scanqr.qrparser.ScanQrParser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult.NoBarcodeInRange
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult.SingleBarcode
+import net.svaroh.passly.feature.setup.di.testModule
+import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult
+import net.svaroh.passly.feature.setup.scanqr.qrparser.ScanQrParser
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level

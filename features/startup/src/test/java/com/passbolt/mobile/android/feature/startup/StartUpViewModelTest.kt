@@ -2,13 +2,6 @@ package net.svaroh.passly.feature.startup
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.domain.accounts.usecase.GetAccountsUseCase
-import net.svaroh.passly.feature.startup.StartUpIntent.AcknowledgeDeprecatedOsWarning
-import net.svaroh.passly.feature.startup.StartUpIntent.HideDeprecatedOsWarning
-import net.svaroh.passly.feature.startup.StartUpSideEffect.NavigateToSetup
-import net.svaroh.passly.feature.startup.StartUpSideEffect.NavigateToSignIn
-import net.svaroh.passly.feature.startup.deprecatedoswarning.DeprecatedOsWarningInteractor
-import net.svaroh.passly.ui.AccountSetupDataModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -16,6 +9,13 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.domain.accounts.usecase.GetAccountsUseCase
+import net.svaroh.passly.feature.startup.StartUpIntent.AcknowledgeDeprecatedOsWarning
+import net.svaroh.passly.feature.startup.StartUpIntent.HideDeprecatedOsWarning
+import net.svaroh.passly.feature.startup.StartUpSideEffect.NavigateToSetup
+import net.svaroh.passly.feature.startup.StartUpSideEffect.NavigateToSignIn
+import net.svaroh.passly.feature.startup.deprecatedoswarning.DeprecatedOsWarningInteractor
+import net.svaroh.passly.ui.AccountSetupDataModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

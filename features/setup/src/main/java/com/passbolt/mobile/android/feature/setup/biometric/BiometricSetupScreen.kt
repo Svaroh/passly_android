@@ -56,6 +56,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.ActivityIntents
@@ -82,7 +83,6 @@ import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.Naviga
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.ShowBiometricPrompt
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.StartAuthActivity
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import java.util.concurrent.Executor

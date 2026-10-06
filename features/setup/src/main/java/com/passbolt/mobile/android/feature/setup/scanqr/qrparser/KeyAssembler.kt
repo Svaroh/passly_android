@@ -1,7 +1,7 @@
 package net.svaroh.passly.feature.setup.scanqr.qrparser
 
-import net.svaroh.passly.dto.response.qrcode.AssembledKeyDto
 import kotlinx.serialization.json.Json
+import net.svaroh.passly.dto.response.qrcode.AssembledKeyDto
 import okio.Buffer
 
 /**

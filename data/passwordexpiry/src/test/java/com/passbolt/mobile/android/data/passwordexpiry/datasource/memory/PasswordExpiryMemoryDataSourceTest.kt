@@ -24,9 +24,9 @@
 package net.svaroh.passly.data.passwordexpiry.datasource.memory
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.domain.passwordexpiry.model.PasswordExpirySettings
-import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class PasswordExpiryMemoryDataSourceTest {

@@ -24,9 +24,9 @@
 package net.svaroh.passly.dto.response
 
 import android.annotation.SuppressLint
-import net.svaroh.passly.dto.response.qrcode.UUIDSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import net.svaroh.passly.dto.response.qrcode.UUIDSerializer
 import java.util.UUID
 
 @SuppressLint("UnsafeOptInUsageError") // false positive in K2

@@ -24,12 +24,12 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.common.time.TimeProvider
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.domain.auth.usecase.FetchServerPublicPgpKeyUseCase
 import net.svaroh.passly.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any

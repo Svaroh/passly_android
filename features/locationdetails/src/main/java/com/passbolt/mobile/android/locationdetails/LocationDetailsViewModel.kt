@@ -24,6 +24,7 @@
 package net.svaroh.passly.locationdetails
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
@@ -47,7 +48,6 @@ import net.svaroh.passly.locationdetails.data.createExpandedIds
 import net.svaroh.passly.locationdetails.ui.LocationItem
 import net.svaroh.passly.locationdetails.ui.LocationItem.FOLDER
 import net.svaroh.passly.locationdetails.ui.LocationItem.RESOURCE
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class LocationDetailsViewModel(

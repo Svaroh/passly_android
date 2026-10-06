@@ -24,6 +24,7 @@
 package net.svaroh.passly.folderdetails
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
@@ -49,7 +50,6 @@ import net.svaroh.passly.folderdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
 import net.svaroh.passly.folderdetails.ToastType.CONTENT_NOT_AVAILABLE
 import net.svaroh.passly.ui.PermissionsMode
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class FolderDetailsViewModel(

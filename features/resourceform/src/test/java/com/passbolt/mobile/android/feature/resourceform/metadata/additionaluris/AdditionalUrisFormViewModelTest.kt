@@ -25,6 +25,12 @@ package net.svaroh.passly.feature.resourceform.metadata.additionaluris
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.UuidProvider
 import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.AddAdditionalUri
 import net.svaroh.passly.feature.resourceform.metadata.additionaluris.AdditionalUrisFormIntent.AdditionalUriChanged
@@ -40,12 +46,6 @@ import net.svaroh.passly.feature.resourceform.metadata.additionaluris.Additional
 import net.svaroh.passly.ui.AdditionalUrisUiModel
 import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.ResourceFormMode.Create
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

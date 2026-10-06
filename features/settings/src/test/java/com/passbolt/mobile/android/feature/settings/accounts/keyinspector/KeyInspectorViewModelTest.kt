@@ -24,6 +24,12 @@ package net.svaroh.passly.feature.settings.accounts.keyinspector
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
@@ -47,12 +53,6 @@ import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspec
 import net.svaroh.passly.ui.GpgKeyUiModel
 import net.svaroh.passly.ui.UserProfileUiModel
 import net.svaroh.passly.ui.UserUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

@@ -1,5 +1,6 @@
 package net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data
 
+import kotlinx.serialization.json.Json
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
@@ -8,7 +9,6 @@ import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data.QrGenerationConstants.RESERVED_BYTES_COUNT
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
-import kotlinx.serialization.json.Json
 import okio.Buffer
 import timber.log.Timber
 import java.util.UUID

@@ -4,12 +4,12 @@ import android.content.Context
 import androidx.paging.PagingSource
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.database.ResourceDatabase
 import net.svaroh.passly.database.ftsbenchmark.FtsBenchmarkDataFactory
 import net.svaroh.passly.database.ftsbenchmark.FtsBenchmarkDataFactory.DataSet
 import net.svaroh.passly.database.ftsbenchmark.FtsBenchmarkDataFactory.SLUG
 import net.svaroh.passly.entity.resource.ResourceUpdateState.PENDING
-import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

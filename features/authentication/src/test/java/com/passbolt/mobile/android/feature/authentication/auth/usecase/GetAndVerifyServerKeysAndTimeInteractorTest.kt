@@ -24,6 +24,7 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.SERVER
@@ -36,7 +37,6 @@ import net.svaroh.passly.domain.auth.usecase.SaveServerPublicRsaKeyUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
-import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level

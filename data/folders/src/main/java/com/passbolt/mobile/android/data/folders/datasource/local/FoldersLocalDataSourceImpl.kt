@@ -27,6 +27,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import net.svaroh.passly.data.folders.mapper.toDomain
 import net.svaroh.passly.data.folders.mapper.toEntity
 import net.svaroh.passly.database.DatabaseProvider
@@ -44,8 +46,6 @@ import net.svaroh.passly.mappers.SharePermissionsModelMapper
 import net.svaroh.passly.ui.Folder
 import net.svaroh.passly.ui.PermissionModel
 import net.svaroh.passly.ui.PermissionModelUi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import net.svaroh.passly.domain.folders.model.FolderUpdateState.UPDATED as DOMAIN_UPDATED
 
 internal class FoldersLocalDataSourceImpl(

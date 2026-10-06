@@ -25,6 +25,12 @@ package net.svaroh.passly.groupdetails.groupmembers
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.domain.groups.usecase.GetGroupWithUsersUseCase
@@ -39,12 +45,6 @@ import net.svaroh.passly.ui.GroupModel
 import net.svaroh.passly.ui.GroupWithUsersModel
 import net.svaroh.passly.ui.UserProfileUiModel
 import net.svaroh.passly.ui.UserUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

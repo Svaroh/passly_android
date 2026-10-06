@@ -2,8 +2,8 @@ package net.svaroh.passly.core.navigation.compose.keys
 
 import android.annotation.SuppressLint
 import androidx.navigation3.runtime.NavKey
-import net.svaroh.passly.ui.TransferAccountStatusType
 import kotlinx.serialization.Serializable
+import net.svaroh.passly.ui.TransferAccountStatusType
 
 sealed interface TransferAccountToAnotherDeviceKey : NavKey {
     @Serializable

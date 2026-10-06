@@ -23,6 +23,7 @@
 
 package net.svaroh.passly.domain.resources.actions
 
+import kotlinx.coroutines.flow.single
 import net.svaroh.passly.core.architecture.result.displayMessage
 import net.svaroh.passly.domain.permissionsconfirmation.mapper.toEditModePermissions
 import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
@@ -36,7 +37,6 @@ import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.TrustedKeyDeletedModel
 import net.svaroh.passly.ui.contentType
-import kotlinx.coroutines.flow.single
 import timber.log.Timber
 
 class ResourceShareActionsInteractor(

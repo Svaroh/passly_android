@@ -25,6 +25,12 @@ package net.svaroh.passly.feature.resourceform.additionalsecrets.totp
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.AdvancedSettingsChanged
 import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.ApplyChanges
 import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.GoBack
@@ -38,12 +44,6 @@ import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.OtpParseResult
 import net.svaroh.passly.ui.ResourceFormMode
 import net.svaroh.passly.ui.TotpUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

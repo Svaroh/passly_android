@@ -1,5 +1,7 @@
 package net.svaroh.passly.feature.otp.scanotp.scanotpsuccess
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction
 import net.svaroh.passly.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
@@ -42,8 +44,6 @@ import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
 import net.svaroh.passly.ui.OtpParseResult
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.ResourceUiModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import timber.log.Timber

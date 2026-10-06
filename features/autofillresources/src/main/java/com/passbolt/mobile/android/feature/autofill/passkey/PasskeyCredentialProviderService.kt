@@ -22,8 +22,10 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.CancellationSignal
 import android.os.OutcomeReceiver
+import androidx.annotation.RequiresApi
 import androidx.credentials.exceptions.ClearCredentialException
 import androidx.credentials.exceptions.CreateCredentialException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
@@ -55,6 +57,7 @@ import java.net.URI
 import net.svaroh.passly.core.localization.R as LocalizationR
 import net.svaroh.passly.core.ui.R as CoreUiR
 
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class PasskeyCredentialProviderService :
     CredentialProviderService(),
     KoinComponent {

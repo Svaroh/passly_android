@@ -24,6 +24,7 @@
 package net.svaroh.passly.groupdetails.groupmemberdetails
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
@@ -31,7 +32,6 @@ import net.svaroh.passly.domain.users.usecase.GetLocalUserUseCase
 import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.GoBack
 import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.Initialize
 import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsSideEffect.NavigateUp
-import kotlinx.coroutines.launch
 
 internal class GroupMemberDetailsViewModel(
     private val getLocalUserUseCase: GetLocalUserUseCase,

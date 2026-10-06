@@ -24,6 +24,10 @@
 package net.svaroh.passly.feature.resourcedetails.details
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.coroutinetimer.TimerFactory
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
@@ -114,10 +118,6 @@ import net.svaroh.passly.ui.ResourceMoreMenuModel
 import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.contentType
 import net.svaroh.passly.ui.isExpired
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf

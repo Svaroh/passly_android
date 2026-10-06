@@ -63,6 +63,7 @@ class ResourceInteractor(
 ) {
     private val selectedAccountId: String
         get() = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
+
     @Suppress("ReturnCount")
     suspend fun fetchAndSaveResources(onPageProcessed: suspend (processedPages: Int, totalPages: Int) -> Unit = { _, _ -> }): Output {
         try {

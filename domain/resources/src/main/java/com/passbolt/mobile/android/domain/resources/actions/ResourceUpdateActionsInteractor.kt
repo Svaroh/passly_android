@@ -23,6 +23,9 @@
 
 package net.svaroh.passly.domain.resources.actions
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.single
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction
 import net.svaroh.passly.core.secrets.usecase.db.RemoveLocalSecretUseCase
@@ -68,9 +71,6 @@ import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.TrustedKeyDeletedModel
 import net.svaroh.passly.ui.UpdateResourceModel
 import net.svaroh.passly.ui.contentType
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.single
 import timber.log.Timber
 
 class ResourceUpdateActionsInteractor(

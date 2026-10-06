@@ -29,14 +29,14 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.core.fulldatarefresh.FullDataRefreshExecutor
 import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory
 import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory.Companion.DATA_SYNC_SERVICE_NOTIFICATION_ID
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 

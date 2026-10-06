@@ -29,8 +29,8 @@ import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDe
 import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Onboarding
 import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Transfer
 import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.TransferStatus
-import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryScreen
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanScreen
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryScreen
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountScreen
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreen
 

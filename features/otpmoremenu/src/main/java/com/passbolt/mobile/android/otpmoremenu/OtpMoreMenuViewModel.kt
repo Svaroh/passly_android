@@ -1,6 +1,7 @@
 package net.svaroh.passly.otpmoremenu
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.Close
@@ -16,7 +17,6 @@ import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeEditOtp
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeShowOtp
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.ShowContentNotAvailable
 import net.svaroh.passly.otpmoremenu.usecase.CreateOtpMoreMenuModelUseCase
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**

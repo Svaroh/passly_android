@@ -2,12 +2,12 @@ package net.svaroh.passly.gopenpgp
 
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.google.common.truth.Truth.assertThat
+import com.proton.gopenpgp.crypto.Crypto
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.common.extension.encodeHex
 import net.svaroh.passly.core.gopenpgp.test.R
 import net.svaroh.passly.gopenpgp.exception.OpenPgpFailure
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
-import com.proton.gopenpgp.crypto.Crypto
-import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

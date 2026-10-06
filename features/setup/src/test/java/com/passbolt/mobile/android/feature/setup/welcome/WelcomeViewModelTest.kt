@@ -24,6 +24,13 @@ package net.svaroh.passly.feature.setup.welcome
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.core.accounts.AccountKitParser
 import net.svaroh.passly.core.security.rootdetection.RootDetector
 import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor
@@ -54,13 +61,6 @@ import net.svaroh.passly.ui.ResultStatus.AlreadyLinked
 import net.svaroh.passly.ui.ResultStatus.Failure
 import net.svaroh.passly.ui.ResultStatus.HttpNotSupported
 import net.svaroh.passly.ui.ResultStatus.Success
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

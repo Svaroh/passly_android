@@ -24,10 +24,10 @@
 package net.svaroh.passly.data.resourcetypes
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.domain.resourcetypes.ResourceTypesLocalDataSource
 import net.svaroh.passly.domain.resourcetypes.model.ResourceType
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

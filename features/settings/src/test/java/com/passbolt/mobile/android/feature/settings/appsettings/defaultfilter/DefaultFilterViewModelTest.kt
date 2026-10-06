@@ -1,6 +1,11 @@
 package net.svaroh.passly.feature.settings.appsettings.defaultfilter
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.domain.preferences.HomeDisplayViewPreferencesUpdate
 import net.svaroh.passly.domain.preferences.usecase.GetAvailableDefaultFiltersUseCase
 import net.svaroh.passly.domain.preferences.usecase.GetHomeDisplayViewPreferencesUseCase
@@ -12,11 +17,6 @@ import net.svaroh.passly.ui.DefaultFilterUiModel.EXPIRY
 import net.svaroh.passly.ui.DefaultFilterUiModel.FAVOURITES
 import net.svaroh.passly.ui.HomeDisplayViewPreferencesUiModel
 import net.svaroh.passly.ui.HomeDisplayViewUiModel.ALL_ITEMS
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

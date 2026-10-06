@@ -30,6 +30,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.TransferStatus
@@ -43,7 +44,6 @@ import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogi
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanSideEffect.NavigateBack
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanSideEffect.NavigateToResult
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanSideEffect.ShowErrorSnackbar
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.compose.scope.KoinScope

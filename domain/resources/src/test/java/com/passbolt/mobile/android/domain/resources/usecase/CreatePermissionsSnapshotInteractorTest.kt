@@ -24,6 +24,7 @@
 package net.svaroh.passly.domain.resources.usecase
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
@@ -38,7 +39,6 @@ import net.svaroh.passly.domain.users.usecase.FetchUsersByIdsUseCase
 import net.svaroh.passly.ui.GroupModel
 import net.svaroh.passly.ui.PermissionModel
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

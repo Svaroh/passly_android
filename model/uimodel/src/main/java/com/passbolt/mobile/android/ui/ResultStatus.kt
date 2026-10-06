@@ -1,11 +1,11 @@
 package net.svaroh.passly.ui
 
+import kotlinx.serialization.Serializable
 import net.svaroh.passly.ui.ResultStatusType.ALREADY_LINKED
 import net.svaroh.passly.ui.ResultStatusType.FAILURE
 import net.svaroh.passly.ui.ResultStatusType.HTTP_NOT_SUPPORTED
 import net.svaroh.passly.ui.ResultStatusType.NO_NETWORK
 import net.svaroh.passly.ui.ResultStatusType.SUCCESS
-import kotlinx.serialization.Serializable
 
 /**
  * Passbolt - Open source password manager for teams

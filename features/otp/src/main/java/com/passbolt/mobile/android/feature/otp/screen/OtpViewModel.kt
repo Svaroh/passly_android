@@ -24,6 +24,14 @@
 package net.svaroh.passly.feature.otp.screen
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.coroutinetimer.TimerFactory
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
@@ -121,14 +129,6 @@ import net.svaroh.passly.ui.refreshingNone
 import net.svaroh.passly.ui.refreshingOnly
 import net.svaroh.passly.ui.replaceOnId
 import net.svaroh.passly.ui.revealed
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
@@ -600,12 +600,13 @@ internal class OtpViewModel(
         dataRefreshTrackingFlow.dataRefreshStatusFlow.collect {
             when (it) {
                 // silent unless the user asked for it, see HomeViewModel for the reasoning
-                is InProgress -> updateViewState {
-                    copy(
-                        isRefreshing = dataRefreshTrackingFlow.isUserInitiated,
-                        refreshProgress = it.progress,
-                    )
-                }
+                is InProgress ->
+                    updateViewState {
+                        copy(
+                            isRefreshing = dataRefreshTrackingFlow.isUserInitiated,
+                            refreshProgress = it.progress,
+                        )
+                    }
                 FinishedWithFailure -> {
                     if (dataRefreshTrackingFlow.isUserInitiated) {
                         emitSideEffect(ShowErrorSnackbar(FAILED_TO_REFRESH_DATA))

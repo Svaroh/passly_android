@@ -24,11 +24,11 @@
 package net.svaroh.passly.domain.groups.datasource
 
 import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import net.svaroh.passly.domain.groups.model.Group
 import net.svaroh.passly.domain.groups.model.GroupWithItemsCount
 import net.svaroh.passly.domain.groups.model.GroupWithMembers
 import net.svaroh.passly.domain.groups.model.GroupWithUsers
-import kotlinx.coroutines.flow.Flow
 
 interface GroupsLocalDataSource {
     suspend fun getGroups(

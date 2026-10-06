@@ -6,6 +6,13 @@ import android.content.Intent
 import androidx.core.content.FileProvider.getUriForFile
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import net.svaroh.passly.common.ExternalDeeplinkHandler
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.ManageAccount
@@ -19,13 +26,6 @@ import net.svaroh.passly.core.navigation.compose.NavigationActivity.Home
 import net.svaroh.passly.core.navigation.compose.NavigationActivity.Setup
 import net.svaroh.passly.core.navigation.compose.NavigationActivity.SetupWithPredefinedAccountData
 import net.svaroh.passly.core.navigation.compose.NavigationActivity.Start
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import java.io.File
 
 /**

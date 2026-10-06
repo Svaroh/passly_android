@@ -1,6 +1,7 @@
 package net.svaroh.passly.feature.autofill.resources
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.otpcore.TotpParametersProvider
@@ -25,7 +26,6 @@ import net.svaroh.passly.feature.autofill.resources.datasetstrategy.AutofillPayl
 import net.svaroh.passly.jsonmodel.delegates.TotpSecret
 import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.contentType
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf

@@ -51,6 +51,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.extension.toSingleLine
 import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
@@ -74,7 +75,6 @@ import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.NavigateUp
 import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.ShowToast
 import net.svaroh.passly.ui.PermissionsItem
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf

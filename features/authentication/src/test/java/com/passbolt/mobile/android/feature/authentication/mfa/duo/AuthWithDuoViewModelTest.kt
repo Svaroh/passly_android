@@ -2,6 +2,13 @@ package net.svaroh.passly.feature.authentication.mfa.duo
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.feature.authentication.auth.usecase.GetDuoPromptUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
@@ -14,13 +21,6 @@ import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.DuoAut
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.CloseAndNavigateToStartup
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NotifyVerificationSucceeded
 import net.svaroh.passly.feature.authentication.mfa.duo.duowebviewsheet.DuoState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

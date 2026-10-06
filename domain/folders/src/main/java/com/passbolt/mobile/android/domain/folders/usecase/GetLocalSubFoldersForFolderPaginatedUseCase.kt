@@ -24,12 +24,12 @@
 package net.svaroh.passly.domain.folders.usecase
 
 import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import net.svaroh.passly.common.usecase.AsyncUseCase
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import net.svaroh.passly.domain.folders.FoldersRepository
 import net.svaroh.passly.domain.folders.model.FolderWithCountAndPath
 import net.svaroh.passly.ui.Folder
-import kotlinx.coroutines.flow.Flow
 
 class GetLocalSubFoldersForFolderPaginatedUseCase(
     private val foldersRepository: FoldersRepository,

@@ -1,7 +1,7 @@
 package net.svaroh.passly.ui
 
-import net.svaroh.passly.common.search.Searchable
 import kotlinx.serialization.Serializable
+import net.svaroh.passly.common.search.Searchable
 
 /**
  * Passbolt - Open source password manager for teams

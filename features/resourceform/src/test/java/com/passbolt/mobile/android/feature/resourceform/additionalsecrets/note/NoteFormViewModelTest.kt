@@ -25,6 +25,12 @@ package net.svaroh.passly.feature.resourceform.additionalsecrets.note
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteFormIntent.ApplyChanges
 import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteFormIntent.GoBack
 import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteFormIntent.NoteTextChanged
@@ -33,12 +39,6 @@ import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteFormSid
 import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteFormSideEffect.NavigateBack
 import net.svaroh.passly.ui.LeadingContentType.PASSWORD
 import net.svaroh.passly.ui.ResourceFormMode
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

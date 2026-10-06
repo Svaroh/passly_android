@@ -24,12 +24,12 @@
 package net.svaroh.passly.data.users
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import net.svaroh.passly.domain.users.UsersDataSource
 import net.svaroh.passly.domain.users.UsersLocalDataSource
 import net.svaroh.passly.domain.users.model.UserProfile
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

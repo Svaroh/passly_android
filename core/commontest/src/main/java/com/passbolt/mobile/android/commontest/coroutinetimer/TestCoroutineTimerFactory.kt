@@ -1,9 +1,9 @@
 package net.svaroh.passly.commontest.coroutinetimer
 
-import net.svaroh.passly.common.coroutinetimer.TimerFactory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import net.svaroh.passly.common.coroutinetimer.TimerFactory
 import kotlin.time.Duration
 
 /**

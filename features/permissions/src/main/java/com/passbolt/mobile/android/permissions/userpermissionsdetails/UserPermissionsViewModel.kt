@@ -1,6 +1,7 @@
 package net.svaroh.passly.permissions.userpermissionsdetails
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
@@ -19,7 +20,6 @@ import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
 import net.svaroh.passly.ui.PermissionsMode
 import net.svaroh.passly.ui.PermissionsMode.EDIT
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.launch
 
 class UserPermissionsViewModel(
     mode: PermissionsMode,

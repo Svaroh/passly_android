@@ -1,6 +1,7 @@
 package net.svaroh.passly.feature.home.switchaccount
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.common.usecase.UserIdInput
 import net.svaroh.passly.core.compose.SideEffectViewModel
@@ -22,7 +23,6 @@ import net.svaroh.passly.feature.home.switchaccount.SwitchAccountSideEffect.Navi
 import net.svaroh.passly.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToStartup
 import net.svaroh.passly.mappers.SwitchAccountModelMapper
 import net.svaroh.passly.ui.SwitchAccountUiModel.AccountItem
-import kotlinx.coroutines.launch
 
 /**
  * Passbolt - Open source password manager for teams

@@ -23,6 +23,7 @@
 
 package net.svaroh.passly.domain.preferences.validation
 
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
 import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
@@ -31,7 +32,6 @@ import net.svaroh.passly.ui.HomeDisplayViewPreferencesUiModel
 import net.svaroh.passly.ui.HomeDisplayViewUiModel
 import net.svaroh.passly.ui.RbacModel
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
-import kotlinx.coroutines.runBlocking
 
 class HomeDisplayViewPrefsValidator(
     private val getFeatureFlagsUseCase: GetFeatureFlagsUseCase,

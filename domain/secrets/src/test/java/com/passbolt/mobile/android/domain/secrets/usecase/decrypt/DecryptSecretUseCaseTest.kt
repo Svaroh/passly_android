@@ -24,6 +24,7 @@
 package net.svaroh.passly.domain.secrets.usecase.decrypt
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
 import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
@@ -33,7 +34,6 @@ import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpError
 import net.svaroh.passly.gopenpgp.exception.OpenPgpFailure
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any

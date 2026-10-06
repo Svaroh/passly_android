@@ -25,13 +25,13 @@ package net.svaroh.passly.domain.groups.usecase
 
 import androidx.paging.PagingData
 import androidx.paging.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import net.svaroh.passly.common.usecase.AsyncUseCase
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import net.svaroh.passly.domain.groups.GroupsRepository
 import net.svaroh.passly.domain.groups.mapper.toUiModel
 import net.svaroh.passly.ui.GroupWithCount
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class GetLocalGroupsWithShareItemsCountPaginatedUseCase(
     private val groupsRepository: GroupsRepository,

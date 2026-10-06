@@ -23,12 +23,12 @@
 
 package net.svaroh.passly.serializers.jsonschema
 
+import net.jimblackler.jsonschemafriend.Schema
+import net.jimblackler.jsonschemafriend.Validator
 import net.svaroh.passly.serializers.jsonschema.schamarepository.JSFJsonSchemaValidator
 import net.svaroh.passly.serializers.jsonschema.schamarepository.JSFSchemaRepository
 import net.svaroh.passly.serializers.jsonschema.schamarepository.JsonSchemaRepository
 import net.svaroh.passly.serializers.jsonschema.schamarepository.JsonSchemaValidator
-import net.jimblackler.jsonschemafriend.Schema
-import net.jimblackler.jsonschemafriend.Validator
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 

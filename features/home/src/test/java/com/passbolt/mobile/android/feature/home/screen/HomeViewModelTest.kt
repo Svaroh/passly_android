@@ -53,13 +53,13 @@ import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.navigation.AppContext
-import net.svaroh.passly.domain.resources.usecase.ResourceContentTypeProvider
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.AVATAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.CLEAR
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import net.svaroh.passly.domain.folders.usecase.GetLocalFolderDetailsUseCase
 import net.svaroh.passly.domain.metadata.interactor.ResourceAccessInteractor
 import net.svaroh.passly.domain.preferences.usecase.GetHomeDisplayViewPreferencesUseCase
+import net.svaroh.passly.domain.resources.usecase.ResourceContentTypeProvider
 import net.svaroh.passly.domain.users.profile.UserProfileInteractor
 import net.svaroh.passly.domain.users.profile.UserProfileRefreshTrackingFlow
 import net.svaroh.passly.feature.home.screen.HomeIntent.CloseCreateResourceMenu

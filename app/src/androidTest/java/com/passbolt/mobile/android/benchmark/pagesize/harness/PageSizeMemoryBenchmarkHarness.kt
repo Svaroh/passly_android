@@ -27,6 +27,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.google.gson.Gson
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.benchmark.pagesize.appstate.DecryptionPassphrase
 import net.svaroh.passly.benchmark.pagesize.appstate.LocalResourceStore
 import net.svaroh.passly.benchmark.pagesize.appstate.ResourceTypeSeeder
@@ -57,7 +58,6 @@ import net.svaroh.passly.instrumentationTestsModule
 import net.svaroh.passly.intents.ManagedAccountIntentCreator
 import net.svaroh.passly.rules.LazyKoinAuthenticationActivityScenarioRule
 import net.svaroh.passly.rules.lazyActivitySetupScenarioRule
-import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import java.io.File

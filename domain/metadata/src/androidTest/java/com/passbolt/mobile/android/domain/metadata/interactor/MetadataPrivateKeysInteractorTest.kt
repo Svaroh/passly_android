@@ -25,6 +25,8 @@ package net.svaroh.passly.domain.metadata.interactor
 
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.google.common.truth.Truth.assertThat
+import com.proton.gopenpgp.crypto.Crypto
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
 import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
@@ -42,8 +44,6 @@ import net.svaroh.passly.ui.ParsedMetadataKeyModel
 import net.svaroh.passly.ui.ParsedMetadataPrivateKeyModel
 import net.svaroh.passly.ui.UserProfileUiModel
 import net.svaroh.passly.ui.UserUiModel
-import com.proton.gopenpgp.crypto.Crypto
-import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

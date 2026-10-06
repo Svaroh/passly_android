@@ -2,6 +2,9 @@ package net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.architecture.result.displayMessage
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.idlingresource.TransferAccountIdlingResource
@@ -24,9 +27,6 @@ import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data.TransferQrCodesDataGenerator
 import net.svaroh.passly.ui.Status
 import net.svaroh.passly.ui.TransferAccountStatusType
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.time.Duration.Companion.milliseconds
 

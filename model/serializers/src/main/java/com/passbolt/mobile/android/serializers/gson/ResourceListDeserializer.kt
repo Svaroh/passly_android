@@ -26,6 +26,7 @@ package net.svaroh.passly.serializers.gson
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.mvp.coroutinecontext.mapAsyncNotNull
 import net.svaroh.passly.database.snapshot.ResourcesSnapshot
@@ -35,7 +36,6 @@ import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappin
 import net.svaroh.passly.dto.response.ResourceResponseDto
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.allSlugs
-import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf

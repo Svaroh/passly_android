@@ -1,6 +1,12 @@
 package net.svaroh.passly.feature.resourceform.main.resourcemodelhandler.v5.leadingnote
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.domain.resources.usecase.GetDefaultCreateContentTypeUseCase
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.DescriptionResult
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.NameTextChanged
@@ -19,12 +25,6 @@ import net.svaroh.passly.ui.OtpParseResult
 import net.svaroh.passly.ui.PasswordUiModel
 import net.svaroh.passly.ui.ResourceFormMode
 import net.svaroh.passly.ui.TotpUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

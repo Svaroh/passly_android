@@ -24,6 +24,15 @@
 package net.svaroh.passly.gopenpgp
 
 import androidx.annotation.VisibleForTesting
+import com.proton.gopenpgp.constants.Constants.AES256
+import com.proton.gopenpgp.crypto.Crypto
+import com.proton.gopenpgp.crypto.Key
+import com.proton.gopenpgp.crypto.PGPHandle
+import com.proton.gopenpgp.crypto.VerifiedDataResult
+import com.proton.gopenpgp.crypto.VerifyCleartextResult
+import com.proton.gopenpgp.mobile.Mobile
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.svaroh.passly.common.extension.decodeHex
 import net.svaroh.passly.common.extension.encodeHex
 import net.svaroh.passly.common.extension.erase
@@ -34,15 +43,6 @@ import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import net.svaroh.passly.gopenpgp.model.CleartextSignatureVerification
 import net.svaroh.passly.gopenpgp.model.DecryptedMessageAndSessionKey
 import net.svaroh.passly.gopenpgp.model.VerifiedMessage
-import com.proton.gopenpgp.constants.Constants.AES256
-import com.proton.gopenpgp.crypto.Crypto
-import com.proton.gopenpgp.crypto.Key
-import com.proton.gopenpgp.crypto.PGPHandle
-import com.proton.gopenpgp.crypto.VerifiedDataResult
-import com.proton.gopenpgp.crypto.VerifyCleartextResult
-import com.proton.gopenpgp.mobile.Mobile
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.time.Instant
 

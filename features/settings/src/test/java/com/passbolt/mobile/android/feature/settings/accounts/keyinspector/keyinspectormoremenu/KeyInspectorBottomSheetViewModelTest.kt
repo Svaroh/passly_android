@@ -25,6 +25,12 @@ package net.svaroh.passly.feature.settings.accounts.keyinspector.keyinspectormor
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.usecase.UserIdInput
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
@@ -44,12 +50,6 @@ import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpError
 import net.svaroh.passly.gopenpgp.exception.OpenPgpFailure
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

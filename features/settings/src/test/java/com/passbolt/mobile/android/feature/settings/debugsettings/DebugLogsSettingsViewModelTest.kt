@@ -23,6 +23,12 @@ package net.svaroh.passly.feature.settings.debugsettings
  * @since v1.0
  */
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.core.logger.FileLoggingTree
 import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
 import net.svaroh.passly.domain.preferences.PreferencesDefaults
@@ -31,12 +37,6 @@ import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCa
 import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.ToggleDebugLogs
 import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsViewModel
 import net.svaroh.passly.ui.GlobalPreferencesUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

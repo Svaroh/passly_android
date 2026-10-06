@@ -26,14 +26,11 @@ import java.util.UUID
 class ResourceContentTypeProvider(
     private val resourceTypeIdToSlugMappingProvider: ResourceTypeIdToSlugMappingProvider,
 ) {
-    suspend fun provideForSelectedAccount(resource: ResourceUiModel): ContentType? =
-        provideForSelectedAccount(resource.resourceTypeId)
+    suspend fun provideForSelectedAccount(resource: ResourceUiModel): ContentType? = provideForSelectedAccount(resource.resourceTypeId)
 
-    suspend fun isPasskey(resource: ResourceUiModel): Boolean =
-        provideForSelectedAccount(resource) == ContentType.V5Passkey
+    suspend fun isPasskey(resource: ResourceUiModel): Boolean = provideForSelectedAccount(resource) == ContentType.V5Passkey
 
-    suspend fun isPasskey(resourceTypeId: String): Boolean =
-        provideForSelectedAccount(resourceTypeId) == ContentType.V5Passkey
+    suspend fun isPasskey(resourceTypeId: String): Boolean = provideForSelectedAccount(resourceTypeId) == ContentType.V5Passkey
 
     private suspend fun provideForSelectedAccount(resourceTypeId: String): ContentType? =
         runCatching {

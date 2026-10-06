@@ -45,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.ActivityIntents
@@ -98,7 +99,6 @@ import net.svaroh.passly.featureflagserror.FeatureFlagsFetchErrorDialog
 import net.svaroh.passly.helpmenu.HelpMenuBottomSheet
 import net.svaroh.passly.testtags.composetags.Auth
 import net.svaroh.passly.ui.HelpMenuModel
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf

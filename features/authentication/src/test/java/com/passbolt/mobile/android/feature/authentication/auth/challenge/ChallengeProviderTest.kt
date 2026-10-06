@@ -1,11 +1,11 @@
 package net.svaroh.passly.feature.authentication.auth.challenge
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.domain.privatekey.model.PrivateKey
 import net.svaroh.passly.gopenpgp.exception.OpenPgpError
 import net.svaroh.passly.gopenpgp.exception.OpenPgpFailure
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.koin.test.KoinTest

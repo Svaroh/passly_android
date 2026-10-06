@@ -24,6 +24,12 @@ package net.svaroh.passly.feature.settings.appsettings.expertsettings.pagesize
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
 import net.svaroh.passly.domain.preferences.PreferencesDefaults
 import net.svaroh.passly.domain.preferences.usecase.GetAutomaticPageSizeUseCase
@@ -36,12 +42,6 @@ import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.page
 import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeSideEffect.NavigateBack
 import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeViewModel
 import net.svaroh.passly.ui.GlobalPreferencesUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

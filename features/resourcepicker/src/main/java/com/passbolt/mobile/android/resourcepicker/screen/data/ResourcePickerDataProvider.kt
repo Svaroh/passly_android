@@ -26,14 +26,14 @@ package net.svaroh.passly.resourcepicker.screen.data
 import androidx.paging.PagingData
 import androidx.paging.filter
 import androidx.paging.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import net.svaroh.passly.common.urimatcher.AutofillUriMatcher
 import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesPaginatedUseCase
 import net.svaroh.passly.mappers.ResourcePickerMapper
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerViewModel.Companion.SELECTABLE_RESOURCE_TYPES_SLUGS
 import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.allSlugs
 import net.svaroh.passly.ui.ResourceUiModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class ResourcePickerDataProvider(
     private val getLocalResourcesPaginatedUseCase: GetLocalResourcesPaginatedUseCase,

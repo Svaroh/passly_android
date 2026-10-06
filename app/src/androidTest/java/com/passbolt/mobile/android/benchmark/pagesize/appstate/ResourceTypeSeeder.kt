@@ -23,10 +23,10 @@
 
 package net.svaroh.passly.benchmark.pagesize.appstate
 
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.domain.resourcetypes.ResourceTypesLocalDataSource
 import net.svaroh.passly.domain.resourcetypes.model.ResourceType
 import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
-import kotlinx.coroutines.runBlocking
 import java.util.UUID
 
 class ResourceTypeSeeder(

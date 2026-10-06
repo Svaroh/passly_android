@@ -1,5 +1,7 @@
 package net.svaroh.passly.feature.resourceform.main
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.common.validation.StringIsBase32
 import net.svaroh.passly.common.validation.StringMaxLength
@@ -145,8 +147,6 @@ import net.svaroh.passly.ui.ResourceFormMode.Edit
 import net.svaroh.passly.ui.ResourceFormUiModel
 import net.svaroh.passly.ui.TotpUiModel
 import net.svaroh.passly.ui.contentType
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import timber.log.Timber

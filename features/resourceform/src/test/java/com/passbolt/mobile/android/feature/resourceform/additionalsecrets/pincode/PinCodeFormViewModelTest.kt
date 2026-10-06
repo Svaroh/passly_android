@@ -25,6 +25,12 @@ package net.svaroh.passly.feature.resourceform.additionalsecrets.pincode
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.core.passwordgenerator.PinCodeGenerator
 import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.AdvancedGenerationResult
 import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormIntent.ApplyChanges
@@ -39,12 +45,6 @@ import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeF
 import net.svaroh.passly.ui.LeadingContentType.PIN_CODE
 import net.svaroh.passly.ui.PinCodeUiModel
 import net.svaroh.passly.ui.ResourceFormMode
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

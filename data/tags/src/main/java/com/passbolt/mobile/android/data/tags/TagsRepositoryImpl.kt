@@ -1,11 +1,11 @@
 package net.svaroh.passly.data.tags
 
 import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import net.svaroh.passly.domain.tags.TagsRepository
 import net.svaroh.passly.domain.tags.datasource.TagsLocalDataSource
 import net.svaroh.passly.ui.ResourceUiModelWithAttributes
 import net.svaroh.passly.ui.TagWithCount
-import kotlinx.coroutines.flow.Flow
 
 /**
  * Passbolt - Open source password manager for teams

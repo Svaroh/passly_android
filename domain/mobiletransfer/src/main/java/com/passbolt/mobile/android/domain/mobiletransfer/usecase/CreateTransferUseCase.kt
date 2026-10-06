@@ -1,5 +1,6 @@
 package net.svaroh.passly.domain.mobiletransfer.usecase
 
+import kotlinx.coroutines.withContext
 import net.svaroh.passly.common.usecase.AsyncUseCase
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
@@ -9,7 +10,6 @@ import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.domain.mobiletransfer.MobileTransferRepository
 import net.svaroh.passly.domain.mobiletransfer.mapper.toUiModel
 import net.svaroh.passly.ui.CreateTransferUiModel
-import kotlinx.coroutines.withContext
 
 /**
  * Passbolt - Open source password manager for teams

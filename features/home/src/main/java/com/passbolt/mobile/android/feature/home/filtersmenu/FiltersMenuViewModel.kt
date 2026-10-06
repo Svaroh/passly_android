@@ -1,6 +1,7 @@
 package net.svaroh.passly.feature.home.filtersmenu
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.domain.preferences.HomeDisplayViewPreferencesUpdate
@@ -32,7 +33,6 @@ import net.svaroh.passly.ui.HomeDisplayViewUiModel.RECENTLY_MODIFIED
 import net.svaroh.passly.ui.HomeDisplayViewUiModel.SHARED_WITH_ME
 import net.svaroh.passly.ui.HomeDisplayViewUiModel.TAGS
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
-import kotlinx.coroutines.launch
 
 /**
  * Passbolt - Open source password manager for teams

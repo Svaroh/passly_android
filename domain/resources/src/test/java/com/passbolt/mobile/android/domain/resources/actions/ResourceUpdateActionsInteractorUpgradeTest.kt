@@ -24,7 +24,12 @@
 package net.svaroh.passly.domain.resources.actions
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
+import net.svaroh.passly.core.secrets.usecase.db.RemoveLocalSecretUseCase
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.folders.usecase.GetLocalFolderPermissionsUseCase
 import net.svaroh.passly.domain.metadata.interactor.MetadataPrivateKeysInteractor
 import net.svaroh.passly.domain.metadata.usecase.GetMetadataKeysSettingsUseCase
@@ -37,8 +42,6 @@ import net.svaroh.passly.domain.resources.usecase.ResourceShareInteractor
 import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
 import net.svaroh.passly.domain.resources.usecase.db.UpdateLocalResourceUseCase
 import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
-import net.svaroh.passly.core.secrets.usecase.db.RemoveLocalSecretUseCase
-import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.users.usecase.GetLocalCurrentUserUseCase
 import net.svaroh.passly.jsonmodel.jsonModelModule
 import net.svaroh.passly.supportedresourceTypes.ContentType
@@ -54,9 +57,6 @@ import net.svaroh.passly.ui.MetadataJsonModel
 import net.svaroh.passly.ui.MetadataKeyTypeModel.PERSONAL
 import net.svaroh.passly.ui.ResourcePermission.OWNER
 import net.svaroh.passly.ui.ResourceUiModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level

@@ -24,13 +24,13 @@
 package net.svaroh.passly.data.share
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.domain.share.ShareDataSource
 import net.svaroh.passly.domain.share.model.EncryptedSecret
 import net.svaroh.passly.domain.share.model.ShareChanges
 import net.svaroh.passly.domain.share.model.SharePermission
 import net.svaroh.passly.domain.share.model.ShareRecipient
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

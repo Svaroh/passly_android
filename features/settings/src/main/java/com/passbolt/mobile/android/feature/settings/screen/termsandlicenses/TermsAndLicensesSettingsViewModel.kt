@@ -24,6 +24,7 @@
 package net.svaroh.passly.feature.settings.screen.termsandlicenses
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsIntent.GoBack
 import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsIntent.GoToOpenSourceLicenses
@@ -34,7 +35,6 @@ import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicens
 import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsSideEffect.NavigateToTermsAndConditionsSettings
 import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsSideEffect.NavigateUp
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
-import kotlinx.coroutines.launch
 
 internal class TermsAndLicensesSettingsViewModel(
     private val getFeatureFlagsUseCase: GetFeatureFlagsUseCase,

@@ -1,11 +1,11 @@
 package net.svaroh.passly.core.passwordgenerator.usecase
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.networking.NetworkResult
 import net.svaroh.passly.core.passwordgenerator.mockPwnedPasswordRepository
 import net.svaroh.passly.core.passwordgenerator.passwordGeneratorTestModule
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level

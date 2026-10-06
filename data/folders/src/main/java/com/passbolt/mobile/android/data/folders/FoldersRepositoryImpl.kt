@@ -24,6 +24,7 @@
 package net.svaroh.passly.data.folders
 
 import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.domain.folders.FoldersRepository
 import net.svaroh.passly.domain.folders.datasource.FoldersLocalDataSource
@@ -37,7 +38,6 @@ import net.svaroh.passly.domain.folders.model.ParentPermissionItemId
 import net.svaroh.passly.ui.Folder
 import net.svaroh.passly.ui.PermissionModel
 import net.svaroh.passly.ui.PermissionModelUi
-import kotlinx.coroutines.flow.Flow
 
 internal class FoldersRepositoryImpl(
     private val localDataSource: FoldersLocalDataSource,

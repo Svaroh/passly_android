@@ -24,6 +24,12 @@ package net.svaroh.passly.feature.accountdetails.screen
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.commontest.session.validSessionTestModule
 import net.svaroh.passly.core.architecture.result.DomainResult
@@ -41,12 +47,6 @@ import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideE
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.ShowProfileFetchError
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsValidationError.MaxLengthExceeded
 import net.svaroh.passly.mappers.AccountModelMapper
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

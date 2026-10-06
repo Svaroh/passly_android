@@ -24,6 +24,7 @@
 package net.svaroh.passly.domain.folders
 
 import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.domain.folders.model.FolderModel
 import net.svaroh.passly.domain.folders.model.FolderModelWithAttributes
@@ -34,7 +35,6 @@ import net.svaroh.passly.domain.folders.model.ParentPermissionItemId
 import net.svaroh.passly.ui.Folder
 import net.svaroh.passly.ui.PermissionModel
 import net.svaroh.passly.ui.PermissionModelUi
-import kotlinx.coroutines.flow.Flow
 
 /**
  * Single source of truth for folders: local reads return plain types straight from Room, while remote

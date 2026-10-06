@@ -24,10 +24,16 @@
 package net.svaroh.passly.domain.resources.actions
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.commontest.session.validSessionTestModule
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
+import net.svaroh.passly.core.secrets.usecase.db.RemoveLocalSecretUseCase
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.folders.usecase.GetLocalFolderPermissionsUseCase
 import net.svaroh.passly.domain.metadata.interactor.MetadataPrivateKeysInteractor
 import net.svaroh.passly.domain.metadata.usecase.GetMetadataKeysSettingsUseCase
@@ -41,8 +47,6 @@ import net.svaroh.passly.domain.resources.usecase.ResourceShareInteractor
 import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
 import net.svaroh.passly.domain.resources.usecase.db.UpdateLocalResourceUseCase
 import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
-import net.svaroh.passly.core.secrets.usecase.db.RemoveLocalSecretUseCase
-import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.secrets.model.SecretJsonModel
 import net.svaroh.passly.domain.secrets.usecase.decrypt.SecretInput
 import net.svaroh.passly.domain.users.model.GpgKey
@@ -64,10 +68,6 @@ import net.svaroh.passly.ui.UpdateResourceModel
 import net.svaroh.passly.ui.UserProfileUiModel
 import net.svaroh.passly.ui.UserUiModel
 import net.svaroh.passly.ui.UserWithAvatar
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

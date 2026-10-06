@@ -24,11 +24,11 @@
 package net.svaroh.passly.domain.resourcetypes.usecase
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import net.svaroh.passly.domain.resourcetypes.RefreshResourceTypesRepository
 import net.svaroh.passly.domain.resourcetypes.model.ResourceType
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -40,6 +40,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.yubico.yubikit.android.ui.OtpActivity
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
@@ -71,8 +73,6 @@ import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffec
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.NotifyLoginSucceeded
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.NotifyVerificationSucceeded
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.ShowErrorSnackbar
-import com.yubico.yubikit.android.ui.OtpActivity
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf

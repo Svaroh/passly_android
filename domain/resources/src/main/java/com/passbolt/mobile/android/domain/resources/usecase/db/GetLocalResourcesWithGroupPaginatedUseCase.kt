@@ -24,14 +24,14 @@ package net.svaroh.passly.domain.resources.usecase.db
 
 import androidx.paging.PagingData
 import androidx.paging.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import net.svaroh.passly.common.usecase.AsyncUseCase
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import net.svaroh.passly.domain.resources.ResourcesRepository
 import net.svaroh.passly.domain.resources.mapper.toUiModel
 import net.svaroh.passly.ui.HomeDisplayViewModel
 import net.svaroh.passly.ui.ResourceUiModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class GetLocalResourcesWithGroupPaginatedUseCase(
     private val resourcesRepository: ResourcesRepository,

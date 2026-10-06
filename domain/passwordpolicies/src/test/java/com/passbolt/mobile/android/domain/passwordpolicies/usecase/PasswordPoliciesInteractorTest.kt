@@ -24,6 +24,7 @@
 package net.svaroh.passly.domain.passwordpolicies.usecase
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState
@@ -32,7 +33,6 @@ import net.svaroh.passly.domain.passwordpolicies.PasswordPoliciesRepository
 import net.svaroh.passly.domain.passwordpolicies.mapper.toUiModel
 import net.svaroh.passly.domain.passwordpolicies.model.PasswordPolicies
 import net.svaroh.passly.domain.passwordpolicies.validation.PasswordPoliciesValidator
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

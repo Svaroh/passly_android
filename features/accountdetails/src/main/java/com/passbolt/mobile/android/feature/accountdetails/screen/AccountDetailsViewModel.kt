@@ -25,6 +25,7 @@ package net.svaroh.passly.feature.accountdetails.screen
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.validation.StringMaxLength
 import net.svaroh.passly.common.validation.StringNotBlank
 import net.svaroh.passly.common.validation.validation
@@ -44,7 +45,6 @@ import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideE
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsValidationError.MaxLengthExceeded
 import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
 import net.svaroh.passly.mappers.AccountModelMapper
-import kotlinx.coroutines.launch
 
 internal class AccountDetailsViewModel(
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,

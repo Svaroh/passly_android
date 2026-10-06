@@ -77,6 +77,7 @@ androidx.core:core-ktx:1.19.0=releaseRuntimeClasspath
 androidx.core:core-remoteviews:1.1.0=releaseRuntimeClasspath
 androidx.core:core-viewtree:1.0.0=releaseRuntimeClasspath
 androidx.core:core:1.19.0=releaseRuntimeClasspath
+androidx.credentials:credentials:1.6.0=releaseRuntimeClasspath
 androidx.cursoradapter:cursoradapter:1.0.0=releaseRuntimeClasspath
 androidx.customview:customview-poolingcontainer:1.0.0=releaseRuntimeClasspath
 androidx.customview:customview:1.0.0=releaseRuntimeClasspath

@@ -25,6 +25,14 @@ package net.svaroh.passly.feature.resources.details
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
@@ -53,14 +61,6 @@ import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffe
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsViewModel
 import net.svaroh.passly.feature.resourcedetails.details.ToastType
 import net.svaroh.passly.ui.RbacRuleModel.DENY
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

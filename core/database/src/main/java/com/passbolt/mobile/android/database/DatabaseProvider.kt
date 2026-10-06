@@ -3,6 +3,7 @@ package net.svaroh.passly.database
 import android.content.Context
 import androidx.room.Room
 import androidx.room.withTransaction
+import kotlinx.coroutines.suspendCancellableCoroutine
 import net.svaroh.passly.common.hash.MessageDigestHash
 import net.svaroh.passly.common.usecase.UserIdInput
 import net.svaroh.passly.database.migrations.Migration10to11
@@ -34,7 +35,6 @@ import net.svaroh.passly.database.migrations.Migration7to8
 import net.svaroh.passly.database.migrations.Migration8to9
 import net.svaroh.passly.database.migrations.Migration9to10
 import net.svaroh.passly.domain.auth.usecase.GetResourcesDatabasePassphraseUseCase
-import kotlinx.coroutines.suspendCancellableCoroutine
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap

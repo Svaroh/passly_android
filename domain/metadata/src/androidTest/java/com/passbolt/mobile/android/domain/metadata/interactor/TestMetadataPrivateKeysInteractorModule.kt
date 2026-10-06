@@ -1,6 +1,7 @@
 package net.svaroh.passly.domain.metadata.interactor
 
 import com.google.gson.Gson
+import com.proton.gopenpgp.crypto.Crypto
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
@@ -13,7 +14,6 @@ import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
 import net.svaroh.passly.domain.users.usecase.GetLocalUserUseCase
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.GopenPgpExceptionParser
-import com.proton.gopenpgp.crypto.Crypto
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

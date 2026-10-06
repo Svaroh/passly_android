@@ -24,10 +24,10 @@
 package net.svaroh.passly.core.passwordgenerator.dice
 
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.passwordgenerator.passwordGeneratorTestModule
-import net.svaroh.passly.ui.CaseTypeUiModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import net.svaroh.passly.core.passwordgenerator.passwordGeneratorTestModule
+import net.svaroh.passly.ui.CaseTypeUiModel
 import org.junit.Assert.assertThrows
 import org.junit.Rule
 import org.junit.Test

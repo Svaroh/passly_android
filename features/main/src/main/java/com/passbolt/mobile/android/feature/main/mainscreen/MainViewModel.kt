@@ -112,7 +112,7 @@ class MainViewModel(
                     Timber.e("[BrowserFirstLogin] Could not parse pending deep link")
                     emitSideEffect(ShowSnackbar(SnackbarType.BROWSER_FIRST_LOGIN_FAILURE))
                     return
-        }
+                }
 
         launch {
             Timber.i("[BrowserFirstLogin] Completing pending deep link")

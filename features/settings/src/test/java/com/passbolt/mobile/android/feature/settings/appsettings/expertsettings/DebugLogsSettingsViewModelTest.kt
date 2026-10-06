@@ -23,18 +23,18 @@ package net.svaroh.passly.feature.settings.appsettings.expertsettings
  * @since v1.0
  */
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.domain.preferences.PreferencesDefaults
-import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
-import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
-import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleHideRootWarning
-import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsViewModel
-import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleHideRootWarning
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsViewModel
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

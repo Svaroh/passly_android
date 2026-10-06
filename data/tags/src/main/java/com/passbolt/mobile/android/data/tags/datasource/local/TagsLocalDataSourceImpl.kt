@@ -4,6 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import net.svaroh.passly.data.tags.mapper.toEntity
 import net.svaroh.passly.data.tags.mapper.toUiModel
 import net.svaroh.passly.database.DatabaseProvider
@@ -12,8 +14,6 @@ import net.svaroh.passly.domain.tags.datasource.TagsLocalDataSource
 import net.svaroh.passly.entity.resource.ResourceAndTagsCrossRef
 import net.svaroh.passly.ui.ResourceUiModelWithAttributes
 import net.svaroh.passly.ui.TagWithCount
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 /**
  * Passbolt - Open source password manager for teams

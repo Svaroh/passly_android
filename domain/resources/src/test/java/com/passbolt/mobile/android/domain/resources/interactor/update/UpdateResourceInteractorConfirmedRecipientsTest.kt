@@ -24,6 +24,8 @@
 package net.svaroh.passly.domain.resources.interactor.update
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
@@ -51,8 +53,6 @@ import net.svaroh.passly.ui.MetadataJsonModel
 import net.svaroh.passly.ui.UpdateResourceModel
 import net.svaroh.passly.ui.UserProfileUiModel
 import net.svaroh.passly.ui.UserUiModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

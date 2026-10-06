@@ -23,6 +23,8 @@
 
 package net.svaroh.passly.domain.resources.usecase
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
@@ -35,8 +37,6 @@ import net.svaroh.passly.domain.share.model.ShareRecipient
 import net.svaroh.passly.domain.users.usecase.GetLocalUserUseCase
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.mappers.SharePermissionsModelMapper
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any

@@ -558,12 +558,12 @@ class HomeViewModelMenuTest : KoinTest {
         metadataJsonModel =
             MetadataJsonModel(
                 """
-                    {
-                        "name": "$name",
-                        "uri": "https://example.com",
-                        "username": "testuser",
-                        "description": "Test description"
-                    }
+                {
+                    "name": "$name",
+                    "uri": "https://example.com",
+                    "username": "testuser",
+                    "description": "Test description"
+                }
                 """.trimIndent(),
             ),
         metadataKeyId = null,

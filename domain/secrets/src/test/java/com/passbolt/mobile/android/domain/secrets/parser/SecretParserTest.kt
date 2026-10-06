@@ -24,6 +24,8 @@
 package net.svaroh.passly.domain.secrets.parser
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
+import net.jimblackler.jsonschemafriend.SchemaStore
 import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.BOOLEAN
 import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.NUMBER
 import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType.PASSWORD
@@ -38,9 +40,6 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PinCodeStandalone
 import net.svaroh.passly.ui.DecryptedSecretOrError
-import kotlinx.coroutines.test.runTest
-import java.util.UUID
-import net.jimblackler.jsonschemafriend.SchemaStore
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

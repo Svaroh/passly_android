@@ -28,6 +28,8 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import net.svaroh.passly.common.coroutinetimer.TimerFactory
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
@@ -56,8 +58,6 @@ import net.svaroh.passly.mappers.GroupsModelMapper
 import net.svaroh.passly.mappers.PermissionsModelMapper
 import net.svaroh.passly.mappers.ResourceFormMapper
 import net.svaroh.passly.mappers.UsersModelMapper
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import org.koin.core.Koin
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf

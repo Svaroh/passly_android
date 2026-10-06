@@ -1,9 +1,9 @@
 package net.svaroh.passly.feature.setup.scanqr.keyassembler
 
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.feature.setup.scanqr.qrparser.KeyAssembler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import net.svaroh.passly.feature.setup.scanqr.qrparser.KeyAssembler
 import okio.Buffer
 import org.junit.Assert.assertThrows
 import org.junit.Rule

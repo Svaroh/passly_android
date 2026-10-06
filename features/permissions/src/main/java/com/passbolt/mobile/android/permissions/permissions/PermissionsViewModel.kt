@@ -24,6 +24,8 @@
 package net.svaroh.passly.permissions.permissions
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.core.compose.SideEffectViewModel
@@ -52,8 +54,6 @@ import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
 import net.svaroh.passly.ui.PermissionsItem
 import net.svaroh.passly.ui.PermissionsMode
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.launch
 
 class PermissionsViewModel(
     permissionsItem: PermissionsItem,

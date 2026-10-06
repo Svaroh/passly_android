@@ -3,6 +3,13 @@ package net.svaroh.passly.feature.settings.appsettings
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.BiometricInformationProvider
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
 import net.svaroh.passly.common.usecase.UserIdInput
@@ -24,13 +31,6 @@ import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffe
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.LaunchBiometricPrompt
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToSystemSettings
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

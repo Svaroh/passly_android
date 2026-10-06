@@ -1,6 +1,9 @@
 package net.svaroh.passly.feature.otp.scanotp.compose
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.qrscan.CameraInformationProvider
 import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
@@ -23,9 +26,6 @@ import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpSideEffect.SetResult
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage
 import net.svaroh.passly.feature.otp.scanotp.parser.OtpQrParser
 import net.svaroh.passly.ui.OtpParseResult
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class ScanOtpViewModel(

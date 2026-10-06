@@ -2,6 +2,13 @@ package net.svaroh.passly.feature.authentication.auth
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.usecase.UserIdInput
 import net.svaroh.passly.core.idlingresource.SignInIdlingResource
 import net.svaroh.passly.core.mvp.authentication.MfaProvidersHandler
@@ -11,6 +18,7 @@ import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
 import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
 import net.svaroh.passly.core.security.rootdetection.RootDetector
 import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
+import net.svaroh.passly.database.usecase.HasLocalReplicaUseCase
 import net.svaroh.passly.domain.accounts.AuthenticatedAccountFlow
 import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
@@ -18,7 +26,6 @@ import net.svaroh.passly.domain.accounts.usecase.SaveSelectedAccountUseCase
 import net.svaroh.passly.domain.accounts.usecase.SaveServerFingerprintUseCase
 import net.svaroh.passly.domain.auth.model.ServerSignOutStatus
 import net.svaroh.passly.domain.auth.usecase.GetPassphraseUseCase
-import net.svaroh.passly.database.usecase.HasLocalReplicaUseCase
 import net.svaroh.passly.domain.auth.usecase.SaveMfaTokenUseCase
 import net.svaroh.passly.domain.auth.usecase.SaveSessionUseCase
 import net.svaroh.passly.domain.inappreview.usecase.InAppReviewInteractor
@@ -60,13 +67,6 @@ import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.VerifyPassphraseUseCase
 import net.svaroh.passly.ui.BiometricAuthError
 import net.svaroh.passly.ui.GlobalPreferencesUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

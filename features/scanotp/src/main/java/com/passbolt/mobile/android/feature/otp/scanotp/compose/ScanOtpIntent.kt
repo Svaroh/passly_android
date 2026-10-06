@@ -1,8 +1,8 @@
 package net.svaroh.passly.feature.otp.scanotp.compose
 
+import kotlinx.coroutines.flow.StateFlow
 import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import net.svaroh.passly.feature.otp.scanotp.ScanOtpMode
-import kotlinx.coroutines.flow.StateFlow
 
 sealed interface ScanOtpIntent {
     data class Initialize(

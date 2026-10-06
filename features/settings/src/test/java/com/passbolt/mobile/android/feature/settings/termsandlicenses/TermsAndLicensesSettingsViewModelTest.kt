@@ -23,9 +23,6 @@ package net.svaroh.passly.feature.settings.termsandlicenses
  * @since v1.0
  */
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
-import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsViewModel
-import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop
@@ -34,6 +31,9 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
+import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesSettingsViewModel
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

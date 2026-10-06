@@ -2,6 +2,12 @@ package net.svaroh.passly.feature.home.filtersmenu
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.domain.preferences.HomeDisplayViewPreferencesUpdate
@@ -36,12 +42,6 @@ import net.svaroh.passly.ui.HomeDisplayViewUiModel.SHARED_WITH_ME
 import net.svaroh.passly.ui.HomeDisplayViewUiModel.TAGS
 import net.svaroh.passly.ui.RbacModel
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

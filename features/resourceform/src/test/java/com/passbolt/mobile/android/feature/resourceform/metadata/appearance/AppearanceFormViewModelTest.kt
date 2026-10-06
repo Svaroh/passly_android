@@ -25,6 +25,12 @@ package net.svaroh.passly.feature.resourceform.metadata.appearance
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.ApplyChanges
 import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetCustomIconBackgroundColor
 import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.SetKeepassIcon
@@ -36,12 +42,6 @@ import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.ResourceAppearanceModel
 import net.svaroh.passly.ui.ResourceAppearanceModel.Companion.DEFAULT_BACKGROUND_COLOR_HEX_STRING
 import net.svaroh.passly.ui.ResourceFormMode.Create
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

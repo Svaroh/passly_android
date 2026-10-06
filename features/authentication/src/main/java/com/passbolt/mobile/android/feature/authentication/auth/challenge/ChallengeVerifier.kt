@@ -1,11 +1,11 @@
 package net.svaroh.passly.feature.authentication.auth.challenge
 
-import net.svaroh.passly.dto.response.ChallengeResponseDto
 import io.fusionauth.jwt.InvalidJWTSignatureException
 import io.fusionauth.jwt.JWTExpiredException
 import io.fusionauth.jwt.Verifier
 import io.fusionauth.jwt.domain.JWT
 import io.fusionauth.jwt.rsa.RSAVerifier
+import net.svaroh.passly.dto.response.ChallengeResponseDto
 import timber.log.Timber
 
 /**

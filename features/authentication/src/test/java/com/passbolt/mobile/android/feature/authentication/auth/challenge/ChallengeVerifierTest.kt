@@ -1,9 +1,9 @@
 package net.svaroh.passly.feature.authentication.auth.challenge
 
-import net.svaroh.passly.dto.response.ChallengeResponseDto
-import net.svaroh.passly.feature.base.readFromFile
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import net.svaroh.passly.dto.response.ChallengeResponseDto
+import net.svaroh.passly.feature.base.readFromFile
 import org.junit.Rule
 import org.junit.Test
 import org.koin.test.KoinTest

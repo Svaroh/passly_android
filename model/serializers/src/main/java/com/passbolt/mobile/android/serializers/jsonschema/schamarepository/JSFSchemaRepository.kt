@@ -24,9 +24,9 @@
 package net.svaroh.passly.serializers.jsonschema.schamarepository
 
 import android.content.Context
-import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes
 import net.jimblackler.jsonschemafriend.Schema
 import net.jimblackler.jsonschemafriend.SchemaStore
+import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes
 
 class JSFSchemaRepository(
     private val context: Context,

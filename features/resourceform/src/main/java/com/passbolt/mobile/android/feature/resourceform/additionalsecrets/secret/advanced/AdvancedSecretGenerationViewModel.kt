@@ -23,6 +23,7 @@
 
 package net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced
 
+import kotlinx.coroutines.Job
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_DIGIT
 import net.svaroh.passly.core.passwordgenerator.Alphabets.MASK_EMOJI
@@ -54,7 +55,6 @@ import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
 import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
 import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel.PASSPHRASE
 import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel.PASSWORD
-import kotlinx.coroutines.Job
 
 internal class AdvancedSecretGenerationViewModel(
     initialTab: PasswordGeneratorTypeUiModel,

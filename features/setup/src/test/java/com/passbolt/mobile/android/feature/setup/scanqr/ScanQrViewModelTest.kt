@@ -25,6 +25,15 @@ package net.svaroh.passly.feature.setup.scanqr
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.HttpsVerifier
 import net.svaroh.passly.common.UuidProvider
 import net.svaroh.passly.common.usecase.FetchFileAsStringUseCase
@@ -81,15 +90,6 @@ import net.svaroh.passly.ui.ResultStatus.HttpNotSupported
 import net.svaroh.passly.ui.ResultStatus.NoNetwork
 import net.svaroh.passly.ui.ResultStatus.Success
 import net.svaroh.passly.ui.UpdateTransferUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

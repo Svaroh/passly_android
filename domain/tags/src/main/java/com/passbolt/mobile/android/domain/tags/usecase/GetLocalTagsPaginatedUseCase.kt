@@ -1,12 +1,12 @@
 package net.svaroh.passly.domain.tags.usecase
 
 import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import net.svaroh.passly.common.usecase.AsyncUseCase
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import net.svaroh.passly.domain.tags.TagsRepository
 import net.svaroh.passly.domain.tags.usecase.GetLocalTagsPaginatedUseCase.Output
 import net.svaroh.passly.ui.TagWithCount
-import kotlinx.coroutines.flow.Flow
 
 /**
  * Passbolt - Open source password manager for teams

@@ -24,14 +24,14 @@
 package net.svaroh.passly
 
 import android.app.Application
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.AppForegroundListener
 import net.svaroh.passly.core.navigation.isAuthenticated
 import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
 import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
 import net.svaroh.passly.domain.preferences.usecase.ApplyAutomaticPageSizeUseCase
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

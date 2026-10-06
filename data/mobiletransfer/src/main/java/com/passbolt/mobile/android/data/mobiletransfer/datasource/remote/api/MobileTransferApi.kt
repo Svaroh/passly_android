@@ -1,12 +1,12 @@
 package net.svaroh.passly.data.mobiletransfer.datasource.remote.api
 
-import net.svaroh.passly.dto.request.CreateTransferRequestDto
 import net.svaroh.passly.dto.request.BrowserFirstLoginAccountRequestDto
 import net.svaroh.passly.dto.request.BrowserFirstLoginResponseRequestDto
+import net.svaroh.passly.dto.request.CreateTransferRequestDto
 import net.svaroh.passly.dto.request.UpdateTransferRequestDto
 import net.svaroh.passly.dto.response.BaseResponse
-import net.svaroh.passly.dto.response.CreateTransferResponseDto
 import net.svaroh.passly.dto.response.BrowserFirstLoginRequestResponseDto
+import net.svaroh.passly.dto.response.CreateTransferResponseDto
 import net.svaroh.passly.dto.response.TransferResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET

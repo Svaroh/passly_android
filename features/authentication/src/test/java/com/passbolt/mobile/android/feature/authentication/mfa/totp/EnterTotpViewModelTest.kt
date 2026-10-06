@@ -2,6 +2,12 @@ package net.svaroh.passly.feature.authentication.mfa.totp
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.VerifyTotpUseCase
@@ -17,12 +23,6 @@ import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.Sna
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.SESSION_EXPIRED
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.WRONG_CODE
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpState.OtpTextColor.ERROR
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

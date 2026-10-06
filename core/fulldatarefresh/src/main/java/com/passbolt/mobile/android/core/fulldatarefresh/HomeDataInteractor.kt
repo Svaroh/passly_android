@@ -23,6 +23,8 @@
 
 package net.svaroh.passly.core.fulldatarefresh
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import net.svaroh.passly.core.idlingresource.ResourcesFullRefreshIdlingResource
 import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState
@@ -39,8 +41,6 @@ import net.svaroh.passly.domain.resources.usecase.ResourceInteractor
 import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypesInteractor
 import net.svaroh.passly.domain.users.usecase.UsersInteractor
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import timber.log.Timber
 
 /**

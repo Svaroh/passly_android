@@ -24,13 +24,13 @@
 package net.svaroh.passly.core.passwordgenerator.entropy
 
 import com.google.common.truth.Truth.assertThat
+import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.passwordgenerator.Alphabets
 import net.svaroh.passly.core.passwordgenerator.codepoints.CodepointSet
 import net.svaroh.passly.core.passwordgenerator.codepoints.toCodepoints
 import net.svaroh.passly.core.passwordgenerator.passwordGeneratorTestModule
-import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level

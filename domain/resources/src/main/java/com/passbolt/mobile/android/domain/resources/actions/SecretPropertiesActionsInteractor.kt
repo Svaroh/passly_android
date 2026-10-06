@@ -24,6 +24,10 @@
 package net.svaroh.passly.domain.resources.actions
 
 import androidx.annotation.VisibleForTesting
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.transform
 import net.svaroh.passly.domain.secrets.model.SecretJsonModel
 import net.svaroh.passly.domain.secrets.parser.SecretParser
 import net.svaroh.passly.domain.secrets.usecase.decrypt.SecretInteractor
@@ -33,10 +37,6 @@ import net.svaroh.passly.jsonmodel.delegates.TotpSecret
 import net.svaroh.passly.ui.DecryptedSecretOrError
 import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.contentType
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.transform
 import timber.log.Timber
 
 class SecretPropertiesActionsInteractor(

@@ -1,5 +1,6 @@
 package net.svaroh.passly.feature.transferaccounttoanotherdevice.usecase
 
+import kotlinx.coroutines.withContext
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.displayMessage
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
@@ -14,7 +15,6 @@ import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogi
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginPrivateKeyPayloadCrypto.PrivateKeyPayload
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.URI
 
@@ -78,12 +78,14 @@ class CompleteBrowserFirstLoginUseCase(
             return Output.DomainMismatch(page.domain, accountData.url)
         }
 
-        val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount) {
-            "No selected account is available."
-        }
-        val privateKey = requireNotNull(privateKeyRepository.getPrivateKey(userId)?.armoredKey) {
-            "Selected account private key is not available."
-        }
+        val userId =
+            requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount) {
+                "No selected account is available."
+            }
+        val privateKey =
+            requireNotNull(privateKeyRepository.getPrivateKey(userId)?.armoredKey) {
+                "Selected account private key is not available."
+            }
         val fingerprint =
             when (val result = openPgp.getKeyFingerprint(privateKey)) {
                 is OpenPgpResult.Error -> {

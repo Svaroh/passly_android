@@ -23,6 +23,12 @@
 
 package net.svaroh.passly.feature.resourceform.main
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
@@ -54,12 +60,6 @@ import net.svaroh.passly.ui.ResourceFormMode
 import net.svaroh.passly.ui.ResourcePermission
 import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.UserWithAvatar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

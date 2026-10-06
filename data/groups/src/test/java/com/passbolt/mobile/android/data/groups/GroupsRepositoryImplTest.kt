@@ -24,6 +24,7 @@
 package net.svaroh.passly.data.groups
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import net.svaroh.passly.domain.groups.datasource.GroupsLocalDataSource
@@ -31,7 +32,6 @@ import net.svaroh.passly.domain.groups.datasource.GroupsRemoteDataSource
 import net.svaroh.passly.domain.groups.model.Group
 import net.svaroh.passly.domain.groups.model.GroupMember
 import net.svaroh.passly.domain.groups.model.GroupWithMembers
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

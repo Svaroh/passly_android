@@ -1,11 +1,11 @@
 package net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data
 
+import kotlinx.serialization.json.Json
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import net.svaroh.passly.dto.response.qrcode.QrFirstPageDto
 import net.svaroh.passly.dto.response.qrcode.ReservedBytesDto
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data.QrGenerationConstants.MAX_QR_DATA_BYTES_EXCLUDING_RESERVED_BYTES
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data.QrGenerationConstants.PROTOCOL_VERSION
-import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.util.UUID
 

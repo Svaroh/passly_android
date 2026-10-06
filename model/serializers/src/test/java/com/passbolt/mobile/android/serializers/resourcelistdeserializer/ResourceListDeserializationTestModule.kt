@@ -25,6 +25,9 @@ package net.svaroh.passly.serializers.resourcelistdeserializer
 
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import net.jimblackler.jsonschemafriend.Schema
+import net.jimblackler.jsonschemafriend.Validator
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.database.snapshot.ResourcesSnapshot
@@ -45,9 +48,6 @@ import net.svaroh.passly.serializers.jsonschema.schamarepository.JSFJsonSchemaVa
 import net.svaroh.passly.serializers.jsonschema.schamarepository.JSFSchemaRepository
 import net.svaroh.passly.serializers.jsonschema.schamarepository.JsonSchemaRepository
 import net.svaroh.passly.serializers.jsonschema.schamarepository.JsonSchemaValidator
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import net.jimblackler.jsonschemafriend.Schema
-import net.jimblackler.jsonschemafriend.Validator
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind

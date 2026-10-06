@@ -24,6 +24,10 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.common.usecase.UserIdInput
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
@@ -33,10 +37,6 @@ import net.svaroh.passly.domain.auth.AuthRepository
 import net.svaroh.passly.domain.auth.SessionRepository
 import net.svaroh.passly.domain.auth.model.RefreshedSession
 import net.svaroh.passly.domain.auth.model.Session
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

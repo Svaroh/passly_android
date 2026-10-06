@@ -1,8 +1,8 @@
 package net.svaroh.passly.core.navigation.compose.keys
 
 import androidx.navigation3.runtime.NavKey
-import net.svaroh.passly.ui.ResourceUiModel
 import kotlinx.serialization.Serializable
+import net.svaroh.passly.ui.ResourceUiModel
 
 sealed interface ResourceDetailsNavigationKey : NavKey {
     @Serializable

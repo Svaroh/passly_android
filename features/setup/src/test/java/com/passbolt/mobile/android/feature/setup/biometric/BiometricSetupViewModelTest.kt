@@ -26,6 +26,12 @@ package net.svaroh.passly.feature.setup.biometric
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.BiometricInformationProvider
 import net.svaroh.passly.core.autofill.AutofillInformationProvider
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
@@ -51,12 +57,6 @@ import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.ShowBi
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.StartAuthActivity
 import net.svaroh.passly.ui.BiometricAuthError
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

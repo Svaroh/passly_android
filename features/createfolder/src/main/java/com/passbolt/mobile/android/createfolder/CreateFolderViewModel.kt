@@ -25,6 +25,7 @@ package net.svaroh.passly.createfolder
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.validation.StringMaxLength
 import net.svaroh.passly.common.validation.StringNotBlank
 import net.svaroh.passly.common.validation.validation
@@ -60,7 +61,6 @@ import net.svaroh.passly.mappers.SharePermissionsModelMapper
 import net.svaroh.passly.mappers.UsersModelMapper
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.launch
 
 internal class CreateFolderViewModel(
     private val getLocalFolderLocationUseCase: GetLocalFolderLocationUseCase,

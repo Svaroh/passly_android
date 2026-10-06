@@ -1,5 +1,7 @@
 package net.svaroh.passly.ui
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import net.svaroh.passly.common.extension.isInFuture
 import net.svaroh.passly.jsonmodel.CachedJsonModel
 import net.svaroh.passly.jsonmodel.ParsedJson
@@ -7,8 +9,6 @@ import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathNullableStringD
 import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathNullableStringListDelegate
 import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathStringDelegate
 import net.svaroh.passly.supportedresourceTypes.ContentType
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import java.time.ZonedDateTime
 
 /**

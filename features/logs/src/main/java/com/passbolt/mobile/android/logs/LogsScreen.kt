@@ -44,6 +44,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
@@ -53,8 +55,6 @@ import net.svaroh.passly.logs.LogsIntent.ShareLogs
 import net.svaroh.passly.logs.LogsSideEffect.NavigateToLogsShareSheet
 import net.svaroh.passly.logs.LogsSideEffect.NavigateUp
 import net.svaroh.passly.logs.LogsSideEffect.ScrollLogsToLastLine
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR

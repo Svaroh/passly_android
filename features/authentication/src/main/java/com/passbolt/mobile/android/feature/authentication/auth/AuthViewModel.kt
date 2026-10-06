@@ -23,18 +23,17 @@ import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase.Passphra
 import net.svaroh.passly.core.passphrasememorycache.usePassphraseCopy
 import net.svaroh.passly.core.security.rootdetection.RootDetector
 import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
+import net.svaroh.passly.database.usecase.HasLocalReplicaUseCase
 import net.svaroh.passly.domain.accounts.AuthenticatedAccountFlow
 import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
 import net.svaroh.passly.domain.accounts.usecase.SaveSelectedAccountUseCase
 import net.svaroh.passly.domain.accounts.usecase.SaveServerFingerprintUseCase
 import net.svaroh.passly.domain.auth.usecase.GetPassphraseUseCase
-import net.svaroh.passly.database.usecase.HasLocalReplicaUseCase
 import net.svaroh.passly.domain.auth.usecase.SaveMfaTokenUseCase
 import net.svaroh.passly.domain.auth.usecase.SaveSessionUseCase
 import net.svaroh.passly.domain.inappreview.usecase.InAppReviewInteractor
 import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.domain.privatekey.usecase.GetPrivateKeyUseCase
-import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.AcceptChangedServerFingerprint
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.AccessLogs
@@ -87,6 +86,7 @@ import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErro
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatus
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatusProvider
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatusProvider.MfaState
+import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.feature.authentication.auth.usecase.BiometryInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error.Generic

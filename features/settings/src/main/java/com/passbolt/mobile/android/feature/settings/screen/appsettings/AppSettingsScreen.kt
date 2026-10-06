@@ -51,6 +51,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
@@ -89,8 +91,6 @@ import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffe
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToGetPassphrase
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToSystemSettings
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateUp
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.getKoin
 import org.koin.compose.koinInject

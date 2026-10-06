@@ -2,6 +2,12 @@ package net.svaroh.passly.feature.otp.scanotp
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.CreateTotpManually
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.GoToSettings
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.GrantCameraPermission
@@ -19,12 +25,6 @@ import net.svaroh.passly.ui.OtpParseResult.UserResolvableError
 import net.svaroh.passly.ui.OtpParseResult.UserResolvableError.ErrorType.MULTIPLE_BARCODES
 import net.svaroh.passly.ui.OtpParseResult.UserResolvableError.ErrorType.NOT_A_OTP_QR
 import net.svaroh.passly.ui.OtpParseResult.UserResolvableError.ErrorType.NO_BARCODES_IN_RANGE
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

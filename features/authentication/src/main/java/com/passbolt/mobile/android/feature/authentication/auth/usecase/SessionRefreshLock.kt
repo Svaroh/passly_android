@@ -1,10 +1,10 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
-import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase.Output
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase.Output
 import timber.log.Timber
 
 /**

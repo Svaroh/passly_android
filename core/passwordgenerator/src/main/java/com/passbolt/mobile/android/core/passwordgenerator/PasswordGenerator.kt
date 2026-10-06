@@ -1,9 +1,9 @@
 package net.svaroh.passly.core.passwordgenerator
 
+import kotlinx.coroutines.withContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.passwordgenerator.codepoints.Codepoint
 import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
-import kotlinx.coroutines.withContext
 
 /**
  * Passbolt - Open source password manager for teams

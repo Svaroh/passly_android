@@ -1,6 +1,7 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.common.usecase.UserIdInput
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.idlingresource.SignOutIdlingResource
@@ -13,7 +14,6 @@ import net.svaroh.passly.domain.auth.SessionRepository
 import net.svaroh.passly.domain.auth.model.ServerSignOutStatus
 import net.svaroh.passly.domain.auth.usecase.GetSessionUseCase
 import net.svaroh.passly.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
-import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn

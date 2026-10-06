@@ -24,6 +24,7 @@
 package net.svaroh.passly.feature.settings.screen.accounts.keyinspector
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.formatter.DateFormatter
 import net.svaroh.passly.core.formatter.FingerprintFormatter
@@ -44,7 +45,6 @@ import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspec
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.mappers.AccountModelMapper
 import net.svaroh.passly.ui.GpgKeyUiModel
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class KeyInspectorViewModel(

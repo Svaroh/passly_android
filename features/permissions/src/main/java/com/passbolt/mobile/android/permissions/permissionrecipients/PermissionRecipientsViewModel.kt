@@ -24,6 +24,7 @@
 package net.svaroh.passly.permissions.permissionrecipients
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.search.SearchableMatcher
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
@@ -43,7 +44,6 @@ import net.svaroh.passly.ui.GroupModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.ResourcePermission
 import net.svaroh.passly.ui.UserUiModel
-import kotlinx.coroutines.launch
 
 class PermissionRecipientsViewModel(
     alreadyAddedGroupPermissions: Array<PermissionModelUi.GroupPermissionModel>,

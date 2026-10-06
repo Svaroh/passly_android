@@ -24,6 +24,8 @@
 package net.svaroh.passly.domain.folders.usecase
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.common.transaction.DatabaseTransactionRunner
 import net.svaroh.passly.commontest.transaction.PassThroughTransactionRunner
 import net.svaroh.passly.core.architecture.result.DomainResult
@@ -36,8 +38,6 @@ import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

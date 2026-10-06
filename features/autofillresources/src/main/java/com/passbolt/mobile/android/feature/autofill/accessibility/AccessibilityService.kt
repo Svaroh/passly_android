@@ -8,6 +8,11 @@ import android.view.View
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.autofill.accessibility.AccessibilityCommunicator
 import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider
 import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition
@@ -23,11 +28,6 @@ import net.svaroh.passly.core.navigation.AutofillMode
 import net.svaroh.passly.core.navigation.AutofillType
 import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory
 import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory.Companion.ACCESSIBILITY_SERVICE_NOTIFICATION_ID
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber

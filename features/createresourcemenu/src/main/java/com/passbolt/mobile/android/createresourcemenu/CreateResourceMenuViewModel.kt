@@ -1,6 +1,7 @@
 package net.svaroh.passly.createresourcemenu
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.navigation.AppContext
 import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.Close
@@ -12,7 +13,6 @@ import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.CreateTotp
 import net.svaroh.passly.createresourcemenu.CreateResourceMenuIntent.Initialize
 import net.svaroh.passly.createresourcemenu.usecase.CreateCreateResourceMenuModelUseCase
 import net.svaroh.passly.ui.HomeDisplayViewModel
-import kotlinx.coroutines.launch
 
 /**
  * Passbolt - Open source password manager for teams

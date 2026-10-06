@@ -6,11 +6,14 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.common.transaction.DatabaseTransactionRunner
 import net.svaroh.passly.commontest.transaction.PassThroughTransactionRunner
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState
+import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
 import net.svaroh.passly.domain.resources.usecase.db.AddLocalResourcePermissionsUseCase
@@ -18,7 +21,6 @@ import net.svaroh.passly.domain.resources.usecase.db.RemoveLocalResourcePermissi
 import net.svaroh.passly.domain.resources.usecase.db.RemoveLocalResourcesWithUpdateStateUseCase
 import net.svaroh.passly.domain.resources.usecase.db.RemoveLocalUrisUseCase
 import net.svaroh.passly.domain.resources.usecase.db.SetLocalResourcesUpdateStateUseCase
-import net.svaroh.passly.core.secrets.usecase.db.UpsertLocalSecretsUseCase
 import net.svaroh.passly.domain.resources.usecase.db.UpsertLocalResourcesUseCase
 import net.svaroh.passly.domain.tags.usecase.AddLocalTagsUseCase
 import net.svaroh.passly.domain.tags.usecase.RemoveLocalTagsUseCase
@@ -31,8 +33,6 @@ import net.svaroh.passly.ui.MetadataKeyTypeModel
 import net.svaroh.passly.ui.ResourcePermission
 import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.ResourceUiModelWithAttributes
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

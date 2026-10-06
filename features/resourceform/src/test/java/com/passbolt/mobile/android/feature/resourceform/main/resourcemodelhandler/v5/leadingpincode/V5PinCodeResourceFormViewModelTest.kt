@@ -2,6 +2,13 @@ package net.svaroh.passly.feature.resourceform.main.resourcemodelhandler.v5.lead
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.domain.resources.usecase.GetDefaultCreateContentTypeUseCase
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GeneratePinCode
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoToPinCodeAdvancedGeneration
@@ -21,13 +28,6 @@ import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.MetadataTypeModel
 import net.svaroh.passly.ui.PinCodeUiModel
 import net.svaroh.passly.ui.ResourceFormMode
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

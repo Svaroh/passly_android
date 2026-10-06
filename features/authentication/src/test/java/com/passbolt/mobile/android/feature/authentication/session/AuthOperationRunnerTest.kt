@@ -26,6 +26,10 @@ package net.svaroh.passly.feature.authentication.session
 import android.app.Activity
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Authenticated
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Passphrase
@@ -36,10 +40,6 @@ import net.svaroh.passly.core.navigation.AppForegroundListener
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
 import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.component.get

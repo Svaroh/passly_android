@@ -11,6 +11,7 @@ import android.view.Gravity
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
+import kotlinx.coroutines.withContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordAndDescription
 import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordDescriptionTotp
@@ -28,7 +29,6 @@ import net.svaroh.passly.ui.ResourceAppearanceModel.Companion.DEFAULT_BACKGROUND
 import net.svaroh.passly.ui.ResourceAppearanceModel.Companion.ICON_TYPE_KEEPASS
 import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.contentType
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import net.svaroh.passly.core.ui.R as CoreUiR
 

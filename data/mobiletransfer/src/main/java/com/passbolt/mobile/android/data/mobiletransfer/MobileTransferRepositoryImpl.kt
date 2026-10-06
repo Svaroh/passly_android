@@ -58,12 +58,10 @@ internal class MobileTransferRepositoryImpl(
     override suspend fun setBrowserFirstLoginAccount(
         uuid: String,
         request: BrowserFirstLoginAccountRequestDto,
-    ): DomainResult<BrowserFirstLoginRequestResponseDto> =
-        remoteDataSource.setBrowserFirstLoginAccount(uuid, request)
+    ): DomainResult<BrowserFirstLoginRequestResponseDto> = remoteDataSource.setBrowserFirstLoginAccount(uuid, request)
 
     override suspend fun setBrowserFirstLoginResponse(
         uuid: String,
         request: BrowserFirstLoginResponseRequestDto,
-    ): DomainResult<BrowserFirstLoginRequestResponseDto> =
-        remoteDataSource.setBrowserFirstLoginResponse(uuid, request)
+    ): DomainResult<BrowserFirstLoginRequestResponseDto> = remoteDataSource.setBrowserFirstLoginResponse(uuid, request)
 }

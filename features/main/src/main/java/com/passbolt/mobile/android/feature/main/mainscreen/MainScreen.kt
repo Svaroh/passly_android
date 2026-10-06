@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.map
 import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.BottomTab.HOME
@@ -31,7 +32,6 @@ import net.svaroh.passly.feature.main.mainscreen.MainIntent.CloseChromeNativeAut
 import net.svaroh.passly.feature.main.mainscreen.MainIntent.GoToSettings
 import net.svaroh.passly.feature.main.mainscreen.MainIntent.TabSelected
 import net.svaroh.passly.feature.main.mainscreen.encouragements.chromenativeautofill.EncourageChromeNativeAutofillDialog
-import kotlinx.coroutines.flow.map
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 

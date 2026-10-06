@@ -8,6 +8,7 @@ import net.svaroh.passly.feature.authentication.auth.challenge.ChallengeVerifier
 import net.svaroh.passly.feature.authentication.auth.challenge.DomainComparator
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatusProvider
 import net.svaroh.passly.feature.authentication.auth.challenge.TrailingSlashDomainComparator
+import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.feature.authentication.auth.usecase.BiometryInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase
@@ -19,7 +20,6 @@ import net.svaroh.passly.feature.authentication.auth.usecase.ServerKeysWarmup
 import net.svaroh.passly.feature.authentication.auth.usecase.ServerKeysWarmupCache
 import net.svaroh.passly.feature.authentication.auth.usecase.SessionRefreshLock
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInUseCase
-import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.VerifyPassphraseUseCase

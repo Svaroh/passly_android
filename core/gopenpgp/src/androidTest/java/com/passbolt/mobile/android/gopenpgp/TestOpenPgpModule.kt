@@ -1,7 +1,7 @@
 package net.svaroh.passly.gopenpgp
 
-import net.svaroh.passly.gopenpgp.exception.GopenPgpExceptionParser
 import com.proton.gopenpgp.crypto.Crypto
+import net.svaroh.passly.gopenpgp.exception.GopenPgpExceptionParser
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

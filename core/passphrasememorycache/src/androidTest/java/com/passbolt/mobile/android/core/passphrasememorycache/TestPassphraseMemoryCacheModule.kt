@@ -1,10 +1,10 @@
 package net.svaroh.passly.core.passphrasememorycache
 
 import androidx.lifecycle.ProcessLifecycleOwner
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module

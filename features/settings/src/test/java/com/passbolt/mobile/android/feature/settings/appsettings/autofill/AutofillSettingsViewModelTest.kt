@@ -24,6 +24,12 @@ package net.svaroh.passly.feature.settings.appsettings.autofill
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.core.autofill.AutofillInformationProvider
 import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.DISABLED
 import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.NOT_SUPPORTED
@@ -40,12 +46,6 @@ import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSe
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.UpdateAutofillState
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsViewModel
 import net.svaroh.passly.ui.GlobalPreferencesUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

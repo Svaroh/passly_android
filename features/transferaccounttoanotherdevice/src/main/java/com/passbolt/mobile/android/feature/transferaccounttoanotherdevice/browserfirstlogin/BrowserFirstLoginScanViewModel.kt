@@ -1,6 +1,9 @@
 package net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import net.svaroh.passly.dto.response.qrcode.BrowserFirstLoginPageDto
@@ -15,9 +18,6 @@ import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogi
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanState.TooltipMessage.SCAN_ERROR
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.usecase.CompleteBrowserFirstLoginUseCase
 import net.svaroh.passly.ui.TransferAccountStatusType
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class BrowserFirstLoginScanViewModel(
@@ -57,7 +57,8 @@ internal class BrowserFirstLoginScanViewModel(
                 updateViewState { copy(tooltipMessage = SCAN_ERROR) }
             }
             BarcodeScanResult.MultipleBarcodes,
-            BarcodeScanResult.NoBarcodeInRange -> updateViewState { copy(tooltipMessage = CENTER_CAMERA_ON_QR) }
+            BarcodeScanResult.NoBarcodeInRange,
+            -> updateViewState { copy(tooltipMessage = CENTER_CAMERA_ON_QR) }
             is BarcodeScanResult.SingleBarcode -> {
                 val page = browserFirstLoginQrParser.parse(scanResult.data)
                 if (page != null) {

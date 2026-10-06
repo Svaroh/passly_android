@@ -24,6 +24,8 @@
 package net.svaroh.passly.domain.resources.usecase
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.commontest.session.validSessionTestModule
 import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
@@ -35,8 +37,6 @@ import net.svaroh.passly.ui.PermissionModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.ResourcePermission
 import net.svaroh.passly.ui.UserWithAvatar
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

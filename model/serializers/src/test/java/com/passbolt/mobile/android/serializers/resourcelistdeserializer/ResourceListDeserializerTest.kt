@@ -26,6 +26,7 @@ package net.svaroh.passly.serializers.resourcelistdeserializer
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import net.jimblackler.jsonschemafriend.SchemaStore
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import net.svaroh.passly.domain.resourcetypes.usecase.GetLocalResourceTypesUseCase
 import net.svaroh.passly.domain.resourcetypes.usecase.GetResourceTypeIdToSlugMappingUseCase
@@ -47,7 +48,6 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 import net.svaroh.passly.ui.ResourceTypeModel
-import net.jimblackler.jsonschemafriend.SchemaStore
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

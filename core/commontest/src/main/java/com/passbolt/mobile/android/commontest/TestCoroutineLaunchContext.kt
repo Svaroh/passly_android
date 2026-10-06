@@ -1,8 +1,8 @@
 package net.svaroh.passly.commontest
 
-import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import kotlin.coroutines.CoroutineContext
 
 /**

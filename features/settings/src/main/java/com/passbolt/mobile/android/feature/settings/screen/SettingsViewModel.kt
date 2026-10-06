@@ -24,6 +24,7 @@
 package net.svaroh.passly.feature.settings.screen
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.core.compose.SideEffectViewModel
@@ -44,7 +45,6 @@ import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToSt
 import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToTermsAndLicenses
 import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.ShowToast
 import net.svaroh.passly.feature.settings.screen.ToastType.SERVER_SIGN_OUT_FAILED
-import kotlinx.coroutines.launch
 
 internal class SettingsViewModel(
     private val signOutUseCase: SignOutUseCase,

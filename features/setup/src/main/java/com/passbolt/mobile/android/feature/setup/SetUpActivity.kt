@@ -28,6 +28,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation3.runtime.NavKey
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.json.Json
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.PartiallyAuthenticated
 import net.svaroh.passly.core.navigation.compose.APP_NAVIGATOR_SCOPE
@@ -40,9 +43,6 @@ import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.Transfe
 import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.Welcome
 import net.svaroh.passly.core.ui.orientation.LockCompactScreenOrientation
 import net.svaroh.passly.ui.AccountSetupDataModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.serialization.json.Json
 import org.koin.compose.koinInject
 import org.koin.compose.scope.KoinScope
 import org.koin.core.annotation.KoinExperimentalAPI

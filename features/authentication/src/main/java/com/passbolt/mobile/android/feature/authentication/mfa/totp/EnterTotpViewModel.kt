@@ -1,5 +1,6 @@
 package net.svaroh.passly.feature.authentication.mfa.totp
 
+import kotlinx.coroutines.delay
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
@@ -27,7 +28,6 @@ import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.Sna
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.NETWORK
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.SESSION_EXPIRED
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.WRONG_CODE
-import kotlinx.coroutines.delay
 import timber.log.Timber
 import kotlin.time.Duration.Companion.milliseconds
 

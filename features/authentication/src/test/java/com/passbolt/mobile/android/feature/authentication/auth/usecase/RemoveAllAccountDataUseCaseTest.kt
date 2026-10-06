@@ -1,5 +1,6 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.common.usecase.UserIdInput
 import net.svaroh.passly.database.DatabaseProvider
 import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
@@ -11,7 +12,6 @@ import net.svaroh.passly.domain.auth.PassphraseRepository
 import net.svaroh.passly.domain.auth.SessionRepository
 import net.svaroh.passly.domain.auth.usecase.RemoveServerPublicRsaKeyUseCase
 import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
-import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock

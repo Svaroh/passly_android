@@ -2,6 +2,13 @@ package net.svaroh.passly.feature.otp.scanotp.scanotpsuccess
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction
 import net.svaroh.passly.domain.resources.actions.ResourceCreateActionResult
 import net.svaroh.passly.domain.resources.actions.ResourceUpdateActionResult
@@ -20,13 +27,6 @@ import net.svaroh.passly.ui.MetadataJsonModel
 import net.svaroh.passly.ui.MetadataTypeModel
 import net.svaroh.passly.ui.OtpParseResult
 import net.svaroh.passly.ui.ResourceUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

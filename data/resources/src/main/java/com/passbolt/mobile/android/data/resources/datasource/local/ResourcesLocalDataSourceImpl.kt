@@ -26,6 +26,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import net.svaroh.passly.data.resources.mapper.toResourceDatabaseView
 import net.svaroh.passly.data.resources.mapper.toUiModel
 import net.svaroh.passly.database.DatabaseProvider
@@ -50,8 +52,6 @@ import net.svaroh.passly.ui.HomeDisplayViewModel
 import net.svaroh.passly.ui.PermissionModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.TagModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 @Suppress("TooManyFunctions")
 internal class ResourcesLocalDataSourceImpl(
