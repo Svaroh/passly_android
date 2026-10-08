@@ -28,7 +28,6 @@ import net.svaroh.passly.domain.biometrickey.BiometricKeyRepository
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCrypto.Companion.BIOMETRIC_KEY_ALIAS
 import net.svaroh.passly.encryptedstorage.biometric.KeyStoreWrapper
-import java.security.InvalidKeyException
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 
@@ -39,7 +38,7 @@ class BiometricCipherImpl(
     override fun getBiometricEncryptCipher(): Cipher =
         try {
             createBiometricEncryptCipher()
-        } catch (exception: InvalidKeyException) {
+        } catch (exception: Exception) {
             keyStoreWrapper.removeKey(BIOMETRIC_KEY_ALIAS)
             createBiometricEncryptCipher()
         }
@@ -62,7 +61,7 @@ class BiometricCipherImpl(
         } catch (exception: KeyPermanentlyInvalidatedException) {
             keyStoreWrapper.removeKey(BIOMETRIC_KEY_ALIAS)
             throw exception
-        } catch (exception: InvalidKeyException) {
+        } catch (exception: Exception) {
             keyStoreWrapper.removeKey(BIOMETRIC_KEY_ALIAS)
             throw KeyPermanentlyInvalidatedException("Biometric key is incompatible", exception)
         }
