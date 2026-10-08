@@ -381,17 +381,22 @@ class AuthViewModel(
         } else if (authConfig is Setup) {
             performFullSignIn(passphrase)
         } else {
+            val capturedPassphrase = passphrase.copyOf()
             launch {
-                // the local database key is stored per selected account, so the account being unlocked has to become
-                // the selected one before its replica can even be inspected
-                saveSelectedAccountUseCase.execute(UserIdInput(userId))
-                if (hasLocalReplicaUseCase.execute(UserIdInput(userId)).hasLocalReplica) {
-                    Timber.d("Unlocking with the local replica, signing in in the background")
-                    unlockWithLocalReplica()
-                    backgroundSignInExecutor.signIn(userId, passphrase.copyOf())
-                } else {
-                    Timber.d("No local replica yet, the server is needed for this sign in")
-                    performFullSignIn(passphrase)
+                try {
+                    // the local database key is stored per selected account, so the account being unlocked has to become
+                    // the selected one before its replica can even be inspected
+                    saveSelectedAccountUseCase.execute(UserIdInput(userId))
+                    if (hasLocalReplicaUseCase.execute(UserIdInput(userId)).hasLocalReplica) {
+                        Timber.d("Unlocking with the local replica, signing in in the background")
+                        unlockWithLocalReplica(capturedPassphrase)
+                        backgroundSignInExecutor.signIn(userId, capturedPassphrase.copyOf())
+                    } else {
+                        Timber.d("No local replica yet, the server is needed for this sign in")
+                        performFullSignIn(capturedPassphrase)
+                    }
+                } finally {
+                    capturedPassphrase.erase()
                 }
             }
         }
@@ -421,10 +426,10 @@ class AuthViewModel(
                                 }
                             }
                             is ServerNotReachable -> {
-                                launch { onServerNotReachable(it.serverUrl) }
+                                launch { onServerNotReachable(it.serverUrl, passphrase) }
                             }
                             is ServerKeysNoNetwork -> {
-                                launch { onServerNotReachable("") }
+                                launch { onServerNotReachable("", passphrase) }
                             }
                             is TimeIsOutOfSync -> {
                                 emitSideEffect(ShowErrorSnackbar(TIME_OUT_OF_SYNC))
@@ -446,14 +451,17 @@ class AuthViewModel(
      * the app runs on local data until synchronisation becomes possible again; only an account that has never
      * synchronised still needs the server to get going.
      */
-    private suspend fun onServerNotReachable(serverUrl: String) {
+    private suspend fun onServerNotReachable(
+        serverUrl: String,
+        verifiedPassphrase: ByteArray,
+    ) {
         // the local database key is stored per selected account, so the account being unlocked has to become the
         // selected one before its replica can even be inspected
         saveSelectedAccountUseCase.execute(UserIdInput(userId))
 
         if (hasLocalReplicaUseCase.execute(UserIdInput(userId)).hasLocalReplica) {
             Timber.d("Server is not reachable, continuing with the local replica")
-            unlockWithLocalReplica()
+            unlockWithLocalReplica(verifiedPassphrase)
         } else {
             Timber.d("Server is not reachable and there is no local replica to fall back on")
             updateViewState {
@@ -462,9 +470,9 @@ class AuthViewModel(
         }
     }
 
-    private fun unlockWithLocalReplica() {
+    private fun unlockWithLocalReplica(verifiedPassphrase: ByteArray) {
         runtimeAuthenticatedFlag.isAuthenticated = true
-        passphraseMemoryCache.set(passphrase.copyOf())
+        passphraseMemoryCache.set(verifiedPassphrase.copyOf())
         // no session is saved: there is no session to save, and the stored one - stale or not - stays untouched
         loginState = null
         updateViewState { copy(showProgress = false) }

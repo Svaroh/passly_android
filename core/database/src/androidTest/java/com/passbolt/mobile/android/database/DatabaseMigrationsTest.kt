@@ -48,6 +48,7 @@ import net.svaroh.passly.database.migrations.Migration25to26
 import net.svaroh.passly.database.migrations.Migration26to27
 import net.svaroh.passly.database.migrations.Migration27to28
 import net.svaroh.passly.database.migrations.Migration28to29
+import net.svaroh.passly.database.migrations.Migration29to30
 import net.svaroh.passly.database.migrations.Migration2to3
 import net.svaroh.passly.database.migrations.Migration3to4
 import net.svaroh.passly.database.migrations.Migration4to5
@@ -889,9 +890,25 @@ class DatabaseMigrationsTest {
                 Migration26to27,
                 Migration27to28,
                 Migration28to29,
+                Migration29to30,
             ).build()
             .apply {
                 openHelper.writableDatabase
+                close()
+            }
+    }
+
+    @Test
+    fun migration29to30() {
+        helper
+            .createDatabase(TEST_DB, 29)
+            .apply {
+                close()
+            }
+
+        helper
+            .runMigrationsAndValidate(TEST_DB, 30, true, Migration29to30)
+            .apply {
                 close()
             }
     }

@@ -22,11 +22,12 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 /**
- * Adds the local secret store. Purely additive and network independent, so an app update applied while offline
- * cannot leave an account unusable.
+ * Migration 29 to 30 ensures that all database indices from earlier upstream migrations
+ * (such as 23to24 and 27to28) and the local Secret table are present, even if previous
+ * migrations were skipped or interrupted during branch rebase.
  */
 @Suppress("MagicNumber")
-object Migration28to29 : Migration(28, 29) {
+object Migration29to30 : Migration(29, 30) {
     private const val CREATE_SECRET_TABLE =
         "CREATE TABLE IF NOT EXISTS `Secret` (" +
             "`resourceId` TEXT NOT NULL, " +
