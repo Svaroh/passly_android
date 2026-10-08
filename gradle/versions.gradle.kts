@@ -1,6 +1,6 @@
 import org.gradle.internal.extensions.core.extra
 
-extra["projectVersionName"] = "3.3.1"
+extra["projectVersionName"] = "3.3.2"
 extra["projectVersionCode"] = 57
 
 extra["projectMinSdk"] = 30
