@@ -46,4 +46,7 @@ enum class UpdateAction {
     REMOVE_PASSWORD_AND_NOTE,
 
     ADD_CUSTOM_FIELDS,
+
+    ADD_PIN_CODE,
+    REMOVE_PIN_CODE,
 }

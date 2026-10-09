@@ -68,7 +68,8 @@ fun GroupPermissionsScreen(
     permission: PermissionModelUi.GroupPermissionModel,
     mode: PermissionsMode,
     modifier: Modifier = Modifier,
-    viewModel: GroupPermissionsViewModel = koinViewModel(parameters = { parametersOf(mode, permission) }),
+    fromSnapshot: Boolean = false,
+    viewModel: GroupPermissionsViewModel = koinViewModel(parameters = { parametersOf(mode, permission, fromSnapshot) }),
     navigator: AppNavigator = koinInject(),
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle()
@@ -84,7 +85,7 @@ fun GroupPermissionsScreen(
         when (effect) {
             NavigateBack -> navigator.navigateBack()
             is NavigateToGroupMembers ->
-                navigator.navigateToKey(GroupMembers(effect.groupId))
+                navigator.navigateToKey(GroupMembers(effect.groupId, effect.fromSnapshot))
             is SetUpdatedPermissionResult -> {
                 resultBus.sendResult(result = GroupPermissionModifiedResult(effect.permission))
                 navigator.navigateBack()

@@ -1,9 +1,9 @@
 package net.svaroh.passly.feature.authentication.auth.challenge
 
-import net.svaroh.passly.dto.response.ChallengeResponseDto
-import net.svaroh.passly.feature.base.readFromFile
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import net.svaroh.passly.dto.response.ChallengeResponseDto
+import net.svaroh.passly.feature.base.readFromFile
 import org.junit.Rule
 import org.junit.Test
 import org.koin.test.KoinTest
@@ -38,13 +38,13 @@ class ChallengeVerifierTest : KoinTest {
             val challengeResponseDto =
                 ChallengeResponseDto(
                     "",
-                    "",
-                    "",
+                    SENT_DOMAIN,
+                    SENT_VERIFY_TOKEN,
                     accessToken,
                     "",
                     null,
                 )
-            val result = challengeVerifier.verify(challengeResponseDto, public)
+            val result = challengeVerifier.verify(challengeResponseDto, public, SENT_VERIFY_TOKEN, SENT_DOMAIN)
             assertTrue(result is ChallengeVerifier.Output.TokenExpired)
         }
 
@@ -54,13 +54,13 @@ class ChallengeVerifierTest : KoinTest {
             val challengeResponseDto =
                 ChallengeResponseDto(
                     "",
-                    "",
-                    "",
+                    SENT_DOMAIN,
+                    SENT_VERIFY_TOKEN,
                     "wrong access",
                     "",
                     null,
                 )
-            val result = challengeVerifier.verify(challengeResponseDto, public)
+            val result = challengeVerifier.verify(challengeResponseDto, public, SENT_VERIFY_TOKEN, SENT_DOMAIN)
             assertTrue(result is ChallengeVerifier.Output.Failure)
         }
 
@@ -70,13 +70,66 @@ class ChallengeVerifierTest : KoinTest {
             val challengeResponseDto =
                 ChallengeResponseDto(
                     "",
-                    "",
-                    "",
+                    SENT_DOMAIN,
+                    SENT_VERIFY_TOKEN,
                     accessToken,
                     "",
                     null,
                 )
-            val result = challengeVerifier.verify(challengeResponseDto, wrongPublic)
+            val result = challengeVerifier.verify(challengeResponseDto, wrongPublic, SENT_VERIFY_TOKEN, SENT_DOMAIN)
             assertTrue(result is ChallengeVerifier.Output.InvalidSignature)
         }
+
+    @Test
+    fun `challenge not verified when returned verify token does not match the sent one`() =
+        runTest {
+            val challengeResponseDto =
+                ChallengeResponseDto(
+                    "",
+                    SENT_DOMAIN,
+                    "e1ebc592-b90d-5e22-9f40-50e52911673b",
+                    accessToken,
+                    "",
+                    null,
+                )
+            val result = challengeVerifier.verify(challengeResponseDto, public, SENT_VERIFY_TOKEN, SENT_DOMAIN)
+            assertTrue(result is ChallengeVerifier.Output.VerifyTokenMismatch)
+        }
+
+    @Test
+    fun `challenge domain check passes when returned domain differs only by a trailing slash`() =
+        runTest {
+            val challengeResponseDto =
+                ChallengeResponseDto(
+                    "",
+                    "$SENT_DOMAIN/",
+                    SENT_VERIFY_TOKEN,
+                    accessToken,
+                    "",
+                    null,
+                )
+            val result = challengeVerifier.verify(challengeResponseDto, public, SENT_VERIFY_TOKEN, SENT_DOMAIN)
+            assertTrue(result is ChallengeVerifier.Output.TokenExpired)
+        }
+
+    @Test
+    fun `challenge not verified when returned domain does not match the sent one`() =
+        runTest {
+            val challengeResponseDto =
+                ChallengeResponseDto(
+                    "",
+                    "https://attacker.dev",
+                    SENT_VERIFY_TOKEN,
+                    accessToken,
+                    "",
+                    null,
+                )
+            val result = challengeVerifier.verify(challengeResponseDto, public, SENT_VERIFY_TOKEN, SENT_DOMAIN)
+            assertTrue(result is ChallengeVerifier.Output.DomainMismatch)
+        }
+
+    private companion object {
+        private const val SENT_VERIFY_TOKEN = "555a30f6-48f0-42be-beca-d200347f1848"
+        private const val SENT_DOMAIN = "https://passbolt.dev"
+    }
 }

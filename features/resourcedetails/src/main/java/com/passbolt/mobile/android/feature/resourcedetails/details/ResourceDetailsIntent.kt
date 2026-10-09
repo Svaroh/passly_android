@@ -23,13 +23,13 @@
 
 package net.svaroh.passly.feature.resourcedetails.details
 
-import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourceMoreMenuModel
+import net.svaroh.passly.ui.ResourceUiModel
 import java.util.UUID
 
 sealed class ResourceDetailsIntent {
     data class Initialize(
-        val resourceModel: ResourceModel,
+        val resourceModel: ResourceUiModel,
     ) : ResourceDetailsIntent()
 
     data object GoBack : ResourceDetailsIntent()
@@ -51,6 +51,8 @@ sealed class ResourceDetailsIntent {
 
     data object CopyTotp : ResourceDetailsIntent()
 
+    data object CopyPinCode : ResourceDetailsIntent()
+
     data class CopyCustomField(
         val key: UUID,
     ) : ResourceDetailsIntent()
@@ -61,6 +63,8 @@ sealed class ResourceDetailsIntent {
     data object ToggleNoteVisibility : ResourceDetailsIntent()
 
     data object ToggleTotpVisibility : ResourceDetailsIntent()
+
+    data object TogglePinCodeVisibility : ResourceDetailsIntent()
 
     data class ToggleCustomField(
         val key: UUID,

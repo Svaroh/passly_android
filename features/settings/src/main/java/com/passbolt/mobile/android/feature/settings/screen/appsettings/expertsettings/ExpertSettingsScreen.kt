@@ -37,13 +37,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey
 import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.core.ui.menu.OpenableSettingsItem
 import net.svaroh.passly.core.ui.menu.SwitchableSettingsItem
 import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
 import net.svaroh.passly.core.ui.topbar.TitleAppBar
 import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.GoBack
-import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleDeveloperMode
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.GoToPageSize
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleAuthRequiredOnEveryEntry
 import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleHideRootWarning
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreenSideEffect.NavigateToPageSize
 import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreenSideEffect.NavigateUp
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -66,6 +70,7 @@ internal fun ExpertSettingsScreen(
     SideEffectDispatcher(viewModel.sideEffect) {
         when (it) {
             NavigateUp -> navigator.navigateBack()
+            NavigateToPageSize -> navigator.navigateToKey(SettingsNavigationKey.PageSize)
         }
     }
 }
@@ -93,18 +98,23 @@ private fun ExpertSettingsScreen(
                         .verticalScroll(rememberScrollState()),
             ) {
                 SwitchableSettingsItem(
-                    iconPainter = painterResource(R.drawable.ic_dev_mode),
-                    title = stringResource(LocalizationR.string.settings_app_settings_expert_settings_dev_mode),
-                    isChecked = state.isDeveloperModeChecked,
-                    onCheckedChange = { onIntent(ToggleDeveloperMode) },
+                    iconPainter = painterResource(R.drawable.ic_auth_setting),
+                    title = stringResource(LocalizationR.string.settings_app_settings_expert_settings_require_auth_on_every_entry),
+                    isChecked = state.isAuthRequiredOnEveryEntryChecked,
+                    onCheckedChange = { onIntent(ToggleAuthRequiredOnEveryEntry) },
                 )
 
                 SwitchableSettingsItem(
                     iconPainter = painterResource(R.drawable.ic_hash),
                     title = stringResource(LocalizationR.string.settings_app_settings_expert_settings_hide_root),
                     isChecked = state.isHideRootWarningChecked,
-                    isEnabled = state.isHideRootWarningEnabled,
                     onCheckedChange = { onIntent(ToggleHideRootWarning) },
+                )
+
+                OpenableSettingsItem(
+                    iconPainter = painterResource(R.drawable.ic_file_sliders),
+                    title = stringResource(LocalizationR.string.settings_app_settings_expert_settings_fetch_page_size),
+                    onClick = { onIntent(GoToPageSize) },
                 )
             }
         },

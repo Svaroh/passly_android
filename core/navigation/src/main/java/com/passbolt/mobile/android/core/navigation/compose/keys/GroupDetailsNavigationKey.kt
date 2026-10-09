@@ -7,10 +7,12 @@ sealed interface GroupDetailsNavigationKey : NavKey {
     @Serializable
     data class GroupMembers(
         val groupId: String,
+        val fromSnapshot: Boolean = false,
     ) : GroupDetailsNavigationKey
 
     @Serializable
     data class GroupMemberDetails(
         val userId: String,
+        val fromSnapshot: Boolean = false,
     ) : GroupDetailsNavigationKey
 }

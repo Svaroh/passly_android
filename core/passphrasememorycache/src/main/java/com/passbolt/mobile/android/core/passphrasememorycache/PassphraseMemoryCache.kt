@@ -3,16 +3,18 @@ package net.svaroh.passly.core.passphrasememorycache
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import net.svaroh.passly.common.coroutinetimer.timerFlow
-import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
-import net.svaroh.passly.common.extension.erase
-import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
+import net.svaroh.passly.common.coroutinetimer.timerFlow
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.common.extension.erase
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import timber.log.Timber
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 /**
  * Passbolt - Open source password manager for teams
@@ -41,14 +43,15 @@ class PassphraseMemoryCache(
     coroutineLaunchContext: CoroutineLaunchContext,
     private val lifecycleOwner: LifecycleOwner,
     private val dataRefreshTrackingFlow: DataRefreshTrackingFlow,
+    private val authOnEveryEntryChecker: AuthOnEveryEntryChecker,
 ) : DefaultLifecycleObserver {
-    private var value: PotentialPassphrase = PotentialPassphrase.PassphraseNotPresent()
+    private val stateLock = ReentrantLock()
+    private var state: State = State.Empty
 
     private val timerFlow = timerFlow(TIMER_REPEAT_TIMES, TIMER_TICK_MILLIS)
 
     private val timerJob = SupervisorJob()
     private val timerScope = CoroutineScope(timerJob + coroutineLaunchContext.ui)
-    private var currentTimerMillis: Long? = null
 
     // lifecycle observer remove/add methods need to be called on Main thread (even in Android Tests
     // TestDispatcher must not be injected here - Main dispatcher is obligatory
@@ -56,62 +59,81 @@ class PassphraseMemoryCache(
     private val lifecycleObserverScope = CoroutineScope(lifecycleObserverJob + Dispatchers.Main)
 
     fun set(passphrase: ByteArray) {
-        clear()
-        initializeObservers()
-        currentTimerMillis = TIMER_TICK_MILLIS
-        value = PotentialPassphrase.Passphrase(passphrase.copyOf())
+        stateLock.withLock {
+            clear()
+            initializeObservers()
+            state = State.Cached(passphrase = passphrase.copyOf(), currentTimerMillis = TIMER_TICK_MILLIS)
+        }
         Timber.d("[Session] Passphrase cached")
     }
 
     fun get() =
-        when (val current = value) {
-            is PotentialPassphrase.Passphrase -> PotentialPassphrase.Passphrase(current.passphrase.copyOf())
-            is PotentialPassphrase.PassphraseNotPresent -> current
+        stateLock.withLock {
+            when (val current = state) {
+                is State.Cached -> PotentialPassphrase.Passphrase(current.passphrase.copyOf())
+                is State.Empty -> PotentialPassphrase.PassphraseNotPresent()
+            }
         }
 
     @Suppress("MagicNumber") // second has 1000 millis
     fun getSessionDurationSeconds() =
-        currentTimerMillis?.let {
-            (CACHE_EXPIRATION_MILLIS - it) / 1000
+        stateLock.withLock {
+            (state as? State.Cached)?.let {
+                (CACHE_EXPIRATION_MILLIS - it.currentTimerMillis) / 1000
+            }
         }
 
-    fun hasPassphrase() = value is PotentialPassphrase.Passphrase
+    fun hasPassphrase() = stateLock.withLock { state is State.Cached }
 
     private fun initializeObservers() {
         lifecycleObserverScope.launch {
             lifecycleOwner.lifecycle.addObserver(this@PassphraseMemoryCache)
         }
         timerScope.launch {
-            timerFlow.collect { currentTimerMillis = it * TIMER_TICK_MILLIS }
+            timerFlow.collect { onTimerTick(it) }
             scheduleClear()
         }
     }
 
+    private fun onTimerTick(tick: Long) {
+        stateLock.withLock {
+            (state as? State.Cached)?.currentTimerMillis = tick * TIMER_TICK_MILLIS
+        }
+    }
+
     fun clear() {
-        (value as? PotentialPassphrase.Passphrase).let {
-            it?.passphrase?.erase()
+        stateLock.withLock {
+            (state as? State.Cached)?.passphrase?.erase()
+            state = State.Empty
+            lifecycleObserverScope.launch {
+                lifecycleOwner.lifecycle.removeObserver(this@PassphraseMemoryCache)
+            }
+            timerScope.coroutineContext.cancelChildren()
+            lifecycleObserverScope.coroutineContext.cancelChildren()
         }
-        value = PotentialPassphrase.PassphraseNotPresent()
-        currentTimerMillis = null
-        lifecycleObserverScope.launch {
-            lifecycleOwner.lifecycle.removeObserver(this@PassphraseMemoryCache)
-        }
-        timerScope.coroutineContext.cancelChildren()
-        lifecycleObserverScope.coroutineContext.cancelChildren()
         Timber.d("[Session] Passphrase cache cleared")
     }
 
-    fun scheduleClear() {
-        lifecycleObserverScope.launch {
-            Timber.d("[Session] Scheduling passphrase cache clear")
-            dataRefreshTrackingFlow.awaitIdle()
-            clear()
-        }
+    private suspend fun scheduleClear() {
+        Timber.d("[Session] Scheduling passphrase cache clear")
+        dataRefreshTrackingFlow.awaitIdle()
+        clear()
     }
 
     override fun onStop(owner: LifecycleOwner) {
         Timber.d("[Session] App went background")
-        scheduleClear()
+        if (authOnEveryEntryChecker.isRequired()) {
+            timerScope.launch { scheduleClear() }
+        }
+    }
+
+    private sealed class State {
+        data object Empty : State()
+
+        class Cached(
+            val passphrase: ByteArray,
+            var currentTimerMillis: Long,
+        ) : State()
     }
 
     companion object {
@@ -122,3 +144,17 @@ class PassphraseMemoryCache(
         private const val TIMER_REPEAT_TIMES = CACHE_EXPIRATION_MILLIS / TIMER_TICK_MILLIS
     }
 }
+
+inline fun <T> PassphraseMemoryCache.usePassphraseCopy(
+    onPassphraseNotPresent: () -> T,
+    action: (passphraseCopy: ByteArray) -> T,
+): T =
+    when (val potentialPassphrase = get()) {
+        is PotentialPassphrase.Passphrase ->
+            try {
+                action(potentialPassphrase.passphrase)
+            } finally {
+                potentialPassphrase.passphrase.erase()
+            }
+        is PotentialPassphrase.PassphraseNotPresent -> onPassphraseNotPresent()
+    }

@@ -61,6 +61,9 @@ class Validation {
         }
 
         internal fun run(value: Any?): Boolean {
+            // safe by construction: ValueValidation<T> pairs value: T with RuleSet<T> at creation time;
+            // the type link is only lost through the star-projected validations list
+            @Suppress("UNCHECKED_CAST")
             val valid = rules.map { it.condition(value as T) }.all { it }
             if (valid) onValid() else onInvalid()
             return valid

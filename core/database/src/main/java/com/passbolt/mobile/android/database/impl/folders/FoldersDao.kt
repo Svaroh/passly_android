@@ -162,18 +162,18 @@ interface FoldersDao : BaseDao<Folder> {
 
     @Transaction
     @Query(
-        "WITH RECURSIVE ancestor(folderId, name, permission, parentId, isShared, updateState, level) as (" +
-            "SELECT folderId, name, permission, parentId, isShared, updateState, 0 " +
+        "WITH RECURSIVE ancestor(folderId, name, permission, parentId, isShared, updateState, modified, level) as (" +
+            "SELECT folderId, name, permission, parentId, isShared, updateState, modified, 0 " +
             "from Folder " +
             "WHERE folderId = :folderId " +
             "" +
             "UNION ALL " +
             "" +
-            "SELECT f.folderId, f.name, f.permission, f.parentId, f.isShared, f.updateState, a.level - 1 " +
+            "SELECT f.folderId, f.name, f.permission, f.parentId, f.isShared, f.updateState, f.modified, a.level - 1 " +
             "FROM Folder f " +
             "JOIN ancestor a on f.folderId = a.parentId " +
             ") " +
-            "SELECT folderId, name, permission, parentId, isShared, updateState " +
+            "SELECT folderId, name, permission, parentId, isShared, updateState, modified " +
             "FROM ancestor a " +
             "ORDER BY level",
     )
@@ -202,6 +202,25 @@ interface FoldersDao : BaseDao<Folder> {
             "where f.folderId = :folderId",
     )
     suspend fun getFolderGroupsPermissions(folderId: String): List<GroupPermission>
+
+    @Transaction
+    @Query(
+        "UPDATE Folder SET isShared = (" +
+            "EXISTS (" +
+            "SELECT 1 FROM FolderAndUsersCrossRef " +
+            "WHERE FolderAndUsersCrossRef.folderId = Folder.folderId " +
+            "AND FolderAndUsersCrossRef.userId != :currentUserId" +
+            ") " +
+            "OR EXISTS (" +
+            "SELECT 1 FROM FolderAndGroupsCrossRef " +
+            "INNER JOIN UsersAndGroupCrossRef " +
+            "ON UsersAndGroupCrossRef.groupId = FolderAndGroupsCrossRef.groupId " +
+            "WHERE FolderAndGroupsCrossRef.folderId = Folder.folderId " +
+            "AND UsersAndGroupCrossRef.userId != :currentUserId" +
+            ")" +
+            ")",
+    )
+    suspend fun updateIsShared(currentUserId: String)
 
     @Transaction
     @Query("UPDATE Folder SET updateState = :updateState")

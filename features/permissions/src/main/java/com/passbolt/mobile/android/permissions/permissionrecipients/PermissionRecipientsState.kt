@@ -27,13 +27,13 @@ import net.svaroh.passly.core.ui.search.SearchInputEndIconMode
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.NONE
 import net.svaroh.passly.ui.GroupModel
 import net.svaroh.passly.ui.PermissionModelUi
-import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserUiModel
 
 data class PermissionRecipientsState(
     val groups: List<GroupModel> = emptyList(),
-    val users: List<UserModel> = emptyList(),
+    val users: List<UserUiModel> = emptyList(),
     val filteredGroups: List<GroupModel> = emptyList(),
-    val filteredUsers: List<UserModel> = emptyList(),
+    val filteredUsers: List<UserUiModel> = emptyList(),
     val selectedGroupIds: Set<String> = emptySet(),
     val selectedUserIds: Set<String> = emptySet(),
     val searchInputEndIconMode: SearchInputEndIconMode = NONE,

@@ -9,6 +9,10 @@ sealed interface AuthWithDuoIntent {
 
     data object Close : AuthWithDuoIntent
 
+    data object ConfirmSetupLeave : AuthWithDuoIntent
+
+    data object DismissSetupLeave : AuthWithDuoIntent
+
     data class DuoAuthFinished(
         val state: DuoState,
     ) : AuthWithDuoIntent

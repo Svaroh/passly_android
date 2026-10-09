@@ -8,7 +8,9 @@ fun Module.groupPermissionsModule() {
         GroupPermissionsViewModel(
             permission = params.get(),
             mode = params.get(),
+            fromSnapshot = params.get(),
             getGroupWithUsersUseCase = get(),
+            getPermissionsSnapshotUseCase = get(),
             coroutineLaunchContext = get(),
         )
     }

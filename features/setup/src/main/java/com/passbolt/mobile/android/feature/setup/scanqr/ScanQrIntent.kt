@@ -23,9 +23,9 @@
 
 package net.svaroh.passly.feature.setup.scanqr
 
-import net.svaroh.passly.core.navigation.AccountSetupDataModel
-import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import kotlinx.coroutines.flow.StateFlow
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.ui.AccountSetupDataModel
 
 sealed interface ScanQrIntent {
     data class Initialize(

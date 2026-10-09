@@ -1,11 +1,11 @@
 package net.svaroh.passly.core.passwordgenerator.usecase
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import net.svaroh.passly.core.networking.NetworkResult
 import net.svaroh.passly.core.passwordgenerator.mockPwnedPasswordRepository
 import net.svaroh.passly.core.passwordgenerator.passwordGeneratorTestModule
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level
@@ -53,7 +53,7 @@ class CheckPasswordPropertiesUseCaseTest : KoinTest {
         runTest {
             val password = "test1234567890"
             mockPwnedPasswordRepository.stub {
-                onBlocking { getPwnedPasswordsSuffixes(any()) }.thenReturn(
+                on { getPwnedPasswordsSuffixes(any()) }.thenReturn(
                     NetworkResult.Success(
                         "08f70a062457f0763adc66e0c0fe17a150a:10",
                     ),
@@ -71,7 +71,7 @@ class CheckPasswordPropertiesUseCaseTest : KoinTest {
         runTest {
             val password = "test1234567890"
             mockPwnedPasswordRepository.stub {
-                onBlocking { getPwnedPasswordsSuffixes(any()) }.thenReturn(
+                on { getPwnedPasswordsSuffixes(any()) }.thenReturn(
                     NetworkResult.Success(
                         "08f70a062457f0763adc66e0c0fe17a150b:10\n" +
                             "08f70a062457f0763adc66e0c0fe17a150c:10\n" +

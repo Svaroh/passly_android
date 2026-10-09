@@ -23,11 +23,9 @@
 
 package net.svaroh.passly.permissions.permissions
 
-import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.PermissionsItem
 import net.svaroh.passly.ui.PermissionsMode
-import net.svaroh.passly.ui.TrustedKeyDeletedModel
 
 data class PermissionsState(
     val permissionsItem: PermissionsItem,
@@ -35,12 +33,5 @@ data class PermissionsState(
     val permissions: List<PermissionModelUi> = emptyList(),
     val mode: PermissionsMode = PermissionsMode.VIEW,
     val showEditButton: Boolean = false,
-    val showAddUserButton: Boolean = false,
-    val showSaveButton: Boolean = false,
     val showEmptyState: Boolean = false,
-    val showProgress: Boolean = false,
-    val showMetadataKeyModifiedDialog: Boolean = false,
-    val newMetadataKeyToTrustModel: NewMetadataKeyToTrustModel? = null,
-    val showMetadataKeyDeletedDialog: Boolean = false,
-    val trustedKeyDeletedModel: TrustedKeyDeletedModel? = null,
 )

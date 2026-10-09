@@ -1,6 +1,5 @@
 package net.svaroh.passly.feature.resourcedetails.details.ui
 
-import PassboltTheme
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -23,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import net.svaroh.passly.common.extension.toSingleLine
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.ui.R
 import net.svaroh.passly.core.localization.R as LocalizationR
 

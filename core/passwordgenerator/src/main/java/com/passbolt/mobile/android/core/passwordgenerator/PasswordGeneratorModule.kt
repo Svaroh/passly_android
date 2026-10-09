@@ -36,6 +36,7 @@ val passwordGeneratorModule =
         singleOf(::PasswordGenerator)
         singleOf(::PassphraseGenerator)
         singleOf(::SecretGenerator)
+        singleOf(::PinCodeGenerator)
         singleOf(::EntropyCalculator)
         singleOf(::CheckPasswordPropertiesUseCase)
         single { SecureRandom() }

@@ -1,10 +1,11 @@
 package net.svaroh.passly.core.security
 
+import com.scottyab.rootbeer.RootBeer
+import net.svaroh.passly.core.security.flagsecure.FlagSecureRegistry
 import net.svaroh.passly.core.security.flagsecure.FlagSecureSetter
 import net.svaroh.passly.core.security.rootdetection.RootDetector
 import net.svaroh.passly.core.security.rootdetection.RootDetectorImpl
 import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
-import com.scottyab.rootbeer.RootBeer
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -33,7 +34,8 @@ import org.koin.dsl.module
 
 val securityModule =
     module {
-        single { FlagSecureSetter() }
+        single { FlagSecureRegistry() }
+        single { FlagSecureSetter(flagSecureRegistry = get()) }
         factory { RootBeer(androidContext()) }
         single<RootDetector> {
             RootDetectorImpl(

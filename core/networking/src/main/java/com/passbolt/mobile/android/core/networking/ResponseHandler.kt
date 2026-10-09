@@ -103,7 +103,13 @@ inline fun <T : Any> callWithLibraryResponseHandler(
     responseHandler: ResponseHandler,
     apiCall: () -> Response<T>,
 ): NetworkResult<Response<T>> {
-    val response = apiCall()
+    val response =
+        try {
+            apiCall()
+        } catch (exception: Exception) {
+            Timber.e(exception)
+            return responseHandler.handleException(exception)
+        }
     return if (response.isSuccessful) {
         responseHandler.handleSuccess(response)
     } else {

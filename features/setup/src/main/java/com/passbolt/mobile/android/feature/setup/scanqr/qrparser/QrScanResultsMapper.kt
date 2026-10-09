@@ -1,12 +1,12 @@
 package net.svaroh.passly.feature.setup.scanqr.qrparser
 
 import androidx.annotation.VisibleForTesting
+import kotlinx.serialization.json.Json
 import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import net.svaroh.passly.dto.response.qrcode.ReservedBytesDto
 import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult.UserResolvableError.ErrorType.MULTIPLE_BARCODES
 import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult.UserResolvableError.ErrorType.NOT_A_PASSBOLT_QR
 import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult.UserResolvableError.ErrorType.NO_BARCODES_IN_RANGE
-import kotlinx.serialization.json.Json
 import timber.log.Timber
 
 class QrScanResultsMapper(

@@ -1,9 +1,8 @@
 package net.svaroh.passly.feature.authentication.auth
 
-import android.security.keystore.KeyPermanentlyInvalidatedException
-import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
+import androidx.fragment.app.FragmentActivity
 import net.svaroh.passly.ui.BiometricAuthError
 import timber.log.Timber
 import java.util.concurrent.Executor
@@ -12,7 +11,7 @@ import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Suppress("LongParameterList")
 fun showBiometricPrompt(
-    activity: AppCompatActivity,
+    activity: FragmentActivity,
     executor: Executor,
     biometricPromptBuilder: BiometricPrompt.PromptInfo.Builder,
     biometricEncryptionCipher: Cipher,
@@ -21,7 +20,6 @@ fun showBiometricPrompt(
     onAuthenticationSuccess: (Cipher?) -> Unit,
     onAuthenticationError: (BiometricAuthError) -> Unit,
     onAuthenticationCancelled: () -> Unit,
-    onKeyPermanentlyInvalidated: (KeyPermanentlyInvalidatedException) -> Unit,
 ) {
     try {
         val biometricPrompt =
@@ -67,8 +65,6 @@ fun showBiometricPrompt(
                 .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
                 .build()
         biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(biometricEncryptionCipher))
-    } catch (e: KeyPermanentlyInvalidatedException) {
-        onKeyPermanentlyInvalidated(e)
     } catch (e: Exception) {
         Timber.e(e, "Error showing biometric prompt")
         onAuthenticationError(BiometricAuthError.GENERIC)

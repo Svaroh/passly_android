@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.folderdetails
 
-import PassboltTheme
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -43,8 +42,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -52,14 +51,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.extension.toSingleLine
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationDetails
 import net.svaroh.passly.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationItem
 import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
 import net.svaroh.passly.core.ui.header.ItemWithHeader
-import net.svaroh.passly.core.ui.pulltorefresh.PullToRefreshIndicatorBox
 import net.svaroh.passly.core.ui.sharedwith.SharedWithSection
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
 import net.svaroh.passly.core.ui.text.SeparatedText
@@ -75,7 +75,6 @@ import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.NavigateUp
 import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.ShowToast
 import net.svaroh.passly.ui.PermissionsItem
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
@@ -93,6 +92,7 @@ internal fun FolderDetailsScreen(
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val errorColor = colorResource(CoreUiR.color.red)
 
     FolderDetailsScreen(
         state = state.value,
@@ -118,7 +118,7 @@ internal fun FolderDetailsScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getErrorMessage(context, sideEffect.type),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorColor,
                         ),
                     )
                 }
@@ -147,6 +147,7 @@ private fun FolderDetailsScreen(
             TitleAppBar(
                 title = stringResource(LocalizationR.string.folder_details_title),
                 navigationIcon = { BackNavigationIcon(onBackClick = { onIntent(GoBack) }) },
+                refreshProgress = if (state.isRefreshing) state.refreshProgress else null,
             )
         },
         snackbarHost = {
@@ -167,78 +168,74 @@ private fun FolderDetailsScreen(
             )
         },
         content = { paddingValues ->
-            PullToRefreshIndicatorBox(
-                isRefreshing = state.isRefreshing,
+            Column(
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .padding(paddingValues),
+                        .padding(paddingValues)
+                        .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Image(
+                    painter =
+                        painterResource(
+                            if (state.folder?.isShared == true) {
+                                CoreUiR.drawable.ic_filled_shared_folder_with_bg
+                            } else {
+                                CoreUiR.drawable.ic_filled_folder_with_bg
+                            },
+                        ),
+                    contentDescription = null,
+                    modifier = Modifier.size(60.dp),
+                )
+
+                Text(
+                    text =
+                        state.folder
+                            ?.name
+                            .orEmpty()
+                            .toSingleLine(),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(top = 16.dp),
+                )
+
+                ItemWithHeader(
+                    headerText = stringResource(LocalizationR.string.location),
+                    modifier = Modifier.padding(top = 16.dp),
+                    onItemClick = { onIntent(GoToLocationDetails) },
                 ) {
-                    Image(
-                        painter =
-                            painterResource(
-                                if (state.folder?.isShared == true) {
-                                    CoreUiR.drawable.ic_filled_shared_folder_with_bg
-                                } else {
-                                    CoreUiR.drawable.ic_filled_folder_with_bg
-                                },
-                            ),
-                        contentDescription = null,
-                        modifier = Modifier.size(60.dp),
+                    SeparatedText(
+                        segments = listOf(stringResource(LocalizationR.string.folder_root)) + state.locationPath,
+                        modifier = Modifier.fillMaxWidth(),
                     )
-
-                    Text(
-                        text =
-                            state.folder
-                                ?.name
-                                .orEmpty()
-                                .toSingleLine(),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.Center,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(top = 16.dp),
-                    )
-
+                }
+                if (state.canViewPermissions) {
                     ItemWithHeader(
-                        headerText = stringResource(LocalizationR.string.location),
+                        headerText = stringResource(LocalizationR.string.shared_with),
                         modifier = Modifier.padding(top = 16.dp),
-                        onItemClick = { onIntent(GoToLocationDetails) },
+                        onItemClick = { onIntent(SharedWithClick) },
                     ) {
-                        SeparatedText(
-                            segments = listOf(stringResource(LocalizationR.string.folder_root)) + state.locationPath,
+                        Row(
                             modifier = Modifier.fillMaxWidth(),
-                        )
-                    }
-                    if (state.canViewPermissions) {
-                        ItemWithHeader(
-                            headerText = stringResource(LocalizationR.string.shared_with),
-                            modifier = Modifier.padding(top = 16.dp),
-                            onItemClick = { onIntent(SharedWithClick) },
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                SharedWithSection(
-                                    permissions = state.permissions,
-                                    modifier = Modifier.weight(1f),
-                                )
+                            SharedWithSection(
+                                permissions = state.permissions,
+                                modifier = Modifier.weight(1f),
+                            )
 
-                                Image(
-                                    painter = painterResource(CoreUiR.drawable.ic_chevron_right),
-                                    contentDescription = null,
-                                    modifier =
-                                        Modifier
-                                            .size(24.dp)
-                                            .padding(start = 8.dp),
-                                )
-                            }
+                            Image(
+                                painter = painterResource(CoreUiR.drawable.ic_chevron_right),
+                                contentDescription = null,
+                                modifier =
+                                    Modifier
+                                        .size(24.dp)
+                                        .padding(start = 8.dp),
+                            )
                         }
                     }
                 }

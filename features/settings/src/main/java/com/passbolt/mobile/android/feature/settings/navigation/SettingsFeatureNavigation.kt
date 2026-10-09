@@ -22,7 +22,7 @@
  */
 package net.svaroh.passly.feature.settings.navigation
 
-import PassboltTheme
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
 import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
 import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey
@@ -34,6 +34,7 @@ import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsScreen
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsScreen
 import net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter.DefaultFilterScreen
 import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreen
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.PageSizeScreen
 import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsScreen
 import net.svaroh.passly.feature.settings.screen.termsandlicenses.TermsAndLicensesScreen
 import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.LicensesScreen
@@ -70,6 +71,9 @@ class SettingsFeatureNavigation : FeatureModuleNavigation {
             }
             entry<SettingsNavigationKey.ExpertSettings> {
                 PassboltTheme { ExpertSettingsScreen() }
+            }
+            entry<SettingsNavigationKey.PageSize> {
+                PassboltTheme { PageSizeScreen() }
             }
         }
 }

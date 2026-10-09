@@ -32,4 +32,5 @@ val fullDataRefreshModule =
         singleOf(::HomeDataInteractor)
         singleOf(::ResourcesFullRefreshIdlingResource)
         singleOf(::FullDataRefreshExecutor)
+        singleOf(::RefreshProgressTrackerFactory)
     }

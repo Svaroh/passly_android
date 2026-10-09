@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.feature.resourceform.metadata.additionaluris
 
-import PassboltTheme
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -54,7 +53,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -63,6 +61,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
@@ -92,7 +92,6 @@ import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.ResourceFormMode
 import net.svaroh.passly.ui.ResourceFormMode.Create
 import net.svaroh.passly.ui.ResourceFormMode.Edit
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import java.util.UUID
@@ -117,6 +116,7 @@ internal fun AdditionalUrisFormScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val lazyListState = rememberLazyListState()
+    val errorColor = colorResource(CoreUiR.color.red)
 
     AdditionalUrisFormScreen(
         modifier = modifier,
@@ -138,7 +138,7 @@ internal fun AdditionalUrisFormScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getErrorMessage(context, sideEffect.type, sideEffect.message),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorColor,
                         ),
                     )
                 }

@@ -24,24 +24,29 @@ package net.svaroh.passly.feature.accountdetails.screen
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.accountdata.UpdateAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
-import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.SaveChanges
-import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.StartTransferAccount
-import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.UpdateLabel
-import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.NavigateUp
-import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsValidationError.MaxLengthExceeded
-import net.svaroh.passly.mappers.AccountModelMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.commontest.session.validSessionTestModule
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
+import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.UpdateAccountDataUseCase
+import net.svaroh.passly.domain.users.profile.UserProfileInteractor
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.SaveChanges
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.StartTransferAccount
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.UpdateLabel
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.NavigateUp
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.ShowProfileFetchError
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsValidationError.MaxLengthExceeded
+import net.svaroh.passly.mappers.AccountModelMapper
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -56,6 +61,7 @@ import org.koin.test.KoinTestRule
 import org.koin.test.get
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.stub
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import kotlin.test.assertIs
@@ -73,10 +79,17 @@ class AccountDetailsViewModelTest : KoinTest {
                         single { mock<GetSelectedAccountDataUseCase>() }
                         single { mock<GetSelectedAccountUseCase>() }
                         single { mock<UpdateAccountDataUseCase>() }
+                        single {
+                            mock<UserProfileInteractor> {
+                                on { fetchAndUpdateUserProfile() } doReturn
+                                    UserProfileInteractor.Output.Success
+                            }
+                        }
                         singleOf(::SessionRefreshTrackingFlow)
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                         factoryOf(::AccountDetailsViewModel)
                     },
+                    validSessionTestModule,
                 ),
             )
         }
@@ -115,6 +128,27 @@ class AccountDetailsViewModelTest : KoinTest {
                 assertThat(state.email).isEqualTo(EMAIL)
                 assertThat(state.name).isEqualTo("$FIRST_NAME $LAST_NAME")
                 assertThat(state.role).isEqualTo(ROLE)
+            }
+        }
+
+    @OptIn(ExperimentalTime::class)
+    @Test
+    fun `when profile fetch fails on load then profile fetch error side effect is emitted`() =
+        runTest {
+            val userProfileInteractor = get<UserProfileInteractor>()
+            userProfileInteractor.stub {
+                on { fetchAndUpdateUserProfile() } doReturn
+                    UserProfileInteractor.Output.Failure(
+                        DomainResult.Incomplete.Error(UNKNOWN, PROFILE_ERROR),
+                    )
+            }
+
+            viewModel = get()
+
+            viewModel.sideEffect.test {
+                val effect = awaitItem()
+                assertIs<ShowProfileFetchError>(effect)
+                assertThat(effect.message).isEqualTo(PROFILE_ERROR)
             }
         }
 
@@ -238,6 +272,7 @@ class AccountDetailsViewModelTest : KoinTest {
         private const val LABEL = "label"
         private const val ROLE = "user"
         private const val SELECTED_ACCOUNT_ID = "selected"
+        private const val PROFILE_ERROR = "profile fetch failed"
 
         private val selectedAccountData =
             GetSelectedAccountDataUseCase.Output(

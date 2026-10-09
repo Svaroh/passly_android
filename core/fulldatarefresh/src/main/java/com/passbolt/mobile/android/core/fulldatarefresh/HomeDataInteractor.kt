@@ -23,20 +23,24 @@
 
 package net.svaroh.passly.core.fulldatarefresh
 
-import net.svaroh.passly.core.commonfolders.usecase.FoldersInteractor
-import net.svaroh.passly.core.commongroups.usecase.GroupsInteractor
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import net.svaroh.passly.core.idlingresource.ResourcesFullRefreshIdlingResource
 import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState
 import net.svaroh.passly.core.mvp.authentication.plus
-import net.svaroh.passly.core.resources.usecase.ResourceInteractor
-import net.svaroh.passly.core.resourcetypes.ResourceTypesInteractor
-import net.svaroh.passly.core.users.UsersInteractor
 import net.svaroh.passly.database.snapshot.ResourcesSnapshot
+import net.svaroh.passly.domain.folders.usecase.FoldersInteractor
+import net.svaroh.passly.domain.groups.usecase.GroupsInteractor
+import net.svaroh.passly.domain.metadata.interactor.MetadataKeysInteractor
+import net.svaroh.passly.domain.metadata.interactor.MetadataKeysSettingsInteractor
+import net.svaroh.passly.domain.metadata.interactor.MetadataPrivateKeysInteractor
+import net.svaroh.passly.domain.metadata.interactor.MetadataSessionKeysInteractor
+import net.svaroh.passly.domain.metadata.interactor.MetadataTypesSettingsInteractor
+import net.svaroh.passly.domain.resources.usecase.ResourceInteractor
+import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypesInteractor
+import net.svaroh.passly.domain.users.usecase.UsersInteractor
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
-import net.svaroh.passly.metadata.interactor.MetadataKeysInteractor
-import net.svaroh.passly.metadata.interactor.MetadataPrivateKeysInteractor
-import net.svaroh.passly.metadata.interactor.MetadataSessionKeysInteractor
 import timber.log.Timber
 
 /**
@@ -52,44 +56,97 @@ class HomeDataInteractor(
     private val metadataKeysInteractor: MetadataKeysInteractor,
     private val metadataPrivateKeysInteractor: MetadataPrivateKeysInteractor,
     private val metadataSessionKeysInteractor: MetadataSessionKeysInteractor,
+    private val metadataTypesSettingsInteractor: MetadataTypesSettingsInteractor,
+    private val metadataKeysSettingsInteractor: MetadataKeysSettingsInteractor,
     private val featureFlagsUseCase: GetFeatureFlagsUseCase,
     private val resourcesFullRefreshIdlingResource: ResourcesFullRefreshIdlingResource,
     private val resourcesSnapshot: ResourcesSnapshot,
+    private val refreshProgressTrackerFactory: RefreshProgressTrackerFactory,
 ) {
     // TODO start multiple async where possible
-    suspend fun refreshAllHomeScreenData(): Output {
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
+    suspend fun refreshAllHomeScreenData(onProgress: suspend (Float) -> Unit = {}): Output {
         resourcesFullRefreshIdlingResource.setIdle(false)
         resourcesSnapshot.populateForCurrentAccount()
 
+        val progressCounter = refreshProgressTrackerFactory.create(TOTAL_REFRESH_STEPS, onProgress)
         val featureFlagsOutput = featureFlagsUseCase.execute(Unit).featureFlags
+        val (metadataTypesSettingsOutput, metadataKeysSettingsOutput) =
+            if (featureFlagsOutput.isV5MetadataAvailable) {
+                coroutineScope {
+                    val typesDeferred =
+                        async {
+                            metadataTypesSettingsInteractor
+                                .fetchAndSaveMetadataTypesSettings()
+                                .also { progressCounter.onStepCompleted() }
+                        }
+                    val keysDeferred =
+                        async {
+                            metadataKeysSettingsInteractor
+                                .fetchAndSaveMetadataKeysSettings()
+                                .also { progressCounter.onStepCompleted() }
+                        }
+                    typesDeferred.await() to keysDeferred.await()
+                }
+            } else {
+                progressCounter.onStepsSkipped(count = 2)
+                MetadataTypesSettingsInteractor.Output.Success to MetadataKeysSettingsInteractor.Output.Success
+            }
         val metadataKeysOutput =
             if (featureFlagsOutput.isV5MetadataAvailable) {
-                metadataKeysInteractor.fetchAndSaveMetadataKeys()
+                metadataKeysInteractor
+                    .fetchAndSaveMetadataKeys()
+                    .also { progressCounter.onStepCompleted() }
             } else {
+                progressCounter.onStepsSkipped(count = 1)
                 MetadataKeysInteractor.Output.Success
             }
         val metadataSessionKeysOutput =
             if (featureFlagsOutput.isV5MetadataAvailable) {
-                metadataSessionKeysInteractor.fetchMetadataSessionKeys()
+                metadataSessionKeysInteractor
+                    .fetchMetadataSessionKeys()
+                    .also { progressCounter.onStepCompleted() }
             } else {
+                progressCounter.onStepsSkipped(count = 1)
                 MetadataSessionKeysInteractor.Output.Success
             }
 
-        val resourceTypesOutput = resourceTypesInteractor.fetchAndSaveResourceTypes()
-        val userInteractorOutput = usersInteractor.fetchAndSaveUsers()
+        val resourceTypesOutput =
+            resourceTypesInteractor
+                .fetchAndSaveResourceTypes()
+                .also { progressCounter.onStepCompleted() }
+        val userInteractorOutput =
+            usersInteractor
+                .fetchAndSaveUsers()
+                .also { progressCounter.onStepCompleted() }
 
         if (featureFlagsOutput.isV5MetadataAvailable) {
             establishMetadataKeyTrust()
+            progressCounter.onStepCompleted()
+        } else {
+            progressCounter.onStepsSkipped(count = 1)
         }
 
-        val groupsRefreshOutput = groupsInteractor.fetchAndSaveGroups()
-        val foldersRefreshOutput = foldersInteractor.fetchAndSaveFolders()
-        val resourcesOutput = resourcesInteractor.fetchAndSaveResources()
+        val groupsRefreshOutput =
+            groupsInteractor
+                .fetchAndSaveGroups()
+                .also { progressCounter.onStepCompleted() }
+        val foldersRefreshOutput =
+            foldersInteractor
+                .fetchAndSaveFolders(progressCounter::onStepPageDownloaded)
+                .also { progressCounter.onStepCompleted() }
+        val resourcesOutput =
+            resourcesInteractor
+                .fetchAndSaveResources(progressCounter::onStepPageDownloaded)
+                .also { progressCounter.onStepCompleted() }
 
         val saveSessionKeysOutput =
             if (featureFlagsOutput.isV5MetadataAvailable) {
-                metadataSessionKeysInteractor.saveMetadataSessionKeysCache()
+                metadataSessionKeysInteractor
+                    .saveMetadataSessionKeysCache()
+                    .also { progressCounter.onStepCompleted() }
             } else {
+                progressCounter.onStepsSkipped(count = 1)
                 MetadataSessionKeysInteractor.Output.Success
             }
 
@@ -97,7 +154,9 @@ class HomeDataInteractor(
         resourcesFullRefreshIdlingResource.setIdle(true)
 
         @Suppress("ComplexCondition")
-        return if (metadataKeysOutput is MetadataKeysInteractor.Output.Success &&
+        return if (metadataTypesSettingsOutput is MetadataTypesSettingsInteractor.Output.Success &&
+            metadataKeysSettingsOutput is MetadataKeysSettingsInteractor.Output.Success &&
+            metadataKeysOutput is MetadataKeysInteractor.Output.Success &&
             metadataSessionKeysOutput is MetadataSessionKeysInteractor.Output.Success &&
             resourceTypesOutput is ResourceTypesInteractor.Output.Success &&
             userInteractorOutput is UsersInteractor.Output.Success &&
@@ -109,7 +168,9 @@ class HomeDataInteractor(
             Output.Success
         } else {
             Output.Failure(
-                metadataKeysOutput.authenticationState +
+                metadataTypesSettingsOutput.authenticationState +
+                    metadataKeysSettingsOutput.authenticationState +
+                    metadataKeysOutput.authenticationState +
                     metadataSessionKeysOutput.authenticationState +
                     resourceTypesOutput.authenticationState +
                     userInteractorOutput.authenticationState +
@@ -124,6 +185,10 @@ class HomeDataInteractor(
     private suspend fun establishMetadataKeyTrust() {
         val result = metadataPrivateKeysInteractor.verifyMetadataPrivateKey()
         Timber.d("Metadata key trust verification during data refresh: $result")
+    }
+
+    private companion object {
+        private const val TOTAL_REFRESH_STEPS = 11
     }
 
     sealed class Output : AuthenticatedUseCaseOutput {

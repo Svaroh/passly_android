@@ -2,9 +2,9 @@ package net.svaroh.passly.feature.setup.summary
 
 import net.svaroh.passly.common.UuidProvider
 import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.account.SaveAccountUseCase
 import net.svaroh.passly.core.compose.SideEffectViewModel
-import net.svaroh.passly.database.usecase.SaveResourcesDatabasePassphraseUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveAccountUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveResourcesDatabasePassphraseUseCase
 import net.svaroh.passly.feature.setup.summary.SummaryIntent.AccessLogs
 import net.svaroh.passly.feature.setup.summary.SummaryIntent.AuthenticationSuccess
 import net.svaroh.passly.feature.setup.summary.SummaryIntent.ConfirmSetupLeave

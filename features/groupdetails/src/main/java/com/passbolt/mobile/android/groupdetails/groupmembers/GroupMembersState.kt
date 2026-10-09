@@ -23,9 +23,9 @@
 
 package net.svaroh.passly.groupdetails.groupmembers
 
-import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserUiModel
 
 data class GroupMembersState(
     val groupName: String = "",
-    val members: List<UserModel> = emptyList(),
+    val members: List<UserUiModel> = emptyList(),
 )

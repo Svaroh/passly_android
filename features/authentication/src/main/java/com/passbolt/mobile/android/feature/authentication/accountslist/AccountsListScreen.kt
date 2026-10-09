@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.feature.authentication.accountslist
 
-import PassboltTheme
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Image
@@ -53,7 +52,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -62,6 +60,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig
 import net.svaroh.passly.core.navigation.compose.AppNavigator
@@ -94,7 +94,6 @@ import net.svaroh.passly.feature.authentication.accountslist.ui.list.AccountItem
 import net.svaroh.passly.feature.authentication.accountslist.ui.list.AddNewAccountItem
 import net.svaroh.passly.ui.AccountModelUi.AccountModel
 import net.svaroh.passly.ui.AccountModelUi.AddNewAccount
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
@@ -121,6 +120,7 @@ internal fun AccountsListScreen(
         snackbarHostState = snackbarHostState,
     )
 
+    val snackbarBackgroundColor = colorResource(CoreUiR.color.background_gray_dark)
     SideEffectDispatcher(viewModel.sideEffect) {
         when (it) {
             is NavigateToSignIn -> navigator.navigateToKey(Auth(it.account.userId))
@@ -135,7 +135,7 @@ internal fun AccountsListScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getSnackBarMessage(context, it.type),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.background_gray_dark)),
+                            backgroundColor = snackbarBackgroundColor,
                         ),
                     )
                 }
@@ -145,12 +145,14 @@ internal fun AccountsListScreen(
 }
 
 @Composable
-private fun AccountsListScreen(
+fun AccountsListScreen(
     state: AccountsListState,
     onIntent: (AccountsListIntent) -> Unit,
+    modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             if (state.showManageAccountsTopBar) {
                 TitleAppBar(

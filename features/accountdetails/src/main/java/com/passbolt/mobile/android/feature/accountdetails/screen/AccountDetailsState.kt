@@ -31,4 +31,5 @@ data class AccountDetailsState(
     val role: String? = "",
     val organizationUrl: String = "",
     val avatarUrl: String? = null,
+    val showProgress: Boolean = false,
 )

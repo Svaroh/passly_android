@@ -11,6 +11,10 @@ sealed interface EnterTotpIntent {
 
     data object Close : EnterTotpIntent
 
+    data object ConfirmSetupLeave : EnterTotpIntent
+
+    data object DismissSetupLeave : EnterTotpIntent
+
     data class ToggleRememberMe(
         val checked: Boolean,
     ) : EnterTotpIntent

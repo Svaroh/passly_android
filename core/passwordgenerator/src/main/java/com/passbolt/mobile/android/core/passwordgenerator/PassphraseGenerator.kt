@@ -1,10 +1,10 @@
 package net.svaroh.passly.core.passwordgenerator
 
+import kotlinx.coroutines.flow.takeWhile
 import net.svaroh.passly.core.passwordgenerator.codepoints.Codepoint
 import net.svaroh.passly.core.passwordgenerator.codepoints.toCodepoints
 import net.svaroh.passly.core.passwordgenerator.dice.Dice
-import net.svaroh.passly.ui.PassphraseGeneratorSettingsModel
-import kotlinx.coroutines.flow.takeWhile
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
 
 /**
  * Passbolt - Open source password manager for teams
@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.takeWhile
 class PassphraseGenerator(
     private val dice: Dice,
 ) {
-    suspend fun generate(settings: PassphraseGeneratorSettingsModel): List<Codepoint> {
+    suspend fun generate(settings: PassphraseGeneratorSettingsUiModel): List<Codepoint> {
         dice.apply {
             initialize()
             isInitializedFlow.takeWhile { !it }

@@ -1,8 +1,8 @@
 package net.svaroh.passly.createresourcemenu
 
 import net.svaroh.passly.createresourcemenu.usecase.CreateCreateResourceMenuModelUseCase
-import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 /**

@@ -23,13 +23,13 @@
 
 package net.svaroh.passly.permissions.permissions.ui
 
-import PassboltTheme
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.ui.permissions.GroupPermissionRow
 import net.svaroh.passly.core.ui.permissions.UserPermissionRow
 import net.svaroh.passly.ui.GroupModel

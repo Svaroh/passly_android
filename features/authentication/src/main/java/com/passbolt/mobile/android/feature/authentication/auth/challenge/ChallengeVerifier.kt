@@ -1,11 +1,11 @@
 package net.svaroh.passly.feature.authentication.auth.challenge
 
-import net.svaroh.passly.dto.response.ChallengeResponseDto
 import io.fusionauth.jwt.InvalidJWTSignatureException
 import io.fusionauth.jwt.JWTExpiredException
 import io.fusionauth.jwt.Verifier
 import io.fusionauth.jwt.domain.JWT
 import io.fusionauth.jwt.rsa.RSAVerifier
+import net.svaroh.passly.dto.response.ChallengeResponseDto
 import timber.log.Timber
 
 /**
@@ -30,18 +30,26 @@ import timber.log.Timber
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-class ChallengeVerifier {
+class ChallengeVerifier(
+    private val domainComparator: DomainComparator,
+) {
     fun verify(
         challengeResponseDto: ChallengeResponseDto,
         rsaPublicKey: String,
-    ): Output =
-        try {
+        sentVerifyToken: String,
+        sentDomain: String,
+    ): Output {
+        if (challengeResponseDto.verifyToken != sentVerifyToken) {
+            Timber.e("Challenge response verify token does not match the one sent in the challenge")
+            return Output.VerifyTokenMismatch
+        }
+        if (!domainComparator.matches(challengeResponseDto.domain, sentDomain)) {
+            Timber.e("Challenge response domain does not match the one sent in the challenge")
+            return Output.DomainMismatch
+        }
+        return try {
             val verifier: Verifier = RSAVerifier.newVerifier(rsaPublicKey)
-            val jwt: JWT = JWT.getDecoder().decode(challengeResponseDto.accessToken, verifier)
-
-            if (jwt.isExpired) {
-                Output.TokenExpired
-            }
+            JWT.getDecoder().decode(challengeResponseDto.accessToken, verifier)
 
             Output.Verified(
                 challengeResponseDto.accessToken,
@@ -57,6 +65,7 @@ class ChallengeVerifier {
             Timber.e(exception)
             Output.Failure
         }
+    }
 
     sealed class Output {
         data object TokenExpired : Output()
@@ -67,6 +76,10 @@ class ChallengeVerifier {
         ) : Output()
 
         data object InvalidSignature : Output()
+
+        data object VerifyTokenMismatch : Output()
+
+        data object DomainMismatch : Output()
 
         data object Failure : Output()
     }

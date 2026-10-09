@@ -1,6 +1,7 @@
 package net.svaroh.passly.feature.otp.scanotp.scanotpsuccess
 
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourceUiModel
 
 sealed interface ScanOtpSuccessIntent {
     data object CreateStandaloneOtpClick : ScanOtpSuccessIntent
@@ -8,7 +9,11 @@ sealed interface ScanOtpSuccessIntent {
     data object LinkToResourceClick : ScanOtpSuccessIntent
 
     data class LinkedResourceReceived(
-        val resource: ResourceModel,
+        val resource: ResourceUiModel,
+    ) : ScanOtpSuccessIntent
+
+    data class ConfirmedPermissionsResult(
+        val permissions: List<PermissionModelUi>,
     ) : ScanOtpSuccessIntent
 
     data object TrustNewMetadataKey : ScanOtpSuccessIntent

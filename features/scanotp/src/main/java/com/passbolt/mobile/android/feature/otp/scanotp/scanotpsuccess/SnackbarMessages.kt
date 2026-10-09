@@ -8,9 +8,13 @@ import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.FA
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.GENERIC_ERROR
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.JSON_RESOURCE_SCHEMA_VALIDATION_ERROR
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.JSON_SECRET_SCHEMA_VALIDATION_ERROR
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ErrorSnackbarType.SHARE_FAILED
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowSuccessSnackbar
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowToast
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.SuccessSnackbarType.NEW_METADATA_KEY_IS_TRUSTED
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ToastType.OTP_CREATED_PERMISSIONS_CHANGED
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ToastType.OTP_CREATED_SHARE_FAILED
 import net.svaroh.passly.core.localization.R as LocalizationR
 
 internal fun getErrorSnackbarMessage(
@@ -23,6 +27,7 @@ internal fun getErrorSnackbarMessage(
         JSON_RESOURCE_SCHEMA_VALIDATION_ERROR -> context.getString(LocalizationR.string.common_json_schema_resource_validation_error)
         JSON_SECRET_SCHEMA_VALIDATION_ERROR -> context.getString(LocalizationR.string.common_json_schema_secret_validation_error)
         CANNOT_CREATE_WITH_CURRENT_CONFIG -> context.getString(LocalizationR.string.common_cannot_create_resource_with_current_config)
+        SHARE_FAILED -> context.getString(LocalizationR.string.resource_permissions_share_failed)
         FAILED_TO_VERIFY_METADATA_KEY -> context.getString(LocalizationR.string.common_metadata_key_verification_failure)
         FAILED_TO_TRUST_METADATA_KEY -> context.getString(LocalizationR.string.common_metadata_key_trust_failed)
     }
@@ -33,4 +38,13 @@ internal fun getSuccessSnackbarMessage(
 ): String =
     when (sideEffect.type) {
         NEW_METADATA_KEY_IS_TRUSTED -> context.getString(LocalizationR.string.common_metadata_key_is_trusted)
+    }
+
+internal fun getToastMessage(
+    context: Context,
+    sideEffect: ShowToast,
+): String =
+    when (sideEffect.type) {
+        OTP_CREATED_SHARE_FAILED -> context.getString(LocalizationR.string.resource_form_created_share_failed)
+        OTP_CREATED_PERMISSIONS_CHANGED -> context.getString(LocalizationR.string.resource_form_created_permissions_changed)
     }

@@ -1,14 +1,14 @@
 package net.svaroh.passly.core.navigation.compose.keys
 
 import androidx.navigation3.runtime.NavKey
-import net.svaroh.passly.ui.ResourceModel
 import kotlinx.serialization.Serializable
+import net.svaroh.passly.ui.ResourceUiModel
 
 sealed interface ResourceDetailsNavigationKey : NavKey {
     @Serializable
     data class ResourceDetails(
-        // Pass ResourceModel instead of resourceId to load initial resource details screen
+        // Pass ResourceUiModel instead of resourceId to load initial resource details screen
         // even if refresh in progress and Resources table currently empty
-        val resourceModel: ResourceModel,
+        val resourceModel: ResourceUiModel,
     ) : ResourceDetailsNavigationKey
 }

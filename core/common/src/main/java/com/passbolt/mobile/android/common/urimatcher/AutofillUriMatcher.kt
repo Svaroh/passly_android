@@ -54,8 +54,8 @@ class AutofillUriMatcher {
                     resourceURL.port == UrlMetadata.Port.None
 
             schemesMatch && hostsMatch && portsMatch
-        } catch (exception: Exception) {
-            Timber.e(exception, "Error during URL parsing")
+        } catch (_: Exception) {
+            Timber.e("Error during URL parsing")
             false
         }
     }

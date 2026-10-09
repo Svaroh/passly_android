@@ -22,6 +22,7 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.review.ReviewManager
+import kotlinx.coroutines.flow.Flow
 import net.svaroh.passly.core.compose.OnResumeEffect
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.fulldatarefresh.service.DataRefreshService
@@ -33,7 +34,6 @@ import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.LaunchChromeNati
 import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.PerformFullDataRefresh
 import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.ShowSnackbar
 import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.TryLaunchReviewFlow
-import kotlinx.coroutines.flow.Flow
 import org.koin.compose.koinInject
 import timber.log.Timber
 import net.svaroh.passly.core.localization.R as LocalizationR

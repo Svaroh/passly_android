@@ -31,14 +31,31 @@ import net.svaroh.passly.core.ui.controller.TotpComposeController
 import net.svaroh.passly.feature.otp.navigation.OtpFeatureNavigation
 import net.svaroh.passly.feature.otp.screen.OtpViewModel
 import org.koin.core.module.dsl.singleOf
-import org.koin.core.module.dsl.viewModelOf
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val otpModule =
     module {
-        viewModelOf(::OtpViewModel)
+        viewModel { params ->
+            OtpViewModel(
+                showSuggestedModel = params.get(),
+                getSelectedAccountDataUseCase = get(),
+                getLocalResourcesUseCase = get(),
+                totpParametersProvider = get(),
+                coroutineLaunchContext = get(),
+                dataRefreshTrackingFlow = get(),
+                metadataPrivateKeysHelperInteractor = get(),
+                timerFactory = get(),
+                resourceAccessInteractor = get(),
+                resourceUpdateActionsInteractorFactory = get(),
+                editPermissionsConfirmationInteractor = get(),
+                secretPropertiesActionsInteractorFactory = get(),
+                autofillUriMatcher = get(),
+                timeProvider = get(),
+            )
+        }
         singleOf(::TotpComposeController)
         singleOf(::CoroutineTimerFactory) bind TimerFactory::class
         single<FeatureModuleNavigation>(named(Feature.OTP)) { OtpFeatureNavigation() }

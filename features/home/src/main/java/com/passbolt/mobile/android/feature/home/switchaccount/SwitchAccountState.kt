@@ -27,8 +27,9 @@ import net.svaroh.passly.ui.SwitchAccountUiModel
  */
 
 data class SwitchAccountState(
+    val appContext: AppContext,
     val accountsList: List<SwitchAccountUiModel> = emptyList(),
     val showSignOutDialog: Boolean = false,
     val showProgress: Boolean = false,
-    val appContext: AppContext? = null,
+    val isCurrentAccountProfileLoading: Boolean = false,
 )

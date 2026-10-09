@@ -1,7 +1,6 @@
 package net.svaroh.passly.core.resourcetypes
 
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
-import net.svaroh.passly.core.resourcetypes.usecase.db.resourceTypesDbModule
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
@@ -30,11 +29,5 @@ import org.koin.dsl.module
 
 val resourceTypesModule =
     module {
-        resourceTypesDbModule()
-
-        singleOf(::GetResourceTypesUseCase)
-        singleOf(::ResourceTypesInteractor)
-
-        singleOf(::ResourceTypesUpdatesAdjacencyGraph)
         singleOf(::ResourceTypesUpdatesAdjacencyGraph)
     }

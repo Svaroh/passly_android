@@ -24,6 +24,7 @@
 package net.svaroh.passly.resourcemoremenu
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.idlingresource.CreateMenuModelIdlingResource
@@ -41,11 +42,11 @@ import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Laun
 import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Share
 import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.ToggleFavourite
 import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.Dismiss
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.ShowContentNotAvailable
 import net.svaroh.passly.resourcemoremenu.usecase.CreateResourceMoreMenuModelUseCase
 import net.svaroh.passly.ui.ResourceMoreMenuModel
 import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_METADATA_DESCRIPTION
 import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_NOTE
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ResourceMoreMenuBottomSheetViewModel(
@@ -135,8 +136,9 @@ class ResourceMoreMenuBottomSheetViewModel(
                         )
                     }
                 }
-            } catch (exception: NullPointerException) {
-                Timber.d("Resource item for the shown menu was deleted: $exception")
+            } catch (_: IllegalStateException) {
+                Timber.d("Resource item for the shown menu was deleted")
+                emitSideEffect(ShowContentNotAvailable)
                 emitSideEffect(Dismiss)
             } finally {
                 createMenuModelIdlingResource.setIdle(true)

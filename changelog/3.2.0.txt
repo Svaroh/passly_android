@@ -1,0 +1,85 @@
+# Passbolt 3.2.0-56 Android app release notes
+
+## Added
+- MOB-4217: Upgrade resource to v5
+- MOB-4228: Implement advanced password generator
+- MOB-4705: Add advanced password generator to additional secrets flows
+- MOB-4581: Automatic API fetch page size based on device capabilities
+- MOB-4338: Allow to change locale in settings for API 33+
+
+## Improved
+- MOB-4284: Parallel verify and rsa fetch
+- MOB-4287: Lazy load password policies
+- MOB-4288: Lazy fetch expiry policies
+- MOB-4289: Lazy fetch user profile
+- MOB-4291: Warmup server keys fetch
+- MOB-4311: Move metadata settings fetch to data refresh
+- MOB-4573: Move full refresh orchestration and mapping off Main thread
+- MOB-4574, MOB-4576: Move heavy operations to default dispatcher; Process metadata keys async
+- MOB-4580: Eliminate json to string re-serialization for v4 validation
+- MOB-4582: Add grouping transaction for resource and folder paged operations
+- MOB-4583: Upsert users and groups
+- MOB-4586: Warm up resource models cache before forwarding them to UI list
+- MOB-4617: Performance improvements for ResourceModel
+- MOB-4587: Add deterministic refresh progress indicator
+- MOB-4815: New pull to refresh
+- MOB-4348: Remember each tab state
+- MOB-4518: Go directly to totp scan when clicking "add" on totp tab
+- MOB-4720: Sort out home screen padding on autofill and home; show add button immediately on autofill
+- MOB-4723: Make otp search consistent with home
+- MOB-4729: Unify advanced password generation preview
+- MOB-4516: Disable "Require auth each time" flag by default
+- MOB-4447: Remove developer mode switch from settings
+
+## Security
+- MOB-4757: Add security policy; update readme
+- MOB-4575: Fix unsynchronized cachedPersonalKey init in MetadataDecryptor
+- Pin renovate managed dependencies
+- Add base docker image pin
+
+## Fixed
+- MOB-4717: Fix returning to the root folder after TOTP is created in a folder
+- MOB-4818: Pass current folder id to can create resource checks
+- MOB-4723: Fix revealing otp items when in search mode
+- MOB-4639: Adjust JSON schema for validation; make icon.value nullable
+
+## Maintenance
+- MOB-4446: Repository layer refactor pattern; Refactor password policies repository layer
+- MOB-4488: Refactor password expiry repository
+- MOB-4489: Refactor rbac repository
+- MOB-4490: Refactor metadata domain+data
+- MOB-4491: Refactor auth domain+data
+- MOB-4492: Refactor settings domain+data
+- MOB-4493: Refactor MFA repository
+- MOB-4494: Refactor groups domain+data
+- MOB-4495: Refactor resource types domain+data
+- MOB-4496: Migrate get user profile calls to new repository architecture
+- MOB-4497: Refactor folders domain+data
+- MOB-4498: Refactor resources domain+data
+- MOB-4499: Refactor favorites repository
+- MOB-4500: Refactor share repository
+- MOB-4501: Refactor mobile transfer repository
+- MOB-4502: Refactor secrets domain+data
+- MOB-4543: Refactor error handling
+- MOB-4708: DataSource split
+- MOB-4741: Extract session repository
+- MOB-4742: Extract passphrase repository
+- MOB-4747: Extract accounts repositories - accounts list, account data, selected account
+- MOB-4748: Refactor biometric key domain+data
+- MOB-4749: Refactor private key domain+data
+- MOB-4750: Extract global and account preferences repositories
+- MOB-4751: Refactor in-app-review domain+data
+- MOB-4852: Extract tags and database passphrase repositories; Move interactors and mappers to domain
+- MOB-4272: Remove remaining view related dependencies and leftovers; migrate from appcompat
+- MOB-4691: Remove parcelable
+- MOB-4439: Update AGP; Migrate to Gradle toolchain; Update devcontainer claude installation
+- MOB-4714: Update dependencies
+- MOB-4143: Add screenshot tests framework and initialize first tests
+- MOB-3983: Install gcloud for running UI tests on Firebase
+- MOB-4581: Device memory benchmark
+- MOB-4730: Update github issues config
+- PB-50306: Add renovate and CODEOWNERS
+- PB-49758: Remove GitLab CI definition as it's been moved to the ci-definitions repo
+- (automated tests) MOB-3984: Add API fetch size screen tests
+- (automated tests) MOB-4793: Fix failing resource tests related to filters and FAB
+- (automated tests) MOB-4826: Add more waiters for UI tests

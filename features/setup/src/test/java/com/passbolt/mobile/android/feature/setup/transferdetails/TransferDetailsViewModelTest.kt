@@ -24,6 +24,13 @@ package net.svaroh.passly.feature.setup.transferdetails
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.core.qrscan.CameraInformationProvider
 import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.DismissCameraPermissionRequiredDialog
 import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsIntent.DismissCameraRequiredDialog
@@ -36,13 +43,6 @@ import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsSideEffect
 import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateToAppSettings
 import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsSideEffect.NavigateToScanQr
 import net.svaroh.passly.feature.setup.transferdetails.TransferDetailsSideEffect.RequestCameraPermission
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

@@ -3,7 +3,6 @@ package net.svaroh.passly.core.autofill.accessibility
 import android.graphics.PixelFormat
 import android.graphics.Point
 import android.graphics.Rect
-import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
 import android.view.WindowManager
@@ -11,7 +10,11 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityNodeInfo.ACTION_SET_TEXT
 import android.view.accessibility.AccessibilityWindowInfo
+import androidx.core.net.toUri
 import net.svaroh.passly.common.ResourceDimenProvider
+import net.svaroh.passly.core.autofill.system.AutofillField
+import net.svaroh.passly.core.autofill.system.AutofillHintsFactory
+import net.svaroh.passly.core.navigation.AutofillType
 
 /**
  * Passbolt - Open source password manager for teams
@@ -37,6 +40,7 @@ import net.svaroh.passly.common.ResourceDimenProvider
  */
 class AccessibilityOperationsProvider(
     private val resourceDimenProvider: ResourceDimenProvider,
+    private val autofillHintsFactory: AutofillHintsFactory,
 ) {
     fun fillNode(
         node: AccessibilityNodeInfo,
@@ -76,6 +80,14 @@ class AccessibilityOperationsProvider(
         return isUsernameEditText
     }
 
+    fun isTotpEditText(
+        root: AccessibilityNodeInfo,
+        event: AccessibilityEvent,
+    ): Boolean {
+        val totpNode = getTotpNode(getAllNodes(root, event)) ?: return false
+        return isSameNode(totpNode, event.source)
+    }
+
     private fun isSameNode(
         node1: AccessibilityNodeInfo?,
         node2: AccessibilityNodeInfo?,
@@ -87,15 +99,15 @@ class AccessibilityOperationsProvider(
     }
 
     fun needToAutofill(
-        credentials: AccessibilityCommunicator.Credentials?,
+        lastFill: AccessibilityCommunicator.LastFill?,
         currentUriString: String?,
     ): Boolean {
-        if (credentials == null) {
+        if (lastFill == null) {
             return false
         }
-        val lastUri = Uri.parse(credentials.uri)
-        val currentUri = Uri.parse(currentUriString ?: "")
-        return lastUri.host == currentUri.host
+        val lastHost = lastFill.uri?.toUri()?.host
+        val currentHost = currentUriString?.toUri()?.host
+        return lastHost != null && lastHost == currentHost
     }
 
     fun getUri(root: AccessibilityNodeInfo): String? {
@@ -126,16 +138,16 @@ class AccessibilityOperationsProvider(
             val hasHttpProtocol = uri.startsWith("http://") || uri.startsWith("https://")
             if (!hasHttpProtocol) {
                 try {
-                    Uri.parse("https://$newUri")
+                    "https://$newUri".toUri()
                     extractedUri = "https://$newUri"
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     // ignoring
                 }
             } else {
                 try {
-                    Uri.parse(newUri.toString())
+                    newUri.toString().toUri()
                     extractedUri = newUri.toString()
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     // ignoring
                 }
             }
@@ -242,22 +254,42 @@ class AccessibilityOperationsProvider(
         return position
     }
 
-    fun getPasswordNode(nodes: List<AccessibilityNodeInfo>): AccessibilityNodeInfo? =
-        nodes.find {
-            it.isPassword || it.hintText?.contains("pass", true) ?: false
+    fun getPasswordNode(nodes: List<AccessibilityNodeInfo>): AccessibilityNodeInfo? {
+        val passwordKeywords = autofillHintsFactory.getHintValues(AutofillField.PASSWORD)
+        return nodes.find { node -> node.isPassword || matchesKeywords(node, passwordKeywords) }
+    }
+
+    fun getTotpNode(nodes: List<AccessibilityNodeInfo>): AccessibilityNodeInfo? {
+        val totpKeywords = autofillHintsFactory.getHintValues(AutofillField.TOTP)
+        return nodes.find { node -> !node.isPassword && matchesKeywords(node, totpKeywords) }
+    }
+
+    fun classifyAutofillType(
+        root: AccessibilityNodeInfo,
+        event: AccessibilityEvent,
+    ): AutofillType? {
+        val allNodes = getAllNodes(root, event)
+        val passwordNode = getPasswordNode(allNodes)
+        val usernameNode = getUsernameNode(allNodes, passwordNode?.viewIdResourceName)
+        val totpNode = getTotpNode(allNodes)
+
+        val hasCredentials = usernameNode != null && passwordNode != null
+        val hasTotp = totpNode != null
+
+        return when {
+            hasCredentials && hasTotp -> AutofillType.CREDENTIALS_AND_TOTP
+            hasCredentials -> AutofillType.CREDENTIALS
+            hasTotp -> AutofillType.TOTP
+            else -> null
         }
+    }
 
     fun getUsernameNode(
         nodes: List<AccessibilityNodeInfo>,
         passwordNodeId: String?,
     ): AccessibilityNodeInfo? {
-        var usernameNode: AccessibilityNodeInfo?
-
-        usernameNode =
-            nodes.find {
-                it.hintText?.contains("username", true) ?: false ||
-                    it.hintText?.contains("mail", true) ?: false
-            }
+        val usernameKeywords = autofillHintsFactory.getHintValues(AutofillField.USERNAME)
+        var usernameNode: AccessibilityNodeInfo? = nodes.find { matchesKeywords(it, usernameKeywords) }
 
         // username node is usually one before the password node
         if (usernameNode == null) {
@@ -272,6 +304,20 @@ class AccessibilityOperationsProvider(
         }
 
         return usernameNode
+    }
+
+    private fun matchesKeywords(
+        node: AccessibilityNodeInfo,
+        keywords: Array<String>,
+    ): Boolean {
+        val hintText = node.hintText?.toString().orEmpty()
+        val contentDescription = node.contentDescription?.toString().orEmpty()
+        val viewId = node.viewIdResourceName.orEmpty()
+        return keywords.any { keyword ->
+            hintText.contains(keyword, ignoreCase = true) ||
+                contentDescription.contains(keyword, ignoreCase = true) ||
+                viewId.contains(keyword, ignoreCase = true)
+        }
     }
 
     private fun getNodes(

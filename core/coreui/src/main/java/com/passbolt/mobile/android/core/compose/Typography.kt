@@ -20,6 +20,11 @@ val Inconsolata =
         Font(R.font.inconsolata_regular, FontWeight.Normal),
     )
 
+val Obfuscation =
+    FontFamily(
+        Font(R.font.obfuscation_regular, FontWeight.Normal),
+    )
+
 val AppTypography =
     Typography(
         titleLarge =
@@ -64,4 +69,12 @@ val AppTypography =
                 fontSize = 14.sp,
                 letterSpacing = 0.sp,
             ),
+    )
+
+val FingerprintTextStyle =
+    TextStyle(
+        fontFamily = Inconsolata,
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+        letterSpacing = 0.sp,
     )

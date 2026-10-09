@@ -25,54 +25,26 @@ package net.svaroh.passly.permissions.permissions
 
 import android.content.Context
 import net.svaroh.passly.permissions.permissions.SnackbarErrorType.CANNOT_SHARE_RESOURCE
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.CANNOT_UPDATE_TOTP_WITH_CURRENT_CONFIG
 import net.svaroh.passly.permissions.permissions.SnackbarErrorType.DATA_REFRESH_ERROR
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.ENCRYPTION_ERROR
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.FAILED_TO_TRUST_METADATA_KEY
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.FAILED_TO_VERIFY_METADATA_KEY
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.GENERIC_ERROR
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.JSON_RESOURCE_SCHEMA_ERROR
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.JSON_SECRET_SCHEMA_ERROR
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.ONE_OWNER_REQUIRED
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.SECRET_DECRYPT_FAILURE
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.SECRET_ENCRYPT_FAILURE
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.SECRET_FETCH_FAILURE
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.SHARE_FAILED
-import net.svaroh.passly.permissions.permissions.SnackbarErrorType.SHARE_SIMULATION_FAILED
-import net.svaroh.passly.permissions.permissions.SnackbarSuccessType.METADATA_KEY_IS_TRUSTED
 import net.svaroh.passly.core.localization.R as LocalizationR
 
-@Suppress("CyclomaticComplexMethod")
 internal fun getErrorMessage(
     context: Context,
     type: SnackbarErrorType,
 ): String =
     context.getString(
         when (type) {
-            ONE_OWNER_REQUIRED -> LocalizationR.string.resource_permissions_one_owner
-            SHARE_SIMULATION_FAILED -> LocalizationR.string.resource_permissions_share_simulation_failed
-            SHARE_FAILED -> LocalizationR.string.resource_permissions_share_failed
-            SECRET_FETCH_FAILURE -> LocalizationR.string.common_fetch_failure
-            SECRET_ENCRYPT_FAILURE -> LocalizationR.string.common_encryption_failure
-            SECRET_DECRYPT_FAILURE -> LocalizationR.string.common_decryption_failure
             DATA_REFRESH_ERROR -> LocalizationR.string.common_data_refresh_error
-            GENERIC_ERROR -> LocalizationR.string.common_failure
-            ENCRYPTION_ERROR -> LocalizationR.string.common_encryption_failure
-            JSON_RESOURCE_SCHEMA_ERROR -> LocalizationR.string.common_json_schema_resource_validation_error
-            JSON_SECRET_SCHEMA_ERROR -> LocalizationR.string.common_json_schema_secret_validation_error
-            CANNOT_UPDATE_TOTP_WITH_CURRENT_CONFIG -> LocalizationR.string.common_cannot_create_resource_with_current_config
-            FAILED_TO_VERIFY_METADATA_KEY -> LocalizationR.string.common_metadata_key_verification_failure
-            FAILED_TO_TRUST_METADATA_KEY -> LocalizationR.string.common_metadata_key_trust_failed
             CANNOT_SHARE_RESOURCE -> LocalizationR.string.common_lack_shared_key_access
         },
     )
 
-internal fun getSuccessMessage(
+internal fun getToastMessage(
     context: Context,
-    type: SnackbarSuccessType,
+    type: ToastType,
 ): String =
     context.getString(
         when (type) {
-            METADATA_KEY_IS_TRUSTED -> LocalizationR.string.common_metadata_key_is_trusted
+            ToastType.CONTENT_NOT_AVAILABLE -> LocalizationR.string.content_not_available
         },
     )

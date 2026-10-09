@@ -25,9 +25,18 @@ package net.svaroh.passly.feature.settings.accounts.keyinspector.keyinspectormor
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.common.usecase.UserIdInput
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.accounts.usecase.privatekey.GetSelectedUserPrivateKeyUseCase
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.privatekey.model.PrivateKey
+import net.svaroh.passly.domain.privatekey.usecase.GetPrivateKeyUseCase
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.ExportPrivateKey
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.ExportPublicKey
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetIntent.RefreshedPassphrase
@@ -39,13 +48,8 @@ import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspec
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetViewModel
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpError
+import net.svaroh.passly.gopenpgp.exception.OpenPgpFailure
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -73,7 +77,8 @@ class KeyInspectorBottomSheetViewModelTest : KoinTest {
             modules(
                 listOf(
                     module {
-                        single { mock<GetSelectedUserPrivateKeyUseCase>() }
+                        single { mock<GetSelectedAccountUseCase>() }
+                        single { mock<GetPrivateKeyUseCase>() }
                         single { mock<OpenPgp>() }
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                         factoryOf(::KeyInspectorBottomSheetViewModel)
@@ -101,9 +106,12 @@ class KeyInspectorBottomSheetViewModelTest : KoinTest {
     fun `should show share sheet for exporting private key`() =
         runTest {
             val mockPrivateKey = "PrivateKey"
-            val getSelectedUserPrivateKeyUseCase: GetSelectedUserPrivateKeyUseCase = get()
-            whenever(getSelectedUserPrivateKeyUseCase.execute(Unit)) doReturn
-                GetSelectedUserPrivateKeyUseCase.Output(mockPrivateKey)
+            val getSelectedAccountUseCase: GetSelectedAccountUseCase = get()
+            whenever(getSelectedAccountUseCase.execute(Unit)) doReturn
+                GetSelectedAccountUseCase.Output("userId")
+            val getPrivateKeyUseCase: GetPrivateKeyUseCase = get()
+            whenever(getPrivateKeyUseCase.execute(UserIdInput("userId"))) doReturn
+                GetPrivateKeyUseCase.Output(PrivateKey(mockPrivateKey))
 
             viewModel = get()
             viewModel.onIntent(ExportPrivateKey)
@@ -126,9 +134,12 @@ class KeyInspectorBottomSheetViewModelTest : KoinTest {
         runTest {
             val mockPrivateKey = "PrivateKey"
             val mockPublicKey = "PublicKey"
-            val getSelectedUserPrivateKeyUseCase: GetSelectedUserPrivateKeyUseCase = get()
-            whenever(getSelectedUserPrivateKeyUseCase.execute(Unit)) doReturn
-                GetSelectedUserPrivateKeyUseCase.Output(mockPrivateKey)
+            val getSelectedAccountUseCase: GetSelectedAccountUseCase = get()
+            whenever(getSelectedAccountUseCase.execute(Unit)) doReturn
+                GetSelectedAccountUseCase.Output("userId")
+            val getPrivateKeyUseCase: GetPrivateKeyUseCase = get()
+            whenever(getPrivateKeyUseCase.execute(UserIdInput("userId"))) doReturn
+                GetPrivateKeyUseCase.Output(PrivateKey(mockPrivateKey))
 
             val mockOpenPgp = get<OpenPgp>()
             whenever(mockOpenPgp.generatePublicKey(mockPrivateKey)) doReturn
@@ -155,13 +166,16 @@ class KeyInspectorBottomSheetViewModelTest : KoinTest {
         runTest {
             val mockPrivateKey = "PrivateKey"
             val errorMessage = "errorMessage"
-            val getSelectedUserPrivateKeyUseCase: GetSelectedUserPrivateKeyUseCase = get()
-            whenever(getSelectedUserPrivateKeyUseCase.execute(Unit)) doReturn
-                GetSelectedUserPrivateKeyUseCase.Output(mockPrivateKey)
+            val getSelectedAccountUseCase: GetSelectedAccountUseCase = get()
+            whenever(getSelectedAccountUseCase.execute(Unit)) doReturn
+                GetSelectedAccountUseCase.Output("userId")
+            val getPrivateKeyUseCase: GetPrivateKeyUseCase = get()
+            whenever(getPrivateKeyUseCase.execute(UserIdInput("userId"))) doReturn
+                GetPrivateKeyUseCase.Output(PrivateKey(mockPrivateKey))
 
             val mockOpenPgp = get<OpenPgp>()
             whenever(mockOpenPgp.generatePublicKey(mockPrivateKey)) doReturn
-                OpenPgpResult.Error(OpenPgpError(errorMessage))
+                OpenPgpResult.Error(OpenPgpFailure.Generic(OpenPgpError(errorMessage)))
 
             viewModel = get()
             viewModel.onIntent(ExportPublicKey)

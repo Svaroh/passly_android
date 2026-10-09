@@ -1,12 +1,12 @@
 package net.svaroh.passly.core.passwordgenerator
 
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.passwordgenerator.SecretGenerator.SecretGenerationResult.FailedToGenerateLowEntropy
-import net.svaroh.passly.ui.CaseTypeModel
-import net.svaroh.passly.ui.PassphraseGeneratorSettingsModel
-import net.svaroh.passly.ui.PasswordGeneratorSettingsModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import net.svaroh.passly.core.passwordgenerator.SecretGenerator.SecretGenerationResult.FailedToGenerateLowEntropy
+import net.svaroh.passly.ui.CaseTypeUiModel
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level
@@ -52,7 +52,7 @@ class SecretGeneratorTest : KoinTest {
         runTest {
             val length = 3
             val settings =
-                PasswordGeneratorSettingsModel(
+                PasswordGeneratorSettingsUiModel(
                     length = length,
                     maskUpper = true,
                     maskLower = false,
@@ -76,10 +76,10 @@ class SecretGeneratorTest : KoinTest {
     fun `generate should return low entropy failure for low passphrase settings`() =
         runTest {
             val settings =
-                PassphraseGeneratorSettingsModel(
+                PassphraseGeneratorSettingsUiModel(
                     words = 1,
                     wordSeparator = "",
-                    wordCase = CaseTypeModel.LOWERCASE,
+                    wordCase = CaseTypeUiModel.LOWERCASE,
                 )
 
             val passphraseGenerationResult = secretGenerator.generatePassphrase(settings)

@@ -191,7 +191,7 @@ class ResourceTypesUpdatesAdjacencyGraphTest {
     fun `actions are correct for v5-note`() {
         val actions = graph.getUpdateActionsMetadata(ContentType.V5Note.slug)
 
-        assertThat(actions).hasSize(10)
+        assertThat(actions).hasSize(11)
         assertThat(actions.map { it.action }).containsExactly(
             UpdateAction.EDIT_METADATA,
             UpdateAction.ADD_NOTE,
@@ -203,6 +203,54 @@ class ResourceTypesUpdatesAdjacencyGraphTest {
             UpdateAction.ADD_PASSWORD,
             UpdateAction.ADD_TOTP,
             UpdateAction.ADD_CUSTOM_FIELDS,
+            UpdateAction.ADD_PIN_CODE,
         )
+    }
+
+    @Test
+    fun `actions are correct for v5-pin-code`() {
+        val actions = graph.getUpdateActionsMetadata(ContentType.V5PinCodeStandalone.slug)
+
+        assertThat(actions).hasSize(8)
+        assertThat(actions.map { it.action }).containsExactly(
+            UpdateAction.EDIT_METADATA,
+            UpdateAction.ADD_PIN_CODE,
+            UpdateAction.REMOVE_PIN_CODE,
+            UpdateAction.ADD_NOTE,
+            UpdateAction.REMOVE_NOTE,
+            UpdateAction.ADD_METADATA_DESCRIPTION,
+            UpdateAction.REMOVE_METADATA_DESCRIPTION,
+            UpdateAction.EDIT_APPEARANCE,
+        )
+    }
+
+    @Test
+    fun `v5-pin-code REMOVE_PIN_CODE transitions to v5-note`() {
+        val newType =
+            graph.getResourceTypeSlugAfterUpdate(
+                currentResourceTypeSlug = ContentType.V5PinCodeStandalone.slug,
+                update = UpdateAction.REMOVE_PIN_CODE,
+            )
+        assertThat(newType).isEqualTo(ContentType.V5Note)
+    }
+
+    @Test
+    fun `v5-pin-code REMOVE_NOTE stays on v5-pin-code`() {
+        val newType =
+            graph.getResourceTypeSlugAfterUpdate(
+                currentResourceTypeSlug = ContentType.V5PinCodeStandalone.slug,
+                update = UpdateAction.REMOVE_NOTE,
+            )
+        assertThat(newType).isEqualTo(ContentType.V5PinCodeStandalone)
+    }
+
+    @Test
+    fun `v5-note ADD_PIN_CODE transitions to v5-pin-code`() {
+        val newType =
+            graph.getResourceTypeSlugAfterUpdate(
+                currentResourceTypeSlug = ContentType.V5Note.slug,
+                update = UpdateAction.ADD_PIN_CODE,
+            )
+        assertThat(newType).isEqualTo(ContentType.V5PinCodeStandalone)
     }
 }

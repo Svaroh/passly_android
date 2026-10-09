@@ -35,8 +35,7 @@ val loggerModule =
             LogFilesManager(
                 appContext = androidContext(),
                 envInfoProvider = get(),
-                getGlobalPreferencesUseCase = get(),
-                updateGlobalPreferencesUseCase = get(),
+                globalPreferencesRepository = get(),
             )
         }
         single { (defaultExceptionHandler: Thread.UncaughtExceptionHandler) ->

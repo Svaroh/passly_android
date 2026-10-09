@@ -25,4 +25,6 @@ package net.svaroh.passly.common.time
 
 interface TimeProvider {
     fun getCurrentEpochSeconds(): Long
+
+    fun getCurrentEpochMillis(): Long
 }

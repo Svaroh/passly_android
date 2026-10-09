@@ -23,17 +23,20 @@ package net.svaroh.passly.feature.settings.debugsettings
  * @since v1.0
  */
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.logger.FileLoggingTree
-import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
-import net.svaroh.passly.core.preferences.usecase.UpdateGlobalPreferencesUseCase
-import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.ToggleDebugLogs
-import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.core.logger.FileLoggingTree
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.ToggleDebugLogs
+import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsViewModel
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -60,8 +63,8 @@ class DebugLogsSettingsViewModelTest : KoinTest {
             modules(
                 listOf(
                     module {
-                        single { mock<UpdateGlobalPreferencesUseCase>() }
                         single { mock<GetGlobalPreferencesUseCase>() }
+                        single { mock<UpdateGlobalPreferencesUseCase>() }
                         single { mock<FileLoggingTree>() }
                         factoryOf(::DebugLogsSettingsViewModel)
                     },
@@ -88,13 +91,16 @@ class DebugLogsSettingsViewModelTest : KoinTest {
         runTest {
             val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase = get()
             whenever(getGlobalPreferencesUseCase.execute(Unit)) doReturn
-                GetGlobalPreferencesUseCase.Output(
+                GlobalPreferencesUiModel(
                     areDebugLogsEnabled = false,
                     debugLogFileCreationDateTime = null,
-                    isDeveloperModeEnabled = false,
                     isHideRootDialogEnabled = false,
+                    isAuthRequiredOnEveryEntry = true,
                     debugLogLastAppVersion = null,
+                    apiFetchPageSize = PreferencesDefaults.API_FETCH_PAGE_SIZE,
+                    isApiFetchPageSizeManuallySet = false,
                     accessibilityPoliciesConsentGiven = true,
+                    deprecatedOsWarningHiddenForSdk = null,
                 )
 
             viewModel = get()
@@ -110,13 +116,16 @@ class DebugLogsSettingsViewModelTest : KoinTest {
         runTest {
             val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase = get()
             whenever(getGlobalPreferencesUseCase.execute(Unit)) doReturn
-                GetGlobalPreferencesUseCase.Output(
+                GlobalPreferencesUiModel(
                     areDebugLogsEnabled = true,
                     debugLogFileCreationDateTime = null,
-                    isDeveloperModeEnabled = false,
                     isHideRootDialogEnabled = false,
+                    isAuthRequiredOnEveryEntry = true,
                     debugLogLastAppVersion = null,
+                    apiFetchPageSize = PreferencesDefaults.API_FETCH_PAGE_SIZE,
+                    isApiFetchPageSizeManuallySet = false,
                     accessibilityPoliciesConsentGiven = true,
+                    deprecatedOsWarningHiddenForSdk = null,
                 )
 
             viewModel = get()
@@ -133,15 +142,17 @@ class DebugLogsSettingsViewModelTest : KoinTest {
         runTest {
             val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase = get()
             whenever(getGlobalPreferencesUseCase.execute(Unit)) doReturn
-                GetGlobalPreferencesUseCase.Output(
+                GlobalPreferencesUiModel(
                     areDebugLogsEnabled = false,
                     debugLogFileCreationDateTime = null,
-                    isDeveloperModeEnabled = false,
                     isHideRootDialogEnabled = false,
+                    isAuthRequiredOnEveryEntry = true,
                     debugLogLastAppVersion = null,
+                    apiFetchPageSize = PreferencesDefaults.API_FETCH_PAGE_SIZE,
+                    isApiFetchPageSizeManuallySet = false,
                     accessibilityPoliciesConsentGiven = true,
+                    deprecatedOsWarningHiddenForSdk = null,
                 )
-            val updateGlobalPreferencesUseCase: UpdateGlobalPreferencesUseCase = get()
 
             viewModel =
                 get<DebugLogsSettingsViewModel>()
@@ -151,8 +162,8 @@ class DebugLogsSettingsViewModelTest : KoinTest {
 
             assertThat(state.areDebugLogsEnabled).isTrue()
             assertThat(state.isAccessLogsEnabled).isTrue()
-            argumentCaptor<UpdateGlobalPreferencesUseCase.Input> {
-                verify(updateGlobalPreferencesUseCase).execute(capture())
+            argumentCaptor<GlobalPreferencesUpdate> {
+                verify(get<UpdateGlobalPreferencesUseCase>()).execute(capture())
                 assertThat(firstValue.areDebugLogsEnabled).isTrue()
             }
         }
@@ -162,15 +173,17 @@ class DebugLogsSettingsViewModelTest : KoinTest {
         runTest {
             val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase = get()
             whenever(getGlobalPreferencesUseCase.execute(Unit)) doReturn
-                GetGlobalPreferencesUseCase.Output(
+                GlobalPreferencesUiModel(
                     areDebugLogsEnabled = true,
                     debugLogFileCreationDateTime = null,
-                    isDeveloperModeEnabled = false,
                     isHideRootDialogEnabled = false,
+                    isAuthRequiredOnEveryEntry = true,
                     debugLogLastAppVersion = null,
+                    apiFetchPageSize = PreferencesDefaults.API_FETCH_PAGE_SIZE,
+                    isApiFetchPageSizeManuallySet = false,
                     accessibilityPoliciesConsentGiven = true,
+                    deprecatedOsWarningHiddenForSdk = null,
                 )
-            val updateGlobalPreferencesUseCase: UpdateGlobalPreferencesUseCase = get()
 
             viewModel =
                 get<DebugLogsSettingsViewModel>()
@@ -180,8 +193,8 @@ class DebugLogsSettingsViewModelTest : KoinTest {
 
             assertThat(state.areDebugLogsEnabled).isFalse()
             assertThat(state.isAccessLogsEnabled).isFalse()
-            argumentCaptor<UpdateGlobalPreferencesUseCase.Input> {
-                verify(updateGlobalPreferencesUseCase).execute(capture())
+            argumentCaptor<GlobalPreferencesUpdate> {
+                verify(get<UpdateGlobalPreferencesUseCase>()).execute(capture())
                 assertThat(firstValue.areDebugLogsEnabled).isFalse()
             }
         }

@@ -28,5 +28,6 @@ internal sealed interface GroupMembersSideEffect {
 
     data class NavigateToMemberDetails(
         val userId: String,
+        val fromSnapshot: Boolean = false,
     ) : GroupMembersSideEffect
 }

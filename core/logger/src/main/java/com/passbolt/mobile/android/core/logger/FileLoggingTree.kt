@@ -1,8 +1,8 @@
 package net.svaroh.passly.core.logger
 
 import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.accounts.GetAccountsUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetAccountsUseCase
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream

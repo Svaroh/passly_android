@@ -1,6 +1,5 @@
 package net.svaroh.passly.permissions.permissionrecipients.ui.list
 
-import PassboltTheme
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,15 +19,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.localization.R
 import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
-import net.svaroh.passly.ui.GpgKeyModel
-import net.svaroh.passly.ui.UserModel
-import net.svaroh.passly.ui.UserProfileModel
+import net.svaroh.passly.ui.GpgKeyUiModel
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
 
 @Composable
 internal fun UserRecipientRow(
-    user: UserModel,
+    user: UserUiModel,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -84,12 +84,12 @@ internal fun UserRecipientRow(
 }
 
 private val previewUser =
-    UserModel(
+    UserUiModel(
         id = "1",
         userName = "john@passbolt.com",
         disabled = false,
         gpgKey =
-            GpgKeyModel(
+            GpgKeyUiModel(
                 id = "1",
                 armoredKey = "",
                 fingerprint = "",
@@ -101,7 +101,7 @@ private val previewUser =
                 keyCreationDate = null,
             ),
         profile =
-            UserProfileModel(
+            UserProfileUiModel(
                 username = "john@passbolt.com",
                 firstName = "John",
                 lastName = "Doe",

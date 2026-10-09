@@ -3,9 +3,9 @@ package net.svaroh.passly.database.ftsbenchmark
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.database.ResourceDatabase
 import net.svaroh.passly.database.ftsbenchmark.FtsBenchmarkDataFactory.DataSet
-import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

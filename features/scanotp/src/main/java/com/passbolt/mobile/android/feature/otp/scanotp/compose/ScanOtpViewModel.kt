@@ -1,14 +1,19 @@
 package net.svaroh.passly.feature.otp.scanotp.compose
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.qrscan.CameraInformationProvider
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import net.svaroh.passly.feature.otp.scanotp.ScanOtpMode
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.CreateTotpManually
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.DismissCameraPermissionRequiredDialog
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.DismissCameraRequiredDialog
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.GoBack
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.GoToSettings
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.GrantCameraPermission
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.Initialize
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.RejectCameraPermission
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.StartCameraError
@@ -21,8 +26,6 @@ import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpSideEffect.SetResult
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpState.TooltipMessage
 import net.svaroh.passly.feature.otp.scanotp.parser.OtpQrParser
 import net.svaroh.passly.ui.OtpParseResult
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class ScanOtpViewModel(
@@ -30,6 +33,7 @@ internal class ScanOtpViewModel(
     private val cameraInformationProvider: CameraInformationProvider,
 ) : SideEffectViewModel<ScanOtpState, ScanOtpSideEffect>(ScanOtpState()) {
     private var qrScanningJob: Job? = null
+    private lateinit var barcodeScanFlow: StateFlow<BarcodeScanResult>
 
     fun onIntent(intent: ScanOtpIntent) {
         when (intent) {
@@ -38,6 +42,7 @@ internal class ScanOtpViewModel(
                 Timber.e(intent.exception)
                 updateViewState { copy(tooltipMessage = TooltipMessage.CAMERA_ERROR) }
             }
+            GrantCameraPermission -> startQrScanning()
             RejectCameraPermission -> updateViewState { copy(showCameraPermissionRequiredDialog = true) }
             DismissCameraRequiredDialog -> updateViewState { copy(showCameraRequiredDialog = false) }
             DismissCameraPermissionRequiredDialog -> updateViewState { copy(showCameraPermissionRequiredDialog = false) }
@@ -48,23 +53,26 @@ internal class ScanOtpViewModel(
     }
 
     private fun initialize(intent: Initialize) {
+        barcodeScanFlow = intent.barcodeScanFlow
         updateViewState { copy(mode = intent.mode) }
+        startQrScanning()
+    }
+
+    private fun startQrScanning() {
         when {
             !cameraInformationProvider.isCameraAvailable() ->
                 updateViewState { copy(showCameraRequiredDialog = true) }
             !cameraInformationProvider.isCameraPermissionGranted() ->
                 emitSideEffect(RequestCameraPermission)
-            else -> {
-                initQrScanning(intent)
-            }
+            else -> initQrScanning()
         }
     }
 
-    private fun initQrScanning(intent: Initialize) {
+    private fun initQrScanning() {
         qrScanningJob?.cancel()
         qrScanningJob =
             viewModelScope.launch {
-                launch { otpQrParser.startParsing(intent.barcodeScanFlow) }
+                launch { otpQrParser.startParsing(barcodeScanFlow) }
                 launch { otpQrParser.parseResultFlow.collect { processParseResult(it) } }
             }
     }

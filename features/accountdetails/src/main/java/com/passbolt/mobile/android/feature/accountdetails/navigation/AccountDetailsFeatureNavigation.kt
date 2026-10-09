@@ -22,7 +22,7 @@
  */
 package net.svaroh.passly.feature.accountdetails.navigation
 
-import PassboltTheme
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
 import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
 import net.svaroh.passly.core.navigation.compose.keys.AccountDetailsNavigationKey

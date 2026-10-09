@@ -24,10 +24,17 @@ package net.svaroh.passly.feature.settings.appsettings.autofill
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.core.autofill.AutofillInformationProvider
 import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.DISABLED
 import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.NOT_SUPPORTED
-import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToAccessibilityPoliciesConsent
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToAutofillEnabled
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToChromeNativeAutofill
@@ -38,12 +45,7 @@ import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSe
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.ToggleNativeAutofill
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsIntent.UpdateAutofillState
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillSettingsViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -214,13 +216,16 @@ class AutofillSettingsViewModelTest : KoinTest {
             whenever(autofillInformationProvider.getChromeNativeAutofillStatus()) doReturn DISABLED
             whenever(autofillInformationProvider.isAccessibilityAutofillSetup()) doReturn false
             whenever(getGlobalPreferencesUseCase.execute(Unit)) doReturn
-                GetGlobalPreferencesUseCase.Output(
+                GlobalPreferencesUiModel(
                     areDebugLogsEnabled = false,
                     debugLogFileCreationDateTime = null,
+                    isHideRootDialogEnabled = true,
+                    isAuthRequiredOnEveryEntry = true,
                     debugLogLastAppVersion = null,
-                    isDeveloperModeEnabled = false,
-                    isHideRootDialogEnabled = false,
+                    apiFetchPageSize = PreferencesDefaults.API_FETCH_PAGE_SIZE,
+                    isApiFetchPageSizeManuallySet = false,
                     accessibilityPoliciesConsentGiven = true,
+                    deprecatedOsWarningHiddenForSdk = null,
                 )
 
             viewModel = get()
@@ -247,13 +252,16 @@ class AutofillSettingsViewModelTest : KoinTest {
             whenever(autofillInformationProvider.getChromeNativeAutofillStatus()) doReturn DISABLED
             whenever(autofillInformationProvider.isAccessibilityAutofillSetup()) doReturn false
             whenever(getGlobalPreferencesUseCase.execute(Unit)) doReturn
-                GetGlobalPreferencesUseCase.Output(
+                GlobalPreferencesUiModel(
                     areDebugLogsEnabled = false,
                     debugLogFileCreationDateTime = null,
+                    isHideRootDialogEnabled = true,
+                    isAuthRequiredOnEveryEntry = true,
                     debugLogLastAppVersion = null,
-                    isDeveloperModeEnabled = false,
-                    isHideRootDialogEnabled = false,
+                    apiFetchPageSize = PreferencesDefaults.API_FETCH_PAGE_SIZE,
+                    isApiFetchPageSizeManuallySet = false,
                     accessibilityPoliciesConsentGiven = false,
+                    deprecatedOsWarningHiddenForSdk = null,
                 )
 
             viewModel = get()

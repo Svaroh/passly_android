@@ -40,21 +40,22 @@ import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.accounts.AccountSwitchFlow
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.commontest.session.validSessionTestModule
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.preferences.usecase.GetHomeDisplayViewPrefsUseCase
-import net.svaroh.passly.core.resources.actions.ResourceCommonActionResult
-import net.svaroh.passly.core.resources.actions.ResourceCommonActionsInteractor
-import net.svaroh.passly.core.resources.actions.ResourcePropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.ResourcePropertyActionResult
-import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.SecretPropertyActionResult
-import net.svaroh.passly.core.resources.usecase.ResourceContentTypeProvider
-import net.svaroh.passly.entity.home.HomeDisplayView
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.domain.metadata.interactor.ResourceAccessInteractor
+import net.svaroh.passly.domain.preferences.usecase.GetHomeDisplayViewPreferencesUseCase
+import net.svaroh.passly.domain.resources.actions.ResourceCommonActionResult
+import net.svaroh.passly.domain.resources.actions.ResourceCommonActionsInteractor
+import net.svaroh.passly.domain.resources.actions.ResourcePropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.ResourcePropertyActionResult
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.SecretPropertyActionResult
+import net.svaroh.passly.domain.resources.usecase.ResourceContentTypeProvider
+import net.svaroh.passly.domain.users.profile.UserProfileInteractor
+import net.svaroh.passly.domain.users.profile.UserProfileRefreshTrackingFlow
 import net.svaroh.passly.feature.home.screen.HomeIntent.ConfirmDeleteResource
 import net.svaroh.passly.feature.home.screen.HomeIntent.CopyNote
 import net.svaroh.passly.feature.home.screen.HomeIntent.CopyPassword
@@ -79,17 +80,15 @@ import net.svaroh.passly.feature.home.screen.data.HomeDataProvider
 import net.svaroh.passly.jsonmodel.JSON_MODEL_GSON
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathJsonPathOps
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathsOps
-import net.svaroh.passly.mappers.HomeDisplayViewMapper
-import net.svaroh.passly.metadata.usecase.CanCreateResourceUseCase
-import net.svaroh.passly.metadata.usecase.CanShareResourceUseCase
-import net.svaroh.passly.ui.DefaultFilterModel
-import net.svaroh.passly.ui.HomeDisplayViewModel.AllItems
+import net.svaroh.passly.ui.DefaultFilterUiModel
 import net.svaroh.passly.ui.HomeDisplayViewModel.NotLoaded
+import net.svaroh.passly.ui.HomeDisplayViewPreferencesUiModel
+import net.svaroh.passly.ui.HomeDisplayViewUiModel
 import net.svaroh.passly.ui.MetadataJsonModel
-import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.REMOVE_FROM_FAVOURITES
 import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.ResourceUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -128,15 +127,18 @@ class HomeViewModelMenuTest : KoinTest {
                     singleOf(::DataRefreshTrackingFlow)
                     singleOf(::SessionRefreshTrackingFlow)
                     single { mock<GetSelectedAccountDataUseCase>() }
-                    single { mock<GetHomeDisplayViewPrefsUseCase>() }
-                    single { mock<HomeDisplayViewMapper>() }
+                    single { mock<GetHomeDisplayViewPreferencesUseCase>() }
                     single { mock<HomeDataProvider>() }
                     single { mock<GetLocalFolderDetailsUseCase>() }
-                    single { mock<CanCreateResourceUseCase>() }
-                    single { mock<CanShareResourceUseCase>() }
+                    single { mock<ResourceAccessInteractor>() }
                     single { mock<DetectAutofillConflict>() }
+                    single {
+                        mock<UserProfileInteractor> {
+                            on { fetchAndUpdateUserProfile() } doReturn UserProfileInteractor.Output.Success
+                        }
+                    }
+                    singleOf(::UserProfileRefreshTrackingFlow)
                     single { mock<ResourceContentTypeProvider>() }
-                    single { AccountSwitchFlow(mock { on { execute(any()) } doReturn GetSelectedAccountUseCase.Output("id1") }) }
                     single(named(JSON_MODEL_GSON)) { GsonBuilder().serializeNulls().create() }
                     single {
                         Configuration
@@ -149,6 +151,7 @@ class HomeViewModelMenuTest : KoinTest {
                     singleOf(::JsonPathJsonPathOps) bind JsonPathsOps::class
                     factoryOf(::HomeViewModel)
                 },
+                validSessionTestModule,
             )
         }
 
@@ -172,18 +175,17 @@ class HomeViewModelMenuTest : KoinTest {
             ),
         )
 
-        whenever(get<GetHomeDisplayViewPrefsUseCase>().execute(any())).thenReturn(
-            GetHomeDisplayViewPrefsUseCase.Output(
-                lastUsedHomeView = HomeDisplayView.ALL_ITEMS,
-                userSetHomeView = DefaultFilterModel.ALL_ITEMS,
+        whenever(get<GetHomeDisplayViewPreferencesUseCase>().execute(Unit)).thenReturn(
+            HomeDisplayViewPreferencesUiModel(
+                lastUsedHomeView = HomeDisplayViewUiModel.ALL_ITEMS,
+                userSetHomeView = DefaultFilterUiModel.ALL_ITEMS,
             ),
         )
 
-        whenever(get<HomeDisplayViewMapper>().map(any(), any())).thenReturn(AllItems)
-
         get<HomeDataProvider>().stub {
-            onBlocking {
+            on {
                 provideData(
+                    any(),
                     any(),
                     any(),
                     any(),
@@ -191,12 +193,9 @@ class HomeViewModelMenuTest : KoinTest {
             }.doReturn(HomeData())
         }
 
-        get<CanCreateResourceUseCase>().stub {
-            onBlocking { execute(any()) }.doReturn(CanCreateResourceUseCase.Output(canCreateResource = true))
-        }
-
-        get<CanShareResourceUseCase>().stub {
-            onBlocking { execute(any()) }.doReturn(CanShareResourceUseCase.Output(canShareResource = true))
+        get<ResourceAccessInteractor>().stub {
+            on { canCreateResource(anyOrNull()) }.doReturn(true)
+            on { canShareResource() }.doReturn(true)
         }
     }
 
@@ -547,9 +546,10 @@ class HomeViewModelMenuTest : KoinTest {
     private fun mockResourceModel(
         name: String,
         resourceTypeId: String = "resTypeId",
-    ) = ResourceModel(
+    ) = ResourceUiModel(
         resourceId = "id1",
         resourceTypeId = resourceTypeId,
+        slug = "password-and-description",
         folderId = "folderId",
         permission = ResourcePermission.READ,
         favouriteId = null,
@@ -558,12 +558,12 @@ class HomeViewModelMenuTest : KoinTest {
         metadataJsonModel =
             MetadataJsonModel(
                 """
-                    {
-                        "name": "$name",
-                        "uri": "https://example.com",
-                        "username": "testuser",
-                        "description": "Test description"
-                    }
+                {
+                    "name": "$name",
+                    "uri": "https://example.com",
+                    "username": "testuser",
+                    "description": "Test description"
+                }
                 """.trimIndent(),
             ),
         metadataKeyId = null,

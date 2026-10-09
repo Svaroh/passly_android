@@ -2,10 +2,18 @@ package net.svaroh.passly.permissions.grouppermissionsdetails
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.commongroups.usecase.db.GetGroupWithUsersUseCase
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.groups.usecase.GetGroupWithUsersUseCase
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
 import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsIntent.CancelPermissionDelete
 import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsIntent.ConfirmPermissionDelete
 import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsIntent.DeletePermission
@@ -17,7 +25,7 @@ import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsSid
 import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsSideEffect.NavigateToGroupMembers
 import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsSideEffect.SetDeletePermissionResult
 import net.svaroh.passly.permissions.grouppermissionsdetails.GroupPermissionsSideEffect.SetUpdatedPermissionResult
-import net.svaroh.passly.ui.GpgKeyModel
+import net.svaroh.passly.ui.GpgKeyUiModel
 import net.svaroh.passly.ui.GroupModel
 import net.svaroh.passly.ui.GroupWithUsersModel
 import net.svaroh.passly.ui.PermissionModelUi
@@ -25,15 +33,8 @@ import net.svaroh.passly.ui.PermissionsMode
 import net.svaroh.passly.ui.PermissionsMode.EDIT
 import net.svaroh.passly.ui.ResourcePermission
 import net.svaroh.passly.ui.ResourcePermission.UPDATE
-import net.svaroh.passly.ui.UserModel
-import net.svaroh.passly.ui.UserProfileModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -63,12 +64,15 @@ class GroupPermissionsViewModelTest : KoinTest {
                 listOf(
                     module {
                         single { mock<GetGroupWithUsersUseCase>() }
+                        single { mock<GetPermissionsSnapshotUseCase>() }
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
-                        factory { (permission: PermissionModelUi.GroupPermissionModel, mode: PermissionsMode) ->
+                        factory { params ->
                             GroupPermissionsViewModel(
-                                mode = mode,
-                                permission = permission,
+                                mode = params.get(),
+                                permission = params.get(),
+                                fromSnapshot = params.getOrNull() ?: false,
                                 getGroupWithUsersUseCase = get(),
+                                getPermissionsSnapshotUseCase = get(),
                                 coroutineLaunchContext = get(),
                             )
                         }
@@ -88,7 +92,7 @@ class GroupPermissionsViewModelTest : KoinTest {
 
         val getGroupWithUsersUseCase = get<GetGroupWithUsersUseCase>()
         getGroupWithUsersUseCase.stub {
-            onBlocking { execute(GetGroupWithUsersUseCase.Input(GROUP.groupId)) }
+            on { execute(GetGroupWithUsersUseCase.Input(GROUP.groupId)) }
                 .doReturn(GetGroupWithUsersUseCase.Output(GROUP_WITH_USERS))
         }
     }
@@ -196,6 +200,20 @@ class GroupPermissionsViewModelTest : KoinTest {
         }
 
     @Test
+    fun `snapshot details without an available snapshot should navigate back`() =
+        runTest {
+            get<GetPermissionsSnapshotUseCase>().stub {
+                on { execute(Unit) }.doReturn(GetPermissionsSnapshotUseCase.Output(null))
+            }
+
+            viewModel = get { parametersOf(GROUP_PERMISSION, PermissionsMode.VIEW, true) }
+
+            viewModel.sideEffect.test {
+                assertIs<NavigateBack>(awaitItem())
+            }
+        }
+
+    @Test
     fun `see group members should emit navigate to group members side effect`() =
         runTest {
             viewModel = get { parametersOf(GROUP_PERMISSION, PermissionsMode.VIEW) }
@@ -211,12 +229,12 @@ class GroupPermissionsViewModelTest : KoinTest {
 
     private companion object {
         private val USER =
-            UserModel(
+            UserUiModel(
                 id = "userId",
                 userName = "userName",
                 disabled = false,
                 gpgKey =
-                    GpgKeyModel(
+                    GpgKeyUiModel(
                         armoredKey = "keyData",
                         fingerprint = "fingerprint",
                         bits = 1,
@@ -228,7 +246,7 @@ class GroupPermissionsViewModelTest : KoinTest {
                         id = UUID.randomUUID().toString(),
                     ),
                 profile =
-                    UserProfileModel(
+                    UserProfileUiModel(
                         username = "username",
                         firstName = "first",
                         lastName = "last",

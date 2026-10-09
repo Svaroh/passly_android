@@ -24,14 +24,21 @@ package net.svaroh.passly.feature.setup.welcome
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.core.accounts.AccountKitParser
-import net.svaroh.passly.core.accounts.AccountsInteractor
-import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ACCOUNT_ALREADY_LINKED
-import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ERROR_NON_HTTPS_DOMAIN
-import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ERROR_WHEN_SAVING_PRIVATE_KEY
-import net.svaroh.passly.core.navigation.AccountSetupDataModel
-import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.core.security.rootdetection.RootDetector
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ACCOUNT_ALREADY_LINKED
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ERROR_NON_HTTPS_DOMAIN
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ERROR_WHEN_SAVING_PRIVATE_KEY
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.AccessLogs
 import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.AcknowledgeDeviceRooted
 import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.ConnectToExistingAccount
@@ -48,17 +55,12 @@ import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateToLogs
 import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateToSummary
 import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateToTransferDetails
 import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateUp
+import net.svaroh.passly.ui.AccountSetupDataModel
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import net.svaroh.passly.ui.ResultStatus.AlreadyLinked
 import net.svaroh.passly.ui.ResultStatus.Failure
 import net.svaroh.passly.ui.ResultStatus.HttpNotSupported
 import net.svaroh.passly.ui.ResultStatus.Success
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -110,13 +112,16 @@ class WelcomeViewModelTest : KoinTest {
 
         val getGlobalPreferencesUseCase = get<GetGlobalPreferencesUseCase>()
         whenever(getGlobalPreferencesUseCase.execute(Unit)) doReturn
-            GetGlobalPreferencesUseCase.Output(
+            GlobalPreferencesUiModel(
                 areDebugLogsEnabled = false,
                 debugLogFileCreationDateTime = null,
-                isDeveloperModeEnabled = false,
                 isHideRootDialogEnabled = false,
+                isAuthRequiredOnEveryEntry = true,
                 debugLogLastAppVersion = null,
+                apiFetchPageSize = 2000,
+                isApiFetchPageSizeManuallySet = false,
                 accessibilityPoliciesConsentGiven = true,
+                deprecatedOsWarningHiddenForSdk = null,
             )
     }
 
@@ -188,13 +193,16 @@ class WelcomeViewModelTest : KoinTest {
 
             val getGlobalPreferencesUseCase = get<GetGlobalPreferencesUseCase>()
             whenever(getGlobalPreferencesUseCase.execute(Unit)) doReturn
-                GetGlobalPreferencesUseCase.Output(
+                GlobalPreferencesUiModel(
                     areDebugLogsEnabled = false,
                     debugLogFileCreationDateTime = null,
-                    isDeveloperModeEnabled = false,
                     isHideRootDialogEnabled = true,
+                    isAuthRequiredOnEveryEntry = true,
                     debugLogLastAppVersion = null,
+                    apiFetchPageSize = PreferencesDefaults.API_FETCH_PAGE_SIZE,
+                    isApiFetchPageSizeManuallySet = false,
                     accessibilityPoliciesConsentGiven = true,
+                    deprecatedOsWarningHiddenForSdk = null,
                 )
 
             viewModel = get()

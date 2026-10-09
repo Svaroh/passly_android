@@ -1,6 +1,7 @@
 package net.svaroh.passly.otpmoremenu
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuIntent.Close
@@ -14,8 +15,9 @@ import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeCopyOtp
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeDeleteOtp
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeEditOtp
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeShowOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.ShowContentNotAvailable
 import net.svaroh.passly.otpmoremenu.usecase.CreateOtpMoreMenuModelUseCase
-import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Passbolt - Open source password manager for teams
@@ -59,18 +61,24 @@ class OtpMoreMenuViewModel(
         updateViewState { copy(title = initialize.resourceName, showShowOtpButton = initialize.canShowTotp) }
         viewModelScope.launch {
             dataRefreshTrackingFlow.awaitIdle()
-            val menuModel =
-                createOtpMoreMenuModelUseCase
-                    .execute(
-                        CreateOtpMoreMenuModelUseCase.Input(initialize.resourceId),
-                    ).otpMoreMenuModel
+            try {
+                val menuModel =
+                    createOtpMoreMenuModelUseCase
+                        .execute(
+                            CreateOtpMoreMenuModelUseCase.Input(initialize.resourceId),
+                        ).otpMoreMenuModel
 
-            updateViewState {
-                copy(
-                    showDeleteButton = menuModel.canDelete,
-                    showEditButton = menuModel.canEdit,
-                    showSeparator = menuModel.canEdit || menuModel.canDelete,
-                )
+                updateViewState {
+                    copy(
+                        showDeleteButton = menuModel.canDelete,
+                        showEditButton = menuModel.canEdit,
+                        showSeparator = menuModel.canEdit || menuModel.canDelete,
+                    )
+                }
+            } catch (_: IllegalStateException) {
+                Timber.d("Resource item for the shown menu was deleted")
+                emitSideEffect(ShowContentNotAvailable)
+                emitSideEffect(Dismiss)
             }
         }
     }

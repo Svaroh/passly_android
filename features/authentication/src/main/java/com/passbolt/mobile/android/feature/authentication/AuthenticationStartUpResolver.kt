@@ -1,10 +1,10 @@
 package net.svaroh.passly.feature.authentication
 
 import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveCurrentApiUrlUseCase
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig
+import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveCurrentApiUrlUseCase
 
 class AuthenticationStartUpResolver(
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,

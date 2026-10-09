@@ -27,9 +27,9 @@ import androidx.annotation.StringRes
 import net.svaroh.passly.core.localization.R as LocalizationR
 
 sealed class ConfirmationModel(
-    @StringRes val titleResId: Int,
-    @StringRes val messageResId: Int,
-    @StringRes val positiveButtonResId: Int,
+    @param:StringRes val titleResId: Int,
+    @param:StringRes val messageResId: Int,
+    @param:StringRes val positiveButtonResId: Int,
 ) {
     class LinkTotpModel :
         ConfirmationModel(

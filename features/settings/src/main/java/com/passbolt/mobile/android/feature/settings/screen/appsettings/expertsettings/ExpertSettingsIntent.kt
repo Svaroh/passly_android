@@ -24,9 +24,11 @@
 package net.svaroh.passly.feature.settings.screen.appsettings.expertsettings
 
 internal sealed interface ExpertSettingsIntent {
-    object GoBack : ExpertSettingsIntent
+    data object GoBack : ExpertSettingsIntent
 
-    data object ToggleDeveloperMode : ExpertSettingsIntent
+    data object ToggleAuthRequiredOnEveryEntry : ExpertSettingsIntent
 
     data object ToggleHideRootWarning : ExpertSettingsIntent
+
+    data object GoToPageSize : ExpertSettingsIntent
 }

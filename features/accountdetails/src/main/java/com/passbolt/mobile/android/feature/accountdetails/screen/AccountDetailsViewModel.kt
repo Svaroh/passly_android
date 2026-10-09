@@ -25,28 +25,32 @@ package net.svaroh.passly.feature.accountdetails.screen
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.validation.StringMaxLength
 import net.svaroh.passly.common.validation.StringNotBlank
 import net.svaroh.passly.common.validation.validation
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.accountdata.UpdateAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.UpdateAccountDataUseCase
+import net.svaroh.passly.domain.users.profile.UserProfileInteractor
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.GoBack
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.SaveChanges
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.StartTransferAccount
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.UpdateLabel
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.NavigateToTransferAccount
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.NavigateUp
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.ShowProfileFetchError
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsValidationError.MaxLengthExceeded
+import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
 import net.svaroh.passly.mappers.AccountModelMapper
-import kotlinx.coroutines.launch
 
 internal class AccountDetailsViewModel(
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
     private val updateAccountDataUseCase: UpdateAccountDataUseCase,
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
+    private val userProfileInteractor: UserProfileInteractor,
     private val coroutineLaunchContext: CoroutineLaunchContext,
 ) : SideEffectViewModel<AccountDetailsState, AccountDetailsScreenSideEffect>(AccountDetailsState()) {
     init {
@@ -91,12 +95,25 @@ internal class AccountDetailsViewModel(
 
     private fun loadInitialValues() {
         viewModelScope.launch(coroutineLaunchContext.io) {
+            updateViewState { copy(showProgress = true) }
+            when (
+                val result =
+                    runAuthenticatedOperation {
+                        userProfileInteractor.fetchAndUpdateUserProfile()
+                    }
+            ) {
+                is UserProfileInteractor.Output.Success -> Unit
+                is UserProfileInteractor.Output.Failure ->
+                    emitSideEffect(ShowProfileFetchError(result.message))
+            }
+
             val data = getSelectedAccountDataUseCase.execute(Unit)
             val defaultLabel = AccountModelMapper.defaultLabel(data.firstName, data.lastName)
             val label = data.label ?: defaultLabel
 
             updateViewState {
                 copy(
+                    showProgress = false,
                     label = label,
                     name = "${data.firstName.orEmpty()} ${data.lastName.orEmpty()}",
                     email = data.email.orEmpty(),

@@ -1,14 +1,20 @@
 package net.svaroh.passly.feature.authentication.mfa.totp
 
-import PassboltTheme
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -28,7 +34,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -37,12 +42,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.clipboard.ClipboardAccess
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.NavigationActivity.AuthenticationSignIn
 import net.svaroh.passly.core.navigation.compose.NavigationActivity.Start
+import net.svaroh.passly.core.ui.dialogs.LeaveSetupAlertDialog
 import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
 import net.svaroh.passly.feature.authentication.mfa.MfaDialogState
@@ -51,6 +59,8 @@ import net.svaroh.passly.feature.authentication.mfa.MfaResult.OtherProvider
 import net.svaroh.passly.feature.authentication.mfa.MfaResult.Succeeded
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.ChooseOtherProvider
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.Close
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.ConfirmSetupLeave
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.DismissSetupLeave
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.PasteFromClipboard
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.ToggleRememberMe
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.ValidateOtp
@@ -68,7 +78,6 @@ import net.svaroh.passly.feature.authentication.mfa.totp.compose.DigitsOnlySanit
 import net.svaroh.passly.feature.authentication.mfa.totp.compose.PinInput
 import net.svaroh.passly.feature.authentication.mfa.totp.compose.PinInputState
 import net.svaroh.passly.feature.authentication.mfa.totp.compose.rememberPinInputState
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
@@ -82,9 +91,10 @@ private const val OTP_LENGTH = 6
 internal fun EnterTotpScreen(
     mfaState: MfaDialogState.Totp,
     onMfaResult: (MfaResult) -> Unit,
+    isSetupFlow: Boolean = false,
     viewModel: EnterTotpViewModel =
         koinViewModel {
-            parametersOf(mfaState.authToken, mfaState.hasOtherProviders)
+            parametersOf(mfaState.authToken, mfaState.hasOtherProviders, isSetupFlow)
         },
     clipboardAccess: ClipboardAccess = koinInject(),
     appNavigator: AppNavigator = koinInject(),
@@ -101,6 +111,7 @@ internal fun EnterTotpScreen(
             onPinComplete = { otp -> viewModel.onIntent(ValidateOtp(otp)) },
         )
 
+    val errorSnackbarColor = colorResource(CoreUiR.color.red)
     SideEffectDispatcher(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             is NotifyVerificationSucceeded ->
@@ -116,7 +127,7 @@ internal fun EnterTotpScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getSnackbarMessage(context, sideEffect.kind),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorSnackbarColor,
                         ),
                     )
                 }
@@ -142,12 +153,14 @@ internal fun EnterTotpScreen(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun EnterTotpScreen(
     state: EnterTotpState,
     onIntent: (EnterTotpIntent) -> Unit,
     snackbarHostState: SnackbarHostState,
     pinInputState: PinInputState,
+    isImeVisible: Boolean = WindowInsets.isImeVisible,
 ) {
     val textColor =
         when (state.otpTextColor) {
@@ -156,6 +169,7 @@ private fun EnterTotpScreen(
         }
 
     Scaffold(
+        modifier = Modifier.imePadding(),
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarHostState,
@@ -195,20 +209,29 @@ private fun EnterTotpScreen(
                 )
             }
 
-            Text(
-                text = stringResource(LocalizationR.string.dialog_mfa_mfa),
-                style = MaterialTheme.typography.titleSmall,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Image(
-                painter = painterResource(CoreUiR.drawable.totp_logo),
-                contentDescription = null,
-                modifier = Modifier.size(116.dp),
-            )
+            AnimatedVisibility(
+                visible = !isImeVisible,
+                enter = expandVertically(),
+                exit = shrinkVertically(),
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = stringResource(LocalizationR.string.dialog_mfa_mfa),
+                        style = MaterialTheme.typography.titleSmall,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Image(
+                        painter = painterResource(CoreUiR.drawable.totp_logo),
+                        contentDescription = null,
+                        modifier = Modifier.size(116.dp),
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -240,6 +263,7 @@ private fun EnterTotpScreen(
                 state = pinInputState,
                 textColor = textColor,
                 modifier = Modifier.padding(horizontal = 32.dp),
+                onLongPress = { onIntent(PasteFromClipboard) },
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -285,6 +309,12 @@ private fun EnterTotpScreen(
         }
     }
 
+    LeaveSetupAlertDialog(
+        isVisible = state.showSetupLeaveConfirmationDialog,
+        onLeaveConfirm = { onIntent(ConfirmSetupLeave) },
+        onDismiss = { onIntent(DismissSetupLeave) },
+    )
+
     ProgressDialog(isVisible = state.showProgress)
 }
 
@@ -301,6 +331,25 @@ private fun EnterTotpScreenPreview() {
                     initialValue = "12",
                     sanitizer = DigitsOnlySanitizer(maxLength = OTP_LENGTH),
                 ),
+            isImeVisible = false,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun EnterTotpScreenImeVisiblePreview() {
+    PassboltTheme {
+        EnterTotpScreen(
+            state = EnterTotpState(hasOtherProvider = true),
+            onIntent = {},
+            snackbarHostState = SnackbarHostState(),
+            pinInputState =
+                PinInputState(
+                    initialValue = "12",
+                    sanitizer = DigitsOnlySanitizer(maxLength = OTP_LENGTH),
+                ),
+            isImeVisible = true,
         )
     }
 }

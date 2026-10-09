@@ -1,24 +1,28 @@
 package net.svaroh.passly.feature.resourceform.main
 
-import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractorFactory
-import net.svaroh.passly.core.resources.actions.SecretPropertyActionResult
-import net.svaroh.passly.core.resources.usecase.GetDefaultCreateContentTypeUseCase
-import net.svaroh.passly.core.resources.usecase.GetDefaultCreateContentTypeUseCase.Output.CreationContentType
-import net.svaroh.passly.core.resources.usecase.GetDefaultCreateContentTypeUseCase.Output.NotPossibleNotCreateResource
-import net.svaroh.passly.core.resources.usecase.GetEditContentTypeUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
+import kotlinx.coroutines.flow.single
+import net.svaroh.passly.common.hash.MessageDigestHash
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.ResourceTypesUpdatesAdjacencyGraph
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction.ADD_CUSTOM_FIELDS
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction.ADD_METADATA_DESCRIPTION
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction.ADD_NOTE
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction.ADD_PASSWORD
+import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction.ADD_PIN_CODE
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction.ADD_TOTP
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction.REMOVE_METADATA_DESCRIPTION
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction.REMOVE_NOTE
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction.REMOVE_PASSWORD
+import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction.REMOVE_PIN_CODE
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction.REMOVE_TOTP
-import net.svaroh.passly.core.secrets.usecase.decrypt.parser.SecretJsonModel
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractorFactory
+import net.svaroh.passly.domain.resources.actions.SecretPropertyActionResult
+import net.svaroh.passly.domain.resources.usecase.GetDefaultCreateContentTypeUseCase
+import net.svaroh.passly.domain.resources.usecase.GetDefaultCreateContentTypeUseCase.Output.CreationContentType
+import net.svaroh.passly.domain.resources.usecase.GetDefaultCreateContentTypeUseCase.Output.NotPossibleNotCreateResource
+import net.svaroh.passly.domain.resources.usecase.GetEditContentTypeUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.domain.secrets.model.SecretJsonModel
 import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldsModel
 import net.svaroh.passly.jsonmodel.delegates.TotpSecret
 import net.svaroh.passly.supportedresourceTypes.ContentType
@@ -32,6 +36,7 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Passkey
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5PinCodeStandalone
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.MetadataJsonModel
@@ -45,8 +50,8 @@ import net.svaroh.passly.ui.ResourceFormUiModel.Metadata.DESCRIPTION
 import net.svaroh.passly.ui.ResourceFormUiModel.Secret.CUSTOM_FIELDS
 import net.svaroh.passly.ui.ResourceFormUiModel.Secret.NOTE
 import net.svaroh.passly.ui.ResourceFormUiModel.Secret.PASSWORD
+import net.svaroh.passly.ui.ResourceFormUiModel.Secret.PIN_CODE
 import net.svaroh.passly.ui.ResourceFormUiModel.Secret.TOTP
-import kotlinx.coroutines.flow.single
 import timber.log.Timber
 
 /**
@@ -78,11 +83,14 @@ class ResourceModelHandler(
     private val getLocalResourceUseCase: GetLocalResourceUseCase,
     private val defaultValues: DefaultValues,
     private val secretPropertiesActionsInteractorFactory: SecretPropertiesActionsInteractorFactory,
+    private val messageDigestHash: MessageDigestHash,
 ) {
     lateinit var resourceMetadata: MetadataJsonModel
     lateinit var resourceSecret: SecretJsonModel
     lateinit var metadataType: MetadataTypeModel
     lateinit var contentType: ContentType
+
+    private var originalEditSecretFingerprint: String? = null
 
     suspend fun initializeModelForCreation(leadingContentType: LeadingContentType) {
         val initialContentTypeToCreate =
@@ -102,6 +110,7 @@ class ResourceModelHandler(
                         LeadingContentType.PASSWORD -> SecretJsonModel.emptyPassword()
                         LeadingContentType.CUSTOM_FIELDS -> SecretJsonModel.emptyCustomFields()
                         LeadingContentType.STANDALONE_NOTE -> SecretJsonModel.emptyDescription()
+                        LeadingContentType.PIN_CODE -> SecretJsonModel.emptyPinCode()
                     }
 
                 Timber.d("Initialized creation model with content type: $contentType and metadata type: $metadataType")
@@ -136,6 +145,7 @@ class ResourceModelHandler(
             val secretPropertiesActionsInteractor = secretPropertiesActionsInteractorFactory.create(resource)
             val secret = secretPropertiesActionsInteractor.provideDecryptedSecret().single()
             resourceSecret = (secret as SecretPropertyActionResult.Success<SecretJsonModel>).result
+            originalEditSecretFingerprint = secretFingerprint(getResourceSecretWithRequiredFields())
 
             Timber.d("Initialized edition model with content type: $contentType and metadata type: $metadataType")
         } catch (e: Exception) {
@@ -174,6 +184,9 @@ class ResourceModelHandler(
         if (contentType.hasCustomFields() && resourceSecret.customFields == null) {
             resourceSecret.customFields = SecretCustomFieldsModel()
         }
+        if (contentType.hasPinCode() && resourceSecret.pinCode == null) {
+            resourceSecret.pinCode = ""
+        }
     }
 
     private fun ensureNoAdditionalFields() {
@@ -188,6 +201,9 @@ class ResourceModelHandler(
         }
         if (!contentType.hasCustomFields() && resourceSecret.customFields != null) {
             resourceSecret.customFields = null
+        }
+        if (!contentType.hasPinCode() && resourceSecret.pinCode != null) {
+            resourceSecret.pinCode = null
         }
     }
 
@@ -245,6 +261,17 @@ class ResourceModelHandler(
 
     private fun resourceHasNoNote(): Boolean = resourceSecret.description.isNullOrBlank()
 
+    fun isSecretModified(): Boolean {
+        val originalFingerprint =
+            checkNotNull(originalEditSecretFingerprint) {
+                "Secret modification tracking is available only after initialization for edition"
+            }
+        return secretFingerprint(getResourceSecretWithRequiredFields()) != originalFingerprint
+    }
+
+    private fun secretFingerprint(secret: SecretJsonModel): String = messageDigestHash.sha256(secret.json.orEmpty())
+
+    @Suppress("CyclomaticComplexMethod")
     fun getResourceSecretWithRequiredFields(): SecretJsonModel =
         SecretJsonModel(resourceSecret.json).apply {
             when (contentType) {
@@ -274,6 +301,11 @@ class ResourceModelHandler(
                         description = ""
                     }
                 }
+                V5PinCodeStandalone -> {
+                    if (pinCode.isNullOrBlank()) {
+                        Timber.e("Attempt to create or edit pin code resource with empty pin code")
+                    }
+                }
                 V5Passkey -> {
                     // Passkey secrets are managed by WebAuthn flows, not by the generic resource form.
                 }
@@ -298,6 +330,7 @@ class ResourceModelHandler(
                 in setOf(Totp, V5TotpStandalone) -> LeadingContentType.TOTP
                 is V5CustomFields -> LeadingContentType.CUSTOM_FIELDS
                 is V5Note -> LeadingContentType.STANDALONE_NOTE
+                is V5PinCodeStandalone -> LeadingContentType.PIN_CODE
                 else -> LeadingContentType.PASSWORD
             }
 
@@ -323,6 +356,11 @@ class ResourceModelHandler(
                     }
                     if (it.contains(ADD_CUSTOM_FIELDS) && mode !is ResourceFormMode.Create) {
                         additionalSecrets.add(CUSTOM_FIELDS)
+                    }
+                    if (leadingContentType != LeadingContentType.PIN_CODE &&
+                        (it.contains(ADD_PIN_CODE) || it.contains(REMOVE_PIN_CODE))
+                    ) {
+                        additionalSecrets.add(PIN_CODE)
                     }
                     additionalSecrets
                 },

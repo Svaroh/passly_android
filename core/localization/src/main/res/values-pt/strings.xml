@@ -345,7 +345,6 @@
     <string name="settings_app_settings_biometry_error">Erro de biometra. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Erro de autenticação biométrica. %s</string>
     <string name="settings_app_settings_expert_settings">Configurações avançadas</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Modo de desenvolvedor</string>
     <string name="settings_app_settings_expert_settings_hide_root">Ocultar diálogo \"dispositivo está com root\"</string>
     <string name="settings_autofill_autofill_title">Aqui você pode mudar os métodos de preenchimento automático</string>
     <string name="settings_autofill_autofill_desc">Recomenda-se usar o método de serviço de preenchimento automático, mas o desempenho do serviço pode depender das configurações de otimização do dispositivo e da bateria. \n\nSe o serviço de preenchimento automático não estiver funcionando corretamente em seu dispositivo, tente ativar o preenchimento automático com base no serviço de acessibilidade.</string>

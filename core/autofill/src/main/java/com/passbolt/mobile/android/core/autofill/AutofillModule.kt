@@ -1,10 +1,12 @@
 package net.svaroh.passly.core.autofill
 
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
+import net.svaroh.passly.core.autofill.accessibility.AccessibilityCommunicator
 import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider
 import net.svaroh.passly.core.autofill.conflict.DetectSystemAutofillConflict
 import net.svaroh.passly.core.autofill.system.AutofillHintsFactory
 import net.svaroh.passly.core.autofill.system.FillableInputsFinder
+import net.svaroh.passly.core.autofill.system.classification.AutofillFieldClassifier
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -37,8 +39,10 @@ import org.koin.dsl.module
 val autofillModule =
     module {
         factoryOf(::FillableInputsFinder)
+        factoryOf(::AutofillFieldClassifier)
         singleOf(::AccessibilityOperationsProvider)
-        factory {
+        singleOf(::AccessibilityCommunicator)
+        single {
             AutofillHintsFactory(
                 resources = get(),
                 appContext = androidContext(),

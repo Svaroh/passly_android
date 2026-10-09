@@ -6,4 +6,5 @@ data class ScanYubikeyState(
     val rememberMe: Boolean = true,
     val showScanCancelledDialog: Boolean = false,
     val showNotFromCurrentUserDialog: Boolean = false,
+    val showSetupLeaveConfirmationDialog: Boolean = false,
 )

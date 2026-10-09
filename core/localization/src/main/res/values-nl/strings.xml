@@ -345,7 +345,6 @@
     <string name="settings_app_settings_biometry_error">Biometrische fout. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Fout bij biometrische authenticatie. %s</string>
     <string name="settings_app_settings_expert_settings">Expertinstellingen</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Ontwikkelaarsmodus</string>
     <string name="settings_app_settings_expert_settings_hide_root">Verberg “apparaat is geroot”-dialoog</string>
     <string name="settings_autofill_autofill_title">Hier kunt u auto-aanvulmethoden wijzigen</string>
     <string name="settings_autofill_autofill_desc">Het wordt aanbevolen de autofill-service te gebruiken, maar de Service-prestaties kunnen verschillen afhankelijk van je apparaat en de instellingen voor batterijoptimalisatie. \n\nAls de autofill-service niet betrouwbaar werkt op je apparaat, kun je proberen auto-aanvullen op basis van de toegankelijkheidsservice in te schakelen.</string>

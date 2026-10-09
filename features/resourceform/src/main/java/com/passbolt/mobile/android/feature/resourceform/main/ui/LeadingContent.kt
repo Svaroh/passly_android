@@ -1,6 +1,5 @@
 package net.svaroh.passly.feature.resourceform.main.ui
 
-import PassboltTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,33 +14,43 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.ui.button.SecondaryIconButton
 import net.svaroh.passly.core.ui.section.Section
+import net.svaroh.passly.core.ui.text.PasswordInput
 import net.svaroh.passly.core.ui.text.TextInput
 import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Default
 import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Error
 import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteValidationError
 import net.svaroh.passly.feature.resourceform.additionalsecrets.password.ui.PasswordGenerationInput
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeValidationError
 import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpSecretValidationError
 import net.svaroh.passly.feature.resourceform.main.NoteData
 import net.svaroh.passly.feature.resourceform.main.PasswordData
+import net.svaroh.passly.feature.resourceform.main.PinCodeData
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GeneratePassword
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GeneratePinCode
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoToPinCodeAdvancedGeneration
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoToTotpMoreSettings
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.NoteChanged
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.OpenAdvancedSecretGeneration
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.PasswordMainUriTextChanged
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.PasswordTextChanged
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.PasswordUsernameTextChanged
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.PinCodeChanged
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.ScanTotp
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.TotpSecretChanged
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.TotpUrlChanged
 import net.svaroh.passly.feature.resourceform.main.TotpData
 import net.svaroh.passly.feature.resourceform.main.getNoteErrorMessage
+import net.svaroh.passly.feature.resourceform.main.getPinCodeErrorMessage
 import net.svaroh.passly.feature.resourceform.main.getTotpSecretErrorMessage
 import net.svaroh.passly.testtags.composetags.ResourceForm
 import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.LeadingContentType.CUSTOM_FIELDS
 import net.svaroh.passly.ui.LeadingContentType.PASSWORD
+import net.svaroh.passly.ui.LeadingContentType.PIN_CODE
 import net.svaroh.passly.ui.LeadingContentType.STANDALONE_NOTE
 import net.svaroh.passly.ui.LeadingContentType.TOTP
 import net.svaroh.passly.ui.PasswordStrength
@@ -54,6 +63,7 @@ internal fun LeadingContent(
     passwordData: PasswordData,
     totpData: TotpData,
     noteData: NoteData,
+    pinCodeData: PinCodeData,
     onIntent: (ResourceFormIntent) -> Unit,
 ) {
     when (leadingContentType) {
@@ -77,6 +87,12 @@ internal fun LeadingContent(
             StandaloneNoteSection(
                 note = noteData.note,
                 noteError = noteData.noteError,
+                onIntent = onIntent,
+            )
+        PIN_CODE ->
+            PinCodeLeadingSection(
+                pinCode = pinCodeData.pinCode,
+                pinCodeError = pinCodeData.pinCodeError,
                 onIntent = onIntent,
             )
         CUSTOM_FIELDS, null -> {
@@ -116,6 +132,12 @@ private fun PasswordSection(
                 entropy = passwordEntropyBits,
                 onPasswordChange = { onIntent(PasswordTextChanged(it)) },
                 onGenerateClick = { onIntent(GeneratePassword) },
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            SettingRow(
+                leadingIconResId = CoreUiR.drawable.ic_cog,
+                text = stringResource(LocalizationR.string.resource_form_advanced_password_generation),
+                onClick = { onIntent(OpenAdvancedSecretGeneration) },
             )
         }
     }
@@ -169,6 +191,45 @@ private fun TotpSection(
 }
 
 @Composable
+private fun PinCodeLeadingSection(
+    pinCode: String,
+    pinCodeError: PinCodeValidationError?,
+    onIntent: (ResourceFormIntent) -> Unit,
+) {
+    Section(title = stringResource(LocalizationR.string.resource_form_pin_code)) {
+        Column {
+            Row(verticalAlignment = Alignment.Bottom) {
+                PasswordInput(
+                    title = stringResource(LocalizationR.string.resource_form_pin_code_code),
+                    hint = stringResource(LocalizationR.string.resource_form_enter_pin_code),
+                    text = pinCode,
+                    onTextChange = { onIntent(PinCodeChanged(it)) },
+                    state =
+                        if (pinCodeError == null) {
+                            Default
+                        } else {
+                            Error(getPinCodeErrorMessage(LocalContext.current, pinCodeError))
+                        },
+                    modifier = Modifier.weight(1f),
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                SecondaryIconButton(
+                    modifier = Modifier.size(56.dp),
+                    onClick = { onIntent(GeneratePinCode) },
+                    icon = painterResource(CoreUiR.drawable.ic_password_generate),
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            SettingRow(
+                leadingIconResId = CoreUiR.drawable.ic_cog,
+                text = stringResource(LocalizationR.string.resource_form_pin_code_advanced),
+                onClick = { onIntent(GoToPinCodeAdvancedGeneration) },
+            )
+        }
+    }
+}
+
+@Composable
 private fun StandaloneNoteSection(
     note: String,
     noteError: NoteValidationError?,
@@ -207,6 +268,7 @@ private fun LeadingContentPasswordPreview() {
                 ),
             totpData = TotpData(),
             noteData = NoteData(),
+            pinCodeData = PinCodeData(),
             onIntent = {},
         )
     }
@@ -225,6 +287,7 @@ private fun LeadingContentTotpPreview() {
                     totpIssuer = "passbolt.com",
                 ),
             noteData = NoteData(),
+            pinCodeData = PinCodeData(),
             onIntent = {},
         )
     }
@@ -241,6 +304,41 @@ private fun LeadingContentNotePreview() {
             noteData =
                 NoteData(
                     note = "This is a secret note",
+                ),
+            pinCodeData = PinCodeData(),
+            onIntent = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LeadingContentPinCodePreview() {
+    PassboltTheme {
+        LeadingContent(
+            leadingContentType = PIN_CODE,
+            passwordData = PasswordData(),
+            totpData = TotpData(),
+            noteData = NoteData(),
+            pinCodeData = PinCodeData(pinCode = "1234"),
+            onIntent = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LeadingContentPinCodeErrorPreview() {
+    PassboltTheme {
+        LeadingContent(
+            leadingContentType = PIN_CODE,
+            passwordData = PasswordData(),
+            totpData = TotpData(),
+            noteData = NoteData(),
+            pinCodeData =
+                PinCodeData(
+                    pinCode = "12",
+                    pinCodeError = PinCodeValidationError.TooShort(minLength = 4),
                 ),
             onIntent = {},
         )

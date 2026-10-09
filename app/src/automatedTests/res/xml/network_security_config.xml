@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  automatedTests variant ONLY (the testBuildType used by instrumented tests).
+  Overrides app/src/main/res/xml/network_security_config.xml for this variant so the in-process
+  MockWebServer used by PageSizeMemoryBenchmark can be reached over cleartext HTTP on localhost.
+  Release and QA variants keep the main config unchanged (no cleartext, no localhost domain).
+  The base-config below mirrors the main file so all other networking behaves identically.
+-->
+<network-security-config xmlns:tools="http://schemas.android.com/tools">
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+    </domain-config>
+    <base-config>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" tools:ignore="AcceptsUserCertificates" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

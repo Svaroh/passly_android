@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.core.ui.section
 
-import PassboltTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +41,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable

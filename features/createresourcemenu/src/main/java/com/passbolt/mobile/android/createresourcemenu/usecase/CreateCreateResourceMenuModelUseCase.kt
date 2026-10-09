@@ -24,14 +24,16 @@
 package net.svaroh.passly.createresourcemenu.usecase
 
 import net.svaroh.passly.common.usecase.AsyncUseCase
-import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.domain.metadata.usecase.GetMetadataTypesSettingsUseCase
+import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
-import net.svaroh.passly.metadata.usecase.GetMetadataTypesSettingsUseCase
 import net.svaroh.passly.supportedresourceTypes.ContentType
 import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordAndDescription
 import net.svaroh.passly.supportedresourceTypes.ContentType.Totp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5PinCodeStandalone
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 import net.svaroh.passly.ui.CreateResourceMenuModel
 import net.svaroh.passly.ui.HomeDisplayViewModel
@@ -74,9 +76,24 @@ class CreateCreateResourceMenuModelUseCase(
                         supportedContentTypes,
                     ),
                 isFolderEnabled = isFoldersViewSelected,
+                isPinCodeEnabled =
+                    input.appContext != AppContext.AUTOFILL &&
+                        isLeadingPinCodeResourceSupported(
+                            defaultMetadataType,
+                            supportedContentTypes,
+                        ),
             ),
         )
     }
+
+    private fun isLeadingPinCodeResourceSupported(
+        defaultMetadataType: MetadataTypeModel,
+        supportedSlugs: List<ContentType>,
+    ): Boolean =
+        when (defaultMetadataType) {
+            V4 -> false
+            V5 -> supportedSlugs.contains(V5PinCodeStandalone)
+        }
 
     private fun isLeadingNoteResourceSupported(
         defaultMetadataType: MetadataTypeModel,
@@ -108,6 +125,7 @@ class CreateCreateResourceMenuModelUseCase(
     data class Input(
         // homeDisplay is null when the user is on home (totp tab)
         val homeDisplay: HomeDisplayViewModel?,
+        val appContext: AppContext = AppContext.APP,
     )
 
     data class Output(

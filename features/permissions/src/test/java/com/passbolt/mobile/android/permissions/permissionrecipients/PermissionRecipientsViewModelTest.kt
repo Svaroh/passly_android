@@ -2,13 +2,20 @@ package net.svaroh.passly.permissions.permissionrecipients
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.search.SearchableMatcher
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.commongroups.usecase.db.GetLocalGroupsUseCase
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode
-import net.svaroh.passly.core.users.usecase.db.GetLocalUsersUseCase
+import net.svaroh.passly.domain.groups.usecase.GetLocalGroupsUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalUsersUseCase
 import net.svaroh.passly.mappers.GroupsModelMapper
 import net.svaroh.passly.mappers.PermissionsModelMapper
 import net.svaroh.passly.mappers.UsersModelMapper
@@ -19,21 +26,14 @@ import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIn
 import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent.ToggleUserSelection
 import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsSideEffect.NavigateBack
 import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsSideEffect.NavigateBackWithResult
-import net.svaroh.passly.ui.GpgKeyModel
+import net.svaroh.passly.ui.GpgKeyUiModel
 import net.svaroh.passly.ui.GroupModel
 import net.svaroh.passly.ui.PermissionModelUi.GroupPermissionModel
 import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
 import net.svaroh.passly.ui.ResourcePermission
-import net.svaroh.passly.ui.UserModel
-import net.svaroh.passly.ui.UserProfileModel
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
 import net.svaroh.passly.ui.UserWithAvatar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -92,11 +92,11 @@ class PermissionRecipientsViewModelTest : KoinTest {
         Dispatchers.setMain(testDispatcher)
 
         get<GetLocalGroupsUseCase>().stub {
-            onBlocking { execute(GetLocalGroupsUseCase.Input(emptyList())) }
+            on { execute(GetLocalGroupsUseCase.Input(emptyList())) }
                 .doReturn(GetLocalGroupsUseCase.Output(listOf(GROUP)))
         }
         get<GetLocalUsersUseCase>().stub {
-            onBlocking { execute(GetLocalUsersUseCase.Input(emptyList())) }
+            on { execute(GetLocalUsersUseCase.Input(emptyList())) }
                 .doReturn(GetLocalUsersUseCase.Output(listOf(USER)))
         }
     }
@@ -271,7 +271,7 @@ class PermissionRecipientsViewModelTest : KoinTest {
                 )
 
             get<GetLocalGroupsUseCase>().stub {
-                onBlocking { execute(GetLocalGroupsUseCase.Input(listOf(EXISTING_GROUP.groupId))) }
+                on { execute(GetLocalGroupsUseCase.Input(listOf(EXISTING_GROUP.groupId))) }
                     .doReturn(GetLocalGroupsUseCase.Output(listOf(GROUP)))
             }
 
@@ -301,12 +301,12 @@ class PermissionRecipientsViewModelTest : KoinTest {
                 avatarUrl = "avatarUrl",
             )
         private val USER =
-            UserModel(
+            UserUiModel(
                 id = USER_WITH_AVATAR.userId,
                 userName = USER_WITH_AVATAR.userName,
                 disabled = false,
                 gpgKey =
-                    GpgKeyModel(
+                    GpgKeyUiModel(
                         armoredKey = "keyData",
                         fingerprint = "fingerprint",
                         bits = 1,
@@ -318,7 +318,7 @@ class PermissionRecipientsViewModelTest : KoinTest {
                         id = UUID.randomUUID().toString(),
                     ),
                 profile =
-                    UserProfileModel(
+                    UserProfileUiModel(
                         username = "username",
                         firstName = USER_WITH_AVATAR.firstName,
                         lastName = USER_WITH_AVATAR.lastName,

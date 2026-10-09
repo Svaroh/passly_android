@@ -24,11 +24,14 @@
 package net.svaroh.passly.feature.settings.screen.appsettings.expertsettings
 
 import net.svaroh.passly.core.compose.SideEffectViewModel
-import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
-import net.svaroh.passly.core.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
 import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.GoBack
-import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleDeveloperMode
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.GoToPageSize
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleAuthRequiredOnEveryEntry
 import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsIntent.ToggleHideRootWarning
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreenSideEffect.NavigateToPageSize
 import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.ExpertSettingsScreenSideEffect.NavigateUp
 
 internal class ExpertSettingsViewModel(
@@ -42,8 +45,9 @@ internal class ExpertSettingsViewModel(
     fun onIntent(intent: ExpertSettingsIntent) {
         when (intent) {
             GoBack -> emitSideEffect(NavigateUp)
-            ToggleDeveloperMode -> toggleDeveloperMode()
+            ToggleAuthRequiredOnEveryEntry -> toggleAuthRequiredOnEveryEntry()
             ToggleHideRootWarning -> toggleHideRootWarning()
+            GoToPageSize -> emitSideEffect(NavigateToPageSize)
         }
     }
 
@@ -51,40 +55,19 @@ internal class ExpertSettingsViewModel(
         val globalPreferences = getGlobalPreferencesUseCase.execute(Unit)
         updateViewState {
             copy(
-                isDeveloperModeChecked = globalPreferences.isDeveloperModeEnabled,
-                isHideRootWarningEnabled = globalPreferences.isDeveloperModeEnabled,
+                isAuthRequiredOnEveryEntryChecked = globalPreferences.isAuthRequiredOnEveryEntry,
                 isHideRootWarningChecked = globalPreferences.isHideRootDialogEnabled,
             )
         }
     }
 
-    private fun toggleDeveloperMode() {
-        val isDeveloperModeChecked = !viewState.value.isDeveloperModeChecked
-
-        if (isDeveloperModeChecked) {
-            updateGlobalPreferencesUseCase.execute(
-                UpdateGlobalPreferencesUseCase.Input(isDeveloperModeEnabled = true),
-            )
-            updateViewState {
-                copy(
-                    isDeveloperModeChecked = true,
-                    isHideRootWarningEnabled = true,
-                )
-            }
-        } else {
-            updateGlobalPreferencesUseCase.execute(
-                UpdateGlobalPreferencesUseCase.Input(
-                    isDeveloperModeEnabled = false,
-                    isHideRootDialogEnabled = false,
-                ),
-            )
-            updateViewState {
-                copy(
-                    isDeveloperModeChecked = false,
-                    isHideRootWarningEnabled = false,
-                    isHideRootWarningChecked = false,
-                )
-            }
+    private fun toggleAuthRequiredOnEveryEntry() {
+        val isChecked = !viewState.value.isAuthRequiredOnEveryEntryChecked
+        updateGlobalPreferencesUseCase.execute(
+            GlobalPreferencesUpdate(isAuthRequiredOnEveryEntry = isChecked),
+        )
+        updateViewState {
+            copy(isAuthRequiredOnEveryEntryChecked = isChecked)
         }
     }
 
@@ -92,7 +75,7 @@ internal class ExpertSettingsViewModel(
         val isHideRootWarningChecked = !viewState.value.isHideRootWarningChecked
 
         updateGlobalPreferencesUseCase.execute(
-            UpdateGlobalPreferencesUseCase.Input(isHideRootDialogEnabled = isHideRootWarningChecked),
+            GlobalPreferencesUpdate(isHideRootDialogEnabled = isHideRootWarningChecked),
         )
         updateViewState {
             copy(isHideRootWarningChecked = isHideRootWarningChecked)

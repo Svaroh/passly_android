@@ -24,7 +24,6 @@ package net.svaroh.passly.feature.settings.screen.appsettings.expertsettings
  */
 
 internal data class ExpertSettingsState(
-    val isDeveloperModeChecked: Boolean = false,
-    val isHideRootWarningEnabled: Boolean = false,
+    val isAuthRequiredOnEveryEntryChecked: Boolean = false,
     val isHideRootWarningChecked: Boolean = false,
 )

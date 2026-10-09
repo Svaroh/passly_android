@@ -54,7 +54,7 @@ import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
 import net.svaroh.passly.core.ui.topbar.TitleAppBar
 import net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter.DefaultFilterIntent.GoBack
 import net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter.model.toUiModel
-import net.svaroh.passly.ui.DefaultFilterModel
+import net.svaroh.passly.ui.DefaultFilterUiModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR
@@ -108,9 +108,9 @@ private fun DefaultFilterScreen(
 
 @Composable
 private fun FilterSelectionList(
-    allFilters: List<DefaultFilterModel>,
-    selectedFilter: DefaultFilterModel?,
-    onFilterSelect: (DefaultFilterModel) -> Unit,
+    allFilters: List<DefaultFilterUiModel>,
+    selectedFilter: DefaultFilterUiModel?,
+    onFilterSelect: (DefaultFilterUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
@@ -147,8 +147,8 @@ private fun DefaultFilterPreview() {
     DefaultFilterScreen(
         state =
             DefaultFilterState(
-                allFilters = DefaultFilterModel.entries.toList(),
-                selectedFilter = DefaultFilterModel.ALL_ITEMS,
+                allFilters = DefaultFilterUiModel.entries.toList(),
+                selectedFilter = DefaultFilterUiModel.ALL_ITEMS,
             ),
         onIntent = {},
         modifier = Modifier,

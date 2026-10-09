@@ -25,16 +25,23 @@ package net.svaroh.passly.folderdetails
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderLocationUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderPermissionsUseCase
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.folders.model.FolderModel
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderLocationUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderPermissionsUseCase
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
 import net.svaroh.passly.folderdetails.FolderDetailsIntent.GoBack
 import net.svaroh.passly.folderdetails.FolderDetailsIntent.GoToLocationDetails
 import net.svaroh.passly.folderdetails.FolderDetailsIntent.GoToPermissionDetails
@@ -47,7 +54,6 @@ import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.folderdetails.FolderDetailsSideEffect.ShowToast
 import net.svaroh.passly.folderdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
 import net.svaroh.passly.folderdetails.ToastType.CONTENT_NOT_AVAILABLE
-import net.svaroh.passly.ui.FolderModel
 import net.svaroh.passly.ui.GroupModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.PermissionsMode
@@ -56,12 +62,6 @@ import net.svaroh.passly.ui.RbacRuleModel.ALLOW
 import net.svaroh.passly.ui.RbacRuleModel.DENY
 import net.svaroh.passly.ui.ResourcePermission
 import net.svaroh.passly.ui.UserWithAvatar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -79,6 +79,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stub
+import java.time.ZonedDateTime
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -122,22 +123,22 @@ class FolderDetailsViewModelTest : KoinTest {
 
         val getLocalFolderDetailsUseCase = get<GetLocalFolderDetailsUseCase>()
         getLocalFolderDetailsUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalFolderDetailsUseCase.Output(testFolder)
+            on { execute(any()) } doReturn GetLocalFolderDetailsUseCase.Output(testFolder)
         }
 
         val getLocalFolderLocationUseCase = get<GetLocalFolderLocationUseCase>()
         getLocalFolderLocationUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalFolderLocationUseCase.Output(testParentFolders)
+            on { execute(any()) } doReturn GetLocalFolderLocationUseCase.Output(testParentFolders)
         }
 
         val getLocalFolderPermissionsUseCase = get<GetLocalFolderPermissionsUseCase>()
         getLocalFolderPermissionsUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalFolderPermissionsUseCase.Output(testPermissions)
+            on { execute(any()) } doReturn GetLocalFolderPermissionsUseCase.Output(testPermissions)
         }
 
         val getRbacRulesUseCase = get<GetRbacRulesUseCase>()
         getRbacRulesUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetRbacRulesUseCase.Output(testRbacModelWithPermissions)
+            on { execute(any()) } doReturn GetRbacRulesUseCase.Output(testRbacModelWithPermissions)
         }
     }
 
@@ -169,7 +170,7 @@ class FolderDetailsViewModelTest : KoinTest {
         runTest {
             val getRbacRulesUseCase = get<GetRbacRulesUseCase>()
             getRbacRulesUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetRbacRulesUseCase.Output(testRbacModelWithoutPermissions)
+                on { execute(any()) } doReturn GetRbacRulesUseCase.Output(testRbacModelWithoutPermissions)
             }
 
             viewModel = get { parametersOf(testFolder.folderId) }
@@ -240,7 +241,7 @@ class FolderDetailsViewModelTest : KoinTest {
             viewModel = get { parametersOf(testFolder.folderId) }
 
             val dataRefreshTrackingFlow = get<DataRefreshTrackingFlow>()
-            dataRefreshTrackingFlow.updateStatus(InProgress)
+            dataRefreshTrackingFlow.updateStatus(InProgress(progress = 0f))
 
             viewModel.viewState.test {
                 val refreshingState = awaitItem()
@@ -285,11 +286,11 @@ class FolderDetailsViewModelTest : KoinTest {
 
     @OptIn(ExperimentalTime::class)
     @Test
-    fun `should handle null pointer exception when loading folder and navigate to home`() =
+    fun `should handle missing item exception when loading folder and navigate to home`() =
         runTest {
             val getLocalFolderDetailsUseCase = get<GetLocalFolderDetailsUseCase>()
             getLocalFolderDetailsUseCase.stub {
-                onBlocking { execute(any()) } doThrow NullPointerException("Folder not found")
+                on { execute(any()) } doThrow IllegalStateException("The query result was empty")
             }
 
             viewModel = get { parametersOf(testFolder.folderId) }
@@ -308,6 +309,7 @@ class FolderDetailsViewModelTest : KoinTest {
                 name = "Test Folder",
                 isShared = true,
                 permission = ResourcePermission.OWNER,
+                modified = ZonedDateTime.now(),
             )
         }
 
@@ -319,6 +321,7 @@ class FolderDetailsViewModelTest : KoinTest {
                     name = "Root",
                     isShared = false,
                     permission = ResourcePermission.OWNER,
+                    modified = ZonedDateTime.now(),
                 ),
                 FolderModel(
                     folderId = "parent-folder-id",
@@ -326,6 +329,7 @@ class FolderDetailsViewModelTest : KoinTest {
                     name = "Parent Folder",
                     isShared = true,
                     permission = ResourcePermission.UPDATE,
+                    modified = ZonedDateTime.now(),
                 ),
             )
         }

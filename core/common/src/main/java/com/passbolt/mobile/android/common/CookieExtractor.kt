@@ -33,14 +33,14 @@ class CookieExtractor {
         response
             .headers()
             .values(SET_COOKIE_HEADER)
-            .find { it.contains(cookieName) }
+            .find { setCookie -> setCookie.cookieName() == cookieName }
             ?.split(COOKIES_DELIMITER)
             ?.firstOrNull()
 
     fun get(
         cookies: List<Cookie>,
         cookieName: String,
-    ): Cookie? = cookies.find { it.name.contains(cookieName) }
+    ): Cookie? = cookies.find { it.name == cookieName }
 
     fun get(
         response: okhttp3.Response,
@@ -48,7 +48,7 @@ class CookieExtractor {
     ): String? =
         response
             .headers(SET_COOKIE_HEADER)
-            .find { it.contains(cookieName) }
+            .find { setCookie -> setCookie.cookieName() == cookieName }
             ?.split(COOKIES_DELIMITER)
             ?.firstOrNull()
 
@@ -64,6 +64,8 @@ class CookieExtractor {
                 null
             }
         }
+
+    private fun String.cookieName() = substringBefore(COOKIE_VALUE_DELIMITER, missingDelimiterValue = "").trim()
 
     companion object {
         const val MFA_COOKIE = "passbolt_mfa"

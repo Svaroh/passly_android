@@ -24,12 +24,8 @@
 package net.svaroh.passly.scenarios.home.filters
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.hasAnyDescendant
-import androidx.compose.ui.test.hasClickAction
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.FlakyTest
 import androidx.test.filters.LargeTest
@@ -39,7 +35,7 @@ import net.svaroh.passly.core.idlingresource.SignInIdlingResource
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.AppContext
 import net.svaroh.passly.feature.authentication.AuthenticationMainActivity
-import net.svaroh.passly.helpers.getString
+import net.svaroh.passly.helpers.chooseFilter
 import net.svaroh.passly.helpers.signIn
 import net.svaroh.passly.instrumentationTestsModule
 import net.svaroh.passly.intents.ManagedAccountIntentCreator
@@ -121,14 +117,7 @@ class FilteringResourcesTest : KoinTest {
     @FlakyTest(detail = "It is currently failing nondeterministic on Android 12 - reason unknown")
     fun asALoggedInMobileUserOnTheHomepageICanChangeTheCurrentActiveFilter() {
         ResourceFilterModel.entries.forEach { model ->
-            composeTestRule.onNodeWithTag(Home.SEARCH_FILTER).performClick()
-            composeTestRule
-                .onNode(
-                    hasClickAction().and(
-                        hasAnyDescendant(hasText(getString(model.filterNameId))),
-                    ),
-                    useUnmergedTree = true,
-                ).performClick()
+            composeTestRule.chooseFilter(model.filterNameId)
             composeTestRule.onNodeWithTag(Home.SCREEN).assertIsDisplayed()
         }
     }

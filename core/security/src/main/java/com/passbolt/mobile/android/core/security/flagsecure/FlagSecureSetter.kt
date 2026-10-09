@@ -3,6 +3,8 @@ package net.svaroh.passly.core.security.flagsecure
 import android.app.Activity
 import android.view.WindowManager
 import net.svaroh.passly.core.security.BuildConfig
+import net.svaroh.passly.core.security.flagsecure.WindowFlagAction.APPLY_FLAG
+import net.svaroh.passly.core.security.flagsecure.WindowFlagAction.CLEAR_FLAG
 
 /**
  * Passbolt - Open source password manager for teams
@@ -27,9 +29,11 @@ import net.svaroh.passly.core.security.BuildConfig
  * @since v1.0
  */
 
-class FlagSecureSetter {
+class FlagSecureSetter(
+    private val flagSecureRegistry: FlagSecureRegistry,
+) {
     fun set(activity: Activity) {
-        if (!BuildConfig.DEBUG) {
+        if (flagSecureRegistry.addActivity(activity) == APPLY_FLAG && !BuildConfig.DEBUG) {
             activity.window.setFlags(
                 WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE,
@@ -38,7 +42,7 @@ class FlagSecureSetter {
     }
 
     fun remove(activity: Activity) {
-        if (!BuildConfig.DEBUG) {
+        if (flagSecureRegistry.removeActivity(activity) == CLEAR_FLAG && !BuildConfig.DEBUG) {
             activity.window.clearFlags(
                 WindowManager.LayoutParams.FLAG_SECURE,
             )

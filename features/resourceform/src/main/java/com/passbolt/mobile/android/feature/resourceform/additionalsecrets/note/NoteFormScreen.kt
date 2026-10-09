@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.feature.resourceform.additionalsecrets.note
 
-import PassboltTheme
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -53,9 +52,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
 import net.svaroh.passly.core.ui.button.PrimaryButton
 import net.svaroh.passly.core.ui.text.TextInput
 import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Default
@@ -87,6 +88,8 @@ internal fun NoteFormScreen(
     navigator: AppNavigator = koinInject(),
     viewModel: NoteFormViewModel = koinViewModel(parameters = { parametersOf(mode, note) }),
 ) {
+    FlagSecureEffect()
+
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val resultBus = NavigationResultEventBus.current
 

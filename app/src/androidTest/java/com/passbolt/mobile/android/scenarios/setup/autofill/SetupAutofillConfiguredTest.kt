@@ -38,7 +38,10 @@ import net.svaroh.passly.accountinit.AccountInitializer
 import net.svaroh.passly.core.idlingresource.ResourcesFullRefreshIdlingResource
 import net.svaroh.passly.core.idlingresource.SignInIdlingResource
 import net.svaroh.passly.feature.startup.StartUpActivity
+import net.svaroh.passly.helpers.acceptAccessibilityPolicies
 import net.svaroh.passly.helpers.getString
+import net.svaroh.passly.helpers.waitForHomeScreen
+import net.svaroh.passly.helpers.waitForText
 import net.svaroh.passly.instrumentationTestsModule
 import net.svaroh.passly.intents.ManagedAccountIntentCreator
 import net.svaroh.passly.rules.IdlingResourceRule
@@ -112,9 +115,13 @@ class SetupAutofillConfiguredTest : KoinTest {
         composeTestRule.apply {
             //    Given     Autofill is configured for Passbolt
             //    When      I skip or finish the biometric configuration
+            waitForText(getString(LocalizationR.string.common_maybe_later))
             onNodeWithText(getString(LocalizationR.string.common_maybe_later)).performClick()
+            //    And       I accept the Accessibility Service consent screen shown before home
+            acceptAccessibilityPolicies()
             //    Then      I do not see the page explaining the autofill configuration
             //    And       I see the home page
+            waitForHomeScreen(timeoutMillis = 10_000)
             onNodeWithTag(Home.SCREEN).assertIsDisplayed()
         }
     }

@@ -345,7 +345,6 @@
     <string name="settings_app_settings_biometry_error">Biometriefehler. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Biometrie-Authentifizierungsfehler. %s</string>
     <string name="settings_app_settings_expert_settings">Experteneinstellungen</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Entwicklermodus</string>
     <string name="settings_app_settings_expert_settings_hide_root">\"Gerät ist gerootet\"-Dialog ausblenden</string>
     <string name="settings_autofill_autofill_title">Hier können Sie die Autofüllungsmethoden ändern</string>
     <string name="settings_autofill_autofill_desc">Es wird empfohlen, die Autofill-Service-Methode zu verwenden, aber die Leistung des Services kann von den Einstellungen Ihres Geräts und der Batterieoptimierung abhängen. \n\nWenn der Autofill-Service nicht zuverlässig auf Ihrem Gerät funktioniert, können Sie versuchen, Autofill basierend auf den Bedienungshilfen zu aktivieren.</string>

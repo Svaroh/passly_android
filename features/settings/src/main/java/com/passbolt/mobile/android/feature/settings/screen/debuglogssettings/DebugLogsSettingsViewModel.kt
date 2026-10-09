@@ -25,8 +25,9 @@ package net.svaroh.passly.feature.settings.screen.debuglogssettings
 
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.logger.FileLoggingTree
-import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
-import net.svaroh.passly.core.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
 import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsScreenSideEffect.NavigateToLogs
 import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsScreenSideEffect.NavigateUp
 import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSettingsIntent.AccessLogs
@@ -36,8 +37,8 @@ import net.svaroh.passly.feature.settings.screen.debuglogssettings.DebugLogsSett
 import timber.log.Timber
 
 internal class DebugLogsSettingsViewModel(
-    private val updateGlobalPreferencesUseCase: UpdateGlobalPreferencesUseCase,
     private val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase,
+    private val updateGlobalPreferencesUseCase: UpdateGlobalPreferencesUseCase,
     private val fileLoggingTree: FileLoggingTree,
 ) : SideEffectViewModel<DebugLogsSettingsState, DebugLogsScreenSideEffect>(DebugLogsSettingsState()) {
     init {
@@ -74,7 +75,7 @@ internal class DebugLogsSettingsViewModel(
                 Timber.uproot(fileLoggingTree)
             }
         }
-        updateGlobalPreferencesUseCase.execute(UpdateGlobalPreferencesUseCase.Input(areLogsEnabled))
+        updateGlobalPreferencesUseCase.execute(GlobalPreferencesUpdate(areLogsEnabled))
         updateViewState {
             copy(
                 areDebugLogsEnabled = areLogsEnabled,

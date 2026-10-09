@@ -2,18 +2,22 @@ package net.svaroh.passly.feature.authentication.mfa.yubikey
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
-import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
-import net.svaroh.passly.feature.authentication.auth.usecase.VerifyYubikeyUseCase
-import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ValidateYubikeyOtp
-import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.ShowErrorSnackbar
-import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.SnackbarErrorType.EMPTY_OTP
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.VerifyYubikeyUseCase
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.Close
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ConfirmSetupLeave
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.DismissSetupLeave
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ValidateYubikeyOtp
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.CloseAndNavigateToStartup
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.SnackbarErrorType.EMPTY_OTP
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -28,6 +32,8 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.stub
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import kotlin.test.assertIs
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -45,6 +51,7 @@ class ScanYubikeyViewModelTest : KoinTest {
                         ScanYubikeyViewModel(
                             authToken = params[0],
                             hasOtherProvider = params[1],
+                            isSetupFlow = params[2],
                             signOutUseCase = get(),
                             verifyYubikeyUseCase = get(),
                             refreshSessionUseCase = get(),
@@ -71,7 +78,7 @@ class ScanYubikeyViewModelTest : KoinTest {
     @Test
     fun `null otp emits empty otp error`() =
         runTest {
-            viewModel = get(parameters = { parametersOf(AUTH_TOKEN, false) })
+            viewModel = get(parameters = { parametersOf(AUTH_TOKEN, false, false) })
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(ValidateYubikeyOtp(null))
@@ -86,10 +93,10 @@ class ScanYubikeyViewModelTest : KoinTest {
         runTest {
             val verifyYubikeyUseCase: VerifyYubikeyUseCase = get()
             verifyYubikeyUseCase.stub {
-                onBlocking { execute(any()) } doReturn VerifyYubikeyUseCase.Output.YubikeyNotFromCurrentUser
+                on { execute(any()) } doReturn VerifyYubikeyUseCase.Output.YubikeyNotFromCurrentUser
             }
 
-            viewModel = get(parameters = { parametersOf(AUTH_TOKEN, false) })
+            viewModel = get(parameters = { parametersOf(AUTH_TOKEN, false, false) })
 
             viewModel.viewState.test {
                 awaitItem() // initial state
@@ -101,6 +108,57 @@ class ScanYubikeyViewModelTest : KoinTest {
                 val finalState = awaitItem()
                 assertThat(finalState.showProgress).isFalse()
             }
+        }
+
+    @Test
+    fun `close in setup flow shows leave confirmation and does not sign out`() =
+        runTest {
+            viewModel = get(parameters = { parametersOf(AUTH_TOKEN, false, true) })
+
+            viewModel.onIntent(Close)
+
+            assertThat(viewModel.viewState.value.showSetupLeaveConfirmationDialog).isTrue()
+            verifyNoInteractions(get<SignOutUseCase>())
+        }
+
+    @Test
+    fun `confirm setup leave signs out and navigates to startup`() =
+        runTest {
+            viewModel = get(parameters = { parametersOf(AUTH_TOKEN, false, true) })
+            viewModel.onIntent(Close)
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(ConfirmSetupLeave)
+                assertIs<CloseAndNavigateToStartup>(awaitItem())
+            }
+
+            assertThat(viewModel.viewState.value.showSetupLeaveConfirmationDialog).isFalse()
+            verify(get<SignOutUseCase>()).execute(Unit)
+        }
+
+    @Test
+    fun `dismiss setup leave hides confirmation and does not sign out`() =
+        runTest {
+            viewModel = get(parameters = { parametersOf(AUTH_TOKEN, false, true) })
+            viewModel.onIntent(Close)
+
+            viewModel.onIntent(DismissSetupLeave)
+
+            assertThat(viewModel.viewState.value.showSetupLeaveConfirmationDialog).isFalse()
+            verifyNoInteractions(get<SignOutUseCase>())
+        }
+
+    @Test
+    fun `close outside setup flow signs out and navigates to startup`() =
+        runTest {
+            viewModel = get(parameters = { parametersOf(AUTH_TOKEN, false, false) })
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(Close)
+                assertIs<CloseAndNavigateToStartup>(awaitItem())
+            }
+
+            verify(get<SignOutUseCase>()).execute(Unit)
         }
 
     private companion object {

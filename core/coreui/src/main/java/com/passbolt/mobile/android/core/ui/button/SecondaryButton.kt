@@ -1,6 +1,5 @@
 package net.svaroh.passly.core.ui.button
 
-import PassboltTheme
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +20,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.ui.R
 
 @Composable

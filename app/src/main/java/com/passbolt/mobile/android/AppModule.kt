@@ -13,10 +13,14 @@ import net.svaroh.passly.common.HttpsVerifier
 import net.svaroh.passly.common.UuidProvider
 import net.svaroh.passly.core.navigation.AppForegroundListener
 import net.svaroh.passly.core.networking.COIL_HTTP_CLIENT
+import net.svaroh.passly.core.passphrasememorycache.AuthOnEveryEntryChecker
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 /**
@@ -50,7 +54,7 @@ internal val appModule =
         factory(named<ProcessLifecycleOwner>()) {
             ProcessLifecycleOwner.get()
         }
-        single { UuidProvider() }
+        singleOf(::UuidProvider)
         single {
             ImageLoader
                 .Builder(androidContext())
@@ -64,10 +68,12 @@ internal val appModule =
                     )
                 }.build()
         }
-        single { ExternalDeeplinkHandler() }
-        single { HttpsVerifier() }
+        singleOf(::ExternalDeeplinkHandler)
+        singleOf(::HttpsVerifier)
         factory { androidApplication().packageManager }
-        single { AppForegroundListener() }
+        singleOf(::AppForegroundListener)
+        singleOf(::BackgroundGracePeriodTimer)
+        factoryOf(::PreferencesAuthOnEveryEntryChecker) bind AuthOnEveryEntryChecker::class
         single {
             androidContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
         }

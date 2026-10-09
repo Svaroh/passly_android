@@ -2,6 +2,7 @@ package net.svaroh.passly.core.ui.switchwithdescription
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.colorResource
@@ -19,9 +21,10 @@ import net.svaroh.passly.core.ui.R
 @Composable
 fun SwitchWithDescriptionItem(
     title: String,
-    description: String,
     isChecked: Boolean,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(vertical = 16.dp, horizontal = 16.dp),
+    description: String? = null,
     additionalDescription: String? = null,
     onClick: () -> Unit = {},
     isEnabled: Boolean = true,
@@ -30,35 +33,38 @@ fun SwitchWithDescriptionItem(
     val alpha = if (isEnabled) 1f else 0.5f
 
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier =
             modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp, horizontal = 16.dp)
                 .clickable(enabled = isEnabled) { onClick() }
+                .padding(contentPadding)
                 .alpha(alpha),
     ) {
         Column(
             modifier =
-                Modifier.Companion
+                Modifier
                     .padding(end = 8.dp)
                     .weight(1f),
         ) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                color = colorResource(R.color.primary),
+                color = MaterialTheme.colorScheme.onBackground,
             )
 
-            Text(
-                text = description,
-                modifier = Modifier.Companion.padding(top = 4.dp),
-                color = colorResource(R.color.text_secondary),
-            )
+            if (description != null) {
+                Text(
+                    text = description,
+                    modifier = Modifier.padding(top = 4.dp),
+                    color = colorResource(R.color.text_secondary),
+                )
+            }
 
             if (additionalDescription != null) {
                 Text(
                     text = additionalDescription,
-                    modifier = Modifier.Companion.padding(top = 4.dp),
+                    modifier = Modifier.padding(top = 4.dp),
                     color = colorResource(R.color.text_secondary),
                 )
             }

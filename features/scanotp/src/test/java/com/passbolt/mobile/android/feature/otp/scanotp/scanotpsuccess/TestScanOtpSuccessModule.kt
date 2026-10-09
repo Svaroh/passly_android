@@ -6,15 +6,17 @@ import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
-import net.svaroh.passly.core.resources.actions.ResourceCreateActionsInteractor
-import net.svaroh.passly.core.resources.actions.ResourceUpdateActionsInteractor
-import net.svaroh.passly.core.resources.actions.ResourceUpdateActionsInteractorFactory
-import net.svaroh.passly.core.resources.usecase.GetDefaultCreateContentTypeUseCase
-import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
+import net.svaroh.passly.domain.resources.actions.ResourceCreateActionsInteractor
+import net.svaroh.passly.domain.resources.actions.ResourceUpdateActionsInteractor
+import net.svaroh.passly.domain.resources.actions.ResourceUpdateActionsInteractorFactory
+import net.svaroh.passly.domain.resources.usecase.CreatePermissionsConfirmationInteractor
+import net.svaroh.passly.domain.resources.usecase.EditPermissionsConfirmationInteractor
+import net.svaroh.passly.domain.resources.usecase.GetDefaultCreateContentTypeUseCase
+import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
 import net.svaroh.passly.jsonmodel.JSON_MODEL_GSON
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathJsonPathOps
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathsOps
-import net.svaroh.passly.metadata.interactor.MetadataPrivateKeysHelperInteractor
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
@@ -28,6 +30,8 @@ internal val mockResourceUpdateActionsInteractor = mock<ResourceUpdateActionsInt
 internal val mockResourceUpdateActionsInteractorFactory = ResourceUpdateActionsInteractorFactory { mockResourceUpdateActionsInteractor }
 internal val mockGetDefaultCreateContentTypeUseCase = mock<GetDefaultCreateContentTypeUseCase>()
 internal val mockMetadataPrivateKeysHelperInteractor = mock<MetadataPrivateKeysHelperInteractor>()
+internal val mockEditPermissionsConfirmationInteractor = mock<EditPermissionsConfirmationInteractor>()
+internal val mockCreatePermissionsConfirmationInteractor = mock<CreatePermissionsConfirmationInteractor>()
 
 internal val testScanOtpSuccessModule =
     module {
@@ -36,6 +40,8 @@ internal val testScanOtpSuccessModule =
         single { mockIdToSlugMappingProvider }
         single { mockGetDefaultCreateContentTypeUseCase }
         single { mockMetadataPrivateKeysHelperInteractor }
+        single { mockEditPermissionsConfirmationInteractor }
+        single { mockCreatePermissionsConfirmationInteractor }
         singleOf(::SessionRefreshTrackingFlow)
         factory { params ->
             ScanOtpSuccessViewModel(
@@ -45,6 +51,8 @@ internal val testScanOtpSuccessModule =
                 getDefaultCreateContentTypeUseCase = get(),
                 metadataPrivateKeysHelperInteractor = get(),
                 resourceUpdateActionsInteractorFactory = get(),
+                editPermissionsConfirmationInteractor = get(),
+                createPermissionsConfirmationInteractor = get(),
             )
         }
         single(named(JSON_MODEL_GSON)) { Gson() }

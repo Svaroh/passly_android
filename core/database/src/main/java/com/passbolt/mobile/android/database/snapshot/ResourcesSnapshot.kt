@@ -1,7 +1,7 @@
 package net.svaroh.passly.database.snapshot
 
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
 import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
 import net.svaroh.passly.entity.resource.ResourceWithMetadata
 
 /**

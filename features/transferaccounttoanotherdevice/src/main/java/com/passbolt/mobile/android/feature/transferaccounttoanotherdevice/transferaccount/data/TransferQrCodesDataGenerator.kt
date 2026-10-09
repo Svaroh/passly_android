@@ -1,11 +1,11 @@
 package net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data
 
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
+import kotlinx.serialization.json.Json
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
 import net.svaroh.passly.dto.response.qrcode.QrFirstPageDto
 import net.svaroh.passly.dto.response.qrcode.ReservedBytesDto
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data.QrGenerationConstants.MAX_QR_DATA_BYTES_EXCLUDING_RESERVED_BYTES
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data.QrGenerationConstants.PROTOCOL_VERSION
-import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.util.UUID
 
@@ -38,7 +38,7 @@ import java.util.UUID
 class TransferQrCodesDataGenerator(
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
 ) {
-    suspend fun generateQrCodesDataPages(input: Input): Output {
+    fun generateQrCodesDataPages(input: Input): Output {
         return try {
             val pages = mutableListOf<String>()
             appendFirstPage(input, pages)

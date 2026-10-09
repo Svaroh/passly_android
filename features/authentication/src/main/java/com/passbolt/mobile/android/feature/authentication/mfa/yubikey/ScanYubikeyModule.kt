@@ -11,6 +11,7 @@ fun Module.scanYubikeyModule() {
         ScanYubikeyViewModel(
             authToken = params[0],
             hasOtherProvider = params[1],
+            isSetupFlow = params[2],
             signOutUseCase = get(),
             verifyYubikeyUseCase = get(),
             refreshSessionUseCase = get(),

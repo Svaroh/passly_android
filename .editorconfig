@@ -6,8 +6,14 @@ max_line_length = 140
 ktlint_function_naming_ignore_when_annotated_with = Composable
 compose_allowed_composition_locals = LocalResultEventBus, LocalAuthenticationParams
 
+[*.gradle.kts]
+ktlint_standard_chain-method-continuation = disabled
+
 [core/navigation/build/generated/**]
 ktlint = disabled
+
+[**/screenshotTest/**]
+ktlint_compose_preview-public-check = disabled
 
 [app/src/androidTest/java/com/passbolt/mobile/android/scenarios/resource/details/note/ResourcesNoteTest.kt]
 max_line_length = off

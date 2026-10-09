@@ -24,16 +24,17 @@
 package net.svaroh.passly.locationdetails
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderLocationUseCase
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderLocationUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
 import net.svaroh.passly.locationdetails.LocationDetailsIntent.GoBack
 import net.svaroh.passly.locationdetails.LocationDetailsIntent.ToggleExpanded
 import net.svaroh.passly.locationdetails.LocationDetailsSideEffect.NavigateToHome
@@ -47,7 +48,6 @@ import net.svaroh.passly.locationdetails.data.createExpandedIds
 import net.svaroh.passly.locationdetails.ui.LocationItem
 import net.svaroh.passly.locationdetails.ui.LocationItem.FOLDER
 import net.svaroh.passly.locationdetails.ui.LocationItem.RESOURCE
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class LocationDetailsViewModel(
@@ -98,7 +98,7 @@ internal class LocationDetailsViewModel(
     ) {
         dataRefreshTrackingFlow.dataRefreshStatusFlow.collect {
             when (it) {
-                InProgress -> updateViewState { copy(isRefreshing = true) }
+                is InProgress -> updateViewState { copy(isRefreshing = true, refreshProgress = it.progress) }
                 FinishedWithFailure -> {
                     emitSideEffect(ShowErrorSnackbar(FAILED_TO_REFRESH_DATA))
                     updateViewState { copy(isRefreshing = false) }
@@ -143,7 +143,7 @@ internal class LocationDetailsViewModel(
                     expandedItemIds = expandedIds,
                 )
             }
-        } catch (_: NullPointerException) {
+        } catch (_: IllegalStateException) {
             emitSideEffect(ShowToast(CONTENT_NOT_AVAILABLE))
             emitSideEffect(NavigateToHome)
         } catch (throwable: Exception) {
@@ -176,7 +176,7 @@ internal class LocationDetailsViewModel(
                     expandedItemIds = expandedIds,
                 )
             }
-        } catch (_: NullPointerException) {
+        } catch (_: IllegalStateException) {
             emitSideEffect(ShowToast(CONTENT_NOT_AVAILABLE))
             emitSideEffect(NavigateToHome)
         } catch (throwable: Exception) {

@@ -27,14 +27,15 @@ import android.security.keystore.KeyPermanentlyInvalidatedException
 import net.svaroh.passly.common.BiometricInformationProvider
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
 import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.biometrickey.SaveBiometricKeyIvUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import net.svaroh.passly.core.authenticationcore.passphrase.CheckIfPassphraseFileExistsUseCase
-import net.svaroh.passly.core.authenticationcore.passphrase.RemovePassphraseUseCase
-import net.svaroh.passly.core.authenticationcore.passphrase.SavePassphraseUseCase
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
-import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
+import net.svaroh.passly.core.passphrasememorycache.usePassphraseCopy
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.auth.usecase.CheckIfPassphraseFileExistsUseCase
+import net.svaroh.passly.domain.auth.usecase.RemovePassphraseUseCase
+import net.svaroh.passly.domain.auth.usecase.SavePassphraseUseCase
+import net.svaroh.passly.domain.biometrickey.model.BiometricKey
+import net.svaroh.passly.domain.biometrickey.usecase.SaveBiometricKeyUseCase
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
 import net.svaroh.passly.feature.authentication.auth.usecase.BiometryInteractor
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.CancelConfigureBiometric
@@ -51,7 +52,6 @@ import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.G
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.GoToDefaultFilter
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.GoToExpertSettings
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.Initialize
-import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.InvalidateBiometricKeyPermanently
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.RefreshedPassphrase
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.ShowBiometryError
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.ToggleBiometric
@@ -77,7 +77,7 @@ internal class AppSettingsViewModel(
     private val biometricCipher: BiometricCipher,
     private val biometryInteractor: BiometryInteractor,
     private val savePassphraseUseCase: SavePassphraseUseCase,
-    private val saveBiometricKeyIvUseCase: SaveBiometricKeyIvUseCase,
+    private val saveBiometricKeyUseCase: SaveBiometricKeyUseCase,
     private val detectAutofillConflict: DetectAutofillConflict,
 ) : SideEffectViewModel<AppSettingsState, AppSettingsSideEffect>(AppSettingsState()) {
     init {
@@ -104,7 +104,6 @@ internal class AppSettingsViewModel(
             CanceledBiometricAuth -> {}
             is ErroredBiometricAuth -> biometricAuthError(intent.error)
             is FinalizedBiometricAuth -> finalizedBiometricAuth(intent.cipher)
-            is InvalidateBiometricKeyPermanently -> invalidateBiometricKey(intent.exception)
             is ShowBiometryError -> biometryShowError(intent.exception)
             CancelConfirmKeyChange -> updateViewState { copy(isKeyChangesDialogDetectedVisible = false) }
             ConfirmKeyChangeClick -> {
@@ -151,22 +150,21 @@ internal class AppSettingsViewModel(
     }
 
     private fun finalizedBiometricAuth(authenticatedCipher: Cipher?) {
-        val passphrase = passphraseMemoryCache.get()
-        if (passphrase is PotentialPassphrase.Passphrase && authenticatedCipher != null) {
+        if (authenticatedCipher == null) {
+            Timber.e("Error during turning biometrics on. Authenticated cipher is missing.")
+            return
+        }
+        passphraseMemoryCache.usePassphraseCopy(
+            onPassphraseNotPresent = { Timber.e("Error during turing biometrics on. Passphrase not in cache after auth.") },
+        ) { passphrase ->
             savePassphraseUseCase.execute(
                 SavePassphraseUseCase.Input(
-                    passphrase.passphrase,
+                    passphrase,
                     authenticatedCipher,
                 ),
             )
-            saveBiometricKeyIvUseCase.execute(
-                SaveBiometricKeyIvUseCase.Input(
-                    authenticatedCipher.iv,
-                ),
-            )
+            saveBiometricKeyUseCase.execute(SaveBiometricKeyUseCase.Input(BiometricKey(authenticatedCipher.iv)))
             updateViewState { copy(isBiometricEnabled = true) }
-        } else {
-            Timber.e("Error during turing biometrics on. Passphrase not in cache after auth.")
         }
     }
 
@@ -202,7 +200,13 @@ internal class AppSettingsViewModel(
     }
 
     fun authenticateUsingBiometryPrompt() {
-        emitSideEffect(LaunchBiometricPrompt(biometricCipher.getBiometricEncryptCipher()))
+        try {
+            emitSideEffect(LaunchBiometricPrompt(biometricCipher.getBiometricEncryptCipher()))
+        } catch (exception: KeyPermanentlyInvalidatedException) {
+            invalidateBiometricKey(exception)
+        } catch (exception: Exception) {
+            biometryShowError(exception)
+        }
     }
 
     fun disableBiometric() {

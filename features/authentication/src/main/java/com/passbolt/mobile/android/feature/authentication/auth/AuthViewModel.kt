@@ -3,15 +3,8 @@ package net.svaroh.passly.feature.authentication.auth
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import net.svaroh.passly.common.extension.erase
 import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.accountdata.SaveServerFingerprintUseCase
-import net.svaroh.passly.core.accounts.usecase.privatekey.GetPrivateKeyUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveSelectedAccountUseCase
-import net.svaroh.passly.core.authenticationcore.passphrase.GetPassphraseUseCase
-import net.svaroh.passly.core.authenticationcore.session.SaveSessionUseCase
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.idlingresource.SignInIdlingResource
-import net.svaroh.passly.core.inappreview.InAppReviewInteractor
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider.DUO
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider.TOTP
@@ -19,23 +12,34 @@ import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthentic
 import net.svaroh.passly.core.mvp.authentication.MfaProvidersHandler
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.ManageAccount
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.Mfa
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.Setup
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.Startup
 import net.svaroh.passly.core.navigation.AppContext
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
 import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
 import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase.Passphrase
-import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.core.passphrasememorycache.usePassphraseCopy
 import net.svaroh.passly.core.security.rootdetection.RootDetector
 import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
 import net.svaroh.passly.database.usecase.HasLocalReplicaUseCase
+import net.svaroh.passly.domain.accounts.AuthenticatedAccountFlow
+import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveServerFingerprintUseCase
+import net.svaroh.passly.domain.auth.usecase.GetPassphraseUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveMfaTokenUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveSessionUseCase
+import net.svaroh.passly.domain.inappreview.usecase.InAppReviewInteractor
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.privatekey.usecase.GetPrivateKeyUseCase
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.AcceptChangedServerFingerprint
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.AccessLogs
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.AuthenticateUsingBiometry
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.BiometricAuthenticationError
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.BiometricAuthenticationSuccess
-import net.svaroh.passly.feature.authentication.auth.AuthIntent.BiometricKeyInvalidated
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.ChooseOtherMfaProvider
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.ConfirmSetupLeave
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.ConnectToExistingAccount
@@ -65,18 +69,25 @@ import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.ShowErrorSna
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.AUTHENTICATION_ERROR
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_CHANGED
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_DECRYPT_ERROR
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_LOCKOUT
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_LOCKOUT_PERMANENT
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_NO_CRYPTO_CIPHER
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_DOMAIN_MISMATCH
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_INVALID_SIGNATURE
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_TOKEN_EXPIRED
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_VERIFICATION_FAILURE
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_VERIFY_TOKEN_MISMATCH
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CONNECTION_FAILURE
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.DECRYPTION_ERROR
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.GENERIC
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.SERVER_SIGNATURE_INVALID
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.TIME_OUT_OF_SYNC
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.WRONG_PASSPHRASE
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatus
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatusProvider
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatusProvider.MfaState
-import net.svaroh.passly.feature.authentication.auth.usecase.BiometryInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
+import net.svaroh.passly.feature.authentication.auth.usecase.BiometryInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error.Generic
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error.IncorrectServerFingerprint
@@ -84,16 +95,20 @@ import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerK
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error.TimeIsOutOfSync
 import net.svaroh.passly.feature.authentication.auth.usecase.PostSignInActionsInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.PostSignInActionsInteractor.Error.ConfigurationFetchError
-import net.svaroh.passly.feature.authentication.auth.usecase.PostSignInActionsInteractor.Error.UserProfileFetchError
 import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.ServerKeysWarmup
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.AccountDoesNotExist
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeDecryptionError
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError
+import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError.Type.DOMAIN_MISMATCH
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError.Type.FAILURE
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError.Type.INVALID_SIGNATURE
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError.Type.TOKEN_EXPIRED
+import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ChallengeVerificationError.Type.VERIFY_TOKEN_MISMATCH
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.IncorrectPassphrase
+import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.NoNetwork
+import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ServerSignatureInvalid
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.SignInFailure
 import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.VerifyPassphraseUseCase
@@ -105,6 +120,8 @@ import net.svaroh.passly.mappers.AccountModelMapper
 import net.svaroh.passly.ui.BiometricAuthError
 import timber.log.Timber
 import javax.crypto.Cipher
+import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor.Error.NoNetwork as ServerKeysNoNetwork
+import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor.Error.ServerNotReachable as SignInServerNotReachable
 
 @Suppress("LongParameterList", "TooManyFunctions")
 class AuthViewModel(
@@ -122,7 +139,9 @@ class AuthViewModel(
     private val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase,
     private val runtimeAuthenticatedFlag: RuntimeAuthenticatedFlag,
     private val saveSessionUseCase: SaveSessionUseCase,
+    private val saveMfaTokenUseCase: SaveMfaTokenUseCase,
     private val saveSelectedAccountUseCase: SaveSelectedAccountUseCase,
+    private val authenticatedAccountFlow: AuthenticatedAccountFlow,
     private val signOutUseCase: SignOutUseCase,
     private val saveServerFingerprintUseCase: SaveServerFingerprintUseCase,
     private val mfaStatusProvider: MfaStatusProvider,
@@ -133,6 +152,7 @@ class AuthViewModel(
     private val postSignInActionsInteractor: PostSignInActionsInteractor,
     private val refreshSessionUseCase: RefreshSessionUseCase,
     private val mfaProvidersHandler: MfaProvidersHandler,
+    private val serverKeysWarmup: ServerKeysWarmup,
     private val hasLocalReplicaUseCase: HasLocalReplicaUseCase,
     private val backgroundSignInExecutor: BackgroundSignInExecutor,
 ) : SideEffectViewModel<AuthState, AuthSideEffect>(
@@ -154,6 +174,14 @@ class AuthViewModel(
     init {
         loadAccountData()
         checkRootAndBiometry()
+        warmUpServerKeysIfNeeded()
+    }
+
+    private fun warmUpServerKeysIfNeeded() {
+        when (authConfig) {
+            is RefreshPassphrase, is Mfa -> Unit
+            else -> serverKeysWarmup.warmUp(userId)
+        }
     }
 
     override fun onCleared() {
@@ -169,11 +197,6 @@ class AuthViewModel(
             is AuthenticateUsingBiometry -> authenticateUsingBiometry()
             is BiometricAuthenticationSuccess -> biometricAuthenticationSuccess(intent.cipher)
             is BiometricAuthenticationError -> biometricAuthenticationError(intent.error)
-            is BiometricKeyInvalidated -> {
-                biometryInteractor.disableBiometry()
-                updateViewState { copy(showBiometricButton = false) }
-                emitSideEffect(ShowErrorSnackbar(BIOMETRIC_CHANGED))
-            }
             is ForgotPassword -> updateViewState { copy(showForgotPasswordDialog = true) }
             is GoBack -> goBack()
             is ConfirmSetupLeave -> {
@@ -274,23 +297,27 @@ class AuthViewModel(
 
     private fun signIn() {
         emitSideEffect(HideKeyboard)
-        validatePassphrase(passphrase.copyOf())
+        validatePassphrase(passphrase)
     }
 
-    private fun validatePassphrase(passphrase: ByteArray) {
+    private fun validatePassphrase(typedPassphrase: ByteArray) {
+        val passphrase = typedPassphrase.copyOf()
         launch {
-            val privateKey =
-                requireNotNull(
-                    getPrivateKeyUseCase.execute(UserIdInput(userId)).privateKey,
-                )
-            val isPassphraseCorrect =
-                verifyPassphraseUseCase.execute(VerifyPassphraseUseCase.Input(privateKey, passphrase)).isCorrect
-            if (isPassphraseCorrect) {
-                passphraseMemoryCache.set(passphrase)
-                onPassphraseVerified(passphrase)
-            } else {
+            try {
+                val privateKey =
+                    requireNotNull(getPrivateKeyUseCase.execute(UserIdInput(userId)).privateKey) {
+                        "Unable to restore private key."
+                    }.armoredKey
+                val isPassphraseCorrect =
+                    verifyPassphraseUseCase.execute(VerifyPassphraseUseCase.Input(privateKey, passphrase)).isCorrect
+                if (isPassphraseCorrect) {
+                    passphraseMemoryCache.set(passphrase)
+                    onPassphraseVerified(passphrase)
+                } else {
+                    emitSideEffect(ShowErrorSnackbar(WRONG_PASSPHRASE))
+                }
+            } finally {
                 passphrase.erase()
-                emitSideEffect(ShowErrorSnackbar(WRONG_PASSPHRASE))
             }
         }
     }
@@ -302,33 +329,36 @@ class AuthViewModel(
             is ManageAccount,
             is AuthConfig.SignIn,
             -> performSignIn(passphrase)
-            is AuthConfig.RefreshPassphrase,
-            is AuthConfig.Mfa,
+            is RefreshPassphrase,
+            is Mfa,
             -> {
                 runtimeAuthenticatedFlag.isAuthenticated = true
-                passphrase.erase()
                 emitSideEffect(AuthSuccess(authConfig, appContext))
             }
             is AuthConfig.RefreshSession -> performRefreshSession(passphrase)
         }
     }
 
-    private fun performRefreshSession(passphrase: ByteArray) {
+    private fun performRefreshSession(verifiedPassphrase: ByteArray) {
+        val passphrase = verifiedPassphrase.copyOf()
         updateViewState { copy(showProgress = true) }
         signInIdlingResource.setIdle(false)
         launch {
-            val refreshSessionResult = refreshSessionUseCase.execute(Unit)
-            updateViewState { copy(showProgress = false) }
-            signInIdlingResource.setIdle(true)
-            when (refreshSessionResult) {
-                is RefreshSessionUseCase.Output.Success -> {
-                    passphrase.erase()
-                    runtimeAuthenticatedFlag.isAuthenticated = true
-                    emitSideEffect(AuthSuccess(authConfig, appContext))
+            try {
+                val refreshSessionResult = refreshSessionUseCase.execute(Unit)
+                updateViewState { copy(showProgress = false) }
+                signInIdlingResource.setIdle(true)
+                when (refreshSessionResult) {
+                    is RefreshSessionUseCase.Output.Success -> {
+                        runtimeAuthenticatedFlag.isAuthenticated = true
+                        emitSideEffect(AuthSuccess(authConfig, appContext))
+                    }
+                    is RefreshSessionUseCase.Output.Failure -> {
+                        performFullSignIn(passphrase)
+                    }
                 }
-                is RefreshSessionUseCase.Output.Failure -> {
-                    performFullSignIn(passphrase)
-                }
+            } finally {
+                passphrase.erase()
             }
         }
     }
@@ -351,53 +381,66 @@ class AuthViewModel(
         } else if (authConfig is Setup) {
             performFullSignIn(passphrase)
         } else {
+            val capturedPassphrase = passphrase.copyOf()
             launch {
-                // the local database key is stored per selected account, so the account being unlocked has to become
-                // the selected one before its replica can even be inspected
-                saveSelectedAccountUseCase.execute(UserIdInput(userId))
-                if (hasLocalReplicaUseCase.execute(UserIdInput(userId)).hasLocalReplica) {
-                    Timber.d("Unlocking with the local replica, signing in in the background")
-                    unlockWithLocalReplica()
-                    backgroundSignInExecutor.signIn(userId, passphrase.copyOf())
-                } else {
-                    Timber.d("No local replica yet, the server is needed for this sign in")
-                    performFullSignIn(passphrase)
+                try {
+                    // the local database key is stored per selected account, so the account being unlocked has to become
+                    // the selected one before its replica can even be inspected
+                    saveSelectedAccountUseCase.execute(UserIdInput(userId))
+                    if (hasLocalReplicaUseCase.execute(UserIdInput(userId)).hasLocalReplica) {
+                        Timber.d("Unlocking with the local replica, signing in in the background")
+                        unlockWithLocalReplica(capturedPassphrase)
+                        backgroundSignInExecutor.signIn(userId, capturedPassphrase.copyOf())
+                    } else {
+                        Timber.d("No local replica yet, the server is needed for this sign in")
+                        performFullSignIn(capturedPassphrase)
+                    }
+                } finally {
+                    capturedPassphrase.erase()
                 }
             }
         }
     }
 
     @Suppress("LongMethod")
-    private fun performFullSignIn(passphrase: ByteArray) {
+    private fun performFullSignIn(verifiedPassphrase: ByteArray) {
+        val passphrase = verifiedPassphrase.copyOf()
         signInIdlingResource.setIdle(false)
         updateViewState { copy(showProgress = true) }
         launch {
-            getAndVerifyServerKeysInteractor.getAndVerifyServerKeys(
-                userId,
-                onError = {
-                    updateViewState { copy(showProgress = false) }
-                    when (it) {
-                        is Generic -> {
-                            emitSideEffect(ShowErrorSnackbar(GENERIC))
-                        }
-                        is IncorrectServerFingerprint -> {
-                            updateViewState {
-                                copy(
-                                    showServerFingerprintChanged = true,
-                                    serverFingerprintChangedFingerprint = it.fingerprint,
-                                )
+            try {
+                getAndVerifyServerKeysInteractor.getAndVerifyServerKeys(
+                    userId,
+                    onError = {
+                        updateViewState { copy(showProgress = false) }
+                        when (it) {
+                            is Generic -> {
+                                emitSideEffect(ShowErrorSnackbar(GENERIC))
+                            }
+                            is IncorrectServerFingerprint -> {
+                                updateViewState {
+                                    copy(
+                                        showServerFingerprintChanged = true,
+                                        serverFingerprintChangedFingerprint = it.fingerprint,
+                                    )
+                                }
+                            }
+                            is ServerNotReachable -> {
+                                launch { onServerNotReachable(it.serverUrl, passphrase) }
+                            }
+                            is ServerKeysNoNetwork -> {
+                                launch { onServerNotReachable("", passphrase) }
+                            }
+                            is TimeIsOutOfSync -> {
+                                emitSideEffect(ShowErrorSnackbar(TIME_OUT_OF_SYNC))
                             }
                         }
-                        is ServerNotReachable -> {
-                            launch { onServerNotReachable(it.serverUrl) }
-                        }
-                        is TimeIsOutOfSync -> {
-                            emitSideEffect(ShowErrorSnackbar(TIME_OUT_OF_SYNC))
-                        }
-                    }
-                },
-            ) {
-                signIn(passphrase.copyOf(), it.pgpKey, it.rsaKey, it.pgpKeyFingerprint)
+                    },
+                ) {
+                    signIn(passphrase, it.pgpKey, it.rsaKey, it.pgpKeyFingerprint)
+                }
+            } finally {
+                passphrase.erase()
             }
         }
     }
@@ -408,14 +451,17 @@ class AuthViewModel(
      * the app runs on local data until synchronisation becomes possible again; only an account that has never
      * synchronised still needs the server to get going.
      */
-    private suspend fun onServerNotReachable(serverUrl: String) {
+    private suspend fun onServerNotReachable(
+        serverUrl: String,
+        verifiedPassphrase: ByteArray,
+    ) {
         // the local database key is stored per selected account, so the account being unlocked has to become the
         // selected one before its replica can even be inspected
         saveSelectedAccountUseCase.execute(UserIdInput(userId))
 
         if (hasLocalReplicaUseCase.execute(UserIdInput(userId)).hasLocalReplica) {
             Timber.d("Server is not reachable, continuing with the local replica")
-            unlockWithLocalReplica()
+            unlockWithLocalReplica(verifiedPassphrase)
         } else {
             Timber.d("Server is not reachable and there is no local replica to fall back on")
             updateViewState {
@@ -424,9 +470,9 @@ class AuthViewModel(
         }
     }
 
-    private fun unlockWithLocalReplica() {
+    private fun unlockWithLocalReplica(verifiedPassphrase: ByteArray) {
         runtimeAuthenticatedFlag.isAuthenticated = true
-        passphraseMemoryCache.set(passphrase.copyOf())
+        passphraseMemoryCache.set(verifiedPassphrase.copyOf())
         // no session is saved: there is no session to save, and the stored one - stale or not - stays untouched
         loginState = null
         updateViewState { copy(showProgress = false) }
@@ -446,34 +492,8 @@ class AuthViewModel(
             passphrase,
             userId,
             rsaKey,
-            onError = {
-                passphrase.erase()
-                updateViewState { copy(showProgress = false) }
-                signInIdlingResource.setIdle(true)
-                when (it) {
-                    is AccountDoesNotExist ->
-                        updateViewState {
-                            copy(
-                                showAccountDoesNotExist = true,
-                                accountDoesNotExistLabel = it.label,
-                                accountDoesNotExistEmail = it.email,
-                                accountDoesNotExistUrl = it.serverUrl,
-                            )
-                        }
-                    is ChallengeDecryptionError -> emitSideEffect(ShowErrorSnackbar(DECRYPTION_ERROR, it.message))
-                    is ChallengeVerificationError -> {
-                        when (it.type) {
-                            TOKEN_EXPIRED -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_TOKEN_EXPIRED))
-                            INVALID_SIGNATURE -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_INVALID_SIGNATURE))
-                            FAILURE -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_VERIFICATION_FAILURE))
-                        }
-                    }
-                    is IncorrectPassphrase -> emitSideEffect(ShowErrorSnackbar(WRONG_PASSPHRASE))
-                    is SignInFailure -> emitSideEffect(ShowErrorSnackbar(AUTHENTICATION_ERROR, it.message))
-                }
-            },
+            onError = { handleSignInError(it, passphrase) },
         ) {
-            passphrase.erase()
             loginState =
                 LoginState(
                     accessToken = it.accessToken,
@@ -502,10 +522,48 @@ class AuthViewModel(
         }
     }
 
+    private fun handleSignInError(
+        error: SignInVerifyInteractor.Error,
+        passphrase: ByteArray,
+    ) {
+        passphrase.erase()
+        updateViewState { copy(showProgress = false) }
+        signInIdlingResource.setIdle(true)
+        when (error) {
+            is AccountDoesNotExist ->
+                updateViewState {
+                    copy(
+                        showAccountDoesNotExist = true,
+                        accountDoesNotExistLabel = error.label,
+                        accountDoesNotExistEmail = error.email,
+                        accountDoesNotExistUrl = error.serverUrl,
+                    )
+                }
+            is ChallengeDecryptionError -> emitSideEffect(ShowErrorSnackbar(DECRYPTION_ERROR, error.message))
+            ServerSignatureInvalid -> emitSideEffect(ShowErrorSnackbar(SERVER_SIGNATURE_INVALID))
+            is ChallengeVerificationError -> handleChallengeVerificationError(error.type)
+            is NoNetwork -> emitSideEffect(ShowErrorSnackbar(CONNECTION_FAILURE))
+            is SignInServerNotReachable ->
+                updateViewState { copy(showServerNotReachable = true, serverNotReachableDomain = error.serverUrl) }
+            is IncorrectPassphrase -> emitSideEffect(ShowErrorSnackbar(WRONG_PASSPHRASE))
+            is SignInFailure -> emitSideEffect(ShowErrorSnackbar(AUTHENTICATION_ERROR, error.message))
+        }
+    }
+
+    private fun handleChallengeVerificationError(type: ChallengeVerificationError.Type) {
+        when (type) {
+            TOKEN_EXPIRED -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_TOKEN_EXPIRED))
+            INVALID_SIGNATURE -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_INVALID_SIGNATURE))
+            VERIFY_TOKEN_MISMATCH -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_VERIFY_TOKEN_MISMATCH))
+            DOMAIN_MISMATCH -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_DOMAIN_MISMATCH))
+            FAILURE -> emitSideEffect(ShowErrorSnackbar(CHALLENGE_VERIFICATION_FAILURE))
+        }
+    }
+
     private fun signInSuccess(updateSession: Boolean = true) {
         Timber.d("Authentication success")
         runtimeAuthenticatedFlag.isAuthenticated = true
-        passphraseMemoryCache.set(passphrase.copyOf())
+        passphraseMemoryCache.set(passphrase)
         val currentLoginState = requireNotNull(loginState)
         if (updateSession) {
             saveSessionUseCase.execute(
@@ -513,14 +571,17 @@ class AuthViewModel(
                     userId = userId,
                     accessToken = currentLoginState.accessToken,
                     refreshToken = currentLoginState.refreshToken,
-                    mfaToken = loginState?.mfaToken,
                 ),
             )
+            currentLoginState.mfaToken?.let {
+                saveMfaTokenUseCase.execute(SaveMfaTokenUseCase.Input(userId, it))
+            }
         }
         saveServerFingerprintUseCase.execute(
             SaveServerFingerprintUseCase.Input(userId, currentLoginState.fingerprint),
         )
         saveSelectedAccountUseCase.execute(UserIdInput(userId))
+        authenticatedAccountFlow.notifyAccountAuthenticated(userId)
         Timber.d("Increasing sign in count")
         inAppReviewInteractor.processSuccessfulSignIn()
         loginState = null
@@ -536,10 +597,6 @@ class AuthViewModel(
                     signInIdlingResource.setIdle(true)
                     when (it) {
                         ConfigurationFetchError -> updateViewState { copy(showFetchFeatureFlagsError = true) }
-                        UserProfileFetchError ->
-                            emitSideEffect(
-                                ShowErrorSnackbar(AuthSideEffect.SnackbarErrorType.PROFILE_FETCH_FAILURE),
-                            )
                     }
                 },
             ) {
@@ -563,18 +620,22 @@ class AuthViewModel(
                         return
                     }
             if (potentialPassphrase is Passphrase) {
-                passphraseMemoryCache.set(potentialPassphrase.passphrase)
-                passphrase.erase()
-                passphrase = potentialPassphrase.passphrase.copyOf()
-                updateViewState { copy(passphrase = "", isAuthButtonEnabled = false) }
-                when (authConfig) {
-                    is AuthConfig.RefreshPassphrase,
-                    is AuthConfig.Mfa,
-                    -> {
-                        runtimeAuthenticatedFlag.isAuthenticated = true
-                        emitSideEffect(AuthSuccess(authConfig, appContext))
+                try {
+                    passphraseMemoryCache.set(potentialPassphrase.passphrase)
+                    passphrase.erase()
+                    passphrase = potentialPassphrase.passphrase.copyOf()
+                    updateViewState { copy(passphrase = "", isAuthButtonEnabled = false) }
+                    when (authConfig) {
+                        is RefreshPassphrase,
+                        is Mfa,
+                        -> {
+                            runtimeAuthenticatedFlag.isAuthenticated = true
+                            emitSideEffect(AuthSuccess(authConfig, appContext))
+                        }
+                        else -> performSignIn(passphrase)
                     }
-                    else -> performSignIn(passphrase.copyOf())
+                } finally {
+                    potentialPassphrase.passphrase.erase()
                 }
             } else {
                 emitSideEffect(ShowErrorSnackbar(GENERIC))
@@ -595,8 +656,10 @@ class AuthViewModel(
     private fun biometricAuthenticationError(error: BiometricAuthError) {
         val errorType =
             when (error) {
-                BiometricAuthError.NO_CRYPTO_CIPHER -> AuthSideEffect.SnackbarErrorType.BIOMETRIC_NO_CRYPTO_CIPHER
-                else -> AUTHENTICATION_ERROR
+                BiometricAuthError.ERROR_LOCKOUT -> BIOMETRIC_LOCKOUT
+                BiometricAuthError.ERROR_LOCKOUT_PERMANENT -> BIOMETRIC_LOCKOUT_PERMANENT
+                BiometricAuthError.NO_CRYPTO_CIPHER -> BIOMETRIC_NO_CRYPTO_CIPHER
+                BiometricAuthError.GENERIC -> BIOMETRIC_DECRYPT_ERROR
             }
         emitSideEffect(ShowErrorSnackbar(errorType))
     }
@@ -629,9 +692,12 @@ class AuthViewModel(
     private fun mfaSucceeded(mfaHeader: String?) {
         Timber.d("MFA succeeded")
         when (authConfig) {
-            is AuthConfig.RefreshPassphrase,
-            is AuthConfig.Mfa,
+            is RefreshPassphrase,
+            is Mfa,
             -> {
+                mfaHeader?.let {
+                    saveMfaTokenUseCase.execute(SaveMfaTokenUseCase.Input(userId, it))
+                }
                 runtimeAuthenticatedFlag.isAuthenticated = true
                 emitSideEffect(AuthSuccess(authConfig, appContext))
             }
@@ -685,10 +751,10 @@ class AuthViewModel(
 
     private fun retry() {
         updateViewState { copy(showFetchFeatureFlagsError = false) }
-        passphraseMemoryCache.get().let {
-            if (it is Passphrase) {
-                performSignIn(it.passphrase)
-            }
+        passphraseMemoryCache.usePassphraseCopy(
+            onPassphraseNotPresent = {},
+        ) { passphrase ->
+            performSignIn(passphrase)
         }
     }
 
@@ -711,7 +777,7 @@ class AuthViewModel(
     companion object {
         fun mapAuthReason(authConfig: AuthConfig): AuthState.RefreshAuthReason? =
             when (authConfig) {
-                is AuthConfig.RefreshPassphrase -> AuthState.RefreshAuthReason.PASSPHRASE
+                is RefreshPassphrase -> AuthState.RefreshAuthReason.PASSPHRASE
                 is AuthConfig.SignIn -> AuthState.RefreshAuthReason.SESSION
                 else -> null
             }

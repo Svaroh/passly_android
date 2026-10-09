@@ -1,9 +1,10 @@
 package net.svaroh.passly.feature.authentication.mfa.totp.compose
 
-import PassboltTheme
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import net.svaroh.passly.core.compose.PassboltTheme
 
 /**
  * Passbolt - Open source password manager for teams
@@ -67,8 +71,10 @@ fun PinInput(
     textColor: Color,
     modifier: Modifier = Modifier,
     autoFocus: Boolean = true,
+    onLongPress: (() -> Unit) = {},
 ) {
     val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(Unit) {
         if (autoFocus) {
@@ -76,15 +82,32 @@ fun PinInput(
         }
     }
 
-    BasicTextField(
-        value = state.textFieldValue,
-        onValueChange = state::onValueChange,
-        modifier = modifier.focusRequester(focusRequester),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
-        decorationBox = { PinInputDecorationBox(value = state.textFieldValue, textColor = textColor, length = state.maxLength) },
-        cursorBrush = SolidColor(Color.Transparent),
-        textStyle = TextStyle(color = Color.Transparent),
-    )
+    Box(modifier = modifier) {
+        BasicTextField(
+            value = state.textFieldValue,
+            onValueChange = state::onValueChange,
+            modifier = Modifier.focusRequester(focusRequester),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+            decorationBox = { PinInputDecorationBox(value = state.textFieldValue, textColor = textColor, length = state.maxLength) },
+            cursorBrush = SolidColor(Color.Transparent),
+            textStyle = TextStyle(color = Color.Transparent),
+        )
+        // Overlay intercepts all touch so the system cannot trigger actions on the text field
+        Box(
+            modifier =
+                Modifier
+                    .matchParentSize()
+                    .pointerInput(onLongPress) {
+                        detectTapGestures(
+                            onTap = {
+                                focusRequester.requestFocus()
+                                keyboardController?.show()
+                            },
+                            onLongPress = { onLongPress() },
+                        )
+                    },
+        )
+    }
 }
 
 @Composable

@@ -1,7 +1,7 @@
 package net.svaroh.passly.feature.setup.scanqr.mapper
 
-import net.svaroh.passly.feature.setup.scanqr.qrparser.QrScanResultsMapper
 import kotlinx.serialization.json.Json
+import net.svaroh.passly.feature.setup.scanqr.qrparser.QrScanResultsMapper
 import org.koin.dsl.module
 
 /**

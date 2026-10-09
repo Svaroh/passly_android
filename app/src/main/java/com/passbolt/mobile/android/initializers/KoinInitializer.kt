@@ -29,16 +29,12 @@ import androidx.startup.Initializer
 import net.svaroh.passly.appModule
 import net.svaroh.passly.common.commonModule
 import net.svaroh.passly.core.accounts.accountsCoreModule
-import net.svaroh.passly.core.authenticationcore.authenticationCoreModule
 import net.svaroh.passly.core.autofill.autofillModule
 import net.svaroh.passly.core.clipboard.clipboardModule
-import net.svaroh.passly.core.commonfolders.foldersModule
-import net.svaroh.passly.core.commongroups.groupsModule
 import net.svaroh.passly.core.coreUiModule
 import net.svaroh.passly.core.envinfo.envInfoModule
 import net.svaroh.passly.core.fulldatarefresh.fullDataRefreshModule
 import net.svaroh.passly.core.idlingresource.idlingResourcesModule
-import net.svaroh.passly.core.inappreview.inAppReviewModule
 import net.svaroh.passly.core.logger.loggerModule
 import net.svaroh.passly.core.mvp.architectureModule
 import net.svaroh.passly.core.navigation.navigationModule
@@ -47,20 +43,57 @@ import net.svaroh.passly.core.notifications.notificationsModule
 import net.svaroh.passly.core.otpcore.otpCoreModule
 import net.svaroh.passly.core.passphrasememorycache.passphraseMemoryCacheModule
 import net.svaroh.passly.core.passwordgenerator.passwordGeneratorModule
-import net.svaroh.passly.core.policiesModule
-import net.svaroh.passly.core.preferences.preferencesModule
 import net.svaroh.passly.core.qrscan.barcodeScanModule
-import net.svaroh.passly.core.rbacModule
-import net.svaroh.passly.core.resources.resourcesModule
 import net.svaroh.passly.core.resourcetypes.resourceTypesModule
-import net.svaroh.passly.core.secrets.secretsModule
 import net.svaroh.passly.core.security.securityModule
 import net.svaroh.passly.core.sync.syncModule
-import net.svaroh.passly.core.tags.tagsModule
-import net.svaroh.passly.core.users.usersModule
 import net.svaroh.passly.createFolderModule
 import net.svaroh.passly.createresourcemenu.createResourceMenuModule
+import net.svaroh.passly.data.accounts.accountsDataModule
+import net.svaroh.passly.data.auth.authDataModule
+import net.svaroh.passly.data.biometrickey.biometricKeyDataModule
+import net.svaroh.passly.data.favourites.favouritesDataModule
+import net.svaroh.passly.data.featureflags.featureFlagsDataModule
+import net.svaroh.passly.data.folders.foldersDataModule
+import net.svaroh.passly.data.groups.groupsDataModule
+import net.svaroh.passly.data.inappreview.inAppReviewDataModule
+import net.svaroh.passly.data.metadata.metadataDataModule
+import net.svaroh.passly.data.mfa.mfaDataModule
+import net.svaroh.passly.data.mobiletransfer.mobileTransferDataModule
+import net.svaroh.passly.data.passwordexpiry.passwordExpiryDataModule
+import net.svaroh.passly.data.passwordpolicies.passwordPoliciesDataModule
+import net.svaroh.passly.data.permissionsconfirmation.permissionsConfirmationDataModule
+import net.svaroh.passly.data.preferences.preferencesDataModule
+import net.svaroh.passly.data.privatekey.privateKeyDataModule
+import net.svaroh.passly.data.rbac.rbacDataModule
+import net.svaroh.passly.data.resources.resourcesDataModule
+import net.svaroh.passly.data.resourcetypes.resourceTypesDataModule
+import net.svaroh.passly.data.secrets.secretsDataModule
+import net.svaroh.passly.data.share.shareDataModule
+import net.svaroh.passly.data.tags.tagsDataModule
+import net.svaroh.passly.data.users.usersDataModule
 import net.svaroh.passly.database.databaseModule
+import net.svaroh.passly.domain.accounts.accountsDomainModule
+import net.svaroh.passly.domain.auth.authDomainModule
+import net.svaroh.passly.domain.biometrickey.biometricKeyDomainModule
+import net.svaroh.passly.domain.favourites.favouritesDomainModule
+import net.svaroh.passly.domain.folders.foldersDomainModule
+import net.svaroh.passly.domain.groups.groupsDomainModule
+import net.svaroh.passly.domain.inappreview.inAppReviewDomainModule
+import net.svaroh.passly.domain.metadata.metadataDomainModule
+import net.svaroh.passly.domain.mobiletransfer.mobileTransferDomainModule
+import net.svaroh.passly.domain.passwordexpiry.passwordExpiryDomainModule
+import net.svaroh.passly.domain.passwordpolicies.passwordPoliciesDomainModule
+import net.svaroh.passly.domain.permissionsconfirmation.permissionsConfirmationDomainModule
+import net.svaroh.passly.domain.preferences.preferencesDomainModule
+import net.svaroh.passly.domain.privatekey.privateKeyDomainModule
+import net.svaroh.passly.domain.rbac.rbacDomainModule
+import net.svaroh.passly.domain.resources.resourcesDomainModule
+import net.svaroh.passly.domain.resourcetypes.resourceTypesDomainModule
+import net.svaroh.passly.domain.secrets.secretsDomainModule
+import net.svaroh.passly.domain.share.shareDomainModule
+import net.svaroh.passly.domain.tags.tagsDomainModule
+import net.svaroh.passly.domain.users.usersDomainModule
 import net.svaroh.passly.encryptedstorage.encryptedStorageModule
 import net.svaroh.passly.feature.accountdetails.accountDetailsModule
 import net.svaroh.passly.feature.authenticationModule
@@ -75,19 +108,16 @@ import net.svaroh.passly.feature.settings.settingsModule
 import net.svaroh.passly.feature.setup.setupModule
 import net.svaroh.passly.feature.startup.startUpModule
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferAccountToAnotherDeviceModule
-import net.svaroh.passly.featureflags.featureFlagsModule
+import net.svaroh.passly.featureflags.featureFlagsDomainModule
 import net.svaroh.passly.folderDetailsModule
 import net.svaroh.passly.gopenpgp.openPgpModule
 import net.svaroh.passly.groupDetailsModule
 import net.svaroh.passly.helpMenuModule
 import net.svaroh.passly.jsonmodel.jsonModelModule
-import net.svaroh.passly.linksapi.linksApiModule
 import net.svaroh.passly.locationDetailsModule
 import net.svaroh.passly.logsModule
 import net.svaroh.passly.mappersModule
-import net.svaroh.passly.metadata.metadataModule
 import net.svaroh.passly.otpMoreMenuModule
-import net.svaroh.passly.passboltapi.passboltApiModule
 import net.svaroh.passly.permissions.permissionsModule
 import net.svaroh.passly.pwnedpasswordsapi.pwnedPasswordsApiModule
 import net.svaroh.passly.resourceMoreMenuModule
@@ -122,26 +152,37 @@ class KoinInitializer : Initializer<Unit> {
                 architectureModule,
                 networkingModule,
                 barcodeScanModule,
-                passboltApiModule,
+                authDomainModule,
+                authDataModule,
+                accountsDomainModule,
+                accountsDataModule,
                 autofillResourcesModule,
                 authenticationModule,
                 homeModule,
                 settingsModule,
                 startUpModule,
-                resourcesModule,
-                featureFlagsModule,
+                resourcesDomainModule,
+                resourcesDataModule,
+                featureFlagsDomainModule,
+                featureFlagsDataModule,
                 databaseModule,
-                secretsModule,
+                secretsDomainModule,
+                secretsDataModule,
                 resourceDetailsModule,
                 securityModule,
-                linksApiModule,
-                usersModule,
+                usersDomainModule,
                 loggerModule,
                 accountDetailsModule,
-                foldersModule,
+                foldersDomainModule,
+                foldersDataModule,
                 folderDetailsModule,
                 mainModule,
-                groupsModule,
+                groupsDomainModule,
+                groupsDataModule,
+                biometricKeyDomainModule,
+                biometricKeyDataModule,
+                privateKeyDomainModule,
+                privateKeyDataModule,
                 commonModule,
                 coreUiModule,
                 locationDetailsModule,
@@ -153,9 +194,12 @@ class KoinInitializer : Initializer<Unit> {
                 resourceMoreMenuModule,
                 fullDataRefreshModule,
                 resourceTypesModule,
+                resourceTypesDomainModule,
+                resourceTypesDataModule,
                 notificationsModule,
                 autofillModule,
-                inAppReviewModule,
+                inAppReviewDomainModule,
+                inAppReviewDataModule,
                 envInfoModule,
                 idlingResourcesModule,
                 transferAccountToAnotherDeviceModule,
@@ -163,18 +207,34 @@ class KoinInitializer : Initializer<Unit> {
                 otpCoreModule,
                 serializersModule,
                 resourcePickerModule,
-                tagsModule,
+                tagsDomainModule,
+                tagsDataModule,
                 scanOtpMainModule,
                 otpMoreMenuModule,
-                rbacModule,
+                rbacDomainModule,
+                rbacDataModule,
                 accountsCoreModule,
-                policiesModule,
+                passwordPoliciesDomainModule,
+                passwordPoliciesDataModule,
+                permissionsConfirmationDomainModule,
+                permissionsConfirmationDataModule,
+                preferencesDomainModule,
+                preferencesDataModule,
+                mobileTransferDomainModule,
+                mobileTransferDataModule,
+                favouritesDomainModule,
+                favouritesDataModule,
+                passwordExpiryDomainModule,
+                passwordExpiryDataModule,
+                usersDataModule,
+                shareDomainModule,
+                shareDataModule,
+                mfaDataModule,
                 pwnedPasswordsApiModule,
                 passwordGeneratorModule,
-                metadataModule,
+                metadataDataModule,
+                metadataDomainModule,
                 encryptedStorageModule,
-                authenticationCoreModule,
-                preferencesModule,
                 passphraseMemoryCacheModule,
                 jsonModelModule,
                 createResourceMenuModule,

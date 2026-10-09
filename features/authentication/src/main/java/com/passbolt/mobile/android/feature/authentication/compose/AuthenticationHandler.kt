@@ -32,7 +32,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import net.svaroh.passly.core.authenticationcore.session.GetSessionUseCase
 import net.svaroh.passly.core.compose.RepeatOnStartedEffect
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
@@ -43,6 +42,9 @@ import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.RefreshSession
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.auth.usecase.GetSessionUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveMfaTokenUseCase
 import net.svaroh.passly.feature.authentication.mfa.MfaDialogState
 import net.svaroh.passly.feature.authentication.mfa.MfaResult
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoScreen
@@ -63,6 +65,8 @@ fun AuthenticationHandler(
     sessionRefreshTrackingFlow: SessionRefreshTrackingFlow = koinInject(),
     mfaProvidersHandler: MfaProvidersHandler = koinInject(),
     getSessionUseCase: GetSessionUseCase = koinInject(),
+    getSelectedAccountUseCase: GetSelectedAccountUseCase = koinInject(),
+    saveMfaTokenUseCase: SaveMfaTokenUseCase = koinInject(),
 ) {
     val context = LocalContext.current
 
@@ -109,7 +113,14 @@ fun AuthenticationHandler(
             onMfaResult = { result ->
                 mfaDialogState = null
                 when (result) {
-                    is MfaResult.Succeeded -> sessionRefreshTrackingFlow.notifySessionRefreshed()
+                    is MfaResult.Succeeded -> {
+                        result.mfaHeader?.let { mfaHeader ->
+                            getSelectedAccountUseCase.execute(Unit).selectedAccount?.let { userId ->
+                                saveMfaTokenUseCase.execute(SaveMfaTokenUseCase.Input(userId, mfaHeader))
+                            }
+                        }
+                        sessionRefreshTrackingFlow.notifySessionRefreshed()
+                    }
                     is MfaResult.OtherProvider -> {
                         mfaDialogState =
                             toMfaDialogState(

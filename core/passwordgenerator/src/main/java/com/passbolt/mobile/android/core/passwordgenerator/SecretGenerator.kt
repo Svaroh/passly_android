@@ -25,22 +25,22 @@ package net.svaroh.passly.core.passwordgenerator
 
 import net.svaroh.passly.core.passwordgenerator.codepoints.Codepoint
 import net.svaroh.passly.core.passwordgenerator.entropy.EntropyCalculator
-import net.svaroh.passly.ui.PassphraseGeneratorSettingsModel
-import net.svaroh.passly.ui.PasswordGeneratorSettingsModel
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
 
 class SecretGenerator(
     private val passwordGenerator: PasswordGenerator,
     private val passphraseGenerator: PassphraseGenerator,
     private val entropyCalculator: EntropyCalculator,
 ) {
-    suspend fun generatePassword(settings: PasswordGeneratorSettingsModel): SecretGenerationResult {
+    suspend fun generatePassword(settings: PasswordGeneratorSettingsUiModel): SecretGenerationResult {
         val password = passwordGenerator.generate(settings)
         val entropy = entropyCalculator.getPasswordEntropy(password, Alphabets.getCodepointSetsForModel(settings))
 
         return returnResult(password, entropy)
     }
 
-    suspend fun generatePassphrase(settings: PassphraseGeneratorSettingsModel): SecretGenerationResult {
+    suspend fun generatePassphrase(settings: PassphraseGeneratorSettingsUiModel): SecretGenerationResult {
         val passphrase = passphraseGenerator.generate(settings)
         val entropy =
             entropyCalculator.getPassphraseEntropy(

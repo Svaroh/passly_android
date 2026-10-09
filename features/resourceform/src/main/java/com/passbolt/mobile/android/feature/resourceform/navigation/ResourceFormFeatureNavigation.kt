@@ -1,30 +1,41 @@
 package net.svaroh.passly.feature.resourceform.navigation
 
-import PassboltTheme
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
 import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.AdditionalUrisForm
+import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.AdvancedSecretGenerationForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.AppearanceForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.CustomFieldsForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.DescriptionForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.NoteForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.PasswordForm
+import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.PinCodeAdvancedGenerationForm
+import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.PinCodeForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.TotpAdvancedSettingsForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.TotpForm
+import net.svaroh.passly.core.navigation.compose.results.PermissionsConfirmedResult
 import net.svaroh.passly.core.navigation.compose.results.ResultEffect
 import net.svaroh.passly.core.navigation.compose.results.ScanOtpResultEvent
 import net.svaroh.passly.feature.resourceform.additionalsecrets.customfields.CustomFieldsFormScreen
 import net.svaroh.passly.feature.resourceform.additionalsecrets.note.NoteFormScreen
 import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormScreen
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.PinCodeFormScreen
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced.PinCodeAdvancedGenerationFormScreen
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.AdvancedSecretGenerationScreen
 import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormScreen
 import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced.TotpAdvancedSettingsFormScreen
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.AdditionalUrisResult
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.AdvancedSecretGenerationResult
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.AppearanceResult
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.ConfirmedPermissionsResult
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.CustomFieldsResult
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.DescriptionResult
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.NoteResult
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.PasswordResult
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.PinCodeAdvancedGenerationResult
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.PinCodeResult
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.ScanOtpResult
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.TotpAdvancedSettingsResult
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.TotpResult
@@ -57,8 +68,17 @@ class ResourceFormFeatureNavigation : FeatureModuleNavigation {
                 ResultEffect<TotpAdvancedSettingsFormResult> { result ->
                     viewModel.onIntent(TotpAdvancedSettingsResult(result.totpModel))
                 }
+                ResultEffect<AdvancedSecretGenerationFormResult> { result ->
+                    viewModel.onIntent(AdvancedSecretGenerationResult(result))
+                }
                 ResultEffect<NoteFormResult> { result ->
                     viewModel.onIntent(NoteResult(result.note))
+                }
+                ResultEffect<PinCodeFormResult> { result ->
+                    viewModel.onIntent(PinCodeResult(result.pinCodeUiModel))
+                }
+                ResultEffect<PinCodeAdvancedGenerationFormResult> { result ->
+                    viewModel.onIntent(PinCodeAdvancedGenerationResult(result.pinCodeUiModel))
                 }
                 ResultEffect<DescriptionFormResult> { result ->
                     viewModel.onIntent(DescriptionResult(result.metadataDescription))
@@ -76,6 +96,9 @@ class ResourceFormFeatureNavigation : FeatureModuleNavigation {
                     viewModel.onIntent(
                         ScanOtpResult(result.isManualCreationChosen, result.scannedTotp),
                     )
+                }
+                ResultEffect<PermissionsConfirmedResult> { result ->
+                    viewModel.onIntent(ConfirmedPermissionsResult(result.permissions))
                 }
 
                 PassboltTheme {
@@ -106,6 +129,16 @@ class ResourceFormFeatureNavigation : FeatureModuleNavigation {
                     TotpAdvancedSettingsFormScreen(
                         mode = key.mode,
                         totpUiModel = key.totpUiModel,
+                    )
+                }
+            }
+
+            entry<AdvancedSecretGenerationForm> { key ->
+                PassboltTheme {
+                    AdvancedSecretGenerationScreen(
+                        initialTab = key.selectedTab,
+                        initialPasswordSettings = key.passwordSettings,
+                        initialPassphraseSettings = key.passphraseSettings,
                     )
                 }
             }
@@ -149,6 +182,24 @@ class ResourceFormFeatureNavigation : FeatureModuleNavigation {
             entry<CustomFieldsForm> { key ->
                 PassboltTheme {
                     CustomFieldsFormScreen(customFieldsUiModel = key.customFieldsUiModel)
+                }
+            }
+
+            entry<PinCodeForm> { key ->
+                PassboltTheme {
+                    PinCodeFormScreen(
+                        mode = key.mode,
+                        pinCodeUiModel = key.pinCodeUiModel,
+                    )
+                }
+            }
+
+            entry<PinCodeAdvancedGenerationForm> { key ->
+                PassboltTheme {
+                    PinCodeAdvancedGenerationFormScreen(
+                        mode = key.mode,
+                        pinCodeUiModel = key.pinCodeUiModel,
+                    )
                 }
             }
         }

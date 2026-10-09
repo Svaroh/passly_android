@@ -3,7 +3,9 @@ package net.svaroh.passly.encryptedstorage
 import android.content.Context
 import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKey
+import timber.log.Timber
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Passbolt - Open source password manager for teams
@@ -32,14 +34,21 @@ class EncryptedFileFactory internal constructor(
     private val context: Context,
     private val masterKey: MasterKey,
 ) {
-    fun get(fileName: String): EncryptedFile {
-        val file = File(EncryptedFileBaseDirectory(context).baseDirectory, fileName)
-        return EncryptedFile
-            .Builder(
-                context,
-                file,
-                masterKey,
-                EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB,
-            ).build()
-    }
+    private val builtFiles = ConcurrentHashMap<String, EncryptedFile>()
+
+    fun get(fileName: String): EncryptedFile =
+        builtFiles.computeIfAbsent(fileName) {
+            try {
+                EncryptedFile
+                    .Builder(
+                        context,
+                        File(EncryptedFileBaseDirectory(context).baseDirectory, fileName),
+                        masterKey,
+                        EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB,
+                    ).build()
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to build encrypted file")
+                throw e
+            }
+        }
 }

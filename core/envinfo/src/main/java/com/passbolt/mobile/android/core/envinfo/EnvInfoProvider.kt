@@ -36,11 +36,13 @@ class EnvInfoProvider(
         EnvInfo(
             deviceName = DEVICE_NAME,
             osName = OS_NAME,
+            sdkInt = SDK_INT,
             appName = "${packageInfo.versionName}-${packageInfo.longVersionCode}",
         )
 
     private companion object {
+        private val SDK_INT = Build.VERSION.SDK_INT
         private val DEVICE_NAME = "${Build.MANUFACTURER} ${Build.MODEL}"
-        private val OS_NAME = "${Build.VERSION.RELEASE} (${Build.VERSION.SDK_INT})"
+        private val OS_NAME = "${Build.VERSION.RELEASE} ($SDK_INT)"
     }
 }

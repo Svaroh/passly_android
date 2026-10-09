@@ -45,7 +45,7 @@ interface PaginatedTagsDao : BaseDao<Tag> {
             "   EXISTS (" +
             "       SELECT 1 FROM TagFts WHERE TagFts MATCH :ftsQuery AND TagFts.docid = t.rowid" +
             "   ) " +
-            "ORDER BY slug COLLATE NOCASE ASC",
+            "ORDER BY slug COLLATE NOCASE ASC, t.id ASC",
     )
     fun getAllWithTaggedItemsCount(ftsQuery: String?): PagingSource<Int, TagWithTaggedItemsCount>
 }

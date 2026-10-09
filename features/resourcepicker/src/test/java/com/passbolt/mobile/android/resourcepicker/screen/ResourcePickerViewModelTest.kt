@@ -23,6 +23,7 @@
 
 package net.svaroh.passly.resourcepicker.screen
 
+import androidx.paging.PagingData
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.GsonBuilder
@@ -30,6 +31,15 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
@@ -37,7 +47,6 @@ import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.common.urimatcher.AutofillUriMatcher
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.resourcetypes.usecase.db.GetResourceTypeIdToSlugMappingUseCase
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.CLEAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.NONE
 import net.svaroh.passly.jsonmodel.JSON_MODEL_GSON
@@ -49,7 +58,6 @@ import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.ApplyClick
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.CloseConfirmationDialog
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.ConfirmOtpLink
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.GoBack
-import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.Initialize
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.ResourcePicked
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.Search
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.SearchEndIconAction
@@ -63,20 +71,12 @@ import net.svaroh.passly.resourcepicker.screen.data.ResourcePickerData
 import net.svaroh.passly.resourcepicker.screen.data.ResourcePickerDataProvider
 import net.svaroh.passly.supportedresourceTypes.ContentType
 import net.svaroh.passly.ui.MetadataJsonModel
-import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourcePermission
 import net.svaroh.passly.ui.ResourcePickerListItem
 import net.svaroh.passly.ui.ResourcePickerListItem.Selection.NOT_SELECTABLE_NO_PERMISSION
 import net.svaroh.passly.ui.ResourcePickerListItem.Selection.NOT_SELECTABLE_UNSUPPORTED_RESOURCE_TYPE
 import net.svaroh.passly.ui.ResourcePickerListItem.Selection.SELECTABLE
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.ui.ResourceUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -84,6 +84,7 @@ import org.junit.Test
 import org.koin.core.logger.Level
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -93,8 +94,10 @@ import org.koin.test.get
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.time.ZonedDateTime
 import java.util.EnumSet
@@ -112,7 +115,6 @@ class ResourcePickerViewModelTest : KoinTest {
                     singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                     singleOf(::DataRefreshTrackingFlow)
                     single { mock<ResourcePickerDataProvider>() }
-                    single { mock<GetResourceTypeIdToSlugMappingUseCase>() }
                     single(named(JSON_MODEL_GSON)) { GsonBuilder().serializeNulls().create() }
                     single {
                         Configuration
@@ -124,7 +126,14 @@ class ResourcePickerViewModelTest : KoinTest {
                     }
                     singleOf(::JsonPathJsonPathOps) bind JsonPathsOps::class
                     factoryOf(::AutofillUriMatcher)
-                    factoryOf(::ResourcePickerViewModel)
+                    factory { params ->
+                        ResourcePickerViewModel(
+                            suggestionUri = params.getOrNull(),
+                            coroutineLaunchContext = get(),
+                            dataRefreshTrackingFlow = get(),
+                            resourcePickerDataProvider = get(),
+                        )
+                    }
                 },
             )
         }
@@ -140,23 +149,12 @@ class ResourcePickerViewModelTest : KoinTest {
         Dispatchers.setMain(testDispatcher)
 
         get<ResourcePickerDataProvider>().stub {
-            onBlocking {
+            on {
                 provideData(
                     anyOrNull(),
                     anyOrNull(),
                 )
             }.doReturn(ResourcePickerData())
-        }
-
-        get<GetResourceTypeIdToSlugMappingUseCase>().stub {
-            onBlocking { execute(any()) }.doReturn(
-                GetResourceTypeIdToSlugMappingUseCase.Output(
-                    idToSlugMapping =
-                        mapOf(
-                            testResourceTypeId to ContentType.PasswordAndDescription.slug,
-                        ),
-                ),
-            )
         }
     }
 
@@ -168,7 +166,7 @@ class ResourcePickerViewModelTest : KoinTest {
     @Test
     fun `should initialize with empty state`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
 
             assertThat(viewModel.viewState.value.searchQuery).isEmpty()
             assertThat(viewModel.viewState.value.isRefreshing).isFalse()
@@ -184,14 +182,9 @@ class ResourcePickerViewModelTest : KoinTest {
             val mockData = mockResourcePickerData()
             whenever(get<ResourcePickerDataProvider>().provideData(anyOrNull(), anyOrNull())).thenReturn(mockData)
 
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
 
-            viewModel.viewState.test {
-                viewModel.onIntent(Initialize(null))
-
-                val updatedState = awaitItem()
-                assertThat(updatedState.resourcePickerData).isEqualTo(mockData)
-            }
+            verify(get<ResourcePickerDataProvider>()).provideData(anyOrNull(), anyOrNull())
         }
 
     @Test
@@ -200,28 +193,31 @@ class ResourcePickerViewModelTest : KoinTest {
             val mockData = mockResourcePickerData()
             whenever(get<ResourcePickerDataProvider>().provideData(anyOrNull(), anyOrNull())).thenReturn(mockData)
 
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
 
             viewModel.viewState.drop(1).test {
                 viewModel.onIntent(Search("test query"))
+                advanceUntilIdle()
 
-                val updatedState = awaitItem()
+                val updatedState = expectMostRecentItem()
                 assertThat(updatedState.searchQuery).isEqualTo("test query")
                 assertThat(updatedState.searchInputEndIconMode).isEqualTo(CLEAR)
-                assertThat(updatedState.resourcePickerData).isEqualTo(mockData)
+                verify(get<ResourcePickerDataProvider>()).provideData(eq("test query"), anyOrNull())
             }
         }
 
     @Test
     fun `should clear search and reset icon mode when search cleared`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
             viewModel.onIntent(Search("test query"))
+            advanceUntilIdle()
 
-            viewModel.viewState.test {
+            viewModel.viewState.drop(1).test {
                 viewModel.onIntent(SearchEndIconAction)
+                advanceUntilIdle()
 
-                val updatedState = awaitItem()
+                val updatedState = expectMostRecentItem()
                 assertThat(updatedState.searchQuery).isEmpty()
                 assertThat(updatedState.searchInputEndIconMode).isEqualTo(NONE)
             }
@@ -234,13 +230,12 @@ class ResourcePickerViewModelTest : KoinTest {
             val mockData = mockResourcePickerData(listOf(resource))
             whenever(get<ResourcePickerDataProvider>().provideData(anyOrNull(), anyOrNull())).thenReturn(mockData)
 
-            viewModel = get()
-            viewModel.onIntent(Initialize(null))
+            viewModel = get { parametersOf(null) }
 
             viewModel.viewState.drop(1).test {
                 viewModel.onIntent(ResourcePicked(resource))
 
-                val updatedState = awaitItem()
+                val updatedState = expectMostRecentItem()
                 assertThat(updatedState.pickedResource).isEqualTo(resource)
                 assertThat(updatedState.isApplyButtonEnabled).isTrue()
             }
@@ -250,7 +245,7 @@ class ResourcePickerViewModelTest : KoinTest {
     fun `should show error when resource with no permission is picked`() =
         runTest {
             val resource = mockResourcePickerListItem("id1", "Resource 1", NOT_SELECTABLE_NO_PERMISSION)
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(ResourcePicked(resource))
@@ -265,7 +260,7 @@ class ResourcePickerViewModelTest : KoinTest {
     fun `should show error when unsupported resource type is picked`() =
         runTest {
             val resource = mockResourcePickerListItem("id1", "Resource 1", NOT_SELECTABLE_UNSUPPORTED_RESOURCE_TYPE)
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(ResourcePicked(resource))
@@ -279,19 +274,15 @@ class ResourcePickerViewModelTest : KoinTest {
     @Test
     fun `should show confirmation dialog for TOTP link when apply clicked`() =
         runTest {
-            val resource = mockResourcePickerListItem("id1", "Resource 1", SELECTABLE)
-            get<GetResourceTypeIdToSlugMappingUseCase>().stub {
-                onBlocking { execute(any()) }.doReturn(
-                    GetResourceTypeIdToSlugMappingUseCase.Output(
-                        idToSlugMapping =
-                            mapOf(
-                                testResourceTypeId to ContentType.PasswordAndDescription.slug,
-                            ),
-                    ),
+            val resource =
+                mockResourcePickerListItem(
+                    "id1",
+                    "Resource 1",
+                    SELECTABLE,
+                    slug = ContentType.PasswordAndDescription.slug,
                 )
-            }
 
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
             viewModel.onIntent(ResourcePicked(resource))
 
             viewModel.viewState.drop(1).test {
@@ -307,19 +298,15 @@ class ResourcePickerViewModelTest : KoinTest {
     @Test
     fun `should show confirmation dialog for TOTP replace when apply clicked`() =
         runTest {
-            val resource = mockResourcePickerListItem("id1", "Resource 1", SELECTABLE)
-            get<GetResourceTypeIdToSlugMappingUseCase>().stub {
-                onBlocking { execute(any()) }.doReturn(
-                    GetResourceTypeIdToSlugMappingUseCase.Output(
-                        idToSlugMapping =
-                            mapOf(
-                                testResourceTypeId to ContentType.PasswordDescriptionTotp.slug,
-                            ),
-                    ),
+            val resource =
+                mockResourcePickerListItem(
+                    "id1",
+                    "Resource 1",
+                    SELECTABLE,
+                    slug = ContentType.PasswordDescriptionTotp.slug,
                 )
-            }
 
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
             viewModel.onIntent(ResourcePicked(resource))
 
             viewModel.viewState.drop(1).test {
@@ -335,7 +322,7 @@ class ResourcePickerViewModelTest : KoinTest {
     @Test
     fun `should close confirmation dialog when CloseConfirmationDialog intent received`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
 
             viewModel.viewState.test {
                 viewModel.onIntent(CloseConfirmationDialog)
@@ -349,7 +336,7 @@ class ResourcePickerViewModelTest : KoinTest {
     fun `should navigate back with result when OTP link confirmed`() =
         runTest {
             val resource = mockResourcePickerListItem("id1", "Resource 1", SELECTABLE)
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
             viewModel.onIntent(ResourcePicked(resource))
 
             viewModel.sideEffect.test {
@@ -367,7 +354,7 @@ class ResourcePickerViewModelTest : KoinTest {
     @Test
     fun `should navigate up when GoBack intent received`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(GoBack)
@@ -384,18 +371,14 @@ class ResourcePickerViewModelTest : KoinTest {
             val mockData = mockResourcePickerData()
             whenever(get<ResourcePickerDataProvider>().provideData(anyOrNull(), anyOrNull())).thenReturn(mockData)
 
-            viewModel = get()
-            viewModel.onIntent(Initialize(null))
+            viewModel = get { parametersOf(null) }
 
             viewModel.viewState.drop(1).test {
-                dataRefreshFlow.updateStatus(InProgress)
-                val inProgress = awaitItem()
-                assertThat(inProgress.isRefreshing).isTrue()
+                dataRefreshFlow.updateStatus(InProgress(progress = 0f))
+                assertThat(expectMostRecentItem().isRefreshing).isTrue()
 
                 dataRefreshFlow.updateStatus(FinishedWithSuccess)
-                val finished = awaitItem()
-                assertThat(finished.isRefreshing).isFalse()
-                assertThat(finished.resourcePickerData).isEqualTo(mockData)
+                assertThat(expectMostRecentItem().isRefreshing).isFalse()
             }
         }
 
@@ -403,17 +386,14 @@ class ResourcePickerViewModelTest : KoinTest {
     fun `should show error on refresh failure`() =
         runTest {
             val dataRefreshFlow: DataRefreshTrackingFlow = get()
-            viewModel = get()
-            viewModel.onIntent(Initialize(null))
+            viewModel = get { parametersOf(null) }
 
             viewModel.viewState.drop(1).test {
-                dataRefreshFlow.updateStatus(InProgress)
-                val inProgress = awaitItem()
-                assertThat(inProgress.isRefreshing).isTrue()
+                dataRefreshFlow.updateStatus(InProgress(progress = 0f))
+                assertThat(expectMostRecentItem().isRefreshing).isTrue()
 
                 dataRefreshFlow.updateStatus(FinishedWithFailure)
-                val finished = awaitItem()
-                assertThat(finished.isRefreshing).isFalse()
+                assertThat(expectMostRecentItem().isRefreshing).isFalse()
 
                 viewModel.sideEffect.test {
                     val effect = awaitItem()
@@ -430,14 +410,9 @@ class ResourcePickerViewModelTest : KoinTest {
             val mockData = mockResourcePickerData()
             whenever(get<ResourcePickerDataProvider>().provideData(anyOrNull(), any())).thenReturn(mockData)
 
-            viewModel = get()
+            viewModel = get { parametersOf(suggestionUri) }
 
-            viewModel.viewState.test {
-                viewModel.onIntent(Initialize(suggestionUri))
-
-                val updatedState = awaitItem()
-                assertThat(updatedState.resourcePickerData).isEqualTo(mockData)
-            }
+            verify(get<ResourcePickerDataProvider>()).provideData(anyOrNull(), eq(suggestionUri))
         }
 
     @Test
@@ -448,15 +423,15 @@ class ResourcePickerViewModelTest : KoinTest {
             val mockData = mockResourcePickerData(listOf(resource1, resource2))
             whenever(get<ResourcePickerDataProvider>().provideData(anyOrNull(), anyOrNull())).thenReturn(mockData)
 
-            viewModel = get()
-            viewModel.onIntent(Initialize(null))
+            viewModel = get { parametersOf(null) }
 
             viewModel.onIntent(ResourcePicked(resource1))
 
             viewModel.viewState.drop(1).test {
                 viewModel.onIntent(Search("test"))
+                advanceUntilIdle()
 
-                val updatedState = awaitItem()
+                val updatedState = expectMostRecentItem()
                 assertThat(updatedState.pickedResource).isEqualTo(resource1)
             }
         }
@@ -464,25 +439,19 @@ class ResourcePickerViewModelTest : KoinTest {
     @Test
     fun `should handle V5Default resource type for TOTP link`() =
         runTest {
-            val resource = mockResourcePickerListItem("id1", "Resource 1", SELECTABLE)
-            get<GetResourceTypeIdToSlugMappingUseCase>().stub {
-                onBlocking { execute(any()) }.doReturn(
-                    GetResourceTypeIdToSlugMappingUseCase.Output(
-                        idToSlugMapping =
-                            mapOf(
-                                testResourceTypeId to ContentType.V5Default.slug,
-                            ),
-                    ),
+            val resource =
+                mockResourcePickerListItem(
+                    "id1",
+                    "Resource 1",
+                    SELECTABLE,
+                    slug = ContentType.V5Default.slug,
                 )
-            }
 
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
             viewModel.onIntent(ResourcePicked(resource))
-            advanceUntilIdle()
 
             viewModel.viewState.drop(1).test {
                 viewModel.onIntent(ApplyClick)
-                advanceUntilIdle()
 
                 val updatedState = awaitItem()
                 assertThat(updatedState.showConfirmationDialog).isTrue()
@@ -494,25 +463,19 @@ class ResourcePickerViewModelTest : KoinTest {
     @Test
     fun `should handle V5DefaultWithTotp resource type for TOTP replace`() =
         runTest {
-            val resource = mockResourcePickerListItem("id1", "Resource 1", SELECTABLE)
-            get<GetResourceTypeIdToSlugMappingUseCase>().stub {
-                onBlocking { execute(any()) }.doReturn(
-                    GetResourceTypeIdToSlugMappingUseCase.Output(
-                        idToSlugMapping =
-                            mapOf(
-                                testResourceTypeId to ContentType.V5DefaultWithTotp.slug,
-                            ),
-                    ),
+            val resource =
+                mockResourcePickerListItem(
+                    "id1",
+                    "Resource 1",
+                    SELECTABLE,
+                    slug = ContentType.V5DefaultWithTotp.slug,
                 )
-            }
 
-            viewModel = get()
+            viewModel = get { parametersOf(null) }
             viewModel.onIntent(ResourcePicked(resource))
-            advanceUntilIdle()
 
             viewModel.viewState.drop(1).test {
                 viewModel.onIntent(ApplyClick)
-                advanceUntilIdle()
 
                 val updatedState = awaitItem()
                 assertThat(updatedState.showConfirmationDialog).isTrue()
@@ -525,26 +488,28 @@ class ResourcePickerViewModelTest : KoinTest {
         resources: List<ResourcePickerListItem> = emptyList(),
         suggestedResources: List<ResourcePickerListItem> = emptyList(),
     ) = ResourcePickerData(
-        resources = resources,
-        suggestedResources = suggestedResources,
+        resources = flowOf(PagingData.from(resources)),
+        suggestedResources = flowOf(PagingData.from(suggestedResources)),
     )
 
     private fun mockResourcePickerListItem(
         id: String,
         name: String,
         selection: ResourcePickerListItem.Selection,
+        slug: String = ContentType.PasswordAndDescription.slug,
     ) = ResourcePickerListItem(
-        resourceModel = mockResourceModel(id, name),
+        resourceModel = mockResourceModel(id, name, slug),
         selection = selection,
-        isSelected = false,
     )
 
     private fun mockResourceModel(
         id: String,
         name: String,
-    ) = ResourceModel(
+        slug: String = ContentType.PasswordAndDescription.slug,
+    ) = ResourceUiModel(
         resourceId = id,
         resourceTypeId = testResourceTypeIdString,
+        slug = slug,
         folderId = "folderId",
         permission = ResourcePermission.OWNER,
         favouriteId = null,

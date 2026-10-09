@@ -1,10 +1,8 @@
 package net.svaroh.passly.feature.authentication.auth
 
-import PassboltTheme
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
-import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -36,7 +34,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
@@ -46,7 +43,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.AppContext
@@ -71,7 +71,6 @@ import net.svaroh.passly.core.ui.topbar.TitleAppBar
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.AcceptChangedServerFingerprint
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.AccessLogs
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.AuthenticateUsingBiometry
-import net.svaroh.passly.feature.authentication.auth.AuthIntent.BiometricKeyInvalidated
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.ConfirmSetupLeave
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.ConnectToExistingAccount
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.DismissConfirmSetupLeave
@@ -100,7 +99,6 @@ import net.svaroh.passly.featureflagserror.FeatureFlagsFetchErrorDialog
 import net.svaroh.passly.helpmenu.HelpMenuBottomSheet
 import net.svaroh.passly.testtags.composetags.Auth
 import net.svaroh.passly.ui.HelpMenuModel
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
@@ -136,6 +134,10 @@ internal fun AuthScreen(
         snackbarHostState = snackbarHostState,
     )
 
+    val sessionExpiredText = stringResource(LocalizationR.string.auth_reason_session_expired)
+    val passphraseExpiredText = stringResource(LocalizationR.string.auth_reason_passphrase_expired)
+    val biometricTitle = stringResource(LocalizationR.string.auth_biometric_title)
+    val errorSnackbarColor = colorResource(CoreUiR.color.red)
     SideEffectDispatcher(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             is NavigateBack -> {
@@ -168,18 +170,16 @@ internal fun AuthScreen(
                 val subtitle =
                     sideEffect.authReason?.let { reason ->
                         when (reason) {
-                            SESSION ->
-                                context.getString(LocalizationR.string.auth_reason_session_expired)
-                            PASSPHRASE ->
-                                context.getString(LocalizationR.string.auth_reason_passphrase_expired)
+                            SESSION -> sessionExpiredText
+                            PASSPHRASE -> passphraseExpiredText
                         }
                     } ?: ""
                 showBiometricPrompt(
-                    activity = context as AppCompatActivity,
+                    activity = context as FragmentActivity,
                     executor = executor,
                     biometricPromptBuilder = biometricPromptBuilder,
                     biometricEncryptionCipher = sideEffect.cipher,
-                    title = context.getString(LocalizationR.string.auth_biometric_title),
+                    title = biometricTitle,
                     subtitle = subtitle,
                     onAuthenticationSuccess = { resultCipher ->
                         viewModel.onIntent(AuthIntent.BiometricAuthenticationSuccess(resultCipher))
@@ -188,9 +188,6 @@ internal fun AuthScreen(
                         viewModel.onIntent(AuthIntent.BiometricAuthenticationError(error))
                     },
                     onAuthenticationCancelled = {},
-                    onKeyPermanentlyInvalidated = {
-                        viewModel.onIntent(BiometricKeyInvalidated)
-                    },
                 )
             }
             is HideKeyboard -> focusManager.clearFocus()
@@ -210,7 +207,7 @@ internal fun AuthScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getSnackBarMessage(context, sideEffect.kind, sideEffect.message),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorSnackbarColor,
                         ),
                     )
                 }
@@ -230,13 +227,14 @@ internal fun AuthScreen(
 }
 
 @Composable
-private fun AuthScreen(
+fun AuthScreen(
     state: AuthState,
     onIntent: (AuthIntent) -> Unit,
     snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        modifier = Modifier.imePadding(),
+        modifier = modifier.imePadding(),
         topBar = {
             TitleAppBar(
                 title = getTitleText(LocalContext.current, state.authReason),

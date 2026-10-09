@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.feature.accountdetails.screen
 
-import PassboltTheme
 import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -35,21 +34,31 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Onboarding
 import net.svaroh.passly.core.ui.button.PrimaryButton
 import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
 import net.svaroh.passly.core.ui.labelledtext.LabelledText
+import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
 import net.svaroh.passly.core.ui.text.TextInput
 import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Default
 import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Error
@@ -60,10 +69,12 @@ import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.Star
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsIntent.UpdateLabel
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.NavigateToTransferAccount
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.NavigateUp
+import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsScreenSideEffect.ShowProfileFetchError
 import net.svaroh.passly.feature.accountdetails.screen.AccountDetailsValidationError.MaxLengthExceeded
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR
+import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun AccountDetailsScreen(
@@ -71,11 +82,16 @@ internal fun AccountDetailsScreen(
     navigator: AppNavigator = koinInject(),
     viewModel: AccountDetailsViewModel = koinViewModel(),
 ) {
+    val context = LocalContext.current
     val state = viewModel.viewState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+    val errorColor = colorResource(CoreUiR.color.red)
 
     AccountDetailsScreen(
         state = state.value,
         onIntent = viewModel::onIntent,
+        snackbarHostState = snackbarHostState,
         modifier = modifier,
     )
 
@@ -83,6 +99,15 @@ internal fun AccountDetailsScreen(
         when (it) {
             NavigateUp -> navigator.navigateBack()
             NavigateToTransferAccount -> navigator.navigateToKey(Onboarding)
+            is ShowProfileFetchError ->
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(
+                        ColoredSnackbarVisuals(
+                            message = getProfileFetchErrorMessage(context, it.message),
+                            backgroundColor = errorColor,
+                        ),
+                    )
+                }
         }
     }
 }
@@ -91,12 +116,30 @@ internal fun AccountDetailsScreen(
 private fun AccountDetailsScreen(
     state: AccountDetailsState,
     onIntent: (AccountDetailsIntent) -> Unit,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
 
     Scaffold(
         modifier = modifier,
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data ->
+                    val customVisuals = data.visuals as? ColoredSnackbarVisuals
+                    if (customVisuals != null) {
+                        Snackbar(
+                            snackbarData = data,
+                            containerColor = customVisuals.backgroundColor,
+                            contentColor = customVisuals.contentColor,
+                        )
+                    } else {
+                        Snackbar(snackbarData = data)
+                    }
+                },
+            )
+        },
         topBar = {
             TitleAppBar(
                 title = stringResource(LocalizationR.string.settings_accounts_account_details),
@@ -221,6 +264,8 @@ private fun AccountDetailsScreen(
             )
         }
     }
+
+    ProgressDialog(isVisible = state.showProgress)
 }
 
 private fun getLabelErrorMessage(
@@ -249,6 +294,7 @@ private fun AccountDetailsPreview() {
                     organizationUrl = "https://www.passbolt.com",
                 ),
             onIntent = {},
+            snackbarHostState = remember { SnackbarHostState() },
         )
     }
 }

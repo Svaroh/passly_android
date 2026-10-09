@@ -2,9 +2,9 @@ package net.svaroh.passly.logs
 
 import net.svaroh.passly.logs.reader.LogsFileReader
 import net.svaroh.passly.logs.reader.LogsReader
-import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 
 /**

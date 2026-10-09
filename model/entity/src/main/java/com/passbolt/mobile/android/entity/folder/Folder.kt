@@ -1,0 +1,65 @@
+package net.svaroh.passly.entity.folder
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.Index.Order.ASC
+import androidx.room.Index.Order.DESC
+import androidx.room.PrimaryKey
+import net.svaroh.passly.entity.resource.Permission
+import java.time.ZonedDateTime
+
+/**
+ * Passbolt - Open source password manager for teams
+ * Copyright (c) 2021 Passbolt SA
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+ * Public License (AGPL) as published by the Free Software Foundation version 3.
+ *
+ * The name "Passbolt" is a registered trademark of Passbolt SA, and Passbolt SA hereby declines to grant a trademark
+ * license to "Passbolt" pursuant to the GNU Affero General Public License version 3 Section 7(e), without a separate
+ * agreement with Passbolt SA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License along with this program. If not,
+ * see GNU Affero General Public License v3 (http://www.gnu.org/licenses/agpl-3.0.html).
+ *
+ * @copyright Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link https://www.passbolt.com Passbolt (tm)
+ * @since v1.0
+ */
+@Entity(
+    indices = [
+        Index(value = ["parentId"]),
+        Index(value = ["modified", "folderId"], orders = [DESC, ASC]),
+    ],
+)
+data class Folder(
+    @PrimaryKey
+    val folderId: String,
+    @ColumnInfo(collate = ColumnInfo.NOCASE)
+    val name: String,
+    val permission: Permission,
+    val parentId: String?,
+    val isShared: Boolean,
+    val modified: ZonedDateTime,
+    val updateState: FolderUpdateState,
+)
+
+enum class FolderUpdateState {
+    PENDING,
+    UPDATED,
+}
+
+data class FolderWithChildItemsCountAndPath(
+    val folderId: String,
+    val name: String,
+    val permission: Permission,
+    val parentId: String?,
+    val isShared: Boolean,
+    val childItemsCount: Int,
+    val path: String?,
+)

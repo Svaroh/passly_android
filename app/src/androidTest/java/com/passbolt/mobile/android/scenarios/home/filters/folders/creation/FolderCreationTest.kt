@@ -45,6 +45,7 @@ import net.svaroh.passly.feature.authentication.AuthenticationMainActivity
 import net.svaroh.passly.helpers.chooseFilter
 import net.svaroh.passly.helpers.getString
 import net.svaroh.passly.helpers.signIn
+import net.svaroh.passly.helpers.waitForText
 import net.svaroh.passly.instrumentationTestsModule
 import net.svaroh.passly.intents.ManagedAccountIntentCreator
 import net.svaroh.passly.rules.IdlingResourceRule
@@ -235,6 +236,7 @@ class FolderCreationTest : KoinTest {
                 onAllNodesWithTag(Home.FAB).fetchSemanticsNodes().isNotEmpty()
             }
             onNodeWithTag(Home.FAB).performClick()
+            waitForText(getString(LocalisationR.string.create_resource_menu_create_folder))
             onNodeWithText(getString(LocalisationR.string.create_resource_menu_create_folder)).performClick()
             onNodeWithTag(CreateFolder.NAME_INPUT, useUnmergedTree = true)
                 .performClick()

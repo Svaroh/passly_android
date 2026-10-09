@@ -2,10 +2,18 @@ package net.svaroh.passly.permissions.userpermissionsdetails
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.users.usecase.db.GetLocalUserUseCase
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalUserUseCase
 import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsIntent.CancelPermissionDelete
 import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsIntent.ConfirmPermissionDelete
 import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsIntent.DeletePermission
@@ -15,28 +23,20 @@ import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsInten
 import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsSideEffect.NavigateBack
 import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsSideEffect.SetDeletePermissionResult
 import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsSideEffect.SetUpdatedPermissionResult
-import net.svaroh.passly.ui.GpgKeyModel
+import net.svaroh.passly.ui.GpgKeyUiModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.PermissionsMode
 import net.svaroh.passly.ui.PermissionsMode.EDIT
 import net.svaroh.passly.ui.ResourcePermission
 import net.svaroh.passly.ui.ResourcePermission.UPDATE
-import net.svaroh.passly.ui.UserModel
-import net.svaroh.passly.ui.UserProfileModel
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
 import net.svaroh.passly.ui.UserWithAvatar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.bind
@@ -61,8 +61,18 @@ class UserPermissionsViewModelTest : KoinTest {
                 listOf(
                     module {
                         single { mock<GetLocalUserUseCase>() }
+                        single { mock<GetPermissionsSnapshotUseCase>() }
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
-                        factoryOf(::UserPermissionsViewModel)
+                        factory { params ->
+                            UserPermissionsViewModel(
+                                mode = params.get(),
+                                permission = params.get(),
+                                fromSnapshot = params.getOrNull() ?: false,
+                                getLocalUserUseCase = get(),
+                                getPermissionsSnapshotUseCase = get(),
+                                coroutineLaunchContext = get(),
+                            )
+                        }
                         singleOf(::SessionRefreshTrackingFlow)
                     },
                 ),
@@ -79,7 +89,7 @@ class UserPermissionsViewModelTest : KoinTest {
 
         val getLocalUserUseCase = get<GetLocalUserUseCase>()
         getLocalUserUseCase.stub {
-            onBlocking { execute(GetLocalUserUseCase.Input(USER_WITH_AVATAR.userId)) }
+            on { execute(GetLocalUserUseCase.Input(USER_WITH_AVATAR.userId)) }
                 .doReturn(GetLocalUserUseCase.Output(USER))
         }
     }
@@ -185,6 +195,20 @@ class UserPermissionsViewModelTest : KoinTest {
             }
         }
 
+    @Test
+    fun `snapshot details without an available snapshot should navigate back`() =
+        runTest {
+            get<GetPermissionsSnapshotUseCase>().stub {
+                on { execute(Unit) }.doReturn(GetPermissionsSnapshotUseCase.Output(null))
+            }
+
+            viewModel = get(parameters = { parametersOf(PermissionsMode.VIEW, USER_PERMISSION, true) })
+
+            viewModel.sideEffect.test {
+                assertIs<NavigateBack>(awaitItem())
+            }
+        }
+
     private companion object {
         private val USER_WITH_AVATAR =
             UserWithAvatar(
@@ -196,12 +220,12 @@ class UserPermissionsViewModelTest : KoinTest {
                 avatarUrl = "avatarUrl",
             )
         private val USER =
-            UserModel(
+            UserUiModel(
                 id = USER_WITH_AVATAR.userId,
                 userName = USER_WITH_AVATAR.userName,
                 disabled = false,
                 gpgKey =
-                    GpgKeyModel(
+                    GpgKeyUiModel(
                         armoredKey = "keyData",
                         fingerprint = "fingerprint",
                         bits = 1,
@@ -213,7 +237,7 @@ class UserPermissionsViewModelTest : KoinTest {
                         id = UUID.randomUUID().toString(),
                     ),
                 profile =
-                    UserProfileModel(
+                    UserProfileUiModel(
                         username = "username",
                         firstName = USER_WITH_AVATAR.firstName,
                         lastName = USER_WITH_AVATAR.lastName,

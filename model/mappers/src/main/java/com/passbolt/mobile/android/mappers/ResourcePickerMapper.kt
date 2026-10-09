@@ -1,0 +1,70 @@
+/**
+ * Passbolt - Open source password manager for teams
+ * Copyright (c) 2021 Passbolt SA
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+ * Public License (AGPL) as published by the Free Software Foundation version 3.
+ *
+ * The name "Passbolt" is a registered trademark of Passbolt SA, and Passbolt SA hereby declines to grant a trademark
+ * license to "Passbolt" pursuant to the GNU Affero General Public License version 3 Section 7(e), without a separate
+ * agreement with Passbolt SA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License along with this program. If not,
+ * see GNU Affero General Public License v3 (http://www.gnu.org/licenses/agpl-3.0.html).
+ *
+ * @copyright Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link https://www.passbolt.com Passbolt (tm)
+ * @since v1.0
+ */
+
+package net.svaroh.passly.mappers
+
+import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.ResourcePickerListItem
+import net.svaroh.passly.ui.ResourcePickerListItem.Selection.NOT_SELECTABLE_NO_PERMISSION
+import net.svaroh.passly.ui.ResourcePickerListItem.Selection.NOT_SELECTABLE_UNSUPPORTED_RESOURCE_TYPE
+import net.svaroh.passly.ui.ResourcePickerListItem.Selection.SELECTABLE
+import net.svaroh.passly.ui.ResourceUiModel
+
+class ResourcePickerMapper {
+    fun map(
+        resource: ResourceUiModel,
+        selectableResourceTypeSlugs: Set<String>,
+    ) = ResourcePickerListItem(
+        resourceModel = resource,
+        selection =
+            getSelection(
+                haveWritePermissions = haveWritePermissions(resource),
+                isAllowedResourceType = resource.slug in selectableResourceTypeSlugs,
+            ),
+    )
+
+    private fun getSelection(
+        haveWritePermissions: Boolean,
+        isAllowedResourceType: Boolean,
+    ): ResourcePickerListItem.Selection =
+        if (haveWritePermissions && isAllowedResourceType) {
+            SELECTABLE
+        } else {
+            // if both are valid prefer invalid permission state
+            if (!haveWritePermissions) {
+                NOT_SELECTABLE_NO_PERMISSION
+            } else {
+                NOT_SELECTABLE_UNSUPPORTED_RESOURCE_TYPE
+            }
+        }
+
+    private fun haveWritePermissions(resource: ResourceUiModel) = resource.permission in WRITE_PERMISSIONS
+
+    private companion object {
+        private val WRITE_PERMISSIONS =
+            setOf(
+                ResourcePermission.OWNER,
+                ResourcePermission.UPDATE,
+            )
+    }
+}

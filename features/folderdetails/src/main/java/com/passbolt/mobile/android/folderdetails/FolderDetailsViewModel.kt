@@ -24,17 +24,18 @@
 package net.svaroh.passly.folderdetails
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderLocationUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderPermissionsUseCase
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderLocationUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderPermissionsUseCase
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
 import net.svaroh.passly.folderdetails.FolderDetailsIntent.GoBack
 import net.svaroh.passly.folderdetails.FolderDetailsIntent.GoToLocationDetails
 import net.svaroh.passly.folderdetails.FolderDetailsIntent.GoToPermissionDetails
@@ -49,7 +50,6 @@ import net.svaroh.passly.folderdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
 import net.svaroh.passly.folderdetails.ToastType.CONTENT_NOT_AVAILABLE
 import net.svaroh.passly.ui.PermissionsMode
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class FolderDetailsViewModel(
@@ -119,7 +119,7 @@ internal class FolderDetailsViewModel(
                     permissions = permissions,
                 )
             }
-        } catch (_: NullPointerException) {
+        } catch (_: IllegalStateException) {
             emitSideEffect(ShowToast(CONTENT_NOT_AVAILABLE))
             emitSideEffect(NavigateToHome)
         } catch (throwable: Exception) {
@@ -130,7 +130,7 @@ internal class FolderDetailsViewModel(
     private suspend fun synchronizeWithDataRefresh(folderId: String) {
         dataRefreshTrackingFlow.dataRefreshStatusFlow.collect {
             when (it) {
-                InProgress -> updateViewState { copy(isRefreshing = true) }
+                is InProgress -> updateViewState { copy(isRefreshing = true, refreshProgress = it.progress) }
                 FinishedWithFailure -> {
                     emitSideEffect(ShowErrorSnackbar(FAILED_TO_REFRESH_DATA))
                     updateViewState { copy(isRefreshing = false) }

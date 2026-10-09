@@ -1,5 +1,7 @@
 package net.svaroh.passly.feature.autofill.resources
 
+import net.svaroh.passly.feature.autofill.resources.datasetstrategy.AutofillPayload
+
 sealed interface AutofillResourcesSideEffect {
     data object NavigateToAuth : AutofillResourcesSideEffect
 
@@ -10,13 +12,12 @@ sealed interface AutofillResourcesSideEffect {
     ) : AutofillResourcesSideEffect
 
     data class AutofillReturn(
-        val username: String,
-        val password: String,
-        val uri: String?,
+        val payload: AutofillPayload,
     ) : AutofillResourcesSideEffect
 }
 
 enum class ToastType {
     DECRYPTION_FAILURE,
     FETCH_FAILURE,
+    INVALID_TOTP_PARAMETERS,
 }

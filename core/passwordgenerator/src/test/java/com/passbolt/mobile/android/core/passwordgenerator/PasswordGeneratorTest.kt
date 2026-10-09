@@ -1,10 +1,10 @@
 package net.svaroh.passly.core.passwordgenerator
 
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.passwordgenerator.codepoints.CodepointSet
-import net.svaroh.passly.ui.PasswordGeneratorSettingsModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import net.svaroh.passly.core.passwordgenerator.codepoints.CodepointSet
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level
@@ -50,7 +50,7 @@ class PasswordGeneratorTest : KoinTest {
         runTest {
             val length = 50
             val settings =
-                PasswordGeneratorSettingsModel(
+                PasswordGeneratorSettingsUiModel(
                     length = length,
                     maskUpper = true,
                     maskLower = false,
@@ -76,7 +76,7 @@ class PasswordGeneratorTest : KoinTest {
         runTest {
             val length = 50
             val settings =
-                PasswordGeneratorSettingsModel(
+                PasswordGeneratorSettingsUiModel(
                     length = length,
                     maskUpper = false,
                     maskLower = true,
@@ -102,7 +102,7 @@ class PasswordGeneratorTest : KoinTest {
         runTest {
             val length = 50
             val settings =
-                PasswordGeneratorSettingsModel(
+                PasswordGeneratorSettingsUiModel(
                     length = length,
                     maskUpper = false,
                     maskLower = false,
@@ -128,7 +128,7 @@ class PasswordGeneratorTest : KoinTest {
         runTest {
             val length = 50
             val settings =
-                PasswordGeneratorSettingsModel(
+                PasswordGeneratorSettingsUiModel(
                     length = length,
                     maskUpper = false,
                     maskLower = false,
@@ -154,7 +154,7 @@ class PasswordGeneratorTest : KoinTest {
         runTest {
             val length = 50
             val settings =
-                PasswordGeneratorSettingsModel(
+                PasswordGeneratorSettingsUiModel(
                     length = length,
                     maskUpper = false,
                     maskLower = false,
@@ -180,7 +180,7 @@ class PasswordGeneratorTest : KoinTest {
         runTest {
             val length = 50
             val settings =
-                PasswordGeneratorSettingsModel(
+                PasswordGeneratorSettingsUiModel(
                     length = length,
                     maskUpper = false,
                     maskLower = false,
@@ -206,7 +206,7 @@ class PasswordGeneratorTest : KoinTest {
         runTest {
             val length = 100
             val settings =
-                PasswordGeneratorSettingsModel(
+                PasswordGeneratorSettingsUiModel(
                     length = length,
                     maskUpper = false,
                     maskLower = false,
@@ -232,7 +232,7 @@ class PasswordGeneratorTest : KoinTest {
         runTest {
             val length = 50
             val settings =
-                PasswordGeneratorSettingsModel(
+                PasswordGeneratorSettingsUiModel(
                     length = length,
                     maskUpper = false,
                     maskLower = false,
@@ -258,7 +258,7 @@ class PasswordGeneratorTest : KoinTest {
         runTest {
             val length = 50
             val settings =
-                PasswordGeneratorSettingsModel(
+                PasswordGeneratorSettingsUiModel(
                     length = length,
                     maskUpper = false,
                     maskLower = false,
@@ -284,7 +284,7 @@ class PasswordGeneratorTest : KoinTest {
         runTest {
             val length = 50
             val settings =
-                PasswordGeneratorSettingsModel(
+                PasswordGeneratorSettingsUiModel(
                     length = length,
                     maskUpper = false,
                     maskLower = false,
@@ -310,7 +310,7 @@ class PasswordGeneratorTest : KoinTest {
         runTest {
             val length = 50
             val settings =
-                PasswordGeneratorSettingsModel(
+                PasswordGeneratorSettingsUiModel(
                     length = length,
                     maskUpper = true,
                     maskLower = true,
@@ -332,7 +332,7 @@ class PasswordGeneratorTest : KoinTest {
         }
 
     private suspend fun testPasswordAlphabetCorrectnessGeneration(
-        settings: PasswordGeneratorSettingsModel,
+        settings: PasswordGeneratorSettingsUiModel,
         alphabets: Set<CodepointSet>,
     ) {
         val password = passwordGenerator.generate(settings)

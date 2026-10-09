@@ -5,9 +5,9 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.barcode.BarcodeScanner
+import kotlinx.coroutines.flow.StateFlow
 import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import net.svaroh.passly.core.qrscan.analyzer.QrCodeImageAnalyzer
-import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.Executor
 
 /**

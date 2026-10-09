@@ -50,6 +50,6 @@ internal class AdditionalUrisLimitChecker : LimitChecker {
 
     companion object {
         @VisibleForTesting
-        const val MAX_ADDITIONAL_URIS = 19
+        const val MAX_ADDITIONAL_URIS = 31
     }
 }

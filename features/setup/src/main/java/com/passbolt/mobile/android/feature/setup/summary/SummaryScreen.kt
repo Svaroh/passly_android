@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.feature.setup.summary
 
-import PassboltTheme
 import android.app.Activity
 import android.content.Intent
 import androidx.activity.compose.BackHandler
@@ -59,6 +58,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.compose.AppNavigator

@@ -4,11 +4,15 @@ import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.os.PowerManager
 import android.provider.Settings
-import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.autofill.accessibility.AccessibilityCommunicator
 import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider
 import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition
@@ -17,22 +21,17 @@ import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProv
 import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition.InBoundsTopAnchor
 import net.svaroh.passly.core.autofill.accessibility.AccessibilityOperationsProvider.OverlayPosition.OutBoundsHide
 import net.svaroh.passly.core.extension.gone
-import net.svaroh.passly.core.extension.setDebouncingOnClick
 import net.svaroh.passly.core.extension.visible
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.AutofillMode
+import net.svaroh.passly.core.navigation.AutofillType
 import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory
 import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory.Companion.ACCESSIBILITY_SERVICE_NOTIFICATION_ID
-import net.svaroh.passly.feature.autofill.databinding.ViewAutofillLabelBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Passbolt - Open source password manager for teams
@@ -60,20 +59,23 @@ class AccessibilityService :
     AccessibilityService(),
     KoinComponent {
     private val accessibilityOperationsProvider: AccessibilityOperationsProvider by inject()
+    private val accessibilityCommunicator: AccessibilityCommunicator by inject()
     private val coroutineLaunchContext: CoroutineLaunchContext by inject()
     private val windowManager: WindowManager by inject()
     private val job = SupervisorJob()
     private val scope = CoroutineScope(job + coroutineLaunchContext.ui)
     private var overlayDisplayed = false
-    private var overlayView: ViewAutofillLabelBinding? = null
+    private var overlayView: View? = null
     private val powerManager: PowerManager by inject()
     private var uri: String? = null
+    private var pendingAutofillType: AutofillType = AutofillType.CREDENTIALS
     private val accessibilityServiceNotificationFactory: AccessibilityServiceNotificationFactory by inject()
     private var overlayViewHeight: Int = 0
     private var anchorNode: AccessibilityNodeInfo? = null
     private var isOverlayAboveAnchor: Boolean = false
     private var overlayAnchorObserverRunning = false
     private var overlayAnchorObserverRunnable: Job? = null
+    private var clearLastFillJob: Job? = null
     private var lastAnchorX = 0
     private var lastAnchorY = 0
     private var lastPosition: OverlayPosition? = null
@@ -88,19 +90,7 @@ class AccessibilityService :
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        createOverlayView()
         Timber.d("AccessibilityService connected")
-    }
-
-    private fun createOverlayView() {
-        overlayView = ViewAutofillLabelBinding.inflate(LayoutInflater.from(applicationContext))
-        overlayView?.root?.setDebouncingOnClick {
-            hideOverlay()
-            openResourcesActivity()
-        }
-        overlayView?.close?.setDebouncingOnClick {
-            hideOverlay()
-        }
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
@@ -128,8 +118,8 @@ class AccessibilityService :
 
     private fun stateChanged(event: AccessibilityEvent) {
         val root = rootInActiveWindow
-        if (AccessibilityCommunicator.lastCredentials == null) {
-            Timber.d("Last credentials are null - ignoring event")
+        if (accessibilityCommunicator.lastFill == null) {
+            Timber.d("Last fill payload is null - ignoring event")
         } else if (event.source == null ||
             (event.packageName != null && event.packageName.contains(PASSBOLT_PACKAGE))
         ) {
@@ -138,7 +128,7 @@ class AccessibilityService :
         } else if (root == null || root.packageName != event.packageName) {
             Timber.d("Root is null or root package name is different than event - ignoring")
         } else if (scanAndAutofill(root, event)) {
-            Timber.d("Scanning return false - hiding overlay")
+            Timber.d("Scanning returned true - hiding overlay")
             hideOverlay()
         }
     }
@@ -154,16 +144,24 @@ class AccessibilityService :
         } else if (root == null || root.packageName != event.packageName) {
             Timber.d("Root is null or root package name is different than event - ignoring")
         } else if (event.source?.isPassword != true &&
-            !accessibilityOperationsProvider.isUsernameEditText(root, event)
+            !accessibilityOperationsProvider.isUsernameEditText(root, event) &&
+            !accessibilityOperationsProvider.isTotpEditText(root, event)
         ) {
-            Timber.d("Field is not a password or username - hiding overlay")
+            Timber.d("Field is not a password, username or totp - hiding overlay")
             hideOverlay()
         } else if (scanAndAutofill(root, event)) {
-            Timber.d("Scanning return false - hiding overlay")
+            Timber.d("Scanning returned true - hiding overlay")
             hideOverlay()
         } else {
-            Timber.d("View clicked else - displaying overlay")
+            val classifiedType = classifyAutofillType(root, event)
+            if (classifiedType == null) {
+                Timber.d("No autofillable fields classified - hiding overlay")
+                hideOverlay()
+                return
+            }
+            Timber.d("View clicked else - displaying overlay for $classifiedType")
             uri = accessibilityOperationsProvider.getUri(root)
+            pendingAutofillType = classifiedType
             if (Settings.canDrawOverlays(this)) {
                 displayOverlay(event)
             } else {
@@ -174,6 +172,11 @@ class AccessibilityService :
             }
         }
     }
+
+    private fun classifyAutofillType(
+        root: AccessibilityNodeInfo,
+        event: AccessibilityEvent,
+    ): AutofillType? = accessibilityOperationsProvider.classifyAutofillType(root, event)
 
     private fun scanAndAutofill(
         root: AccessibilityNodeInfo,
@@ -187,70 +190,112 @@ class AccessibilityService :
                 allEditTexts,
                 passwordEditText?.viewIdResourceName,
             )
-        val uri = accessibilityOperationsProvider.getUri(root)
+        val totpEditText = accessibilityOperationsProvider.getTotpNode(allEditTexts)
+        val currentUri = accessibilityOperationsProvider.getUri(root)
 
-        if (uri != null &&
-            usernameEditText != null &&
-            passwordEditText != null &&
-            accessibilityOperationsProvider.needToAutofill(AccessibilityCommunicator.lastCredentials, uri)
+        val pendingFill = accessibilityCommunicator.lastFill
+        if (currentUri != null &&
+            pendingFill != null &&
+            accessibilityOperationsProvider.needToAutofill(pendingFill, currentUri)
         ) {
-            fillUsernameField(usernameEditText)
-            fillPasswordField(passwordEditText)
-            filled = true
-            AccessibilityCommunicator.lastCredentials = null
+            filled = fillAvailable(pendingFill, usernameEditText, passwordEditText, totpEditText)
+            if (filled) {
+                accessibilityCommunicator.lastFill = null
+                clearLastFillJob?.cancel()
+                clearLastFillJob = null
+            }
         }
 
-        if (AccessibilityCommunicator.lastCredentials != null) {
-            scope.launch {
-                delay(CLEAR_CREDENTIALS_DELAY)
-                AccessibilityCommunicator.lastCredentials = null
-            }
+        if (accessibilityCommunicator.lastFill != null) {
+            clearLastFillJob?.cancel()
+            clearLastFillJob =
+                scope.launch {
+                    delay(CLEAR_CREDENTIALS_DELAY)
+                    accessibilityCommunicator.lastFill = null
+                    clearLastFillJob = null
+                }
         }
         return filled
     }
 
-    private fun fillUsernameField(usernameEditText: AccessibilityNodeInfo) {
-        accessibilityOperationsProvider.fillNode(
-            usernameEditText,
-            AccessibilityCommunicator.lastCredentials!!.username,
-        )
-    }
-
-    private fun fillPasswordField(passwordEditText: AccessibilityNodeInfo) {
-        accessibilityOperationsProvider.fillNode(
-            passwordEditText,
-            AccessibilityCommunicator.lastCredentials!!.password,
-        )
+    private fun fillAvailable(
+        payload: AccessibilityCommunicator.LastFill,
+        usernameNode: AccessibilityNodeInfo?,
+        passwordNode: AccessibilityNodeInfo?,
+        totpNode: AccessibilityNodeInfo?,
+    ): Boolean {
+        var anyFilled = false
+        payload.username?.let { value ->
+            usernameNode?.let { node ->
+                accessibilityOperationsProvider.fillNode(node, value)
+                anyFilled = true
+            }
+        }
+        payload.password?.let { value ->
+            passwordNode?.let { node ->
+                accessibilityOperationsProvider.fillNode(node, value)
+                anyFilled = true
+            }
+        }
+        payload.totpCode?.let { value ->
+            totpNode?.let { node ->
+                accessibilityOperationsProvider.fillNode(node, value)
+                anyFilled = true
+            }
+        }
+        return anyFilled
     }
 
     private fun openResourcesActivity() {
         startActivity(
-            ActivityIntents.autofill(applicationContext, AutofillMode.ACCESSIBILITY.name, uri).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            },
+            ActivityIntents
+                .autofill(
+                    context = applicationContext,
+                    autofillModeName = AutofillMode.ACCESSIBILITY.name,
+                    uri = uri,
+                    autofillTypeName = pendingAutofillType.name,
+                ).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                },
         )
     }
 
     private fun displayOverlay(event: AccessibilityEvent) {
         if (!overlayDisplayed) {
             overlayDisplayed = true
-            createOverlayView()
-            val params = accessibilityOperationsProvider.createOverlayParams()
-            overlayView?.root?.measure(View.MeasureSpec.makeMeasureSpec(0, 0), View.MeasureSpec.makeMeasureSpec(0, 0))
-            overlayViewHeight = overlayView?.root?.measuredHeight ?: 0
+            scope.launch {
+                val view =
+                    composeAutofillLabelView(
+                        context = applicationContext,
+                        onClick = {
+                            hideOverlay()
+                            openResourcesActivity()
+                        },
+                        onClose = ::hideOverlay,
+                    )
+                if (!overlayDisplayed) return@launch
+                overlayView = view
 
-            val anchorPosition =
-                accessibilityOperationsProvider.getOverlayAnchorPosition(
-                    event.source,
-                    overlayViewHeight,
-                    isOverlayAboveAnchor,
+                val params = accessibilityOperationsProvider.createOverlayParams()
+                view.measure(
+                    View.MeasureSpec.makeMeasureSpec(0, 0),
+                    View.MeasureSpec.makeMeasureSpec(0, 0),
                 )
-            anchorNode = event.source
+                overlayViewHeight = view.measuredHeight
 
-            params.x = anchorPosition.x
-            params.y = anchorPosition.y
-            windowManager.addView(overlayView?.root, params)
-            startOverlayAnchorObserver()
+                val anchorPosition =
+                    accessibilityOperationsProvider.getOverlayAnchorPosition(
+                        event.source,
+                        overlayViewHeight,
+                        isOverlayAboveAnchor,
+                    )
+                anchorNode = event.source
+
+                params.x = anchorPosition.x
+                params.y = anchorPosition.y
+                windowManager.addView(view, params)
+                startOverlayAnchorObserver()
+            }
         }
     }
 
@@ -285,16 +330,16 @@ class AccessibilityService :
         if (anchorPosition == null) {
             hideOverlay()
         } else if (anchorPosition is OutBoundsHide) {
-            if (overlayView?.root?.visibility != View.GONE) {
-                overlayView?.root?.gone()
+            if (overlayView?.visibility != View.GONE) {
+                overlayView?.gone()
             }
         } else if (anchorPosition is InBoundsBottomAnchor || anchorPosition is ForceBottom) {
             isOverlayAboveAnchor = false
         } else if (anchorPosition is InBoundsTopAnchor) {
             isOverlayAboveAnchor = true
         } else if (currentLastPosition != null && anchorPosition::class == currentLastPosition::class) {
-            if (overlayView?.root?.visibility != View.VISIBLE) {
-                overlayView?.root?.visibility = View.VISIBLE
+            if (overlayView?.visibility != View.VISIBLE) {
+                overlayView?.visibility = View.VISIBLE
             }
         } else if (anchorPosition is OverlayPosition.Position) {
             updateOverlay(anchorPosition)
@@ -308,16 +353,16 @@ class AccessibilityService :
 
         lastPosition = anchorPosition
 
-        windowManager.updateViewLayout(overlayView?.root, layoutParams)
+        windowManager.updateViewLayout(overlayView, layoutParams)
 
-        if (overlayView?.root?.visibility != View.VISIBLE) {
-            overlayView?.root?.visible()
+        if (overlayView?.visibility != View.VISIBLE) {
+            overlayView?.visible()
         }
     }
 
     private fun hideOverlay() {
         if (overlayDisplayed) {
-            windowManager.removeViewImmediate(overlayView?.root)
+            overlayView?.let { windowManager.removeViewImmediate(it) }
             overlayView = null
             overlayDisplayed = false
             lastAnchorX = 0
@@ -331,9 +376,10 @@ class AccessibilityService :
     }
 
     companion object {
+        private val OBSERVE_POSITION_DELAY = 250L.milliseconds
+        private val CLEAR_CREDENTIALS_DELAY = 1000L.milliseconds
+
         private const val PASSBOLT_PACKAGE = "net.svaroh.passly"
         private const val SYSTEM_UI_PACKAGE = "com.android.systemui"
-        private const val CLEAR_CREDENTIALS_DELAY = 1000L
-        private const val OBSERVE_POSITION_DELAY = 250L
     }
 }

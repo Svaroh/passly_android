@@ -2,20 +2,19 @@ package net.svaroh.passly.feature.home.filtersmenu
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.preferences.usecase.UpdateHomeDisplayViewPrefsUseCase
-import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.preferences.HomeDisplayViewPreferencesUpdate
+import net.svaroh.passly.domain.preferences.mapper.toHomeDisplayViewModel
+import net.svaroh.passly.domain.preferences.usecase.UpdateHomeDisplayViewPreferencesUseCase
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
 import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
-import net.svaroh.passly.entity.home.HomeDisplayView.ALL_ITEMS
-import net.svaroh.passly.entity.home.HomeDisplayView.EXPIRY
-import net.svaroh.passly.entity.home.HomeDisplayView.FAVOURITES
-import net.svaroh.passly.entity.home.HomeDisplayView.FOLDERS
-import net.svaroh.passly.entity.home.HomeDisplayView.GROUPS
-import net.svaroh.passly.entity.home.HomeDisplayView.OWNED_BY_ME
-import net.svaroh.passly.entity.home.HomeDisplayView.RECENTLY_MODIFIED
-import net.svaroh.passly.entity.home.HomeDisplayView.SHARED_WITH_ME
-import net.svaroh.passly.entity.home.HomeDisplayView.TAGS
 import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.AllItemsClick
 import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.Close
 import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.ExpiryClick
@@ -30,17 +29,19 @@ import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.TagsClick
 import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuSideEffect.Dismiss
 import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuSideEffect.HomeViewChanged
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
-import net.svaroh.passly.mappers.HomeDisplayViewMapper
 import net.svaroh.passly.ui.FiltersMenuModel
 import net.svaroh.passly.ui.HomeDisplayViewModel
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.ALL_ITEMS
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.EXPIRY
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.FAVOURITES
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.FOLDERS
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.GROUPS
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.OWNED_BY_ME
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.RECENTLY_MODIFIED
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.SHARED_WITH_ME
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.TAGS
 import net.svaroh.passly.ui.RbacModel
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -95,8 +96,7 @@ class FiltersMenuViewModelTest : KoinTest {
                     module {
                         single { mock<GetFeatureFlagsUseCase>() }
                         single { mock<GetRbacRulesUseCase>() }
-                        single { mock<UpdateHomeDisplayViewPrefsUseCase>() }
-                        singleOf(::HomeDisplayViewMapper)
+                        single { mock<UpdateHomeDisplayViewPreferencesUseCase>() }
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                         factoryOf(::FiltersMenuViewModel)
                     },
@@ -126,7 +126,7 @@ class FiltersMenuViewModelTest : KoinTest {
                 isV5MetadataAvailable = true,
             )
         get<GetFeatureFlagsUseCase>().stub {
-            onBlocking { execute(any()) } doReturn GetFeatureFlagsUseCase.Output(featureFlags)
+            on { execute(any()) } doReturn GetFeatureFlagsUseCase.Output(featureFlags)
         }
 
         val rbacModel =
@@ -138,7 +138,7 @@ class FiltersMenuViewModelTest : KoinTest {
                 foldersUseRule = ALLOW,
             )
         get<GetRbacRulesUseCase>().stub {
-            onBlocking { execute(any()) } doReturn GetRbacRulesUseCase.Output(rbacModel)
+            on { execute(any()) } doReturn GetRbacRulesUseCase.Output(rbacModel)
         }
     }
 
@@ -162,8 +162,7 @@ class FiltersMenuViewModelTest : KoinTest {
     fun `should handle all home view changes and emit correct side effects`() =
         runTest {
             viewModel = get()
-            val updateHomeDisplayViewPrefsUseCase = get<UpdateHomeDisplayViewPrefsUseCase>()
-            val homeDisplayViewMapper = get<HomeDisplayViewMapper>()
+            val updateHomeDisplayViewPreferencesUseCase = get<UpdateHomeDisplayViewPreferencesUseCase>()
 
             // (Intent, HomeDisplayView, Expected HomeDisplayViewModel)
             val testCases =
@@ -184,10 +183,10 @@ class FiltersMenuViewModelTest : KoinTest {
                     viewModel.onIntent(homeIntent)
                     val effect = awaitItem()
                     assertIs<HomeViewChanged>(effect)
-                    assertThat(effect.homeDisplay).isEqualTo(homeDisplayViewMapper.map(homeDisplayView))
+                    assertThat(effect.homeDisplay).isEqualTo(homeDisplayView.toHomeDisplayViewModel())
                     assertIs<Dismiss>(awaitItem())
-                    verify(updateHomeDisplayViewPrefsUseCase).execute(
-                        UpdateHomeDisplayViewPrefsUseCase.Input(lastUsedHomeView = homeDisplayView),
+                    verify(updateHomeDisplayViewPreferencesUseCase).execute(
+                        HomeDisplayViewPreferencesUpdate(lastUsedHomeView = homeDisplayView),
                     )
                 }
             }

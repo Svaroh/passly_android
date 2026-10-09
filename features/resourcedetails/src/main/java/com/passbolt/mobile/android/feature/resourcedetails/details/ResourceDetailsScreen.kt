@@ -23,9 +23,9 @@
 
 package net.svaroh.passly.feature.resourcedetails.details
 
-import PassboltTheme
 import android.graphics.drawable.Drawable
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,18 +48,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.clipboard.ClipboardAccess
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationDetails
 import net.svaroh.passly.core.navigation.compose.keys.LocationDetailsNavigationKey.LocationItem
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
 import net.svaroh.passly.core.navigation.compose.keys.TagsDetailsNavigationKey.ResourceTags
@@ -67,13 +70,13 @@ import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBu
 import net.svaroh.passly.core.navigation.compose.results.ResourceDetailsCompleteResult
 import net.svaroh.passly.core.navigation.compose.results.ResourceFormCompleteResult
 import net.svaroh.passly.core.navigation.compose.results.ResultEffect
-import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
 import net.svaroh.passly.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
 import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
-import net.svaroh.passly.core.ui.pulltorefresh.PullToRefreshIndicatorBox
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
 import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
 import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.domain.resources.resourceicon.ResourceIconProvider
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CloseDeleteConfirmationDialog
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CloseMoreMenu
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ConfirmDeleteResource
@@ -109,17 +112,19 @@ import net.svaroh.passly.feature.resourcedetails.details.ui.CustomFieldsSection
 import net.svaroh.passly.feature.resourcedetails.details.ui.MetadataSection
 import net.svaroh.passly.feature.resourcedetails.details.ui.NoteSection
 import net.svaroh.passly.feature.resourcedetails.details.ui.PasswordSection
+import net.svaroh.passly.feature.resourcedetails.details.ui.PinCodeSection
 import net.svaroh.passly.feature.resourcedetails.details.ui.ResourceHeader
 import net.svaroh.passly.feature.resourcedetails.details.ui.SharedWithSection
 import net.svaroh.passly.feature.resourcedetails.details.ui.TotpSection
 import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheet
 import net.svaroh.passly.testtags.composetags.ResourceDetails
+import net.svaroh.passly.ui.ConfirmPermissionsMode
 import net.svaroh.passly.ui.PermissionsItem
+import net.svaroh.passly.ui.PermissionsMode
 import net.svaroh.passly.ui.ResourceFormMode
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.isExpired
 import net.svaroh.passly.ui.isFavourite
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.ui.R as CoreUiR
@@ -127,18 +132,22 @@ import net.svaroh.passly.core.ui.R as CoreUiR
 @Composable
 @Suppress("CyclomaticComplexMethod")
 fun ResourceDetailsScreen(
-    resourceModel: ResourceModel,
+    resourceModel: ResourceUiModel,
     modifier: Modifier = Modifier,
     viewModel: ResourceDetailsViewModel = koinViewModel(),
     clipboardAccess: ClipboardAccess = koinInject(),
     navigator: AppNavigator = koinInject(),
     resourceIconProvider: ResourceIconProvider = koinInject(),
 ) {
+    FlagSecureEffect()
+
     val context = LocalContext.current
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val resultBus = NavigationResultEventBus.current
+    val errorColor = colorResource(CoreUiR.color.red)
+    val successColor = colorResource(CoreUiR.color.green)
 
     var resourceIcon by remember { mutableStateOf<Drawable?>(null) }
     val currentResourceModel = state.value.resourceData.resourceModel ?: resourceModel
@@ -184,9 +193,13 @@ fun ResourceDetailsScreen(
                     ),
                 )
             is NavigateToResourcePermissions ->
-                navigator.navigateToKey(
-                    Permissions(sideEffect.resourceId, sideEffect.mode, PermissionsItem.RESOURCE),
-                )
+                if (sideEffect.mode == PermissionsMode.EDIT) {
+                    navigator.navigateToKey(ConfirmPermissions(ConfirmPermissionsMode.Share(sideEffect.resourceId)))
+                } else {
+                    navigator.navigateToKey(
+                        Permissions(sideEffect.resourceId, sideEffect.mode, PermissionsItem.RESOURCE),
+                    )
+                }
             is NavigateToResourceTags -> navigator.navigateToKey(ResourceTags(sideEffect.resourceId))
             is NavigateToResourceLocation ->
                 navigator.navigateToKey(
@@ -226,7 +239,7 @@ fun ResourceDetailsScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getSuccessSnackbarMessage(context, sideEffect.type),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.green)),
+                            backgroundColor = successColor,
                         ),
                     )
                 }
@@ -236,7 +249,7 @@ fun ResourceDetailsScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getErrorSnackbarMessage(context, sideEffect.type),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorColor,
                         ),
                     )
                 }
@@ -254,7 +267,7 @@ fun ResourceDetailsScreen(
 }
 
 @Composable
-private fun ResourceDetailsScreen(
+fun ResourceDetailsScreen(
     state: ResourceDetailsState,
     onIntent: (ResourceDetailsIntent) -> Unit,
     snackbarHostState: SnackbarHostState,
@@ -266,6 +279,7 @@ private fun ResourceDetailsScreen(
         topBar = {
             TitleAppBar(
                 navigationIcon = { BackNavigationIcon(onBackClick = { onIntent(GoBack) }) },
+                refreshProgress = if (state.isRefreshing) state.refreshProgress else null,
                 actions = {
                     IconButton(
                         onClick = { onIntent(OpenMoreMenu) },
@@ -297,8 +311,7 @@ private fun ResourceDetailsScreen(
             )
         },
         content = { paddingValues ->
-            PullToRefreshIndicatorBox(
-                isRefreshing = state.isRefreshing,
+            Box(
                 modifier =
                     Modifier
                         .fillMaxSize()
@@ -390,6 +403,15 @@ private fun ResourceDetailsContent(
         if (state.totpData.showTotpSection) {
             TotpSection(
                 otpModel = state.totpData.totpModel,
+                onIntent = onIntent,
+                modifier = Modifier.padding(top = 16.dp),
+            )
+        }
+
+        if (state.pinCodeData.showPinCodeSection) {
+            PinCodeSection(
+                pinCode = state.pinCodeData.pinCode,
+                isPinCodeVisible = state.pinCodeData.isPinCodeVisible,
                 onIntent = onIntent,
                 modifier = Modifier.padding(top = 16.dp),
             )

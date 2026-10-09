@@ -2,25 +2,26 @@ package net.svaroh.passly.feature.home.switchaccount
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
-import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.accounts.usecase.accounts.GetAllAccountsDataUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveSelectedAccountUseCase
-import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.navigation.AppContext
-import net.svaroh.passly.entity.account.Account
-import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
-import net.svaroh.passly.mappers.SwitchAccountModelMapper
-import net.svaroh.passly.mappers.comparator.SwitchAccountUiModelComparator
-import net.svaroh.passly.ui.SwitchAccountUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.domain.accounts.usecase.GetAllAccountsDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveSelectedAccountUseCase
+import net.svaroh.passly.domain.users.profile.UserProfileRefreshTrackingFlow
+import net.svaroh.passly.entity.account.Account
+import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
+import net.svaroh.passly.mappers.SwitchAccountModelMapper
+import net.svaroh.passly.mappers.comparator.SwitchAccountUiModelComparator
+import net.svaroh.passly.ui.SwitchAccountUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -28,6 +29,7 @@ import org.junit.Test
 import org.koin.core.logger.Level
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.parameter.parametersOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import org.koin.test.KoinTest
@@ -77,6 +79,7 @@ class SwitchAccountViewModelTest : KoinTest {
                         single { mock<SaveSelectedAccountUseCase>() }
                         single { mock<GetSelectedAccountUseCase>() }
                         singleOf(::DataRefreshTrackingFlow)
+                        singleOf(::UserProfileRefreshTrackingFlow)
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                         factoryOf(::SwitchAccountViewModel)
                         factoryOf(::SwitchAccountModelMapper)
@@ -141,8 +144,7 @@ class SwitchAccountViewModelTest : KoinTest {
             val getSelectedAccountUseCase: GetSelectedAccountUseCase = get()
             whenever(getSelectedAccountUseCase.execute(Unit)) doReturn GetSelectedAccountUseCase.Output("id1")
 
-            viewModel = get()
-            viewModel.onIntent(SwitchAccountIntent.Initialize(AppContext.APP))
+            viewModel = get { parametersOf(AppContext.APP) }
 
             val state = viewModel.viewState.value
             assertThat(state.appContext).isEqualTo(AppContext.APP)
@@ -186,8 +188,7 @@ class SwitchAccountViewModelTest : KoinTest {
                 )
             whenever(getAllAccountsDataUseCase.execute(Unit)) doReturn GetAllAccountsDataUseCase.Output(accounts)
 
-            viewModel = get()
-            viewModel.onIntent(SwitchAccountIntent.Initialize(AppContext.APP))
+            viewModel = get { parametersOf(AppContext.APP) }
 
             val state = viewModel.viewState.value
             assertThat(state.appContext).isEqualTo(AppContext.APP)
@@ -212,7 +213,7 @@ class SwitchAccountViewModelTest : KoinTest {
     @Test
     fun `should navigate to account details when see current account details intent is received`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(AppContext.APP) }
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(SwitchAccountIntent.SeeCurrentAccountDetails)
@@ -225,12 +226,11 @@ class SwitchAccountViewModelTest : KoinTest {
     @Test
     fun `should sign out with confirmation dialog when sign out intent is received`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(AppContext.APP) }
 
             val initialState = viewModel.viewState.value
             assertThat(initialState.showSignOutDialog).isFalse()
 
-            viewModel.onIntent(SwitchAccountIntent.Initialize(AppContext.APP))
             viewModel.onIntent(SwitchAccountIntent.SignOut)
 
             viewModel.viewState.test {
@@ -260,9 +260,8 @@ class SwitchAccountViewModelTest : KoinTest {
     @Test
     fun `should close sign out dialog when close sign out dialog intent is received`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(AppContext.APP) }
 
-            viewModel.onIntent(SwitchAccountIntent.Initialize(AppContext.APP))
             viewModel.onIntent(SwitchAccountIntent.SignOut)
 
             assertThat(viewModel.viewState.value.showSignOutDialog).isTrue()
@@ -302,8 +301,7 @@ class SwitchAccountViewModelTest : KoinTest {
                 )
             whenever(getAllAccountsDataUseCase.execute(Unit)) doReturn GetAllAccountsDataUseCase.Output(accounts)
 
-            viewModel = get()
-            viewModel.onIntent(SwitchAccountIntent.Initialize(AppContext.APP))
+            viewModel = get { parametersOf(AppContext.APP) }
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(
@@ -327,9 +325,53 @@ class SwitchAccountViewModelTest : KoinTest {
         }
 
     @Test
+    fun `should reload selected account header when refresh intent is received`() =
+        runTest {
+            val getAllAccountsDataUseCase: GetAllAccountsDataUseCase = get()
+            val accounts =
+                listOf(
+                    Account(
+                        userId = "id1",
+                        firstName = "firstName1",
+                        lastName = "lastName1",
+                        email = "email1",
+                        avatarUrl = "avatarUrl1",
+                        url = "url1",
+                        serverId = "serverId1",
+                        label = "label1",
+                    ),
+                    Account(
+                        userId = "id2",
+                        firstName = "firstName2",
+                        lastName = "lastName2",
+                        email = "email2",
+                        avatarUrl = "avatarUrl2",
+                        url = "url2",
+                        serverId = "serverId2",
+                        label = "label2",
+                    ),
+                )
+            whenever(getAllAccountsDataUseCase.execute(Unit)) doReturn GetAllAccountsDataUseCase.Output(accounts)
+
+            val getSelectedAccountUseCase: GetSelectedAccountUseCase = get()
+            whenever(getSelectedAccountUseCase.execute(Unit)) doReturn GetSelectedAccountUseCase.Output("id1")
+
+            viewModel = get { parametersOf(AppContext.APP) }
+            assertThat((viewModel.viewState.value.accountsList[0] as SwitchAccountUiModel.HeaderItem).email)
+                .isEqualTo("email1")
+
+            // simulate the account being switched elsewhere while this (retained) view model is alive
+            whenever(getSelectedAccountUseCase.execute(Unit)) doReturn GetSelectedAccountUseCase.Output("id2")
+            viewModel.onIntent(SwitchAccountIntent.Refresh)
+
+            val headerItem = viewModel.viewState.value.accountsList[0] as SwitchAccountUiModel.HeaderItem
+            assertThat(headerItem.email).isEqualTo("email2")
+        }
+
+    @Test
     fun `should navigate to manage accounts when manage accounts intent is received`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(AppContext.APP) }
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(SwitchAccountIntent.ManageAccounts)

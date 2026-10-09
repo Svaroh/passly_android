@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.feature.settings.screen.appsettings
 
-import android.security.keystore.KeyPermanentlyInvalidatedException
 import net.svaroh.passly.ui.BiometricAuthError
 import javax.crypto.Cipher
 
@@ -62,10 +61,6 @@ internal sealed interface AppSettingsIntent {
 
     data class ErroredBiometricAuth(
         val error: BiometricAuthError,
-    ) : AppSettingsIntent
-
-    data class InvalidateBiometricKeyPermanently(
-        val exception: KeyPermanentlyInvalidatedException,
     ) : AppSettingsIntent
 
     data class ShowBiometryError(

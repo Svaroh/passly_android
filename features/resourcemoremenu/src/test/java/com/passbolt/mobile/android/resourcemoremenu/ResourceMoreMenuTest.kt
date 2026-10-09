@@ -25,21 +25,23 @@ package net.svaroh.passly.resourcemoremenu
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
-import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.idlingresource.CreateMenuModelIdlingResource
-import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.resourcemoremenu.usecase.CreateResourceMoreMenuModelUseCase
-import net.svaroh.passly.ui.ResourceMoreMenuModel
-import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_METADATA_DESCRIPTION
-import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_NOTE
-import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.idlingresource.CreateMenuModelIdlingResource
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.Dismiss
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.ShowContentNotAvailable
+import net.svaroh.passly.resourcemoremenu.usecase.CreateResourceMoreMenuModelUseCase
+import net.svaroh.passly.ui.ResourceMoreMenuModel
+import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_METADATA_DESCRIPTION
+import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_NOTE
+import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -55,6 +57,7 @@ import org.koin.test.get
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stub
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -93,7 +96,7 @@ class ResourceMoreMenuTest : KoinTest {
     fun `all enabled items should be displayed according to state`() =
         runTest {
             mockCreateResourceMoreMenuModelUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     CreateResourceMoreMenuModelUseCase.Output(
                         ResourceMoreMenuModel(
                             title = "title",
@@ -125,6 +128,23 @@ class ResourceMoreMenuTest : KoinTest {
                 assertThat(state.showEdit).isTrue()
                 assertThat(state.showShare).isTrue()
                 assertThat(state.favouriteOption).isEqualTo(ADD_TO_FAVOURITES)
+            }
+        }
+
+    @Test
+    fun `missing resource for the shown menu should dismiss`() =
+        runTest {
+            mockCreateResourceMoreMenuModelUseCase.stub {
+                on { execute(any()) } doThrow IllegalStateException("The query result was empty")
+            }
+
+            viewModel = get()
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(ResourceMoreMenuBottomSheetIntent.Initialize("resourceId"))
+
+                assertThat(awaitItem()).isEqualTo(ShowContentNotAvailable)
+                assertThat(awaitItem()).isEqualTo(Dismiss)
             }
         }
 

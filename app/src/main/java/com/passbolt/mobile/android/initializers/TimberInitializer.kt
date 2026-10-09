@@ -28,7 +28,7 @@ import androidx.startup.Initializer
 import net.svaroh.passly.BuildConfig
 import net.svaroh.passly.core.logger.FileLoggingTree
 import net.svaroh.passly.core.logger.LogFilesManager
-import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -49,7 +49,7 @@ class TimberInitializer :
     KoinComponent {
     private val fileLoggingTree: FileLoggingTree by inject()
     private val logFilesManager: LogFilesManager by inject()
-    private val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase by inject()
+    private val globalPreferencesRepository: GlobalPreferencesRepository by inject()
 
     override fun create(context: Context) {
         if (BuildConfig.DEBUG) {
@@ -58,7 +58,7 @@ class TimberInitializer :
         val logFilePath = logFilesManager.initializeLogFile()
         fileLoggingTree.initialize(logFilePath)
         val shouldWriteFileLogs =
-            BuildConfig.DEBUG || getGlobalPreferencesUseCase.execute(Unit).areDebugLogsEnabled
+            BuildConfig.DEBUG || globalPreferencesRepository.getGlobalPreferences().areDebugLogsEnabled
         if (shouldWriteFileLogs && !Timber.forest().contains(fileLoggingTree)) {
             Timber.plant(fileLoggingTree)
             Timber.d("File logging tree planted")

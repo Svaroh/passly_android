@@ -5,21 +5,21 @@ import net.svaroh.passly.core.mvp.authentication.MfaProvidersHandler
 import net.svaroh.passly.feature.authentication.auth.challenge.ChallengeDecryptor
 import net.svaroh.passly.feature.authentication.auth.challenge.ChallengeProvider
 import net.svaroh.passly.feature.authentication.auth.challenge.ChallengeVerifier
+import net.svaroh.passly.feature.authentication.auth.challenge.DomainComparator
 import net.svaroh.passly.feature.authentication.auth.challenge.MfaStatusProvider
+import net.svaroh.passly.feature.authentication.auth.challenge.TrailingSlashDomainComparator
+import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.feature.authentication.auth.usecase.BiometryInteractor
-import net.svaroh.passly.feature.authentication.auth.usecase.FetchServerPublicPgpKeyUseCase
-import net.svaroh.passly.feature.authentication.auth.usecase.FetchServerPublicRsaKeyUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor
-import net.svaroh.passly.feature.authentication.auth.usecase.GetServerPublicRsaKeyUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.GopenPgpTimeUpdater
 import net.svaroh.passly.feature.authentication.auth.usecase.PostSignInActionsInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.RemoveAllAccountDataUseCase
-import net.svaroh.passly.feature.authentication.auth.usecase.RemoveServerPublicRsaKeyUseCase
-import net.svaroh.passly.feature.authentication.auth.usecase.SaveServerPublicRsaKeyUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.ServerKeysWarmup
+import net.svaroh.passly.feature.authentication.auth.usecase.ServerKeysWarmupCache
+import net.svaroh.passly.feature.authentication.auth.usecase.SessionRefreshLock
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInUseCase
-import net.svaroh.passly.feature.authentication.auth.usecase.BackgroundSignInExecutor
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.VerifyPassphraseUseCase
@@ -27,6 +27,7 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModel
+import org.koin.dsl.bind
 
 @Suppress("LongMethod")
 fun Module.authModule() {
@@ -46,7 +47,9 @@ fun Module.authModule() {
             getGlobalPreferencesUseCase = get(),
             runtimeAuthenticatedFlag = get(),
             saveSessionUseCase = get(),
+            saveMfaTokenUseCase = get(),
             saveSelectedAccountUseCase = get(),
+            authenticatedAccountFlow = get(),
             signOutUseCase = get(),
             saveServerFingerprintUseCase = get(),
             mfaStatusProvider = get(),
@@ -57,6 +60,7 @@ fun Module.authModule() {
             postSignInActionsInteractor = get(),
             refreshSessionUseCase = get(),
             mfaProvidersHandler = get(),
+            serverKeysWarmup = get(),
             hasLocalReplicaUseCase = get(),
             backgroundSignInExecutor = get(),
         )
@@ -65,25 +69,23 @@ fun Module.authModule() {
     factoryOf(::MfaStatusProvider)
     factoryOf(::MfaProvidersHandler)
 
-    singleOf(::FetchServerPublicPgpKeyUseCase)
-    singleOf(::FetchServerPublicRsaKeyUseCase)
     singleOf(::SignInUseCase)
     singleOf(::ChallengeProvider)
     singleOf(::ChallengeDecryptor)
+    singleOf(::TrailingSlashDomainComparator) bind DomainComparator::class
     singleOf(::ChallengeVerifier)
     singleOf(::VerifyPassphraseUseCase)
+    singleOf(::ServerKeysWarmupCache) bind ServerKeysWarmup::class
     singleOf(::GetAndVerifyServerKeysAndTimeInteractor)
     singleOf(::SignInVerifyInteractor)
     singleOf(::BackgroundSignInExecutor)
     singleOf(::GopenPgpTimeUpdater)
     singleOf(::PostSignInActionsInteractor)
     singleOf(::RefreshSessionUseCase)
+    singleOf(::SessionRefreshLock)
     singleOf(::SignOutUseCase)
     singleOf(::BiometryInteractor)
     singleOf(::SignInIdlingResource)
-    singleOf(::SaveServerPublicRsaKeyUseCase)
-    singleOf(::GetServerPublicRsaKeyUseCase)
-    singleOf(::RemoveServerPublicRsaKeyUseCase)
     singleOf(::GetSessionExpiryUseCase)
     singleOf(::RemoveAllAccountDataUseCase)
 }

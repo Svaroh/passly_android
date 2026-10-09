@@ -1,3 +1,5 @@
 package net.svaroh.passly.feature.startup
 
-data object StartUpState
+data class StartUpState(
+    val showDeprecatedOsWarning: Boolean = false,
+)

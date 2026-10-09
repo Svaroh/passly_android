@@ -7,7 +7,6 @@ import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
-import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
@@ -47,12 +46,7 @@ fun TabNavigationHost(
                     rememberSaveableStateHolderNavEntryDecorator(),
                     rememberViewModelStoreNavEntryDecorator(),
                 ),
-            entryProvider =
-                entryProvider {
-                    featureModulesNavigation.forEach { installer ->
-                        installer.provideEntryProviderInstaller().invoke(this)
-                    }
-                },
+            entryProvider = featureEntryProvider(featureModulesNavigation, unknownDestinationFallback(navigator)),
             transitionSpec = { horizontalSlideTransition },
             popTransitionSpec = { horizontalSlidePopTransition },
             predictivePopTransitionSpec = { horizontalSlidePopTransition },

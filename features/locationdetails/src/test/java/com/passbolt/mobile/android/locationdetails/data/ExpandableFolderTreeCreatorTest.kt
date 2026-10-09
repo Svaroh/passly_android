@@ -24,9 +24,10 @@ package net.svaroh.passly.locationdetails.data
  */
 
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.ui.FolderModel
+import net.svaroh.passly.domain.folders.model.FolderModel
 import net.svaroh.passly.ui.ResourcePermission
 import org.junit.Test
+import java.time.ZonedDateTime
 
 class ExpandableFolderTreeCreatorTest {
     @Test
@@ -64,9 +65,9 @@ class ExpandableFolderTreeCreatorTest {
         val creator = ExpandableFolderTreeCreator("Root")
         val folders =
             listOf(
-                FolderModel("folder1", null, "Folder 1", false, ResourcePermission.OWNER),
-                FolderModel("folder2", "folder1", "Folder 2", true, ResourcePermission.UPDATE),
-                FolderModel("folder3", "folder2", "Folder 3", false, ResourcePermission.READ),
+                FolderModel("folder1", null, "Folder 1", false, ResourcePermission.OWNER, ZonedDateTime.now()),
+                FolderModel("folder2", "folder1", "Folder 2", true, ResourcePermission.UPDATE, ZonedDateTime.now()),
+                FolderModel("folder3", "folder2", "Folder 3", false, ResourcePermission.READ, ZonedDateTime.now()),
             )
 
         val result = creator.create(folders)
@@ -95,9 +96,9 @@ class ExpandableFolderTreeCreatorTest {
         val creator = ExpandableFolderTreeCreator("Root")
         val folders =
             listOf(
-                FolderModel("level1", null, "Level 1", false, ResourcePermission.OWNER),
-                FolderModel("level2", "level1", "Level 2", false, ResourcePermission.OWNER),
-                FolderModel("level3", "level2", "Level 3", false, ResourcePermission.OWNER),
+                FolderModel("level1", null, "Level 1", false, ResourcePermission.OWNER, ZonedDateTime.now()),
+                FolderModel("level2", "level1", "Level 2", false, ResourcePermission.OWNER, ZonedDateTime.now()),
+                FolderModel("level3", "level2", "Level 3", false, ResourcePermission.OWNER, ZonedDateTime.now()),
             )
 
         val result = creator.create(folders)
@@ -135,6 +136,7 @@ class ExpandableFolderTreeCreatorTest {
                 name = "Test Folder",
                 isShared = false,
                 permission = ResourcePermission.OWNER,
+                modified = ZonedDateTime.now(),
             )
     }
 }

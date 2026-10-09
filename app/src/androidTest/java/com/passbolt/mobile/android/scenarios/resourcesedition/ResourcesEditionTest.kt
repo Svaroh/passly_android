@@ -25,6 +25,7 @@ package net.svaroh.passly.scenarios.resourcesedition
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -89,6 +90,9 @@ class ResourcesEditionTest : KoinTest {
             val signInIdlingResource: SignInIdlingResource by inject()
             val updateResourceIdlingResource: UpdateResourceIdlingResource by inject()
             val createResourceIdlingResource: CreateResourceIdlingResource by inject()
+            // TODO: register CreateMenuModelIdlingResource here. This test opens the resource More
+            //  menu (searchAndClickMoreOfFirstResource), whose contents load asynchronously; without
+            //  this idling resource, assertions on the menu items can race the model load.
             IdlingResourceRule(
                 arrayOf(
                     signInIdlingResource,
@@ -219,6 +223,13 @@ class ResourcesEditionTest : KoinTest {
     private fun enterEditPasswordScreen() {
         composeTestRule.apply {
             searchAndClickMoreOfFirstResource(RESOURCE_NAME)
+            // The More sheet is a LazyColumn and the Edit item sits below the fold; wait for it
+            // to compose before clicking instead of racing the sheet's async load/animation.
+            waitUntil(conditionDescription = "Waiting for more menu Edit item", timeoutMillis = 5_000) {
+                onAllNodes(hasText(getString(LocalizationR.string.more_edit)), useUnmergedTree = true)
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
             onNodeWithText(getString(LocalizationR.string.more_edit)).performClick()
             waitForResourceForm()
         }

@@ -2,8 +2,8 @@ package net.svaroh.passly.core.logger
 
 import android.content.Context
 import net.svaroh.passly.core.envinfo.EnvInfoProvider
-import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
-import net.svaroh.passly.core.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
 import java.io.File
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -33,8 +33,7 @@ import java.time.temporal.ChronoUnit
 class LogFilesManager(
     private val appContext: Context,
     private val envInfoProvider: EnvInfoProvider,
-    private val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase,
-    private val updateGlobalPreferencesUseCase: UpdateGlobalPreferencesUseCase,
+    private val globalPreferencesRepository: GlobalPreferencesRepository,
 ) {
     /**
      * Initializes the log file. If no file exists a new one is created. If a log file exists, expiry time is checked -
@@ -44,7 +43,7 @@ class LogFilesManager(
      * @return Log file path
      */
     fun initializeLogFile(): String {
-        val preferences = getGlobalPreferencesUseCase.execute(Unit)
+        val preferences = globalPreferencesRepository.getGlobalPreferences()
         val logFileCreationDateTime = preferences.debugLogFileCreationDateTime
         val lastLoggedAppVersion = preferences.debugLogLastAppVersion
         val currentAppVersion = envInfoProvider.provideEnvInfo().appName
@@ -83,8 +82,8 @@ class LogFilesManager(
                     createNewFile()
                     writeText(prepareInfoHeader())
                 }.absolutePath
-        updateGlobalPreferencesUseCase.execute(
-            UpdateGlobalPreferencesUseCase.Input(
+        globalPreferencesRepository.updateGlobalPreferences(
+            GlobalPreferencesUpdate(
                 debugLogFileCreationDateTime = LocalDateTime.now(),
                 debugLogLastAppVersion = currentAppVersion,
             ),
@@ -94,8 +93,8 @@ class LogFilesManager(
 
     private fun appendHeaderToExistingLogFile(currentAppVersion: String) {
         File(logFileDirectory(), LOG_FILE_NAME).appendText(System.lineSeparator() + prepareInfoHeader())
-        updateGlobalPreferencesUseCase.execute(
-            UpdateGlobalPreferencesUseCase.Input(
+        globalPreferencesRepository.updateGlobalPreferences(
+            GlobalPreferencesUpdate(
                 debugLogLastAppVersion = currentAppVersion,
             ),
         )

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -59,6 +60,7 @@ import net.svaroh.passly.core.ui.R as CoreUiR
 @Composable
 fun SwitchAccountAccountsList(
     accountsList: List<SwitchAccountUiModel>,
+    isCurrentAccountProfileLoading: Boolean,
     onHeaderSeeDetailsClick: () -> Unit,
     onHeaderSignOutClick: () -> Unit,
     onManageAccountsClick: () -> Unit,
@@ -71,6 +73,7 @@ fun SwitchAccountAccountsList(
                 is SwitchAccountUiModel.HeaderItem -> {
                     AccountHeaderItem(
                         item = item,
+                        isProfileLoading = isCurrentAccountProfileLoading,
                         onSeeDetailsClick = onHeaderSeeDetailsClick,
                         onSignOutClick = onHeaderSignOutClick,
                     )
@@ -106,6 +109,7 @@ fun SwitchAccountAccountsList(
 @Composable
 private fun AccountHeaderItem(
     item: SwitchAccountUiModel.HeaderItem,
+    isProfileLoading: Boolean,
     onSeeDetailsClick: () -> Unit,
     onSignOutClick: () -> Unit,
 ) {
@@ -124,6 +128,7 @@ private fun AccountHeaderItem(
                     imageUrl = item.avatarUrl,
                     width = 40.dp,
                     height = 40.dp,
+                    placeholderRes = CoreUiR.drawable.ic_avatar_placeholder,
                 )
 
                 Box(
@@ -140,21 +145,27 @@ private fun AccountHeaderItem(
             Column(
                 modifier = Modifier.weight(1f),
             ) {
-                Text(
-                    text = item.label,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = colorResource(CoreUiR.color.text_primary),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                if (isProfileLoading && item.label.isBlank()) {
+                    LabelPlaceholder(widthFraction = 0.6f)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LabelPlaceholder(widthFraction = 0.8f)
+                } else {
+                    Text(
+                        text = item.label,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = colorResource(CoreUiR.color.text_primary),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
 
-                Text(
-                    text = item.email,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = colorResource(CoreUiR.color.text_primary),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                    Text(
+                        text = item.email,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = colorResource(CoreUiR.color.text_primary),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
         }
 
@@ -223,4 +234,18 @@ private fun AccountItem(
             )
         }
     }
+}
+
+@Composable
+private fun LabelPlaceholder(widthFraction: Float) {
+    Box(
+        modifier =
+            Modifier
+                .fillMaxWidth(widthFraction)
+                .height(14.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    shape = RoundedCornerShape(4.dp),
+                ),
+    )
 }

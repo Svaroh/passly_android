@@ -2,13 +2,17 @@ package net.svaroh.passly.feature.authentication.auth.usecase
 
 import net.svaroh.passly.common.usecase.AsyncUseCase
 import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.account.RemoveAccountUseCase
-import net.svaroh.passly.core.accounts.usecase.accountdata.RemoveAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.privatekey.RemovePrivateKeyUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.RemoveSelectedAccountUseCase
-import net.svaroh.passly.core.authenticationcore.passphrase.RemovePassphraseUseCase
-import net.svaroh.passly.core.authenticationcore.session.RemoveSessionUseCase
+import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.RemoveAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.RemoveAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.RemoveSelectedAccountUseCase
+import net.svaroh.passly.domain.auth.DatabasePassphraseRepository
+import net.svaroh.passly.domain.auth.PassphraseRepository
+import net.svaroh.passly.domain.auth.SessionRepository
+import net.svaroh.passly.domain.auth.usecase.RemoveServerPublicRsaKeyUseCase
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
+import timber.log.Timber
 
 /**
  * Passbolt - Open source password manager for teams
@@ -35,29 +39,35 @@ import net.svaroh.passly.core.authenticationcore.session.RemoveSessionUseCase
 class RemoveAllAccountDataUseCase(
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
     private val removeAccountDataUseCase: RemoveAccountDataUseCase,
-    private val removePassphraseUseCase: RemovePassphraseUseCase,
-    private val removePrivateKeyUseCase: RemovePrivateKeyUseCase,
+    private val passphraseRepository: PassphraseRepository,
+    private val privateKeyRepository: PrivateKeyRepository,
     private val removeSelectedAccountUseCase: RemoveSelectedAccountUseCase,
-    private val removeSessionUseCase: RemoveSessionUseCase,
+    private val sessionRepository: SessionRepository,
     private val removeAccountUseCase: RemoveAccountUseCase,
     private val removeServerPublicRsaKeyUseCase: RemoveServerPublicRsaKeyUseCase,
+    private val databaseProvider: DatabaseProvider,
+    private val databasePassphraseRepository: DatabasePassphraseRepository,
 ) : AsyncUseCase<UserIdInput, Unit> {
     override suspend fun execute(input: UserIdInput) {
+        Timber.d("Removing all account data")
         val accountToRemoveId = UserIdInput(input.userId)
         removeAccountData(accountToRemoveId)
 
         val selectedAccountId = getSelectedAccountUseCase.execute(Unit).selectedAccount
         if (accountToRemoveId.userId == selectedAccountId) {
-            removeSelectedAccountUseCase.execute(accountToRemoveId)
+            removeSelectedAccountUseCase.execute(Unit)
         }
     }
 
-    private fun removeAccountData(userIdInput: UserIdInput) {
+    private suspend fun removeAccountData(userIdInput: UserIdInput) {
         removeAccountDataUseCase.execute(userIdInput)
-        removePassphraseUseCase.execute(userIdInput)
-        removePrivateKeyUseCase.execute(userIdInput)
-        removeSessionUseCase.execute(userIdInput)
+        passphraseRepository.removePassphrase(userIdInput.userId)
+        privateKeyRepository.removePrivateKey(userIdInput.userId)
+        sessionRepository.removeSession(userIdInput.userId)
+        sessionRepository.removeMfaToken(userIdInput.userId)
         removeAccountUseCase.execute(userIdInput)
         removeServerPublicRsaKeyUseCase.execute(userIdInput)
+        databaseProvider.delete(userIdInput.userId)
+        databasePassphraseRepository.removeDatabasePassphrase(userIdInput.userId)
     }
 }

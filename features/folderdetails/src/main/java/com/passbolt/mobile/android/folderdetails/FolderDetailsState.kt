@@ -23,12 +23,13 @@
 
 package net.svaroh.passly.folderdetails
 
-import net.svaroh.passly.ui.FolderModel
+import net.svaroh.passly.domain.folders.model.FolderModel
 import net.svaroh.passly.ui.PermissionModelUi
 
 data class FolderDetailsState(
     val folderId: String? = null,
     val isRefreshing: Boolean = false,
+    val refreshProgress: Float = 0f,
     val locationPath: List<String> = emptyList(),
     val folder: FolderModel? = null,
     val canViewPermissions: Boolean = false,

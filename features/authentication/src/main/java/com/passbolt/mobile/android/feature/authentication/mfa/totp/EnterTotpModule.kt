@@ -36,6 +36,7 @@ fun Module.enterTotpModule() {
         EnterTotpViewModel(
             authToken = params[0],
             hasOtherProvider = params[1],
+            isSetupFlow = params[2],
             signOutUseCase = get(),
             verifyTotpUseCase = get(),
             refreshSessionUseCase = get(),

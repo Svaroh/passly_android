@@ -1,6 +1,5 @@
 package net.svaroh.passly.feature.resourceform.main.ui
 
-import PassboltTheme
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.ui.R as CoreUiR
 
 internal data class SettingRowItem(

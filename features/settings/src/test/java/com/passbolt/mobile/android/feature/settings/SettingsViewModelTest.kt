@@ -2,13 +2,6 @@ package net.svaroh.passly.feature.settings
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.common.autofill.DetectAutofillConflict
-import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
-import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
-import net.svaroh.passly.feature.settings.screen.SettingsIntent.ConfirmSignOut
-import net.svaroh.passly.feature.settings.screen.SettingsIntent.Initialize
-import net.svaroh.passly.feature.settings.screen.SettingsIntent.SignOut
-import net.svaroh.passly.feature.settings.screen.SettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop
@@ -16,6 +9,17 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.common.autofill.DetectAutofillConflict
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.domain.auth.model.ServerSignOutStatus
+import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.ConfirmSignOut
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.Initialize
+import net.svaroh.passly.feature.settings.screen.SettingsIntent.SignOut
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToStartUp
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.ShowToast
+import net.svaroh.passly.feature.settings.screen.SettingsViewModel
+import net.svaroh.passly.feature.settings.screen.ToastType.SERVER_SIGN_OUT_FAILED
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -92,7 +96,7 @@ class SettingsViewModelTest : KoinTest {
     fun `sign out flow should work correct`() =
         runTest {
             val signOutUseCase: SignOutUseCase = get()
-            whenever(signOutUseCase.execute(Unit)) doReturn Unit
+            whenever(signOutUseCase.execute(Unit)) doReturn SignOutUseCase.Output(ServerSignOutStatus.SIGNED_OUT)
 
             viewModel = get()
 
@@ -105,6 +109,39 @@ class SettingsViewModelTest : KoinTest {
                     assertThat(signingOutState.isProgressDialogVisible).isTrue()
                 }
                 assertThat(awaitItem().isProgressDialogVisible).isFalse()
+            }
+        }
+
+    @OptIn(ExperimentalTime::class)
+    @Test
+    fun `sign out should navigate to startup without toast when server sign out succeeds`() =
+        runTest {
+            val signOutUseCase: SignOutUseCase = get()
+            whenever(signOutUseCase.execute(Unit)) doReturn SignOutUseCase.Output(ServerSignOutStatus.SIGNED_OUT)
+
+            viewModel = get()
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(ConfirmSignOut)
+                assertThat(awaitItem()).isEqualTo(NavigateToStartUp)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @OptIn(ExperimentalTime::class)
+    @Test
+    fun `sign out should show error toast and still navigate when server sign out fails`() =
+        runTest {
+            val signOutUseCase: SignOutUseCase = get()
+            whenever(signOutUseCase.execute(Unit)) doReturn SignOutUseCase.Output(ServerSignOutStatus.SIGN_OUT_FAILED)
+
+            viewModel = get()
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(ConfirmSignOut)
+                assertThat(awaitItem()).isEqualTo(ShowToast(SERVER_SIGN_OUT_FAILED))
+                assertThat(awaitItem()).isEqualTo(NavigateToStartUp)
+                cancelAndIgnoreRemainingEvents()
             }
         }
 

@@ -1,10 +1,11 @@
 package net.svaroh.passly.core.navigation.compose.keys
 
 import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
+import net.svaroh.passly.ui.ConfirmPermissionsMode
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.PermissionsItem
 import net.svaroh.passly.ui.PermissionsMode
-import kotlinx.serialization.Serializable
 
 sealed interface PermissionsNavigationKey : NavKey {
     @Serializable
@@ -15,15 +16,23 @@ sealed interface PermissionsNavigationKey : NavKey {
     ) : PermissionsNavigationKey
 
     @Serializable
+    data class ConfirmPermissions(
+        val confirmMode: ConfirmPermissionsMode,
+        val driftedEntityNames: List<String>? = null,
+    ) : PermissionsNavigationKey
+
+    @Serializable
     data class GroupPermissionDetails(
         val permission: PermissionModelUi.GroupPermissionModel,
         val mode: PermissionsMode,
+        val fromSnapshot: Boolean = false,
     ) : PermissionsNavigationKey
 
     @Serializable
     data class UserPermissionDetails(
         val permission: PermissionModelUi.UserPermissionModel,
         val mode: PermissionsMode,
+        val fromSnapshot: Boolean = false,
     ) : PermissionsNavigationKey
 
     @Serializable

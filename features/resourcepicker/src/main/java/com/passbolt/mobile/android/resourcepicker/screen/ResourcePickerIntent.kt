@@ -29,10 +29,6 @@ import net.svaroh.passly.ui.ResourcePickerListItem
 sealed class ResourcePickerIntent {
     object GoBack : ResourcePickerIntent()
 
-    data class Initialize(
-        val suggestionUri: String?,
-    ) : ResourcePickerIntent()
-
     data class Search(
         val searchQuery: String,
     ) : ResourcePickerIntent()

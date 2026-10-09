@@ -1,6 +1,6 @@
 package net.svaroh.passly.feature.startup
 
-import net.svaroh.passly.core.navigation.AccountSetupDataModel
+import net.svaroh.passly.ui.AccountSetupDataModel
 
 sealed class StartUpSideEffect {
     data class NavigateToSetup(

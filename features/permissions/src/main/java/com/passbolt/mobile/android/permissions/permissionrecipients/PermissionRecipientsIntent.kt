@@ -24,7 +24,7 @@
 package net.svaroh.passly.permissions.permissionrecipients
 
 import net.svaroh.passly.ui.GroupModel
-import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserUiModel
 
 sealed interface PermissionRecipientsIntent {
     data object GoBack : PermissionRecipientsIntent
@@ -38,7 +38,7 @@ sealed interface PermissionRecipientsIntent {
     ) : PermissionRecipientsIntent
 
     data class ToggleUserSelection(
-        val user: UserModel,
+        val user: UserUiModel,
     ) : PermissionRecipientsIntent
 
     data object Save : PermissionRecipientsIntent

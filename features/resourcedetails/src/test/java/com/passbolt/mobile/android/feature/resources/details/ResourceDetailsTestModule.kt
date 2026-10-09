@@ -28,24 +28,26 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import net.svaroh.passly.common.coroutinetimer.TimerFactory
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderLocationUseCase
 import net.svaroh.passly.core.idlingresource.ResourceDetailActionIdlingResource
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.otpcore.TotpParametersProvider
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
-import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
-import net.svaroh.passly.core.resources.actions.ResourceCommonActionsInteractor
-import net.svaroh.passly.core.resources.actions.ResourcePropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.ResourcePropertyActionResult
-import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractor
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourcePermissionsUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceTagsUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
-import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderLocationUseCase
+import net.svaroh.passly.domain.metadata.usecase.CanShareResourceUseCase
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.resources.actions.ResourceCommonActionsInteractor
+import net.svaroh.passly.domain.resources.actions.ResourcePropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.ResourcePropertyActionResult
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceTagsUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsViewModel
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
@@ -53,14 +55,9 @@ import net.svaroh.passly.jsonmodel.JSON_MODEL_GSON
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathJsonPathOps
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathsOps
 import net.svaroh.passly.mappers.GroupsModelMapper
-import net.svaroh.passly.mappers.OtpModelMapper
 import net.svaroh.passly.mappers.PermissionsModelMapper
 import net.svaroh.passly.mappers.ResourceFormMapper
 import net.svaroh.passly.mappers.UsersModelMapper
-import net.svaroh.passly.metadata.usecase.CanShareResourceUseCase
-import net.svaroh.passly.supportedresourceTypes.ContentType
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import org.koin.core.Koin
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -85,7 +82,6 @@ internal val testModule =
         single { mock<GetLocalFolderLocationUseCase>() }
         single { mock<TotpParametersProvider>() }
         single { mock<GetRbacRulesUseCase>() }
-        single { mock<ResourceTypeIdToSlugMappingProvider>() }
         single { mock<CanShareResourceUseCase>() }
         single { mock<ResourceDetailActionIdlingResource>() }
         single { mock<SecretPropertiesActionsInteractor>() }
@@ -97,7 +93,6 @@ internal val testModule =
         singleOf(::DataRefreshTrackingFlow)
         singleOf(::SessionRefreshTrackingFlow)
         factoryOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
-        factoryOf(::OtpModelMapper)
         factoryOf(::PermissionsModelMapper)
         factoryOf(::GroupsModelMapper)
         factoryOf(::UsersModelMapper)
@@ -135,53 +130,47 @@ private fun Koin.setupAuthenticationMocks() {
 private fun Koin.setupConfigurationMocks() {
     val getFeatureFlagsUseCase: GetFeatureFlagsUseCase = get()
     getFeatureFlagsUseCase.stub {
-        onBlocking { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(DEFAULT_FEATURE_FLAGS)
+        on { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(DEFAULT_FEATURE_FLAGS)
     }
 
     val getRbacRulesUseCase: GetRbacRulesUseCase = get()
     getRbacRulesUseCase.stub {
-        onBlocking { execute(Unit) } doReturn GetRbacRulesUseCase.Output(DEFAULT_RBAC)
+        on { execute(Unit) } doReturn GetRbacRulesUseCase.Output(DEFAULT_RBAC)
     }
 }
 
 private fun Koin.setupResourceMocks() {
     val getLocalResourceUseCase: GetLocalResourceUseCase = get()
     getLocalResourceUseCase.stub {
-        onBlocking { execute(any()) } doReturn GetLocalResourceUseCase.Output(DEFAULT_RESOURCE_MODEL)
+        on { execute(any()) } doReturn GetLocalResourceUseCase.Output(DEFAULT_RESOURCE_MODEL)
     }
 
     val getLocalResourcePermissionsUseCase: GetLocalResourcePermissionsUseCase = get()
     getLocalResourcePermissionsUseCase.stub {
-        onBlocking { execute(any()) } doReturn
+        on { execute(any()) } doReturn
             GetLocalResourcePermissionsUseCase.Output(listOf(GROUP_PERMISSION, USER_PERMISSION))
     }
 
     val getLocalResourceTagsUseCase: GetLocalResourceTagsUseCase = get()
     getLocalResourceTagsUseCase.stub {
-        onBlocking { execute(any()) } doReturn GetLocalResourceTagsUseCase.Output(RESOURCE_TAGS)
+        on { execute(any()) } doReturn GetLocalResourceTagsUseCase.Output(RESOURCE_TAGS)
     }
 
     val getLocalFolderLocationUseCase: GetLocalFolderLocationUseCase = get()
     getLocalFolderLocationUseCase.stub {
-        onBlocking { execute(any()) } doReturn GetLocalFolderLocationUseCase.Output(emptyList())
-    }
-
-    val resourceTypeIdToSlugMappingProvider: ResourceTypeIdToSlugMappingProvider = get()
-    resourceTypeIdToSlugMappingProvider.stub {
-        onBlocking { provideMappingForSelectedAccount() } doReturn
-            mapOf(RESOURCE_TYPE_ID to ContentType.PasswordAndDescription.slug)
+        on { execute(any()) } doReturn GetLocalFolderLocationUseCase.Output(emptyList())
     }
 
     val canShareResourceUseCase: CanShareResourceUseCase = get()
     canShareResourceUseCase.stub {
-        onBlocking { execute(any()) } doReturn CanShareResourceUseCase.Output(canShareResource = true)
+        on { execute(any()) } doReturn CanShareResourceUseCase.Output(canShareResource = true)
     }
 }
 
 private fun Koin.setupResourceActionsMocks() {
     val resourcePropertiesActionsInteractor: ResourcePropertiesActionsInteractor = get()
     resourcePropertiesActionsInteractor.stub {
-        onBlocking { provideMainUri() } doReturn
+        on { provideMainUri() } doReturn
             flowOf(
                 ResourcePropertyActionResult(
                     ResourcePropertiesActionsInteractor.URL_LABEL,
@@ -189,7 +178,7 @@ private fun Koin.setupResourceActionsMocks() {
                     URL,
                 ),
             )
-        onBlocking { provideAdditionalUris() } doReturn
+        on { provideAdditionalUris() } doReturn
             flowOf(
                 ResourcePropertyActionResult(
                     ResourcePropertiesActionsInteractor.URL_LABEL,
@@ -197,7 +186,7 @@ private fun Koin.setupResourceActionsMocks() {
                     listOf(""),
                 ),
             )
-        onBlocking { provideUsername() } doReturn
+        on { provideUsername() } doReturn
             flowOf(
                 ResourcePropertyActionResult(
                     ResourcePropertiesActionsInteractor.USERNAME_LABEL,
@@ -205,7 +194,7 @@ private fun Koin.setupResourceActionsMocks() {
                     USERNAME,
                 ),
             )
-        onBlocking { provideMetadataDescription() } doReturn
+        on { provideMetadataDescription() } doReturn
             flowOf(
                 ResourcePropertyActionResult(
                     ResourcePropertiesActionsInteractor.DESCRIPTION_LABEL,
@@ -219,6 +208,6 @@ private fun Koin.setupResourceActionsMocks() {
 private fun Koin.setupUtilsMocks() {
     val timerFactory: TimerFactory = get()
     timerFactory.stub {
-        onBlocking { createInfiniteTimer(any()) } doReturn flowOf()
+        on { createInfiniteTimer(any()) } doReturn flowOf()
     }
 }

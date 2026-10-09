@@ -13,7 +13,9 @@ import net.svaroh.passly.feature.authentication.auth.usecase.VerifyDuoCallbackUs
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.AuthenticateWithDuo
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.ChooseOtherProvider
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.Close
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.ConfirmSetupLeave
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.DismissDuoAuth
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.DismissSetupLeave
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.DuoAuthFinished
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.CloseAndNavigateToStartup
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NavigateToLogin
@@ -26,6 +28,7 @@ import timber.log.Timber
 
 class AuthWithDuoViewModel(
     hasOtherProvider: Boolean,
+    private val isSetupFlow: Boolean,
     private val authToken: String?,
     private val getDuoPromptUseCase: GetDuoPromptUseCase,
     private val verifyDuoCallbackUseCase: VerifyDuoCallbackUseCase,
@@ -41,8 +44,21 @@ class AuthWithDuoViewModel(
             is AuthenticateWithDuo -> authenticateWithDuo()
             is ChooseOtherProvider -> emitSideEffect(NotifyOtherProviderClicked(authToken))
             is DismissDuoAuth -> updateViewState { copy(showDuoWebViewSheet = false) }
-            is Close -> signOutAndClose()
+            is Close -> close()
+            is ConfirmSetupLeave -> {
+                updateViewState { copy(showSetupLeaveConfirmationDialog = false) }
+                signOutAndClose()
+            }
+            is DismissSetupLeave -> updateViewState { copy(showSetupLeaveConfirmationDialog = false) }
             is DuoAuthFinished -> verifyDuoAuth(intent.state)
+        }
+    }
+
+    private fun close() {
+        if (isSetupFlow) {
+            updateViewState { copy(showSetupLeaveConfirmationDialog = true) }
+        } else {
+            signOutAndClose()
         }
     }
 
@@ -53,7 +69,7 @@ class AuthWithDuoViewModel(
                 when (val result = getDuoPromptUseCase.execute(GetDuoPromptUseCase.Input(token))) {
                     is DuoPromptUrlNotFound ->
                         emitSideEffect(ShowErrorSnackbar(GENERIC))
-                    is Failure<*> ->
+                    is Failure ->
                         emitSideEffect(ShowErrorSnackbar(GENERIC))
                     is NetworkFailure ->
                         emitSideEffect(ShowErrorSnackbar(GENERIC))
@@ -93,7 +109,7 @@ class AuthWithDuoViewModel(
                 ) {
                     is VerifyDuoCallbackUseCase.Output.Error ->
                         emitSideEffect(ShowErrorSnackbar(GENERIC))
-                    is VerifyDuoCallbackUseCase.Output.Failure<*> ->
+                    is VerifyDuoCallbackUseCase.Output.Failure ->
                         emitSideEffect(ShowErrorSnackbar(GENERIC))
                     is VerifyDuoCallbackUseCase.Output.Unauthorized -> {
                         if (backgroundSessionRefreshSucceeded()) {

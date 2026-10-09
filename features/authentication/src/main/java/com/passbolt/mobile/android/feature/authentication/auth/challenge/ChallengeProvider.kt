@@ -4,8 +4,7 @@ import com.google.gson.Gson
 import net.svaroh.passly.common.UuidProvider
 import net.svaroh.passly.common.extension.erase
 import net.svaroh.passly.common.time.TimeProvider
-import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.privatekey.GetPrivateKeyUseCase
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
 import net.svaroh.passly.dto.request.ChallengeDto
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
@@ -35,7 +34,7 @@ import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 class ChallengeProvider(
     private val gson: Gson,
     private val openPgp: OpenPgp,
-    private val privateKeyUseCase: GetPrivateKeyUseCase,
+    private val privateKeyRepository: PrivateKeyRepository,
     private val timeProvider: TimeProvider,
     private val uuidProvider: UuidProvider,
 ) {
@@ -46,27 +45,30 @@ class ChallengeProvider(
         userId: String,
     ): Output {
         val passphraseCopy = passphrase.copyOf()
-        val privateKey = requireNotNull(privateKeyUseCase.execute(UserIdInput(userId)).privateKey)
-        val tokenExpiry = getVerifyTokenExpiry()
+        try {
+            val privateKey =
+                requireNotNull(privateKeyRepository.getPrivateKey(userId)) { "Unable to restore private key." }.armoredKey
+            val tokenExpiry = getVerifyTokenExpiry()
+            val verifyToken = uuidProvider.get()
 
-        val challengeJson =
-            ChallengeDto(CHALLENGE_VERSION, domain, uuidProvider.get(), tokenExpiry)
-                .run { gson.toJson(this) }
+            val challengeJson =
+                ChallengeDto(CHALLENGE_VERSION, domain, verifyToken, tokenExpiry)
+                    .run { gson.toJson(this) }
 
-        return when (
-            val encryptedChallenge =
-                openPgp.encryptSignMessageArmored(
-                    publicKey = serverPublicKey,
-                    privateKey = privateKey,
-                    passphrase = passphraseCopy,
-                    message = challengeJson,
-                )
-        ) {
-            is OpenPgpResult.Result -> {
-                passphraseCopy.erase()
-                Output.Success(encryptedChallenge.result)
+            return when (
+                val encryptedChallenge =
+                    openPgp.encryptSignMessageArmored(
+                        publicKey = serverPublicKey,
+                        privateKey = privateKey,
+                        passphrase = passphraseCopy,
+                        message = challengeJson,
+                    )
+            ) {
+                is OpenPgpResult.Result -> Output.Success(encryptedChallenge.result, verifyToken)
+                is OpenPgpResult.Error -> Output.WrongPassphrase
             }
-            is OpenPgpResult.Error -> Output.WrongPassphrase
+        } finally {
+            passphraseCopy.erase()
         }
     }
 
@@ -75,6 +77,7 @@ class ChallengeProvider(
     sealed class Output {
         data class Success(
             val challenge: String,
+            val verifyToken: String,
         ) : Output()
 
         data object WrongPassphrase : Output()

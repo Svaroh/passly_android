@@ -345,7 +345,6 @@ den aktiverade autofyll-funktionen att föreslå att fylla i dina tidigare tilla
     <string name="settings_app_settings_biometry_error">Biometri-fel. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Fel vid biometri-autentisering. %s</string>
     <string name="settings_app_settings_expert_settings">Expertinställningar</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Utvecklarläge</string>
     <string name="settings_app_settings_expert_settings_hide_root">Dölj dialogen ”enheten är rootad”</string>
     <string name="settings_autofill_autofill_title">Här kan du ändra autofyll-metoder</string>
     <string name="settings_autofill_autofill_desc">Vi rekommenderar att använda Autofylltjänst-metoden, men tjänstens prestanda kan bero på din enhet och inställningar för batterioptimering. \n\nOm Autofylltjänsten inte fungerar tillförlitligt på din enhet kan du prova att aktivera autofyll baserad på Tillgänglighetstjänst.</string>

@@ -2,13 +2,19 @@ package net.svaroh.passly.feature.authentication.auth.accountslist
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.accounts.usecase.accounts.GetAllAccountsDataUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveCurrentApiUrlUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveSelectedAccountUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.ManageAccount
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.Startup
-import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.domain.accounts.usecase.GetAllAccountsDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveCurrentApiUrlUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveSelectedAccountUseCase
+import net.svaroh.passly.domain.auth.model.ServerSignOutStatus
 import net.svaroh.passly.entity.account.Account
 import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.AddAccount
 import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.ConfirmRemoveAccount
@@ -29,12 +35,6 @@ import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
 import net.svaroh.passly.mappers.AccountModelMapper
 import net.svaroh.passly.ui.AccountModelUi
 import net.svaroh.passly.ui.AccountModelUi.AddNewAccount
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -67,7 +67,6 @@ class AccountsListViewModelTest : KoinTest {
                     single { mock<SaveCurrentApiUrlUseCase>() }
                     single { mock<RemoveAllAccountDataUseCase>() }
                     single { mock<SignOutUseCase>() }
-                    single { mock<DatabaseProvider>() }
                     factoryOf(::AccountModelMapper)
                     factory { params ->
                         AccountsListViewModel(
@@ -79,7 +78,6 @@ class AccountsListViewModelTest : KoinTest {
                             removeAllAccountDataUseCase = get(),
                             signOutUseCase = get(),
                             saveCurrentApiUrlUseCase = get(),
-                            databaseProvider = get(),
                         )
                     }
                 },
@@ -99,11 +97,6 @@ class AccountsListViewModelTest : KoinTest {
 
         val getAllAccountsDataUseCase = get<GetAllAccountsDataUseCase>()
         whenever(getAllAccountsDataUseCase.execute(Unit)) doReturn GetAllAccountsDataUseCase.Output(SAVED_ACCOUNT)
-
-        val databaseProvider = get<DatabaseProvider>()
-        databaseProvider.stub {
-            onBlocking { delete(any()) } doReturn Unit
-        }
     }
 
     @After
@@ -198,7 +191,7 @@ class AccountsListViewModelTest : KoinTest {
                 GetAllAccountsDataUseCase.Output(mutableAccountList)
             val removeAllAccountDataUseCase = get<RemoveAllAccountDataUseCase>()
             removeAllAccountDataUseCase.stub {
-                onBlocking { execute(any()) }.then { mutableAccountList.removeAt(0) }
+                on { execute(any()) }.then { mutableAccountList.removeAt(0) }
             }
 
             viewModel = get(parameters = { parametersOf(Startup) })
@@ -223,7 +216,7 @@ class AccountsListViewModelTest : KoinTest {
             whenever(getAllAccountsDataUseCase.execute(Unit)) doReturn GetAllAccountsDataUseCase.Output(mutableAccountList)
             val removeAllAccountDataUseCase = get<RemoveAllAccountDataUseCase>()
             removeAllAccountDataUseCase.stub {
-                onBlocking { execute(any()) }.then { mutableAccountList.removeAt(0) }
+                on { execute(any()) }.then { mutableAccountList.removeAt(0) }
             }
 
             viewModel = get(parameters = { parametersOf(Startup) })
@@ -310,7 +303,7 @@ class AccountsListViewModelTest : KoinTest {
 
             val signOutUseCase = get<SignOutUseCase>()
             signOutUseCase.stub {
-                onBlocking { execute(Unit) } doReturn Unit
+                on { execute(Unit) } doReturn SignOutUseCase.Output(ServerSignOutStatus.SIGNED_OUT)
             }
 
             viewModel = get(parameters = { parametersOf(ManageAccount) })

@@ -2,20 +2,6 @@ package net.svaroh.passly.feature.main.mainscreen
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.common.datarefresh.DataRefreshStatus
-import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
-import net.svaroh.passly.core.autofill.AutofillInformationProvider
-import net.svaroh.passly.core.inappreview.InAppReviewInteractor
-import net.svaroh.passly.core.navigation.compose.AppNavigator
-import net.svaroh.passly.core.navigation.deeplink.BrowserFirstLoginDeepLinkStore
-import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
-import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.CheckForAppUpdates
-import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.PerformFullDataRefresh
-import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.TryLaunchReviewFlow
-import net.svaroh.passly.feature.main.mainscreen.encouragements.EncouragementsInteractor
-import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginQrParser
-import net.svaroh.passly.feature.transferaccounttoanotherdevice.usecase.CompleteBrowserFirstLoginUseCase
-import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,6 +10,20 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.core.autofill.AutofillInformationProvider
+import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.deeplink.BrowserFirstLoginDeepLinkStore
+import net.svaroh.passly.domain.inappreview.usecase.InAppReviewInteractor
+import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
+import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.CheckForAppUpdates
+import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.PerformFullDataRefresh
+import net.svaroh.passly.feature.main.mainscreen.MainSideEffect.TryLaunchReviewFlow
+import net.svaroh.passly.feature.main.mainscreen.encouragements.EncouragementsInteractor
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginQrParser
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.usecase.CompleteBrowserFirstLoginUseCase
+import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -87,7 +87,7 @@ private val defaultFeatureFlags =
 
 private val mockGetFeatureFlagsUseCase =
     mock<GetFeatureFlagsUseCase> {
-        onBlocking { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(defaultFeatureFlags)
+        on { execute(Unit) } doReturn GetFeatureFlagsUseCase.Output(defaultFeatureFlags)
     }
 private val mockBrowserFirstLoginQrParser = mock<BrowserFirstLoginQrParser>()
 private val mockCompleteBrowserFirstLoginUseCase = mock<CompleteBrowserFirstLoginUseCase>()
@@ -185,7 +185,7 @@ class MainViewModelTest : KoinTest {
     fun `totp should be visible based on feature flag`() =
         runTest {
             mockGetFeatureFlagsUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetFeatureFlagsUseCase.Output(
                         FeatureFlagsModel(
                             privacyPolicyUrl = null,
@@ -215,7 +215,7 @@ class MainViewModelTest : KoinTest {
     fun `bottom nav should update after data refresh completes`() =
         runTest {
             mockGetFeatureFlagsUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetFeatureFlagsUseCase.Output(
                         FeatureFlagsModel(
                             privacyPolicyUrl = null,

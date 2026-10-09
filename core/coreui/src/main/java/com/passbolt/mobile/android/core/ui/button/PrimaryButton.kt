@@ -1,6 +1,5 @@
 package net.svaroh.passly.core.ui.button
 
-import PassboltTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.ui.R
 
 @Composable
@@ -41,7 +41,7 @@ fun PrimaryButton(
                 .fillMaxWidth()
                 .height(56.dp),
     ) {
-        Text(text = text, color = Color.White)
+        Text(text = text)
     }
 }
 

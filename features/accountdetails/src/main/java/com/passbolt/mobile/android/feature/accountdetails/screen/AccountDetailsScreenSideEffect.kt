@@ -26,4 +26,8 @@ internal sealed interface AccountDetailsScreenSideEffect {
     data object NavigateUp : AccountDetailsScreenSideEffect
 
     data object NavigateToTransferAccount : AccountDetailsScreenSideEffect
+
+    data class ShowProfileFetchError(
+        val message: String?,
+    ) : AccountDetailsScreenSideEffect
 }

@@ -28,7 +28,6 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,7 +49,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
@@ -59,9 +61,9 @@ import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.Auto
 import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.DefaultFilter
 import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.ExpertSettings
 import net.svaroh.passly.core.ui.R
-import net.svaroh.passly.core.ui.dialogs.CancelAccountTransferAlertDialog
 import net.svaroh.passly.core.ui.dialogs.ConfigureBiometricAlertDialog
 import net.svaroh.passly.core.ui.dialogs.DisableBiometricAlertDialog
+import net.svaroh.passly.core.ui.dialogs.KeyChangesDetectedAlertDialog
 import net.svaroh.passly.core.ui.menu.OpenableSettingsItem
 import net.svaroh.passly.core.ui.menu.SwitchableSettingsItem
 import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
@@ -81,7 +83,6 @@ import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.G
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.GoToDefaultFilter
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.GoToExpertSettings
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.Initialize
-import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.InvalidateBiometricKeyPermanently
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.RefreshedPassphrase
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsIntent.ToggleBiometric
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToAutofill
@@ -90,8 +91,6 @@ import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffe
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToGetPassphrase
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateToSystemSettings
 import net.svaroh.passly.feature.settings.screen.appsettings.AppSettingsSideEffect.NavigateUp
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.getKoin
 import org.koin.compose.koinInject
@@ -178,14 +177,13 @@ private fun AppSettingsSideEffectsHandler(
             NavigateToSystemSettings -> environment.context.startActivity(Intent(Settings.ACTION_SETTINGS))
             is AppSettingsSideEffect.LaunchBiometricPrompt ->
                 showBiometricPrompt(
-                    activity = environment.context as AppCompatActivity,
+                    activity = environment.context as FragmentActivity,
                     executor = environment.executor,
                     biometricPromptBuilder = environment.biometricPromptBuilder,
                     biometricEncryptionCipher = it.cipher,
                     onAuthenticationSuccess = { onIntent(FinalizedBiometricAuth(it)) },
                     onAuthenticationCancelled = { onIntent(CanceledBiometricAuth) },
                     onAuthenticationError = { onIntent(ErroredBiometricAuth(it)) },
-                    onKeyPermanentlyInvalidated = { exception -> onIntent(InvalidateBiometricKeyPermanently(exception)) },
                 )
             is AppSettingsSideEffect.ShowErrorSnackbar ->
                 environment.coroutineScope.launch {
@@ -286,7 +284,7 @@ private fun AppSettingsScreen(
                 onDismiss = { onIntent(CancelConfigureBiometric) },
             )
 
-            CancelAccountTransferAlertDialog(
+            KeyChangesDetectedAlertDialog(
                 isVisible = state.isKeyChangesDialogDetectedVisible,
                 onConfirm = { onIntent(ConfirmKeyChangeClick) },
                 onDismiss = { onIntent(CancelConfirmKeyChange) },

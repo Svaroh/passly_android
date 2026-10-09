@@ -51,7 +51,7 @@ class CheckPasswordPropertiesUseCase(
         val passwordHashSuffix = passwordHash.substring(PwnedPasswordsApi.PARTIAL_HASH_LENGTH)
 
         return when (val response = pwnedPasswordRepository.getPwnedPasswordsSuffixes(passwordHashPrefix)) {
-            is NetworkResult.Failure -> Output.Failure(response)
+            is NetworkResult.Failure -> Output.Failure
             is NetworkResult.Success -> {
                 response.value.lines().forEach {
                     val (suffix, count) = it.split(":")
@@ -75,9 +75,7 @@ class CheckPasswordPropertiesUseCase(
             const val WEAK_ENTROPY_THRESHOLD = 60
         }
 
-        data class Failure<T : Any>(
-            val response: NetworkResult.Failure<T>,
-        ) : Output()
+        data object Failure : Output()
     }
 
     data class Input(

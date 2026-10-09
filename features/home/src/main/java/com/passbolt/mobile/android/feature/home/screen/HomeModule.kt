@@ -4,9 +4,9 @@ import net.svaroh.passly.core.navigation.compose.base.Feature
 import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
 import net.svaroh.passly.feature.home.navigation.HomeFeatureNavigation
 import net.svaroh.passly.feature.home.screen.data.HomeDataProvider
-import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
 
 /**

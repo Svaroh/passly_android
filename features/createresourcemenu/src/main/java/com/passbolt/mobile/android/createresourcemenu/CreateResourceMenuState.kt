@@ -28,4 +28,5 @@ data class CreateResourceMenuState(
     val showTotpButton: Boolean = false,
     val showNoteButton: Boolean = false,
     val showFoldersButton: Boolean = false,
+    val showPinCodeButton: Boolean = false,
 )

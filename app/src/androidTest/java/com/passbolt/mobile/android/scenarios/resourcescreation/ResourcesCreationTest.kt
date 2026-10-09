@@ -52,6 +52,8 @@ import net.svaroh.passly.feature.authentication.AuthenticationMainActivity
 import net.svaroh.passly.helpers.chooseFilter
 import net.svaroh.passly.helpers.getString
 import net.svaroh.passly.helpers.signIn
+import net.svaroh.passly.helpers.waitForCreateButton
+import net.svaroh.passly.helpers.waitForResourceForm
 import net.svaroh.passly.instrumentationTestsModule
 import net.svaroh.passly.intents.ManagedAccountIntentCreator
 import net.svaroh.passly.rules.IdlingResourceRule
@@ -136,6 +138,11 @@ class ResourcesCreationTest : KoinTest {
                 )
             filtersWithFab.forEach { filter ->
                 chooseFilter(filter)
+                // canCreateResource updates asynchronously after the filter's reload, so wait
+                // for the FAB before asserting.
+                waitUntil(conditionDescription = "Waiting for create button on ${getString(filter)}", timeoutMillis = 5_000) {
+                    onAllNodes(hasTestTag(Home.FAB)).fetchSemanticsNodes().isNotEmpty()
+                }
                 onNodeWithTag(Home.FAB).assertExists()
             }
 
@@ -146,6 +153,11 @@ class ResourcesCreationTest : KoinTest {
                 )
             filtersWithoutFab.forEach { filter ->
                 chooseFilter(filter)
+                // Tags/Groups hide the create button only after the async reload, so wait for
+                // the FAB to disappear before asserting.
+                waitUntil(conditionDescription = "Waiting for no create button on ${getString(filter)}", timeoutMillis = 5_000) {
+                    onAllNodes(hasTestTag(Home.FAB)).fetchSemanticsNodes().isEmpty()
+                }
                 onNodeWithTag(Home.FAB).assertDoesNotExist()
             }
         }
@@ -161,8 +173,10 @@ class ResourcesCreationTest : KoinTest {
     @Test
     fun asALoggedInMobileUserOnThePasswordWorkspaceIShouldSeeTheNewPasswordPage() {
         composeTestRule.apply {
+            waitForCreateButton()
             onNodeWithTag(Home.FAB).performClick()
             onNodeWithText(getString(LocalizationR.string.create_resource_menu_create_password)).performClick()
+            waitForResourceForm()
 
             onNodeWithText(getString(LocalizationR.string.resource_form_create_password)).assertIsDisplayed()
             onNode(hasTestTag(ICON), useUnmergedTree = true).assertExists() // Back icon
@@ -188,8 +202,10 @@ class ResourcesCreationTest : KoinTest {
         // (second refresh is during snackbar is showing)
         IdlingRegistry.getInstance().unregister(resourcesFullRefreshIdlingResource)
         composeTestRule.apply {
+            waitForCreateButton()
             onNodeWithTag(Home.FAB).performClick()
             onNodeWithText(getString(LocalizationR.string.create_resource_menu_create_password)).performClick()
+            waitForResourceForm()
 
             onNodeWithTag(ResourceForm.NAME_INPUT).performTextReplacement("PasswordNameTest")
             onNodeWithTag(ResourceForm.PASSWORD_INPUT).performTextReplacement("TestPassword123!")
@@ -207,8 +223,10 @@ class ResourcesCreationTest : KoinTest {
     @Test
     fun asALoggedInMobileUserOnTheNewPasswordPageICanGenerateARandomPassword() {
         composeTestRule.apply {
+            waitForCreateButton()
             onNodeWithTag(Home.FAB).performClick()
             onNodeWithText(getString(LocalizationR.string.create_resource_menu_create_password)).performClick()
+            waitForResourceForm()
 
             onNodeWithTag(ResourceForm.GENERATE_PASSWORD_BUTTON).performClick()
             // after generation the password field should exist and be filled
@@ -226,8 +244,10 @@ class ResourcesCreationTest : KoinTest {
     @Test
     fun asALoggedInMobileUserOnTheNewPasswordPageICanSwitchTheVisibilityOfThePassword() {
         composeTestRule.apply {
+            waitForCreateButton()
             onNodeWithTag(Home.FAB).performClick()
             onNodeWithText(getString(LocalizationR.string.create_resource_menu_create_password)).performClick()
+            waitForResourceForm()
 
             onNodeWithTag(ResourceForm.PASSWORD_INPUT).performTextReplacement("TestPassword")
             onNodeWithTag(PasswordField.VISIBILITY_TOGGLE, useUnmergedTree = true).performClick()

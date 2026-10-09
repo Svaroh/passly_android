@@ -1,11 +1,11 @@
 package net.svaroh.passly.feature.setup.scanqr.mapper
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import net.svaroh.passly.feature.setup.di.testModule
 import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult
 import net.svaroh.passly.feature.setup.scanqr.qrparser.QrScanResultsMapper
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level

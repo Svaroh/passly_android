@@ -1,0 +1,35 @@
+# Passbolt 3.1.0-55 Android app release notes
+
+## Added
+- MOB-3901: Remove orientation lock; Lock in runtime for screen size compact; Improved split screen behaviour
+- MOB-3953: Add reduce re-authentication flag in expert settings
+- MOB-3980: Add TOTP autofill
+- MOB-3984: Custom page size in expert settings (can speed up loading for huge resource lists)
+- MOB-4125: Implement PIN resource
+
+## Improved
+- MOB-4115: Use obfuscated font for hidden note (improves scaling)
+- MOB-4181: Autofill code improvements
+- MOB-4474: Add confirmation dialog on MFA setup cancel
+- MOB-4445: Stable paging refresh - improved resource list jump
+
+## Fixed
+- MOB-4026: Update folder personal field logic to support a single current user group case
+- MOB-3947: Autoscroll to top when search query changes
+- MOB-3896: Fix foreground service not stopped on time crash on some devices
+- MOB-4059: Fix overlapping MFA keyboard
+- MOB-4082: Reintroduce pwned check
+- MOB-4468: Fix restarting of QR code scanning after camera permissions disabled
+- MOB-4480: Fix listener on add PIN in TOTP tab
+
+## Security
+- MOB-3135: Use Gradle lock files
+- Add docker images pinning
+
+## Maintenance
+- MOB-3471: Upgrade to Gradle 9
+- MOB-3137: Add content type into resource model; Hide username for types that don't have it
+- MOB-4083: Fix build warnings
+- MOB-3980: Migrate autofill remote views to Compose and Glance
+- MOB-4146: Migrate build scripts to KTS
+- (automated tests) MOB-4204: chose right resource when deleting, update for v5, fix snackbar string

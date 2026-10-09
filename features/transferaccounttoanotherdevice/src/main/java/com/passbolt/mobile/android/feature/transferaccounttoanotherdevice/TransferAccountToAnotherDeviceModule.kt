@@ -9,8 +9,6 @@ import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.transfer
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.transferAccountModule
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccountonboarding.transferAccountOnboardingModule
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.usecase.CompleteBrowserFirstLoginUseCase
-import net.svaroh.passly.feature.transferaccounttoanotherdevice.usecase.CreateTransferUseCase
-import net.svaroh.passly.feature.transferaccounttoanotherdevice.usecase.ViewTransferUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -51,6 +49,4 @@ val transferAccountToAnotherDeviceModule =
 
         singleOf(::BrowserFirstLoginQrParser)
         singleOf(::CompleteBrowserFirstLoginUseCase)
-        singleOf(::CreateTransferUseCase)
-        singleOf(::ViewTransferUseCase)
     }

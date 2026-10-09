@@ -345,7 +345,6 @@
     <string name="settings_app_settings_biometry_error">Error de biometría. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Error de autenticación de biometría. %s</string>
     <string name="settings_app_settings_expert_settings">Ajustes de experto</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Modo desarrollador</string>
     <string name="settings_app_settings_expert_settings_hide_root">Ocultar diálogo \"el dispositivo está rooteado\"</string>
     <string name="settings_autofill_autofill_title">Aquí puede cambiar los métodos de autocompletado</string>
     <string name="settings_autofill_autofill_desc">Se recomienda utilizar el método Servicio de Autocompletado pero el rendimiento del Servicio puede depender de la configuración de su dispositivo y de la optimización de batería. \n\nSi el Servicio de Autocompletado no funciona de forma fiable en su dispositivo puede intentar habilitar el autocompletado basado en el Servicio de Accesibilidad.</string>

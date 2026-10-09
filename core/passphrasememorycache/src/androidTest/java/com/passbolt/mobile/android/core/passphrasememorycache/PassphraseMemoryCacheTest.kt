@@ -6,12 +6,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.dummy.TestActivity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
+import net.svaroh.passly.core.dummy.TestActivity
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -59,6 +63,7 @@ class PassphraseMemoryCacheTest : KoinTest {
 
     @Before
     fun setup() {
+        testIsAuthRequiredOnEveryEntry = true
         val scenario = activityScenarioRule.scenario
         scenario.moveToState(Lifecycle.State.RESUMED)
     }
@@ -115,6 +120,34 @@ class PassphraseMemoryCacheTest : KoinTest {
         }
 
     @Test
+    fun test_CacheIsNotClearedAfterAppIsInBackground_WhenAuthNotRequiredOnEveryEntry() =
+        runBlocking {
+            testIsAuthRequiredOnEveryEntry = false
+            passphraseMemoryCache.set(TEST_PASSPHRASE)
+
+            // start launcher app to send app to background
+            InstrumentationRegistry
+                .getInstrumentation()
+                .context
+                .startActivity(launcherIntent())
+
+            delay(LIFECYCLE_OBSERVATION_TIMEOUT_MILLIS)
+            assertThat(passphraseMemoryCache.get()).isInstanceOf(PotentialPassphrase.Passphrase::class.java)
+        }
+
+    @Test
+    fun test_CacheIsClearedByTimerExpiry_WhenAuthNotRequiredOnEveryEntry() =
+        runTest(testCoroutineLaunchContext.ui) {
+            testIsAuthRequiredOnEveryEntry = false
+            passphraseMemoryCache.set(TEST_PASSPHRASE)
+
+            // 5-minute timer should still clear the cache regardless of the flag
+            advanceTimeBy(PassphraseMemoryCache.CACHE_EXPIRATION_MILLIS + 1)
+
+            assertThat(passphraseMemoryCache.get()).isInstanceOf(PotentialPassphrase.PassphraseNotPresent::class.java)
+        }
+
+    @Test
     fun test_CacheTimeoutIsRenewedAfterNewPassphraseValueIsSet() =
         runTest(testCoroutineLaunchContext.ui) {
             passphraseMemoryCache.set(TEST_PASSPHRASE)
@@ -130,9 +163,42 @@ class PassphraseMemoryCacheTest : KoinTest {
             assertThat(passphraseMemoryCache.get()).isInstanceOf(PotentialPassphrase.Passphrase::class.java)
         }
 
+    @Test
+    fun test_ConcurrentReadNeverReturnsPartiallyErasedPassphrase() =
+        runBlocking {
+            passphraseMemoryCache.set(LONG_PASSPHRASE)
+
+            coroutineScope {
+                val readers =
+                    List(STRESS_READER_COUNT) {
+                        launch(Dispatchers.Default) {
+                            repeat(STRESS_ITERATIONS) {
+                                (passphraseMemoryCache.get() as? PotentialPassphrase.Passphrase)?.let {
+                                    assertThat(it.passphrase).isEqualTo(LONG_PASSPHRASE)
+                                }
+                            }
+                        }
+                    }
+                val writer =
+                    launch(Dispatchers.Default) {
+                        repeat(STRESS_ITERATIONS) {
+                            passphraseMemoryCache.clear()
+                            passphraseMemoryCache.set(LONG_PASSPHRASE)
+                        }
+                    }
+
+                (readers + writer).joinAll()
+            }
+        }
+
     private companion object {
         private val TEST_PASSPHRASE = "passphrase".toByteArray()
         private const val LIFECYCLE_OBSERVATION_TIMEOUT_MILLIS = 1_000L
+
+        private const val STRESS_READER_COUNT = 4
+        private const val STRESS_ITERATIONS = 2_000
+        private const val LONG_PASSPHRASE_REPEATS = 400
+        private val LONG_PASSPHRASE = "passphrase".repeat(LONG_PASSPHRASE_REPEATS).toByteArray()
 
         fun launcherIntent() =
             Intent(Intent.ACTION_MAIN).apply {

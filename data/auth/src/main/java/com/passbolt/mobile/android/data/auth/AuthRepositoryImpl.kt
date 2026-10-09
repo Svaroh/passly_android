@@ -1,0 +1,63 @@
+package net.svaroh.passly.data.auth
+
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.auth.AuthRepository
+import net.svaroh.passly.domain.auth.datasource.AuthLocalDataSource
+import net.svaroh.passly.domain.auth.datasource.AuthRemoteDataSource
+import net.svaroh.passly.domain.auth.model.RefreshedSession
+import net.svaroh.passly.domain.auth.model.ServerPgpKey
+import net.svaroh.passly.domain.auth.model.ServerRsaKey
+import net.svaroh.passly.domain.auth.model.SignInResult
+
+/**
+ * Passbolt - Open source password manager for teams
+ * Copyright (c) 2021 Passbolt SA
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+ * Public License (AGPL) as published by the Free Software Foundation version 3.
+ *
+ * The name "Passbolt" is a registered trademark of Passbolt SA, and Passbolt SA hereby declines to grant a trademark
+ * license to "Passbolt" pursuant to the GNU Affero General Public License version 3 Section 7(e), without a separate
+ * agreement with Passbolt SA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License along with this program. If not,
+ * see GNU Affero General Public License v3 (http://www.gnu.org/licenses/agpl-3.0.html).
+ *
+ * @copyright Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link https://www.passbolt.com Passbolt (tm)
+ * @since v1.0
+ */
+internal class AuthRepositoryImpl(
+    private val remoteDataSource: AuthRemoteDataSource,
+    private val localDataSource: AuthLocalDataSource,
+) : AuthRepository {
+    override suspend fun fetchServerPublicPgpKey(): DomainResult<ServerPgpKey> = remoteDataSource.fetchServerPublicPgpKey()
+
+    override suspend fun fetchServerPublicRsaKey(): DomainResult<ServerRsaKey> = remoteDataSource.fetchServerPublicRsaKey()
+
+    override suspend fun signIn(
+        userId: String,
+        challenge: String,
+        mfaToken: String?,
+    ): SignInResult = remoteDataSource.signIn(userId, challenge, mfaToken)
+
+    override suspend fun signOut(refreshToken: String): DomainResult<Unit> = remoteDataSource.signOut(refreshToken)
+
+    override suspend fun refreshSession(
+        refreshToken: String,
+        serverUserId: String,
+    ): DomainResult<RefreshedSession> = remoteDataSource.refreshSession(refreshToken, serverUserId)
+
+    override fun getServerPublicRsaKey(userId: String): String? = localDataSource.getServerRsaKey(userId)
+
+    override fun saveServerPublicRsaKey(
+        userId: String,
+        rsaKey: String,
+    ) = localDataSource.saveServerRsaKey(userId, rsaKey)
+
+    override fun removeServerPublicRsaKey(userId: String) = localDataSource.removeServerRsaKey(userId)
+}

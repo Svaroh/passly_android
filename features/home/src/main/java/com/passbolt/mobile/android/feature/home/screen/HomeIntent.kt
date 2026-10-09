@@ -23,15 +23,17 @@
 
 package net.svaroh.passly.feature.home.screen
 
+import net.svaroh.passly.core.navigation.AppContext
 import net.svaroh.passly.ui.HomeDisplayViewModel
-import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption
+import net.svaroh.passly.ui.ResourceUiModel
 
 sealed interface HomeIntent {
     // screen
     data class Initialize(
         val showSuggestedModel: ShowSuggestedModel,
         val homeView: HomeDisplayViewModel?,
+        val appContext: AppContext = AppContext.APP,
     ) : HomeIntent
 
     data class Search(
@@ -59,6 +61,8 @@ sealed interface HomeIntent {
     data object CreateTotp : HomeIntent
 
     data object CreateNote : HomeIntent
+
+    data object CreatePinCode : HomeIntent
 
     data object CreateFolder : HomeIntent
 
@@ -99,7 +103,7 @@ sealed interface HomeIntent {
 
     // resource more menu
     data class OpenResourceMenu(
-        val resourceModel: ResourceModel,
+        val resourceModel: ResourceUiModel,
     ) : HomeIntent
 
     data object CloseResourceMoreMenu : HomeIntent

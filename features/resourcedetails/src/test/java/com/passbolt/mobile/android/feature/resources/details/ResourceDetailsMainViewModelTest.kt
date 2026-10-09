@@ -25,11 +25,23 @@ package net.svaroh.passly.feature.resources.details
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
-import net.svaroh.passly.core.resources.actions.ResourceCommonActionResult
-import net.svaroh.passly.core.resources.actions.ResourceCommonActionsInteractor
-import net.svaroh.passly.core.resources.actions.ResourcePropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.ResourcePropertyActionResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.resources.actions.ResourceCommonActionResult
+import net.svaroh.passly.domain.resources.actions.ResourceCommonActionsInteractor
+import net.svaroh.passly.domain.resources.actions.ResourcePropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.ResourcePropertyActionResult
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
 import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CloseDeleteConfirmationDialog
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CloseMoreMenu
@@ -45,16 +57,10 @@ import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffe
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.NavigateBack
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.OpenWebsite
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowToast
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsViewModel
+import net.svaroh.passly.feature.resourcedetails.details.ToastType
 import net.svaroh.passly.ui.RbacRuleModel.DENY
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -63,7 +69,9 @@ import org.koin.core.logger.Level
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.get
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stub
 import kotlin.test.assertIs
 
@@ -159,12 +167,32 @@ class ResourceDetailsMainViewModelTest : KoinTest {
         }
 
     @Test
+    fun `resource missing after data refresh should show toast and navigate back`() =
+        runTest {
+            viewModel = get()
+            viewModel.onIntent(Initialize(DEFAULT_RESOURCE_MODEL))
+            get<GetLocalResourceUseCase>().stub {
+                on { execute(any()) } doThrow
+                    IllegalStateException("The query result was empty, but expected a single row")
+            }
+
+            viewModel.sideEffect.test {
+                get<DataRefreshTrackingFlow>().updateStatus(FinishedWithSuccess)
+
+                val toast = awaitItem()
+                assertIs<ShowToast>(toast)
+                assertThat(toast.type).isEqualTo(ToastType.CONTENT_NOT_AVAILABLE)
+                assertIs<NavigateBack>(awaitItem())
+            }
+        }
+
+    @Test
     fun `copy username should emit add to clipboard side effect`() =
         runTest {
             val username = "john.doe@example.com"
             val resourcePropertiesActionsInteractor: ResourcePropertiesActionsInteractor = get()
             resourcePropertiesActionsInteractor.stub {
-                onBlocking { provideUsername() } doReturn
+                on { provideUsername() } doReturn
                     flowOf(
                         ResourcePropertyActionResult(
                             ResourcePropertiesActionsInteractor.USERNAME_LABEL,
@@ -193,7 +221,7 @@ class ResourceDetailsMainViewModelTest : KoinTest {
             val url = "https://www.passbolt.com"
             val resourcePropertiesActionsInteractor: ResourcePropertiesActionsInteractor = get()
             resourcePropertiesActionsInteractor.stub {
-                onBlocking { provideMainUri() } doReturn
+                on { provideMainUri() } doReturn
                     flowOf(
                         ResourcePropertyActionResult(
                             ResourcePropertiesActionsInteractor.URL_LABEL,
@@ -246,7 +274,7 @@ class ResourceDetailsMainViewModelTest : KoinTest {
             val resourceName = DEFAULT_RESOURCE_MODEL.metadataJsonModel.name
             val resourceCommonActionsInteractor: ResourceCommonActionsInteractor = get()
             resourceCommonActionsInteractor.stub {
-                onBlocking { deleteResource() } doReturn
+                on { deleteResource() } doReturn
                     flowOf(
                         ResourceCommonActionResult.Success(resourceName),
                     )
@@ -270,7 +298,7 @@ class ResourceDetailsMainViewModelTest : KoinTest {
         runTest {
             val resourceCommonActionsInteractor: ResourceCommonActionsInteractor = get()
             resourceCommonActionsInteractor.stub {
-                onBlocking { deleteResource() } doReturn flowOf(ResourceCommonActionResult.Failure)
+                on { deleteResource() } doReturn flowOf(ResourceCommonActionResult.Failure)
             }
 
             viewModel = get()
@@ -291,7 +319,7 @@ class ResourceDetailsMainViewModelTest : KoinTest {
         runTest {
             val getRbacRulesUseCase: GetRbacRulesUseCase = get()
             getRbacRulesUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetRbacRulesUseCase.Output(
                         DEFAULT_RBAC.copy(tagsUseRule = DENY),
                     )
@@ -313,7 +341,7 @@ class ResourceDetailsMainViewModelTest : KoinTest {
         runTest {
             val getRbacRulesUseCase: GetRbacRulesUseCase = get()
             getRbacRulesUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetRbacRulesUseCase.Output(
                         DEFAULT_RBAC.copy(shareViewRule = DENY),
                     )
@@ -331,11 +359,41 @@ class ResourceDetailsMainViewModelTest : KoinTest {
         }
 
     @Test
+    fun `database backed sections should be loaded only after data refresh finishes`() =
+        runTest {
+            val dataRefreshTrackingFlow: DataRefreshTrackingFlow = get()
+            dataRefreshTrackingFlow.updateStatus(InProgress(progress = 0.5f))
+
+            viewModel = get()
+            viewModel.onIntent(Initialize(DEFAULT_RESOURCE_MODEL))
+
+            viewModel.viewState.test {
+                val duringRefresh = awaitItem()
+                assertThat(duringRefresh.isRefreshing).isTrue()
+                assertThat(duringRefresh.sharedWithData.permissions).isEmpty()
+                assertThat(duringRefresh.metadataData.tags).isEmpty()
+                cancelAndIgnoreRemainingEvents()
+            }
+
+            dataRefreshTrackingFlow.updateStatus(FinishedWithSuccess)
+            testScheduler.advanceUntilIdle()
+
+            viewModel.viewState.test {
+                val afterRefresh = awaitItem()
+                assertThat(afterRefresh.isRefreshing).isFalse()
+                assertThat(afterRefresh.sharedWithData.permissions)
+                    .containsExactly(GROUP_PERMISSION, USER_PERMISSION)
+                assertThat(afterRefresh.metadataData.tags)
+                    .containsExactlyElementsIn(RESOURCE_TAGS.map { it.slug })
+            }
+        }
+
+    @Test
     fun `folder location should not be shown when disabled by rbac`() =
         runTest {
             val getRbacRulesUseCase: GetRbacRulesUseCase = get()
             getRbacRulesUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetRbacRulesUseCase.Output(
                         DEFAULT_RBAC.copy(foldersUseRule = DENY),
                     )

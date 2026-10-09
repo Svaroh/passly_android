@@ -1,3 +1,26 @@
+/**
+ * Passbolt - Open source password manager for teams
+ * Copyright (c) 2021 Passbolt SA
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+ * Public License (AGPL) as published by the Free Software Foundation version 3.
+ *
+ * The name "Passbolt" is a registered trademark of Passbolt SA, and Passbolt SA hereby declines to grant a trademark
+ * license to "Passbolt" pursuant to the GNU Affero General Public License version 3 Section 7(e), without a separate
+ * agreement with Passbolt SA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License along with this program. If not,
+ * see GNU Affero General Public License v3 (http://www.gnu.org/licenses/agpl-3.0.html).
+ *
+ * @copyright Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link https://www.passbolt.com Passbolt (tm)
+ * @since v1.0
+ */
+
 package net.svaroh.passly.feature.autofill.resources
 
 import app.cash.turbine.test
@@ -7,12 +30,21 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.accounts.usecase.accounts.GetAccountsUseCase
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.SecretPropertyActionResult
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.core.otpcore.TotpParametersProvider
+import net.svaroh.passly.domain.accounts.usecase.GetAccountsUseCase
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.SecretPropertyActionResult
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.domain.secrets.model.SecretJsonModel
 import net.svaroh.passly.feature.autofill.resources.AutofillResourcesIntent.NewResourceCreated
 import net.svaroh.passly.feature.autofill.resources.AutofillResourcesIntent.SelectAutofillItem
 import net.svaroh.passly.feature.autofill.resources.AutofillResourcesIntent.UserAuthenticated
@@ -21,18 +53,12 @@ import net.svaroh.passly.feature.autofill.resources.AutofillResourcesSideEffect.
 import net.svaroh.passly.feature.autofill.resources.AutofillResourcesSideEffect.NavigateToSetup
 import net.svaroh.passly.feature.autofill.resources.AutofillResourcesSideEffect.ShowToast
 import net.svaroh.passly.jsonmodel.JSON_MODEL_GSON
+import net.svaroh.passly.jsonmodel.delegates.TotpSecret
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathJsonPathOps
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathsOps
 import net.svaroh.passly.ui.MetadataJsonModel
-import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.ui.ResourceUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -66,6 +92,7 @@ class AutofillResourcesViewModelTest : KoinTest {
                         single { mock<GetAccountsUseCase>() }
                         single { mock<GetLocalResourceUseCase>() }
                         single { mock<SecretPropertiesActionsInteractor>() }
+                        single { mock<TotpParametersProvider>() }
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                         single(named(JSON_MODEL_GSON)) { GsonBuilder().serializeNulls().create() }
                         single {
@@ -82,6 +109,7 @@ class AutofillResourcesViewModelTest : KoinTest {
                                 getAccountsUseCase = get(),
                                 uri = uri,
                                 getLocalResourceUseCase = get(),
+                                totpParametersProvider = get(),
                                 coroutineLaunchContext = get(),
                             )
                         }
@@ -102,6 +130,22 @@ class AutofillResourcesViewModelTest : KoinTest {
         Dispatchers.resetMain()
     }
 
+    private fun stubDecryptedSecret(result: SecretPropertyActionResult<SecretJsonModel>) {
+        val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
+        secretPropertiesActionsInteractor.stub {
+            on { provideDecryptedSecret() } doReturn flowOf(result)
+        }
+    }
+
+    private fun stubDecryptedSecret(secret: SecretJsonModel) =
+        stubDecryptedSecret(
+            SecretPropertyActionResult.Success(
+                label = "JSON Secret",
+                isSecret = true,
+                result = secret,
+            ),
+        )
+
     @Test
     fun `should navigate to auth when accounts exist`() =
         runTest {
@@ -109,7 +153,8 @@ class AutofillResourcesViewModelTest : KoinTest {
             whenever(getAccountsUseCase.execute(Unit)) doReturn
                 GetAccountsUseCase.Output(users = setOf("user1"))
 
-            val viewModel: AutofillResourcesViewModel = get { parametersOf(TEST_URI) }
+            val viewModel: AutofillResourcesViewModel =
+                get { parametersOf(TEST_URI) }
 
             viewModel.sideEffect.test {
                 val effect = awaitItem()
@@ -124,7 +169,8 @@ class AutofillResourcesViewModelTest : KoinTest {
             whenever(getAccountsUseCase.execute(Unit)) doReturn
                 GetAccountsUseCase.Output(users = emptySet())
 
-            val viewModel: AutofillResourcesViewModel = get { parametersOf(TEST_URI) }
+            val viewModel: AutofillResourcesViewModel =
+                get { parametersOf(TEST_URI) }
 
             viewModel.sideEffect.test {
                 val effect = awaitItem()
@@ -139,7 +185,8 @@ class AutofillResourcesViewModelTest : KoinTest {
             whenever(getAccountsUseCase.execute(Unit)) doReturn
                 GetAccountsUseCase.Output(users = setOf("user1"))
 
-            val viewModel: AutofillResourcesViewModel = get { parametersOf(TEST_URI) }
+            val viewModel: AutofillResourcesViewModel =
+                get { parametersOf(TEST_URI) }
 
             viewModel.sideEffect.test {
                 assertIs<NavigateToAuth>(awaitItem())
@@ -160,19 +207,10 @@ class AutofillResourcesViewModelTest : KoinTest {
             whenever(getAccountsUseCase.execute(Unit)) doReturn
                 GetAccountsUseCase.Output(users = setOf("user1"))
 
-            val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
-            secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn
-                    flowOf(
-                        SecretPropertyActionResult.Success(
-                            label = "password",
-                            isSecret = true,
-                            result = TEST_PASSWORD,
-                        ),
-                    )
-            }
+            stubDecryptedSecret(passwordSecretJson())
 
-            val viewModel: AutofillResourcesViewModel = get { parametersOf(TEST_URI) }
+            val viewModel: AutofillResourcesViewModel =
+                get { parametersOf(TEST_URI) }
 
             viewModel.sideEffect.test {
                 assertIs<NavigateToAuth>(awaitItem())
@@ -180,9 +218,11 @@ class AutofillResourcesViewModelTest : KoinTest {
                 viewModel.onIntent(SelectAutofillItem(testResource))
 
                 val effect = assertIs<AutofillReturn>(awaitItem())
-                assertThat(effect.username).isEqualTo(TEST_USERNAME)
-                assertThat(effect.password).isEqualTo(TEST_PASSWORD)
-                assertThat(effect.uri).isEqualTo(TEST_URI)
+                val payload = effect.payload
+                assertThat(payload.username).isEqualTo(TEST_USERNAME)
+                assertThat(payload.password).isEqualTo(TEST_PASSWORD)
+                assertThat(payload.totpCode).isNull()
+                assertThat(payload.uri).isEqualTo(TEST_URI)
             }
         }
 
@@ -193,23 +233,25 @@ class AutofillResourcesViewModelTest : KoinTest {
             whenever(getAccountsUseCase.execute(Unit)) doReturn
                 GetAccountsUseCase.Output(users = setOf("user1"))
 
-            val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
-            secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn
-                    flowOf(
-                        SecretPropertyActionResult.FetchFailure(),
-                    )
-            }
+            stubDecryptedSecret(SecretPropertyActionResult.FetchFailure())
 
-            val viewModel: AutofillResourcesViewModel = get { parametersOf(TEST_URI) }
+            val viewModel: AutofillResourcesViewModel =
+                get { parametersOf(TEST_URI) }
 
             viewModel.sideEffect.test {
                 assertIs<NavigateToAuth>(awaitItem())
 
                 viewModel.onIntent(SelectAutofillItem(testResource))
 
-                val effect = assertIs<ShowToast>(awaitItem())
-                assertThat(effect.type).isEqualTo(ToastType.FETCH_FAILURE)
+                val toast = assertIs<ShowToast>(awaitItem())
+                assertThat(toast.type).isEqualTo(ToastType.FETCH_FAILURE)
+
+                val effect = assertIs<AutofillReturn>(awaitItem())
+                val payload = effect.payload
+                assertThat(payload.username).isEqualTo(TEST_USERNAME)
+                assertThat(payload.password).isNull()
+                assertThat(payload.totpCode).isNull()
+                assertThat(payload.uri).isEqualTo(TEST_URI)
             }
         }
 
@@ -220,23 +262,25 @@ class AutofillResourcesViewModelTest : KoinTest {
             whenever(getAccountsUseCase.execute(Unit)) doReturn
                 GetAccountsUseCase.Output(users = setOf("user1"))
 
-            val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
-            secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn
-                    flowOf(
-                        SecretPropertyActionResult.DecryptionFailure(),
-                    )
-            }
+            stubDecryptedSecret(SecretPropertyActionResult.DecryptionFailure())
 
-            val viewModel: AutofillResourcesViewModel = get { parametersOf(TEST_URI) }
+            val viewModel: AutofillResourcesViewModel =
+                get { parametersOf(TEST_URI) }
 
             viewModel.sideEffect.test {
                 assertIs<NavigateToAuth>(awaitItem())
 
                 viewModel.onIntent(SelectAutofillItem(testResource))
 
-                val effect = assertIs<ShowToast>(awaitItem())
-                assertThat(effect.type).isEqualTo(ToastType.DECRYPTION_FAILURE)
+                val toast = assertIs<ShowToast>(awaitItem())
+                assertThat(toast.type).isEqualTo(ToastType.DECRYPTION_FAILURE)
+
+                val effect = assertIs<AutofillReturn>(awaitItem())
+                val payload = effect.payload
+                assertThat(payload.username).isEqualTo(TEST_USERNAME)
+                assertThat(payload.password).isNull()
+                assertThat(payload.totpCode).isNull()
+                assertThat(payload.uri).isEqualTo(TEST_URI)
             }
         }
 
@@ -247,19 +291,10 @@ class AutofillResourcesViewModelTest : KoinTest {
             whenever(getAccountsUseCase.execute(Unit)) doReturn
                 GetAccountsUseCase.Output(users = setOf("user1"))
 
-            val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
-            secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn
-                    flowOf(
-                        SecretPropertyActionResult.Success(
-                            label = "password",
-                            isSecret = true,
-                            result = TEST_PASSWORD,
-                        ),
-                    )
-            }
+            stubDecryptedSecret(passwordSecretJson())
 
-            val viewModel: AutofillResourcesViewModel = get { parametersOf(TEST_URI) }
+            val viewModel: AutofillResourcesViewModel =
+                get { parametersOf(TEST_URI) }
 
             viewModel.sideEffect.test {
                 assertIs<NavigateToAuth>(awaitItem())
@@ -282,23 +317,14 @@ class AutofillResourcesViewModelTest : KoinTest {
 
             val getLocalResourceUseCase: GetLocalResourceUseCase = get()
             getLocalResourceUseCase.stub {
-                onBlocking { execute(GetLocalResourceUseCase.Input(TEST_RESOURCE_ID)) } doReturn
+                on { execute(GetLocalResourceUseCase.Input(TEST_RESOURCE_ID)) } doReturn
                     GetLocalResourceUseCase.Output(testResource)
             }
 
-            val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
-            secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn
-                    flowOf(
-                        SecretPropertyActionResult.Success(
-                            label = "password",
-                            isSecret = true,
-                            result = TEST_PASSWORD,
-                        ),
-                    )
-            }
+            stubDecryptedSecret(passwordSecretJson())
 
-            val viewModel: AutofillResourcesViewModel = get { parametersOf(TEST_URI) }
+            val viewModel: AutofillResourcesViewModel =
+                get { parametersOf(TEST_URI) }
 
             viewModel.sideEffect.test {
                 assertIs<NavigateToAuth>(awaitItem())
@@ -306,8 +332,147 @@ class AutofillResourcesViewModelTest : KoinTest {
                 viewModel.onIntent(NewResourceCreated(TEST_RESOURCE_ID))
 
                 val effect = assertIs<AutofillReturn>(awaitItem())
-                assertThat(effect.username).isEqualTo(TEST_USERNAME)
-                assertThat(effect.password).isEqualTo(TEST_PASSWORD)
+                val payload = effect.payload
+                assertThat(payload.username).isEqualTo(TEST_USERNAME)
+                assertThat(payload.password).isEqualTo(TEST_PASSWORD)
+            }
+        }
+
+    @Test
+    fun `should return TOTP-only payload for TOTP-only resource`() =
+        runTest {
+            val getAccountsUseCase: GetAccountsUseCase = get()
+            whenever(getAccountsUseCase.execute(Unit)) doReturn
+                GetAccountsUseCase.Output(users = setOf("user1"))
+
+            stubDecryptedSecret(totpSecretJson())
+
+            val totpParametersProvider: TotpParametersProvider = get()
+            whenever(
+                totpParametersProvider.provideOtpParameters(
+                    secretKey = TEST_TOTP_SECRET.key,
+                    digits = TEST_TOTP_SECRET.digits,
+                    period = TEST_TOTP_SECRET.period,
+                    algorithm = TEST_TOTP_SECRET.algorithm,
+                ),
+            ) doReturn
+                TotpParametersProvider.OtpParametersResult.OtpParameters(
+                    otpValue = TEST_TOTP_CODE,
+                    secondsValid = 30,
+                )
+
+            val viewModel: AutofillResourcesViewModel =
+                get { parametersOf(TEST_URI) }
+
+            viewModel.sideEffect.test {
+                assertIs<NavigateToAuth>(awaitItem())
+
+                viewModel.onIntent(SelectAutofillItem(testTotpResource))
+
+                val effect = assertIs<AutofillReturn>(awaitItem())
+                val payload = effect.payload
+                assertThat(payload.username).isNull()
+                assertThat(payload.password).isNull()
+                assertThat(payload.totpCode).isEqualTo(TEST_TOTP_CODE)
+                assertThat(payload.uri).isEqualTo(TEST_URI)
+            }
+        }
+
+    @Test
+    fun `should return full payload when resource has both password and TOTP`() =
+        runTest {
+            val getAccountsUseCase: GetAccountsUseCase = get()
+            whenever(getAccountsUseCase.execute(Unit)) doReturn
+                GetAccountsUseCase.Output(users = setOf("user1"))
+
+            stubDecryptedSecret(passwordAndTotpSecretJson())
+
+            val totpParametersProvider: TotpParametersProvider = get()
+            whenever(
+                totpParametersProvider.provideOtpParameters(
+                    secretKey = TEST_TOTP_SECRET.key,
+                    digits = TEST_TOTP_SECRET.digits,
+                    period = TEST_TOTP_SECRET.period,
+                    algorithm = TEST_TOTP_SECRET.algorithm,
+                ),
+            ) doReturn
+                TotpParametersProvider.OtpParametersResult.OtpParameters(
+                    otpValue = TEST_TOTP_CODE,
+                    secondsValid = 30,
+                )
+
+            val viewModel: AutofillResourcesViewModel =
+                get { parametersOf(TEST_URI) }
+
+            viewModel.sideEffect.test {
+                assertIs<NavigateToAuth>(awaitItem())
+
+                viewModel.onIntent(SelectAutofillItem(testPasswordDescriptionTotpResource))
+
+                val effect = assertIs<AutofillReturn>(awaitItem())
+                val payload = effect.payload
+                assertThat(payload.username).isEqualTo(TEST_USERNAME)
+                assertThat(payload.password).isEqualTo(TEST_PASSWORD)
+                assertThat(payload.totpCode).isEqualTo(TEST_TOTP_CODE)
+                assertThat(payload.uri).isEqualTo(TEST_URI)
+            }
+        }
+
+    @Test
+    fun `should return credentials-only payload when resource has no TOTP`() =
+        runTest {
+            val getAccountsUseCase: GetAccountsUseCase = get()
+            whenever(getAccountsUseCase.execute(Unit)) doReturn
+                GetAccountsUseCase.Output(users = setOf("user1"))
+
+            stubDecryptedSecret(passwordSecretJson())
+
+            val viewModel: AutofillResourcesViewModel =
+                get { parametersOf(TEST_URI) }
+
+            viewModel.sideEffect.test {
+                assertIs<NavigateToAuth>(awaitItem())
+
+                viewModel.onIntent(SelectAutofillItem(testResource))
+
+                val effect = assertIs<AutofillReturn>(awaitItem())
+                val payload = effect.payload
+                assertThat(payload.username).isEqualTo(TEST_USERNAME)
+                assertThat(payload.password).isEqualTo(TEST_PASSWORD)
+                assertThat(payload.totpCode).isNull()
+                assertThat(payload.uri).isEqualTo(TEST_URI)
+            }
+        }
+
+    @Test
+    fun `should show toast on invalid TOTP input`() =
+        runTest {
+            val getAccountsUseCase: GetAccountsUseCase = get()
+            whenever(getAccountsUseCase.execute(Unit)) doReturn
+                GetAccountsUseCase.Output(users = setOf("user1"))
+
+            stubDecryptedSecret(totpSecretJson())
+
+            val totpParametersProvider: TotpParametersProvider = get()
+            whenever(
+                totpParametersProvider.provideOtpParameters(
+                    secretKey = TEST_TOTP_SECRET.key,
+                    digits = TEST_TOTP_SECRET.digits,
+                    period = TEST_TOTP_SECRET.period,
+                    algorithm = TEST_TOTP_SECRET.algorithm,
+                ),
+            ) doReturn TotpParametersProvider.OtpParametersResult.InvalidTotpInput
+
+            val viewModel: AutofillResourcesViewModel =
+                get { parametersOf(TEST_URI) }
+
+            viewModel.sideEffect.test {
+                assertIs<NavigateToAuth>(awaitItem())
+
+                viewModel.onIntent(SelectAutofillItem(testTotpResource))
+
+                val effect = assertIs<ShowToast>(awaitItem())
+                assertThat(effect.type).isEqualTo(ToastType.INVALID_TOTP_PARAMETERS)
             }
         }
 
@@ -316,11 +481,52 @@ class AutofillResourcesViewModelTest : KoinTest {
         private const val TEST_PASSWORD = "secretPassword"
         private const val TEST_USERNAME = "testuser"
         private const val TEST_RESOURCE_ID = "resourceId"
+        private const val TEST_TOTP_CODE = "123456"
+
+        private val TEST_TOTP_SECRET =
+            TotpSecret(
+                algorithm = "SHA1",
+                key = "JBSWY3DPEHPK3PXP",
+                digits = 6,
+                period = 30L,
+            )
+
+        private fun passwordSecretJson() = SecretJsonModel("""{"password": "$TEST_PASSWORD"}""")
+
+        private fun totpSecretJson() =
+            SecretJsonModel(
+                """
+                {
+                    "totp": {
+                        "secret_key": "${TEST_TOTP_SECRET.key}",
+                        "algorithm": "${TEST_TOTP_SECRET.algorithm}",
+                        "digits": ${TEST_TOTP_SECRET.digits},
+                        "period": ${TEST_TOTP_SECRET.period}
+                    }
+                }
+                """.trimIndent(),
+            )
+
+        private fun passwordAndTotpSecretJson() =
+            SecretJsonModel(
+                """
+                {
+                    "password": "$TEST_PASSWORD",
+                    "totp": {
+                        "secret_key": "${TEST_TOTP_SECRET.key}",
+                        "algorithm": "${TEST_TOTP_SECRET.algorithm}",
+                        "digits": ${TEST_TOTP_SECRET.digits},
+                        "period": ${TEST_TOTP_SECRET.period}
+                    }
+                }
+                """.trimIndent(),
+            )
 
         private val testResource by lazy {
-            ResourceModel(
+            ResourceUiModel(
                 resourceId = TEST_RESOURCE_ID,
                 resourceTypeId = "resTypeId",
+                slug = "password-and-description",
                 folderId = null,
                 permission = ResourcePermission.READ,
                 favouriteId = null,
@@ -331,6 +537,58 @@ class AutofillResourcesViewModelTest : KoinTest {
                         """
                         {
                             "name": "Test Resource",
+                            "uri": "$TEST_URI",
+                            "username": "$TEST_USERNAME",
+                            "description": "Test description"
+                        }
+                        """.trimIndent(),
+                    ),
+                metadataKeyId = null,
+                metadataKeyType = null,
+            )
+        }
+
+        private val testTotpResource by lazy {
+            ResourceUiModel(
+                resourceId = TEST_RESOURCE_ID,
+                resourceTypeId = "resTypeId",
+                slug = "totp",
+                folderId = null,
+                permission = ResourcePermission.READ,
+                favouriteId = null,
+                modified = ZonedDateTime.now(),
+                expiry = null,
+                metadataJsonModel =
+                    MetadataJsonModel(
+                        """
+                        {
+                            "name": "Test TOTP Resource",
+                            "uri": "$TEST_URI",
+                            "username": null,
+                            "description": null
+                        }
+                        """.trimIndent(),
+                    ),
+                metadataKeyId = null,
+                metadataKeyType = null,
+            )
+        }
+
+        private val testPasswordDescriptionTotpResource by lazy {
+            ResourceUiModel(
+                resourceId = TEST_RESOURCE_ID,
+                resourceTypeId = "resTypeId",
+                slug = "password-description-totp",
+                folderId = null,
+                permission = ResourcePermission.READ,
+                favouriteId = null,
+                modified = ZonedDateTime.now(),
+                expiry = null,
+                metadataJsonModel =
+                    MetadataJsonModel(
+                        """
+                        {
+                            "name": "Test Combined Resource",
                             "uri": "$TEST_URI",
                             "username": "$TEST_USERNAME",
                             "description": "Test description"

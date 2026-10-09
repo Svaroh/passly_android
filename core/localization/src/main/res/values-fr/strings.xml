@@ -345,7 +345,6 @@
     <string name="settings_app_settings_biometry_error">Erreur de biométrie. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Erreur d\'authentification biométrique. %s</string>
     <string name="settings_app_settings_expert_settings">Exporter les paramètres</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Mode développeur</string>
     <string name="settings_app_settings_expert_settings_hide_root">Masquer la boîte de dialogue \"périphérique rooté\"</string>
     <string name="settings_autofill_autofill_title">Ici, vous pouvez modifier les méthodes de remplissage automatique</string>
     <string name="settings_autofill_autofill_desc">Il est recommandé d\'utiliser la méthode du service de remplissage automatique, mais les performances du service peuvent dépendre des paramètres d\'optimisation de votre appareil et de la batterie. \n\nSi le service de remplissage automatique ne fonctionne pas de manière fiable sur votre appareil, vous pouvez essayer d\'activer le remplissage automatique basé sur le service d\'accessibilité.</string>

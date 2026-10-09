@@ -26,23 +26,25 @@ package net.svaroh.passly.feature.resourcedetails.details
 import net.svaroh.passly.ui.CustomFieldModel
 import net.svaroh.passly.ui.OtpItemWrapper
 import net.svaroh.passly.ui.PermissionModelUi
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 import java.util.UUID
 
 data class ResourceDetailsState(
     val isRefreshing: Boolean = false,
+    val refreshProgress: Float = 0f,
     val isLoading: Boolean = false,
     val resourceData: ResourceData = ResourceData(),
     val totpData: TotpData = TotpData(),
     val noteData: NoteData = NoteData(),
     val passwordData: PasswordData = PasswordData(),
+    val pinCodeData: PinCodeData = PinCodeData(),
     val metadataData: MetadataData = MetadataData(),
     val sharedWithData: SharedWithData = SharedWithData(),
     val customFieldsData: CustomFieldsData = CustomFieldsData(),
     val showDeleteResourceConfirmationDialog: Boolean = false,
     val showMoreMenu: Boolean = false,
 ) {
-    val requiredResourceModel: ResourceModel
+    val requiredResourceModel: ResourceUiModel
         get() = requireNotNull(resourceData.resourceModel)
 
     val showPasswordSection: Boolean
@@ -63,7 +65,7 @@ data class ResourceDetailsState(
 }
 
 data class ResourceData(
-    val resourceModel: ResourceModel? = null,
+    val resourceModel: ResourceUiModel? = null,
 )
 
 data class TotpData(
@@ -82,6 +84,12 @@ data class PasswordData(
     val showPasswordEyeIcon: Boolean = false,
     val isPasswordVisible: Boolean = false,
     val password: String = "",
+)
+
+data class PinCodeData(
+    val showPinCodeSection: Boolean = false,
+    val isPinCodeVisible: Boolean = false,
+    val pinCode: String = "",
 )
 
 data class MetadataData(

@@ -23,16 +23,8 @@
 
 package net.svaroh.passly.core.accounts
 
-import android.content.Context
 import net.svaroh.passly.core.accounts.usecase.BiometricCipherImpl
-import net.svaroh.passly.core.accounts.usecase.account.accountModule
-import net.svaroh.passly.core.accounts.usecase.accountdata.accountDataModule
-import net.svaroh.passly.core.accounts.usecase.accounts.accountsModule
-import net.svaroh.passly.core.accounts.usecase.biometrickey.biometricKeyIvModule
-import net.svaroh.passly.core.accounts.usecase.privatekey.privateKeyModule
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.selectedAccountModule
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
-import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -40,18 +32,6 @@ import org.koin.dsl.module
 
 val accountsCoreModule =
     module {
-        accountModule()
-        accountsModule()
-        accountDataModule()
-        privateKeyModule()
-        biometricKeyIvModule()
-        selectedAccountModule()
-
-        singleOf(::AccountsInteractor)
         singleOf(::AccountKitParser)
         factoryOf(::BiometricCipherImpl) bind BiometricCipher::class
-
-        single {
-            androidApplication().getSharedPreferences("user-accounts", Context.MODE_PRIVATE)
-        }
     }

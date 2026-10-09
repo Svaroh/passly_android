@@ -24,16 +24,23 @@ package net.svaroh.passly.feature.settings.accounts.keyinspector
  */
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import net.svaroh.passly.core.formatter.DateFormatter
 import net.svaroh.passly.core.formatter.FingerprintFormatter
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.networking.NetworkResult
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
-import net.svaroh.passly.core.users.usecase.db.GetLocalCurrentUserUseCase
-import net.svaroh.passly.core.users.user.FetchCurrentUserUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.users.usecase.FetchCurrentUserUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalCurrentUserUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase.Output.JwtWillExpire
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CopyFingerprint
@@ -43,15 +50,9 @@ import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspec
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ErrorSnackbarType.FAILED_TO_FETCH_KEY
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorViewModel
-import net.svaroh.passly.ui.GpgKeyModel
-import net.svaroh.passly.ui.UserModel
-import net.svaroh.passly.ui.UserProfileModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.ui.GpgKeyUiModel
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -71,7 +72,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
-import java.net.UnknownHostException
 import java.time.ZonedDateTime
 import java.util.UUID
 import kotlin.time.ExperimentalTime
@@ -119,12 +119,12 @@ class KeyInspectorViewModelTest : KoinTest {
 
         val fetchCurrentUserUseCase = get<FetchCurrentUserUseCase>()
         fetchCurrentUserUseCase.stub {
-            onBlocking { execute(Unit) } doReturn user
+            on { execute(Unit) } doReturn user
         }
 
         val getLocalCurrentUserUseCase = get<GetLocalCurrentUserUseCase>()
         getLocalCurrentUserUseCase.stub {
-            onBlocking { execute(Unit) } doReturn GetLocalCurrentUserUseCase.Output(user.userModel)
+            onBlocking { execute(Unit) } doReturn GetLocalCurrentUserUseCase.Output(user.userUiModel)
         }
 
         val fingerprintFormatter: FingerprintFormatter = get()
@@ -149,18 +149,18 @@ class KeyInspectorViewModelTest : KoinTest {
                 val state = awaitItem()
                 assertThat(state.avatarUrl).isEqualTo(selectedAccountData.avatarUrl)
                 assertThat(state.label).isEqualTo(selectedAccountData.label)
-                assertThat(state.fingerprint).isEqualTo(user.userModel.gpgKey.fingerprint)
-                assertThat(state.keyLength).isEqualTo(user.userModel.gpgKey.bits)
-                assertThat(state.uid).isEqualTo(user.userModel.gpgKey.uid)
+                assertThat(state.fingerprint).isEqualTo(user.userUiModel.gpgKey.fingerprint)
+                assertThat(state.keyLength).isEqualTo(user.userUiModel.gpgKey.bits)
+                assertThat(state.uid).isEqualTo(user.userUiModel.gpgKey.uid)
                 assertThat(state.created).isEqualTo(
-                    user.userModel.gpgKey.keyCreationDate
+                    user.userUiModel.gpgKey.keyCreationDate
                         .toString(),
                 )
                 assertThat(state.expires).isEqualTo(
-                    user.userModel.gpgKey.keyExpirationDate
+                    user.userUiModel.gpgKey.keyExpirationDate
                         .toString(),
                 )
-                assertThat(state.algorithm).isEqualTo(user.userModel.gpgKey.type)
+                assertThat(state.algorithm).isEqualTo(user.userUiModel.gpgKey.type)
             }
         }
 
@@ -176,13 +176,9 @@ class KeyInspectorViewModelTest : KoinTest {
             }
             val fetchCurrentUserUseCase: FetchCurrentUserUseCase = get()
             fetchCurrentUserUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     FetchCurrentUserUseCase.Output.Failure(
-                        NetworkResult.Failure.NetworkError(
-                            UnknownHostException(),
-                            errorMessage,
-                        ),
-                        errorMessage,
+                        DomainResult.Incomplete.Error(UNKNOWN, errorMessage),
                     ),
                 )
             }
@@ -203,7 +199,7 @@ class KeyInspectorViewModelTest : KoinTest {
             viewModel = get()
 
             viewModel.viewState.test {
-                assertThat(awaitItem().fingerprint).isEqualTo(user.userModel.gpgKey.fingerprint)
+                assertThat(awaitItem().fingerprint).isEqualTo(user.userUiModel.gpgKey.fingerprint)
             }
 
             val fetchCurrentUserUseCase: FetchCurrentUserUseCase = get()
@@ -221,13 +217,13 @@ class KeyInspectorViewModelTest : KoinTest {
                 val copyUidEffect = awaitItem()
                 assertThat(copyUidEffect).isInstanceOf(AddUidToClipboard::class.java)
                 assertThat((copyUidEffect as AddUidToClipboard).uid)
-                    .isEqualTo(user.userModel.gpgKey.uid)
+                    .isEqualTo(user.userUiModel.gpgKey.uid)
 
                 viewModel.onIntent(CopyFingerprint)
                 val copyFingerprintEffect = awaitItem()
                 assertThat(copyFingerprintEffect).isInstanceOf(AddFingerprintToClipboard::class.java)
                 assertThat((copyFingerprintEffect as AddFingerprintToClipboard).fingerprint)
-                    .isEqualTo(user.userModel.gpgKey.fingerprint)
+                    .isEqualTo(user.userUiModel.gpgKey.fingerprint)
             }
         }
 
@@ -246,12 +242,12 @@ class KeyInspectorViewModelTest : KoinTest {
 
         private val user =
             FetchCurrentUserUseCase.Output.Success(
-                UserModel(
+                UserUiModel(
                     id = "newUserId",
                     userName = "newUserName",
                     disabled = false,
                     gpgKey =
-                        GpgKeyModel(
+                        GpgKeyUiModel(
                             armoredKey = "keyData",
                             fingerprint = "fingerprint",
                             bits = 1,
@@ -263,7 +259,7 @@ class KeyInspectorViewModelTest : KoinTest {
                             id = UUID.randomUUID().toString(),
                         ),
                     profile =
-                        UserProfileModel(
+                        UserProfileUiModel(
                             username = "username",
                             firstName = "first",
                             lastName = "last",

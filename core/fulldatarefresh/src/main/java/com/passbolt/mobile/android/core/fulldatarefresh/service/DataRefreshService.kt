@@ -24,20 +24,26 @@ package net.svaroh.passly.core.fulldatarefresh.service
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import net.svaroh.passly.core.fulldatarefresh.FullDataRefreshExecutor
-import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory
-import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory.Companion.DATA_SYNC_SERVICE_NOTIFICATION_ID
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.core.fulldatarefresh.FullDataRefreshExecutor
+import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory
+import net.svaroh.passly.core.notifications.accessibilityautofill.AccessibilityServiceNotificationFactory.Companion.DATA_SYNC_SERVICE_NOTIFICATION_ID
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 class DataRefreshService : LifecycleService() {
     private val accessibilityServiceNotificationFactory: AccessibilityServiceNotificationFactory by inject()
     private val fullDataRefreshExecutor: FullDataRefreshExecutor by inject()
+    private val dataRefreshTrackingFlow: DataRefreshTrackingFlow by inject()
 
     private var refreshJob: Job? = null
 
@@ -47,6 +53,7 @@ class DataRefreshService : LifecycleService() {
         startId: Int,
     ): Int {
         super.onStartCommand(intent, flags, startId)
+        Timber.d("DataRefreshService(startId=$startId) started")
 
         startForeground(
             DATA_SYNC_SERVICE_NOTIFICATION_ID,
@@ -59,7 +66,7 @@ class DataRefreshService : LifecycleService() {
             refreshJob =
                 lifecycleScope.launch {
                     try {
-                        fullDataRefreshExecutor.susPerformFullDataRefresh(isUserInitiated)
+                        fullDataRefreshExecutor.performFullDataRefresh(isUserInitiated)
                     } finally {
                         stopForeground(ServiceCompat.STOP_FOREGROUND_REMOVE)
                         stopSelf()
@@ -68,6 +75,25 @@ class DataRefreshService : LifecycleService() {
         }
 
         return START_NOT_STICKY
+    }
+
+    // On Android 15+ the system enforces a stop deadline on dataSync foreground services.
+    // If the coroutine is suspended waiting for re-authentication (e.g. user backgrounded the app
+    // while runAuthenticatedOperation awaits fingerprint / foreground), the finally block with
+    // stopSelf() is never reached. The callback is added to stop gracefully before the system kills
+    // the service in this case. Indicate FinishedWithFailure as it can be in the middle of database
+    // transactions.
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+    override fun onTimeout(
+        startId: Int,
+        fgsType: Int,
+    ) {
+        super.onTimeout(startId, fgsType)
+        Timber.d("DataRefreshService(startId=$startId) timed out by system - stopping")
+        refreshJob?.cancel()
+        dataRefreshTrackingFlow.updateStatus(FinishedWithFailure)
+        stopForeground(ServiceCompat.STOP_FOREGROUND_REMOVE)
+        stopSelf()
     }
 
     override fun onDestroy() {

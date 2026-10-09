@@ -37,48 +37,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.GroupPermissionDetails
-import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.PermissionRecipients
-import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
 import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.UserPermissionDetails
-import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
-import net.svaroh.passly.core.navigation.compose.results.ShareCompleteResult
 import net.svaroh.passly.core.ui.button.PrimaryButton
-import net.svaroh.passly.core.ui.fab.AddFloatingActionButton
-import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
 import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
 import net.svaroh.passly.core.ui.topbar.TitleAppBar
-import net.svaroh.passly.feature.metadatakeytrust.NewMetadataKeyTrustDialog
-import net.svaroh.passly.feature.metadatakeytrust.TrustedMetadataKeyDeletedDialog
-import net.svaroh.passly.permissions.permissions.PermissionsIntent.AddPermission
-import net.svaroh.passly.permissions.permissions.PermissionsIntent.DismissMetadataKeyDeletedDialog
-import net.svaroh.passly.permissions.permissions.PermissionsIntent.DismissMetadataKeyModifiedDialog
 import net.svaroh.passly.permissions.permissions.PermissionsIntent.GoBack
 import net.svaroh.passly.permissions.permissions.PermissionsIntent.MainButtonIntent
 import net.svaroh.passly.permissions.permissions.PermissionsIntent.SeePermission
-import net.svaroh.passly.permissions.permissions.PermissionsIntent.TrustNewMetadataKey
-import net.svaroh.passly.permissions.permissions.PermissionsIntent.TrustedMetadataKeyDeleted
-import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.CloseWithShareSuccess
 import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateBack
 import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToGroupPermissionDetails
 import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToHome
-import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToSelectShareRecipients
-import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToSelfWithMode
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToShareResource
 import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.NavigateToUserPermissionDetails
-import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.ShowContentNotAvailable
 import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.ShowErrorSnackbar
-import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.ShowSuccessSnackbar
+import net.svaroh.passly.permissions.permissions.PermissionsSideEffect.ShowToast
 import net.svaroh.passly.permissions.permissions.ui.EmptyPermissionsState
 import net.svaroh.passly.permissions.permissions.ui.PermissionsList
-import kotlinx.coroutines.launch
+import net.svaroh.passly.ui.ConfirmPermissionsMode
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR
 import net.svaroh.passly.core.ui.R as CoreUiR
@@ -90,10 +76,10 @@ fun PermissionsScreen(
     navigator: AppNavigator = koinInject(),
 ) {
     val context = LocalContext.current
-    val resultBus = NavigationResultEventBus.current
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val errorColor = colorResource(CoreUiR.color.red)
 
     PermissionsScreen(
         state = state.value,
@@ -119,39 +105,19 @@ fun PermissionsScreen(
                         mode = effect.mode,
                     ),
                 )
-            is NavigateToSelectShareRecipients ->
-                navigator.navigateToKey(
-                    PermissionRecipients(
-                        userPermissions = effect.users,
-                        groupPermissions = effect.groups,
-                    ),
-                )
-            is NavigateToSelfWithMode ->
-                navigator.navigateToKey(Permissions(effect.id, effect.mode, effect.permissionsItem))
-            CloseWithShareSuccess -> {
-                resultBus.sendResult(result = ShareCompleteResult(shared = true))
-                navigator.navigateBack()
-            }
+            is NavigateToShareResource ->
+                navigator.navigateToKey(ConfirmPermissions(ConfirmPermissionsMode.Share(effect.resourceId)))
             NavigateToHome -> navigator.popToRoot()
-            ShowContentNotAvailable ->
+            is ShowToast ->
                 Toast
-                    .makeText(context, LocalizationR.string.content_not_available, Toast.LENGTH_SHORT)
+                    .makeText(context, getToastMessage(context, effect.type), Toast.LENGTH_SHORT)
                     .show()
             is ShowErrorSnackbar ->
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getErrorMessage(context, effect.type),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
-                        ),
-                    )
-                }
-            is ShowSuccessSnackbar ->
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        ColoredSnackbarVisuals(
-                            message = getSuccessMessage(context, effect.type),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.green)),
+                            backgroundColor = errorColor,
                         ),
                     )
                 }
@@ -175,16 +141,17 @@ private fun PermissionsScreen(
             )
         },
         bottomBar = {
-            if (state.showEditButton || state.showSaveButton) {
-                ActionButtonAppBar(
-                    state = state,
-                    onIntent = onIntent,
-                )
-            }
-        },
-        floatingActionButton = {
-            if (state.showAddUserButton) {
-                AddFloatingActionButton(onClick = { onIntent(AddPermission) })
+            if (state.showEditButton) {
+                BottomAppBar(
+                    modifier = Modifier.fillMaxWidth(),
+                    containerColor = MaterialTheme.colorScheme.background,
+                ) {
+                    PrimaryButton(
+                        text = stringResource(LocalizationR.string.resource_permissions_edit_permissions),
+                        onClick = { onIntent(MainButtonIntent) },
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                    )
+                }
             }
         },
         snackbarHost = {
@@ -222,46 +189,5 @@ private fun PermissionsScreen(
                         .padding(paddingValues),
             )
         }
-    }
-
-    ProgressDialog(isVisible = state.showProgress)
-
-    if (state.showMetadataKeyModifiedDialog && state.newMetadataKeyToTrustModel != null) {
-        NewMetadataKeyTrustDialog(
-            newKeyToTrustModel = state.newMetadataKeyToTrustModel,
-            onTrustClick = { onIntent(TrustNewMetadataKey) },
-            onDismiss = { onIntent(DismissMetadataKeyModifiedDialog) },
-        )
-    }
-
-    if (state.showMetadataKeyDeletedDialog && state.trustedKeyDeletedModel != null) {
-        TrustedMetadataKeyDeletedDialog(
-            trustedKeyDeletedModel = state.trustedKeyDeletedModel,
-            onDismiss = { onIntent(DismissMetadataKeyDeletedDialog) },
-            onTrustClick = { onIntent(TrustedMetadataKeyDeleted) },
-        )
-    }
-}
-
-@Composable
-private fun ActionButtonAppBar(
-    state: PermissionsState,
-    onIntent: (PermissionsIntent) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    BottomAppBar(
-        modifier = modifier.fillMaxWidth(),
-        containerColor = MaterialTheme.colorScheme.background,
-    ) {
-        PrimaryButton(
-            text =
-                if (state.showSaveButton) {
-                    stringResource(LocalizationR.string.save)
-                } else {
-                    stringResource(LocalizationR.string.resource_permissions_edit_permissions)
-                },
-            onClick = { onIntent(MainButtonIntent) },
-            modifier = Modifier.padding(horizontal = 16.dp),
-        )
     }
 }

@@ -1,7 +1,7 @@
 package net.svaroh.passly.core.navigation.compose.results
 
 import net.svaroh.passly.ui.OtpParseResult
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 
 data class OtpScanCompleteResult(
     val otpCreated: Boolean,
@@ -16,7 +16,7 @@ data class ResourceFormCompleteResult(
 
 data class ResourcePickerResultEvent(
     val pickAction: String,
-    val resource: ResourceModel,
+    val resource: ResourceUiModel,
 )
 
 data class ScanOtpResultEvent(

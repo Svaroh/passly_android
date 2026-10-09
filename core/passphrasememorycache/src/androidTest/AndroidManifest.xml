@@ -7,8 +7,6 @@
         <uses-library android:name="android.test.base" />
         <uses-library android:name="android.test.mock" />
 
-        <activity
-            android:name="net.svaroh.passly.core.dummy.TestActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name="net.svaroh.passly.core.dummy.TestActivity" />
     </application>
 </manifest>

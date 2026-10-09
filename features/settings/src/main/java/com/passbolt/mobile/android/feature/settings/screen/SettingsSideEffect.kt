@@ -32,4 +32,12 @@ internal sealed interface SettingsSideEffect {
     object NavigateToDebugLogs : SettingsSideEffect
 
     object NavigateToStartUp : SettingsSideEffect
+
+    data class ShowToast(
+        val type: ToastType,
+    ) : SettingsSideEffect
+}
+
+internal enum class ToastType {
+    SERVER_SIGN_OUT_FAILED,
 }

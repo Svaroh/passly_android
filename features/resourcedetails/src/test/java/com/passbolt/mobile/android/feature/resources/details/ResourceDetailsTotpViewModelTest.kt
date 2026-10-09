@@ -25,18 +25,6 @@ package net.svaroh.passly.feature.resources.details
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.otpcore.TotpParametersProvider
-import net.svaroh.passly.core.otpcore.TotpParametersProvider.OtpParametersResult
-import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.SecretPropertyActionResult
-import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType
-import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyTotp
-import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.Initialize
-import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ToggleTotpVisibility
-import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.AddToClipboard
-import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowErrorSnackbar
-import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsViewModel
-import net.svaroh.passly.jsonmodel.delegates.TotpSecret
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop
@@ -45,6 +33,18 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.core.otpcore.TotpParametersProvider
+import net.svaroh.passly.core.otpcore.TotpParametersProvider.OtpParametersResult
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.SecretPropertyActionResult
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyTotp
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.Initialize
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ToggleTotpVisibility
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.AddToClipboard
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsViewModel
+import net.svaroh.passly.jsonmodel.delegates.TotpSecret
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -95,7 +95,7 @@ class ResourceDetailsTotpViewModelTest : KoinTest {
 
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideOtp() } doReturn
+                on { provideOtp() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -107,7 +107,7 @@ class ResourceDetailsTotpViewModelTest : KoinTest {
 
             val totpParametersProvider: TotpParametersProvider = get()
             totpParametersProvider.stub {
-                onBlocking { provideOtpParameters(any(), any(), any(), any()) } doReturn
+                on { provideOtpParameters(any(), any(), any(), any()) } doReturn
                     OtpParametersResult.OtpParameters(otpValue, secondsValid = 25)
             }
 
@@ -137,7 +137,7 @@ class ResourceDetailsTotpViewModelTest : KoinTest {
 
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideOtp() } doReturn
+                on { provideOtp() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -149,7 +149,7 @@ class ResourceDetailsTotpViewModelTest : KoinTest {
 
             val totpParametersProvider: TotpParametersProvider = get()
             totpParametersProvider.stub {
-                onBlocking { provideOtpParameters(any(), any(), any(), any()) } doReturn
+                on { provideOtpParameters(any(), any(), any(), any()) } doReturn
                     OtpParametersResult.OtpParameters(otpValue, secondsValid = 25)
             }
 
@@ -171,7 +171,7 @@ class ResourceDetailsTotpViewModelTest : KoinTest {
         runTest {
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideOtp() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
+                on { provideOtp() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
             }
 
             viewModel = get()

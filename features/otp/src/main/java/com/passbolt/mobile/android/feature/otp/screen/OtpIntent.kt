@@ -25,6 +25,8 @@ package net.svaroh.passly.feature.otp.screen
 
 import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
 import net.svaroh.passly.ui.OtpItemWrapper
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourceUiModel
 
 sealed interface OtpIntent {
     // screen
@@ -33,7 +35,7 @@ sealed interface OtpIntent {
     ) : OtpIntent
 
     data class RevealOtp(
-        val otpItemWrapper: OtpItemWrapper,
+        val resource: ResourceUiModel,
     ) : OtpIntent
 
     data class OtpQRScanReturned(
@@ -49,19 +51,13 @@ sealed interface OtpIntent {
 
     data object SearchEndIconAction : OtpIntent
 
+    data object Dispose : OtpIntent
+
     // switch account
     object CloseSwitchAccount : OtpIntent
 
-    // create resource menu
-    data object OpenCreateResourceMenu : OtpIntent
-
-    data object CreatePassword : OtpIntent
-
+    // create totp
     data object CreateTotp : OtpIntent
-
-    data object CreateNote : OtpIntent
-
-    data object CloseCreateResourceMenu : OtpIntent
 
     // otp more menu
     data class OpenOtpMoreMenu(
@@ -85,6 +81,10 @@ sealed interface OtpIntent {
     data object ConfirmDeleteTotp : OtpIntent
 
     data object CloseDeleteConfirmationDialog : OtpIntent
+
+    data class ConfirmedPermissionsResult(
+        val permissions: List<PermissionModelUi>,
+    ) : OtpIntent
 
     // metadata keys
     data object CloseTrustNewKeyDialog : OtpIntent

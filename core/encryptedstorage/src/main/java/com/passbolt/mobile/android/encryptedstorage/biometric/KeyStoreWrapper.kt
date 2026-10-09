@@ -1,7 +1,6 @@
 package net.svaroh.passly.encryptedstorage.biometric
 
 import android.content.pm.PackageManager
-import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import java.security.KeyStore
@@ -23,8 +22,8 @@ class KeyStoreWrapper(
                 .Builder(
                     alias,
                     KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT,
-                ).setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                ).setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
                 .setUserAuthenticationRequired(true)
                 .setInvalidatedByBiometricEnrollment(true)
                 .setAuthTimeoutParameters()
@@ -36,14 +35,7 @@ class KeyStoreWrapper(
     }
 
     private fun KeyGenParameterSpec.Builder.setAuthTimeoutParameters() =
-        let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                setUserAuthenticationParameters(KEY_AUTH_DURATION_ZERO, KeyProperties.AUTH_BIOMETRIC_STRONG)
-            } else {
-                @Suppress("DEPRECATION")
-                setUserAuthenticationValidityDurationSeconds(KEY_AUTH_EVERY_USAGE)
-            }
-        }
+        setUserAuthenticationParameters(KEY_AUTH_DURATION_ZERO, KeyProperties.AUTH_BIOMETRIC_STRONG)
 
     private fun KeyGenParameterSpec.Builder.setStrongBoxParameter() =
         let {
@@ -59,6 +51,5 @@ class KeyStoreWrapper(
 
     private companion object {
         private const val KEY_AUTH_DURATION_ZERO = 0
-        private const val KEY_AUTH_EVERY_USAGE = -1
     }
 }

@@ -1,6 +1,5 @@
 package net.svaroh.passly.feature.authentication.mfa.duo
 
-import PassboltTheme
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -26,20 +25,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.NavigationActivity.AuthenticationSignIn
 import net.svaroh.passly.core.navigation.compose.NavigationActivity.Start
 import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.dialogs.LeaveSetupAlertDialog
 import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
 import net.svaroh.passly.feature.authentication.mfa.MfaDialogState
@@ -49,7 +51,9 @@ import net.svaroh.passly.feature.authentication.mfa.MfaResult.Succeeded
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.AuthenticateWithDuo
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.ChooseOtherProvider
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.Close
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.ConfirmSetupLeave
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.DismissDuoAuth
+import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.DismissSetupLeave
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoIntent.DuoAuthFinished
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.CloseAndNavigateToStartup
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NavigateToLogin
@@ -58,7 +62,6 @@ import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.No
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.NotifyVerificationSucceeded
 import net.svaroh.passly.feature.authentication.mfa.duo.AuthWithDuoSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.authentication.mfa.duo.duowebviewsheet.DuoWebViewSheet
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
@@ -69,10 +72,11 @@ import net.svaroh.passly.core.ui.R as CoreUiR
 internal fun AuthWithDuoScreen(
     mfaState: MfaDialogState.Duo,
     onMfaResult: (MfaResult) -> Unit,
+    isSetupFlow: Boolean = false,
     appNavigator: AppNavigator = koinInject(),
     viewModel: AuthWithDuoViewModel =
         koinViewModel {
-            parametersOf(mfaState.authToken, mfaState.hasOtherProviders)
+            parametersOf(mfaState.authToken, mfaState.hasOtherProviders, isSetupFlow)
         },
 ) {
     val context = LocalContext.current
@@ -82,6 +86,7 @@ internal fun AuthWithDuoScreen(
 
     BackHandler { viewModel.onIntent(Close) }
 
+    val errorSnackbarColor = colorResource(CoreUiR.color.red)
     SideEffectDispatcher(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             is NotifyVerificationSucceeded -> onMfaResult(Succeeded(sideEffect.mfaHeader))
@@ -94,7 +99,7 @@ internal fun AuthWithDuoScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getSnackbarMessage(context, sideEffect.kind),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorSnackbarColor,
                         ),
                     )
                 }
@@ -212,6 +217,12 @@ private fun AuthWithDuoScreen(
             onDismiss = { onIntent(DismissDuoAuth) },
         )
     }
+
+    LeaveSetupAlertDialog(
+        isVisible = state.showSetupLeaveConfirmationDialog,
+        onLeaveConfirm = { onIntent(ConfirmSetupLeave) },
+        onDismiss = { onIntent(DismissSetupLeave) },
+    )
 
     ProgressDialog(isVisible = state.showProgress)
 }

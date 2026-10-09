@@ -1,9 +1,12 @@
 package net.svaroh.passly.permissions.userpermissionsdetails
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.users.usecase.db.GetLocalUserUseCase
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
+import net.svaroh.passly.domain.users.mapper.toUserModel
+import net.svaroh.passly.domain.users.usecase.GetLocalUserUseCase
 import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsIntent.CancelPermissionDelete
 import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsIntent.ConfirmPermissionDelete
 import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsIntent.DeletePermission
@@ -17,12 +20,13 @@ import net.svaroh.passly.ui.PermissionModelUi.UserPermissionModel
 import net.svaroh.passly.ui.PermissionsMode
 import net.svaroh.passly.ui.PermissionsMode.EDIT
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.launch
 
 class UserPermissionsViewModel(
     mode: PermissionsMode,
     permission: UserPermissionModel,
+    fromSnapshot: Boolean,
     private val getLocalUserUseCase: GetLocalUserUseCase,
+    private val getPermissionsSnapshotUseCase: GetPermissionsSnapshotUseCase,
     private val coroutineLaunchContext: CoroutineLaunchContext,
 ) : SideEffectViewModel<UserPermissionsState, UserPermissionsSideEffect>(
         initialState =
@@ -32,7 +36,11 @@ class UserPermissionsViewModel(
             ),
     ) {
     init {
-        loadUserDetails(permission.user.userId)
+        if (fromSnapshot) {
+            loadSnapshotUserDetails(permission.user.userId)
+        } else {
+            loadUserDetails(permission.user.userId)
+        }
     }
 
     fun onIntent(intent: UserPermissionsIntent) {
@@ -43,6 +51,19 @@ class UserPermissionsViewModel(
             DeletePermission -> updateViewState { copy(isDeleteConfirmationVisible = true) }
             CancelPermissionDelete -> updateViewState { copy(isDeleteConfirmationVisible = false) }
             ConfirmPermissionDelete -> deletePermission()
+        }
+    }
+
+    private fun loadSnapshotUserDetails(userId: String) {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            val snapshot = getPermissionsSnapshotUseCase.execute(Unit).snapshot
+            when {
+                // the snapshot is not available (i.e. after process death) - close instead of showing unconfirmed
+                snapshot == null -> emitSideEffect(NavigateBack)
+                userId in snapshot.users -> updateViewState { copy(user = requireNotNull(snapshot.users[userId]).toUserModel()) }
+                // not part of the snapshot - a recipient added from the local search during confirmation
+                else -> loadUserDetails(userId)
+            }
         }
     }
 

@@ -1,0 +1,28 @@
+plugins {
+    id("passbolt.android.library")
+}
+
+dependencies {
+    implementation(project(":architecture"))
+    implementation(project(":common"))
+
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin)
+    implementation(libs.lifecycle.process)
+
+    androidTestImplementation(project(":commontest"))
+    androidTestImplementation(platform(libs.koin.bom))
+    androidTestImplementation(libs.koin.test)
+    androidTestImplementation(libs.koin.test.junit)
+    androidTestImplementation(libs.kotlin.coroutines.test)
+    androidTestImplementation(libs.android.tests.runner)
+    androidTestImplementation(libs.android.test.rules)
+}
+
+android {
+    namespace = "net.svaroh.passly.core.storage"
+
+    packaging {
+        resources.excludes += "META-INF/{AL2.0,LGPL2.1}"
+    }
+}

@@ -1,17 +1,14 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
-import net.svaroh.passly.common.CookieExtractor
 import net.svaroh.passly.common.usecase.AsyncUseCase
 import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import net.svaroh.passly.core.authenticationcore.session.GetSessionUseCase
-import net.svaroh.passly.core.authenticationcore.session.SaveSessionUseCase
-import net.svaroh.passly.dto.request.RefreshSessionRequest
-import net.svaroh.passly.passboltapi.auth.AuthRepository
-import retrofit2.HttpException
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.auth.AuthRepository
+import net.svaroh.passly.domain.auth.SessionRepository
+import net.svaroh.passly.feature.authentication.auth.usecase.SessionRefreshLock.CompletedRefresh
 import timber.log.Timber
-import java.net.HttpURLConnection
 
 /**
  * Passbolt - Open source password manager for teams
@@ -39,44 +36,48 @@ class RefreshSessionUseCase(
     private val authRepository: AuthRepository,
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
     private val getAccountDataUseCase: GetAccountDataUseCase,
-    private val getSessionUseCase: GetSessionUseCase,
-    private val saveSessionUseCase: SaveSessionUseCase,
-    private val cookieExtractor: CookieExtractor,
+    private val sessionRepository: SessionRepository,
+    private val sessionRefreshLock: SessionRefreshLock,
 ) : AsyncUseCase<Unit, RefreshSessionUseCase.Output> {
     override suspend fun execute(input: Unit): Output =
+        sessionRefreshLock.refreshOrShareOutcome(
+            currentUserId = { getSelectedAccountUseCase.execute(Unit).selectedAccount },
+            refresh = { refreshSessionForSelectedAccount() },
+        )
+
+    private suspend fun refreshSessionForSelectedAccount(): CompletedRefresh =
         try {
             val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
             val serverUserId = requireNotNull(getAccountDataUseCase.execute(UserIdInput(userId)).serverId)
-            val refreshToken = requireNotNull(getSessionUseCase.execute(Unit).refreshToken)
-            val refreshSessionRequest = RefreshSessionRequest(refreshToken, serverUserId)
+            val singleUseRefreshToken = requireNotNull(sessionRepository.getSession(userId).refreshToken)
 
-            val response = authRepository.refreshSession(refreshSessionRequest)
-            if (response.code() == HttpURLConnection.HTTP_OK) {
-                val newAccessToken =
-                    requireNotNull(
-                        response.body(),
-                    ).body.accessToken
-                val newRefreshToken =
-                    requireNotNull(
-                        cookieExtractor.getCookieValue(response, CookieExtractor.REFRESH_TOKEN_COOKIE),
-                    )
-                val mfaToken = cookieExtractor.get(response, CookieExtractor.MFA_COOKIE)
-
-                saveSessionUseCase.execute(
-                    SaveSessionUseCase.Input(
-                        userId,
-                        newRefreshToken,
-                        newAccessToken,
-                        mfaToken,
-                    ),
-                )
-                Output.Success
-            } else {
-                throw HttpException(response)
+            Timber.d("[Session] Refreshing backend session")
+            when (val result = authRepository.refreshSession(singleUseRefreshToken, serverUserId)) {
+                is DomainResult.Finished -> {
+                    with(sessionRepository) {
+                        saveSession(
+                            userId = userId,
+                            accessToken = result.value.accessToken,
+                            refreshToken = result.value.refreshToken,
+                        )
+                        result.value.mfaToken?.let { echoedMfaToken ->
+                            saveMfaToken(
+                                userId = userId,
+                                mfaToken = echoedMfaToken,
+                            )
+                        }
+                    }
+                    Timber.d("[Session] Backend session refresh succeeded")
+                    CompletedRefresh(userId, Output.Success)
+                }
+                is DomainResult.Incomplete -> {
+                    Timber.d("[Session] Backend session refresh request did not succeed")
+                    CompletedRefresh(userId, Output.Failure)
+                }
             }
         } catch (throwable: Throwable) {
-            Timber.e(throwable)
-            Output.Failure
+            Timber.e(throwable, "[Session] Backend session refresh attempt failed")
+            CompletedRefresh(userId = null, output = Output.Failure)
         }
 
     sealed class Output {

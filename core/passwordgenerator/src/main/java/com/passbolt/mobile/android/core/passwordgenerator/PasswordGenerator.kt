@@ -1,9 +1,9 @@
 package net.svaroh.passly.core.passwordgenerator
 
+import kotlinx.coroutines.withContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.passwordgenerator.codepoints.Codepoint
-import net.svaroh.passly.ui.PasswordGeneratorSettingsModel
-import kotlinx.coroutines.withContext
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
 
 /**
  * Passbolt - Open source password manager for teams
@@ -30,7 +30,7 @@ import kotlinx.coroutines.withContext
 class PasswordGenerator(
     private val coroutineLaunchContext: CoroutineLaunchContext,
 ) {
-    suspend fun generate(settings: PasswordGeneratorSettingsModel): List<Codepoint> {
+    suspend fun generate(settings: PasswordGeneratorSettingsUiModel): List<Codepoint> {
         val codepointBuilder = mutableListOf<Codepoint>()
 
         withContext(coroutineLaunchContext.io) {

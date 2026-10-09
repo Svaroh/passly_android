@@ -24,9 +24,11 @@
 package net.svaroh.passly.feature.settings.screen
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.core.compose.SideEffectViewModel
+import net.svaroh.passly.domain.auth.model.ServerSignOutStatus
 import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
 import net.svaroh.passly.feature.settings.screen.SettingsIntent.ConfirmSignOut
 import net.svaroh.passly.feature.settings.screen.SettingsIntent.GoToAccounts
@@ -41,7 +43,8 @@ import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToAp
 import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToDebugLogs
 import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToStartUp
 import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.NavigateToTermsAndLicenses
-import kotlinx.coroutines.launch
+import net.svaroh.passly.feature.settings.screen.SettingsSideEffect.ShowToast
+import net.svaroh.passly.feature.settings.screen.ToastType.SERVER_SIGN_OUT_FAILED
 
 internal class SettingsViewModel(
     private val signOutUseCase: SignOutUseCase,
@@ -76,8 +79,11 @@ internal class SettingsViewModel(
             updateViewState { copy(isSignOutDialogVisible = false, isProgressDialogVisible = true) }
             // wait for full refresh to finish to minimize leaving db in an inconsistent state
             dataRefreshTrackingFlow.awaitIdle()
-            signOutUseCase.execute(Unit)
+            val signOutResult = signOutUseCase.execute(Unit)
             updateViewState { copy(isProgressDialogVisible = false) }
+            if (signOutResult.serverSignOutStatus == ServerSignOutStatus.SIGN_OUT_FAILED) {
+                emitSideEffect(ShowToast(SERVER_SIGN_OUT_FAILED))
+            }
             emitSideEffect(NavigateToStartUp)
         }
     }

@@ -26,8 +26,16 @@ package net.svaroh.passly.feature.resources.details
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.JsonPrimitive
-import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.SecretPropertyActionResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.SecretPropertyActionResult
 import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyCustomField
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.Initialize
@@ -38,14 +46,6 @@ import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsViewMode
 import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldModel
 import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldType
 import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldsModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -100,7 +100,7 @@ class ResourceDetailsCustomFieldsViewModelTest : KoinTest {
 
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideCustomFields() } doReturn
+                on { provideCustomFields() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -139,7 +139,7 @@ class ResourceDetailsCustomFieldsViewModelTest : KoinTest {
 
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideCustomFields() } doReturn
+                on { provideCustomFields() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -168,7 +168,7 @@ class ResourceDetailsCustomFieldsViewModelTest : KoinTest {
 
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideCustomFields() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
+                on { provideCustomFields() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
             }
 
             viewModel = get()

@@ -76,9 +76,6 @@ enum class ExpertSettingsItemModel(
     @param:StringRes val settingsItemTextId: Int,
     val testTag: String = SwitchableSetting.ITEM,
 ) {
-    DEVELOPER_MODE(
-        settingsItemTextId = LocalizationR.string.settings_app_settings_expert_settings_dev_mode,
-    ),
     DEVICE_IS_ROOTED_DIALOG(
         settingsItemTextId = LocalizationR.string.settings_app_settings_expert_settings_hide_root,
     ),

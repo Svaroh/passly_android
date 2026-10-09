@@ -3,15 +3,11 @@ package net.svaroh.passly.core.navigation.compose
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import net.svaroh.passly.core.navigation.compose.base.Feature
-import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
 import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey
 import org.koin.compose.koinInject
-import org.koin.core.qualifier.named
 
 @Composable
 fun SettingsNavigation(navigator: AppNavigator = koinInject()) {
@@ -25,14 +21,7 @@ fun SettingsNavigation(navigator: AppNavigator = koinInject()) {
         }
     }
 
-    val featureModulesNavigation: Set<FeatureModuleNavigation> =
-        setOf(
-            koinInject<FeatureModuleNavigation>(named(Feature.SETTINGS)),
-            koinInject<FeatureModuleNavigation>(named(Feature.LOGS)),
-            koinInject<FeatureModuleNavigation>(named(Feature.ACCOUNT_DETAILS)),
-            koinInject<FeatureModuleNavigation>(named(Feature.TRANSFER_ACCOUNT_TO_ANOTHER_DEVICE)),
-            koinInject<FeatureModuleNavigation>(named(Feature.AUTOFILL_ENCOURAGEMENTS)),
-        )
+    val featureModulesNavigation = injectFeatureModulesNavigation(NavigationHostFeatures.settings)
 
     NavDisplay(
         backStack = navigator.backStack,
@@ -42,12 +31,7 @@ fun SettingsNavigation(navigator: AppNavigator = koinInject()) {
                 rememberSaveableStateHolderNavEntryDecorator(),
                 rememberViewModelStoreNavEntryDecorator(),
             ),
-        entryProvider =
-            entryProvider {
-                featureModulesNavigation.forEach { installer ->
-                    installer.provideEntryProviderInstaller().invoke(this)
-                }
-            },
+        entryProvider = featureEntryProvider(featureModulesNavigation, unknownDestinationFallback(navigator)),
         transitionSpec = { horizontalSlideTransition },
         popTransitionSpec = { horizontalSlidePopTransition },
         predictivePopTransitionSpec = { horizontalSlidePopTransition },

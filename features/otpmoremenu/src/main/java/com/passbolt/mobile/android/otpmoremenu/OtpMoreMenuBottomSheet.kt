@@ -1,15 +1,21 @@
 package net.svaroh.passly.otpmoremenu
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +35,7 @@ import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeCopyOtp
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeDeleteOtp
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeEditOtp
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeShowOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.ShowContentNotAvailable
 import org.koin.androidx.compose.koinViewModel
 import net.svaroh.passly.core.localization.R as LocalizationR
 import net.svaroh.passly.core.ui.R as CoreUiR
@@ -70,6 +77,8 @@ fun OtpMoreMenuBottomSheet(
 ) {
     viewModel.onIntent(Initialize(resourceId, resourceName, onShowOtp != null))
 
+    val context = LocalContext.current
+    val resources = LocalResources.current
     val state by viewModel.viewState.collectAsState()
 
     OtpMoreMenuBottomSheet(
@@ -81,6 +90,13 @@ fun OtpMoreMenuBottomSheet(
     SideEffectDispatcher(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             Dismiss -> onDismissRequest()
+            ShowContentNotAvailable ->
+                Toast
+                    .makeText(
+                        context,
+                        resources.getString(LocalizationR.string.content_not_available),
+                        Toast.LENGTH_SHORT,
+                    ).show()
             InvokeShowOtp -> onShowOtp?.invoke()
             InvokeCopyOtp -> onCopyOtp()
             InvokeEditOtp -> onEditOtp()
@@ -96,12 +112,21 @@ private fun OtpMoreMenuBottomSheet(
     onDismissRequest: () -> Unit,
     state: OtpMoreMenuState,
 ) {
+    val sheetState =
+        rememberModalBottomSheetState(
+            skipPartiallyExpanded = true,
+        )
+
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         containerColor = colorResource(R.color.elevated_background),
+        sheetState = sheetState,
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
         ) {
             BottomSheetHeader(
                 title = state.title,

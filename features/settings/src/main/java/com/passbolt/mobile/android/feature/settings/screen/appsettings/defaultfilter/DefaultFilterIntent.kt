@@ -23,12 +23,12 @@
 
 package net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter
 
-import net.svaroh.passly.ui.DefaultFilterModel
+import net.svaroh.passly.ui.DefaultFilterUiModel
 
 internal sealed interface DefaultFilterIntent {
     object GoBack : DefaultFilterIntent
 
     data class SelectDefaultFilter(
-        val filter: DefaultFilterModel,
+        val filter: DefaultFilterUiModel,
     ) : DefaultFilterIntent
 }

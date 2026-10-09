@@ -25,21 +25,33 @@ package net.svaroh.passly.feature.setup.scanqr
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.HttpsVerifier
 import net.svaroh.passly.common.UuidProvider
 import net.svaroh.passly.common.usecase.FetchFileAsStringUseCase
 import net.svaroh.passly.core.accounts.AccountKitParser
-import net.svaroh.passly.core.accounts.AccountsInteractor
-import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ACCOUNT_ALREADY_LINKED
-import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ERROR_NON_HTTPS_DOMAIN
-import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ERROR_WHEN_SAVING_PRIVATE_KEY
-import net.svaroh.passly.core.accounts.usecase.accountdata.UpdateAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.accounts.CheckAccountExistsUseCase
-import net.svaroh.passly.core.accounts.usecase.privatekey.SavePrivateKeyUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveCurrentApiUrlUseCase
-import net.svaroh.passly.core.navigation.AccountSetupDataModel
-import net.svaroh.passly.core.networking.NetworkResult.Failure.NetworkError
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.TIMEOUT
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ACCOUNT_ALREADY_LINKED
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ERROR_NON_HTTPS_DOMAIN
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ERROR_WHEN_SAVING_PRIVATE_KEY
+import net.svaroh.passly.domain.accounts.usecase.CheckAccountExistsUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveCurrentApiUrlUseCase
+import net.svaroh.passly.domain.accounts.usecase.UpdateAccountDataUseCase
+import net.svaroh.passly.domain.mobiletransfer.usecase.UpdateTransferUseCase
+import net.svaroh.passly.domain.privatekey.usecase.SavePrivateKeyUseCase
 import net.svaroh.passly.dto.response.qrcode.AccountKitPageDto
 import net.svaroh.passly.dto.response.qrcode.QrFirstPageDto
 import net.svaroh.passly.dto.response.qrcode.ReservedBytesDto
@@ -71,22 +83,13 @@ import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult.UserResolvabl
 import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult.UserResolvableError.ErrorType
 import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult.UserResolvableError.ErrorType.NO_BARCODES_IN_RANGE
 import net.svaroh.passly.feature.setup.scanqr.qrparser.ScanQrParser
-import net.svaroh.passly.feature.setup.scanqr.usecase.UpdateTransferUseCase
+import net.svaroh.passly.ui.AccountSetupDataModel
 import net.svaroh.passly.ui.ResultStatus.AlreadyLinked
 import net.svaroh.passly.ui.ResultStatus.Failure
 import net.svaroh.passly.ui.ResultStatus.HttpNotSupported
 import net.svaroh.passly.ui.ResultStatus.NoNetwork
 import net.svaroh.passly.ui.ResultStatus.Success
-import net.svaroh.passly.ui.UpdateTransferModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.ui.UpdateTransferUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -105,8 +108,6 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import java.util.UUID
 import kotlin.test.assertIs
 import kotlin.time.ExperimentalTime
@@ -356,7 +357,7 @@ class ScanQrViewModelTest : KoinTest {
             whenever(httpsVerifier.isHttps(any())) doReturn true
             whenever(updateTransferUseCase.execute(any())) doReturn
                 UpdateTransferUseCase.Output.Success(
-                    UpdateTransferModel(TEST_TRANSFER_ID.toString(), null, null, null, null),
+                    UpdateTransferUiModel(TEST_TRANSFER_ID.toString(), null, null, null, null),
                 )
 
             viewModel = get()
@@ -417,7 +418,7 @@ class ScanQrViewModelTest : KoinTest {
             whenever(httpsVerifier.isHttps(any())) doReturn true
             whenever(updateTransferUseCase.execute(any())) doReturn
                 UpdateTransferUseCase.Output.Success(
-                    UpdateTransferModel(TEST_TRANSFER_ID.toString(), null, null, null, null),
+                    UpdateTransferUiModel(TEST_TRANSFER_ID.toString(), null, null, null, null),
                 )
 
             viewModel = get()
@@ -447,7 +448,7 @@ class ScanQrViewModelTest : KoinTest {
             whenever(httpsVerifier.isHttps(any())) doReturn true
             whenever(updateTransferUseCase.execute(any())) doReturn
                 UpdateTransferUseCase.Output.Success(
-                    UpdateTransferModel(TEST_TRANSFER_ID.toString(), null, null, null, null),
+                    UpdateTransferUiModel(TEST_TRANSFER_ID.toString(), null, null, null, null),
                 )
 
             viewModel = get()
@@ -480,9 +481,9 @@ class ScanQrViewModelTest : KoinTest {
             whenever(httpsVerifier.isHttps(any())) doReturn true
             whenever(updateTransferUseCase.execute(any())) doReturn
                 UpdateTransferUseCase.Output.Success(
-                    UpdateTransferModel(TEST_TRANSFER_ID.toString(), null, null, null, null),
+                    UpdateTransferUiModel(TEST_TRANSFER_ID.toString(), null, null, null, null),
                 )
-            whenever(savePrivateKeyUseCase.execute(any())) doReturn SavePrivateKeyUseCase.Output.Success
+            whenever(savePrivateKeyUseCase.execute(any())) doReturn SavePrivateKeyUseCase.Output(true)
 
             viewModel = get()
             viewModel.onIntent(Initialize(barcodeScanFlow = barcodeScanFlow, accountSetupDataModel = null))
@@ -515,9 +516,9 @@ class ScanQrViewModelTest : KoinTest {
             whenever(httpsVerifier.isHttps(any())) doReturn true
             whenever(updateTransferUseCase.execute(any())) doReturn
                 UpdateTransferUseCase.Output.Success(
-                    UpdateTransferModel(TEST_TRANSFER_ID.toString(), null, null, null, null),
+                    UpdateTransferUiModel(TEST_TRANSFER_ID.toString(), null, null, null, null),
                 )
-            whenever(savePrivateKeyUseCase.execute(any())) doReturn SavePrivateKeyUseCase.Output.Failure
+            whenever(savePrivateKeyUseCase.execute(any())) doReturn SavePrivateKeyUseCase.Output(false)
 
             viewModel = get()
             viewModel.onIntent(Initialize(barcodeScanFlow = barcodeScanFlow, accountSetupDataModel = null))
@@ -565,12 +566,7 @@ class ScanQrViewModelTest : KoinTest {
             whenever(checkAccountExistsUseCase.execute(any())) doReturn CheckAccountExistsUseCase.Output(false)
             whenever(httpsVerifier.isHttps(any())) doReturn true
             whenever(updateTransferUseCase.execute(any())) doReturn
-                UpdateTransferUseCase.Output.Failure(
-                    NetworkError(
-                        exception = SocketTimeoutException("Server not reachable"),
-                        headerMessage = "Server not reachable",
-                    ),
-                )
+                UpdateTransferUseCase.Output.Failure(DomainResult.Incomplete.Error(TIMEOUT, null))
 
             viewModel = get()
             viewModel.onIntent(Initialize(barcodeScanFlow = barcodeScanFlow, accountSetupDataModel = null))
@@ -597,12 +593,7 @@ class ScanQrViewModelTest : KoinTest {
             whenever(checkAccountExistsUseCase.execute(any())) doReturn CheckAccountExistsUseCase.Output(false)
             whenever(httpsVerifier.isHttps(any())) doReturn true
             whenever(updateTransferUseCase.execute(any())) doReturn
-                UpdateTransferUseCase.Output.Failure(
-                    NetworkError(
-                        exception = UnknownHostException("No network"),
-                        headerMessage = "No network",
-                    ),
-                )
+                UpdateTransferUseCase.Output.Failure(DomainResult.Incomplete.Error(OFFLINE, null))
 
             viewModel = get()
             viewModel.onIntent(Initialize(barcodeScanFlow = barcodeScanFlow, accountSetupDataModel = null))
@@ -630,12 +621,7 @@ class ScanQrViewModelTest : KoinTest {
             whenever(checkAccountExistsUseCase.execute(any())) doReturn CheckAccountExistsUseCase.Output(false)
             whenever(httpsVerifier.isHttps(any())) doReturn true
             whenever(updateTransferUseCase.execute(any())) doReturn
-                UpdateTransferUseCase.Output.Failure(
-                    NetworkError(
-                        exception = Exception("Unknown error"),
-                        headerMessage = "Unknown error",
-                    ),
-                )
+                UpdateTransferUseCase.Output.Failure(DomainResult.Incomplete.Error(UNKNOWN, "Unknown error"))
 
             viewModel = get()
             viewModel.onIntent(Initialize(barcodeScanFlow = barcodeScanFlow, accountSetupDataModel = null))

@@ -24,8 +24,10 @@
 package net.svaroh.passly.scenarios.resource.deleteresource
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasAnyDescendant
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.IdlingRegistry
@@ -47,14 +49,12 @@ import net.svaroh.passly.helpers.createNewPasswordFromHomeScreen
 import net.svaroh.passly.helpers.getString
 import net.svaroh.passly.helpers.searchAndClickMoreOfFirstResource
 import net.svaroh.passly.helpers.signIn
-import net.svaroh.passly.helpers.waitForHomeScreen
 import net.svaroh.passly.instrumentationTestsModule
 import net.svaroh.passly.intents.ManagedAccountIntentCreator
 import net.svaroh.passly.rules.IdlingResourceRule
 import net.svaroh.passly.rules.lazyActivitySetupScenarioRule
 import net.svaroh.passly.testtags.composetags.Home
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -108,7 +108,7 @@ class DeleteResourcesTest(
         @Parameterized.Parameters(name = "Resource name: {0}")
         fun resourceNames() =
             listOf(
-                "To be deleted - Password with description",
+                "To be deleted - Default resource",
             )
     }
 
@@ -120,34 +120,6 @@ class DeleteResourcesTest(
         composeTestRule.signIn(managedAccountIntentCreator.getPassphrase())
     }
 
-    /**  [On the password removal popup, I can click the delete button](https://passbolt.testrail.io/index.php?/cases/view/8142)
-     *
-     *     Given that I am on removal popup of the <resource>
-     *     When I click 'Delete' button in @blue
-     *     Then I am back on the homepage
-     *     And I see a popup "<password name> resource was deleted." in @green
-     *
-     */
-    @Deprecated(message = "With the introduction of v5 resource types this test will be removed")
-    @Test
-    fun onThePasswordRemovalPopupICanClickTheDeleteButton() {
-        val randomizedName = "$testedResource ${System.currentTimeMillis()}"
-        composeTestRule.apply {
-            createNewPasswordFromHomeScreen(randomizedName)
-            chooseFilter(filters_menu_all_items)
-
-            // unregister refresh idling resource after first refresh not to block the snackbar checks
-            IdlingRegistry.getInstance().unregister(resourcesFullRefreshIdlingResource)
-
-            searchAndClickMoreOfFirstResource(randomizedName)
-            onNodeWithText(getString(more_delete)).performClick()
-            onNodeWithText(getString(delete)).performClick()
-
-            waitForHomeScreen()
-            onNodeWithTag(Home.SCREEN).assertIsDisplayed()
-        }
-    }
-
     /**  [On the password removal popup, I can delete resource when v5 resources are enabled](https://passbolt.testrail.io/index.php?/cases/view/13121)
      *
      *     Given that I am on removal popup of the <resource>
@@ -156,6 +128,7 @@ class DeleteResourcesTest(
      *     And I don't see deleted resource on the list
      *
      *     Examples:
+     *     TODO: enable remaining rows once creation of other resource types is supported in the app
      *     | resource                       |
      *     | Simple password                |
      *     | Password with description      |
@@ -165,30 +138,40 @@ class DeleteResourcesTest(
      *     | Default resource type with TOTP|
      *
      */
-    @Ignore("This test will be enabled after enabling V5 on cloud's `Betty` user")
     @Test
-    fun onThePasswordRemovalPopupICanDeleteTheResourceAndItDisappearsFromTheList() {
+    fun onThePasswordRemovalPopupICanDeleteResourceWhenV5ResourcesAreEnabled() {
         val randomizedName = "$testedResource ${System.currentTimeMillis()}"
         composeTestRule.apply {
-            createNewPasswordFromHomeScreen(randomizedName)
             chooseFilter(filters_menu_all_items)
+            createNewPasswordFromHomeScreen(randomizedName)
 
             searchAndClickMoreOfFirstResource(randomizedName)
             onNodeWithText(getString(more_delete)).performClick()
             onNodeWithText(getString(delete)).performClick()
 
-            waitForHomeScreen()
-            onNodeWithTag(Home.SCREEN).assertIsDisplayed()
-            onNodeWithText(getString(LocalizationR.string.no_passwords)).assertIsDisplayed()
+            val deletedRowMatcher =
+                hasTestTag(Home.RESOURCE_ROW).and(
+                    hasAnyDescendant(hasText(randomizedName, substring = true, ignoreCase = true)),
+                )
+            waitUntil(timeoutMillis = 20_000, conditionDescription = "Resource removed") {
+                onAllNodes(deletedRowMatcher, useUnmergedTree = true).fetchSemanticsNodes().isEmpty()
+            }
+
+            val noPasswordsMatcher = hasText(getString(LocalizationR.string.no_passwords))
+            waitUntil(timeoutMillis = 15_000, conditionDescription = "No passwords empty state shown") {
+                onAllNodes(noPasswordsMatcher).fetchSemanticsNodes().isNotEmpty()
+            }
+            onNode(noPasswordsMatcher).assertIsDisplayed()
         }
     }
 
     /**  [After deletion I can see confirmation snackbar when v5 resources are enabled](https://passbolt.testrail.io/index.php?/cases/view/13122)
      *
      *     Given that I am on removal popup of the <resource>
-     *     When I click 'Delete' button in @blue
-     *     Then I see a snackbar "<password name> password was deleted." in @green
+     *     When I click ‘Delete’ button in @blue
+     *     Then I see a snackbar "<password name> resource was deleted." in @green
      *
+     *     TODO: enable remaining rows once creation of other resource types is supported in the app
      *     Examples:
      *     | resource                       |
      *     | Simple password                |
@@ -199,19 +182,27 @@ class DeleteResourcesTest(
      *     | Default resource type with TOTP|
      *
      */
-    @Ignore("This test will be enabled after enabling V5 on cloud's `Betty` user")
     @Test
     fun afterDeletionICanSeeConfirmationPopUpWhenV5ResourcesAreEnabled() {
+        val randomizedName = "$testedResource ${System.currentTimeMillis()}"
         composeTestRule.apply {
-            // unregister refresh idling resource after first refresh not to block the snackbar checks
+            createNewPasswordFromHomeScreen(randomizedName)
+
+            // Unregister refresh idling resource so Espresso doesn't block on the
+            // post-delete refresh and miss the transient snackbar.
             IdlingRegistry.getInstance().unregister(resourcesFullRefreshIdlingResource)
 
-            searchAndClickMoreOfFirstResource(testedResource)
+            searchAndClickMoreOfFirstResource(randomizedName)
             onNodeWithText(getString(more_delete)).performClick()
             onNodeWithText(getString(delete)).performClick()
 
-            waitForHomeScreen()
-            onNodeWithTag(Home.SCREEN).assertIsDisplayed()
+            val snackbarText =
+                getString(LocalizationR.string.common_message_resource_deleted, randomizedName)
+            val snackbarMatcher = hasText(snackbarText, substring = true, ignoreCase = true)
+            waitUntil(timeoutMillis = 15_000, conditionDescription = "Snackbar shown") {
+                onAllNodes(snackbarMatcher).fetchSemanticsNodes().isNotEmpty()
+            }
+            onNode(snackbarMatcher).assertIsDisplayed()
         }
     }
 }

@@ -1,16 +1,18 @@
 package net.svaroh.passly.feature.otp.scanotp.navigation
 
-import PassboltTheme
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
 import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode.SCAN_FOR_RESULT
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode.SCAN_WITH_SUCCESS_SCREEN
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpSuccess
+import net.svaroh.passly.core.navigation.compose.results.PermissionsConfirmedResult
 import net.svaroh.passly.core.navigation.compose.results.ResourcePickerResultEvent
 import net.svaroh.passly.core.navigation.compose.results.ResultEffect
 import net.svaroh.passly.feature.otp.scanotp.ScanOtpMode
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpScreen
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.ConfirmedPermissionsResult
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkedResourceReceived
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessScreen
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessViewModel
@@ -37,6 +39,9 @@ class ScanOtpFeatureNavigation : FeatureModuleNavigation {
 
                 ResultEffect<ResourcePickerResultEvent> { result ->
                     viewModel.onIntent(LinkedResourceReceived(result.resource))
+                }
+                ResultEffect<PermissionsConfirmedResult> { result ->
+                    viewModel.onIntent(ConfirmedPermissionsResult(result.permissions))
                 }
 
                 PassboltTheme {

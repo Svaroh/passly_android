@@ -1,7 +1,7 @@
 package net.svaroh.passly.core.networking.interceptor
 
-import net.svaroh.passly.core.authenticationcore.session.GetSessionUseCase
 import net.svaroh.passly.core.networking.AuthPaths
+import net.svaroh.passly.domain.auth.usecase.GetSessionUseCase
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -21,7 +21,7 @@ internal class AuthInterceptor(
         return chain.proceed(newBuilder.build())
     }
 
-    private fun isAnonymous(encodedPath: String) = ANONYMOUS_PATHS.any { encodedPath.contains(it) }
+    private fun isAnonymous(encodedPath: String) = encodedPath in ANONYMOUS_PATHS
 
     private fun addAuthTokens(builder: Request.Builder) {
         val accessToken = getSessionUseCase.execute(Unit).accessToken
@@ -42,6 +42,6 @@ internal class AuthInterceptor(
                 AuthPaths.AUTH_VERIFY,
                 AuthPaths.AUTH_JWT_REFRESH,
             )
-        private const val AUTH_HEADER = "Authorization"
+        internal const val AUTH_HEADER = "Authorization"
     }
 }

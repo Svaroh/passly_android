@@ -346,7 +346,6 @@
     <string name="settings_app_settings_biometry_error">Помилка біометрії. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Помилка біометричної автентифікації. %s</string>
     <string name="settings_app_settings_expert_settings">Розширені налаштування</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Режим розробника</string>
     <string name="settings_app_settings_expert_settings_hide_root">Приховати діалог \"пристрій має права суперкористувача\"</string>
     <string name="settings_autofill_autofill_title">Тут можна змінювати методи автозаповнення</string>
     <string name="settings_autofill_autofill_desc">Рекомендується використовувати метод служби автозаповнення, проте його продуктивність може залежати від вашого пристрою та налаштувань енергоощадження. \n\nЯкщо на вашому пристрої служба автозаповнення працює ненадійно, ви можете спробувати увімкнути автозаповнення на основі служби спеціальних можливостей.</string>

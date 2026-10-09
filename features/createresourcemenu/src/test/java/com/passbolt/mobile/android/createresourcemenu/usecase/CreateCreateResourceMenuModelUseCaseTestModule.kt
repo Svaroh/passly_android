@@ -1,8 +1,8 @@
 package net.svaroh.passly.createresourcemenu.usecase
 
-import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.domain.metadata.usecase.GetMetadataTypesSettingsUseCase
+import net.svaroh.passly.domain.resourcetypes.usecase.ResourceTypeIdToSlugMappingProvider
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
-import net.svaroh.passly.metadata.usecase.GetMetadataTypesSettingsUseCase
 import org.koin.dsl.module
 import org.mockito.kotlin.mock
 

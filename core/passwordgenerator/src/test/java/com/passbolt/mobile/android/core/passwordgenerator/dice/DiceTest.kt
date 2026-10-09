@@ -24,10 +24,10 @@
 package net.svaroh.passly.core.passwordgenerator.dice
 
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.passwordgenerator.passwordGeneratorTestModule
-import net.svaroh.passly.ui.CaseTypeModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import net.svaroh.passly.core.passwordgenerator.passwordGeneratorTestModule
+import net.svaroh.passly.ui.CaseTypeUiModel
 import org.junit.Assert.assertThrows
 import org.junit.Rule
 import org.junit.Test
@@ -64,7 +64,7 @@ class DiceTest : KoinTest {
     fun `passphrase should be generated correctly with default separator`() =
         runTest {
             val wordsCount = 6
-            val passphrase = dice.generatePassphrase(wordsCount, case = CaseTypeModel.LOWERCASE)
+            val passphrase = dice.generatePassphrase(wordsCount, case = CaseTypeUiModel.LOWERCASE)
 
             val words = passphrase.split(Dice.DEFAULT_WORD_SEPARATOR)
 
@@ -77,7 +77,7 @@ class DiceTest : KoinTest {
         runTest {
             val separator = ";"
             val wordsCount = 8
-            val passphrase = dice.generatePassphrase(wordsCount, case = CaseTypeModel.LOWERCASE, wordsSeparator = separator)
+            val passphrase = dice.generatePassphrase(wordsCount, case = CaseTypeUiModel.LOWERCASE, wordsSeparator = separator)
 
             val words = passphrase.split(separator)
 
@@ -90,7 +90,7 @@ class DiceTest : KoinTest {
         runTest {
             val separator = ";"
             val wordsCount = 8
-            val passphrase = dice.generatePassphrase(wordsCount, case = CaseTypeModel.CAMELCASE, wordsSeparator = separator)
+            val passphrase = dice.generatePassphrase(wordsCount, case = CaseTypeUiModel.CAMELCASE, wordsSeparator = separator)
 
             val words = passphrase.split(separator).map { it.replace(separator, "") }
 
@@ -103,11 +103,11 @@ class DiceTest : KoinTest {
         runTest {
             val separator = ";"
             val wordsCount = 8
-            val passphrase = dice.generatePassphrase(wordsCount, case = CaseTypeModel.UPPERCASE, wordsSeparator = separator)
+            val passphrase = dice.generatePassphrase(wordsCount, case = CaseTypeUiModel.UPPERCASE, wordsSeparator = separator)
 
             val words = passphrase.split(separator).map { it.replace(separator, "") }
 
             assertThat(words.size).isEqualTo(wordsCount)
-            assertThat(words.all { it.all { letter -> letter.isUpperCase() } }).isTrue()
+            assertThat(words.none { it.any { letter -> letter.isLowerCase() } }).isTrue()
         }
 }

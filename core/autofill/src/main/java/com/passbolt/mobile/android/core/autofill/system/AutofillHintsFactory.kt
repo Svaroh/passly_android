@@ -13,6 +13,13 @@ class AutofillHintsFactory(
     private val resources: Resources,
     private val appContext: Context,
 ) {
+    private val englishHintsByResId: Map<Int, Array<String>> =
+        listOf(
+            LocalizationR.array.username_hint_values,
+            LocalizationR.array.password_hint_values,
+            LocalizationR.array.totp_hint_values,
+        ).associateWith(::loadEnglishHints)
+
     fun getHintValues(field: AutofillField) =
         when (field) {
             AutofillField.USERNAME ->
@@ -21,14 +28,16 @@ class AutofillHintsFactory(
             AutofillField.PASSWORD ->
                 getLocalizedOrEnglishValues(LocalizationR.array.password_hint_values) +
                     View.AUTOFILL_HINT_PASSWORD
+            AutofillField.TOTP ->
+                getLocalizedOrEnglishValues(LocalizationR.array.totp_hint_values)
         }
 
     private fun getLocalizedOrEnglishValues(
         @ArrayRes stringArrayResId: Int,
-    ) = getLocalized(stringArrayResId) + getEnglish(stringArrayResId)
+    ) = getLocalized(stringArrayResId) + requireNotNull(englishHintsByResId[stringArrayResId])
 
     @SuppressLint("AppBundleLocaleChanges")
-    private fun getEnglish(
+    private fun loadEnglishHints(
         @ArrayRes stringArrayResId: Int,
     ): Array<String> {
         val config = Configuration(appContext.resources.configuration)

@@ -3,7 +3,7 @@ package net.svaroh.passly.feature.authentication.auth.challenge
 import com.google.gson.Gson
 import net.svaroh.passly.common.UuidProvider
 import net.svaroh.passly.common.time.TimeProvider
-import net.svaroh.passly.core.accounts.usecase.privatekey.GetPrivateKeyUseCase
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
 import net.svaroh.passly.gopenpgp.OpenPgp
 import org.koin.dsl.module
 import org.mockito.kotlin.mock
@@ -31,7 +31,7 @@ import org.mockito.kotlin.mock
  * @since v1.0
  */
 
-internal val getPrivateKeyUseCase = mock<GetPrivateKeyUseCase>()
+internal val privateKeyRepository = mock<PrivateKeyRepository>()
 internal val openPgp = mock<OpenPgp>()
 internal val timeProvider = mock<TimeProvider>()
 internal val uuidProvider = mock<UuidProvider>()
@@ -39,26 +39,29 @@ internal val uuidProvider = mock<UuidProvider>()
 val challengeTestModule =
     module {
         factory { Gson() }
-        factory { getPrivateKeyUseCase }
+        factory { privateKeyRepository }
         factory { openPgp }
         factory {
             ChallengeDecryptor(
                 openPgp = get(),
-                getPrivateKeyUseCase = get(),
+                privateKeyRepository = get(),
                 gson = get(),
             )
         }
         factory {
             ChallengeProvider(
                 openPgp = get(),
-                privateKeyUseCase = get(),
+                privateKeyRepository = get(),
                 gson = get(),
                 timeProvider = get(),
                 uuidProvider = get(),
             )
         }
+        factory<DomainComparator> { TrailingSlashDomainComparator() }
         factory {
-            ChallengeVerifier()
+            ChallengeVerifier(
+                domainComparator = get(),
+            )
         }
         factory { timeProvider }
         factory { uuidProvider }

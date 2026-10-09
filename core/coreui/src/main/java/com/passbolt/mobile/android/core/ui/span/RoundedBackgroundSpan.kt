@@ -32,8 +32,8 @@ import kotlin.math.roundToInt
  */
 
 class RoundedBackgroundSpan(
-    @ColorInt private val backgroundColor: Int,
-    @ColorInt private val textColor: Int,
+    @param:ColorInt private val backgroundColor: Int,
+    @param:ColorInt private val textColor: Int,
 ) : ReplacementSpan() {
     override fun draw(
         canvas: Canvas,

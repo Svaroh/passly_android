@@ -341,7 +341,6 @@
     <string name="settings_app_settings_biometry_error">バイオメトリックエラー。%s</string>
     <string name="settings_app_settings_biometry_authentication_error">生体認証エラー。%s</string>
     <string name="settings_app_settings_expert_settings">エキスパート設定</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">開発者モード</string>
     <string name="settings_app_settings_expert_settings_hide_root">\"端末がroot化されています\"のダイアログを非表示</string>
     <string name="settings_autofill_autofill_title">ここで自動入力の方法を変更できます</string>
     <string name="settings_autofill_autofill_desc">推奨手法としてAutofill Serviceの使用を推奨しますが、デバイスやバッテリー最適化の設定によっては動作が異なる場合があります。\n\n自動入力サービスが信頼できない場合は、アクセシビリティサービスを使った自動入力を試してみてください。</string>

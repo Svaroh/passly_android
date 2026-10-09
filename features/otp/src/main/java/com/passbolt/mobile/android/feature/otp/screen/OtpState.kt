@@ -26,20 +26,27 @@ package net.svaroh.passly.feature.otp.screen
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode
 import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
 import net.svaroh.passly.ui.OtpItemWrapper
+import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.TrustedKeyDeletedModel
+
+internal const val DEFAULT_TOTP_PERIOD = 30L
 
 data class OtpState(
     val otps: List<OtpItemWrapper> = emptyList(),
     val filteredOtps: List<OtpItemWrapper> = emptyList(),
+    val suggestedOtps: List<OtpItemWrapper> = emptyList(),
+    val universalCountdownSeconds: Long = DEFAULT_TOTP_PERIOD,
     val isRefreshing: Boolean = false,
+    val refreshProgress: Float = 0f,
     val searchQuery: String = "",
+    val isSearching: Boolean = false,
     val showProgress: Boolean = false,
     val searchInputEndIconMode: SearchInputEndIconMode = SearchInputEndIconMode.AVATAR,
     val userAvatar: String? = null,
     val moreMenuResource: OtpItemWrapper? = null,
+    val pendingPermissionsConfirmationResource: ResourceUiModel? = null,
     val metadataDeletedKeyModel: TrustedKeyDeletedModel? = null,
     val newMetadataKeyTrustModel: NewMetadataKeyToTrustModel? = null,
-    val showCreateResourceBottomSheet: Boolean = false,
     val showOtpMoreBottomSheet: Boolean = false,
     val showAccountSwitchBottomSheet: Boolean = false,
     val showDeleteTotpConfirmationDialog: Boolean = false,

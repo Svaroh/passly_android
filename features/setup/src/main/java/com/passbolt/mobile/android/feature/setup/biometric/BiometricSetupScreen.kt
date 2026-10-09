@@ -23,11 +23,9 @@
 
 package net.svaroh.passly.feature.setup.biometric
 
-import PassboltTheme
 import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -56,7 +54,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.Setup
@@ -73,7 +74,6 @@ import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.BiometricA
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.BiometricAuthenticationSuccess
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.ConfirmKeyPermanentlyInvalidated
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.DismissKeyPermanentlyInvalidated
-import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.KeyPermanentlyInvalidated
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.MaybeLater
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.ResumeView
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupIntent.UseBiometric
@@ -83,7 +83,6 @@ import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.Naviga
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.ShowBiometricPrompt
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.setup.biometric.BiometricSetupSideEffect.StartAuthActivity
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import java.util.concurrent.Executor
@@ -108,7 +107,7 @@ fun BiometricSetupScreen(
         when (sideEffect) {
             is ShowBiometricPrompt ->
                 showBiometricPrompt(
-                    activity = environment.context as AppCompatActivity,
+                    activity = environment.context as FragmentActivity,
                     executor = environment.executor,
                     biometricPromptBuilder = environment.biometricPromptBuilder,
                     biometricEncryptionCipher = sideEffect.cipher,
@@ -120,9 +119,6 @@ fun BiometricSetupScreen(
                     },
                     onAuthenticationError = { error ->
                         viewModel.onIntent(BiometricAuthenticationError(error))
-                    },
-                    onKeyPermanentlyInvalidated = { exception ->
-                        viewModel.onIntent(KeyPermanentlyInvalidated(exception))
                     },
                 )
             NavigateToAppSystemSettings -> navigator.openAppOsSettings(context)

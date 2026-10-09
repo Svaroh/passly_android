@@ -1,8 +1,8 @@
 package net.svaroh.passly.feature.home.navigation
 
-import PassboltTheme
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.remember
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
 import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation

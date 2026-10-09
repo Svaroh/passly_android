@@ -24,13 +24,13 @@
 package net.svaroh.passly.feature.resourcedetails.details
 
 import net.svaroh.passly.ui.PermissionsMode
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 
 sealed class ResourceDetailsSideEffect {
     data object NavigateBack : ResourceDetailsSideEffect()
 
     data class NavigateToEditResource(
-        val resourceModel: ResourceModel,
+        val resourceModel: ResourceUiModel,
     ) : ResourceDetailsSideEffect()
 
     data class NavigateToResourcePermissions(
@@ -89,6 +89,7 @@ enum class ErrorSnackbarType {
     DATA_REFRESH_ERROR,
     TOGGLE_FAVOURITE_FAILURE,
     CANNOT_PERFORM_ACTION,
+    INVALID_TOTP_PARAMETERS,
 }
 
 enum class ToastType {

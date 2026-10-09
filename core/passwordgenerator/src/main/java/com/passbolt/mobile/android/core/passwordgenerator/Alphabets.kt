@@ -3,7 +3,7 @@ package net.svaroh.passly.core.passwordgenerator
 import net.svaroh.passly.core.passwordgenerator.codepoints.Codepoint
 import net.svaroh.passly.core.passwordgenerator.codepoints.CodepointSet
 import net.svaroh.passly.core.passwordgenerator.codepoints.CodepointSet.Companion.withLookAlikeExcluded
-import net.svaroh.passly.ui.PasswordGeneratorSettingsModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
 
 /**
  * Passbolt - Open source password manager for teams
@@ -261,7 +261,7 @@ object Alphabets {
         excludeLookAlike: Boolean,
     ): CodepointSet = all[name]!!.withLookAlikeExcluded(excludeLookAlike)
 
-    fun getCodepointSetsForModel(model: PasswordGeneratorSettingsModel): Set<CodepointSet> {
+    fun getCodepointSetsForModel(model: PasswordGeneratorSettingsUiModel): Set<CodepointSet> {
         val result = mutableSetOf<CodepointSet>()
         val excludeLookAlike = model.excludeLookAlikeChars
         if (model.maskUpper) {

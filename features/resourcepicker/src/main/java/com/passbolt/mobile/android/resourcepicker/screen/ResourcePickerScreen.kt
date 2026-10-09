@@ -33,26 +33,26 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectDispatcher
-import net.svaroh.passly.core.fulldatarefresh.service.DataRefreshService
+import net.svaroh.passly.core.compose.rememberDebouncedBoolean
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
 import net.svaroh.passly.core.navigation.compose.results.ResourcePickerResultEvent
 import net.svaroh.passly.core.ui.button.PrimaryButton
 import net.svaroh.passly.core.ui.dialogs.ConfirmAlertDialog
+import net.svaroh.passly.core.ui.progressindicator.DataRefreshProgressIndicator
+import net.svaroh.passly.core.ui.progressindicator.SearchProgressIndicator
 import net.svaroh.passly.core.ui.scaffold.HomeScaffold
 import net.svaroh.passly.core.ui.search.SearchInput
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
@@ -60,24 +60,22 @@ import net.svaroh.passly.resourcepicker.model.ConfirmationModelFactory
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.CloseConfirmationDialog
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.ConfirmOtpLink
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.GoBack
-import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.Initialize
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.Search
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.SearchEndIconAction
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerSideEffect.NavigateBackWithResult
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerSideEffect.NavigateUp
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.resourcepicker.screen.list.ResourcePickerList
-import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
+import net.svaroh.passly.resourcepicker.screen.list.rememberIsAnyListRefreshing
+import net.svaroh.passly.resourcepicker.screen.list.rememberResourcePickerListData
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR
 import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun ResourcePickerScreen(
-    suggestionUri: String?,
+    viewModel: ResourcePickerViewModel,
     modifier: Modifier = Modifier,
-    viewModel: ResourcePickerViewModel = koinViewModel(),
     navigator: AppNavigator = koinInject(),
 ) {
     val context = LocalContext.current
@@ -85,10 +83,7 @@ internal fun ResourcePickerScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val resultBus = NavigationResultEventBus.current
-
-    LaunchedEffect(suggestionUri) {
-        viewModel.onIntent(Initialize(suggestionUri))
-    }
+    val errorColor = colorResource(CoreUiR.color.red)
 
     ResourcePickerScreen(
         state = state.value,
@@ -104,7 +99,7 @@ internal fun ResourcePickerScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getErrorMessage(context, it.type),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorColor,
                         ),
                     )
                 }
@@ -128,7 +123,11 @@ private fun ResourcePickerScreen(
     modifier: Modifier = Modifier,
     confirmationModelFactory: ConfirmationModelFactory = koinInject(),
 ) {
-    val context = LocalContext.current
+    val listData = rememberResourcePickerListData(state)
+    val isAnyListRefreshing = rememberIsAnyListRefreshing(listData)
+    val isListLoading = state.isSearching || isAnyListRefreshing
+    val isSearchRunning = state.isSearching || (isAnyListRefreshing && state.searchQuery.isNotBlank())
+    val showSearchProgress = rememberDebouncedBoolean(isSearchRunning && !state.isRefreshing)
 
     HomeScaffold(
         snackbarHostState = snackbarHostState,
@@ -170,15 +169,27 @@ private fun ResourcePickerScreen(
             }
         },
         content = { paddingValues ->
-            PullToRefreshBox(
-                isRefreshing = state.isRefreshing,
-                onRefresh = { DataRefreshService.start(context) },
+            Box(
                 modifier =
                     Modifier
                         .fillMaxSize()
                         .padding(paddingValues),
             ) {
-                ResourcePickerList(state, onIntent)
+                ResourcePickerList(
+                    state = state,
+                    listData = listData,
+                    isListLoading = isListLoading,
+                    onIntent = onIntent,
+                )
+                if (state.isRefreshing) {
+                    DataRefreshProgressIndicator(
+                        progress = state.refreshProgress,
+                        modifier = Modifier.align(Alignment.TopCenter),
+                    )
+                }
+                if (showSearchProgress) {
+                    SearchProgressIndicator(modifier = Modifier.align(Alignment.TopCenter))
+                }
             }
 
             if (state.showConfirmationDialog && state.confirmationType != null && state.pickAction != null) {

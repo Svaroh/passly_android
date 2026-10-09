@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.groupdetails.groupmembers
 
-import PassboltTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.keys.GroupDetailsNavigationKey.GroupMemberDetails
@@ -54,9 +54,9 @@ import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.GoToMember
 import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.Initialize
 import net.svaroh.passly.groupdetails.groupmembers.GroupMembersSideEffect.NavigateToMemberDetails
 import net.svaroh.passly.groupdetails.groupmembers.GroupMembersSideEffect.NavigateUp
-import net.svaroh.passly.ui.GpgKeyModel
-import net.svaroh.passly.ui.UserModel
-import net.svaroh.passly.ui.UserProfileModel
+import net.svaroh.passly.ui.GpgKeyUiModel
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import java.time.ZonedDateTime
@@ -67,13 +67,14 @@ import net.svaroh.passly.core.ui.R as CoreUiR
 internal fun GroupMembersScreen(
     groupId: String,
     modifier: Modifier = Modifier,
+    fromSnapshot: Boolean = false,
     viewModel: GroupMembersViewModel = koinViewModel(),
     navigator: AppNavigator = koinInject(),
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle()
 
     LaunchedEffect(groupId) {
-        viewModel.onIntent(Initialize(groupId))
+        viewModel.onIntent(Initialize(groupId, fromSnapshot))
     }
 
     GroupMembersContent(
@@ -85,7 +86,7 @@ internal fun GroupMembersScreen(
     SideEffectDispatcher(viewModel.sideEffect) {
         when (it) {
             NavigateUp -> navigator.navigateBack()
-            is NavigateToMemberDetails -> navigator.navigateToKey(GroupMemberDetails(it.userId))
+            is NavigateToMemberDetails -> navigator.navigateToKey(GroupMemberDetails(it.userId, it.fromSnapshot))
         }
     }
 }
@@ -154,12 +155,12 @@ private fun GroupMembersPreview() {
                     groupName = "Development Team",
                     members =
                         listOf(
-                            UserModel(
+                            UserUiModel(
                                 id = "1",
                                 userName = "grace@passbolt.com",
                                 disabled = false,
                                 gpgKey =
-                                    GpgKeyModel(
+                                    GpgKeyUiModel(
                                         id = "1",
                                         armoredKey = "",
                                         fingerprint = "03F60E958F4CB29723ACDF761353B5B15D9B054F",
@@ -171,19 +172,19 @@ private fun GroupMembersPreview() {
                                         keyCreationDate = ZonedDateTime.now(),
                                     ),
                                 profile =
-                                    UserProfileModel(
+                                    UserProfileUiModel(
                                         username = "grace",
                                         firstName = "Grace",
                                         lastName = "Hopper",
                                         avatarUrl = null,
                                     ),
                             ),
-                            UserModel(
+                            UserUiModel(
                                 id = "2",
                                 userName = "ada@passbolt.com",
                                 disabled = false,
                                 gpgKey =
-                                    GpgKeyModel(
+                                    GpgKeyUiModel(
                                         id = "2",
                                         armoredKey = "",
                                         fingerprint = "03F60E958F4CB29723ACDF761353B5B15D9B054F",
@@ -195,7 +196,7 @@ private fun GroupMembersPreview() {
                                         keyCreationDate = ZonedDateTime.now(),
                                     ),
                                 profile =
-                                    UserProfileModel(
+                                    UserProfileUiModel(
                                         username = "ada",
                                         firstName = "Ada",
                                         lastName = "Lovelace",

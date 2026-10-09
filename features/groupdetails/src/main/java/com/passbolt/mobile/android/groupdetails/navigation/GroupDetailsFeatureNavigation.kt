@@ -1,6 +1,6 @@
 package net.svaroh.passly.groupdetails.navigation
 
-import PassboltTheme
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
 import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
 import net.svaroh.passly.core.navigation.compose.keys.GroupDetailsNavigationKey.GroupMemberDetails
@@ -12,11 +12,11 @@ class GroupDetailsFeatureNavigation : FeatureModuleNavigation {
     override fun provideEntryProviderInstaller(): EntryProviderInstaller =
         {
             entry<GroupMembers> { key ->
-                PassboltTheme { GroupMembersScreen(groupId = key.groupId) }
+                PassboltTheme { GroupMembersScreen(groupId = key.groupId, fromSnapshot = key.fromSnapshot) }
             }
 
             entry<GroupMemberDetails> { key ->
-                PassboltTheme { GroupMemberDetailsScreen(userId = key.userId) }
+                PassboltTheme { GroupMemberDetailsScreen(userId = key.userId, fromSnapshot = key.fromSnapshot) }
             }
         }
 }

@@ -90,6 +90,9 @@ class UpdateExpiryTest : KoinTest {
             val createResourceIdlingResource: CreateResourceIdlingResource by inject()
             val resourcesFullRefreshIdlingResource: ResourcesFullRefreshIdlingResource by inject()
 
+            // TODO: register CreateMenuModelIdlingResource here. This test opens the resource More
+            //  menu (searchAndClickMoreOfFirstResource), whose contents load asynchronously; without
+            //  this idling resource, assertions on the menu items can race the model load.
             IdlingResourceRule(
                 arrayOf(
                     signInIdlingResource,
@@ -180,6 +183,6 @@ class UpdateExpiryTest : KoinTest {
 
     private companion object {
         private const val RESOURCE_NAME = "ExpiringResource"
-        private const val EXPIRED_RESOURCE_NAME = "Expired"
+        private const val EXPIRED_RESOURCE_NAME = "StillExpired"
     }
 }

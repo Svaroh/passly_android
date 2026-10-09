@@ -345,7 +345,6 @@
     <string name="settings_app_settings_biometry_error">Chyba biometrie. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Chyba ověřování biometrie. %s</string>
     <string name="settings_app_settings_expert_settings">Expertní nastavení</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Vývojářský režim</string>
     <string name="settings_app_settings_expert_settings_hide_root">Skrýt dialogové okno „zařízení je root“</string>
     <string name="settings_autofill_autofill_title">Zde můžete změnit metody automatického vyplňování</string>
     <string name="settings_autofill_autofill_desc">Doporučuje se používat metodu služby automatického vyplňování, ale výkon služby může záviset na vašem zařízení a nastavení optimalizace baterie. \n\nPokud služba automatického vyplňování nefunguje spolehlivě na vašem zařízení, můžete zkusit povolit automatické vyplňování na základě služby usnadnění přístupu.</string>

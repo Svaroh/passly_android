@@ -25,21 +25,20 @@ package net.svaroh.passly.createfolder
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.commonfolders.usecase.AddLocalFolderPermissionsUseCase
-import net.svaroh.passly.core.commonfolders.usecase.CreateFolderUseCase
-import net.svaroh.passly.core.commonfolders.usecase.FolderShareInteractor
-import net.svaroh.passly.core.commonfolders.usecase.db.AddLocalFolderUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderLocationUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderPermissionsUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalParentFolderPermissionsToApplyToNewItemUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import net.svaroh.passly.core.idlingresource.CreateFolderIdlingResource
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.networking.NetworkResult
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
-import net.svaroh.passly.core.users.usecase.db.GetLocalCurrentUserUseCase
 import net.svaroh.passly.createfolder.CreateFolderIntent.FolderNameChanged
 import net.svaroh.passly.createfolder.CreateFolderIntent.GoBack
 import net.svaroh.passly.createfolder.CreateFolderIntent.Initialize
@@ -49,23 +48,25 @@ import net.svaroh.passly.createfolder.CreateFolderSideEffect.NavigateUp
 import net.svaroh.passly.createfolder.CreateFolderSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.createfolder.CreateFolderValidationError.MaxLengthExceeded
 import net.svaroh.passly.createfolder.CreateFolderViewModel.Companion.FOLDER_NAME_MAX_LENGTH
+import net.svaroh.passly.domain.folders.model.FolderModel
+import net.svaroh.passly.domain.folders.model.FolderModelWithAttributes
+import net.svaroh.passly.domain.folders.usecase.AddLocalFolderPermissionsUseCase
+import net.svaroh.passly.domain.folders.usecase.AddLocalFolderUseCase
+import net.svaroh.passly.domain.folders.usecase.CreateFolderUseCase
+import net.svaroh.passly.domain.folders.usecase.FolderShareInteractor
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderLocationUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderPermissionsUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalParentFolderPermissionsToApplyToNewItemUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalCurrentUserUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.GetSessionExpiryUseCase.Output.JwtWillExpire
 import net.svaroh.passly.mappers.UsersModelMapper
-import net.svaroh.passly.ui.FolderModel
-import net.svaroh.passly.ui.FolderModelWithAttributes
 import net.svaroh.passly.ui.PermissionModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.ResourcePermission
-import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserUiModel
 import net.svaroh.passly.ui.UserWithAvatar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -398,10 +399,10 @@ class CreateFolderViewModelTest : KoinTest {
 
     private suspend fun setupMocksForRootFolder() {
         val getCurrentUserUseCase = get<GetLocalCurrentUserUseCase>()
-        whenever(getCurrentUserUseCase.execute(Unit)) doReturn GetLocalCurrentUserUseCase.Output(mockUserModel)
+        whenever(getCurrentUserUseCase.execute(Unit)) doReturn GetLocalCurrentUserUseCase.Output(mockUserUiModel)
 
         val usersModelMapper = get<UsersModelMapper>()
-        whenever(usersModelMapper.mapToUserWithAvatar(mockUserModel)) doReturn mockUserWithAvatar
+        whenever(usersModelMapper.mapToUserWithAvatar(mockUserUiModel)) doReturn mockUserWithAvatar
     }
 
     private suspend fun setupMocksForParentFolder() {
@@ -465,7 +466,7 @@ class CreateFolderViewModelTest : KoinTest {
 
         whenever(createFolderUseCase.execute(any())) doReturn
             CreateFolderUseCase.Output.Failure(
-                NetworkResult.Failure.NetworkError<Any>(Exception("Network error"), "Network error"),
+                DomainResult.Incomplete.Error(UNKNOWN, "Network error"),
             )
     }
 
@@ -480,7 +481,7 @@ class CreateFolderViewModelTest : KoinTest {
 
         whenever(folderShareInteractor.shareFolder(any(), any())) doReturn
             FolderShareInteractor.Output.ShareFailure(
-                Exception("Share failed"),
+                DomainResult.Incomplete.Error(UNKNOWN, "Share failed"),
             )
     }
 
@@ -489,8 +490,8 @@ class CreateFolderViewModelTest : KoinTest {
         private const val NEW_FOLDER_ID = "new-folder-id"
         private const val USER_ID = "user-id"
 
-        private val mockUserModel =
-            mock<UserModel>()
+        private val mockUserUiModel =
+            mock<UserUiModel>()
 
         private val mockUserWithAvatar =
             UserWithAvatar(
@@ -530,6 +531,7 @@ class CreateFolderViewModelTest : KoinTest {
                 name = "Parent Folder",
                 isShared = false,
                 permission = ResourcePermission.OWNER,
+                modified = ZonedDateTime.now(),
             )
 
         private val mockNewFolderModel =
@@ -539,6 +541,7 @@ class CreateFolderViewModelTest : KoinTest {
                 name = "Test Folder",
                 isShared = false,
                 permission = ResourcePermission.OWNER,
+                modified = ZonedDateTime.now(),
             )
 
         private val mockFolderWithAttributes =

@@ -29,32 +29,51 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.coroutinetimer.TimerFactory
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
-import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
-import net.svaroh.passly.common.search.SearchableMatcher
+import net.svaroh.passly.common.time.TimeProvider
+import net.svaroh.passly.common.urimatcher.AutofillUriMatcher
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.commontest.coroutinetimer.TestCoroutineTimerFactory
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.otpcore.TotpParametersProvider
-import net.svaroh.passly.core.resources.actions.ResourceUpdateActionsInteractorFactory
-import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractorFactory
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourcesUseCase
-import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.core.otpcore.TotpParametersProvider.OtpParametersResult.OtpParameters
+import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.AVATAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.CLEAR
-import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseCreateResourceMenu
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
+import net.svaroh.passly.domain.metadata.interactor.ResourceAccessInteractor
+import net.svaroh.passly.domain.resources.actions.ResourceUpdateActionResult
+import net.svaroh.passly.domain.resources.actions.ResourceUpdateActionsInteractor
+import net.svaroh.passly.domain.resources.actions.ResourceUpdateActionsInteractorFactory
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractorFactory
+import net.svaroh.passly.domain.resources.actions.SecretPropertyActionResult
+import net.svaroh.passly.domain.resources.usecase.EditPermissionsConfirmationInteractor
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesUseCase
+import net.svaroh.passly.feature.home.screen.ShowSuggestedModel
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseOtpMoreMenu
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseSwitchAccount
-import net.svaroh.passly.feature.otp.screen.OtpIntent.CreatePassword
+import net.svaroh.passly.feature.otp.screen.OtpIntent.ConfirmDeleteTotp
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CreateTotp
+import net.svaroh.passly.feature.otp.screen.OtpIntent.Dispose
 import net.svaroh.passly.feature.otp.screen.OtpIntent.EditOtp
-import net.svaroh.passly.feature.otp.screen.OtpIntent.OpenCreateResourceMenu
 import net.svaroh.passly.feature.otp.screen.OtpIntent.OpenOtpMoreMenu
 import net.svaroh.passly.feature.otp.screen.OtpIntent.OtpQRScanReturned
+import net.svaroh.passly.feature.otp.screen.OtpIntent.RevealOtp
 import net.svaroh.passly.feature.otp.screen.OtpIntent.Search
 import net.svaroh.passly.feature.otp.screen.OtpIntent.SearchEndIconAction
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.InitiateDataRefresh
@@ -64,40 +83,34 @@ import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToEditResource
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.ShowSuccessSnackbar
 import net.svaroh.passly.feature.otp.screen.SnackbarSuccessType.RESOURCE_CREATED
 import net.svaroh.passly.feature.otp.screen.SnackbarSuccessType.RESOURCE_EDITED
+import net.svaroh.passly.jsonmodel.delegates.TotpSecret
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathJsonPathOps
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathsOps
-import net.svaroh.passly.mappers.OtpModelMapper
-import net.svaroh.passly.metadata.interactor.MetadataPrivateKeysHelperInteractor
-import net.svaroh.passly.metadata.usecase.CanCreateResourceUseCase
-import net.svaroh.passly.ui.LeadingContentType.PASSWORD
 import net.svaroh.passly.ui.LeadingContentType.TOTP
 import net.svaroh.passly.ui.MetadataJsonModel
 import net.svaroh.passly.ui.OtpItemWrapper
-import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.ui.ResourceUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.parameter.parametersOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.get
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import java.time.ZonedDateTime
 import java.util.EnumSet
@@ -116,14 +129,34 @@ class OtpViewModelTest : KoinTest {
                         single { mock<GetSelectedAccountDataUseCase>() }
                         single { mock<GetLocalResourcesUseCase>() }
                         single { mock<TotpParametersProvider>() }
-                        single { mock<ResourceTypeIdToSlugMappingProvider>() }
                         single { mock<MetadataPrivateKeysHelperInteractor>() }
-                        single { mock<CanCreateResourceUseCase>() }
+                        single { mock<ResourceAccessInteractor>() }
                         single { mock<ResourceUpdateActionsInteractorFactory>() }
+                        single { mock<EditPermissionsConfirmationInteractor>() }
+                        single { mock<ResourceUpdateActionsInteractor>() }
                         single { mock<SecretPropertiesActionsInteractorFactory>() }
+                        single { mock<AutofillUriMatcher>() }
+                        single { mock<TimeProvider>() }
                         singleOf(::TestCoroutineTimerFactory) bind TimerFactory::class
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
-                        factoryOf(::OtpViewModel)
+                        factory { (showSuggestedModel: ShowSuggestedModel) ->
+                            OtpViewModel(
+                                showSuggestedModel = showSuggestedModel,
+                                getSelectedAccountDataUseCase = get(),
+                                getLocalResourcesUseCase = get(),
+                                totpParametersProvider = get(),
+                                coroutineLaunchContext = get(),
+                                dataRefreshTrackingFlow = get(),
+                                metadataPrivateKeysHelperInteractor = get(),
+                                timerFactory = get(),
+                                resourceAccessInteractor = get(),
+                                resourceUpdateActionsInteractorFactory = get(),
+                                editPermissionsConfirmationInteractor = get(),
+                                secretPropertiesActionsInteractorFactory = get(),
+                                autofillUriMatcher = get(),
+                                timeProvider = get(),
+                            )
+                        }
                         singleOf(::JsonPathJsonPathOps) bind JsonPathsOps::class
                         single {
                             Configuration
@@ -133,8 +166,6 @@ class OtpViewModelTest : KoinTest {
                                 .options(EnumSet.noneOf(Option::class.java))
                                 .build()
                         }
-                        factoryOf(::OtpModelMapper)
-                        factoryOf(::SearchableMatcher)
                         singleOf(::DataRefreshTrackingFlow)
                         singleOf(::SessionRefreshTrackingFlow)
                     },
@@ -154,13 +185,15 @@ class OtpViewModelTest : KoinTest {
 
         val getLocalResourcesUseCase = get<GetLocalResourcesUseCase>()
         getLocalResourcesUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalResourcesUseCase.Output(otpResources)
+            on { execute(any()) } doReturn GetLocalResourcesUseCase.Output(otpResources)
         }
 
-        val canCreateResourceUseCase = get<CanCreateResourceUseCase>()
-        canCreateResourceUseCase.stub {
-            onBlocking { execute(any()) } doReturn
-                CanCreateResourceUseCase.Output(canCreateResource = true)
+        get<ResourceAccessInteractor>().stub {
+            on { canCreateResource(anyOrNull()) } doReturn true
+        }
+
+        get<EditPermissionsConfirmationInteractor>().stub {
+            on { shouldConfirmPermissions(any()) } doReturn false
         }
     }
 
@@ -170,24 +203,9 @@ class OtpViewModelTest : KoinTest {
     }
 
     @Test
-    fun `should be able to open and close create resource`() =
-        runTest {
-            viewModel = get()
-
-            viewModel.onIntent(OpenCreateResourceMenu)
-
-            viewModel.viewState.test {
-                assertThat(awaitItem().showCreateResourceBottomSheet).isTrue()
-
-                viewModel.onIntent(CloseCreateResourceMenu)
-                assertThat(awaitItem().showCreateResourceBottomSheet).isFalse()
-            }
-        }
-
-    @Test
     fun `should be able to open and close switch account`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.onIntent(SearchEndIconAction)
 
@@ -202,7 +220,7 @@ class OtpViewModelTest : KoinTest {
     @Test
     fun `should be able to open and close otp menu`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.onIntent(OpenOtpMoreMenu(clickedOtp))
 
@@ -220,15 +238,20 @@ class OtpViewModelTest : KoinTest {
     @Test
     fun `avatar should change to clear after search query entered and come back when cleared`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.onIntent(Search("abc"))
+            advanceUntilIdle()
 
-            viewModel.viewState.drop(1).test {
-                assertThat(awaitItem().searchInputEndIconMode).isEqualTo(CLEAR)
+            viewModel.viewState.test {
+                val searchedState = awaitItem()
+                assertThat(searchedState.searchInputEndIconMode).isEqualTo(CLEAR)
+                assertThat(searchedState.searchQuery).isEqualTo("abc")
 
                 viewModel.onIntent(SearchEndIconAction)
-                val state = awaitItem()
+                advanceUntilIdle()
+
+                val state = expectMostRecentItem()
                 assertThat(state.searchQuery).isEmpty()
                 assertThat(state.searchInputEndIconMode).isEqualTo(AVATAR)
             }
@@ -237,22 +260,100 @@ class OtpViewModelTest : KoinTest {
     @Test
     fun `should enter filtering mode on search query`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.onIntent(Search("resource 2"))
+            advanceUntilIdle()
 
-            viewModel.viewState.drop(1).test {
+            viewModel.viewState.test {
                 val state = awaitItem()
                 assertThat(state.searchQuery).isEqualTo("resource 2")
                 assertThat(state.searchInputEndIconMode).isEqualTo(CLEAR)
                 assertThat(state.isInFilteringMode).isTrue()
+                assertThat(state.isSearching).isFalse()
             }
         }
 
     @Test
+    fun `should mark searching and keep previous results until the query is applied`() =
+        runTest {
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
+            advanceUntilIdle()
+            val otpsBeforeSearch = viewModel.viewState.value.uiOtps
+
+            viewModel.onIntent(Search("resource 2"))
+
+            val searchingState = viewModel.viewState.value
+            assertThat(searchingState.isSearching).isTrue()
+            assertThat(searchingState.isInFilteringMode).isFalse()
+            assertThat(searchingState.uiOtps).isEqualTo(otpsBeforeSearch)
+
+            advanceUntilIdle()
+
+            val appliedState = viewModel.viewState.value
+            assertThat(appliedState.isSearching).isFalse()
+            assertThat(appliedState.isInFilteringMode).isTrue()
+        }
+
+    @Test
+    fun `should reveal otp on filtered list when search query is active`() =
+        runTest {
+            mockSuccessfulTotpFetch()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
+
+            viewModel.onIntent(Search("resource"))
+            advanceUntilIdle()
+            viewModel.onIntent(RevealOtp(otpResources.first()))
+
+            viewModel.viewState.test {
+                val state = expectMostRecentItem()
+                assertThat(state.isInFilteringMode).isTrue()
+                val revealedItem = state.uiOtps.first { it.resource.resourceId == otpResources.first().resourceId }
+                assertThat(revealedItem.isVisible).isTrue()
+                assertThat(revealedItem.otpValue).isEqualTo(OTP_VALUE)
+            }
+        }
+
+    @Test
+    fun `should reset revealed otp but keep search filter on dispose`() =
+        runTest {
+            mockSuccessfulTotpFetch()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
+
+            viewModel.onIntent(Search("resource"))
+            advanceUntilIdle()
+            viewModel.onIntent(RevealOtp(otpResources.first()))
+
+            viewModel.viewState.test {
+                assertThat(expectMostRecentItem().uiOtps.any { it.isVisible }).isTrue()
+
+                viewModel.onIntent(Dispose)
+
+                val state = expectMostRecentItem()
+                assertThat(state.searchQuery).isEqualTo("resource")
+                assertThat(state.isInFilteringMode).isTrue()
+                assertThat(state.otps.none { it.isVisible }).isTrue()
+                assertThat(state.filteredOtps.none { it.isVisible }).isTrue()
+            }
+        }
+
+    private fun mockSuccessfulTotpFetch(otpFlow: Flow<SecretPropertyActionResult<TotpSecret>> = flowOf(totpFetchSuccess)) {
+        val secretPropertiesActionsInteractor =
+            mock<SecretPropertiesActionsInteractor> {
+                on { provideOtp() } doReturn otpFlow
+            }
+        val secretPropertiesActionsInteractorFactory = get<SecretPropertiesActionsInteractorFactory>()
+        whenever(secretPropertiesActionsInteractorFactory.create(any())) doReturn secretPropertiesActionsInteractor
+
+        val totpParametersProvider = get<TotpParametersProvider>()
+        whenever(totpParametersProvider.provideOtpParameters(any(), any(), any(), any())) doReturn
+            OtpParameters(OTP_VALUE, secondsValid = 25)
+    }
+
+    @Test
     fun `should show refresh while resources are loading`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.viewState.drop(1).test {
                 val dataRefreshStatusFlow = get<DataRefreshTrackingFlow>()
@@ -270,7 +371,7 @@ class OtpViewModelTest : KoinTest {
     @Test
     fun `should initialize with avatar URL`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.viewState.test {
                 val state = awaitItem()
@@ -280,23 +381,9 @@ class OtpViewModelTest : KoinTest {
         }
 
     @Test
-    fun `should navigate to create resource form when create password intent is received`() =
-        runTest {
-            viewModel = get()
-
-            viewModel.sideEffect.test {
-                viewModel.onIntent(CreatePassword)
-
-                val sideEffect = awaitItem()
-                assertIs<NavigateToCreateResourceForm>(sideEffect)
-                assertThat(sideEffect.leadingContentType).isEqualTo(PASSWORD)
-            }
-        }
-
-    @Test
     fun `should navigate to create totp screen when create totp intent is received`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(CreateTotp)
@@ -309,7 +396,7 @@ class OtpViewModelTest : KoinTest {
     @Test
     fun `should process otp scan result with successful creation`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.onIntent(OtpQRScanReturned(otpCreated = true, otpManualCreationChosen = false))
 
@@ -321,7 +408,7 @@ class OtpViewModelTest : KoinTest {
     @Test
     fun `should process otp scan result with manual creation chosen`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(OtpQRScanReturned(otpCreated = false, otpManualCreationChosen = true))
@@ -335,7 +422,7 @@ class OtpViewModelTest : KoinTest {
     @Test
     fun `should process resource form result with created resource`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(
@@ -358,7 +445,7 @@ class OtpViewModelTest : KoinTest {
     @Test
     fun `should process resource form result with edited resource`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(
@@ -380,7 +467,7 @@ class OtpViewModelTest : KoinTest {
     @Test
     fun `should navigate to edit resource form when edit otp intent is received`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.sideEffect.test {
                 viewModel.onIntent(EditOtp(clickedOtp))
@@ -395,7 +482,7 @@ class OtpViewModelTest : KoinTest {
     @Test
     fun `should show delete confirmation dialog when delete otp intent is received`() =
         runTest {
-            viewModel = get()
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.onIntent(OtpIntent.DeleteOtp(clickedOtp))
 
@@ -407,20 +494,64 @@ class OtpViewModelTest : KoinTest {
         }
 
     @Test
-    fun `should show error when resource creation not possible`() =
+    fun `deleting totp from a shared combined resource should navigate to permissions confirmation`() =
         runTest {
-            val canCreateResourceUseCase = get<CanCreateResourceUseCase>()
-            whenever(canCreateResourceUseCase.execute(any())) doReturn
-                CanCreateResourceUseCase.Output(canCreateResource = false)
-
-            viewModel = get()
+            get<EditPermissionsConfirmationInteractor>().stub {
+                on { shouldConfirmPermissions(combinedTotpResource.resourceId) } doReturn true
+            }
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
 
             viewModel.sideEffect.test {
-                viewModel.onIntent(CreatePassword)
-                val stateAfterCreatePassword = awaitItem()
-                assertIs<OtpSideEffect.ShowErrorSnackbar>(stateAfterCreatePassword)
-                assertThat(stateAfterCreatePassword.type).isEqualTo(SnackbarErrorType.NO_SHARED_KEY_ACCESS)
+                viewModel.onIntent(OpenOtpMoreMenu(combinedTotpWrapper))
+                viewModel.onIntent(ConfirmDeleteTotp)
 
+                assertThat(awaitItem()).isEqualTo(
+                    OtpSideEffect.NavigateToConfirmPermissions(combinedTotpResource.resourceId),
+                )
+            }
+            verifyNoInteractions(get<ResourceUpdateActionsInteractorFactory>())
+        }
+
+    @Test
+    fun `confirmed permissions should delete totp with the confirmed list`() =
+        runTest {
+            get<EditPermissionsConfirmationInteractor>().stub {
+                on { shouldConfirmPermissions(combinedTotpResource.resourceId) } doReturn true
+            }
+            get<ResourceUpdateActionsInteractorFactory>().stub {
+                on { create(any()) } doReturn get<ResourceUpdateActionsInteractor>()
+            }
+            get<ResourceUpdateActionsInteractor>().stub {
+                on {
+                    updateGenericResourceWithConfirmedPermissions(eq(UpdateAction.REMOVE_TOTP), any(), any(), any())
+                } doReturn flowOf(ResourceUpdateActionResult.Success(combinedTotpResource.resourceId, "name"))
+            }
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(OpenOtpMoreMenu(combinedTotpWrapper))
+                viewModel.onIntent(ConfirmDeleteTotp)
+                awaitItem()
+
+                viewModel.onIntent(OtpIntent.ConfirmedPermissionsResult(emptyList()))
+
+                assertThat(awaitItem()).isEqualTo(ShowSuccessSnackbar(SnackbarSuccessType.RESOURCE_DELETED))
+                assertThat(awaitItem()).isEqualTo(InitiateDataRefresh)
+            }
+            verify(get<ResourceUpdateActionsInteractor>())
+                .updateGenericResourceWithConfirmedPermissions(eq(UpdateAction.REMOVE_TOTP), any(), any(), any())
+        }
+
+    @Test
+    fun `should show error when resource creation not possible`() =
+        runTest {
+            get<ResourceAccessInteractor>().stub {
+                on { canCreateResource(anyOrNull()) } doReturn false
+            }
+
+            viewModel = get { parametersOf(ShowSuggestedModel.DoNotShow) }
+
+            viewModel.sideEffect.test {
                 viewModel.onIntent(CreateTotp)
                 val stateAfterCreateTotp = awaitItem()
                 assertIs<OtpSideEffect.ShowErrorSnackbar>(stateAfterCreateTotp)
@@ -429,6 +560,21 @@ class OtpViewModelTest : KoinTest {
         }
 
     private companion object {
+        private const val OTP_VALUE = "123456"
+
+        private val totpFetchSuccess by lazy {
+            SecretPropertyActionResult.Success(
+                SecretPropertiesActionsInteractor.OTP_LABEL,
+                isSecret = true,
+                TotpSecret(
+                    algorithm = "SHA1",
+                    key = "JBSWY3DPEHPK3PXP",
+                    digits = 6,
+                    period = 30L,
+                ),
+            )
+        }
+
         private val selectedAccountData =
             GetSelectedAccountDataUseCase.Output(
                 firstName = "John",
@@ -443,9 +589,10 @@ class OtpViewModelTest : KoinTest {
 
         private val otpResources by lazy {
             listOf(
-                ResourceModel(
+                ResourceUiModel(
                     resourceId = "resId",
                     resourceTypeId = "resTypeId",
+                    slug = "password-and-description",
                     folderId = null,
                     permission = ResourcePermission.READ,
                     favouriteId = null,
@@ -465,9 +612,10 @@ class OtpViewModelTest : KoinTest {
                     metadataKeyId = null,
                     metadataKeyType = null,
                 ),
-                ResourceModel(
+                ResourceUiModel(
                     resourceId = "resId2",
                     resourceTypeId = "resTypeId",
+                    slug = "password-and-description",
                     folderId = null,
                     permission = ResourcePermission.READ,
                     favouriteId = null,
@@ -487,6 +635,20 @@ class OtpViewModelTest : KoinTest {
                     metadataKeyId = null,
                     metadataKeyType = null,
                 ),
+            )
+        }
+
+        private val combinedTotpResource by lazy {
+            otpResources.first().copy(slug = "password-description-totp")
+        }
+
+        private val combinedTotpWrapper by lazy {
+            OtpItemWrapper(
+                combinedTotpResource,
+                isVisible = false,
+                isRefreshing = false,
+                otpExpirySeconds = null,
+                otpValue = null,
             )
         }
 

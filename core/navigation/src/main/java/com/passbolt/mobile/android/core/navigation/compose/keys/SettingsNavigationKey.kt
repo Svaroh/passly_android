@@ -57,6 +57,9 @@ sealed interface SettingsNavigationKey : NavKey {
     data object ExpertSettings : SettingsNavigationKey
 
     @Serializable
+    data object PageSize : SettingsNavigationKey
+
+    @Serializable
     data class EncourageNativeAutofill(
         val dismissBehavior: DismissBehavior,
     ) : SettingsNavigationKey

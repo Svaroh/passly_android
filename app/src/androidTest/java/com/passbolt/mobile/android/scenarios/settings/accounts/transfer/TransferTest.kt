@@ -40,6 +40,7 @@ import net.svaroh.passly.core.navigation.AppContext
 import net.svaroh.passly.feature.authentication.AuthenticationMainActivity
 import net.svaroh.passly.helpers.getString
 import net.svaroh.passly.helpers.signIn
+import net.svaroh.passly.helpers.waitForText
 import net.svaroh.passly.instrumentationTestsModule
 import net.svaroh.passly.intents.ManagedAccountIntentCreator
 import net.svaroh.passly.rules.IdlingResourceRule
@@ -295,6 +296,9 @@ class TransferTest : KoinTest {
             // re-authentication before start transfer
             onNodeWithTag(Auth.PASSPHRASE_INPUT).performTextReplacement(managedAccountIntentCreator.getPassphrase())
             onNodeWithTag(Auth.SIGN_IN_BUTTON).performClick()
+            // The transferring screen (QR code + "Cancel transfer") is composed asynchronously after
+            // re-authentication; wait for it before asserting on it or interacting with it.
+            waitForText(getString(LocalizationR.string.transfer_account_cancel_button))
         }
     }
 

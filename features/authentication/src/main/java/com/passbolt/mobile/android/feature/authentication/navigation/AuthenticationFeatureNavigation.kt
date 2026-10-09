@@ -1,6 +1,7 @@
 package net.svaroh.passly.feature.authentication.navigation
 
-import PassboltTheme
+import net.svaroh.passly.core.compose.PassboltTheme
+import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.LocalAuthenticationParams
 import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
@@ -50,6 +51,7 @@ class AuthenticationFeatureNavigation : FeatureModuleNavigation {
             entry<MfaTotp> { key ->
                 val resultBus = NavigationResultEventBus.current
                 val navigator: AppNavigator = koinInject()
+                val params = LocalAuthenticationParams.current
                 PassboltTheme {
                     EnterTotpScreen(
                         mfaState = MfaDialogState.Totp(key.authToken, key.hasOtherProviders),
@@ -57,6 +59,7 @@ class AuthenticationFeatureNavigation : FeatureModuleNavigation {
                             resultBus.sendResult<MfaResult>(result = it)
                             navigator.navigateBack()
                         },
+                        isSetupFlow = params.authConfig is AuthConfig.Setup,
                     )
                 }
             }
@@ -64,6 +67,7 @@ class AuthenticationFeatureNavigation : FeatureModuleNavigation {
             entry<MfaYubikey> { key ->
                 val resultBus = NavigationResultEventBus.current
                 val navigator: AppNavigator = koinInject()
+                val params = LocalAuthenticationParams.current
                 PassboltTheme {
                     ScanYubikeyScreen(
                         mfaState = MfaDialogState.Yubikey(key.authToken, key.hasOtherProviders),
@@ -71,6 +75,7 @@ class AuthenticationFeatureNavigation : FeatureModuleNavigation {
                             resultBus.sendResult<MfaResult>(result = it)
                             navigator.navigateBack()
                         },
+                        isSetupFlow = params.authConfig is AuthConfig.Setup,
                     )
                 }
             }
@@ -78,6 +83,7 @@ class AuthenticationFeatureNavigation : FeatureModuleNavigation {
             entry<MfaDuo> { key ->
                 val resultBus = NavigationResultEventBus.current
                 val navigator: AppNavigator = koinInject()
+                val params = LocalAuthenticationParams.current
                 PassboltTheme {
                     AuthWithDuoScreen(
                         mfaState = MfaDialogState.Duo(key.authToken, key.hasOtherProviders),
@@ -85,6 +91,7 @@ class AuthenticationFeatureNavigation : FeatureModuleNavigation {
                             resultBus.sendResult<MfaResult>(result = it)
                             navigator.navigateBack()
                         },
+                        isSetupFlow = params.authConfig is AuthConfig.Setup,
                     )
                 }
             }

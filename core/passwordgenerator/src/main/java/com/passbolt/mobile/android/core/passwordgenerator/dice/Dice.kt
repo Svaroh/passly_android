@@ -23,14 +23,14 @@
 
 package net.svaroh.passly.core.passwordgenerator.dice
 
-import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.ui.CaseTypeModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.ui.CaseTypeUiModel
 import org.jetbrains.annotations.VisibleForTesting
 import java.io.InputStream
 import java.security.SecureRandom
@@ -93,7 +93,7 @@ class Dice(
     // https://www.eff.org/dice; use long words list
     suspend fun generatePassphrase(
         wordsCount: Int,
-        case: CaseTypeModel,
+        case: CaseTypeUiModel,
         wordsSeparator: String = DEFAULT_WORD_SEPARATOR,
         diceCount: Int = DEFAULT_DICE_COUNT,
     ): String {
@@ -109,9 +109,9 @@ class Dice(
                         .let { getWord(it) }
                 result.add(
                     when (case) {
-                        CaseTypeModel.UPPERCASE -> word.uppercase()
-                        CaseTypeModel.LOWERCASE -> word.lowercase()
-                        CaseTypeModel.CAMELCASE -> word.replaceFirstChar { it.uppercase() }
+                        CaseTypeUiModel.UPPERCASE -> word.uppercase()
+                        CaseTypeUiModel.LOWERCASE -> word.lowercase()
+                        CaseTypeUiModel.CAMELCASE -> word.replaceFirstChar { it.uppercase() }
                     },
                 )
             }

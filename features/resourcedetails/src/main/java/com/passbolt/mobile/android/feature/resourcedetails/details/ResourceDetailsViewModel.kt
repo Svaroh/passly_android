@@ -24,6 +24,10 @@
 package net.svaroh.passly.feature.resourcedetails.details
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.coroutinetimer.TimerFactory
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
@@ -31,28 +35,30 @@ import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.common.types.ClipboardLabel
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderLocationUseCase
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.idlingresource.ResourceDetailActionIdlingResource
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.otpcore.TotpParametersProvider
 import net.svaroh.passly.core.otpcore.TotpParametersProvider.OtpParametersResult.OtpParameters
-import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
-import net.svaroh.passly.core.resources.actions.ResourceCommonActionsInteractor
-import net.svaroh.passly.core.resources.actions.ResourcePropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.performCommonResourceAction
-import net.svaroh.passly.core.resources.actions.performResourcePropertyAction
-import net.svaroh.passly.core.resources.actions.performSecretPropertyAction
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourcePermissionsUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceTagsUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
-import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderLocationUseCase
+import net.svaroh.passly.domain.metadata.usecase.CanShareResourceUseCase
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.resources.actions.ResourceCommonActionsInteractor
+import net.svaroh.passly.domain.resources.actions.ResourcePropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.performCommonResourceAction
+import net.svaroh.passly.domain.resources.actions.performResourcePropertyAction
+import net.svaroh.passly.domain.resources.actions.performSecretPropertyAction
+import net.svaroh.passly.domain.resources.mapper.toOtpItemWrapper
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcePermissionsUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceTagsUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
 import net.svaroh.passly.entity.featureflags.FeatureFlagsModel
 import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.CANNOT_PERFORM_ACTION
 import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.DECRYPTION_FAILURE
 import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.FETCH_FAILURE
 import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.GENERAL_ERROR
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.INVALID_TOTP_PARAMETERS
 import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.TOGGLE_FAVOURITE_FAILURE
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CloseDeleteConfirmationDialog
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CloseMoreMenu
@@ -61,6 +67,7 @@ import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.C
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyMetadataDescription
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyNote
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyPassword
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyPinCode
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyTotp
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyUrl
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyUsername
@@ -80,6 +87,7 @@ import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.T
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ToggleFavourite
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ToggleNoteVisibility
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.TogglePasswordVisibility
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.TogglePinCodeVisibility
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ToggleTotpVisibility
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ViewPermissions
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.AddToClipboard
@@ -97,10 +105,7 @@ import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffe
 import net.svaroh.passly.feature.resourcedetails.details.SuccessSnackbarType.RESOURCE_EDITED
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import net.svaroh.passly.jsonmodel.delegates.TotpSecret
-import net.svaroh.passly.mappers.OtpModelMapper
 import net.svaroh.passly.mappers.ResourceFormMapper
-import net.svaroh.passly.metadata.usecase.CanShareResourceUseCase
-import net.svaroh.passly.supportedresourceTypes.ContentType
 import net.svaroh.passly.ui.CustomFieldModel.BooleanCustomField
 import net.svaroh.passly.ui.CustomFieldModel.NumberCustomField
 import net.svaroh.passly.ui.CustomFieldModel.PasswordCustomField
@@ -109,13 +114,10 @@ import net.svaroh.passly.ui.CustomFieldModel.UriCustomField
 import net.svaroh.passly.ui.PermissionsMode
 import net.svaroh.passly.ui.RbacModel
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
-import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourceMoreMenuModel
+import net.svaroh.passly.ui.ResourceUiModel
+import net.svaroh.passly.ui.contentType
 import net.svaroh.passly.ui.isExpired
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
@@ -123,7 +125,7 @@ import timber.log.Timber
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 
-@Suppress("LargeClass")
+@Suppress("LargeClass", "TooManyFunctions")
 class ResourceDetailsViewModel(
     private val getFeatureFlagsUseCase: GetFeatureFlagsUseCase,
     private val getLocalResourceUseCase: GetLocalResourceUseCase,
@@ -131,8 +133,6 @@ class ResourceDetailsViewModel(
     private val getLocalResourceTagsUseCase: GetLocalResourceTagsUseCase,
     private val getLocalFolderLocation: GetLocalFolderLocationUseCase,
     private val totpParametersProvider: TotpParametersProvider,
-    private val otpModelMapper: OtpModelMapper,
-    private val idToSlugMappingProvider: ResourceTypeIdToSlugMappingProvider,
     private val getRbacRulesUseCase: GetRbacRulesUseCase,
     private val resourceDetailActionIdlingResource: ResourceDetailActionIdlingResource,
     private val canShareResourceUseCase: CanShareResourceUseCase,
@@ -151,7 +151,7 @@ class ResourceDetailsViewModel(
 
     private val missingItemExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
-            if (throwable is NullPointerException) {
+            if (throwable is IllegalStateException) {
                 emitSideEffect(ShowToast(ToastType.CONTENT_NOT_AVAILABLE))
                 emitSideEffect(NavigateBack)
             }
@@ -160,7 +160,7 @@ class ResourceDetailsViewModel(
     private var dataRefreshJob: Job? = null
     private var otpTimerJob: Job? = null
 
-    private val resource: ResourceModel
+    private val resource: ResourceUiModel
         get() = viewState.value.requiredResourceModel
 
     @Suppress("CyclomaticComplexMethod")
@@ -175,10 +175,12 @@ class ResourceDetailsViewModel(
             CopyMetadataDescription -> copyMetadataDescription()
             CopyNote -> copyNote()
             CopyTotp -> copyTotp()
+            CopyPinCode -> copyPinCode()
             is CopyCustomField -> copyCustomField(intent.key)
             TogglePasswordVisibility -> togglePasswordVisibility()
             ToggleNoteVisibility -> toggleNoteVisibility()
             ToggleTotpVisibility -> toggleTotpVisibility()
+            TogglePinCodeVisibility -> togglePinCodeVisibility()
             is ToggleCustomField -> toggleCustomFieldVisibility(intent.key)
             GoToTags -> goToTags()
             GoToLocation -> goToLocation()
@@ -197,7 +199,7 @@ class ResourceDetailsViewModel(
         }
     }
 
-    private fun initialize(resourceModel: ResourceModel) {
+    private fun initialize(resourceModel: ResourceUiModel) {
         updateViewState { copy(resourceData = resourceData.copy(resourceModel = resourceModel)) }
 
         viewModelScope.launch(coroutineLaunchContext.io + missingItemExceptionHandler) {
@@ -206,7 +208,7 @@ class ResourceDetailsViewModel(
 
         dataRefreshJob?.cancel()
         dataRefreshJob =
-            viewModelScope.launch(coroutineLaunchContext.io) {
+            viewModelScope.launch(coroutineLaunchContext.io + missingItemExceptionHandler) {
                 synchronizeWithDataRefresh()
             }
 
@@ -218,34 +220,36 @@ class ResourceDetailsViewModel(
     }
 
     private suspend fun loadResourceDetails() {
-        // Wait for data refresh if in progress and refresh resource afterwards
-        if (dataRefreshTrackingFlow.isInProgress()) {
-            dataRefreshTrackingFlow.awaitIdle()
-            val refreshedResource =
-                getLocalResourceUseCase
-                    .execute(GetLocalResourceUseCase.Input(resource.resourceId))
-                    .resource
-            updateViewState { copy(resourceData = resourceData.copy(resourceModel = refreshedResource)) }
-        }
-
         val featureFlags = getFeatureFlagsUseCase.execute(Unit).featureFlags
         val rbac = getRbacRulesUseCase.execute(Unit).rbacModel
 
         loadAndDisplayResource(rbac, featureFlags)
+        if (dataRefreshTrackingFlow.isInProgress()) {
+            dataRefreshTrackingFlow.awaitIdle()
+            reloadAndDisplayResource(rbac, featureFlags)
+        }
         loadAndDisplayPermissions(rbac)
         loadAndDisplayTags(rbac, featureFlags)
         loadAndDisplayLocation(rbac)
+    }
+
+    private suspend fun reloadAndDisplayResource(
+        rbac: RbacModel,
+        featureFlags: FeatureFlagsModel,
+    ) {
+        val refreshedResource =
+            getLocalResourceUseCase
+                .execute(GetLocalResourceUseCase.Input(resource.resourceId))
+                .resource
+        updateViewState { copy(resourceData = resourceData.copy(resourceModel = refreshedResource)) }
+        loadAndDisplayResource(rbac, featureFlags)
     }
 
     private suspend fun loadAndDisplayResource(
         rbac: RbacModel,
         featureFlags: FeatureFlagsModel,
     ) {
-        val slug =
-            idToSlugMappingProvider.provideMappingForSelectedAccount()[
-                UUID.fromString(resource.resourceTypeId),
-            ]
-        val contentType = ContentType.fromSlug(slug!!)
+        val contentType = resource.contentType()
 
         performResourcePropertyAction(
             action = { resourcePropertiesActionsInteractor.provideMainUri() },
@@ -283,11 +287,15 @@ class ResourceDetailsViewModel(
                 totpData =
                     totpData.copy(
                         showTotpSection = contentType.hasTotp(),
-                        totpModel = otpModelMapper.map(resource),
+                        totpModel = resource.toOtpItemWrapper(),
                     ),
                 noteData =
                     noteData.copy(
                         showNoteSection = contentType.hasNote(),
+                    ),
+                pinCodeData =
+                    pinCodeData.copy(
+                        showPinCodeSection = contentType.hasPinCode(),
                     ),
             )
         }
@@ -369,7 +377,7 @@ class ResourceDetailsViewModel(
     private suspend fun synchronizeWithDataRefresh() {
         dataRefreshTrackingFlow.dataRefreshStatusFlow.collect { status ->
             when (status) {
-                InProgress -> updateViewState { copy(isRefreshing = true) }
+                is InProgress -> updateViewState { copy(isRefreshing = true, refreshProgress = status.progress) }
                 FinishedWithFailure -> {
                     emitSideEffect(ShowErrorSnackbar(ErrorSnackbarType.DATA_REFRESH_ERROR))
                     updateViewState { copy(isRefreshing = false) }
@@ -385,7 +393,7 @@ class ResourceDetailsViewModel(
                             resourceData = resourceData.copy(resourceModel = refreshedResource),
                         )
                     }
-                    viewModelScope.launch { loadResourceDetails() }
+                    viewModelScope.launch(missingItemExceptionHandler) { loadResourceDetails() }
                 }
                 NotCompleted -> {
                     // do nothing
@@ -434,7 +442,7 @@ class ResourceDetailsViewModel(
     private fun openMoreMenu() {
         updateViewState {
             copy(
-                totpData = totpData.copy(totpModel = otpModelMapper.map(resource)),
+                totpData = totpData.copy(totpModel = resource.toOtpItemWrapper()),
                 showMoreMenu = true,
             )
         }
@@ -505,6 +513,19 @@ class ResourceDetailsViewModel(
         resourceDetailActionIdlingResource.setIdle(false)
         doAfterOtpFetchAndDecrypt { label, _, otpParameters ->
             emitSideEffect(AddToClipboard(label, otpParameters.otpValue, isSecret = true))
+            resourceDetailActionIdlingResource.setIdle(true)
+        }
+    }
+
+    private fun copyPinCode() {
+        resourceDetailActionIdlingResource.setIdle(false)
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            performSecretPropertyAction(
+                action = { secretPropertiesActionsInteractor.providePinCode() },
+                doOnFetchFailure = { emitSideEffect(ShowErrorSnackbar(FETCH_FAILURE)) },
+                doOnDecryptionFailure = { emitSideEffect(ShowErrorSnackbar(DECRYPTION_FAILURE)) },
+                doOnSuccess = { emitSideEffect(AddToClipboard(it.label, it.result, it.isSecret)) },
+            )
             resourceDetailActionIdlingResource.setIdle(true)
         }
     }
@@ -616,15 +637,51 @@ class ResourceDetailsViewModel(
         }
     }
 
+    private fun togglePinCodeVisibility() {
+        val isCurrentlyVisible = viewState.value.pinCodeData.isPinCodeVisible
+        if (isCurrentlyVisible) {
+            updateViewState {
+                copy(
+                    pinCodeData =
+                        pinCodeData.copy(
+                            isPinCodeVisible = false,
+                            pinCode = "",
+                        ),
+                )
+            }
+        } else {
+            resourceDetailActionIdlingResource.setIdle(false)
+            viewModelScope.launch(coroutineLaunchContext.io) {
+                performSecretPropertyAction(
+                    action = { secretPropertiesActionsInteractor.providePinCode() },
+                    doOnDecryptionFailure = { emitSideEffect(ShowErrorSnackbar(DECRYPTION_FAILURE)) },
+                    doOnFetchFailure = { emitSideEffect(ShowErrorSnackbar(FETCH_FAILURE)) },
+                    doOnSuccess = {
+                        updateViewState {
+                            copy(
+                                pinCodeData =
+                                    pinCodeData.copy(
+                                        isPinCodeVisible = true,
+                                        pinCode = it.result,
+                                    ),
+                            )
+                        }
+                    },
+                )
+                resourceDetailActionIdlingResource.setIdle(true)
+            }
+        }
+    }
+
     private fun toggleTotpVisibility() {
         val currentOtpModel = viewState.value.totpData.totpModel
         if (currentOtpModel?.isVisible == true) {
-            updateViewState { copy(totpData = totpData.copy(totpModel = otpModelMapper.map(resource))) }
+            updateViewState { copy(totpData = totpData.copy(totpModel = resource.toOtpItemWrapper())) }
         } else {
             resourceDetailActionIdlingResource.setIdle(false)
             updateViewState {
                 copy(
-                    totpData = totpData.copy(totpModel = otpModelMapper.map(resource).copy(isRefreshing = true)),
+                    totpData = totpData.copy(totpModel = resource.toOtpItemWrapper().copy(isRefreshing = true)),
                 )
             }
 
@@ -634,7 +691,7 @@ class ResourceDetailsViewModel(
                         totpData =
                             totpData.copy(
                                 totpModel =
-                                    otpModelMapper.map(resource).copy(
+                                    resource.toOtpItemWrapper().copy(
                                         otpValue = otpParameters.otpValue,
                                         isVisible = true,
                                         otpExpirySeconds = otp.period,
@@ -734,7 +791,7 @@ class ResourceDetailsViewModel(
 
     private fun toggleFavourite(option: ResourceMoreMenuModel.FavouriteOption) {
         resourceDetailActionIdlingResource.setIdle(false)
-        viewModelScope.launch(coroutineLaunchContext.io) {
+        viewModelScope.launch(coroutineLaunchContext.io + missingItemExceptionHandler) {
             updateViewState { copy(isLoading = true) }
             performCommonResourceAction(
                 action = { resourceCommonActionsInteractor.toggleFavourite(option) },
@@ -756,13 +813,13 @@ class ResourceDetailsViewModel(
     }
 
     private fun handleResourceEdited(resourceName: String?) {
-        viewModelScope.launch(coroutineLaunchContext.io) {
+        viewModelScope.launch(coroutineLaunchContext.io + missingItemExceptionHandler) {
             val refreshedResource =
                 getLocalResourceUseCase
                     .execute(GetLocalResourceUseCase.Input(resource.resourceId))
                     .resource
             updateViewState { copy(resourceData = resourceData.copy(resourceModel = refreshedResource)) }
-            viewModelScope.launch { loadResourceDetails() }
+            viewModelScope.launch(missingItemExceptionHandler) { loadResourceDetails() }
 
             emitSideEffect(ShowSuccessSnackbar(RESOURCE_EDITED))
             emitSideEffect(SetResourceEditedResult(resourceName.orEmpty()))
@@ -774,6 +831,7 @@ class ResourceDetailsViewModel(
             copy(
                 passwordData = passwordData.copy(isPasswordVisible = false, password = ""),
                 noteData = noteData.copy(isNoteVisible = false, note = ""),
+                pinCodeData = pinCodeData.copy(isPinCodeVisible = false, pinCode = ""),
                 customFieldsData = customFieldsData.copy(visibleCustomFields = emptyMap()),
             )
         }
@@ -797,9 +855,8 @@ class ResourceDetailsViewModel(
                         when (otpParametersResult) {
                             is OtpParameters -> action(it.label, it.result, otpParametersResult)
                             is TotpParametersProvider.OtpParametersResult.InvalidTotpInput -> {
-                                val error = "Invalid TOTP input"
-                                Timber.e(error)
-                                emitSideEffect(ShowErrorSnackbar(GENERAL_ERROR))
+                                Timber.e("Invalid TOTP parameters")
+                                emitSideEffect(ShowErrorSnackbar(INVALID_TOTP_PARAMETERS))
                             }
                         }
                     } else {

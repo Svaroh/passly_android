@@ -5,4 +5,5 @@ data class AuthWithDuoState(
     val hasOtherProvider: Boolean = false,
     val showDuoWebViewSheet: Boolean = false,
     val duoPromptUrl: String = "",
+    val showSetupLeaveConfirmationDialog: Boolean = false,
 )

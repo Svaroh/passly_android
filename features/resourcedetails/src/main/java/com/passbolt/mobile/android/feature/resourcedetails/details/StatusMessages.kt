@@ -6,6 +6,7 @@ import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.DATA_
 import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.DECRYPTION_FAILURE
 import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.FETCH_FAILURE
 import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.GENERAL_ERROR
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.INVALID_TOTP_PARAMETERS
 import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType.TOGGLE_FAVOURITE_FAILURE
 import net.svaroh.passly.feature.resourcedetails.details.SuccessSnackbarType.RESOURCE_EDITED
 import net.svaroh.passly.feature.resourcedetails.details.SuccessSnackbarType.RESOURCE_SHARED
@@ -31,6 +32,7 @@ internal fun getErrorSnackbarMessage(
         DATA_REFRESH_ERROR -> context.getString(LocalizationR.string.common_data_refresh_error)
         TOGGLE_FAVOURITE_FAILURE -> context.getString(LocalizationR.string.favourites_failure)
         CANNOT_PERFORM_ACTION -> context.getString(LocalizationR.string.common_lack_shared_key_access)
+        INVALID_TOTP_PARAMETERS -> context.getString(LocalizationR.string.common_invalid_totp_parameters)
     }
 
 internal fun getToastMessage(

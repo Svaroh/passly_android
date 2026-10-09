@@ -22,15 +22,15 @@
  */
 package net.svaroh.passly.feature.transferaccounttoanotherdevice.navigation
 
-import PassboltTheme
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
 import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
 import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.BrowserFirstLoginScan
 import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Onboarding
 import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.Transfer
 import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.TransferStatus
-import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryScreen
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginScanScreen
+import net.svaroh.passly.feature.transferaccounttoanotherdevice.summary.TransferAccountSummaryScreen
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountScreen
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccountonboarding.TransferAccountOnboardingScreen
 

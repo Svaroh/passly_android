@@ -25,9 +25,19 @@ package net.svaroh.passly.feature.resources.details
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
-import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.SecretPropertyActionResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
+import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.SecretPropertyActionResult
 import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyPassword
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.Initialize
@@ -37,14 +47,6 @@ import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffe
 import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsViewModel
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
 import net.svaroh.passly.ui.RbacRuleModel.DENY
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -86,7 +88,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
             val password = "secretPassword123"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn
+                on { providePassword() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -114,7 +116,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
             val password = "secretPassword123"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn
+                on { providePassword() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -144,7 +146,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
             val password = "secretPassword123"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn
+                on { providePassword() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -173,7 +175,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
         runTest {
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
+                on { providePassword() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
             }
 
             viewModel = get()
@@ -193,7 +195,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
         runTest {
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { providePassword() } doReturn flowOf(SecretPropertyActionResult.FetchFailure())
+                on { providePassword() } doReturn flowOf(SecretPropertyActionResult.FetchFailure())
             }
 
             viewModel = get()
@@ -213,7 +215,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
         runTest {
             val getFeatureFlagsUseCase: GetFeatureFlagsUseCase = get()
             getFeatureFlagsUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetFeatureFlagsUseCase.Output(
                         DEFAULT_FEATURE_FLAGS.copy(isPreviewPasswordAvailable = false),
                     )
@@ -232,7 +234,7 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
         runTest {
             val getRbacRulesUseCase: GetRbacRulesUseCase = get()
             getRbacRulesUseCase.stub {
-                onBlocking { execute(Unit) } doReturn
+                on { execute(Unit) } doReturn
                     GetRbacRulesUseCase.Output(
                         DEFAULT_RBAC.copy(passwordPreviewRule = DENY),
                     )
@@ -243,6 +245,52 @@ class ResourceDetailsPasswordViewModelTest : KoinTest {
             viewModel.viewState.drop(2).test {
                 viewModel.onIntent(Initialize(DEFAULT_RESOURCE_MODEL))
                 assertThat(awaitItem().passwordData.showPasswordEyeIcon).isFalse()
+            }
+        }
+
+    @Test
+    fun `password item and eye icon should be shown while data refresh is in progress`() =
+        runTest {
+            get<DataRefreshTrackingFlow>().updateStatus(InProgress(progress = 0.5f))
+
+            viewModel = get()
+            viewModel.onIntent(Initialize(DEFAULT_RESOURCE_MODEL))
+
+            viewModel.viewState.test {
+                val state = awaitItem()
+                assertThat(state.isRefreshing).isTrue()
+                assertThat(state.passwordData.showPasswordItem).isTrue()
+                assertThat(state.passwordData.showPasswordEyeIcon).isTrue()
+            }
+        }
+
+    @Test
+    fun `toggle password visibility should show password while data refresh is in progress`() =
+        runTest {
+            val password = "secretPassword123"
+            val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
+            secretPropertiesActionsInteractor.stub {
+                on { providePassword() } doReturn
+                    flowOf(
+                        SecretPropertyActionResult.Success(
+                            SecretPropertiesActionsInteractor.SECRET_LABEL,
+                            isSecret = true,
+                            password,
+                        ),
+                    )
+            }
+            get<DataRefreshTrackingFlow>().updateStatus(InProgress(progress = 0.5f))
+
+            viewModel = get()
+            viewModel.onIntent(Initialize(DEFAULT_RESOURCE_MODEL))
+
+            viewModel.viewState.drop(1).test {
+                viewModel.onIntent(TogglePasswordVisibility)
+
+                val state = awaitItem()
+                assertThat(state.isRefreshing).isTrue()
+                assertThat(state.passwordData.isPasswordVisible).isTrue()
+                assertThat(state.passwordData.password).isEqualTo(password)
             }
         }
 }

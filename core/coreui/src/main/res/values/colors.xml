@@ -39,4 +39,7 @@
 
     <color name="secondary_button_background">#F3F3F3</color>
     <color name="secondary_button_border">#DDDDDD</color>
+
+    <color name="upgrade_panel_background">#EAF3FA</color>
+    <color name="upgrade_panel_button_background">#FFFFFF</color>
 </resources>

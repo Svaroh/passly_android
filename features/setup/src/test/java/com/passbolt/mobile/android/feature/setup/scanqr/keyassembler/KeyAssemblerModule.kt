@@ -23,8 +23,8 @@
 
 package net.svaroh.passly.feature.setup.scanqr.keyassembler
 
-import net.svaroh.passly.feature.setup.scanqr.qrparser.KeyAssembler
 import kotlinx.serialization.json.Json
+import net.svaroh.passly.feature.setup.scanqr.qrparser.KeyAssembler
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 

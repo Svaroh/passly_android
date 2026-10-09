@@ -2,6 +2,13 @@ package net.svaroh.passly.otpmoremenu
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
@@ -15,15 +22,9 @@ import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeCopyOtp
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeDeleteOtp
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeEditOtp
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.InvokeShowOtp
+import net.svaroh.passly.otpmoremenu.OtpMoreMenuSideEffect.ShowContentNotAvailable
 import net.svaroh.passly.otpmoremenu.usecase.CreateOtpMoreMenuModelUseCase
 import net.svaroh.passly.ui.OtpMoreMenuModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -39,6 +40,7 @@ import org.koin.test.get
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stub
 import kotlin.time.ExperimentalTime
 
@@ -70,7 +72,7 @@ class OtpMoreMenuViewModelTest : KoinTest {
 
         val createOtpMoreMenuModelUseCase = get<CreateOtpMoreMenuModelUseCase>()
         createOtpMoreMenuModelUseCase.stub {
-            onBlocking { execute(any()) } doReturn
+            on { execute(any()) } doReturn
                 CreateOtpMoreMenuModelUseCase.Output(
                     OtpMoreMenuModel(
                         title = RESOURCE_NAME,
@@ -112,6 +114,29 @@ class OtpMoreMenuViewModelTest : KoinTest {
 
     @OptIn(ExperimentalTime::class)
     @Test
+    fun `should dismiss when resource for the shown menu is missing`() =
+        runTest {
+            get<CreateOtpMoreMenuModelUseCase>().stub {
+                on { execute(any()) } doThrow IllegalStateException("The query result was empty")
+            }
+            viewModel = get()
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(
+                    OtpMoreMenuIntent.Initialize(
+                        resourceId = RESOURCE_ID,
+                        resourceName = RESOURCE_NAME,
+                        canShowTotp = CAN_SHOW_TOTP,
+                    ),
+                )
+
+                assertThat(awaitItem()).isEqualTo(ShowContentNotAvailable)
+                assertThat(awaitItem()).isEqualTo(Dismiss)
+            }
+        }
+
+    @OptIn(ExperimentalTime::class)
+    @Test
     fun `should emit side effects when corresponding intents are received`() =
         runTest {
             viewModel = get()
@@ -140,7 +165,7 @@ class OtpMoreMenuViewModelTest : KoinTest {
         runTest {
             val createOtpMoreMenuModelUseCase = get<CreateOtpMoreMenuModelUseCase>()
             createOtpMoreMenuModelUseCase.stub {
-                onBlocking { execute(any()) } doReturn
+                on { execute(any()) } doReturn
                     CreateOtpMoreMenuModelUseCase.Output(
                         OtpMoreMenuModel(
                             title = RESOURCE_NAME,

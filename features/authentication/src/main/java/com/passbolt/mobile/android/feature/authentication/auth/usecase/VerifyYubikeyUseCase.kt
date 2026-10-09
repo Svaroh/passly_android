@@ -1,18 +1,12 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
-import net.svaroh.passly.common.CookieExtractor
 import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
-import net.svaroh.passly.core.mvp.authentication.AuthenticationState
-import net.svaroh.passly.core.networking.MfaTypeProvider
-import net.svaroh.passly.core.networking.NetworkResult
-import net.svaroh.passly.dto.request.HotpRequest
-import net.svaroh.passly.passboltapi.mfa.MfaRepository
-import org.json.JSONException
-import org.json.JSONObject
-import retrofit2.Response
-import java.net.HttpURLConnection.HTTP_BAD_REQUEST
-import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
+import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
+import net.svaroh.passly.core.mvp.authentication.IncompleteAuthenticatedOutput
+import net.svaroh.passly.domain.mfa.MfaRepository
+import net.svaroh.passly.domain.mfa.model.YubikeyVerification
 
 /**
  * Passbolt - Open source password manager for teams
@@ -38,53 +32,17 @@ import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
  */
 class VerifyYubikeyUseCase(
     private val mfaRepository: MfaRepository,
-    private val cookieExtractor: CookieExtractor,
 ) : AsyncUseCase<VerifyYubikeyUseCase.Input, VerifyYubikeyUseCase.Output> {
     override suspend fun execute(input: Input): Output =
-        when (
-            val result =
-                mfaRepository.verifyYubikeyOtp(
-                    HotpRequest(input.totp, input.remember),
-                    input.jwtHeader?.let { "Bearer $it" },
-                )
-        ) {
-            is NetworkResult.Failure -> Output.Failure(result)
-            is NetworkResult.Success -> {
-                if (result.value.isSuccessful) {
-                    handleSuccess(result)
-                } else {
-                    handleError(result)
+        when (val result = mfaRepository.verifyYubikeyOtp(input.totp, input.remember, input.jwtHeader)) {
+            is DomainResult.Finished ->
+                when (val verification = result.value) {
+                    is YubikeyVerification.Succeeded -> Output.Success(verification.mfaHeader)
+                    is YubikeyVerification.Unauthorized -> Output.Unauthorized
+                    is YubikeyVerification.NotFromCurrentUser -> Output.YubikeyNotFromCurrentUser
+                    is YubikeyVerification.OtherFailure -> Output.NetworkFailure(verification.errorCode)
                 }
-            }
-        }
-
-    private fun handleSuccess(result: NetworkResult.Success<Response<Void>>) =
-        Output.Success(cookieExtractor.get(result.value, CookieExtractor.MFA_COOKIE))
-
-    private fun handleError(result: NetworkResult.Success<Response<Void>>) =
-        when (val errorCode = result.value.code()) {
-            HTTP_UNAUTHORIZED -> Output.Unauthorized
-            HTTP_BAD_REQUEST ->
-                if (yubikeyNotFromCurrentUser(result.value)) {
-                    Output.YubikeyNotFromCurrentUser
-                } else {
-                    Output.NetworkFailure(errorCode)
-                }
-            else -> Output.NetworkFailure(errorCode)
-        }
-
-    // checks if field "isSameYubikeyId" exists in the response - that means that it's not a Yubikey
-    // that is associated with the account
-    private fun yubikeyNotFromCurrentUser(result: Response<Void>) =
-        try {
-            val errorBody = result.errorBody()?.string()
-            errorBody != null &&
-                JSONObject(errorBody)
-                    .getJSONObject(RESPONSE_BODY)
-                    .getJSONObject(RESPONSE_BODY_HOTP)
-                    .has(HOTP_BODY_IS_SAME_YUBIKEY)
-        } catch (exception: JSONException) {
-            false
+            is DomainResult.Incomplete -> Output.Failure(result)
         }
 
     data class Input(
@@ -94,44 +52,23 @@ class VerifyYubikeyUseCase(
     )
 
     sealed class Output : AuthenticatedUseCaseOutput {
-        override val authenticationState: AuthenticationState
-            get() =
-                when {
-                    this is Failure<*> &&
-                        this.response.isUnauthorized ||
-                        this is NetworkFailure &&
-                        this.errorCode == HTTP_UNAUTHORIZED ->
-                        AuthenticationState.Unauthenticated(AuthenticationState.Unauthenticated.Reason.Session)
-                    this is Failure<*> && this.response.isMfaRequired -> {
-                        val providers = MfaTypeProvider.get(this.response)
-
-                        AuthenticationState.Unauthenticated(
-                            AuthenticationState.Unauthenticated.Reason.Mfa(providers),
-                        )
-                    }
-                    else -> AuthenticationState.Authenticated
-                }
-
         data class Success(
             val mfaHeader: String?,
-        ) : Output()
+        ) : Output(),
+            CompleteAuthenticatedOutput
 
         data class NetworkFailure(
             val errorCode: Int,
-        ) : Output()
+        ) : Output(),
+            CompleteAuthenticatedOutput
 
-        data object Unauthorized : Output()
+        data object Unauthorized : Output(), CompleteAuthenticatedOutput
 
-        data object YubikeyNotFromCurrentUser : Output()
+        data object YubikeyNotFromCurrentUser : Output(), CompleteAuthenticatedOutput
 
-        data class Failure<T : Any>(
-            val response: NetworkResult.Failure<T>,
-        ) : Output()
-    }
-
-    private companion object {
-        private const val RESPONSE_BODY = "body"
-        private const val RESPONSE_BODY_HOTP = "hotp"
-        private const val HOTP_BODY_IS_SAME_YUBIKEY = "isSameYubikeyId"
+        data class Failure(
+            override val incomplete: DomainResult.Incomplete,
+        ) : Output(),
+            IncompleteAuthenticatedOutput
     }
 }

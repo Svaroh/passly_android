@@ -59,19 +59,20 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import net.svaroh.passly.common.extension.isInFuture
 import net.svaroh.passly.common.extension.toSingleLine
-import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
 import net.svaroh.passly.core.ui.R
+import net.svaroh.passly.domain.resources.resourceicon.ResourceIconProvider
 import net.svaroh.passly.testtags.composetags.Home
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
+import net.svaroh.passly.ui.contentType
 import net.svaroh.passly.ui.isExpired
 import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
 fun ResourceItem(
-    resource: ResourceModel,
+    resource: ResourceUiModel,
     resourceIconProvider: ResourceIconProvider,
-    onItemClick: (ResourceModel) -> Unit,
-    onMoreClick: (ResourceModel) -> Unit,
+    onItemClick: (ResourceUiModel) -> Unit,
+    onMoreClick: (ResourceUiModel) -> Unit,
     modifier: Modifier = Modifier,
     showMoreMenu: Boolean = true,
 ) {
@@ -137,20 +138,22 @@ fun ResourceItem(
                 color = MaterialTheme.colorScheme.onBackground,
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
-            val username = resource.metadataJsonModel.username
-            val isUsernameEmpty = username.isNullOrBlank()
+            if (resource.contentType().hasUsername()) {
+                Spacer(modifier = Modifier.height(4.dp))
+                val username = resource.metadataJsonModel.username
+                val isUsernameEmpty = username.isNullOrBlank()
 
-            Text(
-                text = if (!isUsernameEmpty) username else stringResource(LocalizationR.string.no_username),
-                style =
-                    MaterialTheme.typography.bodyMedium.copy(
-                        fontStyle = if (isUsernameEmpty) FontStyle.Italic else FontStyle.Normal,
-                    ),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+                Text(
+                    text = if (!isUsernameEmpty) username else stringResource(LocalizationR.string.no_username),
+                    style =
+                        MaterialTheme.typography.bodyMedium.copy(
+                            fontStyle = if (isUsernameEmpty) FontStyle.Italic else FontStyle.Normal,
+                        ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
 
         Spacer(modifier = Modifier.width(8.dp))

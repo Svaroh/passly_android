@@ -22,6 +22,7 @@ package net.svaroh.passly.common.search
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
+@Deprecated("Search should be implemented using database now to account for large datasets")
 interface Searchable {
     val searchCriteria: String
 }

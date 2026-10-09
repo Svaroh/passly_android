@@ -69,12 +69,13 @@ internal fun DebugLogsSettingsScreen(
         onIntent = viewModel::onIntent,
     )
 
+    val helpWebsiteUrl = stringResource(LocalizationR.string.help_website)
     SideEffectDispatcher(viewModel.sideEffect) {
         when (it) {
             NavigateToLogs -> navigator.navigateToKey(LogsNavigationKey.Logs)
             NavigateUp -> navigator.navigateBack()
             OpenHelpWebsite -> {
-                navigator.openExternalWebsite(context, context.getString(LocalizationR.string.help_website))
+                navigator.openExternalWebsite(context, helpWebsiteUrl)
             }
         }
     }

@@ -345,7 +345,6 @@
     <string name="settings_app_settings_biometry_error">Eroare biometrică. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Eroare de autentificare biometrică. %s</string>
     <string name="settings_app_settings_expert_settings">Setări avansate</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Mod dezvoltator</string>
     <string name="settings_app_settings_expert_settings_hide_root">Ascundeți dialogul \"dispozitivul este rootat\"</string>
     <string name="settings_autofill_autofill_title">Aici puteţi schimba metodele de autocompletare</string>
     <string name="settings_autofill_autofill_desc">Este recomandat să utilizaţi Serviciul de Autocompletare, dar performanţa serviciului poate depinde de setările de optimizare ale bateriei şi de setările dispozitivului. \n\nÎn cazul în care serviciul de autocompletare nu funcționează în mod fiabil pe dispozitivul dvs., puteți încerca să activați autocompletarea pe baza Serviciului de Accesibilitate.</string>

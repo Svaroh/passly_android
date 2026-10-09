@@ -24,46 +24,58 @@
 package net.svaroh.passly.feature.otp.screen
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.coroutinetimer.TimerFactory
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
+import net.svaroh.passly.common.time.TimeProvider
+import net.svaroh.passly.common.urimatcher.AutofillUriMatcher
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.otpcore.TotpParametersProvider
 import net.svaroh.passly.core.otpcore.TotpParametersProvider.OtpParametersResult.InvalidTotpInput
 import net.svaroh.passly.core.otpcore.TotpParametersProvider.OtpParametersResult.OtpParameters
-import net.svaroh.passly.core.resources.actions.ResourceCommonActionsInteractor
-import net.svaroh.passly.core.resources.actions.ResourceUpdateActionsInteractorFactory
-import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractorFactory
-import net.svaroh.passly.core.resources.actions.SecretPropertyActionResult
-import net.svaroh.passly.core.resources.actions.performCommonResourceAction
-import net.svaroh.passly.core.resources.actions.performResourceUpdateAction
-import net.svaroh.passly.core.resources.actions.performSecretPropertyAction
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourcesUseCase
 import net.svaroh.passly.core.resourcetypes.graph.redesigned.UpdateAction
-import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.AVATAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.CLEAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.NONE
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.metadata.interactor.MetadataPrivateKeysHelperInteractor
+import net.svaroh.passly.domain.metadata.interactor.ResourceAccessInteractor
+import net.svaroh.passly.domain.resources.actions.ResourceCommonActionsInteractor
+import net.svaroh.passly.domain.resources.actions.ResourceUpdateActionsInteractorFactory
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractorFactory
+import net.svaroh.passly.domain.resources.actions.SecretPropertyActionResult
+import net.svaroh.passly.domain.resources.actions.performCommonResourceAction
+import net.svaroh.passly.domain.resources.actions.performResourceUpdateAction
+import net.svaroh.passly.domain.resources.actions.performSecretPropertyAction
+import net.svaroh.passly.domain.resources.mapper.toOtpItemWrapper
+import net.svaroh.passly.domain.resources.usecase.EditPermissionsConfirmationInteractor
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesUseCase
 import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
-import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseCreateResourceMenu
+import net.svaroh.passly.feature.home.screen.ShowSuggestedModel
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseDeleteConfirmationDialog
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseOtpMoreMenu
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseSwitchAccount
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseTrustNewKeyDialog
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseTrustedKeyDeletedDialog
 import net.svaroh.passly.feature.otp.screen.OtpIntent.ConfirmDeleteTotp
+import net.svaroh.passly.feature.otp.screen.OtpIntent.ConfirmedPermissionsResult
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CopyOtp
-import net.svaroh.passly.feature.otp.screen.OtpIntent.CreateNote
-import net.svaroh.passly.feature.otp.screen.OtpIntent.CreatePassword
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CreateTotp
 import net.svaroh.passly.feature.otp.screen.OtpIntent.DeleteOtp
+import net.svaroh.passly.feature.otp.screen.OtpIntent.Dispose
 import net.svaroh.passly.feature.otp.screen.OtpIntent.EditOtp
-import net.svaroh.passly.feature.otp.screen.OtpIntent.OpenCreateResourceMenu
 import net.svaroh.passly.feature.otp.screen.OtpIntent.OpenOtpMoreMenu
 import net.svaroh.passly.feature.otp.screen.OtpIntent.OtpQRScanReturned
 import net.svaroh.passly.feature.otp.screen.OtpIntent.ResourceFormReturned
@@ -74,6 +86,7 @@ import net.svaroh.passly.feature.otp.screen.OtpIntent.TrustMetadataKeyDeletion
 import net.svaroh.passly.feature.otp.screen.OtpIntent.TrustNewMetadataKey
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.CopyToClipboard
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.InitiateDataRefresh
+import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToConfirmPermissions
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToCreateResourceForm
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToCreateTotp
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToEditResourceForm
@@ -87,6 +100,7 @@ import net.svaroh.passly.feature.otp.screen.SnackbarErrorType.FAILED_TO_REFRESH_
 import net.svaroh.passly.feature.otp.screen.SnackbarErrorType.FAILED_TO_TRUST_METADATA_KEY
 import net.svaroh.passly.feature.otp.screen.SnackbarErrorType.FAILED_TO_VERIFY_METADATA_KEYS
 import net.svaroh.passly.feature.otp.screen.SnackbarErrorType.FETCH_FAILURE
+import net.svaroh.passly.feature.otp.screen.SnackbarErrorType.INVALID_TOTP_PARAMETERS
 import net.svaroh.passly.feature.otp.screen.SnackbarErrorType.NO_SHARED_KEY_ACCESS
 import net.svaroh.passly.feature.otp.screen.SnackbarErrorType.RESOURCE_SCHEMA_INVALID
 import net.svaroh.passly.feature.otp.screen.SnackbarErrorType.SECRET_SCHEMA_INVALID
@@ -95,69 +109,93 @@ import net.svaroh.passly.feature.otp.screen.SnackbarSuccessType.RESOURCE_CREATED
 import net.svaroh.passly.feature.otp.screen.SnackbarSuccessType.RESOURCE_DELETED
 import net.svaroh.passly.feature.otp.screen.SnackbarSuccessType.RESOURCE_EDITED
 import net.svaroh.passly.jsonmodel.delegates.TotpSecret
-import net.svaroh.passly.mappers.OtpModelMapper
-import net.svaroh.passly.metadata.interactor.MetadataPrivateKeysHelperInteractor
-import net.svaroh.passly.metadata.usecase.CanCreateResourceUseCase
 import net.svaroh.passly.serializers.jsonschema.SchemaEntity.RESOURCE
 import net.svaroh.passly.serializers.jsonschema.SchemaEntity.SECRET
-import net.svaroh.passly.supportedresourceTypes.ContentType
 import net.svaroh.passly.supportedresourceTypes.ContentType.PasswordDescriptionTotp
 import net.svaroh.passly.supportedresourceTypes.ContentType.Totp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.totpSlugs
-import net.svaroh.passly.ui.LeadingContentType.PASSWORD
-import net.svaroh.passly.ui.LeadingContentType.STANDALONE_NOTE
 import net.svaroh.passly.ui.LeadingContentType.TOTP
 import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
 import net.svaroh.passly.ui.OtpItemWrapper
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.allReset
+import net.svaroh.passly.ui.contentType
 import net.svaroh.passly.ui.findVisible
 import net.svaroh.passly.ui.isExpired
 import net.svaroh.passly.ui.refreshingNone
 import net.svaroh.passly.ui.refreshingOnly
 import net.svaroh.passly.ui.replaceOnId
 import net.svaroh.passly.ui.revealed
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
-import java.util.UUID
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 internal class OtpViewModel(
+    private val showSuggestedModel: ShowSuggestedModel,
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
     private val getLocalResourcesUseCase: GetLocalResourcesUseCase,
-    private val otpModelMapper: OtpModelMapper,
     private val totpParametersProvider: TotpParametersProvider,
     private val coroutineLaunchContext: CoroutineLaunchContext,
     private val dataRefreshTrackingFlow: DataRefreshTrackingFlow,
-    private val idToSlugMappingProvider: ResourceTypeIdToSlugMappingProvider,
     private val metadataPrivateKeysHelperInteractor: MetadataPrivateKeysHelperInteractor,
     private val timerFactory: TimerFactory,
-    private val canCreateResourceUse: CanCreateResourceUseCase,
+    private val resourceAccessInteractor: ResourceAccessInteractor,
     private val resourceUpdateActionsInteractorFactory: ResourceUpdateActionsInteractorFactory,
+    private val editPermissionsConfirmationInteractor: EditPermissionsConfirmationInteractor,
     private val secretPropertiesActionsInteractorFactory: SecretPropertiesActionsInteractorFactory,
+    private val autofillUriMatcher: AutofillUriMatcher,
+    private val timeProvider: TimeProvider,
 ) : SideEffectViewModel<OtpState, OtpSideEffect>(OtpState()),
     KoinComponent {
+    private var dataRefreshJob: Job? = null
+    private var otpsCounterJob: Job? = null
+    private var universalCountdownJob: Job? = null
+    private var fetchTotpJob: Job? = null
+
+    private val searchQueryFlow = MutableStateFlow("")
+
     init {
         loadUserAvatar()
-        viewModelScope.launch(coroutineLaunchContext.io) {
-            synchronizeWithDataRefresh()
-        }
-        viewModelScope.launch(coroutineLaunchContext.io) {
-            val otps = getOtpResources()
-            updateViewState { copy(otps = otps) }
-            updateOtpsCounterTime()
-        }
+        observeSearchQuery()
+        updateViewState { copy(universalCountdownSeconds = currentRemainingCountdownSeconds()) }
+        dataRefreshJob?.cancel()
+        dataRefreshJob =
+            viewModelScope.launch(coroutineLaunchContext.io) {
+                synchronizeWithDataRefresh()
+            }
+        otpsCounterJob?.cancel()
+        otpsCounterJob =
+            viewModelScope.launch(coroutineLaunchContext.io) {
+                val otps = getOtpResources()
+                updateViewState { copy(otps = otps, suggestedOtps = getSuggestedOtps(otps)) }
+                updateOtpsCounterTime()
+            }
+        universalCountdownJob?.cancel()
+        universalCountdownJob =
+            viewModelScope.launch(coroutineLaunchContext.io) {
+                updateUniversalCountdown()
+            }
+    }
+
+    private fun currentRemainingCountdownSeconds(): Long =
+        DEFAULT_TOTP_PERIOD - (timeProvider.getCurrentEpochSeconds() % DEFAULT_TOTP_PERIOD)
+
+    override fun onCleared() {
+        dataRefreshJob?.cancel()
+        otpsCounterJob?.cancel()
+        universalCountdownJob?.cancel()
+        fetchTotpJob?.cancel()
     }
 
     private fun onCanCreateResource(function: () -> Unit) {
         viewModelScope.launch {
-            if (canCreateResourceUse.execute(CanCreateResourceUseCase.Input(folderId = null)).canCreateResource) {
+            if (resourceAccessInteractor.canCreateResource()) {
                 function()
             } else {
                 emitSideEffect(ShowErrorSnackbar(NO_SHARED_KEY_ACCESS))
@@ -169,27 +207,14 @@ internal class OtpViewModel(
     @Suppress("CyclomaticComplexMethod", "LongMethod")
     fun onIntent(intent: OtpIntent) {
         when (intent) {
-            OpenCreateResourceMenu -> updateViewState { copy(showCreateResourceBottomSheet = true) }
-            CloseCreateResourceMenu -> updateViewState { copy(showCreateResourceBottomSheet = false) }
             is Search -> searchQueryChanged(intent.searchQuery)
             is RevealOtp -> {
                 updateViewState { copy(showOtpMoreBottomSheet = false) }
-                otpClick(intent.otpItemWrapper)
+                otpClick(intent.resource)
             }
             is OpenOtpMoreMenu -> updateViewState { copy(showOtpMoreBottomSheet = true, moreMenuResource = intent.otpItemWrapper) }
             is CloseOtpMoreMenu -> updateViewState { copy(showOtpMoreBottomSheet = false) }
-            CreatePassword -> {
-                updateViewState { copy(showCreateResourceBottomSheet = false) }
-                onCanCreateResource { emitSideEffect(NavigateToCreateResourceForm(leadingContentType = PASSWORD)) }
-            }
-            CreateNote -> {
-                updateViewState { copy(showCreateResourceBottomSheet = false) }
-                onCanCreateResource { emitSideEffect(NavigateToCreateResourceForm(leadingContentType = STANDALONE_NOTE)) }
-            }
-            CreateTotp -> {
-                updateViewState { copy(showCreateResourceBottomSheet = false) }
-                onCanCreateResource { emitSideEffect(NavigateToCreateTotp) }
-            }
+            CreateTotp -> onCanCreateResource { emitSideEffect(NavigateToCreateTotp) }
             is OtpQRScanReturned -> processOtpScanResult(intent)
             is ResourceFormReturned -> processResourceFormResult(intent)
             is CopyOtp -> {
@@ -207,6 +232,7 @@ internal class OtpViewModel(
                 )
             }
             CloseDeleteConfirmationDialog -> updateViewState { copy(showDeleteTotpConfirmationDialog = false) }
+            is ConfirmedPermissionsResult -> confirmedPermissionsReceived(intent.permissions)
             ConfirmDeleteTotp -> {
                 updateViewState { copy(showProgress = true, showDeleteTotpConfirmationDialog = false) }
                 deleteTotp(viewState.value.moreMenuResource)
@@ -229,7 +255,17 @@ internal class OtpViewModel(
             is TrustNewMetadataKey -> trustNewMetadataKeyConfirmed(intent.model)
             CloseSwitchAccount -> updateViewState { copy(showAccountSwitchBottomSheet = false) }
             SearchEndIconAction -> searchEndIconAction()
+            Dispose -> dispose()
         }
+    }
+
+    private fun dispose() {
+        fetchTotpJob?.cancel()
+        updateOtpLists { allReset() }
+    }
+
+    private fun updateOtpLists(transform: List<OtpItemWrapper>.() -> List<OtpItemWrapper>) {
+        updateViewState { copy(otps = otps.transform(), filteredOtps = filteredOtps.transform()) }
     }
 
     private fun searchEndIconAction() {
@@ -238,13 +274,7 @@ internal class OtpViewModel(
                 // opened straight away: the list is served from the local replica, so there is nothing to wait for
                 updateViewState { copy(showAccountSwitchBottomSheet = true) }
             }
-            CLEAR ->
-                updateViewState {
-                    copy(
-                        searchQuery = "",
-                        searchInputEndIconMode = AVATAR,
-                    )
-                }
+            CLEAR -> searchQueryChanged("")
             NONE -> {
                 // no-op
             }
@@ -291,15 +321,17 @@ internal class OtpViewModel(
     private fun deleteTotp(moreMenuResource: OtpItemWrapper?) {
         viewModelScope.launch(coroutineLaunchContext.io) {
             val otpResource = requireNotNull(moreMenuResource)
-            val slug =
-                idToSlugMappingProvider.provideMappingForSelectedAccount()[
-                    UUID.fromString(otpResource.resource.resourceTypeId),
-                ]
-            when (val contentType = ContentType.fromSlug(slug!!)) {
+            when (val contentType = otpResource.resource.contentType()) {
                 is Totp, V5TotpStandalone ->
                     deleteStandaloneTotpResource(otpResource.resource)
                 is PasswordDescriptionTotp, V5DefaultWithTotp ->
-                    downgradeToPasswordAndDescriptionResource(otpResource.resource)
+                    if (editPermissionsConfirmationInteractor.shouldConfirmPermissions(otpResource.resource.resourceId)) {
+                        Timber.d("Removing totp from a shared resource - navigating to permissions confirmation")
+                        updateViewState { copy(pendingPermissionsConfirmationResource = otpResource.resource) }
+                        emitSideEffect(NavigateToConfirmPermissions(otpResource.resource.resourceId))
+                    } else {
+                        downgradeToPasswordAndDescriptionResource(otpResource.resource)
+                    }
                 else ->
                     error("$contentType type should not be presented on totp list")
             }
@@ -307,7 +339,7 @@ internal class OtpViewModel(
         }
     }
 
-    private suspend fun deleteStandaloneTotpResource(otpResource: ResourceModel) {
+    private suspend fun deleteStandaloneTotpResource(otpResource: ResourceUiModel) {
         val resourceCommonActionsInteractor = get<ResourceCommonActionsInteractor> { parametersOf(otpResource) }
         performCommonResourceAction(
             action = { resourceCommonActionsInteractor.deleteResource() },
@@ -319,15 +351,42 @@ internal class OtpViewModel(
         )
     }
 
-    private suspend fun downgradeToPasswordAndDescriptionResource(otpResource: ResourceModel) {
+    private fun confirmedPermissionsReceived(confirmedPermissions: List<PermissionModelUi>) {
+        val resource = viewState.value.pendingPermissionsConfirmationResource ?: return
+        updateViewState { copy(pendingPermissionsConfirmationResource = null, showProgress = true) }
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            downgradeToPasswordAndDescriptionResource(resource, confirmedPermissions)
+            updateViewState { copy(showProgress = false) }
+        }
+    }
+
+    private suspend fun downgradeToPasswordAndDescriptionResource(
+        otpResource: ResourceUiModel,
+        confirmedPermissions: List<PermissionModelUi>? = null,
+    ) {
         val resourceUpdateActionInteractor = resourceUpdateActionsInteractorFactory.create(otpResource)
         performResourceUpdateAction(
             action = {
-                resourceUpdateActionInteractor.updateGenericResource(
-                    UpdateAction.REMOVE_TOTP,
-                    secretModification = { it.apply { totp = null } },
+                if (confirmedPermissions == null) {
+                    resourceUpdateActionInteractor.updateGenericResource(
+                        UpdateAction.REMOVE_TOTP,
+                        secretModification = { it.apply { totp = null } },
+                    )
+                } else {
+                    resourceUpdateActionInteractor.updateGenericResourceWithConfirmedPermissions(
+                        UpdateAction.REMOVE_TOTP,
+                        confirmedPermissions,
+                        secretModification = { it.apply { totp = null } },
+                    )
+                }
+            },
+            doOnPermissionsDrifted = { drifted ->
+                updateViewState { copy(pendingPermissionsConfirmationResource = otpResource) }
+                emitSideEffect(
+                    NavigateToConfirmPermissions(otpResource.resourceId, driftedEntityNames = drifted.driftedEntityNames),
                 )
             },
+            doOnShareFailure = { emitSideEffect(ShowErrorSnackbar(SnackbarErrorType.SHARE_FAILED)) },
             doOnCryptoFailure = { emitSideEffect(ShowErrorSnackbar(SnackbarErrorType.ENCRYPTION_FAILURE)) },
             doOnFailure = { emitSideEffect(ShowErrorSnackbar(ERROR)) },
             doOnSuccess = {
@@ -358,7 +417,7 @@ internal class OtpViewModel(
     }
 
     private fun copyTotp(otpItemWrapper: OtpItemWrapper) {
-        fetchTotp(otpItemWrapper) { totp ->
+        fetchTotp(otpItemWrapper.resource) { totp ->
             val otpParameters =
                 totpParametersProvider.provideOtpParameters(
                     secretKey = totp.result.key,
@@ -368,7 +427,7 @@ internal class OtpViewModel(
                 )
 
             when (otpParameters) {
-                InvalidTotpInput -> stopRefreshingAndShowError("Failed to generate totp parameters")
+                InvalidTotpInput -> stopRefreshingAndShowInvalidTotpError()
                 is OtpParameters -> {
                     emitSideEffect(
                         CopyToClipboard(
@@ -404,52 +463,74 @@ internal class OtpViewModel(
     }
 
     private fun searchQueryChanged(searchQuery: String) {
-        val searchEndIcon = if (searchQuery.isNotBlank()) CLEAR else AVATAR
-        viewModelScope.launch {
-            val filteredOtps = getOtpResources(searchQuery)
-            updateViewState {
-                copy(
-                    searchInputEndIconMode = searchEndIcon,
-                    searchQuery = searchQuery,
-                    filteredOtps = filteredOtps,
-                )
-            }
+        if (searchQuery == searchQueryFlow.value) {
+            return
+        }
+        searchQueryFlow.value = searchQuery
+        updateViewState {
+            copy(
+                searchInputEndIconMode = if (searchQuery.isNotBlank()) CLEAR else AVATAR,
+                isSearching = true,
+            )
         }
     }
 
-    private fun otpClick(otpItemWrapper: OtpItemWrapper) {
+    @OptIn(FlowPreview::class)
+    private fun observeSearchQuery() {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            searchQueryFlow
+                .drop(1)
+                .debounce(SEARCH_DEBOUNCE)
+                .collectLatest { searchQuery ->
+                    Timber.d("Applying search query (length: ${searchQuery.length})")
+                    try {
+                        val filteredOtps = getOtpResources(searchQuery)
+                        updateViewState {
+                            copy(searchQuery = searchQuery, filteredOtps = filteredOtps, isSearching = false)
+                        }
+                    } catch (exception: CancellationException) {
+                        throw exception
+                    } catch (exception: Exception) {
+                        Timber.e(exception, "Failed to apply the search query")
+                        updateViewState { copy(isSearching = false) }
+                    }
+                }
+        }
+    }
+
+    private fun otpClick(resource: ResourceUiModel) {
         updateViewState { copy(showOtpMoreBottomSheet = false) }
-        fetchTotp(otpItemWrapper) {
-            showTotp(it, otpItemWrapper.resource.resourceId)
+        fetchTotp(resource) {
+            showTotp(it, resource.resourceId)
         }
     }
 
     private fun fetchTotp(
-        otpItemWrapper: OtpItemWrapper,
+        resource: ResourceUiModel,
         afterFetchAction: (SecretPropertyActionResult.Success<TotpSecret>) -> Unit,
     ) {
-        viewModelScope.launch(coroutineLaunchContext.io) {
-            updateViewState {
-                copy(otps = otps.refreshingOnly(otpItemWrapper.resource.resourceId))
+        fetchTotpJob?.cancel()
+        fetchTotpJob =
+            viewModelScope.launch(coroutineLaunchContext.io) {
+                updateOtpLists { refreshingOnly(resource.resourceId) }
+
+                val secretPropertiesActionsInteractor = secretPropertiesActionsInteractorFactory.create(resource)
+
+                performSecretPropertyAction(
+                    action = { secretPropertiesActionsInteractor.provideOtp() },
+                    doOnDecryptionFailure = {
+                        emitSideEffect(ShowErrorSnackbar(DECRYPTION_FAILURE))
+                        updateOtpLists { refreshingNone() }
+                    },
+                    doOnFetchFailure = {
+                        emitSideEffect(ShowErrorSnackbar(FETCH_FAILURE))
+                        updateOtpLists { refreshingNone() }
+                    },
+                    doOnSuccess = { result ->
+                        afterFetchAction(result)
+                    },
+                )
             }
-
-            val secretPropertiesActionsInteractor = secretPropertiesActionsInteractorFactory.create(otpItemWrapper.resource)
-
-            performSecretPropertyAction(
-                action = { secretPropertiesActionsInteractor.provideOtp() },
-                doOnDecryptionFailure = {
-                    emitSideEffect(ShowErrorSnackbar(DECRYPTION_FAILURE))
-                    updateViewState { copy(otps = otps.refreshingNone()) }
-                },
-                doOnFetchFailure = {
-                    emitSideEffect(ShowErrorSnackbar(FETCH_FAILURE))
-                    updateViewState { copy(otps = otps.refreshingNone()) }
-                },
-                doOnSuccess = { result ->
-                    afterFetchAction(result)
-                },
-            )
-        }
     }
 
     private fun showTotp(
@@ -471,15 +552,12 @@ internal class OtpViewModel(
         when (otpParameters) {
             InvalidTotpInput -> stopRefreshingAndShowError("Failed to generate totp parameters")
             is OtpParameters -> {
-                updateViewState {
-                    copy(
-                        otps =
-                            otps.revealed(
-                                resourceId,
-                                otpParameters.otpValue,
-                                totp.result.period,
-                                otpParameters.secondsValid,
-                            ),
+                updateOtpLists {
+                    revealed(
+                        resourceId,
+                        otpParameters.otpValue,
+                        totp.result.period,
+                        otpParameters.secondsValid,
                     )
                 }
 
@@ -494,6 +572,12 @@ internal class OtpViewModel(
         }
     }
 
+    private suspend fun updateUniversalCountdown() {
+        timerFactory.createInfiniteTimer(tickDuration = 1.seconds).collectLatest {
+            updateViewState { copy(universalCountdownSeconds = currentRemainingCountdownSeconds()) }
+        }
+    }
+
     private suspend fun updateOtpsCounterTime() {
         timerFactory.createInfiniteTimer(tickDuration = 1.seconds).collectLatest {
             val visibleTotp = viewState.value.otps.findVisible()
@@ -501,12 +585,12 @@ internal class OtpViewModel(
                 val updated = visibleTotp.copy(remainingSecondsCounter = (visibleTotp.remainingSecondsCounter!!) - 1)
 
                 if (updated.isExpired()) {
-                    updateViewState { copy(otps = otps.allReset()) }
-                    fetchTotp(updated) {
+                    updateOtpLists { allReset() }
+                    fetchTotp(updated.resource) {
                         showTotp(it, updated.resource.resourceId)
                     }
                 } else {
-                    updateViewState { copy(otps = otps.replaceOnId(updated)) }
+                    updateOtpLists { replaceOnId(updated) }
                 }
             }
         }
@@ -516,7 +600,13 @@ internal class OtpViewModel(
         dataRefreshTrackingFlow.dataRefreshStatusFlow.collect {
             when (it) {
                 // silent unless the user asked for it, see HomeViewModel for the reasoning
-                InProgress -> updateViewState { copy(isRefreshing = dataRefreshTrackingFlow.isUserInitiated) }
+                is InProgress ->
+                    updateViewState {
+                        copy(
+                            isRefreshing = dataRefreshTrackingFlow.isUserInitiated,
+                            refreshProgress = it.progress,
+                        )
+                    }
                 FinishedWithFailure -> {
                     if (dataRefreshTrackingFlow.isUserInitiated) {
                         emitSideEffect(ShowErrorSnackbar(FAILED_TO_REFRESH_DATA))
@@ -525,7 +615,16 @@ internal class OtpViewModel(
                 }
                 FinishedWithSuccess -> {
                     val otps = getOtpResources()
-                    updateViewState { copy(otps = otps, isRefreshing = false) }
+                    val searchQuery = viewState.value.searchQuery
+                    val filteredOtps = if (searchQuery.isNotEmpty()) getOtpResources(searchQuery) else emptyList()
+                    updateViewState {
+                        copy(
+                            otps = otps,
+                            filteredOtps = filteredOtps,
+                            suggestedOtps = getSuggestedOtps(otps),
+                            isRefreshing = false,
+                        )
+                    }
                 }
                 NotCompleted -> {
                     // do nothing
@@ -543,15 +642,38 @@ internal class OtpViewModel(
         updateViewState { copy(userAvatar = avatarUrl) }
     }
 
+    private fun getSuggestedOtps(otps: List<OtpItemWrapper>): List<OtpItemWrapper> =
+        when (showSuggestedModel) {
+            is ShowSuggestedModel.DoNotShow -> emptyList()
+            is ShowSuggestedModel.Show ->
+                otps.filter { otpItem ->
+                    val resourceUris =
+                        otpItem.resource.metadataJsonModel.uris
+                            .orEmpty() +
+                            listOfNotNull(otpItem.resource.metadataJsonModel.uri)
+                    autofillUriMatcher.isMatching(showSuggestedModel.suggestedUri, resourceUris)
+                }
+        }
+
     private suspend fun getOtpResources(searchQuery: String? = null): List<OtpItemWrapper> =
         getLocalResourcesUseCase
             .execute(GetLocalResourcesUseCase.Input(totpSlugs, searchQuery = searchQuery))
             .resources
-            .map(otpModelMapper::map)
+            .map(ResourceUiModel::toOtpItemWrapper)
 
     private fun stopRefreshingAndShowError(message: String) {
         Timber.e(message)
         emitSideEffect(ShowErrorSnackbar(ERROR, message))
-        updateViewState { copy(otps = otps.refreshingNone()) }
+        updateOtpLists { refreshingNone() }
+    }
+
+    private fun stopRefreshingAndShowInvalidTotpError() {
+        Timber.e("Invalid TOTP parameters")
+        emitSideEffect(ShowErrorSnackbar(INVALID_TOTP_PARAMETERS))
+        updateOtpLists { refreshingNone() }
+    }
+
+    companion object {
+        val SEARCH_DEBOUNCE = 300.milliseconds
     }
 }

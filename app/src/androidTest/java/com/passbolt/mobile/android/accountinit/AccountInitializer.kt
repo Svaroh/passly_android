@@ -1,13 +1,16 @@
 package net.svaroh.passly.accountinit
 
+import android.os.Build
 import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.account.SaveAccountUseCase
-import net.svaroh.passly.core.accounts.usecase.accountdata.UpdateAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.privatekey.SavePrivateKeyUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveCurrentApiUrlUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveSelectedAccountUseCase
-import net.svaroh.passly.core.preferences.usecase.UpdateGlobalPreferencesUseCase
-import net.svaroh.passly.database.usecase.SaveResourcesDatabasePassphraseUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveCurrentApiUrlUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.UpdateAccountDataUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveResourcesDatabasePassphraseUseCase
+import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
+import net.svaroh.passly.domain.privatekey.model.PrivateKey
 import net.svaroh.passly.intents.ManagedAccountIntentCreator
 import org.koin.core.component.KoinComponent
 
@@ -16,10 +19,10 @@ class AccountInitializer(
     private val saveResourcesDatabasePassphraseUseCase: SaveResourcesDatabasePassphraseUseCase,
     private val saveSelectedAccountUseCase: SaveSelectedAccountUseCase,
     private val updateAccountDataUseCase: UpdateAccountDataUseCase,
-    private val savePrivateKeyUseCase: SavePrivateKeyUseCase,
+    private val privateKeyRepository: PrivateKeyRepository,
     private val managedAccountIntentCreator: ManagedAccountIntentCreator,
     private val saveAccountUseCase: SaveAccountUseCase,
-    private val updateGlobalPreferencesUseCase: UpdateGlobalPreferencesUseCase,
+    private val globalPreferencesRepository: GlobalPreferencesRepository,
 ) : KoinComponent {
     fun initializeAccount() {
         saveCurrentApiUrlUseCase.execute(
@@ -44,17 +47,15 @@ class AccountInitializer(
                 serverId = managedAccountIntentCreator.getUserServerId(),
             ),
         )
-        savePrivateKeyUseCase.execute(
-            SavePrivateKeyUseCase.Input(
-                managedAccountIntentCreator.getUserLocalId(),
-                managedAccountIntentCreator.getArmoredPrivateKey(),
-            ),
+        privateKeyRepository.savePrivateKey(
+            managedAccountIntentCreator.getUserLocalId(),
+            PrivateKey(managedAccountIntentCreator.getArmoredPrivateKey()),
         )
-        updateGlobalPreferencesUseCase.execute(
-            UpdateGlobalPreferencesUseCase.Input(
+        globalPreferencesRepository.updateGlobalPreferences(
+            GlobalPreferencesUpdate(
                 areDebugLogsEnabled = false,
-                isDeveloperModeEnabled = false,
                 isHideRootDialogEnabled = false,
+                deprecatedOsWarningHiddenForSdk = Build.VERSION.SDK_INT,
             ),
         )
     }

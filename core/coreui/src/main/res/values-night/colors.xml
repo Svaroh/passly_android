@@ -14,4 +14,7 @@
 
     <color name="secondary_button_background">#333333</color>
     <color name="secondary_button_border">#0F0F0F</color>
+
+    <color name="upgrade_panel_background">#1C2545</color>
+    <color name="upgrade_panel_button_background">#191919</color>
 </resources>

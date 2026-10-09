@@ -1,14 +1,14 @@
 package net.svaroh.passly.feature.resourcedetails.details.ui.metadata
 
-import PassboltTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.localization.R
 import net.svaroh.passly.core.ui.header.ItemWithHeader
 
@@ -17,8 +17,8 @@ internal fun AdditionalUrisItem(
     urls: List<String>,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-    val formattedUrls = urls.joinToString(separator = "\n") { url -> context.getString(R.string.additional_uri_format, url) }
+    val resources = LocalResources.current
+    val formattedUrls = urls.joinToString(separator = "\n") { url -> resources.getString(R.string.additional_uri_format, url) }
 
     ItemWithHeader(
         headerText = stringResource(R.string.resource_details_additional_uris),

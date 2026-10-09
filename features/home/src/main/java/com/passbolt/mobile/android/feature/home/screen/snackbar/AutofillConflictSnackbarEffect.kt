@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import net.svaroh.passly.core.localization.R as LocalizationR
 
 @Composable
@@ -16,7 +16,8 @@ fun AutofillConflictSnackbarEffect(
     isAutofillConflictDetected: Boolean,
     onActionClick: () -> Unit,
 ) {
-    val context = LocalContext.current
+    val message = stringResource(LocalizationR.string.autofill_conflict_message)
+    val actionLabel = stringResource(LocalizationR.string.settings)
     val currentOnActionClick by rememberUpdatedState(onActionClick)
 
     LaunchedEffect(isAutofillConflictDetected) {
@@ -26,8 +27,8 @@ fun AutofillConflictSnackbarEffect(
 
         val result =
             snackbarHostState.showSnackbar(
-                message = context.getString(LocalizationR.string.autofill_conflict_message),
-                actionLabel = context.getString(LocalizationR.string.settings),
+                message = message,
+                actionLabel = actionLabel,
                 withDismissAction = false,
                 duration = SnackbarDuration.Long,
             )

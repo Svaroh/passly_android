@@ -6,7 +6,6 @@ import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
 import net.svaroh.passly.feature.authentication.AuthenticationStartUpResolver
 import net.svaroh.passly.feature.authentication.accountslist.accountsListModule
 import net.svaroh.passly.feature.authentication.auth.authModule
-import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
 import net.svaroh.passly.feature.authentication.mfa.duo.authWithDuoModule
 import net.svaroh.passly.feature.authentication.mfa.totp.enterTotpModule
 import net.svaroh.passly.feature.authentication.mfa.unknown.unknownProviderModule
@@ -22,7 +21,6 @@ val authenticationModule =
             AuthenticationFeatureNavigation()
         }
         single { BiometricPrompt.PromptInfo.Builder() }
-        factoryOf(::RefreshSessionUseCase)
         factoryOf(::AuthenticationStartUpResolver)
 
         accountsListModule()

@@ -24,14 +24,13 @@
 package net.svaroh.passly.feature.authentication.accountslist
 
 import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.accounts.GetAllAccountsDataUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveCurrentApiUrlUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveSelectedAccountUseCase
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.ManageAccount
-import net.svaroh.passly.database.DatabaseProvider
+import net.svaroh.passly.domain.accounts.usecase.GetAllAccountsDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveCurrentApiUrlUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveSelectedAccountUseCase
 import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.AddAccount
 import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.ConfirmRemoveAccount
 import net.svaroh.passly.feature.authentication.accountslist.AccountsListIntent.DismissRemoveAccountDialog
@@ -58,7 +57,6 @@ class AccountsListViewModel(
     private val removeAllAccountDataUseCase: RemoveAllAccountDataUseCase,
     private val signOutUseCase: SignOutUseCase,
     private val saveCurrentApiUrlUseCase: SaveCurrentApiUrlUseCase,
-    private val databaseProvider: DatabaseProvider,
 ) : SideEffectViewModel<AccountsListState, AccountsListSideEffect>(
         AccountsListState(
             showManageAccountsTopBar = authConfig is ManageAccount,
@@ -120,7 +118,6 @@ class AccountsListViewModel(
                 }
             }
             removeAllAccountDataUseCase.execute(UserIdInput(account.userId))
-            databaseProvider.delete(account.userId)
 
             updateViewState { copy(showProgress = false) }
             emitSideEffect(ShowSuccessSnackBar(ACCOUNT_REMOVED))

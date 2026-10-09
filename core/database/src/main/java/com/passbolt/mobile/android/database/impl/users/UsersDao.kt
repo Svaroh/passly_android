@@ -5,6 +5,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import net.svaroh.passly.database.impl.base.BaseDao
 import net.svaroh.passly.entity.user.User
+import net.svaroh.passly.entity.user.UserUpdateState
 
 /**
  * Passbolt - Open source password manager for teams
@@ -38,7 +39,9 @@ interface UsersDao : BaseDao<User> {
     @Query("SELECT * FROM User WHERE id NOT IN (:ids)")
     suspend fun getAllExcluding(ids: List<String>): List<User>
 
-    @Transaction
-    @Query("DELETE FROM User")
-    suspend fun deleteAll()
+    @Query("UPDATE User SET updateState = :updateState")
+    suspend fun setAllUpdateState(updateState: UserUpdateState)
+
+    @Query("DELETE FROM User WHERE updateState = :updateState")
+    suspend fun removeWithUpdateState(updateState: UserUpdateState)
 }

@@ -25,6 +25,12 @@ package net.svaroh.passly.feature.resourceform.additionalsecrets.totp
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.AdvancedSettingsChanged
 import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.ApplyChanges
 import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.TotpFormIntent.GoBack
@@ -38,12 +44,6 @@ import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.OtpParseResult
 import net.svaroh.passly.ui.ResourceFormMode
 import net.svaroh.passly.ui.TotpUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -119,7 +119,7 @@ class TotpFormViewModelTest : KoinTest {
                 val sideEffect = awaitItem()
                 assertIs<ApplyAndGoBack>(sideEffect)
                 assertThat(sideEffect.totpUiModel!!.secret).isEqualTo(changedSecret)
-                assertThat(sideEffect.totpUiModel!!.issuer).isEqualTo(changedIssuer)
+                assertThat(sideEffect.totpUiModel.issuer).isEqualTo(changedIssuer)
             }
         }
 
@@ -145,8 +145,8 @@ class TotpFormViewModelTest : KoinTest {
                 val sideEffect = awaitItem()
                 assertIs<ApplyAndGoBack>(sideEffect)
                 assertThat(sideEffect.totpUiModel!!.expiry).isEqualTo(changedExpiry)
-                assertThat(sideEffect.totpUiModel!!.length).isEqualTo(changedLength)
-                assertThat(sideEffect.totpUiModel!!.algorithm).isEqualTo(changedAlgorithm)
+                assertThat(sideEffect.totpUiModel.length).isEqualTo(changedLength)
+                assertThat(sideEffect.totpUiModel.algorithm).isEqualTo(changedAlgorithm)
             }
         }
 
@@ -171,10 +171,10 @@ class TotpFormViewModelTest : KoinTest {
                 val sideEffect = awaitItem()
                 assertIs<ApplyAndGoBack>(sideEffect)
                 assertThat(sideEffect.totpUiModel!!.secret).isEqualTo(scannedTotp.secret)
-                assertThat(sideEffect.totpUiModel!!.issuer).isEqualTo(scannedTotp.issuer)
-                assertThat(sideEffect.totpUiModel!!.algorithm).isEqualTo(scannedTotp.algorithm.name)
-                assertThat(sideEffect.totpUiModel!!.length).isEqualTo(scannedTotp.digits.toString())
-                assertThat(sideEffect.totpUiModel!!.expiry).isEqualTo(scannedTotp.period.toString())
+                assertThat(sideEffect.totpUiModel.issuer).isEqualTo(scannedTotp.issuer)
+                assertThat(sideEffect.totpUiModel.algorithm).isEqualTo(scannedTotp.algorithm.name)
+                assertThat(sideEffect.totpUiModel.length).isEqualTo(scannedTotp.digits.toString())
+                assertThat(sideEffect.totpUiModel.expiry).isEqualTo(scannedTotp.period.toString())
             }
         }
 

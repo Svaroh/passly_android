@@ -23,6 +23,7 @@
 
 package net.svaroh.passly.feature.home.screen
 
+import net.svaroh.passly.core.navigation.AppContext
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.AVATAR
 import net.svaroh.passly.feature.home.screen.data.HomeData
@@ -31,7 +32,7 @@ import net.svaroh.passly.ui.HomeDisplayViewModel
 import net.svaroh.passly.ui.HomeDisplayViewModel.Folders
 import net.svaroh.passly.ui.HomeDisplayViewModel.Groups
 import net.svaroh.passly.ui.HomeDisplayViewModel.Tags
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 
 data class HomeState(
     val homeData: HomeData = HomeData(),
@@ -39,18 +40,21 @@ data class HomeState(
     val showSuggestedModel: ShowSuggestedModel = ShowSuggestedModel.DoNotShow,
     val canCreateResource: Boolean = false,
     val isRefreshing: Boolean = false,
+    val refreshProgress: Float = 0f,
     val searchQuery: String = "",
+    val isSearching: Boolean = false,
     val showProgress: Boolean = false,
     val searchInputEndIconMode: SearchInputEndIconMode = AVATAR,
     val userAvatar: String? = null,
     val showCreateResourceBottomSheet: Boolean = false,
     val showResourceMoreBottomSheet: Boolean = false,
-    val moreMenuResource: ResourceModel? = null,
+    val moreMenuResource: ResourceUiModel? = null,
     val showAccountSwitchBottomSheet: Boolean = false,
     val showDeleteResourceConfirmationDialog: Boolean = false,
     val showFiltersBottomSheet: Boolean = false,
     val showFolderMoreMenuBottomSheet: Boolean = false,
     val isAutofillConflictDetected: Boolean = false,
+    val appContext: AppContext = AppContext.APP,
 ) {
     val showBackIcon: Boolean
         get() =
@@ -66,7 +70,7 @@ data class HomeState(
     val showMoreMenu: Boolean
         get() = homeView is Folders && homeView.activeFolder is Child
 
-    val requireMoreMenuResource: ResourceModel
+    val requireMoreMenuResource: ResourceUiModel
         get() = requireNotNull(moreMenuResource)
 
     val currentFolderId: String?

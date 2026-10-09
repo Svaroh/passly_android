@@ -5,10 +5,10 @@ import androidx.room.Room
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.database.ResourceDatabase
 import net.svaroh.passly.database.ftsbenchmark.FtsBenchmarkDataFactory.DataSet
 import net.svaroh.passly.database.ftsbenchmark.FtsBenchmarkDataFactory.SLUG
-import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

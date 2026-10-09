@@ -1,7 +1,8 @@
 package net.svaroh.passly.core.networking.interceptor
 
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetCurrentApiUrlUseCase
 import net.svaroh.passly.core.networking.PLACEHOLDER_BASE_URL
+import net.svaroh.passly.domain.accounts.usecase.GetCurrentApiUrlUseCase
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -35,9 +36,14 @@ class ChangeableBaseUrlInterceptor(
         val oldUrl = oldRequest.url
         val baseUrl: String = getCurrentApiUrlUseCase.execute(Unit).currentUrl
         val newUrl = oldUrl.toString().replaceBaseUrlWithNew(baseUrl)
-        val newRequest = oldRequest.newBuilder().url(newUrl).build()
+        val newRequest =
+            oldRequest
+                .newBuilder()
+                .url(newUrl)
+                .tagApiOrigin(baseUrl.toHttpUrlOrNull()?.let { ApiOrigin(it) })
+                .build()
         return chain.proceed(newRequest)
     }
 }
 
-private fun String.replaceBaseUrlWithNew(newUrl: String) = toString().replace(PLACEHOLDER_BASE_URL, newUrl)
+private fun String.replaceBaseUrlWithNew(newUrl: String) = replace(PLACEHOLDER_BASE_URL, newUrl)

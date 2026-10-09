@@ -56,7 +56,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
-import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.domain.resources.resourceicon.ResourceIconProvider
 import net.svaroh.passly.ui.ResourcePickerListItem
 import net.svaroh.passly.ui.isExpired
 import net.svaroh.passly.core.localization.R as LocalizationR
@@ -65,6 +65,7 @@ import net.svaroh.passly.core.ui.R as CoreUiR
 @Composable
 fun ResourcePickerItem(
     resource: ResourcePickerListItem,
+    isSelected: Boolean,
     resourceIconProvider: ResourceIconProvider,
     onItemClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -171,7 +172,7 @@ fun ResourcePickerItem(
             )
         } else {
             RadioButton(
-                selected = resource.isSelected,
+                selected = isSelected,
                 onClick = null,
             )
         }

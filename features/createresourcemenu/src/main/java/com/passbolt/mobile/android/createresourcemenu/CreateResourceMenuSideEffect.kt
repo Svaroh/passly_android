@@ -32,5 +32,7 @@ sealed interface CreateResourceMenuSideEffect {
 
     data object InvokeCreateNote : CreateResourceMenuSideEffect
 
+    data object InvokeCreatePinCode : CreateResourceMenuSideEffect
+
     data object Dismiss : CreateResourceMenuSideEffect
 }

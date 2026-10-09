@@ -22,8 +22,10 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.CancellationSignal
 import android.os.OutcomeReceiver
+import androidx.annotation.RequiresApi
 import androidx.credentials.exceptions.ClearCredentialException
 import androidx.credentials.exceptions.CreateCredentialException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
@@ -45,9 +47,9 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourcesUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesUseCase
 import net.svaroh.passly.supportedresourceTypes.ContentType
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -55,6 +57,7 @@ import java.net.URI
 import net.svaroh.passly.core.localization.R as LocalizationR
 import net.svaroh.passly.core.ui.R as CoreUiR
 
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class PasskeyCredentialProviderService :
     CredentialProviderService(),
     KoinComponent {
@@ -168,7 +171,7 @@ class PasskeyCredentialProviderService :
     }
 
     private fun buildCredentialEntry(
-        resource: ResourceModel,
+        resource: ResourceUiModel,
         option: BeginGetPublicKeyCredentialOption,
         optionIndex: Int,
     ): PublicKeyCredentialEntry {
@@ -253,7 +256,7 @@ class PasskeyCredentialProviderService :
             CREATE_PUBLIC_KEY_CREDENTIAL_REQUEST_SUBTYPE ||
             candidateQueryData.containsKey(CREDENTIAL_BUNDLE_KEY_REQUEST_JSON)
 
-    private fun ResourceModel.matchesRpId(rpId: String): Boolean {
+    private fun ResourceUiModel.matchesRpId(rpId: String): Boolean {
         val candidates =
             buildList {
                 runCatching { metadataJsonModel.uri }.getOrNull()?.let(::add)

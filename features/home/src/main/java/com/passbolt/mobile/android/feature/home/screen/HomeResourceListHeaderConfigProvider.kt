@@ -23,24 +23,24 @@
 package net.svaroh.passly.feature.home.screen
 
 import androidx.paging.compose.LazyPagingItems
+import net.svaroh.passly.domain.folders.model.FolderWithCountAndPath
 import net.svaroh.passly.feature.home.screen.ShowSuggestedModel.Show
 import net.svaroh.passly.feature.home.screen.data.HeaderSectionConfiguration
-import net.svaroh.passly.ui.FolderWithCountAndPath
 import net.svaroh.passly.ui.GroupWithCount
 import net.svaroh.passly.ui.HomeDisplayViewModel
 import net.svaroh.passly.ui.HomeDisplayViewModel.Folders
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.TagWithCount
 
 @Suppress("LongParameterList")
 internal fun getHeaderConfig(
-    resources: LazyPagingItems<ResourceModel>,
+    resources: LazyPagingItems<ResourceUiModel>,
     folders: LazyPagingItems<FolderWithCountAndPath>,
     tags: LazyPagingItems<TagWithCount>,
     groups: LazyPagingItems<GroupWithCount>,
     filteredSubfolders: LazyPagingItems<FolderWithCountAndPath>,
-    filteredSubfoldersResources: LazyPagingItems<ResourceModel>,
-    suggestedResources: LazyPagingItems<ResourceModel>,
+    filteredSubfoldersResources: LazyPagingItems<ResourceUiModel>,
+    suggestedResources: LazyPagingItems<ResourceUiModel>,
     searchQuery: String?,
     homeView: HomeDisplayViewModel,
     showSuggestedModel: ShowSuggestedModel,

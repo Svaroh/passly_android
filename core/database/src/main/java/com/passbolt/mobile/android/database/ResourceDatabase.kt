@@ -96,7 +96,7 @@ import net.svaroh.passly.entity.user.User
         MetadataPrivateKey::class,
         Secret::class,
     ],
-    version = 24,
+    version = 30,
 )
 @TypeConverters(Converters::class)
 abstract class ResourceDatabase : RoomDatabase() {

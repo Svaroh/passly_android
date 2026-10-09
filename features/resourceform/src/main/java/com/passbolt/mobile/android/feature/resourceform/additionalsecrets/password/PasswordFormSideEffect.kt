@@ -1,5 +1,8 @@
 package net.svaroh.passly.feature.resourceform.additionalsecrets.password
 
+import net.svaroh.passly.ui.PassphraseGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorSettingsUiModel
+import net.svaroh.passly.ui.PasswordGeneratorTypeUiModel
 import net.svaroh.passly.ui.PasswordUiModel
 
 internal sealed interface PasswordFormSideEffect {
@@ -9,7 +12,9 @@ internal sealed interface PasswordFormSideEffect {
         val model: PasswordUiModel,
     ) : PasswordFormSideEffect
 
-    data class ShowUnableToGeneratePassword(
-        val minimumEntropyBits: Int,
+    data class NavigateToAdvancedSecretGeneration(
+        val selectedTab: PasswordGeneratorTypeUiModel,
+        val passwordSettings: PasswordGeneratorSettingsUiModel,
+        val passphraseSettings: PassphraseGeneratorSettingsUiModel,
     ) : PasswordFormSideEffect
 }

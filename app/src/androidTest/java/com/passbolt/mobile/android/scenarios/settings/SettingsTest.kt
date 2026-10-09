@@ -26,9 +26,6 @@ package net.svaroh.passly.scenarios.settings
 import android.app.Instrumentation.ActivityResult
 import android.content.Intent
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertIsNotEnabled
-import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasContentDescription
@@ -209,8 +206,7 @@ class SettingsTest : KoinTest {
                 hasTestTag(BackNavigation.ICON),
                 useUnmergedTree = true,
             ).assertIsDisplayed()
-            //    And 	    I see a Developer mode with an nodes icon and a switch on the right
-            //    And 	    I see a Hide "device is rooted" dialog with an hash icon and a switch on the right
+            //    And 	    I see a Hide "device is rooted" dialog with hash icon and a switch on the right
 
             ExpertSettingsItemModel.entries.forEach { item ->
                 val matcher =
@@ -226,34 +222,22 @@ class SettingsTest : KoinTest {
     }
 
     @Test
-    fun asAnAndroidUserICanEnableDeveloperMode() {
+    fun asAnAndroidUserICanSeeApiFetchPageSizeEntryInExpertSettings() {
         //    Given     that I am #MOBILE_USER_ON_SETTINGS_PAGE
         composeTestRule.apply {
-            //    And	    I'm on the "Expert settings" screen
+            //    And       I'm on the "Expert settings" screen
             onNodeWithText(getString(LocalizationR.string.settings_app_settings)).performClick()
             onNodeWithText(getString(LocalizationR.string.settings_app_settings_expert_settings)).performClick()
-            //    When 	    I enable the "Developer mode" switch
-            onAllNodesWithTag(SwitchableSetting.SWITCH)[0].performClick()
-            //    Then      I see that switch is enabled
-            onAllNodesWithTag(SwitchableSetting.SWITCH)[0].assertIsOn()
-            //    And 	    I see that "Hide "device is rooted" dialog" switch is available
-            onAllNodesWithTag(SwitchableSetting.SWITCH)[1].assertIsEnabled()
-        }
-    }
 
-    @Test
-    fun asAnAndroidUserICanDisableDeveloperMode() {
-        //    Given     that I am #MOBILE_USER_ON_SETTINGS_PAGE
-        composeTestRule.apply {
-            //    And	    I'm on the "Expert settings" screen
-            onNodeWithText(getString(LocalizationR.string.settings_app_settings)).performClick()
-            onNodeWithText(getString(LocalizationR.string.settings_app_settings_expert_settings)).performClick()
-            //    When 	    I disable the "Developer mode" switch
-            onAllNodesWithTag(SwitchableSetting.SWITCH)[0].performClick()
-            onAllNodesWithTag(SwitchableSetting.SWITCH)[0].performClick()
-            //    And 	    I see that every subsequent position is unavailable
-            onAllNodesWithTag(SwitchableSetting.SWITCH)[0].assertIsOff()
-            onAllNodesWithTag(SwitchableSetting.SWITCH)[1].assertIsNotEnabled()
+            //    Then      I see an "API fetch page size" openable row with a chevron on the right
+            val pageSizeTitle = getString(LocalizationR.string.settings_app_settings_expert_settings_fetch_page_size)
+            val pageSizeRow =
+                hasTestTag(OpenableSetting.ITEM)
+                    .and(hasAnyDescendant(hasText(pageSizeTitle)))
+                    .and(hasAnyDescendant(hasContentDescription(pageSizeTitle)))
+                    .and(hasAnyDescendant(hasTestTag(OpenableSetting.ARROW)))
+
+            onNode(pageSizeRow, useUnmergedTree = true).assertExists()
         }
     }
 
@@ -265,9 +249,8 @@ class SettingsTest : KoinTest {
             onNodeWithText(getString(LocalizationR.string.settings_app_settings)).performClick()
             onNodeWithText(getString(LocalizationR.string.settings_app_settings_expert_settings)).performClick()
             //    When 	    I enable the "Hide "device is rooted" dialog" switch
-            onAllNodesWithTag(SwitchableSetting.SWITCH)[0].performClick()
             onAllNodesWithTag(SwitchableSetting.SWITCH)[1].performClick()
-            onAllNodesWithTag(SwitchableSetting.SWITCH)[1].assertIsOn()
+            //    Then      I see that the switch is enabled
             onAllNodesWithTag(SwitchableSetting.SWITCH)[1].assertIsOn()
         }
     }

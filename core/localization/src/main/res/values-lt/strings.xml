@@ -344,7 +344,6 @@
     <string name="settings_app_settings_biometry_error">Biometrijos klaida. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Biometrijos autentifikavimo klaida. %s</string>
     <string name="settings_app_settings_expert_settings">Eksperto nustatymai</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Kūrėjo režimas</string>
     <string name="settings_app_settings_expert_settings_hide_root">Slėpti „įrenginys rootintas“ dialogą</string>
     <string name="settings_autofill_autofill_title">Čia galite keisti automatinio pildymo metodus</string>
     <string name="settings_autofill_autofill_desc">Rekomenduojama naudoti Autofill Service metodą, bet jo veikimas gali priklausyti nuo jūsų įrenginio ir baterijos optimizavimo nustatymų. \n\nJei Autofill Service jūsų įrenginyje neveikia patikimai, galite pabandyti įjungti automatinį pildymą, pagrįstą Accessibility Service.</string>

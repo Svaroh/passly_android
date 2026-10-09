@@ -1,13 +1,14 @@
 package net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data
 
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.privatekey.GetSelectedUserPrivateKeyUseCase
+import kotlinx.serialization.json.Json
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
 import net.svaroh.passly.dto.response.qrcode.AssembledKeyDto
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data.QrGenerationConstants.MAX_QR_DATA_BYTES
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.data.QrGenerationConstants.RESERVED_BYTES_COUNT
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
-import kotlinx.serialization.json.Json
 import okio.Buffer
 import timber.log.Timber
 import java.util.UUID
@@ -40,13 +41,15 @@ import kotlin.math.ceil
  * @since v1.0
  */
 class CreateTransferInputParametersGenerator(
-    private val getSelectedAccountPrivateKeyUseCase: GetSelectedUserPrivateKeyUseCase,
+    private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
+    private val privateKeyRepository: PrivateKeyRepository,
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
     private val openPgp: OpenPgp,
 ) {
     suspend fun calculateCreateTransferParameters(): Output =
         try {
-            val armoredPrivateKey = requireNotNull(getSelectedAccountPrivateKeyUseCase.execute(Unit).privateKey)
+            val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
+            val armoredPrivateKey = requireNotNull(privateKeyRepository.getPrivateKey(userId)?.armoredKey)
             val accountData = getSelectedAccountDataUseCase.execute(Unit)
             val userServerId = requireNotNull(accountData.serverId)
             val privateKeyFingerprint =

@@ -29,15 +29,22 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderLocationUseCase
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.domain.folders.model.FolderModel
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderLocationUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathJsonPathOps
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathsOps
 import net.svaroh.passly.locationdetails.LocationDetailsIntent.GoBack
@@ -53,16 +60,9 @@ import net.svaroh.passly.locationdetails.data.ExpandableFolderTree
 import net.svaroh.passly.locationdetails.data.ExpandableFolderTreeCreator
 import net.svaroh.passly.locationdetails.ui.LocationItem.FOLDER
 import net.svaroh.passly.locationdetails.ui.LocationItem.RESOURCE
-import net.svaroh.passly.ui.FolderModel
 import net.svaroh.passly.ui.MetadataJsonModel
-import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.ui.ResourceUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -135,17 +135,17 @@ class LocationDetailsViewModelTest : KoinTest {
 
         val getLocalResourceUseCase = get<GetLocalResourceUseCase>()
         getLocalResourceUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalResourceUseCase.Output(testResource)
+            on { execute(any()) } doReturn GetLocalResourceUseCase.Output(testResource)
         }
 
         val getLocalFolderDetailsUseCase = get<GetLocalFolderDetailsUseCase>()
         getLocalFolderDetailsUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalFolderDetailsUseCase.Output(testFolder)
+            on { execute(any()) } doReturn GetLocalFolderDetailsUseCase.Output(testFolder)
         }
 
         val getLocalFolderLocationUseCase = get<GetLocalFolderLocationUseCase>()
         getLocalFolderLocationUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalFolderLocationUseCase.Output(testParentFolders)
+            on { execute(any()) } doReturn GetLocalFolderLocationUseCase.Output(testParentFolders)
         }
 
         val expandableFolderTreeCreator = get<ExpandableFolderTreeCreator>()
@@ -251,7 +251,7 @@ class LocationDetailsViewModelTest : KoinTest {
                 awaitItem()
 
                 val dataRefreshTrackingFlow = get<DataRefreshTrackingFlow>()
-                dataRefreshTrackingFlow.updateStatus(InProgress)
+                dataRefreshTrackingFlow.updateStatus(InProgress(progress = 0f))
 
                 val refreshingState = awaitItem()
                 assertThat(refreshingState.isRefreshing).isTrue()
@@ -278,11 +278,11 @@ class LocationDetailsViewModelTest : KoinTest {
 
     @OptIn(ExperimentalTime::class)
     @Test
-    fun `should handle null pointer exception when loading resource and navigate to home`() =
+    fun `should handle missing item exception when loading resource and navigate to home`() =
         runTest {
             val getLocalResourceUseCase = get<GetLocalResourceUseCase>()
             getLocalResourceUseCase.stub {
-                onBlocking { execute(any()) } doThrow NullPointerException("Resource not found")
+                on { execute(any()) } doThrow IllegalStateException("The query result was empty")
             }
 
             viewModel = get { parametersOf(RESOURCE, testResource.resourceId) }
@@ -295,11 +295,11 @@ class LocationDetailsViewModelTest : KoinTest {
 
     @OptIn(ExperimentalTime::class)
     @Test
-    fun `should handle null pointer exception when loading folder and navigate to home`() =
+    fun `should handle missing item exception when loading folder and navigate to home`() =
         runTest {
             val getLocalFolderDetailsUseCase = get<GetLocalFolderDetailsUseCase>()
             getLocalFolderDetailsUseCase.stub {
-                onBlocking { execute(any()) } doThrow NullPointerException("Folder not found")
+                on { execute(any()) } doThrow IllegalStateException("The query result was empty")
             }
 
             viewModel = get { parametersOf(FOLDER, testFolder.folderId) }
@@ -317,7 +317,7 @@ class LocationDetailsViewModelTest : KoinTest {
             val resourceWithoutFolder = testResource.copy(folderId = null)
             val getLocalResourceUseCase = get<GetLocalResourceUseCase>()
             getLocalResourceUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetLocalResourceUseCase.Output(resourceWithoutFolder)
+                on { execute(any()) } doReturn GetLocalResourceUseCase.Output(resourceWithoutFolder)
             }
 
             val expandableFolderTreeCreator = get<ExpandableFolderTreeCreator>()
@@ -356,9 +356,10 @@ class LocationDetailsViewModelTest : KoinTest {
 
     private companion object {
         private val testResource by lazy {
-            ResourceModel(
+            ResourceUiModel(
                 resourceId = "resource-id-123",
                 resourceTypeId = "resource-type-id",
+                slug = "password-and-description",
                 folderId = "parent-folder-id",
                 permission = ResourcePermission.READ,
                 favouriteId = null,
@@ -387,6 +388,7 @@ class LocationDetailsViewModelTest : KoinTest {
                 name = "Test Folder",
                 isShared = true,
                 permission = ResourcePermission.OWNER,
+                modified = ZonedDateTime.now(),
             )
         }
 
@@ -398,6 +400,7 @@ class LocationDetailsViewModelTest : KoinTest {
                     name = "Root",
                     isShared = false,
                     permission = ResourcePermission.OWNER,
+                    modified = ZonedDateTime.now(),
                 ),
                 FolderModel(
                     folderId = "parent-folder-id",
@@ -405,6 +408,7 @@ class LocationDetailsViewModelTest : KoinTest {
                     name = "Parent Folder",
                     isShared = true,
                     permission = ResourcePermission.UPDATE,
+                    modified = ZonedDateTime.now(),
                 ),
             )
         }

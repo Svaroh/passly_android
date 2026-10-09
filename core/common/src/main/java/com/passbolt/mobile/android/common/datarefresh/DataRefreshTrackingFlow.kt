@@ -22,12 +22,12 @@
  */
 package net.svaroh.passly.common.datarefresh
 
-import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle
-import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
-import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
+import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 
 class DataRefreshTrackingFlow {
     val dataRefreshStatusFlow: StateFlow<DataRefreshStatus>
@@ -47,7 +47,7 @@ class DataRefreshTrackingFlow {
 
     fun startTracking(isUserInitiated: Boolean) {
         this.isUserInitiated = isUserInitiated
-        _dataRefreshStatusFlow.value = InProgress
+        _dataRefreshStatusFlow.value = InProgress(progress = 0f)
     }
 
     fun updateStatus(newStatus: DataRefreshStatus) {

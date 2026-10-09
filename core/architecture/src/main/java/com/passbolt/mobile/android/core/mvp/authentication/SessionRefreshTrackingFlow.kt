@@ -1,9 +1,9 @@
 package net.svaroh.passly.core.mvp.authentication
 
-import net.svaroh.passly.core.mvp.authentication.SessionState.NeedsRefresh
-import net.svaroh.passly.core.mvp.authentication.SessionState.Valid
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterIsInstance
+import net.svaroh.passly.core.mvp.authentication.SessionState.NeedsRefresh
+import net.svaroh.passly.core.mvp.authentication.SessionState.Valid
 import timber.log.Timber
 
 /**

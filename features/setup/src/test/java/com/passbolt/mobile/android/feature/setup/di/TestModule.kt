@@ -1,9 +1,9 @@
 package net.svaroh.passly.feature.setup.di
 
 import com.google.gson.Gson
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.dsl.module
 
 /**

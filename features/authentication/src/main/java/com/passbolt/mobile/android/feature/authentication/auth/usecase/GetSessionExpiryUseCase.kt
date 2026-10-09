@@ -1,15 +1,14 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
-import net.svaroh.passly.common.usecase.UseCase
-import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.SessionFileName
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import net.svaroh.passly.core.authenticationcore.session.ACCESS_TOKEN_KEY
-import net.svaroh.passly.encryptedstorage.EncryptedSharedPreferencesFactory
 import io.fusionauth.jwt.JWTExpiredException
 import io.fusionauth.jwt.Verifier
 import io.fusionauth.jwt.domain.JWT
 import io.fusionauth.jwt.rsa.RSAVerifier
+import net.svaroh.passly.common.usecase.UseCase
+import net.svaroh.passly.common.usecase.UserIdInput
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.auth.SessionRepository
+import net.svaroh.passly.domain.auth.usecase.GetServerPublicRsaKeyUseCase
 import java.time.ZonedDateTime
 
 /**
@@ -36,29 +35,27 @@ import java.time.ZonedDateTime
  */
 
 class GetSessionExpiryUseCase(
-    private val encryptedSharedPreferencesFactory: EncryptedSharedPreferencesFactory,
+    private val sessionRepository: SessionRepository,
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
     private val getServerRsaPublicKeyUseCase: GetServerPublicRsaKeyUseCase,
 ) : UseCase<Unit, GetSessionExpiryUseCase.Output> {
     override fun execute(input: Unit): Output {
         val userId = getSelectedAccountUseCase.execute(Unit).selectedAccount
-        userId?.let {
-            val alias = SessionFileName(it).name
-            val sharedPreferences = encryptedSharedPreferencesFactory.get("$alias.xml")
-            val accessToken = sharedPreferences.getString(ACCESS_TOKEN_KEY, null)
+        return userId?.let {
+            val accessToken = sessionRepository.getSession(it).accessToken
             val rsaPublicKey = getServerRsaPublicKeyUseCase.execute(UserIdInput(userId)).rsaKey
 
             val verifier: Verifier = RSAVerifier.newVerifier(rsaPublicKey)
 
-            return try {
+            try {
                 val accessTokenJwt = JWT.getDecoder().decode(accessToken, verifier)
                 Output.JwtWillExpire(accessTokenJwt.expiration)
-            } catch (exception: JWTExpiredException) {
+            } catch (_: JWTExpiredException) {
                 Output.JwtAlreadyExpired
-            } catch (exception: Exception) {
+            } catch (_: Exception) {
                 Output.NoJwt
             }
-        } ?: return Output.NoJwt
+        } ?: Output.NoJwt
     }
 
     sealed class Output {

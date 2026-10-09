@@ -1,0 +1,27 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+# To regenerate this file, run: ./gradlew :dto:dependencies --write-locks
+com.google.code.gson:gson:2.13.1=releaseRuntimeClasspath
+com.google.errorprone:error_prone_annotations:2.38.0=releaseRuntimeClasspath
+com.jakewharton.timber:timber:5.0.1=releaseRuntimeClasspath
+com.squareup.okhttp3:okhttp:4.12.0=releaseRuntimeClasspath
+com.squareup.okio:okio-jvm:3.6.0=releaseRuntimeClasspath
+com.squareup.okio:okio:3.6.0=releaseRuntimeClasspath
+com.squareup.retrofit2:converter-gson:3.0.0=releaseRuntimeClasspath
+com.squareup.retrofit2:retrofit:3.0.0=releaseRuntimeClasspath
+org.jetbrains.kotlin:kotlin-stdlib-common:2.4.10=releaseRuntimeClasspath
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10=releaseRuntimeClasspath
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10=releaseRuntimeClasspath
+org.jetbrains.kotlin:kotlin-stdlib:2.4.10=releaseRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0=releaseRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0=releaseRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0=releaseRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0=releaseRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-serialization-bom:1.11.0=releaseRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.11.0=releaseRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-serialization-core:1.11.0=releaseRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.11.0=releaseRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0=releaseRuntimeClasspath
+org.jetbrains:annotations:23.0.0=releaseRuntimeClasspath
+empty=

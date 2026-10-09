@@ -32,7 +32,6 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
-import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.Otp
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpSuccess
 import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
 import net.svaroh.passly.core.navigation.compose.results.OtpScanCompleteResult
@@ -51,6 +50,7 @@ import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.DismissCamera
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.DismissCameraRequiredDialog
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.GoBack
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.GoToSettings
+import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.GrantCameraPermission
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.Initialize
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.RejectCameraPermission
 import net.svaroh.passly.feature.otp.scanotp.compose.ScanOtpIntent.StartCameraError
@@ -88,7 +88,9 @@ internal fun ScanOtpScreen(
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestPermission(),
         ) { isGranted: Boolean ->
-            if (!isGranted) {
+            if (isGranted) {
+                viewModel.onIntent(GrantCameraPermission)
+            } else {
                 viewModel.onIntent(RejectCameraPermission)
             }
         }
@@ -153,7 +155,7 @@ internal fun ScanOtpScreen(
                         resultBus.sendResult(
                             result = OtpScanCompleteResult(otpCreated = false, otpManualCreationChosen = true),
                         )
-                        navigator.popToKey(Otp)
+                        navigator.navigateBack()
                     }
                 }
             NavigateToAppSettings -> {

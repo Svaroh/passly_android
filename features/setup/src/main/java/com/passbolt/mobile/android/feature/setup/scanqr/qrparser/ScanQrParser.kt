@@ -1,12 +1,12 @@
 package net.svaroh.passly.feature.setup.scanqr.qrparser
 
-import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import okio.Buffer
 import timber.log.Timber
 

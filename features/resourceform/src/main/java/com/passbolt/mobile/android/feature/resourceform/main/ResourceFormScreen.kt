@@ -1,6 +1,5 @@
 package net.svaroh.passly.feature.resourceform.main
 
-import PassboltTheme
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -13,12 +12,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -31,21 +32,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.AdditionalUrisForm
+import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.AdvancedSecretGenerationForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.AppearanceForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.CustomFieldsForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.DescriptionForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.NoteForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.PasswordForm
+import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.PinCodeAdvancedGenerationForm
+import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.PinCodeForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.TotpAdvancedSettingsForm
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.TotpForm
 import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
 import net.svaroh.passly.core.navigation.compose.results.ResourceFormCompleteResult
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
 import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.dialogs.UnableToGeneratePasswordAlertDialog
 import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
 import net.svaroh.passly.core.ui.text.TextInput
 import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
@@ -54,9 +63,12 @@ import net.svaroh.passly.feature.metadatakeytrust.NewMetadataKeyTrustDialog
 import net.svaroh.passly.feature.metadatakeytrust.TrustedMetadataKeyDeletedDialog
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.CreateResource
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.DismissMetadataKeyDialog
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.DismissPasswordWarning
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.DismissUnableToGeneratePassword
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.ExpandAdvancedSettings
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.GoBack
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.NameTextChanged
+import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.ProceedWithPasswordWarning
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.TrustNewMetadataKey
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.TrustedMetadataKeyDeleted
 import net.svaroh.passly.feature.resourceform.main.ResourceFormIntent.UpdateResource
@@ -64,26 +76,31 @@ import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.Naviga
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateBackWithCreateSuccess
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateBackWithEditSuccess
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToAdditionalUris
+import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToAdvancedSecretGeneration
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToAppearance
+import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToConfirmPermissions
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToCustomFields
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToDescription
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToNote
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToPassword
+import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToPinCode
+import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToPinCodeAdvancedGeneration
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToScanOtp
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToTotp
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.NavigateToTotpAdvancedSettings
+import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.OpenWebsite
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.ShowSnackbar
 import net.svaroh.passly.feature.resourceform.main.ResourceFormSideEffect.ShowToast
 import net.svaroh.passly.feature.resourceform.main.ui.AdditionalSecretsSection
 import net.svaroh.passly.feature.resourceform.main.ui.LeadingContent
 import net.svaroh.passly.feature.resourceform.main.ui.MetadataSection
+import net.svaroh.passly.feature.resourceform.main.ui.UpgradeAvailableSection
 import net.svaroh.passly.testtags.composetags.ResourceForm
 import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.PasswordStrength
 import net.svaroh.passly.ui.ResourceFormMode.Create
 import net.svaroh.passly.ui.ResourceFormMode.Edit
 import net.svaroh.passly.ui.ResourceFormUiModel
-import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR
 
@@ -94,6 +111,8 @@ internal fun ResourceFormScreen(
     modifier: Modifier = Modifier,
     navigator: AppNavigator = koinInject(),
 ) {
+    FlagSecureEffect()
+
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resultBus = NavigationResultEventBus.current
@@ -114,8 +133,20 @@ internal fun ResourceFormScreen(
                 navigator.navigateToKey(TotpForm(sideEffect.mode, sideEffect.totpUiModel))
             is NavigateToTotpAdvancedSettings ->
                 navigator.navigateToKey(TotpAdvancedSettingsForm(sideEffect.mode, sideEffect.totpUiModel))
+            is NavigateToAdvancedSecretGeneration ->
+                navigator.navigateToKey(
+                    AdvancedSecretGenerationForm(
+                        selectedTab = sideEffect.selectedTab,
+                        passwordSettings = sideEffect.passwordSettings,
+                        passphraseSettings = sideEffect.passphraseSettings,
+                    ),
+                )
             is NavigateToNote ->
                 navigator.navigateToKey(NoteForm(sideEffect.mode, sideEffect.note))
+            is NavigateToPinCode ->
+                navigator.navigateToKey(PinCodeForm(sideEffect.mode, sideEffect.pinCodeUiModel))
+            is NavigateToPinCodeAdvancedGeneration ->
+                navigator.navigateToKey(PinCodeAdvancedGenerationForm(sideEffect.mode, sideEffect.pinCodeUiModel))
             is NavigateToDescription ->
                 navigator.navigateToKey(DescriptionForm(sideEffect.mode, sideEffect.metadataDescription))
             is NavigateToAdditionalUris ->
@@ -128,6 +159,8 @@ internal fun ResourceFormScreen(
                 )
             NavigateToScanOtp ->
                 navigator.navigateToKey(ScanOtp(ScanOtpMode.SCAN_FOR_RESULT))
+            is NavigateToConfirmPermissions ->
+                navigator.navigateToKey(ConfirmPermissions(sideEffect.confirmMode, sideEffect.driftedEntityNames))
             is NavigateBackWithCreateSuccess -> {
                 resultBus.sendResult(
                     result =
@@ -151,6 +184,7 @@ internal fun ResourceFormScreen(
                 navigator.navigateBack()
             }
             NavigateBack -> navigator.navigateBack()
+            is OpenWebsite -> navigator.openExternalWebsite(context, sideEffect.url)
             is ShowSnackbar ->
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar(getSnackbarMessage(context, sideEffect.type))
@@ -166,8 +200,9 @@ internal fun ResourceFormScreen(
     }
 }
 
+@Suppress("CyclomaticComplexMethod")
 @Composable
-private fun ResourceFormScreen(
+fun ResourceFormScreen(
     state: ResourceFormState,
     onIntent: (ResourceFormIntent) -> Unit,
     modifier: Modifier = Modifier,
@@ -231,6 +266,11 @@ private fun ResourceFormScreen(
                     testTag = ResourceForm.NAME_INPUT,
                 )
 
+                if (state.showUpgradePanel) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    UpgradeAvailableSection(onIntent = onIntent)
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 LeadingContent(
@@ -238,6 +278,7 @@ private fun ResourceFormScreen(
                     passwordData = state.passwordData,
                     totpData = state.totpData,
                     noteData = state.noteData,
+                    pinCodeData = state.pinCodeData,
                     onIntent = onIntent,
                 )
 
@@ -275,6 +316,12 @@ private fun ResourceFormScreen(
 
         ProgressDialog(isVisible = state.shouldShowDialogProgress)
 
+        UnableToGeneratePasswordAlertDialog(
+            isVisible = state.isUnableToGeneratePasswordDialogVisible,
+            requiredEntropy = state.minimumEntropyBits,
+            onDismiss = { onIntent(DismissUnableToGeneratePassword) },
+        )
+
         state.metadataKeyModifiedDialog?.let { model ->
             NewMetadataKeyTrustDialog(
                 newKeyToTrustModel = model,
@@ -288,6 +335,35 @@ private fun ResourceFormScreen(
                 trustedKeyDeletedModel = model,
                 onTrustClick = { onIntent(TrustedMetadataKeyDeleted) },
                 onDismiss = { onIntent(DismissMetadataKeyDialog) },
+            )
+        }
+
+        if (state.showPasswordWarningDialog && state.passwordWarningType != null) {
+            AlertDialog(
+                onDismissRequest = {},
+                title = { Text(stringResource(LocalizationR.string.dialog_confirm_password_title)) },
+                text = {
+                    Text(
+                        stringResource(
+                            when (state.passwordWarningType) {
+                                PasswordWarningType.DATA_BREACH ->
+                                    LocalizationR.string.dialog_confirm_password_message_data_breach
+                                PasswordWarningType.LOW_ENTROPY ->
+                                    LocalizationR.string.dialog_confirm_password_message_low_entropy
+                            },
+                        ),
+                    )
+                },
+                confirmButton = {
+                    TextButton(onClick = { onIntent(DismissPasswordWarning) }) {
+                        Text(stringResource(LocalizationR.string.edit_password))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { onIntent(ProceedWithPasswordWarning) }) {
+                        Text(stringResource(LocalizationR.string.proceed))
+                    }
+                },
             )
         }
     }
@@ -390,6 +466,14 @@ private fun getSnackbarMessage(
             SnackbarMessage.METADATA_KEY_TRUST_FAILED -> LocalizationR.string.common_metadata_key_trust_failed
             SnackbarMessage.ENCRYPTION_FAILURE -> LocalizationR.string.common_encryption_failure
             SnackbarMessage.METADATA_KEY_IS_TRUSTED -> LocalizationR.string.common_metadata_key_is_trusted
+            SnackbarMessage.RESOURCE_UPGRADED -> LocalizationR.string.resource_details_upgrade_success
+            SnackbarMessage.UPGRADE_FAILURE -> LocalizationR.string.resource_details_upgrade_failure
+            SnackbarMessage.PASSWORD_POLICIES_FETCH_FAILED ->
+                LocalizationR.string.common_password_policies_fetch_failed
+            SnackbarMessage.PASSWORD_EXPIRY_FETCH_FAILED ->
+                LocalizationR.string.common_password_expiry_fetch_failed
+            SnackbarMessage.RESOURCE_EDITED_SHARE_FAILED ->
+                LocalizationR.string.resource_form_edited_share_failed
         },
     )
 
@@ -405,6 +489,9 @@ private fun getToastMessage(
                 LocalizationR.string.dialog_unable_to_generate_password_message
             ToastMessage.CREATE_INITIALIZATION_ERROR -> LocalizationR.string.resource_form_create_init_error
             ToastMessage.EDIT_INITIALIZATION_ERROR -> LocalizationR.string.resource_form_edit_init_error
+            ToastMessage.RESOURCE_CREATED_SHARE_FAILED -> LocalizationR.string.resource_form_created_share_failed
+            ToastMessage.RESOURCE_CREATED_PERMISSIONS_CHANGED ->
+                LocalizationR.string.resource_form_created_permissions_changed
         },
         *args.toTypedArray(),
     )

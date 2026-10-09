@@ -25,18 +25,20 @@ package net.svaroh.passly.feature.main.mainscreen.encouragements
 
 import net.svaroh.passly.core.autofill.AutofillInformationProvider
 import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.DISABLED
-import net.svaroh.passly.core.preferences.usecase.GetAccountFlagsPrefsUseCase
-import net.svaroh.passly.core.preferences.usecase.UpdateAccountFlagsPrefsUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.preferences.AccountFlagsUpdate
+import net.svaroh.passly.domain.preferences.AccountPreferencesRepository
 
 class EncouragementsInteractor(
-    private val getAccountFlagsPrefsUseCase: GetAccountFlagsPrefsUseCase,
-    private val updateAccountFlagsPrefsUseCase: UpdateAccountFlagsPrefsUseCase,
+    private val accountPreferencesRepository: AccountPreferencesRepository,
     private val autofillInformationProvider: AutofillInformationProvider,
+    private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
 ) {
     fun shouldShowChromeNativeAutofillEncouragement(): Boolean {
+        val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
         val wasChromeEncouragementDialogShown =
-            getAccountFlagsPrefsUseCase
-                .execute(Unit)
+            accountPreferencesRepository
+                .getAccountFlags(userId)
                 .wasChromeNativeAutofillDialogShown
         val chromeNativeAutofillStatus = autofillInformationProvider.getChromeNativeAutofillStatus()
 
@@ -44,8 +46,10 @@ class EncouragementsInteractor(
     }
 
     fun chromeNativeAutofillEncouragementShown() {
-        updateAccountFlagsPrefsUseCase.execute(
-            UpdateAccountFlagsPrefsUseCase.Input(wasChromeNativeAutofillDialogShown = true),
+        val userId = requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount)
+        accountPreferencesRepository.updateAccountFlags(
+            AccountFlagsUpdate(wasChromeNativeAutofillDialogShown = true),
+            userId,
         )
     }
 }

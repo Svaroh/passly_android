@@ -10,7 +10,6 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.Passbolt"
             tools:ignore="DiscouragedApi" />
     </application>

@@ -1,13 +1,13 @@
 package net.svaroh.passly.permissions.grouppermissionsdetails.ui
 
 import net.svaroh.passly.core.ui.overlap.OverlapCalculator
-import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserUiModel
 
 class UsersDatasetCreator(
     private val membersRecyclerWidth: Int,
     private val membersItemWidth: Float,
 ) {
-    fun prepareDataset(users: List<UserModel>): Output {
+    fun prepareDataset(users: List<UserUiModel>): Output {
         val overlapCalculationResult =
             OverlapCalculator(
                 membersRecyclerWidth,
@@ -39,7 +39,7 @@ class UsersDatasetCreator(
     }
 
     data class Output(
-        val users: List<UserModel>,
+        val users: List<UserUiModel>,
         val counterValue: List<String>,
         val overlap: Int,
     )

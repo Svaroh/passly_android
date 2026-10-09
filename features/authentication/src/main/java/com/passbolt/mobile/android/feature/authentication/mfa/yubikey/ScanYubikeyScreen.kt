@@ -1,6 +1,5 @@
 package net.svaroh.passly.feature.authentication.mfa.yubikey
 
-import PassboltTheme
 import android.app.Activity
 import android.content.Intent
 import androidx.activity.compose.BackHandler
@@ -33,20 +32,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.yubico.yubikit.android.ui.OtpActivity
+import kotlinx.coroutines.launch
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.mvp.authentication.AuthenticationState.Unauthenticated.Reason.Mfa.MfaProvider
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.NavigationActivity.AuthenticationSignIn
 import net.svaroh.passly.core.navigation.compose.NavigationActivity.Start
 import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.dialogs.LeaveSetupAlertDialog
 import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
 import net.svaroh.passly.feature.authentication.mfa.MfaDialogState
@@ -56,8 +59,10 @@ import net.svaroh.passly.feature.authentication.mfa.MfaResult.Succeeded
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.CancelYubikeyScan
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ChooseOtherProvider
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.Close
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ConfirmSetupLeave
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.DismissNotFromCurrentUserDialog
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.DismissScanCancelledDialog
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.DismissSetupLeave
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ScanYubikey
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ToggleRememberMe
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ValidateYubikeyOtp
@@ -68,8 +73,6 @@ import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffec
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.NotifyLoginSucceeded
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.NotifyVerificationSucceeded
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeySideEffect.ShowErrorSnackbar
-import com.yubico.yubikit.android.ui.OtpActivity
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
@@ -80,10 +83,11 @@ import net.svaroh.passly.core.ui.R as CoreUiR
 internal fun ScanYubikeyScreen(
     mfaState: MfaDialogState.Yubikey,
     onMfaResult: (MfaResult) -> Unit,
+    isSetupFlow: Boolean = false,
     appNavigator: AppNavigator = koinInject(),
     viewModel: ScanYubikeyViewModel =
         koinViewModel {
-            parametersOf(mfaState.authToken, mfaState.hasOtherProviders)
+            parametersOf(mfaState.authToken, mfaState.hasOtherProviders, isSetupFlow)
         },
 ) {
     val context = LocalContext.current
@@ -105,6 +109,7 @@ internal fun ScanYubikeyScreen(
             }
         }
 
+    val errorSnackbarColor = colorResource(CoreUiR.color.red)
     SideEffectDispatcher(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             is NotifyVerificationSucceeded -> onMfaResult(Succeeded(sideEffect.mfaHeader))
@@ -118,7 +123,7 @@ internal fun ScanYubikeyScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getSnackbarMessage(context, sideEffect.kind),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorSnackbarColor,
                         ),
                     )
                 }
@@ -270,6 +275,12 @@ private fun ScanYubikeyScreen(
             onDismissRequest = { onIntent(DismissNotFromCurrentUserDialog) },
         )
     }
+
+    LeaveSetupAlertDialog(
+        isVisible = state.showSetupLeaveConfirmationDialog,
+        onLeaveConfirm = { onIntent(ConfirmSetupLeave) },
+        onDismiss = { onIntent(DismissSetupLeave) },
+    )
 
     ProgressDialog(isVisible = state.showProgress)
 }

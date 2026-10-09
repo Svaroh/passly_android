@@ -35,6 +35,7 @@ import net.svaroh.passly.supportedresourceTypes.ContentType.V5Default
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5DefaultWithTotp
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5Note
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5PasswordString
+import net.svaroh.passly.supportedresourceTypes.ContentType.V5PinCodeStandalone
 import net.svaroh.passly.supportedresourceTypes.ContentType.V5TotpStandalone
 
 class ResourceTypesUpdatesAdjacencyGraph {
@@ -54,6 +55,7 @@ class ResourceTypesUpdatesAdjacencyGraph {
         val v5DefaultWithTotp = ResourceTypeVertex(V5DefaultWithTotp)
         val v5CustomFields = ResourceTypeVertex(V5CustomFields)
         val v5Note = ResourceTypeVertex(V5Note)
+        val v5PinCode = ResourceTypeVertex(V5PinCodeStandalone)
 
         // edges (actions)
         map[simplePassword] =
@@ -173,6 +175,19 @@ class ResourceTypesUpdatesAdjacencyGraph {
                 ResourceTypeEdge(v5Note, v5Default, UpdateAction.ADD_PASSWORD),
                 ResourceTypeEdge(v5Note, v5DefaultWithTotp, UpdateAction.ADD_TOTP),
                 ResourceTypeEdge(v5Note, v5Default, UpdateAction.ADD_CUSTOM_FIELDS),
+                ResourceTypeEdge(v5Note, v5PinCode, UpdateAction.ADD_PIN_CODE),
+            )
+
+        map[v5PinCode] =
+            listOf(
+                ResourceTypeEdge(v5PinCode, v5PinCode, UpdateAction.EDIT_METADATA),
+                ResourceTypeEdge(v5PinCode, v5PinCode, UpdateAction.ADD_PIN_CODE),
+                ResourceTypeEdge(v5PinCode, v5Note, UpdateAction.REMOVE_PIN_CODE),
+                ResourceTypeEdge(v5PinCode, v5PinCode, UpdateAction.ADD_NOTE),
+                ResourceTypeEdge(v5PinCode, v5PinCode, UpdateAction.REMOVE_NOTE),
+                ResourceTypeEdge(v5PinCode, v5PinCode, UpdateAction.ADD_METADATA_DESCRIPTION),
+                ResourceTypeEdge(v5PinCode, v5PinCode, UpdateAction.REMOVE_METADATA_DESCRIPTION),
+                ResourceTypeEdge(v5PinCode, v5PinCode, UpdateAction.EDIT_APPEARANCE),
             )
 
         adjacencyMap = map

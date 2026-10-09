@@ -1,6 +1,6 @@
 package net.svaroh.passly.feature.otp.scanotp.scanotpsuccess
 
-import PassboltTheme
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -31,22 +31,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
-import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.Otp
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ResourcePicker
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
+import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
 import net.svaroh.passly.core.navigation.compose.results.OtpScanCompleteResult
 import net.svaroh.passly.core.ui.button.PrimaryButton
 import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.CreateStandaloneOtpClick
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessIntent.LinkToResourceClick
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToConfirmPermissions
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToOtpList
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.NavigateToResourcePicker
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowSuccessSnackbar
+import net.svaroh.passly.feature.otp.scanotp.scanotpsuccess.ScanOtpSuccessSideEffect.ShowToast
 import net.svaroh.passly.ui.OtpParseResult
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
@@ -85,10 +90,17 @@ internal fun ScanOtpSuccessScreen(
                 resultBus.sendResult(
                     result = OtpScanCompleteResult(otpCreated = sideEffect.otpCreated, otpManualCreationChosen = false),
                 )
-                navigator.popToKey(Otp)
+                navigator.popToKey(
+                    ScanOtp(ScanOtpMode.SCAN_WITH_SUCCESS_SCREEN, parentFolderId),
+                    inclusive = true,
+                )
             }
             is NavigateToResourcePicker ->
                 navigator.navigateToKey(ResourcePicker(sideEffect.suggestedUri))
+            is NavigateToConfirmPermissions ->
+                navigator.navigateToKey(
+                    ConfirmPermissions(sideEffect.confirmMode, sideEffect.driftedEntityNames),
+                )
             is ShowErrorSnackbar ->
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar(getErrorSnackbarMessage(context, sideEffect))
@@ -97,6 +109,10 @@ internal fun ScanOtpSuccessScreen(
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar(getSuccessSnackbarMessage(context, sideEffect))
                 }
+            is ShowToast ->
+                Toast
+                    .makeText(context, getToastMessage(context, sideEffect), Toast.LENGTH_LONG)
+                    .show()
         }
     }
 }

@@ -24,15 +24,15 @@
 package net.svaroh.passly.feature.setup.welcome
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.accounts.AccountKitParser
-import net.svaroh.passly.core.accounts.AccountsInteractor
-import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ACCOUNT_ALREADY_LINKED
-import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ERROR_NON_HTTPS_DOMAIN
-import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ERROR_WHEN_SAVING_PRIVATE_KEY
 import net.svaroh.passly.core.compose.SideEffectViewModel
-import net.svaroh.passly.core.navigation.AccountSetupDataModel
-import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.core.security.rootdetection.RootDetector
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ACCOUNT_ALREADY_LINKED
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ERROR_NON_HTTPS_DOMAIN
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ERROR_WHEN_SAVING_PRIVATE_KEY
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.AccessLogs
 import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.AcknowledgeDeviceRooted
 import net.svaroh.passly.feature.setup.welcome.WelcomeIntent.ConnectToExistingAccount
@@ -49,10 +49,10 @@ import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateToLogs
 import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateToSummary
 import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateToTransferDetails
 import net.svaroh.passly.feature.setup.welcome.WelcomeSideEffect.NavigateUp
+import net.svaroh.passly.ui.AccountSetupDataModel
 import net.svaroh.passly.ui.ResultStatus
 import net.svaroh.passly.ui.ResultStatus.Failure
 import net.svaroh.passly.ui.ResultStatus.Success
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
 internal class WelcomeViewModel(
@@ -79,7 +79,8 @@ internal class WelcomeViewModel(
     }
 
     private fun initialize(intent: Initialize) {
-        val shouldShowRootWarning = !getGlobalPreferencesUseCase.execute(Unit).isHideRootDialogEnabled && rootDetector.isDeviceRooted()
+        val shouldShowRootWarning =
+            !getGlobalPreferencesUseCase.execute(Unit).isHideRootDialogEnabled && rootDetector.isDeviceRooted()
         updateViewState {
             copy(
                 showBackNavigation = !intent.isTaskRoot,

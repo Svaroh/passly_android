@@ -1,10 +1,9 @@
 package net.svaroh.passly.feature.setup.scanqr
 
+import kotlinx.serialization.json.Json
 import net.svaroh.passly.feature.setup.scanqr.qrparser.KeyAssembler
 import net.svaroh.passly.feature.setup.scanqr.qrparser.QrScanResultsMapper
 import net.svaroh.passly.feature.setup.scanqr.qrparser.ScanQrParser
-import net.svaroh.passly.feature.setup.scanqr.usecase.UpdateTransferUseCase
-import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -37,7 +36,6 @@ fun Module.scanQrModule() {
     viewModelOf(::ScanQrViewModel)
     singleOf(::QrScanResultsMapper)
     singleOf(::KeyAssembler)
-    singleOf(::UpdateTransferUseCase)
     factoryOf(::ScanQrParser)
     single { Json { ignoreUnknownKeys = true } }
 }

@@ -1,7 +1,7 @@
 package net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin
 
-import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 import kotlinx.coroutines.flow.StateFlow
+import net.svaroh.passly.core.qrscan.analyzer.BarcodeScanResult
 
 internal sealed interface BrowserFirstLoginScanIntent {
     data class Initialize(

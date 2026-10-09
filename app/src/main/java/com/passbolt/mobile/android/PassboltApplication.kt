@@ -24,12 +24,14 @@
 package net.svaroh.passly
 
 import android.app.Application
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.AppForegroundListener
 import net.svaroh.passly.core.navigation.isAuthenticated
 import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import net.svaroh.passly.domain.preferences.GlobalPreferencesRepository
+import net.svaroh.passly.domain.preferences.usecase.ApplyAutomaticPageSizeUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -46,9 +48,13 @@ class PassboltApplication :
     private val appForegroundListener: AppForegroundListener by inject()
     private val applicationScope = MainScope()
     private val runtimeAuthenticatedFlag: RuntimeAuthenticatedFlag by inject()
+    private val globalPreferencesRepository: GlobalPreferencesRepository by inject()
+    private val backgroundGracePeriodTimer: BackgroundGracePeriodTimer by inject()
+    private val applyAutomaticPageSizeUseCase: ApplyAutomaticPageSizeUseCase by inject()
 
     override fun onCreate() {
         super.onCreate()
+        applyAutomaticPageSizeUseCase.execute(Unit)
         registerAppForegroundListener()
     }
 
@@ -61,13 +67,25 @@ class PassboltApplication :
         applicationScope.launch {
             runtimeAuthenticatedFlag.isAuthenticated = false
             appForegroundListener.appWentForegroundFlow.collect {
-                if (it.isAuthenticated()) {
+                val skipAuth =
+                    !globalPreferencesRepository.getGlobalPreferences().isAuthRequiredOnEveryEntry &&
+                        backgroundGracePeriodTimer.isWithinGracePeriod()
+                backgroundGracePeriodTimer.reset()
+
+                if (it.isAuthenticated() && !skipAuth) {
                     it.startActivity(
                         ActivityIntents.authentication(
                             it,
                             ActivityIntents.AuthConfig.RefreshSession,
                         ),
                     )
+                }
+            }
+        }
+        applicationScope.launch {
+            appForegroundListener.appWentBackgroundFlow.collect {
+                if (!globalPreferencesRepository.getGlobalPreferences().isAuthRequiredOnEveryEntry) {
+                    backgroundGracePeriodTimer.start()
                 }
             }
         }

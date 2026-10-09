@@ -1,0 +1,139 @@
+/**
+ * Passbolt - Open source password manager for teams
+ * Copyright (c) 2021 Passbolt SA
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+ * Public License (AGPL) as published by the Free Software Foundation version 3.
+ *
+ * The name "Passbolt" is a registered trademark of Passbolt SA, and Passbolt SA hereby declines to grant a trademark
+ * license to "Passbolt" pursuant to the GNU Affero General Public License version 3 Section 7(e), without a separate
+ * agreement with Passbolt SA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License along with this program. If not,
+ * see GNU Affero General Public License v3 (http://www.gnu.org/licenses/agpl-3.0.html).
+ *
+ * @copyright Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link https://www.passbolt.com Passbolt (tm)
+ * @since v1.0
+ */
+
+package net.svaroh.passly.domain.secrets.model
+
+import net.svaroh.passly.jsonmodel.JsonModel
+import net.svaroh.passly.jsonmodel.delegates.NullableStringDelegate
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathNullableStringDelegate
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathSecretCustomFieldsDelegate
+import net.svaroh.passly.jsonmodel.delegates.RootRelativeJsonPathTotpDelegate
+import net.svaroh.passly.jsonmodel.delegates.SecretCustomFieldsModel
+import net.svaroh.passly.jsonmodel.delegates.TotpSecret
+import net.svaroh.passly.supportedresourceTypes.ContentType
+import net.svaroh.passly.ui.OtpParseResult
+
+class SecretJsonModel(
+    override var json: String?,
+) : JsonModel {
+    var objectType: String? by RootRelativeJsonPathNullableStringDelegate(jsonPath = "object_type")
+
+    var resourceTypeId: String? by RootRelativeJsonPathNullableStringDelegate(jsonPath = "resource_type_id")
+
+    // simple-password is just a string (not a valid JSON)
+    var password: String? by NullableStringDelegate()
+
+    var secret: String? by RootRelativeJsonPathNullableStringDelegate(jsonPath = "password")
+
+    var description: String? by RootRelativeJsonPathNullableStringDelegate(jsonPath = "description")
+
+    var totp: TotpSecret? by RootRelativeJsonPathTotpDelegate(jsonPath = "totp")
+
+    var customFields: SecretCustomFieldsModel? by RootRelativeJsonPathSecretCustomFieldsDelegate(jsonPath = "custom_fields")
+
+    var pinCode: String? by RootRelativeJsonPathNullableStringDelegate(jsonPath = "pin_code")
+
+    fun getPassword(contentType: ContentType): String? =
+        when (contentType) {
+            ContentType.PasswordString, ContentType.V5PasswordString -> password
+            else -> secret
+        }
+
+    fun setPassword(
+        contentType: ContentType,
+        password: String?,
+    ) {
+        when (contentType) {
+            ContentType.PasswordString, ContentType.V5PasswordString -> this.password = password
+            else -> this.secret = password
+        }
+    }
+
+    companion object {
+        const val OBJECT_TYPE = "PASSBOLT_SECRET_DATA"
+
+        fun emptyPassword(): SecretJsonModel =
+            SecretJsonModel(
+                """
+                {
+                    "password": ""
+                }
+                """.trimIndent(),
+            )
+
+        fun emptyDescription(): SecretJsonModel =
+            SecretJsonModel(
+                """
+                {
+                    "description": ""
+                }
+                """.trimIndent(),
+            )
+
+        fun emptyCustomFields(): SecretJsonModel =
+            SecretJsonModel(
+                """
+                {
+                    "custom_fields": []
+                }
+                """.trimIndent(),
+            )
+
+        fun emptyTotp(): SecretJsonModel =
+            SecretJsonModel(
+                """
+                {
+                    ${emptyTotpObject()}
+                }
+                """.trimIndent(),
+            )
+
+        fun emptyPinCode(): SecretJsonModel =
+            SecretJsonModel(
+                """
+                {
+                    "pin_code": ""
+                }
+                """.trimIndent(),
+            )
+
+        fun emptyJsonModel(password: String?): SecretJsonModel =
+            SecretJsonModel(
+                """
+                {
+                    "password": "${password ?: ""}"
+                }
+                """.trimIndent(),
+            )
+
+        private fun emptyTotpObject() =
+            """
+                "totp": {
+                            "secret_key": "",
+                            "period": ${OtpParseResult.OtpQr.TotpQr.DEFAULT_PERIOD_SECONDS},
+                            "digits": ${OtpParseResult.OtpQr.TotpQr.DEFAULT_DIGITS},
+                            "algorithm": ${OtpParseResult.OtpQr.Algorithm.DEFAULT.name}
+                        }
+            """
+    }
+}

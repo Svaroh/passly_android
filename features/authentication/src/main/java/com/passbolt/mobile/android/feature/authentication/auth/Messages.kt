@@ -4,13 +4,18 @@ import android.content.Context
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.AUTHENTICATION_ERROR
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_CHANGED
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_DECRYPT_ERROR
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_LOCKOUT
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_LOCKOUT_PERMANENT
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_NO_CRYPTO_CIPHER
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_DOMAIN_MISMATCH
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_INVALID_SIGNATURE
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_TOKEN_EXPIRED
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_VERIFICATION_FAILURE
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CHALLENGE_VERIFY_TOKEN_MISMATCH
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.CONNECTION_FAILURE
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.DECRYPTION_ERROR
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.GENERIC
-import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.PROFILE_FETCH_FAILURE
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.SERVER_SIGNATURE_INVALID
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.TIME_OUT_OF_SYNC
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.WRONG_PASSPHRASE
 import net.svaroh.passly.core.localization.R as LocalizationR
@@ -33,6 +38,7 @@ internal fun getSnackBarMessage(
     when (kind) {
         WRONG_PASSPHRASE -> context.getString(LocalizationR.string.auth_incorrect_passphrase)
         GENERIC -> context.getString(LocalizationR.string.common_failure)
+        CONNECTION_FAILURE -> context.getString(LocalizationR.string.common_network_failure)
         BIOMETRIC_CHANGED -> context.getString(LocalizationR.string.biometric_changed_title)
         AUTHENTICATION_ERROR -> message ?: context.getString(LocalizationR.string.common_failure)
         DECRYPTION_ERROR -> {
@@ -43,18 +49,15 @@ internal fun getSnackBarMessage(
                 base
             }
         }
+        SERVER_SIGNATURE_INVALID -> context.getString(LocalizationR.string.auth_error_server_signature_invalid)
         CHALLENGE_INVALID_SIGNATURE -> context.getString(LocalizationR.string.auth_error_invalid_signature)
         CHALLENGE_TOKEN_EXPIRED -> context.getString(LocalizationR.string.auth_error_token_expired)
+        CHALLENGE_VERIFY_TOKEN_MISMATCH -> context.getString(LocalizationR.string.auth_error_verify_token_mismatch)
+        CHALLENGE_DOMAIN_MISMATCH -> context.getString(LocalizationR.string.auth_error_domain_mismatch)
         CHALLENGE_VERIFICATION_FAILURE -> context.getString(LocalizationR.string.auth_error_challenge_verification_failure)
         TIME_OUT_OF_SYNC -> context.getString(LocalizationR.string.common_time_is_out_of_sync)
-        PROFILE_FETCH_FAILURE -> {
-            val base = context.getString(LocalizationR.string.auth_error_profile_fetch_failure)
-            if (!message.isNullOrBlank()) {
-                "$base($message)"
-            } else {
-                base
-            }
-        }
         BIOMETRIC_DECRYPT_ERROR -> context.getString(LocalizationR.string.biometric_decrypt_error_message)
         BIOMETRIC_NO_CRYPTO_CIPHER -> context.getString(LocalizationR.string.biometric_no_crypto_cipher)
+        BIOMETRIC_LOCKOUT -> context.getString(LocalizationR.string.biometric_error_blocked)
+        BIOMETRIC_LOCKOUT_PERMANENT -> context.getString(LocalizationR.string.biometric_error_too_many_attempts)
     }

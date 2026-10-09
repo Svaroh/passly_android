@@ -24,7 +24,7 @@
 package net.svaroh.passly.otpmoremenu.usecase
 
 import net.svaroh.passly.common.usecase.AsyncUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
 import net.svaroh.passly.ui.OtpMoreMenuModel
 import net.svaroh.passly.ui.ResourcePermission
 

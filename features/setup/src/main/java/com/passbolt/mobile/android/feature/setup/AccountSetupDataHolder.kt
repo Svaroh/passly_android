@@ -1,6 +1,6 @@
 package net.svaroh.passly.feature.setup
 
-import net.svaroh.passly.core.navigation.AccountSetupDataModel
+import net.svaroh.passly.ui.AccountSetupDataModel
 
 /**
  * Passbolt - Open source password manager for teams

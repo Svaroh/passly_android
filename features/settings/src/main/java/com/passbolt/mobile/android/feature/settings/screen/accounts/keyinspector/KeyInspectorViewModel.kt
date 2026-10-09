@@ -24,13 +24,14 @@
 package net.svaroh.passly.feature.settings.screen.accounts.keyinspector
 
 import androidx.lifecycle.viewModelScope
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.formatter.DateFormatter
 import net.svaroh.passly.core.formatter.FingerprintFormatter
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.users.usecase.db.GetLocalCurrentUserUseCase
-import net.svaroh.passly.core.users.user.FetchCurrentUserUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.users.usecase.FetchCurrentUserUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalCurrentUserUseCase
 import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CloseMoreMenu
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorIntent.CopyFingerprint
@@ -43,8 +44,7 @@ import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspec
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.NavigateUp
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.mappers.AccountModelMapper
-import net.svaroh.passly.ui.GpgKeyModel
-import kotlinx.coroutines.launch
+import net.svaroh.passly.ui.GpgKeyUiModel
 import timber.log.Timber
 
 internal class KeyInspectorViewModel(
@@ -100,12 +100,12 @@ internal class KeyInspectorViewModel(
         }
 
         when (val keyData = runAuthenticatedOperation { fetchCurrentUserUseCase.execute(Unit) }) {
-            is FetchCurrentUserUseCase.Output.Failure<*> -> emitSideEffect(ShowErrorSnackbar(FAILED_TO_FETCH_KEY, keyData.message))
-            is FetchCurrentUserUseCase.Output.Success -> showKeyData(keyData.userModel.gpgKey)
+            is FetchCurrentUserUseCase.Output.Failure -> emitSideEffect(ShowErrorSnackbar(FAILED_TO_FETCH_KEY, keyData.message))
+            is FetchCurrentUserUseCase.Output.Success -> showKeyData(keyData.userUiModel.gpgKey)
         }
     }
 
-    private fun showKeyData(keyData: GpgKeyModel) {
+    private fun showKeyData(keyData: GpgKeyUiModel) {
         updateViewState {
             copy(
                 fingerprint = fingerprintFormatter.format(keyData.fingerprint, appendMiddleSpacing = false).orEmpty(),

@@ -13,6 +13,10 @@ sealed interface ScanYubikeyIntent {
 
     data object Close : ScanYubikeyIntent
 
+    data object ConfirmSetupLeave : ScanYubikeyIntent
+
+    data object DismissSetupLeave : ScanYubikeyIntent
+
     data class ToggleRememberMe(
         val checked: Boolean,
     ) : ScanYubikeyIntent

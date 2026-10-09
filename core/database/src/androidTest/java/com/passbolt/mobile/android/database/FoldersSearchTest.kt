@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.database.FoldersSearchTest.SearchFolderStructure.FOLDER_1
 import net.svaroh.passly.database.FoldersSearchTest.SearchFolderStructure.FOLDER_2
 import net.svaroh.passly.database.FoldersSearchTest.SearchFolderStructure.FOLDER_3
@@ -21,7 +22,6 @@ import net.svaroh.passly.entity.folder.FolderUpdateState
 import net.svaroh.passly.entity.resource.Permission
 import net.svaroh.passly.entity.resource.Resource
 import net.svaroh.passly.entity.resource.ResourceUpdateState
-import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -198,6 +198,7 @@ class FoldersSearchTest {
                 Permission.READ,
                 null,
                 false,
+                ZonedDateTime.now(),
                 FolderUpdateState.UPDATED,
             )
         val FOLDER_2 =
@@ -207,6 +208,7 @@ class FoldersSearchTest {
                 Permission.READ,
                 null,
                 false,
+                ZonedDateTime.now(),
                 FolderUpdateState.UPDATED,
             )
         val FOLDER_3 =
@@ -216,6 +218,7 @@ class FoldersSearchTest {
                 Permission.READ,
                 "rootFolder2",
                 false,
+                ZonedDateTime.now(),
                 FolderUpdateState.UPDATED,
             )
         val FOLDER_4 =
@@ -225,6 +228,7 @@ class FoldersSearchTest {
                 Permission.READ,
                 "rootFolder2Folder1",
                 false,
+                ZonedDateTime.now(),
                 FolderUpdateState.UPDATED,
             )
         val FOLDER_5 =
@@ -234,6 +238,7 @@ class FoldersSearchTest {
                 Permission.READ,
                 "rootFolder2Folder1Folder1",
                 false,
+                ZonedDateTime.now(),
                 FolderUpdateState.UPDATED,
             )
     }

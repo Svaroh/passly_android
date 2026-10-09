@@ -42,7 +42,6 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,8 +51,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -61,20 +60,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
-import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
-import net.svaroh.passly.core.ui.pulltorefresh.PullToRefreshIndicatorBox
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
 import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
 import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.domain.resources.resourceicon.ResourceIconProvider
 import net.svaroh.passly.tagsdetails.ResourceTagsIntent.GoBack
 import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.NavigateBack
 import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.NavigateToHome
 import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.ShowContentNotAvailable
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.isFavourite
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
@@ -92,6 +90,7 @@ internal fun ResourceTagsScreen(
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val errorColor = colorResource(CoreUiR.color.red)
 
     ResourceTagsContent(
         state = state,
@@ -117,7 +116,7 @@ internal fun ResourceTagsScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getErrorMessage(context, sideEffect.type),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorColor,
                         ),
                     )
                 }
@@ -137,24 +136,13 @@ private fun ResourceTagsContent(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
-    val pullState = rememberPullToRefreshState()
-    val scope = rememberCoroutineScope()
-    LaunchedEffect(state.isRefreshing) {
-        scope.launch {
-            if (state.isRefreshing) {
-                pullState.animateToThreshold()
-            } else {
-                pullState.animateToHidden()
-            }
-        }
-    }
-
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
             TitleAppBar(
                 title = stringResource(LocalizationR.string.resource_tags_title),
                 navigationIcon = { BackNavigationIcon(onBackClick = { onIntent(GoBack) }) },
+                refreshProgress = if (state.isRefreshing) state.refreshProgress else null,
             )
         },
         snackbarHost = {
@@ -175,33 +163,30 @@ private fun ResourceTagsContent(
             )
         },
         content = { paddingValues ->
-            PullToRefreshIndicatorBox(
-                isRefreshing = state.isRefreshing,
+            Column(
                 modifier =
                     Modifier
                         .fillMaxSize()
                         .padding(paddingValues),
             ) {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    ResourceHeader(
-                        resourceModel = state.resourceModel,
-                        modifier = Modifier.padding(16.dp),
-                    )
+                ResourceHeader(
+                    resourceModel = state.resourceModel,
+                    modifier = Modifier.padding(16.dp),
+                )
 
-                    Text(
-                        text = stringResource(LocalizationR.string.resource_tags_section),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                    )
+                Text(
+                    text = stringResource(LocalizationR.string.resource_tags_section),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                )
 
-                    LazyColumn(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                    ) {
-                        items(state.tags) { tag ->
-                            TagItem(tag = tag)
-                        }
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    items(state.tags) { tag ->
+                        TagItem(tag = tag)
                     }
                 }
             }
@@ -211,7 +196,7 @@ private fun ResourceTagsContent(
 
 @Composable
 private fun ResourceHeader(
-    resourceModel: ResourceModel?,
+    resourceModel: ResourceUiModel?,
     modifier: Modifier = Modifier,
     resourceIconProvider: ResourceIconProvider = koinInject(),
 ) {

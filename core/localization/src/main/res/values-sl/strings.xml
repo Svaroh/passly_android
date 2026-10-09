@@ -343,7 +343,6 @@ ali preverite specifičen vodnik za vašo napravo:</string>
     <string name="settings_app_settings_biometry_error">Napaka biometrije. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Napaka avtentikacije biometrije. %s</string>
     <string name="settings_app_settings_expert_settings">Napredne nastavitve</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Način razvijalca</string>
     <string name="settings_app_settings_expert_settings_hide_root">Skrij okno „Naprava je root-ana“</string>
     <string name="settings_autofill_autofill_title">Tukaj lahko spremenite metode samodejnega izpolnjevanja</string>
     <string name="settings_autofill_autofill_desc">Priporočljivo je uporabiti storitev samodejnega izpolnjevanja, vendar se zmnožek storitve lahko razlikuje glede na nastavitve optimizacije vaše naprave in baterije. \n\nČe storitev samodejnega izpolnjevanja na vaši napravi ne deluje zanesljivo, lahko poskusite omogočiti samodejno izpolnjevanje na podlagi storitve dostopnosti.</string>

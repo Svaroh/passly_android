@@ -2,6 +2,7 @@ package net.svaroh.passly.permissions
 
 import net.svaroh.passly.core.navigation.compose.base.Feature
 import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
+import net.svaroh.passly.permissions.confirmpermissions.confirmPermissionsModule
 import net.svaroh.passly.permissions.grouppermissionsdetails.groupPermissionsModule
 import net.svaroh.passly.permissions.navigation.PermissionsFeatureNavigation
 import net.svaroh.passly.permissions.permissionrecipients.permissionRecipientsModule
@@ -40,6 +41,7 @@ val permissionsModule =
         }
 
         permissionsModule()
+        confirmPermissionsModule()
         groupPermissionsModule()
         userPermissionsModule()
         permissionRecipientsModule()

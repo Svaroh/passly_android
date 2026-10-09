@@ -1,9 +1,9 @@
 package net.svaroh.passly.core.networking.interceptor
 
-import net.svaroh.passly.common.CookieExtractor
 import net.svaroh.passly.core.networking.AuthPaths
 import net.svaroh.passly.core.networking.AuthPaths.AVATAR_PATH
 import net.svaroh.passly.core.networking.AuthPaths.TRANSFER_PATH
+import net.svaroh.passly.domain.auth.usecase.GetSessionUseCase
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -30,20 +30,9 @@ import okhttp3.Response
  * @since v1.0
  */
 class CookiesInterceptor {
-    class ReceivedCookiesInterceptor(
-        private val cookieExtractor: CookieExtractor,
+    class AddCookiesInterceptor(
+        private val getSessionUseCase: GetSessionUseCase,
     ) : Interceptor {
-        override fun intercept(chain: Interceptor.Chain): Response {
-            val originalResponse: Response = chain.proceed(chain.request())
-            val cookie = cookieExtractor.get(originalResponse, CookieExtractor.MFA_COOKIE)
-            if (cookie != null) {
-                mfaCookie = cookie
-            }
-            return originalResponse
-        }
-    }
-
-    class AddCookiesInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request()
             val newBuilder = request.newBuilder()
@@ -51,7 +40,7 @@ class CookiesInterceptor {
                 !request.url.encodedPath.contains(AVATAR_PATH) &&
                 !request.url.encodedPath.contains(TRANSFER_PATH)
             ) {
-                mfaCookie?.let {
+                getSessionUseCase.execute(Unit).mfaToken?.let {
                     newBuilder.addHeader(COOKIE_HEADER, it)
                 }
             }
@@ -60,9 +49,7 @@ class CookiesInterceptor {
     }
 
     companion object {
-        private const val COOKIE_HEADER = "Cookie"
-
-        private var mfaCookie: String? = null
+        internal const val COOKIE_HEADER = "Cookie"
 
         private val ANONYMOUS_PATHS =
             setOf(

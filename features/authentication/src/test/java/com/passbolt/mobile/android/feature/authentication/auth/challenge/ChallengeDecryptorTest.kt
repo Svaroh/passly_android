@@ -1,11 +1,12 @@
 package net.svaroh.passly.feature.authentication.auth.challenge
 
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.accounts.usecase.privatekey.GetPrivateKeyUseCase
-import net.svaroh.passly.gopenpgp.exception.OpenPgpError
-import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import net.svaroh.passly.domain.privatekey.model.PrivateKey
+import net.svaroh.passly.gopenpgp.exception.OpenPgpError
+import net.svaroh.passly.gopenpgp.exception.OpenPgpFailure
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import org.junit.Rule
 import org.junit.Test
 import org.koin.test.KoinTest
@@ -34,7 +35,7 @@ class ChallengeDecryptorTest : KoinTest {
             val challenge =
                 "{version: \"1.0\", domain: \"domain\", verify_token: \"verify_token\"," +
                     " access_token: \"access_token\", refresh_token: \"refresh_token\"}"
-            whenever(getPrivateKeyUseCase.execute(any())).thenReturn(GetPrivateKeyUseCase.Output(privateKey))
+            whenever(privateKeyRepository.getPrivateKey(any())).thenReturn(PrivateKey(privateKey))
             whenever(openPgp.decryptVerifyMessageArmored(eq(publicKey), eq(privateKey), any(), any())).thenReturn(
                 OpenPgpResult.Result(challenge),
             )
@@ -61,9 +62,9 @@ class ChallengeDecryptorTest : KoinTest {
             val privateKey = "private_key"
             val publicKey = "public_key"
             val errorMessage = "message"
-            whenever(getPrivateKeyUseCase.execute(any())).thenReturn(GetPrivateKeyUseCase.Output(privateKey))
+            whenever(privateKeyRepository.getPrivateKey(any())).thenReturn(PrivateKey(privateKey))
             whenever(openPgp.decryptVerifyMessageArmored(any(), any(), any(), any()))
-                .thenReturn(OpenPgpResult.Error(OpenPgpError(errorMessage)))
+                .thenReturn(OpenPgpResult.Error(OpenPgpFailure.Generic(OpenPgpError(errorMessage))))
 
             val result =
                 challengeDecryptor.decrypt(
@@ -75,5 +76,68 @@ class ChallengeDecryptorTest : KoinTest {
             assertThat(result).isInstanceOf(ChallengeDecryptor.Output.DecryptionError::class.java)
             val decryptionError = (result as ChallengeDecryptor.Output.DecryptionError)
             assertThat(decryptionError.message).isEqualTo(errorMessage)
+        }
+
+    @Test
+    fun `challenge maps to server signature invalid when signature verification fails`() =
+        runTest {
+            val privateKey = "private_key"
+            val publicKey = "public_key"
+            val errorMessage = "signature is invalid"
+            whenever(privateKeyRepository.getPrivateKey(any())).thenReturn(PrivateKey(privateKey))
+            whenever(openPgp.decryptVerifyMessageArmored(any(), any(), any(), any()))
+                .thenReturn(
+                    OpenPgpResult.Error(OpenPgpFailure.SignatureVerificationFailed(OpenPgpError(errorMessage))),
+                )
+
+            val result =
+                challengeDecryptor.decrypt(
+                    publicKey,
+                    "pass".toByteArray(),
+                    "userId",
+                    "challenge",
+                )
+            assertThat(result).isInstanceOf(ChallengeDecryptor.Output.ServerSignatureInvalid::class.java)
+            val signatureError = (result as ChallengeDecryptor.Output.ServerSignatureInvalid)
+            assertThat(signatureError.message).isEqualTo(errorMessage)
+        }
+
+    @Test
+    fun `passphrase copy is wiped after use on success and failure but caller array is intact`() =
+        runTest {
+            val privateKey = "private_key"
+            val publicKey = "public_key"
+            val challenge =
+                "{version: \"1.0\", domain: \"domain\", verify_token: \"verify_token\"," +
+                    " access_token: \"access_token\", refresh_token: \"refresh_token\"}"
+            val passphrasesPassedToPgp = mutableListOf<ByteArray>()
+            val passphraseContentsAtPgpCall = mutableListOf<ByteArray>()
+
+            whenever(privateKeyRepository.getPrivateKey(any())).thenReturn(PrivateKey(privateKey))
+            whenever(openPgp.decryptVerifyMessageArmored(eq(publicKey), eq(privateKey), any(), any()))
+                .thenAnswer { invocation ->
+                    val pgpPassphraseInput = invocation.arguments[2] as ByteArray
+                    passphrasesPassedToPgp += pgpPassphraseInput
+                    passphraseContentsAtPgpCall += pgpPassphraseInput.copyOf()
+                    OpenPgpResult.Result(challenge)
+                }
+            val callerPassphrase = "pass".toByteArray()
+
+            challengeDecryptor.decrypt(publicKey, callerPassphrase, "userId", "challenge")
+
+            whenever(openPgp.decryptVerifyMessageArmored(eq(publicKey), eq(privateKey), any(), any()))
+                .thenAnswer { invocation ->
+                    val pgpPassphraseInput = invocation.arguments[2] as ByteArray
+                    passphrasesPassedToPgp += pgpPassphraseInput
+                    passphraseContentsAtPgpCall += pgpPassphraseInput.copyOf()
+                    OpenPgpResult.Error(OpenPgpFailure.Generic(OpenPgpError("error")))
+                }
+
+            challengeDecryptor.decrypt(publicKey, callerPassphrase, "userId", "challenge")
+
+            assertThat(passphraseContentsAtPgpCall).hasSize(2)
+            assertThat(passphraseContentsAtPgpCall.all { it.contentEquals("pass".toByteArray()) }).isTrue()
+            assertThat(passphrasesPassedToPgp.all { pgpInput -> pgpInput.all { it == 0.toByte() } }).isTrue()
+            assertThat(callerPassphrase).isEqualTo("pass".toByteArray())
         }
 }

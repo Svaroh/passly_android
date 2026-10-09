@@ -25,15 +25,6 @@ package net.svaroh.passly.feature.resources.details
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.SecretPropertyActionResult
-import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType
-import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyNote
-import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.Initialize
-import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ToggleNoteVisibility
-import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.AddToClipboard
-import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowErrorSnackbar
-import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop
@@ -42,6 +33,15 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.SecretPropertyActionResult
+import net.svaroh.passly.feature.resourcedetails.details.ErrorSnackbarType
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.CopyNote
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.Initialize
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsIntent.ToggleNoteVisibility
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.AddToClipboard
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.resourcedetails.details.ResourceDetailsViewModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -83,7 +83,7 @@ class ResourceDetailsNoteViewModelTest : KoinTest {
             val note = "This is a secret note"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideNote() } doReturn
+                on { provideNote() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -111,7 +111,7 @@ class ResourceDetailsNoteViewModelTest : KoinTest {
             val note = "This is a secret note"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideNote() } doReturn
+                on { provideNote() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -141,7 +141,7 @@ class ResourceDetailsNoteViewModelTest : KoinTest {
             val note = "This is a secret note"
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideNote() } doReturn
+                on { provideNote() } doReturn
                     flowOf(
                         SecretPropertyActionResult.Success(
                             SecretPropertiesActionsInteractor.SECRET_LABEL,
@@ -169,7 +169,7 @@ class ResourceDetailsNoteViewModelTest : KoinTest {
         runTest {
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideNote() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
+                on { provideNote() } doReturn flowOf(SecretPropertyActionResult.DecryptionFailure())
             }
 
             viewModel = get()
@@ -189,7 +189,7 @@ class ResourceDetailsNoteViewModelTest : KoinTest {
         runTest {
             val secretPropertiesActionsInteractor: SecretPropertiesActionsInteractor = get()
             secretPropertiesActionsInteractor.stub {
-                onBlocking { provideNote() } doReturn flowOf(SecretPropertyActionResult.FetchFailure())
+                on { provideNote() } doReturn flowOf(SecretPropertyActionResult.FetchFailure())
             }
 
             viewModel = get()

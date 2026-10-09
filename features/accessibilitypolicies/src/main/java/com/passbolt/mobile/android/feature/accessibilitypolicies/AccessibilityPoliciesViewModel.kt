@@ -24,7 +24,8 @@
 package net.svaroh.passly.feature.accessibilitypolicies
 
 import net.svaroh.passly.core.compose.SideEffectViewModel
-import net.svaroh.passly.core.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
 import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesIntent.Accept
 import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesIntent.Decline
 import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToAcceptedScreen
@@ -39,7 +40,7 @@ class AccessibilityPoliciesViewModel(
             Accept -> {
                 Timber.d("Accessibility policies accepted")
                 updateGlobalPreferencesUseCase.execute(
-                    UpdateGlobalPreferencesUseCase.Input(accessibilityPoliciesConsentGiven = true),
+                    GlobalPreferencesUpdate(accessibilityPoliciesConsentGiven = true),
                 )
                 emitSideEffect(NavigateToAcceptedScreen)
             }

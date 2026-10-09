@@ -1,7 +1,7 @@
 package net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin
 
-import net.svaroh.passly.dto.response.qrcode.BrowserFirstLoginPageDto
 import kotlinx.serialization.json.Json
+import net.svaroh.passly.dto.response.qrcode.BrowserFirstLoginPageDto
 import timber.log.Timber
 import java.net.URI
 import java.net.URLDecoder
@@ -10,8 +10,7 @@ import java.nio.charset.StandardCharsets
 class BrowserFirstLoginQrParser(
     private val json: Json,
 ) {
-    fun parse(data: ByteArray?): BrowserFirstLoginPageDto? =
-        data?.let { parse(String(it)) }
+    fun parse(data: ByteArray?): BrowserFirstLoginPageDto? = data?.let { parse(String(it)) }
 
     fun parse(data: String): BrowserFirstLoginPageDto? =
         runCatching {
@@ -55,8 +54,7 @@ class BrowserFirstLoginQrParser(
             }?.toMap()
             .orEmpty()
 
-    private fun String.urlDecode(): String =
-        URLDecoder.decode(this, StandardCharsets.UTF_8.name())
+    private fun String.urlDecode(): String = URLDecoder.decode(this, StandardCharsets.UTF_8.name())
 
     private fun parseReservedBytesPayload(data: String): BrowserFirstLoginPageDto? {
         val version = data.substring(0, 1).toInt(RESERVED_BYTES_NUMBER_RADIX)

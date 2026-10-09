@@ -25,25 +25,26 @@ package net.svaroh.passly.groupdetails.groupmembers
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.commongroups.usecase.db.GetGroupWithUsersUseCase
-import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.GoBack
-import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.GoToMemberDetails
-import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.Initialize
-import net.svaroh.passly.groupdetails.groupmembers.GroupMembersSideEffect.NavigateToMemberDetails
-import net.svaroh.passly.groupdetails.groupmembers.GroupMembersSideEffect.NavigateUp
-import net.svaroh.passly.ui.GpgKeyModel
-import net.svaroh.passly.ui.GroupModel
-import net.svaroh.passly.ui.GroupWithUsersModel
-import net.svaroh.passly.ui.UserModel
-import net.svaroh.passly.ui.UserProfileModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.groups.usecase.GetGroupWithUsersUseCase
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.GoBack
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.GoToMemberDetails
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersIntent.Initialize
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersSideEffect.NavigateToMemberDetails
+import net.svaroh.passly.groupdetails.groupmembers.GroupMembersSideEffect.NavigateUp
+import net.svaroh.passly.ui.GpgKeyUiModel
+import net.svaroh.passly.ui.GroupModel
+import net.svaroh.passly.ui.GroupWithUsersModel
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -74,6 +75,7 @@ class GroupMembersViewModelTest : KoinTest {
                 listOf(
                     module {
                         single { mock<GetGroupWithUsersUseCase>() }
+                        single { mock<GetPermissionsSnapshotUseCase>() }
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                         factoryOf(::GroupMembersViewModel)
                     },
@@ -91,7 +93,7 @@ class GroupMembersViewModelTest : KoinTest {
 
         val getGroupWithUsersUseCase = get<GetGroupWithUsersUseCase>()
         getGroupWithUsersUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetGroupWithUsersUseCase.Output(testGroupWithUsers)
+            on { execute(any()) } doReturn GetGroupWithUsersUseCase.Output(testGroupWithUsers)
         }
     }
 
@@ -130,7 +132,7 @@ class GroupMembersViewModelTest : KoinTest {
 
             val getGroupWithUsersUseCase = get<GetGroupWithUsersUseCase>()
             getGroupWithUsersUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetGroupWithUsersUseCase.Output(emptyGroupWithUsers)
+                on { execute(any()) } doReturn GetGroupWithUsersUseCase.Output(emptyGroupWithUsers)
             }
 
             viewModel = get()
@@ -179,12 +181,12 @@ class GroupMembersViewModelTest : KoinTest {
             )
 
         private val testUser1 =
-            UserModel(
+            UserUiModel(
                 id = UUID.randomUUID().toString(),
                 userName = "john.doe@passbolt.com",
                 disabled = false,
                 gpgKey =
-                    GpgKeyModel(
+                    GpgKeyUiModel(
                         armoredKey = "test-armored-key-1",
                         fingerprint = "ABCD1234EFGH5678IJKL9012MNOP3456QRST7890",
                         bits = 4096,
@@ -196,7 +198,7 @@ class GroupMembersViewModelTest : KoinTest {
                         id = UUID.randomUUID().toString(),
                     ),
                 profile =
-                    UserProfileModel(
+                    UserProfileUiModel(
                         username = "john.doe",
                         firstName = "John",
                         lastName = "Doe",
@@ -205,12 +207,12 @@ class GroupMembersViewModelTest : KoinTest {
             )
 
         private val testUser2 =
-            UserModel(
+            UserUiModel(
                 id = UUID.randomUUID().toString(),
                 userName = "jane.smith@passbolt.com",
                 disabled = false,
                 gpgKey =
-                    GpgKeyModel(
+                    GpgKeyUiModel(
                         armoredKey = "test-armored-key-2",
                         fingerprint = "1234ABCD5678EFGH9012IJKL3456MNOP7890QRST",
                         bits = 4096,
@@ -222,7 +224,7 @@ class GroupMembersViewModelTest : KoinTest {
                         id = UUID.randomUUID().toString(),
                     ),
                 profile =
-                    UserProfileModel(
+                    UserProfileUiModel(
                         username = "jane.smith",
                         firstName = "Jane",
                         lastName = "Smith",

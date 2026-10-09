@@ -22,7 +22,6 @@
  */
 package net.svaroh.passly.core.ui.scaffold
 
-import PassboltTheme
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +30,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -66,6 +64,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.ui.fab.AddFloatingActionButton
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
 import net.svaroh.passly.testtags.composetags.BackNavigation
@@ -94,7 +93,6 @@ fun HomeScaffold(
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        contentWindowInsets = WindowInsets(0), // Prevent handling insets twice - they're already handled in parent xml
         topBar = {
             Surface(shadowElevation = 4.dp) {
                 TopAppBar(
@@ -103,8 +101,9 @@ fun HomeScaffold(
                             containerColor = colorResource(CoreUiR.color.background),
                             scrolledContainerColor = colorResource(CoreUiR.color.background),
                             navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-                            titleContentColor = MaterialTheme.colorScheme.onSurface,
                             actionIconContentColor = MaterialTheme.colorScheme.onSurface,
+                            titleContentColor = MaterialTheme.colorScheme.onSurface,
+                            subtitleContentColor = MaterialTheme.colorScheme.onSurface,
                         ),
                     scrollBehavior = scrollBehavior,
                     expandedHeight = 124.dp,

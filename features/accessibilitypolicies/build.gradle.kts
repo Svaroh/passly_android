@@ -1,0 +1,36 @@
+plugins {
+    id("passbolt.android.library")
+    id(libs.plugins.compose.compiler.get().pluginId)
+}
+
+dependencies {
+    implementation(project(":architecture"))
+    implementation(project(":coreui"))
+    implementation(project(":navigation"))
+    implementation(project(":localization"))
+    implementation(project(":preferences-domain"))
+    implementation(project(":logger"))
+    implementation(project(":common"))
+
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin)
+    implementation(libs.koin.compose)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.material3)
+    implementation(libs.compose.lifecycle.viewmodel)
+    implementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.activity)
+    implementation(libs.compose.foundation)
+
+    testImplementation(project(":commontest"))
+}
+
+android {
+    namespace = "net.svaroh.passly.feature.accessibilitypolicies"
+    buildFeatures {
+        compose = true
+    }
+}

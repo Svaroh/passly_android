@@ -23,42 +23,27 @@
 
 package net.svaroh.passly.feature.authentication.auth.usecase
 
-import net.svaroh.passly.common.CookieExtractor
 import net.svaroh.passly.common.usecase.AsyncUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.mvp.authentication.AuthenticatedUseCaseOutput
-import net.svaroh.passly.core.mvp.authentication.AuthenticationState
-import net.svaroh.passly.core.networking.MfaTypeProvider
-import net.svaroh.passly.core.networking.NetworkResult
-import net.svaroh.passly.passboltapi.mfa.MfaRepository
-import java.net.HttpURLConnection
+import net.svaroh.passly.core.mvp.authentication.CompleteAuthenticatedOutput
+import net.svaroh.passly.core.mvp.authentication.IncompleteAuthenticatedOutput
+import net.svaroh.passly.domain.mfa.MfaRepository
+import net.svaroh.passly.domain.mfa.model.DuoPrompt
 
 class GetDuoPromptUseCase(
-    private val cookieExtractor: CookieExtractor,
     private val mfaRepository: MfaRepository,
 ) : AsyncUseCase<GetDuoPromptUseCase.Input, GetDuoPromptUseCase.Output> {
     override suspend fun execute(input: Input): Output =
-        when (val result = mfaRepository.getDuoPromptUrl("Bearer ${input.jwtHeader}")) {
-            is NetworkResult.Failure.NetworkError -> Output.Failure(result)
-            is NetworkResult.Failure.ServerError -> Output.Failure(result)
-            is NetworkResult.Success -> {
-                when (result.value.code()) {
-                    HttpURLConnection.HTTP_MOVED_TEMP -> {
-                        val locationHeader = result.value.headers()[LOCATION_HEADER]
-                        val duoUuidCookie = cookieExtractor.getCookieValue(result.value, DUO_UUID_COOKIE)
-                        if (locationHeader != null && duoUuidCookie != null) {
-                            Output.Success(locationHeader, duoUuidCookie)
-                        } else {
-                            Output.DuoPromptUrlNotFound
-                        }
-                    }
-                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
-                        Output.Unauthorized
-                    }
-                    else -> {
-                        Output.NetworkFailure(result.value.code())
-                    }
+        when (val result = mfaRepository.getDuoPrompt(input.jwtHeader)) {
+            is DomainResult.Finished ->
+                when (val prompt = result.value) {
+                    is DuoPrompt.Found -> Output.Success(prompt.duoPromptUrl, prompt.passboltDuoCookieUuid)
+                    is DuoPrompt.NotFound -> Output.DuoPromptUrlNotFound
+                    is DuoPrompt.Unauthorized -> Output.Unauthorized
+                    is DuoPrompt.OtherFailure -> Output.NetworkFailure(prompt.errorCode)
                 }
-            }
+            is DomainResult.Incomplete -> Output.Failure(result)
         }
 
     data class Input(
@@ -66,41 +51,24 @@ class GetDuoPromptUseCase(
     )
 
     sealed class Output : AuthenticatedUseCaseOutput {
-        override val authenticationState: AuthenticationState
-            get() =
-                when {
-                    this is Failure<*> && this.response.isUnauthorized ->
-                        AuthenticationState.Unauthenticated(AuthenticationState.Unauthenticated.Reason.Session)
-                    this is Failure<*> && this.response.isMfaRequired -> {
-                        val providers = MfaTypeProvider.get(this.response)
-
-                        AuthenticationState.Unauthenticated(
-                            AuthenticationState.Unauthenticated.Reason.Mfa(providers),
-                        )
-                    }
-                    else -> AuthenticationState.Authenticated
-                }
-
         data class Success(
             val duoPromptUrl: String,
             val passboltDuoCookieUuid: String,
-        ) : Output()
+        ) : Output(),
+            CompleteAuthenticatedOutput
 
         data class NetworkFailure(
             val errorCode: Int,
-        ) : Output()
+        ) : Output(),
+            CompleteAuthenticatedOutput
 
-        data object Unauthorized : Output()
+        data object Unauthorized : Output(), CompleteAuthenticatedOutput
 
-        class Failure<T : Any>(
-            val response: NetworkResult.Failure<T>,
-        ) : Output()
+        data class Failure(
+            override val incomplete: DomainResult.Incomplete,
+        ) : Output(),
+            IncompleteAuthenticatedOutput
 
-        data object DuoPromptUrlNotFound : Output()
-    }
-
-    private companion object {
-        private const val LOCATION_HEADER = "location"
-        private const val DUO_UUID_COOKIE = "passbolt_duo_state"
+        data object DuoPromptUrlNotFound : Output(), CompleteAuthenticatedOutput
     }
 }

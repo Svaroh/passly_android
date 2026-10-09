@@ -1,6 +1,5 @@
 package net.svaroh.passly.feature.main.mainscreen
 
-import PassboltTheme
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -13,8 +12,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.map
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.BottomTab.HOME
 import net.svaroh.passly.core.navigation.compose.BottomTab.OTP
@@ -30,7 +32,6 @@ import net.svaroh.passly.feature.main.mainscreen.MainIntent.CloseChromeNativeAut
 import net.svaroh.passly.feature.main.mainscreen.MainIntent.GoToSettings
 import net.svaroh.passly.feature.main.mainscreen.MainIntent.TabSelected
 import net.svaroh.passly.feature.main.mainscreen.encouragements.chromenativeautofill.EncourageChromeNativeAutofillDialog
-import kotlinx.coroutines.flow.map
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -42,6 +43,7 @@ fun MainScreen(
 ) {
     val state by mainViewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val tabStateHolder = rememberSaveableStateHolder()
 
     AuthenticationHandler()
 
@@ -81,9 +83,9 @@ fun MainScreen(
                         .consumeWindowInsets(innerPadding),
             ) {
                 when (state.selectedTab) {
-                    HOME -> HomeTabContent()
-                    OTP -> OtpNavigation()
-                    SETTINGS -> SettingsNavigation()
+                    HOME -> tabStateHolder.SaveableStateProvider(HOME.name) { HomeTabContent() }
+                    OTP -> tabStateHolder.SaveableStateProvider(OTP.name) { OtpNavigation() }
+                    SETTINGS -> tabStateHolder.SaveableStateProvider(SETTINGS.name) { SettingsNavigation() }
                 }
             }
         }

@@ -2,6 +2,14 @@
 -dontobfuscate
 -keepattributes SourceFile,LineNumberTable
 
+# R8 full mode (mandatory in AGP 9) strips no-arg constructors that are only
+# called via reflection. Many libraries rely on this:
+# Firebase ComponentRegistrars, ML Kit factories, etc. Keeping all default
+# constructors prevents this entire class of runtime failures.
+-keepclassmembers class * {
+    <init>();
+}
+
 # keep all the code from the app
 -keep class net.svaroh.passly.** { *; }
 
@@ -26,7 +34,9 @@
  -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
 # Jwt
--keep class io.fusionauth.jwt.domain.** { *; }
+-keep class io.fusionauth.jwt.** { *; }
+-dontwarn java.beans.ConstructorProperties
+-dontwarn java.beans.Transient
 
 # Yubikit
 -keep class com.yubico.yubikit.android.** { *; }

@@ -1,9 +1,12 @@
 package net.svaroh.passly.feature.resourceform.main
 
+import net.svaroh.passly.feature.resourceform.navigation.AdvancedSecretGenerationFormResult
 import net.svaroh.passly.ui.AdditionalUrisUiModel
 import net.svaroh.passly.ui.NewMetadataKeyToTrustModel
 import net.svaroh.passly.ui.OtpParseResult
 import net.svaroh.passly.ui.PasswordUiModel
+import net.svaroh.passly.ui.PermissionModelUi
+import net.svaroh.passly.ui.PinCodeUiModel
 import net.svaroh.passly.ui.ResourceAppearanceModel
 import net.svaroh.passly.ui.TotpUiModel
 
@@ -16,6 +19,10 @@ sealed interface ResourceFormIntent {
 
     data object CreateResource : ResourceFormIntent
 
+    data class ConfirmedPermissionsResult(
+        val permissions: List<PermissionModelUi>,
+    ) : ResourceFormIntent
+
     data object UpdateResource : ResourceFormIntent
 
     data class PasswordTextChanged(
@@ -23,6 +30,14 @@ sealed interface ResourceFormIntent {
     ) : ResourceFormIntent
 
     data object GeneratePassword : ResourceFormIntent
+
+    data object DismissUnableToGeneratePassword : ResourceFormIntent
+
+    data object OpenAdvancedSecretGeneration : ResourceFormIntent
+
+    data class AdvancedSecretGenerationResult(
+        val result: AdvancedSecretGenerationFormResult,
+    ) : ResourceFormIntent
 
     data class PasswordMainUriTextChanged(
         val mainUri: String,
@@ -48,11 +63,25 @@ sealed interface ResourceFormIntent {
         val note: String,
     ) : ResourceFormIntent
 
+    data class PinCodeChanged(
+        val pinCode: String,
+    ) : ResourceFormIntent
+
+    data object GeneratePinCode : ResourceFormIntent
+
+    data object GoToPinCodeAdvancedGeneration : ResourceFormIntent
+
+    data class PinCodeAdvancedGenerationResult(
+        val pinCodeUiModel: PinCodeUiModel,
+    ) : ResourceFormIntent
+
     data object GoToAdditionalNote : ResourceFormIntent
 
     data object GoToAdditionalTotp : ResourceFormIntent
 
     data object GoToAdditionalPassword : ResourceFormIntent
+
+    data object GoToAdditionalPinCode : ResourceFormIntent
 
     data object GoToCustomFields : ResourceFormIntent
 
@@ -76,6 +105,10 @@ sealed interface ResourceFormIntent {
 
     data class NoteResult(
         val note: String?,
+    ) : ResourceFormIntent
+
+    data class PinCodeResult(
+        val pinCodeUiModel: PinCodeUiModel?,
     ) : ResourceFormIntent
 
     data class DescriptionResult(
@@ -106,4 +139,12 @@ sealed interface ResourceFormIntent {
     data object DismissMetadataKeyDialog : ResourceFormIntent
 
     data object GoBack : ResourceFormIntent
+
+    data object ProceedWithPasswordWarning : ResourceFormIntent
+
+    data object DismissPasswordWarning : ResourceFormIntent
+
+    data object UpgradeResource : ResourceFormIntent
+
+    data object LearnMoreAboutUpgrade : ResourceFormIntent
 }

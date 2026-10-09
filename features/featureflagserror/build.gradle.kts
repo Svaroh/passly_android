@@ -1,0 +1,31 @@
+plugins {
+    id("passbolt.android.library")
+    id(libs.plugins.compose.compiler.get().pluginId)
+}
+
+dependencies {
+    implementation(project(":mappers"))
+    implementation(project(":common"))
+    implementation(project(":uimodel"))
+    implementation(project(":architecture"))
+    implementation(project(":coreui"))
+    implementation(project(":localization"))
+
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin)
+
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.ui.graphics)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.icons)
+    debugImplementation(libs.compose.ui.tooling.preview)
+}
+
+android {
+    namespace = "net.svaroh.passly.feature.flagserror"
+    buildFeatures {
+        compose = true
+    }
+}

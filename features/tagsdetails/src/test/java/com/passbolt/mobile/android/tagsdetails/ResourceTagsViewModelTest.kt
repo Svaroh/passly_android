@@ -29,14 +29,20 @@ import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.GsonJsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceTagsUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceTagsUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathJsonPathOps
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathsOps
 import net.svaroh.passly.tagsdetails.ResourceTagsIntent.GoBack
@@ -46,15 +52,9 @@ import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.ShowContentNotAvaila
 import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.tagsdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
 import net.svaroh.passly.ui.MetadataJsonModel
-import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.TagModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -123,12 +123,12 @@ class ResourceTagsViewModelTest : KoinTest {
 
         val getLocalResourceUseCase = get<GetLocalResourceUseCase>()
         getLocalResourceUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalResourceUseCase.Output(testResource)
+            on { execute(any()) } doReturn GetLocalResourceUseCase.Output(testResource)
         }
 
         val getLocalResourceTagsUseCase = get<GetLocalResourceTagsUseCase>()
         getLocalResourceTagsUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalResourceTagsUseCase.Output(testTags)
+            on { execute(any()) } doReturn GetLocalResourceTagsUseCase.Output(testTags)
         }
     }
 
@@ -173,7 +173,7 @@ class ResourceTagsViewModelTest : KoinTest {
                 awaitItem()
 
                 val dataRefreshTrackingFlow = get<DataRefreshTrackingFlow>()
-                dataRefreshTrackingFlow.updateStatus(InProgress)
+                dataRefreshTrackingFlow.updateStatus(InProgress(progress = 0f))
 
                 val refreshingState = awaitItem()
                 assertThat(refreshingState.isRefreshing).isTrue()
@@ -200,11 +200,11 @@ class ResourceTagsViewModelTest : KoinTest {
 
     @OptIn(ExperimentalTime::class)
     @Test
-    fun `should handle null pointer exception and navigate to home`() =
+    fun `should handle missing item exception and navigate to home`() =
         runTest {
             val getLocalResourceUseCase = get<GetLocalResourceUseCase>()
             getLocalResourceUseCase.stub {
-                onBlocking { execute(any()) } doThrow NullPointerException("Resource not found")
+                on { execute(any()) } doThrow IllegalStateException("The query result was empty")
             }
 
             viewModel = get { parametersOf(testResource.resourceId) }
@@ -221,7 +221,7 @@ class ResourceTagsViewModelTest : KoinTest {
         runTest {
             val getLocalResourceTagsUseCase = get<GetLocalResourceTagsUseCase>()
             getLocalResourceTagsUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetLocalResourceTagsUseCase.Output(emptyList())
+                on { execute(any()) } doReturn GetLocalResourceTagsUseCase.Output(emptyList())
             }
 
             viewModel = get { parametersOf(testResource.resourceId) }
@@ -251,9 +251,10 @@ class ResourceTagsViewModelTest : KoinTest {
 
     private companion object {
         private val testResource by lazy {
-            ResourceModel(
+            ResourceUiModel(
                 resourceId = "resId",
                 resourceTypeId = "resTypeId",
+                slug = "password-and-description",
                 folderId = null,
                 permission = ResourcePermission.READ,
                 favouriteId = null,

@@ -11,6 +11,7 @@ import net.svaroh.passly.feature.settings.screen.appsettings.appSettingsModule
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.settingsAutofillModule
 import net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter.defaultFilterModule
 import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.expertSettingsModule
+import net.svaroh.passly.feature.settings.screen.appsettings.expertsettings.pagesize.pageSizeModule
 import net.svaroh.passly.feature.settings.screen.debuglogssettings.debugLogsSettingsModule
 import net.svaroh.passly.feature.settings.screen.settingsModule
 import net.svaroh.passly.feature.settings.screen.termsandlicenses.licenses.licensesModule
@@ -57,6 +58,7 @@ val settingsModule =
         debugLogsSettingsModule()
         termsAndLicensesSettingsModule()
         expertSettingsModule()
+        pageSizeModule()
 
         settingsAutofillModule()
         licensesModule()

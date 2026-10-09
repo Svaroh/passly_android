@@ -23,8 +23,8 @@
 
 package net.svaroh.passly.feature.settings.screen.debuglogssettings
 
-import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.viewModelOf
 
 fun Module.debugLogsSettingsModule() {
     viewModelOf(::DebugLogsSettingsViewModel)

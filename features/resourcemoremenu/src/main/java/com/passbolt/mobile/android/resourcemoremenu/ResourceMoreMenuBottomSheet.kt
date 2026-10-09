@@ -23,6 +23,7 @@
 
 package net.svaroh.passly.resourcemoremenu
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +34,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,6 +57,7 @@ import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Laun
 import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.Share
 import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetIntent.ToggleFavourite
 import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.Dismiss
+import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheetSideEffect.ShowContentNotAvailable
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.REMOVE_FROM_FAVOURITES
@@ -78,6 +82,8 @@ fun ResourceMoreMenuBottomSheet(
     onToggleFavourite: (FavouriteOption) -> Unit,
     viewModel: ResourceMoreMenuBottomSheetViewModel = koinViewModel(),
 ) {
+    val context = LocalContext.current
+    val resources = LocalResources.current
     val state by viewModel.viewState.collectAsStateWithLifecycle()
 
     LaunchedEffect(resourceId) {
@@ -94,6 +100,13 @@ fun ResourceMoreMenuBottomSheet(
     SideEffectDispatcher(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             Dismiss -> onDismissRequest()
+            ShowContentNotAvailable ->
+                Toast
+                    .makeText(
+                        context,
+                        resources.getString(LocalizationR.string.content_not_available),
+                        Toast.LENGTH_SHORT,
+                    ).show()
             ResourceMoreMenuBottomSheetSideEffect.CopyPassword -> onCopyPassword()
             ResourceMoreMenuBottomSheetSideEffect.CopyMetadataDescription -> onCopyMetadataDescription()
             ResourceMoreMenuBottomSheetSideEffect.CopyNote -> onCopyNote()

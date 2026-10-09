@@ -24,17 +24,18 @@
 package net.svaroh.passly.feature.accessibilitypolicies
 
 import app.cash.turbine.test
-import net.svaroh.passly.core.preferences.usecase.UpdateGlobalPreferencesUseCase
-import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesIntent.Accept
-import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesIntent.Decline
-import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToAcceptedScreen
-import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToDeclinedScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesIntent.Accept
+import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesIntent.Decline
+import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToAcceptedScreen
+import net.svaroh.passly.feature.accessibilitypolicies.AccessibilityPoliciesSideEffect.NavigateToDeclinedScreen
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -78,7 +79,7 @@ class AccessibilityPoliciesViewModelTest {
             viewModel.onIntent(Accept)
 
             verify(updateGlobalPreferencesUseCase).execute(
-                UpdateGlobalPreferencesUseCase.Input(accessibilityPoliciesConsentGiven = true),
+                GlobalPreferencesUpdate(accessibilityPoliciesConsentGiven = true),
             )
         }
 

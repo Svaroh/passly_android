@@ -24,6 +24,7 @@
 package net.svaroh.passly.tagsdetails
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
@@ -31,15 +32,14 @@ import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceTagsUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceTagsUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
 import net.svaroh.passly.tagsdetails.ResourceTagsIntent.GoBack
 import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.NavigateBack
 import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.NavigateToHome
 import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.ShowContentNotAvailable
 import net.svaroh.passly.tagsdetails.ResourceTagsSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.tagsdetails.SnackbarErrorType.FAILED_TO_REFRESH_DATA
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class ResourceTagsViewModel(
@@ -67,7 +67,7 @@ internal class ResourceTagsViewModel(
     private suspend fun synchronizeWithDataRefresh(resourceId: String) {
         dataRefreshTrackingFlow.dataRefreshStatusFlow.collect {
             when (it) {
-                InProgress -> updateViewState { copy(isRefreshing = true) }
+                is InProgress -> updateViewState { copy(isRefreshing = true, refreshProgress = it.progress) }
                 FinishedWithFailure -> {
                     emitSideEffect(ShowErrorSnackbar(FAILED_TO_REFRESH_DATA))
                     updateViewState { copy(isRefreshing = false) }
@@ -101,7 +101,7 @@ internal class ResourceTagsViewModel(
                     tags = tagsResult.tags,
                 )
             }
-        } catch (_: NullPointerException) {
+        } catch (_: IllegalStateException) {
             emitSideEffect(ShowContentNotAvailable)
             emitSideEffect(NavigateToHome)
         } catch (throwable: Exception) {

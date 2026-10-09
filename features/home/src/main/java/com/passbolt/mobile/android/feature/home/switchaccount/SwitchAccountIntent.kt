@@ -1,6 +1,5 @@
 package net.svaroh.passly.feature.home.switchaccount
 
-import net.svaroh.passly.core.navigation.AppContext
 import net.svaroh.passly.ui.SwitchAccountUiModel.AccountItem
 
 /**
@@ -27,9 +26,7 @@ import net.svaroh.passly.ui.SwitchAccountUiModel.AccountItem
  */
 
 sealed interface SwitchAccountIntent {
-    data class Initialize(
-        val appContext: AppContext,
-    ) : SwitchAccountIntent
+    data object Refresh : SwitchAccountIntent
 
     data object SeeCurrentAccountDetails : SwitchAccountIntent
 

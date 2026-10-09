@@ -40,7 +40,7 @@ val validSessionTestModule =
     module {
         single {
             mockGetSessionExpiryUseCase.stub {
-                onBlocking { execute(Unit) }.thenReturn(
+                on { execute(Unit) }.thenReturn(
                     GetSessionExpiryUseCase.Output.JwtWillExpire(
                         ZonedDateTime.now().plusSeconds(VALID_SESSION_DURATION_SECONDS),
                     ),

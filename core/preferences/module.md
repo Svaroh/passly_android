@@ -1,3 +1,0 @@
-# Module preferences
-
-Preferences module.

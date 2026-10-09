@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.locationdetails
 
-import PassboltTheme
 import android.graphics.drawable.Drawable
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -49,10 +48,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,14 +59,16 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.extension.toSingleLine
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
-import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
-import net.svaroh.passly.core.ui.pulltorefresh.PullToRefreshIndicatorBox
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
 import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
 import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.domain.folders.model.FolderModel
+import net.svaroh.passly.domain.resources.resourceicon.ResourceIconProvider
 import net.svaroh.passly.locationdetails.LocationDetailsIntent.GoBack
 import net.svaroh.passly.locationdetails.LocationDetailsIntent.ToggleExpanded
 import net.svaroh.passly.locationdetails.LocationDetailsSideEffect.NavigateToHome
@@ -78,12 +79,11 @@ import net.svaroh.passly.locationdetails.data.ExpandableFolderTreeCreator
 import net.svaroh.passly.locationdetails.data.flattenTree
 import net.svaroh.passly.locationdetails.ui.ExpandableFolderItem
 import net.svaroh.passly.locationdetails.ui.LocationItem
-import net.svaroh.passly.ui.FolderModel
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
+import java.time.ZonedDateTime
 import net.svaroh.passly.core.localization.R as LocalizationR
 import net.svaroh.passly.core.ui.R as CoreUiR
 
@@ -107,6 +107,8 @@ internal fun LocationDetailsScreen(
         modifier = modifier,
     )
 
+    val errorColor = colorResource(CoreUiR.color.red)
+
     SideEffectDispatcher(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             NavigateUp -> navigator.navigateBack()
@@ -116,7 +118,7 @@ internal fun LocationDetailsScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getErrorMessage(context, sideEffect.type),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorColor,
                         ),
                     )
                 }
@@ -146,6 +148,7 @@ private fun LocationDetailsContent(
             TitleAppBar(
                 title = stringResource(LocalizationR.string.location),
                 navigationIcon = { BackNavigationIcon(onBackClick = { onIntent(GoBack) }) },
+                refreshProgress = if (state.isRefreshing) state.refreshProgress else null,
             )
         },
         snackbarHost = {
@@ -166,75 +169,71 @@ private fun LocationDetailsContent(
             )
         },
         content = { paddingValues ->
-            PullToRefreshIndicatorBox(
-                isRefreshing = state.isRefreshing,
+            Column(
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .padding(paddingValues),
+                        .padding(paddingValues)
+                        .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    val context = LocalContext.current
-                    var itemIcon by remember { mutableStateOf<Drawable?>(null) }
+                val context = LocalContext.current
+                var itemIcon by remember { mutableStateOf<Drawable?>(null) }
 
-                    LaunchedEffect(state.itemName) {
-                        itemIcon =
-                            if (state.resource != null) {
-                                resourceIconProvider.getResourceIcon(context, state.resource)
-                            } else {
-                                ContextCompat.getDrawable(
-                                    context,
-                                    if (state.isSharedFolder) {
-                                        CoreUiR.drawable.ic_filled_shared_folder_with_bg
-                                    } else {
-                                        CoreUiR.drawable.ic_filled_folder_with_bg
-                                    },
-                                )
-                            }
-                    }
+                LaunchedEffect(state.itemName) {
+                    itemIcon =
+                        if (state.resource != null) {
+                            resourceIconProvider.getResourceIcon(context, state.resource)
+                        } else {
+                            ContextCompat.getDrawable(
+                                context,
+                                if (state.isSharedFolder) {
+                                    CoreUiR.drawable.ic_filled_shared_folder_with_bg
+                                } else {
+                                    CoreUiR.drawable.ic_filled_folder_with_bg
+                                },
+                            )
+                        }
+                }
 
-                    itemIcon?.let { drawable ->
-                        Image(
-                            painter = BitmapPainter(drawable.toBitmap().asImageBitmap()),
-                            contentDescription = null,
-                            modifier = Modifier.size(60.dp),
-                        )
-                    }
+                itemIcon?.let { drawable ->
+                    Image(
+                        painter = BitmapPainter(drawable.toBitmap().asImageBitmap()),
+                        contentDescription = null,
+                        modifier = Modifier.size(60.dp),
+                    )
+                }
 
+                Text(
+                    text = state.itemName.toSingleLine(),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 16.dp),
+                )
+
+                if (state.folderTree != null && state.folderTree.rootNodes.isNotEmpty()) {
                     Text(
-                        text = state.itemName.toSingleLine(),
-                        style = MaterialTheme.typography.titleLarge,
+                        text = stringResource(LocalizationR.string.location),
+                        style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(top = 16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = 24.dp, start = 16.dp),
                     )
 
-                    if (state.folderTree != null && state.folderTree.rootNodes.isNotEmpty()) {
-                        Text(
-                            text = stringResource(LocalizationR.string.location),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 24.dp, start = 16.dp),
-                        )
-
-                        LazyColumn(modifier = Modifier.padding(top = 24.dp)) {
-                            items(
-                                items = flattenTree(state.folderTree.rootNodes, state.expandedItemIds),
-                                key = { it.id },
-                            ) { node ->
-                                ExpandableFolderItem(
-                                    node = node,
-                                    isExpanded = state.expandedItemIds.contains(node.id),
-                                    onToggleExpansion = { onIntent(ToggleExpanded(node.id)) },
-                                    modifier = Modifier.fillMaxWidth(),
-                                )
-                            }
+                    LazyColumn(modifier = Modifier.padding(top = 24.dp)) {
+                        items(
+                            items = flattenTree(state.folderTree.rootNodes, state.expandedItemIds),
+                            key = { it.id },
+                        ) { node ->
+                            ExpandableFolderItem(
+                                node = node,
+                                isExpanded = state.expandedItemIds.contains(node.id),
+                                onToggleExpansion = { onIntent(ToggleExpanded(node.id)) },
+                                modifier = Modifier.fillMaxWidth(),
+                            )
                         }
                     }
                 }
@@ -256,6 +255,7 @@ private fun LocationDetailsPreview(expandableFolderTreeCreator: ExpandableFolder
                         name = "Projects",
                         isShared = false,
                         permission = ResourcePermission.OWNER,
+                        modified = ZonedDateTime.now(),
                     ),
                     FolderModel(
                         folderId = "2",
@@ -263,6 +263,7 @@ private fun LocationDetailsPreview(expandableFolderTreeCreator: ExpandableFolder
                         name = "Mobile Apps",
                         isShared = true,
                         permission = ResourcePermission.OWNER,
+                        modified = ZonedDateTime.now(),
                     ),
                 ),
             )
@@ -281,6 +282,7 @@ private fun LocationDetailsPreview(expandableFolderTreeCreator: ExpandableFolder
                                 name = "Projects",
                                 isShared = false,
                                 permission = ResourcePermission.OWNER,
+                                modified = ZonedDateTime.now(),
                             ),
                             FolderModel(
                                 folderId = "2",
@@ -288,6 +290,7 @@ private fun LocationDetailsPreview(expandableFolderTreeCreator: ExpandableFolder
                                 name = "Mobile Apps",
                                 isShared = true,
                                 permission = ResourcePermission.OWNER,
+                                modified = ZonedDateTime.now(),
                             ),
                         ),
                     folderTree = folderTree,

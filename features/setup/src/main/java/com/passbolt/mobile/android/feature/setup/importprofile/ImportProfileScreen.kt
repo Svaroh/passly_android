@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.feature.setup.importprofile
 
-import PassboltTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,9 +37,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.Summary
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
 import net.svaroh.passly.core.ui.button.PrimaryButton
 import net.svaroh.passly.core.ui.text.TextInput
 import net.svaroh.passly.core.ui.textinputfield.StatefulInput.State.Default
@@ -64,6 +65,8 @@ internal fun ImportProfileScreen(
     navigator: AppNavigator = koinInject(),
     viewModel: ImportProfileViewModel = koinViewModel(),
 ) {
+    FlagSecureEffect()
+
     val state = viewModel.viewState.collectAsStateWithLifecycle()
 
     ImportProfileScreen(

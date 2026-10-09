@@ -1,5 +1,7 @@
 package net.svaroh.passly.core.autofill.accessibility
 
+import java.util.concurrent.atomic.AtomicReference
+
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -22,12 +24,19 @@ package net.svaroh.passly.core.autofill.accessibility
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-object AccessibilityCommunicator {
-    var lastCredentials: Credentials? = null
+class AccessibilityCommunicator {
+    private val _lastFill = AtomicReference<LastFill?>(null)
 
-    data class Credentials(
-        val username: String,
-        val password: String,
+    var lastFill: LastFill?
+        get() = _lastFill.get()
+        set(value) {
+            _lastFill.set(value)
+        }
+
+    data class LastFill(
+        val username: String?,
+        val password: String?,
+        val totpCode: String?,
         val uri: String?,
     )
 }

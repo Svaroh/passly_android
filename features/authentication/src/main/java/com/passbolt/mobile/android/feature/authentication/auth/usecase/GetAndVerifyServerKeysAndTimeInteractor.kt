@@ -1,13 +1,17 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
 import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.accountdata.IsServerFingerprintCorrectUseCase
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.TIMEOUT
+import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.IsServerFingerprintCorrectUseCase
+import net.svaroh.passly.domain.auth.usecase.FetchServerPublicPgpKeyUseCase
+import net.svaroh.passly.domain.auth.usecase.FetchServerPublicRsaKeyUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveServerPublicRsaKeyUseCase
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import timber.log.Timber
-import kotlin.time.measureTimedValue
 
 /**
  * Passbolt - Open source password manager for teams
@@ -32,12 +36,12 @@ import kotlin.time.measureTimedValue
  * @since v1.0
  */
 class GetAndVerifyServerKeysAndTimeInteractor(
-    private val fetchServerPublicPgpKeyUseCase: FetchServerPublicPgpKeyUseCase,
-    private val fetchServerPublicRsaKeyUseCase: FetchServerPublicRsaKeyUseCase,
+    private val serverKeysWarmup: ServerKeysWarmup,
     private val saveServerPublicRsaKeyUseCase: SaveServerPublicRsaKeyUseCase,
     private val isServerFingerprintCorrectUseCase: IsServerFingerprintCorrectUseCase,
     private val getAccountDataUseCase: GetAccountDataUseCase,
     private val gopenPgpTimeUpdater: GopenPgpTimeUpdater,
+    private val openPgp: OpenPgp,
 ) {
     suspend fun getAndVerifyServerKeys(
         userId: String,
@@ -45,62 +49,118 @@ class GetAndVerifyServerKeysAndTimeInteractor(
         onSuccess: suspend (Success) -> Unit,
     ) {
         Timber.d("Getting server pgp and rsa keys")
-        // the two keys are independent, so they are fetched at once: run one after the other, an unreachable server
-        // costs two full connection budgets before the caller is told anything
-        val (timedPgpKey, rsaKey) =
-            coroutineScope {
-                val pgpKeyRequest = async { measureTimedValue { fetchServerPublicPgpKeyUseCase.execute(Unit) } }
-                val rsaKeyRequest = async { fetchServerPublicRsaKeyUseCase.execute(Unit) }
-                pgpKeyRequest.await() to rsaKeyRequest.await()
-            }
-        val pgpKey = timedPgpKey.value
-        val getTimeRequestDuration = timedPgpKey.duration
+        val serverKeys = serverKeysWarmup.fetchOrAwait(userId)
+        val (pgpKey, getTimeRequestDuration) = serverKeys.timedPgp
+        val rsaKey = serverKeys.rsa
 
-        if (pgpKey is FetchServerPublicPgpKeyUseCase.Output.Success &&
-            rsaKey is FetchServerPublicRsaKeyUseCase.Output.Success
+        if (pgpKey !is FetchServerPublicPgpKeyUseCase.Output.Success ||
+            rsaKey !is FetchServerPublicRsaKeyUseCase.Output.Success
         ) {
-            saveServerPublicRsaKeyUseCase.execute(SaveServerPublicRsaKeyUseCase.Input(userId, rsaKey.rsaKey))
-            Timber.d("Getting server pgp and rsa keys succeeded")
-            Timber.d("Checking if time adjustment is needed")
-            val timeUpdateResult =
-                gopenPgpTimeUpdater.updateTimeIfNeeded(pgpKey.serverTime, getTimeRequestDuration.inWholeSeconds)
-            if (timeUpdateResult == GopenPgpTimeUpdater.Result.TIME_DELTA_TOO_BIG_FOR_SYNC) {
-                onError(Error.TimeIsOutOfSync)
+            onError(mapKeysFetchFailure(userId, pgpKey, rsaKey))
+            return
+        }
+
+        if (isServerTimeOutOfSync(pgpKey, serverKeys.deviceTimeAtFetchMillis, getTimeRequestDuration.inWholeMilliseconds)) {
+            onError(Error.TimeIsOutOfSync)
+            return
+        }
+
+        verifyServerFingerprint(userId, pgpKey, rsaKey, onError, onSuccess)
+    }
+
+    private suspend fun verifyServerFingerprint(
+        userId: String,
+        pgpKey: FetchServerPublicPgpKeyUseCase.Output.Success,
+        rsaKey: FetchServerPublicRsaKeyUseCase.Output.Success,
+        onError: (Error) -> Unit,
+        onSuccess: suspend (Success) -> Unit,
+    ) {
+        val computedFingerprint =
+            computeServerKeyFingerprint(pgpKey.publicKey) ?: run {
+                onError(Error.Generic)
                 return
             }
-            Timber.d("Verifying server fingerprint")
-            val input = IsServerFingerprintCorrectUseCase.Input(userId, pgpKey.fingerprint)
-            if (!isServerFingerprintCorrectUseCase.execute(input).isCorrect) {
-                Timber.d("Server key fingerprint has changed")
-                onError(Error.IncorrectServerFingerprint(pgpKey.fingerprint))
-            } else {
-                Timber.d("Server key fingerprint is valid")
-                onSuccess(Success(pgpKey.publicKey, pgpKey.fingerprint, rsaKey.rsaKey))
-            }
-        } else {
-            val pgpFailure = (pgpKey as? FetchServerPublicPgpKeyUseCase.Output.Failure)?.error
-            val rsaFailure = (rsaKey as? FetchServerPublicRsaKeyUseCase.Output.Failure)?.error
 
-            if (isUnreachable(pgpFailure) || isUnreachable(rsaFailure)) {
+        val rejection = calculateFingerprintRejectionReason(userId, computedFingerprint, pgpKey.fingerprint)
+        if (rejection != null) {
+            Timber.e(rejection.logMessage)
+            onError(Error.IncorrectServerFingerprint(computedFingerprint))
+        } else {
+            Timber.d("Server key fingerprint is valid")
+            saveServerPublicRsaKeyUseCase.execute(SaveServerPublicRsaKeyUseCase.Input(userId, rsaKey.rsaKey))
+            onSuccess(Success(pgpKey.publicKey, computedFingerprint, rsaKey.rsaKey))
+        }
+    }
+
+    private fun isServerTimeOutOfSync(
+        pgpKey: FetchServerPublicPgpKeyUseCase.Output.Success,
+        deviceTimeAtFetchMillis: Long,
+        getTimeRequestDurationMillis: Long,
+    ): Boolean =
+        gopenPgpTimeUpdater.updateTimeIfNeeded(
+            pgpKey.serverTime,
+            deviceTimeAtFetchMillis,
+            getTimeRequestDurationMillis,
+        ) == GopenPgpTimeUpdater.Result.TIME_DELTA_TOO_BIG_FOR_SYNC
+
+    private suspend fun computeServerKeyFingerprint(publicKey: String): String? =
+        when (val result = openPgp.getKeyFingerprint(publicKey)) {
+            is OpenPgpResult.Result -> result.result.uppercase()
+            is OpenPgpResult.Error -> {
+                Timber.e("Unable to compute server key fingerprint from key data: ${result.error.message}")
+                null
+            }
+        }
+
+    private fun isServerFingerprintTrusted(
+        userId: String,
+        fingerprint: String,
+    ): Boolean = isServerFingerprintCorrectUseCase.execute(IsServerFingerprintCorrectUseCase.Input(userId, fingerprint)).isCorrect
+
+    private fun calculateFingerprintRejectionReason(
+        userId: String,
+        computedFingerprint: String,
+        reportedFingerprint: String,
+    ): FingerprintRejection? {
+        if (!computedFingerprint.equals(reportedFingerprint, ignoreCase = true)) {
+            return FingerprintRejection.FINGERPRINT_NOT_MATCHING_KEY
+        }
+        return if (isServerFingerprintTrusted(userId, computedFingerprint)) {
+            null
+        } else {
+            FingerprintRejection.FINGERPRINT_CHANGED
+        }
+    }
+
+    private fun mapKeysFetchFailure(
+        userId: String,
+        pgpKey: FetchServerPublicPgpKeyUseCase.Output,
+        rsaKey: FetchServerPublicRsaKeyUseCase.Output,
+    ): Error {
+        val pgpIncomplete = (pgpKey as? FetchServerPublicPgpKeyUseCase.Output.Failure)?.incomplete
+        val rsaIncomplete = (rsaKey as? FetchServerPublicRsaKeyUseCase.Output.Failure)?.incomplete
+        return when {
+            pgpIncomplete.isNoNetwork() || rsaIncomplete.isNoNetwork() -> {
+                Timber.d("No network connection")
+                Error.NoNetwork
+            }
+            pgpIncomplete.isServerNotReachable() || rsaIncomplete.isServerNotReachable() -> {
                 Timber.d("Server is not reachable")
-                val accountData = getAccountDataUseCase.execute(UserIdInput(userId))
-                onError(Error.ServerNotReachable(accountData.url))
-            } else {
+                Error.ServerNotReachable(getAccountDataUseCase.execute(UserIdInput(userId)).url)
+            }
+            else -> {
                 Timber.d("Generic error occurred")
-                onError(Error.Generic)
+                Error.Generic
             }
         }
     }
 
-    /**
-     * "Cannot be reached" has to cover having no network at all, not only a server that answers too slowly.
-     *
-     * A timeout raises SocketTimeoutException, but the far more common offline case - flight mode, no signal, no DNS -
-     * raises UnknownHostException. Treating only the former as unreachable made every real offline start fall through
-     * to a generic error, which is exactly the situation the local replica exists for.
-     */
-    private fun isUnreachable(failure: NetworkResult.Failure<*>?): Boolean =
-        failure != null && (failure.isServerNotReachable || failure.isNoNetworkException)
+    private enum class FingerprintRejection(
+        val logMessage: String,
+    ) {
+        FINGERPRINT_NOT_MATCHING_KEY("Server-reported fingerprint does not match its key data"),
+        FINGERPRINT_CHANGED("Server key fingerprint changed from the saved value"),
+    }
 
     data class Success(
         val pgpKey: String,
@@ -117,8 +177,14 @@ class GetAndVerifyServerKeysAndTimeInteractor(
             val serverUrl: String,
         ) : Error()
 
+        data object NoNetwork : Error()
+
         data object TimeIsOutOfSync : Error()
 
         data object Generic : Error()
     }
 }
+
+private fun DomainResult.Incomplete?.isServerNotReachable(): Boolean = this is DomainResult.Incomplete.Error && reason == TIMEOUT
+
+private fun DomainResult.Incomplete?.isNoNetwork(): Boolean = this is DomainResult.Incomplete.Error && reason == OFFLINE

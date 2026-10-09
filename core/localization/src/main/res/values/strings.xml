@@ -18,6 +18,7 @@
     <string name="default_home_search_hint">Search name, user or url</string>
     <string name="all_items_home_search_hint">Search name, user, url or tag</string>
     <string name="user_search_hint">Search for users…</string>
+    <string name="search_in_progress">Searching…</string>
     <string name="no_passwords">There are no passwords</string>
     <string name="no_otps">There are no TOTPs</string>
     <string name="authentication_required">Authentication required</string>
@@ -51,6 +52,7 @@
     <string name="common_sign_out">Sign out</string>
     <string name="common_data_refresh_error">There was an error during data refresh. Swipe down to refresh.</string>
     <string name="common_decryption_failure">Error during secret decryption</string>
+    <string name="common_invalid_totp_parameters">Invalid TOTP parameters</string>
     <string name="common_metadata_encryption_failure">Error during metadata encryption</string>
     <string name="common_fetch_failure">Error during downloading the secret</string>
     <string name="common_encryption_failure">There was an error during secret encryption</string>
@@ -61,6 +63,8 @@
     <string name="common_metadata_key_verification_failure">Could not verify metadata keys</string>
     <string name="common_metadata_key_is_trusted">New metadata key is trusted</string>
     <string name="common_metadata_key_trust_failed">Failed to trust new metadata key</string>
+    <string name="common_password_policies_fetch_failed">Failed to fetch password policies - using defaults</string>
+    <string name="common_password_expiry_fetch_failed">Failed to fetch password expiry settings - using defaults</string>
     <string name="common_bullet_format"
         translatable="false">• %s</string>
     <string name="common_bullet"
@@ -183,8 +187,11 @@
     <string name="auth_decryption_error_title">Decryption error</string>
     <string name="auth_decryption_error_description">There was a decryption error. Please try again.\n</string>
     <string name="auth_decryption_error_cause">Open PGP error is:\n%s</string>
+    <string name="auth_error_server_signature_invalid">Server signature invalid</string>
     <string name="auth_error_invalid_signature">Challenge verification error (invalid signature)</string>
     <string name="auth_error_token_expired">Challenge verification error (token expired)</string>
+    <string name="auth_error_verify_token_mismatch">Challenge verification error (verify token mismatch)</string>
+    <string name="auth_error_domain_mismatch">Challenge verification error (domain mismatch)</string>
     <string name="auth_error_challenge_verification_failure">Challenge verification failure</string>
     <string name="auth_error_profile_fetch_failure">There was an error during profile update</string>
 
@@ -305,6 +312,8 @@
     <string name="resource_details_description_header">Description</string>
     <string name="resource_details_note_header">Note</string>
     <string name="resource_details_note_content">Content</string>
+    <string name="resource_details_pin_code_header">Pin code</string>
+    <string name="resource_details_pin_code_code">Code</string>
     <string name="resource_details_tags_header">Tags</string>
     <string name="hidden_secret"
         translatable="false">••••••••••••••••••</string>
@@ -316,6 +325,12 @@
     <string name="resource_details_invalid_totp_scanned">Invalid TOTP QR code scanned</string>
     <string name="resource_details_metadata_header">Metadata</string>
     <string name="resource_details_custom_fields_header">Custom fields</string>
+    <string name="resource_details_upgrade_available_header">Upgrade available</string>
+    <string name="resource_details_upgrade_panel_message">This is a legacy resource. Upgrade for security improvements and new features.</string>
+    <string name="resource_details_upgrade_action">Upgrade</string>
+    <string name="resource_details_upgrade_learn_more">Learn more</string>
+    <string name="resource_details_upgrade_success">Resource upgraded.</string>
+    <string name="resource_details_upgrade_failure">Could not upgrade the resource. Please try again.</string>
     <string name="additional_uri_format">• %s</string>
 
     <string name="more_details_copy_password">Copy password</string>
@@ -335,6 +350,34 @@
     <string name="resource_form_totp_url_issuer">URL (Issuer)</string>
     <string name="resource_form_totp_more_settings">More TOTP settings</string>
     <string name="resource_form_totp_settings">TOTP settings</string>
+    <string name="resource_form_advanced_password_generation">Advanced password generation</string>
+    <string name="resource_form_advanced_passphrase_generation">Advanced passphrase generation</string>
+    <string name="resource_form_advanced_password_generation_save_preferences">Save preferences</string>
+    <string name="resource_form_advanced_password_generation_password_preview">Password preview</string>
+    <string name="resource_form_advanced_password_generation_passphrase_preview">Passphrase preview</string>
+    <string name="resource_form_advanced_password_generation_tab_password">Password</string>
+    <string name="resource_form_advanced_password_generation_tab_passphrase">Passphrase</string>
+    <string name="resource_form_advanced_password_generation_length">Length</string>
+    <string name="resource_form_advanced_password_generation_character_types">Character Types</string>
+    <string name="resource_form_advanced_password_generation_exclude_look_alike">Exclude look-alike characters</string>
+    <string name="resource_form_advanced_password_generation_exclude_look_alike_description">Skip characters that can be confused with each other (O/0, l/I/1).</string>
+    <string name="resource_form_advanced_password_generation_number_of_words">Number of words</string>
+    <string name="resource_form_advanced_password_generation_word_separator">Word separator</string>
+    <string name="resource_form_advanced_password_generation_word_separator_hint">Type one or more characters</string>
+    <string name="resource_form_advanced_password_generation_word_case">Word case</string>
+    <string name="resource_form_character_set_upper">A-Z</string>
+    <string name="resource_form_character_set_digit">0-9</string>
+    <string name="resource_form_character_set_lower">a-z</string>
+    <string name="resource_form_character_set_parenthesis">{ [ ( | ) ] }</string>
+    <string name="resource_form_character_set_special_char1"># $ % &amp; @ ^ ~</string>
+    <string name="resource_form_character_set_special_char2">. , : ;</string>
+    <string name="resource_form_character_set_special_char3">\' \" `</string>
+    <string name="resource_form_character_set_special_char4">/ \\ _ -</string>
+    <string name="resource_form_character_set_special_char5">&lt; * + ! ? =</string>
+    <string name="resource_form_character_set_emoji">🙂</string>
+    <string name="resource_form_word_case_lowercase">Lower case</string>
+    <string name="resource_form_word_case_uppercase">Upper case</string>
+    <string name="resource_form_word_case_camelcase">Camel case</string>
     <string name="resource_form_description">Description</string>
     <string name="resource_form_additional_uris">Additional URIs</string>
     <string name="resource_form_enter_description">Enter description</string>
@@ -364,8 +407,22 @@
     <string name="resource_form_save">Save</string>
     <string name="resource_form_edit_init_error">Failed to initialize resource edition</string>
     <string name="resource_form_create_init_error">Failed to initialize resource creation</string>
+    <string name="resource_form_created_share_failed">Resource created but not shared - sharing failed.</string>
+    <string name="resource_form_edited_share_failed">Unable to apply the confirmed permissions - please try again.</string>
+    <string name="resource_form_created_permissions_changed">Resource created but not shared - permissions changed in the meantime.</string>
     <string name="resource_form_remove_totp">Remove TOTP</string>
     <string name="resource_form_remove_note">Remove Note</string>
+    <string name="resource_form_remove_pin_code">Remove pin code</string>
+    <string name="resource_form_pin_code">Pin code</string>
+    <string name="resource_form_create_pin_code">Create a pin code</string>
+    <string name="resource_form_pin_code_code">Code</string>
+    <string name="resource_form_enter_pin_code">Enter pin code</string>
+    <string name="resource_form_pin_code_advanced">Advanced pin code generation</string>
+    <string name="resource_form_pin_code_length">Length</string>
+    <string name="resource_form_pin_code_save_preferences">Save preferences</string>
+    <string name="resource_form_pin_code_additional_information">Additional information</string>
+    <string name="resource_form_pin_code_validation_too_short">Pin code must be at least %d digits</string>
+    <string name="resource_form_pin_code_validation_too_long">Pin code can be at most %d digits</string>
     <string name="resource_form_no_name">no name</string>
     <string name="resource_form_max_additional_uris_limit">You can add a maximum of %d additional URIs</string>
     <string name="resource_form_appearance">Appearance</string>
@@ -382,6 +439,7 @@
     <string name="settings_debug_logs">Debug, logs</string>
     <string name="settings_disable">Disable</string>
     <string name="settings_sign_out">Sign out</string>
+    <string name="settings_sign_out_server_error">Signed out on this device. The server session may still be active.</string>
     <string name="settings_title">Settings</string>
     <string name="settings_disable_biometric_confirmation_message">After disabling biometric you will need to login by using your passphrase.</string>
     <string name="settings_turn_on_biometric_title">Turn on biometric authentication</string>
@@ -410,8 +468,12 @@
     <string name="settings_app_settings_biometry_authentication_error">Biometry authentication error. %s</string>
     <string name="settings_app_settings_expert_settings">Expert settings</string>
 
-    <string name="settings_app_settings_expert_settings_dev_mode">Developer mode</string>
+    <string name="settings_app_settings_expert_settings_require_auth_on_every_entry">Require auth on every entry</string>
     <string name="settings_app_settings_expert_settings_hide_root">Hide “device is rooted” dialog</string>
+    <string name="settings_app_settings_expert_settings_fetch_page_size">API fetch page size</string>
+    <string name="settings_page_size_description">Number of resources fetched per API request. Higher values use more memory but reduce the number of network requests.</string>
+    <string name="settings_page_size_exceeds_recommended_limit">Exceeds recommended limit. May cause app slowdowns.</string>
+    <string name="settings_page_size_restore_default_values">Restore default values</string>
 
     <string name="settings_autofill_autofill_title">Here you can change autofill methods</string>
     <string name="settings_autofill_autofill_desc">It is recommended to use the Autofill Service method, but the Service performance may depend on your device and battery optimization settings. \n\nIf the Autofill Service is not working reliably on your device you can try enabling autofill based on Accessibility Service.</string>
@@ -482,6 +544,16 @@
     <string name="resource_permissions_share_failed">There was an error during share </string>
     <string name="resource_permissions_edit_permissions">Edit permissions</string>
 
+    <string name="confirm_permissions_title">Confirm permissions</string>
+    <string name="confirm_permissions_fetch_failure">Unable to load current permissions. Please try again.</string>
+    <string name="confirm_permissions_preparing">Preparing permissions to approve…</string>
+    <string name="confirm_permissions_refreshing_users_and_groups">Refreshing users and groups…</string>
+    <string name="confirm_permissions_drifted">The permissions changed in the meantime. Please review them and confirm again.</string>
+    <string name="confirm_permissions_drifted_single">Permissions for %1$s have changed</string>
+    <string name="confirm_permissions_drifted_multiple">Permissions for %1$s (and more) have changed</string>
+    <string name="confirm_permissions_indirect_access_single_user">%1$s is already part of the group %2$s</string>
+    <string name="confirm_permissions_indirect_access_multiple_users">%1$s (and more) already have access via group membership</string>
+
     <string name="group_permission_permission">Permission</string>
     <string name="group_permission_group_members">Group members</string>
     <string name="group_permission_delete">Delete permission</string>
@@ -502,6 +574,12 @@
     <string name="main_update_downloaded">Passly update has just been downloaded</string>
     <string name="main_update_download_in_progress">Downloading in background. We\'ll notify you once the download finishes.</string>
     <string name="main_update_downloaded_install">Install</string>
+
+    <string name="deprecated_os_warning_title">Outdated Android version</string>
+    <string name="deprecated_os_warning_message">Your device runs an Android version that no longer receives security updates. Passbolt support for this version is scheduled to be phased out.</string>
+    <string name="deprecated_os_warning_call_to_action">To stay protected and keep receiving Passbolt updates, &lt;b>update your device to a newer Android version&lt;/b>.</string>
+    <string name="deprecated_os_warning_acknowledge">I understand</string>
+    <string name="deprecated_os_warning_hide">Don\'t show again</string>
 
     <string name="dialog_encryption_error_title">There was an encryption error</string>
     <string name="dialog_encryption_error_message">There was an encryption error (%s). Please try again.</string>
@@ -659,6 +737,9 @@
     <string name="create_resource_menu_create_password">Password</string>
     <string name="create_resource_menu_create_note">Note</string>
     <string name="create_resource_menu_create_folder">Folder</string>
+    <string name="create_resource_menu_other">Other</string>
+    <string name="create_resource_menu_other_title">Other resource types</string>
+    <string name="create_resource_menu_create_pin_code">Pin code</string>
 
     <string name="dialog_new_metadata_key_trust_changed">The metadata key has changed.</string>
     <string name="dialog_new_metadata_key_trust_modified_by_user">The encryption key used to share metadata between users has been updated by %s.</string>
@@ -694,6 +775,25 @@
         <item>password</item>
         <item>secret</item>
         <item>passphrase</item>
+    </string-array>
+
+    <!--
+      arrays can be inconsistent when in other languages
+      index / size is not used in code
+    -->
+    <string-array name="totp_hint_values"
+        tools:ignore="InconsistentArrays">
+        <item>otp</item>
+        <item>totp</item>
+        <item>one-time</item>
+        <item>one-time-code</item>
+        <item>verification</item>
+        <item>verification code</item>
+        <item>auth code</item>
+        <item>authentication code</item>
+        <item>2fa</item>
+        <item>mfa</item>
+        <item>security code</item>
     </string-array>
 
     <string-array name="dialog_encourage_autofill_setup_steps">

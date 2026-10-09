@@ -24,12 +24,12 @@
 package net.svaroh.passly.resourcepicker.screen
 
 import net.svaroh.passly.resourcepicker.model.PickResourceAction
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 
 internal sealed class ResourcePickerSideEffect {
     data class NavigateBackWithResult(
         val pickAction: PickResourceAction,
-        val resourceModel: ResourceModel,
+        val resourceModel: ResourceUiModel,
     ) : ResourcePickerSideEffect()
 
     data class ShowErrorSnackbar(

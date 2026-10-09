@@ -2,25 +2,39 @@ package net.svaroh.passly.feature.authentication.auth
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.accountdata.SaveServerFingerprintUseCase
-import net.svaroh.passly.core.accounts.usecase.privatekey.GetPrivateKeyUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveSelectedAccountUseCase
-import net.svaroh.passly.core.authenticationcore.passphrase.GetPassphraseUseCase
-import net.svaroh.passly.core.authenticationcore.session.SaveSessionUseCase
 import net.svaroh.passly.core.idlingresource.SignInIdlingResource
-import net.svaroh.passly.core.inappreview.InAppReviewInteractor
 import net.svaroh.passly.core.mvp.authentication.MfaProvidersHandler
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig
 import net.svaroh.passly.core.navigation.AppContext
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
 import net.svaroh.passly.core.passphrasememorycache.PotentialPassphrase
-import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.core.security.rootdetection.RootDetector
 import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
 import net.svaroh.passly.database.usecase.HasLocalReplicaUseCase
+import net.svaroh.passly.domain.accounts.AuthenticatedAccountFlow
+import net.svaroh.passly.domain.accounts.usecase.GetAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveServerFingerprintUseCase
+import net.svaroh.passly.domain.auth.model.ServerSignOutStatus
+import net.svaroh.passly.domain.auth.usecase.GetPassphraseUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveMfaTokenUseCase
+import net.svaroh.passly.domain.auth.usecase.SaveSessionUseCase
+import net.svaroh.passly.domain.inappreview.usecase.InAppReviewInteractor
+import net.svaroh.passly.domain.preferences.PreferencesDefaults
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.privatekey.model.PrivateKey
+import net.svaroh.passly.domain.privatekey.usecase.GetPrivateKeyUseCase
 import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
+import net.svaroh.passly.feature.authentication.auth.AuthIntent.BiometricAuthenticationError
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.BiometricAuthenticationSuccess
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.ConnectToExistingAccount
 import net.svaroh.passly.feature.authentication.auth.AuthIntent.DismissNoAccountExplanation
@@ -36,6 +50,8 @@ import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.HideKeyboard
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.NavigateBack
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.NavigateToAccountList
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.ShowErrorSnackbar
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_LOCKOUT
+import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.BIOMETRIC_LOCKOUT_PERMANENT
 import net.svaroh.passly.feature.authentication.auth.AuthSideEffect.SnackbarErrorType.WRONG_PASSPHRASE
 import net.svaroh.passly.feature.authentication.auth.AuthState.RefreshAuthReason.PASSPHRASE
 import net.svaroh.passly.feature.authentication.auth.AuthState.RefreshAuthReason.SESSION
@@ -45,16 +61,12 @@ import net.svaroh.passly.feature.authentication.auth.usecase.BiometryInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.GetAndVerifyServerKeysAndTimeInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.PostSignInActionsInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
+import net.svaroh.passly.feature.authentication.auth.usecase.ServerKeysWarmup
 import net.svaroh.passly.feature.authentication.auth.usecase.SignInVerifyInteractor
 import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.VerifyPassphraseUseCase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.ui.BiometricAuthError
+import net.svaroh.passly.ui.GlobalPreferencesUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -67,11 +79,12 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.get
-import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
-import org.mockito.kotlin.argThat
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
+import org.mockito.kotlin.reset
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -96,7 +109,15 @@ class AuthViewModelTest : KoinTest {
                     single { mock<BiometryInteractor>() }
                     single { mock<GetGlobalPreferencesUseCase>() }
                     single { mock<SaveSessionUseCase>() }
+                    single { mock<SaveMfaTokenUseCase>() }
                     single { mock<SaveSelectedAccountUseCase>() }
+                    single {
+                        AuthenticatedAccountFlow(
+                            mock<GetSelectedAccountUseCase> {
+                                on { execute(Unit) } doReturn GetSelectedAccountUseCase.Output(null)
+                            },
+                        )
+                    }
                     single { mock<SignOutUseCase>() }
                     single { mock<SaveServerFingerprintUseCase>() }
                     single { mock<MfaStatusProvider>() }
@@ -105,6 +126,7 @@ class AuthViewModelTest : KoinTest {
                     single { mock<InAppReviewInteractor>() }
                     single { mock<PostSignInActionsInteractor>() }
                     single { mock<RefreshSessionUseCase>() }
+                    single { mock<ServerKeysWarmup>() }
                     single { mock<HasLocalReplicaUseCase>() }
                     single { mock<BackgroundSignInExecutor>() }
                     single { RuntimeAuthenticatedFlag() }
@@ -126,7 +148,9 @@ class AuthViewModelTest : KoinTest {
                             getGlobalPreferencesUseCase = get(),
                             runtimeAuthenticatedFlag = get(),
                             saveSessionUseCase = get(),
+                            saveMfaTokenUseCase = get(),
                             saveSelectedAccountUseCase = get(),
+                            authenticatedAccountFlow = get(),
                             signOutUseCase = get(),
                             saveServerFingerprintUseCase = get(),
                             mfaStatusProvider = get(),
@@ -137,6 +161,7 @@ class AuthViewModelTest : KoinTest {
                             postSignInActionsInteractor = get(),
                             refreshSessionUseCase = get(),
                             mfaProvidersHandler = get(),
+                            serverKeysWarmup = get(),
                             hasLocalReplicaUseCase = get(),
                             backgroundSignInExecutor = get(),
                         )
@@ -154,21 +179,24 @@ class AuthViewModelTest : KoinTest {
         Dispatchers.setMain(testDispatcher)
 
         val getGlobalPreferencesUseCase: GetGlobalPreferencesUseCase = get()
-        whenever(getGlobalPreferencesUseCase.execute(any())) doReturn
-            GetGlobalPreferencesUseCase.Output(
+        whenever(getGlobalPreferencesUseCase.execute(Unit)) doReturn
+            GlobalPreferencesUiModel(
                 areDebugLogsEnabled = false,
                 debugLogFileCreationDateTime = null,
                 debugLogLastAppVersion = null,
-                isDeveloperModeEnabled = false,
                 isHideRootDialogEnabled = true,
+                isAuthRequiredOnEveryEntry = true,
+                apiFetchPageSize = PreferencesDefaults.API_FETCH_PAGE_SIZE,
+                isApiFetchPageSizeManuallySet = false,
                 accessibilityPoliciesConsentGiven = false,
+                deprecatedOsWarningHiddenForSdk = null,
             )
 
         val getAccountDataUseCase: GetAccountDataUseCase = get()
         whenever(getAccountDataUseCase.execute(UserIdInput(USER_ID))) doReturn accountData
 
         val getPrivateKeyUseCase: GetPrivateKeyUseCase = get()
-        whenever(getPrivateKeyUseCase.execute(any())) doReturn GetPrivateKeyUseCase.Output("privateKey")
+        whenever(getPrivateKeyUseCase.execute(any())) doReturn GetPrivateKeyUseCase.Output(PrivateKey("privateKey"))
     }
 
     @After
@@ -355,6 +383,36 @@ class AuthViewModelTest : KoinTest {
         }
 
     @Test
+    fun `mfa succeeded with mfa config persists mfa token for current user`() =
+        runTest {
+            val saveMfaTokenUseCase: SaveMfaTokenUseCase = get()
+
+            viewModel = get(parameters = { parametersOf(AuthConfig.Mfa("totp"), USER_ID, AppContext.APP) })
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(MfaSucceeded(MFA_HEADER))
+                assertIs<AuthSuccess>(awaitItem())
+            }
+
+            verify(saveMfaTokenUseCase).execute(SaveMfaTokenUseCase.Input(USER_ID, MFA_HEADER))
+        }
+
+    @Test
+    fun `mfa succeeded without header does not persist mfa token`() =
+        runTest {
+            val saveMfaTokenUseCase: SaveMfaTokenUseCase = get()
+
+            viewModel = get(parameters = { parametersOf(AuthConfig.Mfa("totp"), USER_ID, AppContext.APP) })
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(MfaSucceeded(null))
+                assertIs<AuthSuccess>(awaitItem())
+            }
+
+            verify(saveMfaTokenUseCase, never()).execute(any())
+        }
+
+    @Test
     fun `refresh session tries refresh first on passphrase verified`() =
         runTest {
             val verifyPassphraseUseCase: VerifyPassphraseUseCase = get()
@@ -438,7 +496,7 @@ class AuthViewModelTest : KoinTest {
         runTest {
             val signOutUseCase: SignOutUseCase = get()
             signOutUseCase.stub {
-                onBlocking { execute(any()) } doReturn Unit
+                on { execute(any()) } doReturn SignOutUseCase.Output(ServerSignOutStatus.SIGNED_OUT)
             }
 
             viewModel = get(parameters = { parametersOf(AuthConfig.Startup, USER_ID, AppContext.APP) })
@@ -461,7 +519,12 @@ class AuthViewModelTest : KoinTest {
                     PotentialPassphrase.Passphrase(BIOMETRIC_PASSPHRASE.toByteArray()),
                 )
 
+            val cachedPassphraseSnapshots = mutableListOf<ByteArray>()
             val passphraseMemoryCache: PassphraseMemoryCache = get()
+            doAnswer { invocation ->
+                cachedPassphraseSnapshots += (invocation.arguments[0] as ByteArray).copyOf()
+                Unit
+            }.whenever(passphraseMemoryCache).set(any())
 
             viewModel = get(parameters = { parametersOf(AuthConfig.RefreshPassphrase, USER_ID, AppContext.APP) })
 
@@ -470,10 +533,31 @@ class AuthViewModelTest : KoinTest {
                 assertIs<AuthSuccess>(awaitItem())
             }
 
-            verify(passphraseMemoryCache).set(
-                argThat { contentEquals(BIOMETRIC_PASSPHRASE.toByteArray()) },
-            )
-            verify(passphraseMemoryCache, never()).set(argThat { isEmpty() })
+            assertThat(cachedPassphraseSnapshots).hasSize(1)
+            assertThat(cachedPassphraseSnapshots.single()).isEqualTo(BIOMETRIC_PASSPHRASE.toByteArray())
+        }
+
+    @Test
+    fun `biometric passphrase source array is wiped after the flow completes`() =
+        runTest {
+            val mockCipher = mock<Cipher>()
+            whenever(mockCipher.iv) doReturn ByteArray(0)
+
+            val biometricSource = BIOMETRIC_PASSPHRASE.toByteArray()
+            val getPassphraseUseCase: GetPassphraseUseCase = get()
+            whenever(getPassphraseUseCase.execute(any())) doReturn
+                GetPassphraseUseCase.Output(
+                    PotentialPassphrase.Passphrase(biometricSource),
+                )
+
+            viewModel = get(parameters = { parametersOf(AuthConfig.RefreshPassphrase, USER_ID, AppContext.APP) })
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(BiometricAuthenticationSuccess(mockCipher))
+                assertIs<AuthSuccess>(awaitItem())
+            }
+
+            assertThat(biometricSource.all { it == 0.toByte() }).isTrue()
         }
 
     @Test
@@ -487,6 +571,43 @@ class AuthViewModelTest : KoinTest {
                 val state = awaitItem()
                 assertThat(state.passphrase).isEqualTo(TYPED_PASSPHRASE)
                 assertThat(state.isAuthButtonEnabled).isTrue()
+            }
+        }
+
+    @Test
+    fun `server keys warm-up is triggered on init for every full sign-in config`() =
+        runTest {
+            val warmup: ServerKeysWarmup = get()
+            val configsThatWarmUp =
+                listOf(
+                    AuthConfig.Startup,
+                    AuthConfig.Setup,
+                    AuthConfig.ManageAccount,
+                    AuthConfig.SignIn,
+                    AuthConfig.RefreshSession,
+                )
+
+            configsThatWarmUp.forEach { config ->
+                reset(warmup)
+                viewModel = get(parameters = { parametersOf(config, USER_ID, AppContext.APP) })
+                verify(warmup).warmUp(USER_ID)
+            }
+        }
+
+    @Test
+    fun `server keys warm-up is skipped on init for passphrase-only and MFA configs`() =
+        runTest {
+            val warmup: ServerKeysWarmup = get()
+            val configsThatSkip =
+                listOf(
+                    AuthConfig.RefreshPassphrase,
+                    AuthConfig.Mfa("totp"),
+                )
+
+            configsThatSkip.forEach { config ->
+                reset(warmup)
+                viewModel = get(parameters = { parametersOf(config, USER_ID, AppContext.APP) })
+                verify(warmup, never()).warmUp(any())
             }
         }
 
@@ -512,8 +633,27 @@ class AuthViewModelTest : KoinTest {
             assertThat(viewModel.viewState.value.passphrase).isEmpty()
         }
 
+    @Test
+    fun `biometric lockout errors show dedicated messages`() =
+        runTest {
+            viewModel = get(parameters = { parametersOf(AuthConfig.Startup, USER_ID, AppContext.APP) })
+
+            viewModel.sideEffect.test {
+                viewModel.onIntent(BiometricAuthenticationError(BiometricAuthError.ERROR_LOCKOUT))
+                val lockout = awaitItem()
+                assertIs<ShowErrorSnackbar>(lockout)
+                assertThat(lockout.kind).isEqualTo(BIOMETRIC_LOCKOUT)
+
+                viewModel.onIntent(BiometricAuthenticationError(BiometricAuthError.ERROR_LOCKOUT_PERMANENT))
+                val permanentLockout = awaitItem()
+                assertIs<ShowErrorSnackbar>(permanentLockout)
+                assertThat(permanentLockout.kind).isEqualTo(BIOMETRIC_LOCKOUT_PERMANENT)
+            }
+        }
+
     private companion object {
         const val USER_ID = "test-user-id"
+        const val MFA_HEADER = "passbolt_mfa=test-mfa-token"
         const val TYPED_PASSPHRASE = "typed-passphrase"
         const val BIOMETRIC_PASSPHRASE = "biometric-passphrase"
 

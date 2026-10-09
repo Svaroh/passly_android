@@ -345,7 +345,6 @@
     <string name="settings_app_settings_biometry_error">生物验证错误。 %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Biometry authentication error. %s</string>
     <string name="settings_app_settings_expert_settings">高级设置</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">开发者模式</string>
     <string name="settings_app_settings_expert_settings_hide_root">隐藏“设备已root”对话框</string>
     <string name="settings_autofill_autofill_title">您可以在这里更改自动填充方式</string>
     <string name="settings_autofill_autofill_desc">建议使用自动填充服务，但服务性能可能取决于您的设备和电池优化设置。 \n\n如果自动填充服务无法稳定的在您设备上工作，您可以尝试基于辅助服务启用自动填充。</string>

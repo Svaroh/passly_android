@@ -1,20 +1,13 @@
 package net.svaroh.passly.feature.home.filtersmenu
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.preferences.usecase.UpdateHomeDisplayViewPrefsUseCase
-import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
-import net.svaroh.passly.entity.home.HomeDisplayView
-import net.svaroh.passly.entity.home.HomeDisplayView.ALL_ITEMS
-import net.svaroh.passly.entity.home.HomeDisplayView.EXPIRY
-import net.svaroh.passly.entity.home.HomeDisplayView.FAVOURITES
-import net.svaroh.passly.entity.home.HomeDisplayView.FOLDERS
-import net.svaroh.passly.entity.home.HomeDisplayView.GROUPS
-import net.svaroh.passly.entity.home.HomeDisplayView.OWNED_BY_ME
-import net.svaroh.passly.entity.home.HomeDisplayView.RECENTLY_MODIFIED
-import net.svaroh.passly.entity.home.HomeDisplayView.SHARED_WITH_ME
-import net.svaroh.passly.entity.home.HomeDisplayView.TAGS
+import net.svaroh.passly.domain.preferences.HomeDisplayViewPreferencesUpdate
+import net.svaroh.passly.domain.preferences.mapper.toHomeDisplayViewModel
+import net.svaroh.passly.domain.preferences.usecase.UpdateHomeDisplayViewPreferencesUseCase
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
 import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.AllItemsClick
 import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.Close
 import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.ExpiryClick
@@ -29,9 +22,17 @@ import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuIntent.TagsClick
 import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuSideEffect.Dismiss
 import net.svaroh.passly.feature.home.filtersmenu.FiltersMenuSideEffect.HomeViewChanged
 import net.svaroh.passly.featureflags.usecase.GetFeatureFlagsUseCase
-import net.svaroh.passly.mappers.HomeDisplayViewMapper
+import net.svaroh.passly.ui.HomeDisplayViewUiModel
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.ALL_ITEMS
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.EXPIRY
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.FAVOURITES
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.FOLDERS
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.GROUPS
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.OWNED_BY_ME
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.RECENTLY_MODIFIED
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.SHARED_WITH_ME
+import net.svaroh.passly.ui.HomeDisplayViewUiModel.TAGS
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
-import kotlinx.coroutines.launch
 
 /**
  * Passbolt - Open source password manager for teams
@@ -59,8 +60,7 @@ import kotlinx.coroutines.launch
 class FiltersMenuViewModel(
     private val getFeatureFlagsUseCase: GetFeatureFlagsUseCase,
     private val getRbacRulesUseCase: GetRbacRulesUseCase,
-    private val updateHomeDisplayViewPrefsUseCase: UpdateHomeDisplayViewPrefsUseCase,
-    private val homeDisplayViewMapper: HomeDisplayViewMapper,
+    private val updateHomeDisplayViewPreferencesUseCase: UpdateHomeDisplayViewPreferencesUseCase,
     private val coroutineLaunchContext: CoroutineLaunchContext,
 ) : SideEffectViewModel<FiltersMenuState, FiltersMenuSideEffect>(FiltersMenuState()) {
     init {
@@ -83,12 +83,12 @@ class FiltersMenuViewModel(
         }
     }
 
-    private fun handleHomeViewChanged(homeDisplayView: HomeDisplayView) {
+    private fun handleHomeViewChanged(homeDisplayViewUiModel: HomeDisplayViewUiModel) {
         viewModelScope.launch(coroutineLaunchContext.io) {
-            updateHomeDisplayViewPrefsUseCase.execute(
-                UpdateHomeDisplayViewPrefsUseCase.Input(lastUsedHomeView = homeDisplayView),
+            updateHomeDisplayViewPreferencesUseCase.execute(
+                HomeDisplayViewPreferencesUpdate(lastUsedHomeView = homeDisplayViewUiModel),
             )
-            emitSideEffect(HomeViewChanged(homeDisplayViewMapper.map(homeDisplayView)))
+            emitSideEffect(HomeViewChanged(homeDisplayViewUiModel.toHomeDisplayViewModel()))
             emitSideEffect(Dismiss)
         }
     }

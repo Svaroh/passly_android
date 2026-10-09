@@ -36,6 +36,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -46,17 +47,21 @@ import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithS
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.accounts.AccountSwitchFlow
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.commontest.session.validSessionTestModule
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.UNKNOWN
 import net.svaroh.passly.core.mvp.authentication.SessionRefreshTrackingFlow
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.preferences.usecase.GetHomeDisplayViewPrefsUseCase
-import net.svaroh.passly.core.resources.usecase.ResourceContentTypeProvider
+import net.svaroh.passly.core.navigation.AppContext
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.AVATAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.CLEAR
-import net.svaroh.passly.entity.home.HomeDisplayView
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.domain.metadata.interactor.ResourceAccessInteractor
+import net.svaroh.passly.domain.preferences.usecase.GetHomeDisplayViewPreferencesUseCase
+import net.svaroh.passly.domain.resources.usecase.ResourceContentTypeProvider
+import net.svaroh.passly.domain.users.profile.UserProfileInteractor
+import net.svaroh.passly.domain.users.profile.UserProfileRefreshTrackingFlow
 import net.svaroh.passly.feature.home.screen.HomeIntent.CloseCreateResourceMenu
 import net.svaroh.passly.feature.home.screen.HomeIntent.CloseSwitchAccount
 import net.svaroh.passly.feature.home.screen.HomeIntent.CreateFolder
@@ -76,6 +81,7 @@ import net.svaroh.passly.feature.home.screen.HomeSideEffect.ShowSuccessSnackbar
 import net.svaroh.passly.feature.home.screen.ShowSuggestedModel.DoNotShow
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_REFRESH_DATA
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.NO_SHARED_KEY_ACCESS
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.PROFILE_FETCH_FAILURE
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.FOLDER_CREATED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_CREATED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_DELETED
@@ -86,19 +92,17 @@ import net.svaroh.passly.feature.home.screen.data.HomeDataProvider
 import net.svaroh.passly.jsonmodel.JSON_MODEL_GSON
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathJsonPathOps
 import net.svaroh.passly.jsonmodel.jsonpathops.JsonPathsOps
-import net.svaroh.passly.mappers.HomeDisplayViewMapper
-import net.svaroh.passly.metadata.usecase.CanCreateResourceUseCase
-import net.svaroh.passly.metadata.usecase.CanShareResourceUseCase
-import net.svaroh.passly.ui.DefaultFilterModel
+import net.svaroh.passly.ui.DefaultFilterUiModel
 import net.svaroh.passly.ui.Folder
 import net.svaroh.passly.ui.HomeDisplayViewModel
-import net.svaroh.passly.ui.HomeDisplayViewModel.AllItems
 import net.svaroh.passly.ui.HomeDisplayViewModel.NotLoaded
+import net.svaroh.passly.ui.HomeDisplayViewPreferencesUiModel
+import net.svaroh.passly.ui.HomeDisplayViewUiModel
 import net.svaroh.passly.ui.LeadingContentType.PASSWORD
 import net.svaroh.passly.ui.LeadingContentType.STANDALONE_NOTE
 import net.svaroh.passly.ui.MetadataJsonModel
-import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.ResourceUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -114,8 +118,11 @@ import org.koin.test.KoinTestRule
 import org.koin.test.get
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -123,9 +130,11 @@ import java.time.ZonedDateTime
 import java.util.EnumSet
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
+@Suppress("LargeClass")
 class HomeViewModelTest : KoinTest {
     @get:Rule
     val koinTestRule =
@@ -137,15 +146,18 @@ class HomeViewModelTest : KoinTest {
                     singleOf(::DataRefreshTrackingFlow)
                     singleOf(::SessionRefreshTrackingFlow)
                     single { mock<GetSelectedAccountDataUseCase>() }
-                    single { mock<GetHomeDisplayViewPrefsUseCase>() }
-                    single { mock<HomeDisplayViewMapper>() }
+                    single { mock<GetHomeDisplayViewPreferencesUseCase>() }
                     single { mock<HomeDataProvider>() }
                     single { mock<GetLocalFolderDetailsUseCase>() }
-                    single { mock<CanCreateResourceUseCase>() }
-                    single { mock<CanShareResourceUseCase>() }
+                    single { mock<ResourceAccessInteractor>() }
                     single { mock<DetectAutofillConflict>() }
+                    single {
+                        mock<UserProfileInteractor> {
+                            on { fetchAndUpdateUserProfile() } doReturn UserProfileInteractor.Output.Success
+                        }
+                    }
+                    singleOf(::UserProfileRefreshTrackingFlow)
                     single { mock<ResourceContentTypeProvider>() }
-                    single { AccountSwitchFlow(mock { on { execute(any()) } doReturn GetSelectedAccountUseCase.Output("id1") }) }
                     single(named(JSON_MODEL_GSON)) { GsonBuilder().serializeNulls().create() }
                     single {
                         Configuration
@@ -158,6 +170,7 @@ class HomeViewModelTest : KoinTest {
                     singleOf(::JsonPathJsonPathOps) bind JsonPathsOps::class
                     factoryOf(::HomeViewModel)
                 },
+                validSessionTestModule,
             )
         }
 
@@ -181,18 +194,17 @@ class HomeViewModelTest : KoinTest {
             ),
         )
 
-        whenever(get<GetHomeDisplayViewPrefsUseCase>().execute(any())).thenReturn(
-            GetHomeDisplayViewPrefsUseCase.Output(
-                lastUsedHomeView = HomeDisplayView.ALL_ITEMS,
-                userSetHomeView = DefaultFilterModel.ALL_ITEMS,
+        whenever(get<GetHomeDisplayViewPreferencesUseCase>().execute(Unit)).thenReturn(
+            HomeDisplayViewPreferencesUiModel(
+                lastUsedHomeView = HomeDisplayViewUiModel.ALL_ITEMS,
+                userSetHomeView = DefaultFilterUiModel.ALL_ITEMS,
             ),
         )
 
-        whenever(get<HomeDisplayViewMapper>().map(any(), any())).thenReturn(AllItems)
-
         get<HomeDataProvider>().stub {
-            onBlocking {
+            on {
                 provideData(
+                    any(),
                     any(),
                     any(),
                     any(),
@@ -200,12 +212,9 @@ class HomeViewModelTest : KoinTest {
             }.doReturn(HomeData())
         }
 
-        get<CanCreateResourceUseCase>().stub {
-            onBlocking { execute(any()) }.doReturn(CanCreateResourceUseCase.Output(canCreateResource = true))
-        }
-
-        get<CanShareResourceUseCase>().stub {
-            onBlocking { execute(any()) }.doReturn(CanShareResourceUseCase.Output(canShareResource = true))
+        get<ResourceAccessInteractor>().stub {
+            on { canCreateResource(anyOrNull()) }.doReturn(true)
+            on { canShareResource() }.doReturn(true)
         }
     }
 
@@ -237,20 +246,76 @@ class HomeViewModelTest : KoinTest {
         }
 
     @Test
+    fun `should show error snackbar when profile refresh fails on init`() =
+        runTest {
+            val errorMessage = "profile fetch failed"
+            get<UserProfileInteractor>().stub {
+                on { fetchAndUpdateUserProfile() } doReturn
+                    UserProfileInteractor.Output.Failure(DomainResult.Incomplete.Error(UNKNOWN, errorMessage))
+            }
+
+            viewModel = get()
+
+            viewModel.sideEffect.test {
+                val effect = awaitItem()
+                assertIs<ShowErrorSnackbar>(effect)
+                assertThat(effect.type).isEqualTo(PROFILE_FETCH_FAILURE)
+                assertThat(effect.message).isEqualTo(errorMessage)
+            }
+        }
+
+    @Test
     fun `should update search state when search query changes`() =
         runTest {
             val mockHomeData = mockResourcesData()
-            whenever(get<HomeDataProvider>().provideData(any(), any(), any())).thenReturn(mockHomeData)
+            whenever(get<HomeDataProvider>().provideData(any(), any(), any(), any())).thenReturn(mockHomeData)
 
             viewModel = get()
-            viewModel.onIntent(Search("test query"))
 
-            viewModel.viewState.drop(1).test {
-                val updatedState = awaitItem()
-                assertThat(updatedState.searchQuery).isEqualTo("test query")
-                assertThat(updatedState.searchInputEndIconMode).isEqualTo(CLEAR)
-                assertThat(updatedState.homeData).isEqualTo(mockHomeData)
+            viewModel.viewState.test {
+                assertThat(awaitItem().isSearching).isFalse()
+
+                viewModel.onIntent(Search("test query"))
+
+                val typedState = awaitItem()
+                assertThat(typedState.searchQuery).isEqualTo("test query")
+                assertThat(typedState.searchInputEndIconMode).isEqualTo(CLEAR)
+                assertThat(typedState.isSearching).isTrue()
+
+                advanceTimeBy(HomeViewModel.SEARCH_DEBOUNCE + 1.milliseconds)
+
+                val appliedState = awaitItem()
+                assertThat(appliedState.homeData).isEqualTo(mockHomeData)
+                assertThat(appliedState.isSearching).isFalse()
             }
+        }
+
+    @Test
+    fun `should apply the search query only once when typing multiple characters quickly`() =
+        runTest {
+            viewModel = get()
+            clearInvocations(get<HomeDataProvider>())
+
+            viewModel.onIntent(Search("t"))
+            viewModel.onIntent(Search("te"))
+            viewModel.onIntent(Search("tes"))
+            advanceUntilIdle()
+
+            verify(get<HomeDataProvider>()).provideData(eq("tes"), any(), any(), any())
+        }
+
+    @Test
+    fun `should not re-run the search when the query text did not change`() =
+        runTest {
+            viewModel = get()
+            viewModel.onIntent(Search("test query"))
+            advanceUntilIdle()
+            clearInvocations(get<HomeDataProvider>())
+
+            viewModel.onIntent(Search("test query"))
+            advanceUntilIdle()
+
+            verify(get<HomeDataProvider>(), never()).provideData(any(), any(), any(), any())
         }
 
     @Test
@@ -258,6 +323,7 @@ class HomeViewModelTest : KoinTest {
         runTest {
             viewModel = get()
             viewModel.onIntent(Search("test query"))
+            advanceUntilIdle()
 
             viewModel.viewState.drop(1).test {
                 viewModel.onIntent(SearchEndIconAction)
@@ -412,6 +478,25 @@ class HomeViewModelTest : KoinTest {
                 val finished = awaitItem()
                 assertThat(finished.isRefreshing).isFalse()
                 assertThat(finished.canCreateResource).isTrue()
+            }
+        }
+
+    @Test
+    fun `should show create button from local data without refresh in autofill context`() =
+        runTest {
+            mockHomeData()
+            mockCanCreateResource(true)
+
+            viewModel = get()
+
+            viewModel.viewState.test {
+                viewModel.onIntent(Initialize(DoNotShow, NotLoaded, appContext = AppContext.AUTOFILL))
+
+                var state = awaitItem()
+                while (!state.canCreateResource) {
+                    state = awaitItem()
+                }
+                assertThat(state.isRefreshing).isFalse()
             }
         }
 
@@ -621,53 +706,37 @@ class HomeViewModelTest : KoinTest {
         }
 
     @Test
-    fun `should reload home data and avatar when account switches`() =
+    fun `should not regenerate homeData on refresh complete`() =
         runTest {
             mockHomeData()
+            val dataRefreshFlow: DataRefreshTrackingFlow = get()
+            val provider: HomeDataProvider = get()
+
             viewModel = get()
             viewModel.onIntent(Initialize(DoNotShow, NotLoaded))
             advanceUntilIdle()
 
-            val newAvatar = "new_avatar_url"
-            whenever(get<GetSelectedAccountDataUseCase>().execute(anyOrNull())).thenReturn(
-                GetSelectedAccountDataUseCase.Output(
-                    firstName = "New",
-                    lastName = "User",
-                    email = "new@passbolt.com",
-                    avatarUrl = newAvatar,
-                    url = "www.passbolt.com",
-                    serverId = "2",
-                    label = "label2",
-                    role = "user",
-                ),
-            )
+            clearInvocations(provider)
 
-            val newHomeData = mockResourcesData()
-            whenever(get<HomeDataProvider>().provideData(any(), any(), any())).thenReturn(newHomeData)
-
-            val accountSwitchFlow: AccountSwitchFlow = get()
-            accountSwitchFlow.notifyAccountSwitch("id2")
+            dataRefreshFlow.updateStatus(InProgress(progress = 0f))
+            dataRefreshFlow.updateStatus(FinishedWithSuccess)
             advanceUntilIdle()
 
-            assertThat(viewModel.viewState.value.userAvatar).isEqualTo(newAvatar)
-            assertThat(viewModel.viewState.value.homeData).isEqualTo(newHomeData)
+            verify(provider, never()).provideData(any(), any(), any(), any())
         }
 
     private fun mockCanCreateResource(canCreate: Boolean) {
-        get<CanCreateResourceUseCase>().stub {
-            onBlocking {
-                execute(any())
-            }.doReturn(
-                CanCreateResourceUseCase.Output(canCreateResource = canCreate),
-            )
+        get<ResourceAccessInteractor>().stub {
+            on { canCreateResource(anyOrNull()) }.doReturn(canCreate)
         }
     }
 
     private fun mockHomeData() {
         val homeData = mockResourcesData()
         get<HomeDataProvider>().stub {
-            onBlocking {
+            on {
                 provideData(
+                    any(),
                     any(),
                     any(),
                     any(),
@@ -692,9 +761,10 @@ class HomeViewModelTest : KoinTest {
     private fun mockResourceModel(
         id: String,
         name: String,
-    ) = ResourceModel(
+    ) = ResourceUiModel(
         resourceId = id,
         resourceTypeId = "resTypeId",
+        slug = "password-and-description",
         folderId = "folderId",
         permission = ResourcePermission.READ,
         favouriteId = null,

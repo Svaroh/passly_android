@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.Dp
@@ -23,13 +22,13 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
 import net.svaroh.passly.core.ui.sharedwith.xFor
-import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserUiModel
 import net.svaroh.passly.core.ui.R as CoreUiR
 
 // TODO: Identical UI offset logic to "SharedWith" section - prepare one composable that abstracts model and use in both
 @Composable
 fun GroupMembersSection(
-    users: List<UserModel>,
+    users: List<UserUiModel>,
     modifier: Modifier = Modifier,
     avatarSize: Dp = 40.dp,
 ) {
@@ -73,13 +72,14 @@ fun GroupMembersSection(
                                 0,
                             )
                         }.background(
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.surfaceVariant,
                             shape = CircleShape,
                         ).border(1.dp, colorResource(CoreUiR.color.divider), CircleShape),
             ) {
                 Text(
                     text = counter,
                     style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }

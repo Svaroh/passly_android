@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -25,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import net.svaroh.passly.core.compose.FingerprintText
 import net.svaroh.passly.core.formatter.FingerprintFormatter
 import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
 import net.svaroh.passly.ui.MetadataKeyModification
@@ -83,7 +85,10 @@ fun NewMetadataKeyTrustDialog(
             color = colorResource(CoreUiR.color.background),
         ) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .statusBarsPadding(),
             ) {
                 BackNavigationIcon(onBackClick = onDismiss)
 
@@ -141,17 +146,9 @@ fun NewMetadataKeyTrustDialog(
 
                     Spacer(modifier = Modifier.height(60.dp))
 
-                    Text(
-                        text =
-                            fingerprintFormatter
-                                .format(
-                                    newKeyToTrustModel.metadataPrivateKey.fingerprint,
-                                    appendMiddleSpacing = true,
-                                )?.uppercase()
-                                .orEmpty(),
-                        style = MaterialTheme.typography.displayMedium,
-                        color = colorResource(CoreUiR.color.text_primary),
-                        textAlign = TextAlign.Center,
+                    FingerprintText(
+                        fingerprint = newKeyToTrustModel.metadataPrivateKey.fingerprint,
+                        fingerprintFormatter = fingerprintFormatter,
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
@@ -232,7 +229,7 @@ private fun NewMetadataKeyTrustDialogPreview() {
                     modified = ZonedDateTime.now(),
                     modifiedBy = UUID.randomUUID(),
                     pgpMessage = "--- PGP MESSAGE ---",
-                    fingerprint = "AAABBBCCCDDD",
+                    fingerprint = "03F60E958F4CB29DBE4BE4EB3BD91E325CC7D42C",
                     domain = "",
                 ),
             signedUsername = "john.doe@passbolt.com",

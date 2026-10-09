@@ -18,6 +18,13 @@ class StringMaxLength(
     length: Int,
 ) : Rule<String>({ it.length <= length })
 
+class StringMinLength(
+    length: Int,
+) : Rule<String>({ it.length >= length })
+
+object StringIsNumericOnly :
+    Rule<String>({ it.isNotEmpty() && it.all(Char::isDigit) })
+
 object StringIsUuid :
     Rule<String>({ UUID_PATTERN.toRegex().matches(it) })
 

@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.groupdetails.groupmemberdetails
 
-import PassboltTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,8 +39,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import net.svaroh.passly.core.compose.FingerprintText
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.formatter.FingerprintFormatter
 import net.svaroh.passly.core.navigation.compose.AppNavigator
@@ -59,13 +59,14 @@ import net.svaroh.passly.core.localization.R as LocalizationR
 internal fun GroupMemberDetailsScreen(
     userId: String,
     modifier: Modifier = Modifier,
+    fromSnapshot: Boolean = false,
     viewModel: GroupMemberDetailsViewModel = koinViewModel(),
     navigator: AppNavigator = koinInject(),
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle()
 
     LaunchedEffect(userId) {
-        viewModel.onIntent(Initialize(userId))
+        viewModel.onIntent(Initialize(userId, fromSnapshot))
     }
 
     GroupMemberDetailsContent(
@@ -130,17 +131,9 @@ private fun GroupMemberDetailsContent(
                     .padding(top = 24.dp),
         )
 
-        Text(
-            text =
-                fingerprintFormatter
-                    .format(
-                        state.fingerprint,
-                        appendMiddleSpacing = true,
-                    )?.uppercase()
-                    .orEmpty(),
-            style = MaterialTheme.typography.bodySmall.copy(fontSize = 16.sp),
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center,
+        FingerprintText(
+            fingerprint = state.fingerprint,
+            fingerprintFormatter = fingerprintFormatter,
             modifier =
                 Modifier
                     .fillMaxWidth()

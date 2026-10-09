@@ -345,7 +345,6 @@
     <string name="settings_app_settings_biometry_error">Błąd biometrii. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Błąd uwierzytelniania przy użyciu biometrii. %s</string>
     <string name="settings_app_settings_expert_settings">Ustawienia eksperckie</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Tryb programisty</string>
     <string name="settings_app_settings_expert_settings_hide_root">Ukryj okno \"urządzenie jest zrootowane\"</string>
     <string name="settings_autofill_autofill_title">Tutaj możesz zmienić metody autouzupełniania</string>
     <string name="settings_autofill_autofill_desc">Zalecamy skorzystać z Usługi Autouzupełniania. Pamiętaj, że jej wydajność może zależeć od ustawień optymalizacji urządzenia i jego baterii. \n\nJeżeli Usługa Autouzupełniania nie działa poprawnie na Twoim urządzeniu, możesz spróbować włączyć autouzupełnianie przy użyciu Usługi ułatwień dostępu.</string>

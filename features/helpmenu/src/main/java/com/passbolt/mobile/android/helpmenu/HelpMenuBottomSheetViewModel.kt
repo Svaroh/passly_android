@@ -25,8 +25,9 @@ package net.svaroh.passly.helpmenu
 
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.logger.FileLoggingTree
-import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
-import net.svaroh.passly.core.preferences.usecase.UpdateGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.GlobalPreferencesUpdate
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.UpdateGlobalPreferencesUseCase
 import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.AccessLogs
 import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.AccountKitRead
 import net.svaroh.passly.helpmenu.HelpMenuBottomSheetIntent.Close
@@ -100,7 +101,7 @@ class HelpMenuBottomSheetViewModel(
     }
 
     private fun handleEnableLogsToggled(enabled: Boolean) {
-        updateGlobalPreferencesUseCase.execute(UpdateGlobalPreferencesUseCase.Input(enabled))
+        updateGlobalPreferencesUseCase.execute(GlobalPreferencesUpdate(enabled))
 
         updateViewState {
             copy(

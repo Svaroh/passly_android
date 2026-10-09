@@ -1,6 +1,5 @@
 package net.svaroh.passly.feature.resourceform.additionalsecrets.password
 
-import PassboltTheme
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -26,24 +25,33 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import net.svaroh.passly.common.dialogs.unableToGeneratePasswordAlertDialog
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.AdvancedSecretGenerationForm
 import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
+import net.svaroh.passly.core.navigation.compose.results.ResultEffect
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
 import net.svaroh.passly.core.ui.button.PrimaryButton
+import net.svaroh.passly.core.ui.dialogs.UnableToGeneratePasswordAlertDialog
 import net.svaroh.passly.core.ui.text.TextInput
 import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
 import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.AdvancedSecretGenerationResult
 import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.ApplyChanges
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.DismissUnableToGeneratePassword
 import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.GeneratePassword
 import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.GoBack
 import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.MainUriTextChanged
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.OpenAdvancedSecretGeneration
 import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.PasswordTextChanged
 import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormIntent.UsernameTextChanged
 import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormSideEffect.ApplyAndGoBack
 import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormSideEffect.NavigateBack
-import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormSideEffect.ShowUnableToGeneratePassword
+import net.svaroh.passly.feature.resourceform.additionalsecrets.password.PasswordFormSideEffect.NavigateToAdvancedSecretGeneration
 import net.svaroh.passly.feature.resourceform.additionalsecrets.password.ui.PasswordGenerationInput
+import net.svaroh.passly.feature.resourceform.main.ui.SettingRow
+import net.svaroh.passly.feature.resourceform.navigation.AdvancedSecretGenerationFormResult
 import net.svaroh.passly.feature.resourceform.navigation.PasswordFormResult
 import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.PasswordStrength
@@ -70,9 +78,10 @@ internal fun PasswordFormScreen(
             },
         ),
 ) {
+    FlagSecureEffect()
+
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     val resultBus = NavigationResultEventBus.current
-    val context = LocalContext.current
 
     PasswordFormScreen(
         modifier = modifier,
@@ -87,9 +96,19 @@ internal fun PasswordFormScreen(
                 navigator.navigateBack()
             }
             NavigateBack -> navigator.navigateBack()
-            is ShowUnableToGeneratePassword ->
-                unableToGeneratePasswordAlertDialog(context, it.minimumEntropyBits).show()
+            is NavigateToAdvancedSecretGeneration ->
+                navigator.navigateToKey(
+                    AdvancedSecretGenerationForm(
+                        selectedTab = it.selectedTab,
+                        passwordSettings = it.passwordSettings,
+                        passphraseSettings = it.passphraseSettings,
+                    ),
+                )
         }
+    }
+
+    ResultEffect<AdvancedSecretGenerationFormResult> { result ->
+        viewModel.onIntent(AdvancedSecretGenerationResult(result))
     }
 }
 
@@ -161,9 +180,21 @@ private fun PasswordFormScreen(
                     onPasswordChange = { onIntent(PasswordTextChanged(it)) },
                     onGenerateClick = { onIntent(GeneratePassword) },
                 )
+                Spacer(modifier = Modifier.height(16.dp))
+                SettingRow(
+                    leadingIconResId = CoreUiR.drawable.ic_cog,
+                    text = stringResource(LocalizationR.string.resource_form_advanced_password_generation),
+                    onClick = { onIntent(OpenAdvancedSecretGeneration) },
+                )
             }
         }
     }
+
+    UnableToGeneratePasswordAlertDialog(
+        isVisible = state.isUnableToGeneratePasswordDialogVisible,
+        requiredEntropy = state.minimumEntropyBits,
+        onDismiss = { onIntent(DismissUnableToGeneratePassword) },
+    )
 }
 
 private fun getScreenTitle(

@@ -24,4 +24,6 @@ package net.svaroh.passly.feature.settings.screen.appsettings.expertsettings
  */
 internal sealed interface ExpertSettingsScreenSideEffect {
     data object NavigateUp : ExpertSettingsScreenSideEffect
+
+    data object NavigateToPageSize : ExpertSettingsScreenSideEffect
 }

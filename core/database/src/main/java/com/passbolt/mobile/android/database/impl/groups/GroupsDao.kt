@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import net.svaroh.passly.database.impl.base.BaseDao
+import net.svaroh.passly.entity.group.GroupUpdateState
 import net.svaroh.passly.entity.group.GroupWithUsers
 import net.svaroh.passly.entity.group.UsersGroup
 import net.svaroh.passly.entity.group.UsersGroupWithChildItemsCount
@@ -37,9 +38,11 @@ interface GroupsDao : BaseDao<UsersGroup> {
     @Query("SELECT * FROM UsersGroup WHERE groupId NOT IN (:ids) ORDER BY name ASC")
     suspend fun getAllExcluding(ids: List<String>): List<UsersGroup>
 
-    @Transaction
-    @Query("DELETE FROM UsersGroup")
-    suspend fun deleteAll()
+    @Query("UPDATE UsersGroup SET updateState = :updateState")
+    suspend fun setAllUpdateState(updateState: GroupUpdateState)
+
+    @Query("DELETE FROM UsersGroup WHERE updateState = :updateState")
+    suspend fun removeWithUpdateState(updateState: GroupUpdateState)
 
     @Transaction
     @Query(

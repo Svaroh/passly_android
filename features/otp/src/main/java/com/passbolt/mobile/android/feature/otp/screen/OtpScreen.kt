@@ -24,6 +24,7 @@
 package net.svaroh.passly.feature.otp.screen
 
 import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,39 +35,47 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.clipboard.ClipboardAccess
 import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.compose.rememberDebouncedBoolean
 import net.svaroh.passly.core.fulldatarefresh.service.DataRefreshService
 import net.svaroh.passly.core.navigation.AppContext
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
-import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
 import net.svaroh.passly.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
 import net.svaroh.passly.core.ui.empty.EmptyResourceListState
 import net.svaroh.passly.core.ui.fab.AddFloatingActionButton
 import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.progressindicator.SearchProgressIndicator
+import net.svaroh.passly.core.ui.pulltorefresh.SlidingFeedbackPullToRefreshBox
 import net.svaroh.passly.core.ui.scaffold.HomeScaffold
 import net.svaroh.passly.core.ui.search.SearchInput
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
-import net.svaroh.passly.createresourcemenu.CreateResourceMenuBottomSheet
+import net.svaroh.passly.domain.resources.resourceicon.ResourceIconProvider
+import net.svaroh.passly.feature.home.screen.ResourceHandlingStrategy
 import net.svaroh.passly.feature.home.switchaccount.SwitchAccountBottomSheet
 import net.svaroh.passly.feature.metadatakeytrust.NewMetadataKeyTrustDialog
 import net.svaroh.passly.feature.metadatakeytrust.TrustedMetadataKeyDeletedDialog
-import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseCreateResourceMenu
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseDeleteConfirmationDialog
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseOtpMoreMenu
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseSwitchAccount
@@ -74,12 +83,10 @@ import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseTrustNewKeyDialog
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CloseTrustedKeyDeletedDialog
 import net.svaroh.passly.feature.otp.screen.OtpIntent.ConfirmDeleteTotp
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CopyOtp
-import net.svaroh.passly.feature.otp.screen.OtpIntent.CreateNote
-import net.svaroh.passly.feature.otp.screen.OtpIntent.CreatePassword
 import net.svaroh.passly.feature.otp.screen.OtpIntent.CreateTotp
 import net.svaroh.passly.feature.otp.screen.OtpIntent.DeleteOtp
+import net.svaroh.passly.feature.otp.screen.OtpIntent.Dispose
 import net.svaroh.passly.feature.otp.screen.OtpIntent.EditOtp
-import net.svaroh.passly.feature.otp.screen.OtpIntent.OpenCreateResourceMenu
 import net.svaroh.passly.feature.otp.screen.OtpIntent.OpenOtpMoreMenu
 import net.svaroh.passly.feature.otp.screen.OtpIntent.RevealOtp
 import net.svaroh.passly.feature.otp.screen.OtpIntent.Search
@@ -88,16 +95,21 @@ import net.svaroh.passly.feature.otp.screen.OtpIntent.TrustMetadataKeyDeletion
 import net.svaroh.passly.feature.otp.screen.OtpIntent.TrustNewMetadataKey
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.CopyToClipboard
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.InitiateDataRefresh
+import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToConfirmPermissions
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToCreateResourceForm
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToCreateTotp
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.NavigateToEditResourceForm
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.ShowSuccessSnackbar
 import net.svaroh.passly.feature.otp.screen.OtpSideEffect.ShowToast
+import net.svaroh.passly.feature.otp.screen.ui.ProgressSource
+import net.svaroh.passly.feature.otp.screen.ui.ProgressSource.RevealedOtp
+import net.svaroh.passly.feature.otp.screen.ui.ProgressSource.UniversalAutofillCountdown
 import net.svaroh.passly.otpmoremenu.OtpMoreMenuBottomSheet
 import net.svaroh.passly.testtags.composetags.Otp
+import net.svaroh.passly.ui.ConfirmPermissionsMode
+import net.svaroh.passly.ui.OtpItemWrapper
 import net.svaroh.passly.ui.ResourceFormMode
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR
@@ -106,23 +118,35 @@ import net.svaroh.passly.core.ui.R as CoreUiR
 @Composable
 internal fun OtpScreen(
     navigator: AppNavigator,
+    resourceHandlingStrategy: ResourceHandlingStrategy,
     modifier: Modifier = Modifier,
     viewModel: OtpViewModel = koinViewModel(),
     resourceIconProvider: ResourceIconProvider = koinInject(),
     clipboardAccess: ClipboardAccess = koinInject(),
 ) {
+    FlagSecureEffect()
+
     val context = LocalContext.current
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val errorColor = colorResource(CoreUiR.color.red)
+    val successColor = colorResource(CoreUiR.color.green)
 
     OtpScreen(
         state = state.value,
         onIntent = viewModel::onIntent,
         resourceIconProvider = resourceIconProvider,
         snackbarHostState = snackbarHostState,
+        resourceHandlingStrategy = resourceHandlingStrategy,
         modifier = modifier,
     )
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.onIntent(Dispose)
+        }
+    }
 
     SideEffectDispatcher(viewModel.sideEffect) {
         when (it) {
@@ -138,7 +162,7 @@ internal fun OtpScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getErrorMessage(context, it.type, it.message),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorColor,
                         ),
                     )
                 }
@@ -147,7 +171,7 @@ internal fun OtpScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getSuccessMessage(context, it.type, it.message),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.green)),
+                            backgroundColor = successColor,
                         ),
                     )
                 }
@@ -159,6 +183,10 @@ internal fun OtpScreen(
                 navigator.navigateToKey(MainResourceForm(ResourceFormMode.Create(it.leadingContentType, null)))
             is NavigateToEditResourceForm ->
                 navigator.navigateToKey(MainResourceForm(ResourceFormMode.Edit(it.resourceId, it.resourceName)))
+            is NavigateToConfirmPermissions ->
+                navigator.navigateToKey(
+                    ConfirmPermissions(ConfirmPermissionsMode.Edit(it.resourceId), it.driftedEntityNames),
+                )
             InitiateDataRefresh -> DataRefreshService.start(context, isUserInitiated = true)
             is ShowToast -> Toast.makeText(context, getToastMessage(context, it.type), Toast.LENGTH_SHORT).show()
         }
@@ -166,14 +194,21 @@ internal fun OtpScreen(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("CyclomaticComplexMethod")
 @Composable
 fun OtpScreen(
     state: OtpState,
     onIntent: (OtpIntent) -> Unit,
     resourceIconProvider: ResourceIconProvider,
     snackbarHostState: SnackbarHostState,
+    resourceHandlingStrategy: ResourceHandlingStrategy,
     modifier: Modifier = Modifier,
 ) {
+    val isAutofillMode = resourceHandlingStrategy.appContext == AppContext.AUTOFILL
+    val showMoreMenu = resourceHandlingStrategy.shouldShowResourceMoreMenu()
+    val showCloseButton = resourceHandlingStrategy.shouldShowCloseButton()
+    val activity = LocalActivity.current
+
     HomeScaffold(
         snackbarHostState = snackbarHostState,
         modifier =
@@ -181,6 +216,8 @@ fun OtpScreen(
                 .testTag(Otp.SCREEN),
         appBarTitle = stringResource(LocalizationR.string.main_menu_otp),
         appBarIconRes = CoreUiR.drawable.ic_time_lock,
+        shouldShowCloseIcon = showCloseButton,
+        onCloseClick = { activity?.finish() },
         appBarSearchInput = {
             SearchInput(
                 onValueChange = { onIntent(Search(it)) },
@@ -191,20 +228,23 @@ fun OtpScreen(
                         .fillMaxWidth()
                         .padding(end = 16.dp),
                 avatarUrl = state.userAvatar,
+                initialValue = state.searchQuery,
                 onEndIconClick = { onIntent(SearchEndIconAction) },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
             )
         },
         floatingActionButton = {
-            if (!state.isRefreshing) {
-                AddFloatingActionButton(onClick = { onIntent(OpenCreateResourceMenu) })
+            if (!isAutofillMode && !state.isRefreshing) {
+                AddFloatingActionButton(onClick = { onIntent(CreateTotp) })
             }
         },
         content =
             { paddingValues ->
                 val context = LocalContext.current
-                PullToRefreshBox(
+                val showSearchProgress = rememberDebouncedBoolean(state.isSearching && !state.isRefreshing)
+                SlidingFeedbackPullToRefreshBox(
                     isRefreshing = state.isRefreshing,
+                    refreshProgress = state.refreshProgress,
                     onRefresh = { DataRefreshService.start(context, isUserInitiated = true) },
                     modifier =
                         Modifier
@@ -218,33 +258,70 @@ fun OtpScreen(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(vertical = 16.dp),
                         ) {
+                            if (state.suggestedOtps.isNotEmpty()) {
+                                item {
+                                    Text(
+                                        text = stringResource(LocalizationR.string.suggested),
+                                        style = MaterialTheme.typography.titleSmall,
+                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                    )
+                                }
+                                items(state.suggestedOtps, key = { "suggested_${it.resource.resourceId}" }) { otpItem ->
+                                    OtpItem(
+                                        otpItem = otpItem,
+                                        resourceIconProvider = resourceIconProvider,
+                                        onItemClick = { resourceHandlingStrategy.resourceItemClick(otpItem.resource) },
+                                        onMoreClick = {},
+                                        showMoreMenu = false,
+                                        showEyeIcon = false,
+                                        progressSource =
+                                            resolveProgressSource(
+                                                otpItem = otpItem,
+                                                isAutofillMode = true,
+                                                universalCountdownSeconds = state.universalCountdownSeconds,
+                                            ),
+                                    )
+                                }
+                                item {
+                                    Text(
+                                        text = stringResource(LocalizationR.string.other),
+                                        style = MaterialTheme.typography.titleSmall,
+                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                    )
+                                }
+                            }
+
                             items(state.uiOtps) { otpItem ->
                                 OtpItem(
                                     otpItem = otpItem,
                                     resourceIconProvider = resourceIconProvider,
-                                    onItemClick = { onIntent(RevealOtp(otpItem)) },
+                                    onItemClick = {
+                                        resourceHandlingStrategy.resourceItemClick(otpItem.resource)
+                                    },
                                     onMoreClick = { onIntent(OpenOtpMoreMenu(otpItem)) },
+                                    showMoreMenu = showMoreMenu,
+                                    showEyeIcon = !isAutofillMode,
+                                    progressSource =
+                                        resolveProgressSource(
+                                            otpItem = otpItem,
+                                            isAutofillMode = isAutofillMode,
+                                            universalCountdownSeconds = state.universalCountdownSeconds,
+                                        ),
                                 )
                             }
                         }
                     }
+                    if (showSearchProgress) {
+                        SearchProgressIndicator(modifier = Modifier.align(Alignment.TopCenter))
+                    }
                 }
-                if (state.showCreateResourceBottomSheet) {
-                    CreateResourceMenuBottomSheet(
-                        onCreatePassword = { onIntent(CreatePassword) },
-                        onCreateTotp = { onIntent(CreateTotp) },
-                        onCreateNote = { onIntent(CreateNote) },
-                        onDismissRequest = { onIntent(CloseCreateResourceMenu) },
-                    )
-                }
-
                 if (state.showOtpMoreBottomSheet) {
                     val moreMenuResource = requireNotNull(state.moreMenuResource)
                     OtpMoreMenuBottomSheet(
                         resourceId = moreMenuResource.resource.resourceId,
                         resourceName = moreMenuResource.resource.metadataJsonModel.name,
                         onDismissRequest = { onIntent(CloseOtpMoreMenu) },
-                        onShowOtp = { onIntent(RevealOtp(moreMenuResource)) },
+                        onShowOtp = { onIntent(RevealOtp(moreMenuResource.resource)) },
                         onCopyOtp = { onIntent(CopyOtp(moreMenuResource)) },
                         onEditOtp = { onIntent(EditOtp(moreMenuResource)) },
                         onDeleteOtp = { onIntent(DeleteOtp(moreMenuResource)) },
@@ -283,4 +360,23 @@ fun OtpScreen(
                 ProgressDialog(state.showProgress)
             },
     )
+}
+
+private fun resolveProgressSource(
+    otpItem: OtpItemWrapper,
+    isAutofillMode: Boolean,
+    universalCountdownSeconds: Long,
+): ProgressSource? {
+    val remainingSeconds = otpItem.remainingSecondsCounter
+    val expirySeconds = otpItem.otpExpirySeconds
+    return when {
+        otpItem.isVisible && remainingSeconds != null && expirySeconds != null ->
+            RevealedOtp(remainingSeconds = remainingSeconds, expirySeconds = expirySeconds)
+        isAutofillMode ->
+            UniversalAutofillCountdown(
+                remainingSeconds = universalCountdownSeconds,
+                expirySeconds = DEFAULT_TOTP_PERIOD,
+            )
+        else -> null
+    }
 }

@@ -32,16 +32,13 @@ import net.svaroh.passly.ui.ResourcePickerListItem
 data class ResourcePickerState(
     val resourcePickerData: ResourcePickerData = ResourcePickerData(),
     val searchQuery: String = "",
+    val isSearching: Boolean = false,
     val isRefreshing: Boolean = false,
+    val refreshProgress: Float = 0f,
     val searchInputEndIconMode: SearchInputEndIconMode = SearchInputEndIconMode.NONE,
     val isApplyButtonEnabled: Boolean = false,
     val pickedResource: ResourcePickerListItem? = null,
     val showConfirmationDialog: Boolean = false,
     val confirmationType: ConfirmationType? = null,
     val pickAction: PickResourceAction? = null,
-) {
-    val hasResources: Boolean
-        get() =
-            resourcePickerData.suggestedResources.isNotEmpty() ||
-                resourcePickerData.resources.isNotEmpty()
-}
+)

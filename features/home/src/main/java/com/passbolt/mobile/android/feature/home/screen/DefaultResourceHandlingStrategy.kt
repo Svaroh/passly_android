@@ -3,14 +3,14 @@ package net.svaroh.passly.feature.home.screen
 import net.svaroh.passly.core.navigation.AppContext
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.keys.ResourceDetailsNavigationKey.ResourceDetails
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 
 class DefaultResourceHandlingStrategy(
     private val navigator: AppNavigator,
 ) : ResourceHandlingStrategy {
     override val appContext: AppContext = AppContext.APP
 
-    override fun resourceItemClick(resourceModel: ResourceModel) {
+    override fun resourceItemClick(resourceModel: ResourceUiModel) {
         navigator.navigateToKey(ResourceDetails(resourceModel))
     }
 

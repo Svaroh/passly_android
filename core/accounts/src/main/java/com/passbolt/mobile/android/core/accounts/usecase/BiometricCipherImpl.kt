@@ -1,15 +1,3 @@
-package net.svaroh.passly.core.accounts.usecase
-
-import android.security.keystore.KeyPermanentlyInvalidatedException
-import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.biometrickey.GetBiometricKeyIvUseCase
-import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
-import net.svaroh.passly.encryptedstorage.biometric.BiometricCrypto.Companion.BIOMETRIC_KEY_ALIAS
-import net.svaroh.passly.encryptedstorage.biometric.KeyStoreWrapper
-import java.security.InvalidKeyException
-import javax.crypto.Cipher
-import javax.crypto.spec.GCMParameterSpec
-
 /**
  * Passbolt - Open source password manager for teams
  * Copyright (c) 2021 Passbolt SA
@@ -33,14 +21,24 @@ import javax.crypto.spec.GCMParameterSpec
  * @since v1.0
  */
 
+package net.svaroh.passly.core.accounts.usecase
+
+import android.security.keystore.KeyPermanentlyInvalidatedException
+import net.svaroh.passly.domain.biometrickey.BiometricKeyRepository
+import net.svaroh.passly.encryptedstorage.biometric.BiometricCipher
+import net.svaroh.passly.encryptedstorage.biometric.BiometricCrypto.Companion.BIOMETRIC_KEY_ALIAS
+import net.svaroh.passly.encryptedstorage.biometric.KeyStoreWrapper
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+
 class BiometricCipherImpl(
     private val keyStoreWrapper: KeyStoreWrapper,
-    private val getBiometricKeyIvUseCase: GetBiometricKeyIvUseCase,
+    private val biometricKeyRepository: BiometricKeyRepository,
 ) : BiometricCipher {
     override fun getBiometricEncryptCipher(): Cipher =
         try {
             createBiometricEncryptCipher()
-        } catch (exception: InvalidKeyException) {
+        } catch (exception: Exception) {
             keyStoreWrapper.removeKey(BIOMETRIC_KEY_ALIAS)
             createBiometricEncryptCipher()
         }
@@ -57,20 +55,19 @@ class BiometricCipherImpl(
                 val key =
                     keyStoreWrapper.getSymmetricKey(BIOMETRIC_KEY_ALIAS)
                         ?: throw SecurityException("Unable to decrypt: No keys found")
-                val ivOutput = getBiometricKeyIvUseCase.execute(UserIdInput(userId))
-                init(Cipher.DECRYPT_MODE, key, GCMParameterSpec(GCM_TAG_LENGTH_BITS, ivOutput.iv))
+                val iv = biometricKeyRepository.getBiometricKey(userId).iv
+                init(Cipher.DECRYPT_MODE, key, IvParameterSpec(iv))
             }
         } catch (exception: KeyPermanentlyInvalidatedException) {
             keyStoreWrapper.removeKey(BIOMETRIC_KEY_ALIAS)
             throw exception
-        } catch (exception: InvalidKeyException) {
+        } catch (exception: Exception) {
             keyStoreWrapper.removeKey(BIOMETRIC_KEY_ALIAS)
-            throw KeyPermanentlyInvalidatedException("Biometric key is incompatible with AES-GCM")
+            throw KeyPermanentlyInvalidatedException("Biometric key is incompatible", exception)
         }
 
     companion object {
-        private const val GCM_TAG_LENGTH_BITS = 128
-        private const val TRANSFORMATION_SYMMETRIC = "AES/GCM/NoPadding"
+        private const val TRANSFORMATION_SYMMETRIC = "AES/CBC/PKCS7Padding"
 
         private fun newSymmetricCipher() = Cipher.getInstance(TRANSFORMATION_SYMMETRIC)
     }

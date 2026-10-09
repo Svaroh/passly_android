@@ -25,21 +25,22 @@ package net.svaroh.passly.groupdetails.groupmemberdetails
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.commontest.TestCoroutineLaunchContext
-import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.users.usecase.db.GetLocalUserUseCase
-import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.GoBack
-import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.Initialize
-import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsSideEffect.NavigateUp
-import net.svaroh.passly.ui.GpgKeyModel
-import net.svaroh.passly.ui.UserModel
-import net.svaroh.passly.ui.UserProfileModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.svaroh.passly.commontest.TestCoroutineLaunchContext
+import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalUserUseCase
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.GoBack
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.Initialize
+import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsSideEffect.NavigateUp
+import net.svaroh.passly.ui.GpgKeyUiModel
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -70,6 +71,7 @@ class GroupMemberDetailsViewModelTest : KoinTest {
                 listOf(
                     module {
                         single { mock<GetLocalUserUseCase>() }
+                        single { mock<GetPermissionsSnapshotUseCase>() }
                         singleOf(::TestCoroutineLaunchContext) bind CoroutineLaunchContext::class
                         factoryOf(::GroupMemberDetailsViewModel)
                     },
@@ -87,7 +89,7 @@ class GroupMemberDetailsViewModelTest : KoinTest {
 
         val getLocalUserUseCase = get<GetLocalUserUseCase>()
         getLocalUserUseCase.stub {
-            onBlocking { execute(any()) } doReturn GetLocalUserUseCase.Output(testUser)
+            on { execute(any()) } doReturn GetLocalUserUseCase.Output(testUser)
         }
     }
 
@@ -134,7 +136,7 @@ class GroupMemberDetailsViewModelTest : KoinTest {
 
             val getLocalUserUseCase = get<GetLocalUserUseCase>()
             getLocalUserUseCase.stub {
-                onBlocking { execute(any()) } doReturn GetLocalUserUseCase.Output(userWithEmptyFields)
+                on { execute(any()) } doReturn GetLocalUserUseCase.Output(userWithEmptyFields)
             }
 
             viewModel = get()
@@ -168,12 +170,12 @@ class GroupMemberDetailsViewModelTest : KoinTest {
 
     private companion object {
         private val testUser =
-            UserModel(
+            UserUiModel(
                 id = UUID.randomUUID().toString(),
                 userName = "john.doe@passbolt.com",
                 disabled = false,
                 gpgKey =
-                    GpgKeyModel(
+                    GpgKeyUiModel(
                         armoredKey = "test-armored-key",
                         fingerprint = "ABCD1234EFGH5678IJKL9012MNOP3456QRST7890",
                         bits = 4096,
@@ -185,7 +187,7 @@ class GroupMemberDetailsViewModelTest : KoinTest {
                         id = UUID.randomUUID().toString(),
                     ),
                 profile =
-                    UserProfileModel(
+                    UserProfileUiModel(
                         username = "john.doe",
                         firstName = "John",
                         lastName = "Doe",

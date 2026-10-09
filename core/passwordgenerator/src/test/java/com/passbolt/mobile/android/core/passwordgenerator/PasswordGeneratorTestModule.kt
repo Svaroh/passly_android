@@ -1,5 +1,7 @@
 package net.svaroh.passly.core.passwordgenerator
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import net.svaroh.passly.common.hash.MessageDigestHash
 import net.svaroh.passly.commontest.TestCoroutineLaunchContext
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
@@ -7,8 +9,6 @@ import net.svaroh.passly.core.passwordgenerator.dice.Dice
 import net.svaroh.passly.core.passwordgenerator.entropy.EntropyCalculator
 import net.svaroh.passly.core.passwordgenerator.usecase.CheckPasswordPropertiesUseCase
 import net.svaroh.passly.pwnedpasswordsapi.range.PwnedPasswordRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import org.mockito.Mockito.mock

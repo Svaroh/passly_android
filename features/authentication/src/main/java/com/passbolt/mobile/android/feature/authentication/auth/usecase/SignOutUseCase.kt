@@ -1,18 +1,18 @@
 package net.svaroh.passly.feature.authentication.auth.usecase
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import net.svaroh.passly.common.usecase.AsyncUseCase
 import net.svaroh.passly.common.usecase.UserIdInput
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.GetSelectedAccountUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.RemoveSelectedAccountUseCase
-import net.svaroh.passly.core.authenticationcore.session.GetSessionUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
 import net.svaroh.passly.core.idlingresource.SignOutIdlingResource
-import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
-import net.svaroh.passly.mappers.SignOutMapper
-import net.svaroh.passly.passboltapi.auth.AuthRepository
+import net.svaroh.passly.core.security.runtimeauth.RuntimeAuthenticatedFlag
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.accounts.usecase.RemoveSelectedAccountUseCase
+import net.svaroh.passly.domain.auth.AuthRepository
+import net.svaroh.passly.domain.auth.SessionRepository
+import net.svaroh.passly.domain.auth.model.ServerSignOutStatus
+import net.svaroh.passly.domain.auth.usecase.GetSessionUseCase
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.RemovePermissionsSnapshotUseCase
 import timber.log.Timber
 
 /**
@@ -37,44 +37,48 @@ import timber.log.Timber
  * @link https://www.passbolt.com Passbolt (tm)
  * @since v1.0
  */
-/**
- * Signs the user out of this device, and tells the server about it if it can be reached.
- *
- * Signing out is a local act: what makes it real is the passphrase leaving memory and the account no longer being
- * selected. Telling the server to drop the refresh token is a courtesy that keeps a stolen token from outliving the
- * session, so it is attempted, but never waited for - a server that is down must not keep someone signed in, nor make
- * them watch a spinner for a screen that has already done its job.
- */
 class SignOutUseCase(
     private val passphraseMemoryCache: PassphraseMemoryCache,
+    private val removePermissionsSnapshotUseCase: RemovePermissionsSnapshotUseCase,
     private val removeSelectedAccountUseCase: RemoveSelectedAccountUseCase,
     private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
     private val authRepository: AuthRepository,
-    private val signOutMapper: SignOutMapper,
     private val getSessionUseCase: GetSessionUseCase,
+    private val sessionRepository: SessionRepository,
     private val signOutIdlingResource: SignOutIdlingResource,
-    coroutineLaunchContext: CoroutineLaunchContext,
-) : AsyncUseCase<Unit, Unit> {
-    private val revokeScope = CoroutineScope(SupervisorJob() + coroutineLaunchContext.io)
-
-    override suspend fun execute(input: Unit) {
+    private val runtimeAuthenticatedFlag: RuntimeAuthenticatedFlag,
+) : AsyncUseCase<Unit, SignOutUseCase.Output> {
+    override suspend fun execute(input: Unit): Output {
+        Timber.d("Signing out")
         signOutIdlingResource.setIdle(false)
-        val refreshToken = getSessionUseCase.execute(Unit).refreshToken
-
+        runtimeAuthenticatedFlag.isAuthenticated = false
+        val serverSignOutStatus = signOutFromServer()
         passphraseMemoryCache.clear()
         getSelectedAccountUseCase.execute(Unit).selectedAccount?.let { selectedAccount ->
-            removeSelectedAccountUseCase.execute(UserIdInput(selectedAccount))
+            sessionRepository.removeSession(selectedAccount)
+            removePermissionsSnapshotUseCase.execute(UserIdInput(selectedAccount))
+            removeSelectedAccountUseCase.execute(Unit)
         }
         signOutIdlingResource.setIdle(true)
+        return Output(serverSignOutStatus)
+    }
 
-        refreshToken?.let { token ->
-            revokeScope.launch {
-                try {
-                    authRepository.signOut(signOutMapper.mapRequestToDto(token))
-                } catch (exception: Exception) {
-                    Timber.d(exception, "Could not tell the server about the sign out")
+    private suspend fun signOutFromServer(): ServerSignOutStatus {
+        val refreshToken = getSessionUseCase.execute(Unit).refreshToken
+        return if (refreshToken == null) {
+            ServerSignOutStatus.NO_ACTIVE_SESSION
+        } else {
+            when (authRepository.signOut(refreshToken)) {
+                is DomainResult.Finished -> ServerSignOutStatus.SIGNED_OUT
+                is DomainResult.Incomplete -> {
+                    Timber.w("Server sign out request failed; continuing with local sign out")
+                    ServerSignOutStatus.SIGN_OUT_FAILED
                 }
             }
         }
     }
+
+    data class Output(
+        val serverSignOutStatus: ServerSignOutStatus,
+    )
 }

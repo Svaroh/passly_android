@@ -28,13 +28,18 @@ import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,6 +51,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.ActivityIntents.AuthConfig.RefreshPassphrase
@@ -62,7 +68,6 @@ import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspec
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ErrorSnackbarType.FAILED_TO_GENERATE_PUBLIC_KEY
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheetSideEffect.ShowTextShareSheet
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR
@@ -92,6 +97,7 @@ internal fun KeyInspectorBottomSheet(
         onDismissRequest = onDismissRequest,
     )
 
+    val exportKeyTitle = stringResource(LocalizationR.string.key_inspector_menu_export_key)
     SideEffectDispatcher(viewModel.sideEffect) {
         when (it) {
             is ShowErrorSnackbar ->
@@ -110,7 +116,7 @@ internal fun KeyInspectorBottomSheet(
                 navigator.startTextShareSheet(
                     context = context,
                     text = it.text,
-                    shareSheetTitle = context.getString(LocalizationR.string.key_inspector_menu_export_key),
+                    shareSheetTitle = exportKeyTitle,
                 )
         }
     }
@@ -135,27 +141,40 @@ private fun KeyInspectorBottomSheet(
     onIntent: (KeyInspectorBottomSheetIntent) -> Unit,
     onDismissRequest: () -> Unit = {},
 ) {
+    val sheetState =
+        rememberModalBottomSheetState(
+            skipPartiallyExpanded = true,
+        )
+
     Box {
         ModalBottomSheet(
             onDismissRequest = onDismissRequest,
             containerColor = colorResource(R.color.elevated_background),
+            sheetState = sheetState,
         ) {
-            BottomSheetHeader(
-                title = stringResource(LocalizationR.string.key_inspector_menu_title),
-                onClose = { onIntent(Close) },
-            )
-            OpenableSettingsItem(
-                title = stringResource(LocalizationR.string.key_inspector_menu_export_private_key),
-                iconPainter = painterResource(CoreUiR.drawable.ic_export),
-                onClick = { onIntent(ExportPrivateKey) },
-                opensInternally = false,
-            )
-            OpenableSettingsItem(
-                title = stringResource(LocalizationR.string.key_inspector_menu_export_public_key),
-                iconPainter = painterResource(CoreUiR.drawable.ic_export),
-                onClick = { onIntent(ExportPublicKey) },
-                opensInternally = false,
-            )
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
+            ) {
+                BottomSheetHeader(
+                    title = stringResource(LocalizationR.string.key_inspector_menu_title),
+                    onClose = { onIntent(Close) },
+                )
+                OpenableSettingsItem(
+                    title = stringResource(LocalizationR.string.key_inspector_menu_export_private_key),
+                    iconPainter = painterResource(CoreUiR.drawable.ic_export),
+                    onClick = { onIntent(ExportPrivateKey) },
+                    opensInternally = false,
+                )
+                OpenableSettingsItem(
+                    title = stringResource(LocalizationR.string.key_inspector_menu_export_public_key),
+                    iconPainter = painterResource(CoreUiR.drawable.ic_export),
+                    onClick = { onIntent(ExportPublicKey) },
+                    opensInternally = false,
+                )
+            }
         }
 
         SnackbarHost(

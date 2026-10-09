@@ -24,9 +24,8 @@
 package net.svaroh.passly.resourcemoremenu.usecase
 
 import net.svaroh.passly.common.usecase.AsyncUseCase
-import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourceUseCase
-import net.svaroh.passly.core.resourcetypes.usecase.db.ResourceTypeIdToSlugMappingProvider
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourceUseCase
 import net.svaroh.passly.supportedresourceTypes.ContentType
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
 import net.svaroh.passly.ui.ResourceMoreMenuModel
@@ -35,21 +34,19 @@ import net.svaroh.passly.ui.ResourceMoreMenuModel.DescriptionOption.HAS_NOTE
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.ADD_TO_FAVOURITES
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption.REMOVE_FROM_FAVOURITES
 import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.contentType
 import net.svaroh.passly.ui.isFavourite
-import java.util.UUID
 
 class CreateResourceMoreMenuModelUseCase(
     private val getLocalResourceUseCase: GetLocalResourceUseCase,
     private val getRbacRulesUseCase: GetRbacRulesUseCase,
-    private val idToSlugMappingProvider: ResourceTypeIdToSlugMappingProvider,
 ) : AsyncUseCase<CreateResourceMoreMenuModelUseCase.Input, CreateResourceMoreMenuModelUseCase.Output> {
     override suspend fun execute(input: Input): Output {
         val resource = getLocalResourceUseCase.execute(GetLocalResourceUseCase.Input(input.resourceId)).resource
         val rbacModel = getRbacRulesUseCase.execute(Unit).rbacModel
         val isCopyRbacAllowed = rbacModel.passwordCopyRule == ALLOW
         val isShareRbacAllowed = rbacModel.shareViewRule == ALLOW
-        val slug = idToSlugMappingProvider.provideMappingForSelectedAccount()[UUID.fromString(resource.resourceTypeId)]
-        val contentType = ContentType.fromSlug(slug!!)
+        val contentType = resource.contentType()
 
         return Output(
             ResourceMoreMenuModel(

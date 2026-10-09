@@ -2,11 +2,12 @@ package net.svaroh.passly.gopenpgp
 
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.google.common.truth.Truth.assertThat
-import net.svaroh.passly.common.extension.encodeHex
-import net.svaroh.passly.core.gopenpgp.test.R
-import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import com.proton.gopenpgp.crypto.Crypto
 import kotlinx.coroutines.runBlocking
+import net.svaroh.passly.common.extension.encodeHex
+import net.svaroh.passly.core.gopenpgp.test.R
+import net.svaroh.passly.gopenpgp.exception.OpenPgpFailure
+import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -14,6 +15,7 @@ import org.koin.core.logger.Level
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.inject
+import java.time.Instant
 import kotlin.test.assertTrue
 
 /**
@@ -328,6 +330,173 @@ class OpenPgpTest : KoinTest {
             assertIsOpenPgpErrorResult(result)
         }
 
+    @Test
+    fun test_decryptVerifyMessageArmored_returnsErrorForUnsignedMessage() =
+        runBlocking {
+            val unsignedMessage = encryptUnsignedMessageTo(gracePublicKey, PLAIN_MESSAGE)
+
+            val result =
+                openPgp.decryptVerifyMessageArmored(
+                    gracePublicKey,
+                    String(gracePrivateKey),
+                    GRACE_KEY_CORRECT_PASSPHRASE,
+                    unsignedMessage,
+                )
+
+            assertIsSignatureVerificationFailure(result)
+        }
+
+    @Test
+    fun test_decryptVerifyMessageArmored_returnsErrorWhenSignedByKeyOtherThanVerificationKey() =
+        runBlocking {
+            val messageSignedByAdmin =
+                (
+                    openPgp.encryptSignMessageArmored(
+                        gracePublicKey,
+                        adminPrivateKey,
+                        ADMIN_KEY_CORRECT_PASSPHRASE,
+                        PLAIN_MESSAGE,
+                    ) as OpenPgpResult.Result
+                ).result
+
+            val result =
+                openPgp.decryptVerifyMessageArmored(
+                    gracePublicKey,
+                    String(gracePrivateKey),
+                    GRACE_KEY_CORRECT_PASSPHRASE,
+                    messageSignedByAdmin,
+                )
+
+            assertIsSignatureVerificationFailure(result)
+        }
+
+    @Test
+    fun test_decryptVerifyMessageArmoredWithPkGeneration_returnsErrorForUnsignedMessage() =
+        runBlocking {
+            val unsignedMessage = encryptUnsignedMessageTo(gracePublicKey, PLAIN_MESSAGE)
+
+            val result =
+                openPgp.decryptVerifyMessageArmored(
+                    String(gracePrivateKey),
+                    GRACE_KEY_CORRECT_PASSPHRASE,
+                    unsignedMessage,
+                )
+
+            assertIsSignatureVerificationFailure(result)
+        }
+
+    @Test
+    fun test_decryptVerifyMessageArmoredWithPkGeneration_returnsErrorWhenSignedByDifferentKey() =
+        runBlocking {
+            val encryptedToGraceSignedByAdmin =
+                (
+                    openPgp.encryptSignMessageArmored(
+                        gracePublicKey,
+                        adminPrivateKey,
+                        ADMIN_KEY_CORRECT_PASSPHRASE,
+                        PLAIN_MESSAGE,
+                    ) as OpenPgpResult.Result
+                ).result
+
+            val result =
+                openPgp.decryptVerifyMessageArmored(
+                    String(gracePrivateKey),
+                    GRACE_KEY_CORRECT_PASSPHRASE,
+                    encryptedToGraceSignedByAdmin,
+                )
+
+            assertIsSignatureVerificationFailure(result)
+        }
+
+    @Test
+    fun test_decryptVerifyMessageArmored_acceptsSignatureCreatedOneSecondAhead() =
+        runBlocking {
+            val pgpMessage =
+                encryptSignedMessageTo(
+                    recipientPublicKey = adminPublicKey,
+                    signerPrivateKey = String(gracePrivateKey),
+                    signerPassphrase = GRACE_KEY_CORRECT_PASSPHRASE,
+                    signTimeEpochSeconds = Instant.now().epochSecond + OpenPgp.SERVER_TIME_RESOLUTION_SECS,
+                    message = PLAIN_MESSAGE,
+                )
+
+            val result =
+                openPgp.decryptVerifyMessageArmored(
+                    publicKey = gracePublicKey,
+                    privateKey = adminPrivateKey,
+                    passphrase = ADMIN_KEY_CORRECT_PASSPHRASE,
+                    cipherText = pgpMessage,
+                )
+
+            assertIsOpenPgpSuccessResult(result)
+            assertThat((result as OpenPgpResult.Result).result).isEqualTo(PLAIN_MESSAGE)
+        }
+
+    @Test
+    fun test_decryptVerifyMessageArmored_acceptsSignatureWithinRoundTripUncertainty() =
+        runBlocking {
+            openPgp.setTimeOffsetMillis(HELD_REPLY_TIME_OFFSET_MILLIS, HELD_REPLY_TIME_OFFSET_UNCERTAINTY_MILLIS)
+            val pgpMessage =
+                encryptSignedMessageTo(
+                    recipientPublicKey = adminPublicKey,
+                    signerPrivateKey = String(gracePrivateKey),
+                    signerPassphrase = GRACE_KEY_CORRECT_PASSPHRASE,
+                    signTimeEpochSeconds = Instant.now().epochSecond,
+                    message = PLAIN_MESSAGE,
+                )
+
+            val result =
+                openPgp.decryptVerifyMessageArmored(
+                    publicKey = gracePublicKey,
+                    privateKey = adminPrivateKey,
+                    passphrase = ADMIN_KEY_CORRECT_PASSPHRASE,
+                    cipherText = pgpMessage,
+                )
+
+            assertIsOpenPgpSuccessResult(result)
+            assertThat((result as OpenPgpResult.Result).result).isEqualTo(PLAIN_MESSAGE)
+        }
+
+    private fun encryptUnsignedMessageTo(
+        recipientPublicKey: String,
+        message: String,
+    ): String =
+        Crypto
+            .pgp()
+            .encryption()
+            .recipient(Crypto.newKeyFromArmored(recipientPublicKey))
+            .new_()
+            .encrypt(message.toByteArray())
+            .armor()
+
+    private fun encryptSignedMessageTo(
+        recipientPublicKey: String,
+        signerPrivateKey: String,
+        signerPassphrase: ByteArray,
+        signTimeEpochSeconds: Long,
+        message: String,
+    ): String =
+        Crypto
+            .pgp()
+            .encryption()
+            .recipient(Crypto.newKeyFromArmored(recipientPublicKey))
+            .signingKey(Crypto.newPrivateKeyFromArmored(signerPrivateKey, signerPassphrase))
+            .signTime(signTimeEpochSeconds)
+            .new_()
+            .encrypt(message.toByteArray())
+            .armor()
+
+    @Test
+    fun test_getKeyFingerprintMatchesServerStyleFingerprintCaseInsensitively() =
+        runBlocking {
+            val result = openPgp.getKeyFingerprint(gracePublicKey)
+
+            assertIsOpenPgpSuccessResult(result)
+            assertThat(
+                (result as OpenPgpResult.Result).result.equals(GRACE_KEY_FINGERPRINT, ignoreCase = true),
+            ).isTrue()
+        }
+
     private fun <T> assertIsOpenPgpSuccessResult(value: OpenPgpResult<T>) {
         assertThat(value).isInstanceOf(OpenPgpResult.Result::class.java)
     }
@@ -336,9 +505,18 @@ class OpenPgpTest : KoinTest {
         assertThat(result).isInstanceOf(OpenPgpResult.Error::class.java)
     }
 
+    private fun <T> assertIsSignatureVerificationFailure(result: OpenPgpResult<T>) {
+        assertThat(result).isInstanceOf(OpenPgpResult.Error::class.java)
+        assertThat((result as OpenPgpResult.Error).error)
+            .isInstanceOf(OpenPgpFailure.SignatureVerificationFailed::class.java)
+    }
+
     private companion object {
         private const val PLAIN_MESSAGE = "test message"
+        private const val GRACE_KEY_FINGERPRINT = "63452C7A0AE6FAE8C8C309640BD9E2409BC6A569"
         private val GRACE_KEY_CORRECT_PASSPHRASE = "grace@passbolt.com".toByteArray()
+        private const val HELD_REPLY_TIME_OFFSET_MILLIS = -5_100L
+        private const val HELD_REPLY_TIME_OFFSET_UNCERTAINTY_MILLIS = 5_100L
         private val ADMIN_KEY_CORRECT_PASSPHRASE = "admin@passbolt.com".toByteArray()
         private val GRACE_KEY_WRONG_PASSPHRASE = "1111".toByteArray()
     }

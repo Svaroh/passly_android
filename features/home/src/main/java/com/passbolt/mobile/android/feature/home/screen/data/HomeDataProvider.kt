@@ -24,17 +24,20 @@ package net.svaroh.passly.feature.home.screen.data
 
 import androidx.paging.PagingData
 import androidx.paging.filter
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import net.svaroh.passly.common.urimatcher.AutofillUriMatcher
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalResourcesAndFoldersPaginatedUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalSubFolderResourcesFilteredPaginatedUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalSubFoldersForFolderPaginatedUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalSubFoldersForFolderUseCase
-import net.svaroh.passly.core.commongroups.usecase.db.GetLocalGroupsWithShareItemsCountPaginatedUseCase
-import net.svaroh.passly.core.rbac.usecase.GetRbacRulesUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourcesPaginatedUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourcesWithGroupPaginatedUseCase
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourcesWithTagPaginatedUseCase
-import net.svaroh.passly.core.tags.usecase.db.GetLocalTagsPaginatedUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalDirectChildFoldersPaginatedUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalSubFoldersForFolderPaginatedUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalSubFoldersForFolderUseCase
+import net.svaroh.passly.domain.groups.usecase.GetLocalGroupsWithShareItemsCountPaginatedUseCase
+import net.svaroh.passly.domain.rbac.usecase.GetRbacRulesUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesPaginatedUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesWithGroupPaginatedUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesWithTagPaginatedUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalSubFolderResourcesFilteredPaginatedUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetResourcesInFolderPaginatedUseCase
+import net.svaroh.passly.domain.tags.usecase.GetLocalTagsPaginatedUseCase
 import net.svaroh.passly.feature.home.screen.ShowSuggestedModel
 import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.homeSlugs
 import net.svaroh.passly.ui.Folder
@@ -50,10 +53,7 @@ import net.svaroh.passly.ui.HomeDisplayViewModel.RecentlyModified
 import net.svaroh.passly.ui.HomeDisplayViewModel.SharedWithMe
 import net.svaroh.passly.ui.HomeDisplayViewModel.Tags
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
-import net.svaroh.passly.ui.ResourceModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+import net.svaroh.passly.ui.ResourceUiModel
 
 class HomeDataProvider(
     private val getLocalResourcesPaginatedUseCase: GetLocalResourcesPaginatedUseCase,
@@ -61,7 +61,8 @@ class HomeDataProvider(
     private val getLocalResourcesWithLocalTagsPaginatedUseCase: GetLocalResourcesWithTagPaginatedUseCase,
     private val getLocalGroupsWithShareItemsCountPaginatedUseCase: GetLocalGroupsWithShareItemsCountPaginatedUseCase,
     private val getLocalResourcesWithGroupsPaginatedUseCase: GetLocalResourcesWithGroupPaginatedUseCase,
-    private val getLocalResourcesAndFoldersPaginatedUseCase: GetLocalResourcesAndFoldersPaginatedUseCase,
+    private val getLocalDirectChildFoldersPaginatedUseCase: GetLocalDirectChildFoldersPaginatedUseCase,
+    private val getResourcesInFolderPaginatedUseCase: GetResourcesInFolderPaginatedUseCase,
     private val getLocalSubFolderResourcesFilteredPaginatedUseCase: GetLocalSubFolderResourcesFilteredPaginatedUseCase,
     private val getLocalSubFoldersForFolderUseCase: GetLocalSubFoldersForFolderUseCase,
     private val getLocalSubFoldersForFolderPaginatedUseCase: GetLocalSubFoldersForFolderPaginatedUseCase,
@@ -72,6 +73,7 @@ class HomeDataProvider(
         searchQuery: String?,
         homeView: HomeDisplayViewModel,
         showSuggestedModel: ShowSuggestedModel,
+        slugs: Set<String> = homeSlugs,
     ): HomeData =
         when (homeView) {
             AllItems,
@@ -80,11 +82,11 @@ class HomeDataProvider(
             OwnedByMe,
             RecentlyModified,
             SharedWithMe,
-            -> getResourcesHomeData(searchQuery, homeView, showSuggestedModel)
+            -> getResourcesHomeData(searchQuery, homeView, showSuggestedModel, slugs)
 
-            is Tags -> getTagsHomeData(searchQuery, homeView, showSuggestedModel)
-            is Groups -> getGroupsHomeData(searchQuery, homeView, showSuggestedModel)
-            is Folders -> getFoldersHomeData(searchQuery, homeView, showSuggestedModel)
+            is Tags -> getTagsHomeData(searchQuery, homeView, showSuggestedModel, slugs)
+            is Groups -> getGroupsHomeData(searchQuery, homeView, showSuggestedModel, slugs)
+            is Folders -> getFoldersHomeData(searchQuery, homeView, showSuggestedModel, slugs)
             NotLoaded -> HomeData()
         }
 
@@ -92,24 +94,37 @@ class HomeDataProvider(
         searchQuery: String?,
         foldersView: Folders,
         showSuggestedModel: ShowSuggestedModel,
+        slugs: Set<String>,
     ): HomeData {
         if (getRbacRulesUseCase.execute(Unit).rbacModel.foldersUseRule != ALLOW) {
             return HomeData()
         }
 
-        val data =
-            getLocalResourcesAndFoldersPaginatedUseCase.execute(
-                GetLocalResourcesAndFoldersPaginatedUseCase.Input(
-                    foldersView.activeFolder,
-                    homeSlugs,
-                    searchQuery,
-                ),
-            ) as GetLocalResourcesAndFoldersPaginatedUseCase.Output.Success
+        val folders =
+            getLocalDirectChildFoldersPaginatedUseCase
+                .execute(
+                    GetLocalDirectChildFoldersPaginatedUseCase.Input(
+                        foldersView.activeFolder.folderId,
+                        searchQuery,
+                        enablePlaceholders = true,
+                    ),
+                ).folders
+
+        val resources =
+            getResourcesInFolderPaginatedUseCase
+                .execute(
+                    GetResourcesInFolderPaginatedUseCase.Input(
+                        foldersView.activeFolder.folderId,
+                        slugs,
+                        searchQuery,
+                        enablePlaceholders = true,
+                    ),
+                ).resources
 
         return if (searchQuery.isNullOrBlank()) {
             HomeData(
-                resourceList = data.resources,
-                foldersList = data.folders,
+                resourceList = resources,
+                foldersList = folders,
             )
         } else {
             // resources need to be shown for all child folders
@@ -131,16 +146,16 @@ class HomeDataProvider(
                         GetLocalSubFolderResourcesFilteredPaginatedUseCase.Input(
                             allSubFolders.map { it.folderId },
                             searchQuery,
-                            homeSlugs,
+                            slugs,
                         ),
                     ).resources
 
             HomeData(
-                resourceList = data.resources,
-                foldersList = data.folders,
+                resourceList = resources,
+                foldersList = folders,
                 filteredSubFolderResources = filteredSubFolderResources,
                 filteredSubFolders = allSubFoldersPaginated,
-                suggestedResourceList = getSuggestedList(data.resources, searchQuery, foldersView, showSuggestedModel),
+                suggestedResourceList = getSuggestedList(resources, searchQuery, foldersView, showSuggestedModel),
             )
         }
     }
@@ -149,6 +164,7 @@ class HomeDataProvider(
         searchQuery: String?,
         groupsView: Groups,
         showSuggestedModel: ShowSuggestedModel,
+        slugs: Set<String>,
     ): HomeData {
         val groups =
             getLocalGroupsWithShareItemsCountPaginatedUseCase
@@ -163,7 +179,7 @@ class HomeDataProvider(
                     .execute(
                         GetLocalResourcesWithGroupPaginatedUseCase.Input(
                             groupsView,
-                            homeSlugs,
+                            slugs,
                             searchQuery,
                         ),
                     ).resources
@@ -179,12 +195,24 @@ class HomeDataProvider(
         searchQuery: String?,
         homeView: HomeDisplayViewModel,
         showSuggestedModel: ShowSuggestedModel,
+        slugs: Set<String>,
     ): HomeData {
         val resourceList =
             getLocalResourcesPaginatedUseCase
                 .execute(
                     GetLocalResourcesPaginatedUseCase.Input(
-                        homeSlugs,
+                        slugs,
+                        homeView,
+                        searchQuery,
+                        enablePlaceholders = true,
+                    ),
+                ).pagedResourcesFlow
+
+        val suggestedSource =
+            getLocalResourcesPaginatedUseCase
+                .execute(
+                    GetLocalResourcesPaginatedUseCase.Input(
+                        slugs,
                         homeView,
                         searchQuery,
                     ),
@@ -192,31 +220,34 @@ class HomeDataProvider(
 
         return HomeData(
             resourceList = resourceList,
-            suggestedResourceList = getSuggestedList(resourceList, searchQuery, homeView, showSuggestedModel),
+            suggestedResourceList = getSuggestedList(suggestedSource, searchQuery, homeView, showSuggestedModel),
         )
     }
 
     private fun getSuggestedList(
-        resourceList: Flow<PagingData<ResourceModel>>,
+        resourceList: Flow<PagingData<ResourceUiModel>>,
         searchQuery: String?,
         homeView: HomeDisplayViewModel,
         showSuggestedModel: ShowSuggestedModel,
-    ): Flow<PagingData<ResourceModel>> =
-        if (shouldShowSuggested(homeView, searchQuery)) {
+    ): Flow<PagingData<ResourceUiModel>> =
+        if (showSuggestedModel is ShowSuggestedModel.Show && shouldShowSuggested(homeView, searchQuery)) {
             resourceList.map { pagingData ->
                 pagingData.filter {
-                    val autofillUrl = (showSuggestedModel as? ShowSuggestedModel.Show)?.suggestedUri
-                    autofillMatcher.isMatching(autofillUrl, it.metadataJsonModel.uris.orEmpty() + it.metadataJsonModel.uri.orEmpty())
+                    autofillMatcher.isMatching(
+                        showSuggestedModel.suggestedUri,
+                        it.metadataJsonModel.uris.orEmpty() + it.metadataJsonModel.uri.orEmpty(),
+                    )
                 }
             }
         } else {
-            flowOf(PagingData.empty())
+            settledEmptyPagingData()
         }
 
     private suspend fun getTagsHomeData(
         searchQuery: String?,
         tagsView: Tags,
         showSuggestedModel: ShowSuggestedModel,
+        slugs: Set<String>,
     ): HomeData {
         if (getRbacRulesUseCase.execute(Unit).rbacModel.tagsUseRule != ALLOW) {
             return HomeData()
@@ -231,7 +262,7 @@ class HomeDataProvider(
                     .execute(
                         GetLocalResourcesWithTagPaginatedUseCase.Input(
                             tagsView,
-                            homeSlugs,
+                            slugs,
                             searchQuery,
                         ),
                     ).resources

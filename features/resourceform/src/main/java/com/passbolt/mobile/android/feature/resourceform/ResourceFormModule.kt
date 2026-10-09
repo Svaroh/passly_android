@@ -2,13 +2,17 @@ package net.svaroh.passly.feature.resourceform
 
 import net.svaroh.passly.core.navigation.compose.base.Feature
 import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
-import net.svaroh.passly.core.resources.usecase.GetDefaultCreateContentTypeUseCase
-import net.svaroh.passly.core.resources.usecase.GetEditContentTypeUseCase
+import net.svaroh.passly.domain.resources.usecase.GetDefaultCreateContentTypeUseCase
+import net.svaroh.passly.domain.resources.usecase.GetEditContentTypeUseCase
 import net.svaroh.passly.feature.resourceform.additionalsecrets.customfields.customFieldsFormModule
 import net.svaroh.passly.feature.resourceform.additionalsecrets.note.noteFormModule
 import net.svaroh.passly.feature.resourceform.additionalsecrets.password.passwordFormModule
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.advanced.pinCodeAdvancedGenerationFormModule
+import net.svaroh.passly.feature.resourceform.additionalsecrets.pincode.pinCodeFormModule
+import net.svaroh.passly.feature.resourceform.additionalsecrets.secret.advanced.advancedSecretGenerationModule
 import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.advanced.totpAdvancedSettingsFormModule
 import net.svaroh.passly.feature.resourceform.additionalsecrets.totp.totpFormModule
+import net.svaroh.passly.feature.resourceform.main.GetOrLoadGeneratorSettingsUseCase
 import net.svaroh.passly.feature.resourceform.main.resourceFormModule
 import net.svaroh.passly.feature.resourceform.metadata.additionaluris.additionalUrisFormModule
 import net.svaroh.passly.feature.resourceform.metadata.appearance.appearanceFormModule
@@ -49,12 +53,16 @@ val resourceFormModule =
         totpAdvancedSettingsFormModule()
         noteFormModule()
         passwordFormModule()
+        advancedSecretGenerationModule()
         additionalUrisFormModule()
         appearanceFormModule()
         customFieldsFormModule()
+        pinCodeFormModule()
+        pinCodeAdvancedGenerationFormModule()
 
         factoryOf(::GetDefaultCreateContentTypeUseCase)
         factoryOf(::GetEditContentTypeUseCase)
+        factoryOf(::GetOrLoadGeneratorSettingsUseCase)
 
         single<FeatureModuleNavigation>(named(Feature.RESOURCE_FORM)) { ResourceFormFeatureNavigation() }
     }

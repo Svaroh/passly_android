@@ -24,22 +24,53 @@
 package net.svaroh.passly.groupdetails.groupmemberdetails
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.users.usecase.db.GetLocalUserUseCase
+import net.svaroh.passly.domain.permissionsconfirmation.usecase.GetPermissionsSnapshotUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalUserUseCase
 import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.GoBack
 import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsIntent.Initialize
 import net.svaroh.passly.groupdetails.groupmemberdetails.GroupMemberDetailsSideEffect.NavigateUp
-import kotlinx.coroutines.launch
 
 internal class GroupMemberDetailsViewModel(
     private val getLocalUserUseCase: GetLocalUserUseCase,
+    private val getPermissionsSnapshotUseCase: GetPermissionsSnapshotUseCase,
     private val coroutineLaunchContext: CoroutineLaunchContext,
 ) : SideEffectViewModel<GroupMemberDetailsState, GroupMemberDetailsSideEffect>(GroupMemberDetailsState()) {
     fun onIntent(intent: GroupMemberDetailsIntent) {
         when (intent) {
             GoBack -> emitSideEffect(NavigateUp)
-            is Initialize -> loadUserData(intent.userId)
+            is Initialize ->
+                if (intent.fromSnapshot) {
+                    loadSnapshotUserData(intent.userId)
+                } else {
+                    loadUserData(intent.userId)
+                }
+        }
+    }
+
+    private fun loadSnapshotUserData(userId: String) {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            val snapshot = getPermissionsSnapshotUseCase.execute(Unit).snapshot
+            when {
+                // the snapshot is not available (i.e. after process death) - close instead of showing unconfirmed
+                snapshot == null -> emitSideEffect(NavigateUp)
+                userId in snapshot.users -> {
+                    val snapshotUser = snapshot.users.getValue(userId)
+                    updateViewState {
+                        copy(
+                            userName = snapshotUser.username,
+                            firstName = snapshotUser.firstName.orEmpty(),
+                            lastName = snapshotUser.lastName.orEmpty(),
+                            avatarUrl = snapshotUser.avatarUrl,
+                            fingerprint = snapshotUser.gpgKey?.fingerprint.orEmpty(),
+                        )
+                    }
+                }
+                // not part of the snapshot - a member of a group added from the local search during confirmation
+                else -> loadUserData(userId)
+            }
         }
     }
 

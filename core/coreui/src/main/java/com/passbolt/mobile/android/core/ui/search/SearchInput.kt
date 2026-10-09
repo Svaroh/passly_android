@@ -22,7 +22,7 @@
  */
 package net.svaroh.passly.core.ui.search
 
-import PassboltTheme
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -46,6 +46,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.ui.R
 import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
 import net.svaroh.passly.testtags.composetags.SearchField
@@ -57,6 +58,7 @@ fun SearchInput(
     endIconMode: SearchInputEndIconMode,
     modifier: Modifier = Modifier,
     avatarUrl: String? = null,
+    @DrawableRes avatarPlaceholderRes: Int = R.drawable.ic_user_avatar,
     initialValue: String = "",
     onEndIconClick: (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
@@ -78,6 +80,7 @@ fun SearchInput(
                         imageUrl = avatarUrl,
                         width = 28.dp,
                         height = 28.dp,
+                        placeholderRes = avatarPlaceholderRes,
                         modifier = Modifier.clickable { onEndIconClick?.invoke() },
                     )
                 SearchInputEndIconMode.CLEAR ->

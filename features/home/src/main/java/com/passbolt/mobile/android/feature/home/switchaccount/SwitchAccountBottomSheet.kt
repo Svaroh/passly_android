@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -23,7 +24,6 @@ import net.svaroh.passly.core.ui.bottomsheet.BottomSheetHeader
 import net.svaroh.passly.core.ui.dialogs.SignOutAlertDialog
 import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
 import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.CloseSignOutDialog
-import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.Initialize
 import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.SeeCurrentAccountDetails
 import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.SignOut
 import net.svaroh.passly.feature.home.switchaccount.SwitchAccountIntent.SignOutConfirmed
@@ -35,6 +35,7 @@ import net.svaroh.passly.feature.home.switchaccount.SwitchAccountSideEffect.Navi
 import net.svaroh.passly.feature.home.switchaccount.SwitchAccountSideEffect.NavigateToStartup
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
+import org.koin.core.parameter.parametersOf
 import net.svaroh.passly.core.localization.R as LocalizationR
 
 /**
@@ -65,14 +66,16 @@ import net.svaroh.passly.core.localization.R as LocalizationR
 fun SwitchAccountBottomSheet(
     appContext: AppContext,
     onDismissRequest: () -> Unit,
-    viewModel: SwitchAccountViewModel = koinViewModel(),
+    viewModel: SwitchAccountViewModel = koinViewModel(parameters = { parametersOf(appContext) }),
     navigator: AppNavigator = koinInject(),
 ) {
-    viewModel.onIntent(Initialize(appContext))
-
     val state by viewModel.viewState.collectAsState()
     val context = LocalContext.current
     val activity = LocalActivity.current
+
+    LaunchedEffect(Unit) {
+        viewModel.onIntent(SwitchAccountIntent.Refresh)
+    }
 
     SwitchAccountBottomSheet(
         onIntent = viewModel::onIntent,
@@ -138,6 +141,7 @@ private fun SwitchAccountBottomSheet(
 
             SwitchAccountAccountsList(
                 accountsList = state.accountsList,
+                isCurrentAccountProfileLoading = state.isCurrentAccountProfileLoading,
                 onHeaderSeeDetailsClick = { onIntent(SeeCurrentAccountDetails) },
                 onHeaderSignOutClick = { onIntent(SignOut) },
                 onManageAccountsClick = { onIntent(SwitchAccountIntent.ManageAccounts) },

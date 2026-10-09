@@ -33,34 +33,4 @@ sealed interface PermissionsIntent {
     data class SeePermission(
         val permission: PermissionModelUi,
     ) : PermissionsIntent
-
-    data object AddPermission : PermissionsIntent
-
-    data class ShareRecipientsAdded(
-        val recipients: List<PermissionModelUi>?,
-    ) : PermissionsIntent
-
-    data class UserPermissionModified(
-        val permission: PermissionModelUi.UserPermissionModel,
-    ) : PermissionsIntent
-
-    data class UserPermissionDeleted(
-        val permission: PermissionModelUi.UserPermissionModel,
-    ) : PermissionsIntent
-
-    data class GroupPermissionModified(
-        val permission: PermissionModelUi.GroupPermissionModel,
-    ) : PermissionsIntent
-
-    data class GroupPermissionDeleted(
-        val permission: PermissionModelUi.GroupPermissionModel,
-    ) : PermissionsIntent
-
-    data object TrustNewMetadataKey : PermissionsIntent
-
-    data object TrustedMetadataKeyDeleted : PermissionsIntent
-
-    data object DismissMetadataKeyModifiedDialog : PermissionsIntent
-
-    data object DismissMetadataKeyDeletedDialog : PermissionsIntent
 }

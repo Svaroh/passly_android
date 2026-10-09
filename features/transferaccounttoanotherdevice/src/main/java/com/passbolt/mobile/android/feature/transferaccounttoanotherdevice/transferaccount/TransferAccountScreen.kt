@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount
 
-import PassboltTheme
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -56,9 +55,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.journeyapps.barcodescanner.BarcodeEncoder
+import kotlinx.coroutines.launch
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.keys.TransferAccountToAnotherDeviceKey.TransferStatus
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
 import net.svaroh.passly.core.ui.button.PrimaryButton
 import net.svaroh.passly.core.ui.dialogs.CancelAccountTransferAlertDialog
 import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
@@ -71,7 +73,6 @@ import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountScreenSideEffect.NavigateToResult
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.transferaccount.TransferAccountScreenSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.testtags.composetags.TransferAccount
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
@@ -84,6 +85,8 @@ internal fun TransferAccountScreen(
     navigator: AppNavigator = koinInject(),
     viewModel: TransferAccountViewModel = koinViewModel(),
 ) {
+    FlagSecureEffect()
+
     val context = LocalContext.current
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }

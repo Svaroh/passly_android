@@ -27,7 +27,7 @@ import net.svaroh.passly.core.autofill.AutofillInformationProvider
 import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.ENABLED
 import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.NOT_SUPPORTED
 import net.svaroh.passly.core.compose.SideEffectViewModel
-import net.svaroh.passly.core.preferences.usecase.GetGlobalPreferencesUseCase
+import net.svaroh.passly.domain.preferences.usecase.GetGlobalPreferencesUseCase
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.ErrorSnackbarType.NATIVE_AUTOFILL_NOT_SUPPORTED
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToAccessibilityPoliciesConsent
 import net.svaroh.passly.feature.settings.screen.appsettings.autofill.AutofillScreenSideEffect.NavigateToAutofillEnabled

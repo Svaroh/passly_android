@@ -35,5 +35,7 @@ sealed class DataRefreshStatus {
         data object FinishedWithFailure : Idle()
     }
 
-    data object InProgress : DataRefreshStatus()
+    data class InProgress(
+        val progress: Float,
+    ) : DataRefreshStatus()
 }

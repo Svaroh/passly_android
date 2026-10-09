@@ -55,6 +55,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.clipboard.ClipboardAccess
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
@@ -73,7 +74,6 @@ import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspec
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.NavigateUp
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.KeyInspectorScreenSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.feature.settings.screen.accounts.keyinspector.keyinspectormoremenu.KeyInspectorBottomSheet
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR
@@ -98,19 +98,21 @@ internal fun KeyInspectorScreen(
         onIntent = viewModel::onIntent,
     )
 
+    val fingerprintLabel = stringResource(LocalizationR.string.copy_label_fingerprint)
+    val uidLabel = stringResource(LocalizationR.string.copy_label_uid)
     SideEffectDispatcher(viewModel.sideEffect) {
         when (it) {
             is AddFingerprintToClipboard ->
                 clipboardAccess.setPrimaryClip(
                     context = context,
-                    label = context.getString(LocalizationR.string.copy_label_fingerprint),
+                    label = fingerprintLabel,
                     value = it.fingerprint,
                     isSensitive = true,
                 )
             is AddUidToClipboard ->
                 clipboardAccess.setPrimaryClip(
                     context = context,
-                    label = context.getString(LocalizationR.string.copy_label_uid),
+                    label = uidLabel,
                     value = it.uid,
                     isSensitive = true,
                 )

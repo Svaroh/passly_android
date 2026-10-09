@@ -345,7 +345,6 @@
     <string name="settings_app_settings_biometry_error">Errore biometrico. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Errore di autenticazione biometrica. %s</string>
     <string name="settings_app_settings_expert_settings">Impostazioni avanzate</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Modalità sviluppatore</string>
     <string name="settings_app_settings_expert_settings_hide_root">Nascondere la finestra di dialogo \"dispositivo rooted\"</string>
     <string name="settings_autofill_autofill_title">Qui è possibile modificare i metodi di compilazione automatica</string>
     <string name="settings_autofill_autofill_desc">Si consiglia l\'utilizzo del Servizio di Compilazione automatica, ma le prestazioni del servizio possono dipendere dal dispositivo e dalle impostazioni di ottimizzazione della batteria. \n\nSe il Servizio di Compilazione automatica non funziona correttamente sul dispositivo, è possibile provare ad abilitare la compilazione automatica basata sul Servizio di accessibilità.</string>

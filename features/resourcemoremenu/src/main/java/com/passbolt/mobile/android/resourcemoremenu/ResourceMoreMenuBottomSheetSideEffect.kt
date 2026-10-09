@@ -28,6 +28,8 @@ import net.svaroh.passly.ui.ResourceMoreMenuModel
 sealed interface ResourceMoreMenuBottomSheetSideEffect {
     data object Dismiss : ResourceMoreMenuBottomSheetSideEffect
 
+    data object ShowContentNotAvailable : ResourceMoreMenuBottomSheetSideEffect
+
     data object CopyPassword : ResourceMoreMenuBottomSheetSideEffect
 
     data object CopyMetadataDescription : ResourceMoreMenuBottomSheetSideEffect

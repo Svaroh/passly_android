@@ -24,20 +24,26 @@
 package net.svaroh.passly.feature.setup.scanqr
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.HttpsVerifier
 import net.svaroh.passly.common.UuidProvider
 import net.svaroh.passly.common.usecase.FetchFileAsStringUseCase
 import net.svaroh.passly.core.accounts.AccountKitParser
-import net.svaroh.passly.core.accounts.AccountsInteractor
-import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ACCOUNT_ALREADY_LINKED
-import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ERROR_NON_HTTPS_DOMAIN
-import net.svaroh.passly.core.accounts.AccountsInteractor.InjectAccountFailureType.ERROR_WHEN_SAVING_PRIVATE_KEY
-import net.svaroh.passly.core.accounts.usecase.accountdata.UpdateAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.accounts.CheckAccountExistsUseCase
-import net.svaroh.passly.core.accounts.usecase.privatekey.SavePrivateKeyUseCase
-import net.svaroh.passly.core.accounts.usecase.selectedaccount.SaveCurrentApiUrlUseCase
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.OFFLINE
+import net.svaroh.passly.core.architecture.result.DomainResult.Incomplete.Error.Reason.TIMEOUT
 import net.svaroh.passly.core.compose.SideEffectViewModel
-import net.svaroh.passly.core.navigation.AccountSetupDataModel
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ACCOUNT_ALREADY_LINKED
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ERROR_NON_HTTPS_DOMAIN
+import net.svaroh.passly.domain.accounts.usecase.AccountsInteractor.InjectAccountFailureType.ERROR_WHEN_SAVING_PRIVATE_KEY
+import net.svaroh.passly.domain.accounts.usecase.CheckAccountExistsUseCase
+import net.svaroh.passly.domain.accounts.usecase.SaveCurrentApiUrlUseCase
+import net.svaroh.passly.domain.accounts.usecase.UpdateAccountDataUseCase
+import net.svaroh.passly.domain.mobiletransfer.usecase.UpdateTransferUseCase
+import net.svaroh.passly.domain.privatekey.model.PrivateKey
+import net.svaroh.passly.domain.privatekey.usecase.SavePrivateKeyUseCase
 import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.AccessLogs
 import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.ConfirmSetupLeave
 import net.svaroh.passly.feature.setup.scanqr.ScanQrIntent.DismissHelpMenu
@@ -67,11 +73,9 @@ import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult.UserResolvabl
 import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult.UserResolvableError.ErrorType.NOT_A_PASSBOLT_QR
 import net.svaroh.passly.feature.setup.scanqr.qrparser.ParseResult.UserResolvableError.ErrorType.NO_BARCODES_IN_RANGE
 import net.svaroh.passly.feature.setup.scanqr.qrparser.ScanQrParser
-import net.svaroh.passly.feature.setup.scanqr.usecase.UpdateTransferUseCase
+import net.svaroh.passly.ui.AccountSetupDataModel
 import net.svaroh.passly.ui.ResultStatus
 import net.svaroh.passly.ui.Status
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.properties.Delegates
 
@@ -230,15 +234,12 @@ internal class ScanQrViewModel(
     }
 
     private suspend fun parserFinishedWithSuccess(armoredKey: String) {
-        when (savePrivateKeyUseCase.execute(SavePrivateKeyUseCase.Input(userId, armoredKey))) {
-            SavePrivateKeyUseCase.Output.Failure -> {
-                updateTransfer(pageNumber = currentPage, Status.ERROR)
-                emitSideEffect(NavigateToSummary(ResultStatus.Failure("")))
-            }
-            SavePrivateKeyUseCase.Output.Success -> {
-                updateTransfer(pageNumber = currentPage, Status.COMPLETE)
-                emitSideEffect(NavigateToSummary(ResultStatus.Success(userId)))
-            }
+        if (savePrivateKeyUseCase.execute(SavePrivateKeyUseCase.Input(userId, PrivateKey(armoredKey))).saved) {
+            updateTransfer(pageNumber = currentPage, Status.COMPLETE)
+            emitSideEffect(NavigateToSummary(ResultStatus.Success(userId)))
+        } else {
+            updateTransfer(pageNumber = currentPage, Status.ERROR)
+            emitSideEffect(NavigateToSummary(ResultStatus.Failure("")))
         }
     }
 
@@ -275,21 +276,21 @@ internal class ScanQrViewModel(
             )
         when (response) {
             is UpdateTransferUseCase.Output.Failure -> {
-                Timber.e(response.error.exception, "There was an error during transfer update")
+                Timber.e("There was an error during transfer update. Failure: %s", response.incomplete)
                 if (status == Status.ERROR || status == Status.CANCEL) {
                     // ignoring
                 } else {
-                    if (response.error.isServerNotReachable) {
-                        updateViewState {
-                            copy(
-                                showServerNotReachableDialog = true,
-                                serverDomain = serverDomain,
-                            )
-                        }
-                    } else if (response.error.isNoNetworkException) {
-                        emitSideEffect(NavigateToSummary(ResultStatus.NoNetwork()))
-                    } else {
-                        emitSideEffect(ScanQrSideEffect.ShowToast(ToastType.UPDATE_TRANSFER_ERROR))
+                    when (val incomplete = response.incomplete) {
+                        is DomainResult.Incomplete.Error if incomplete.reason == TIMEOUT ->
+                            updateViewState {
+                                copy(
+                                    showServerNotReachableDialog = true,
+                                    serverDomain = serverDomain,
+                                )
+                            }
+                        is DomainResult.Incomplete.Error if incomplete.reason == OFFLINE ->
+                            emitSideEffect(NavigateToSummary(ResultStatus.NoNetwork()))
+                        else -> emitSideEffect(ScanQrSideEffect.ShowToast(ToastType.UPDATE_TRANSFER_ERROR))
                     }
                 }
             }

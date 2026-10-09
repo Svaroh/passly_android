@@ -23,7 +23,12 @@
 package net.svaroh.passly.feature.home.screen
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import net.svaroh.passly.common.autofill.DetectAutofillConflict
@@ -32,22 +37,29 @@ import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithS
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
-import net.svaroh.passly.core.accounts.AccountSwitchFlow
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.preferences.usecase.GetHomeDisplayViewPrefsUseCase
-import net.svaroh.passly.core.resources.actions.ResourceCommonActionsInteractor
-import net.svaroh.passly.core.resources.actions.ResourcePropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.SecretPropertiesActionsInteractor
-import net.svaroh.passly.core.resources.actions.performCommonResourceAction
-import net.svaroh.passly.core.resources.actions.performResourcePropertyAction
-import net.svaroh.passly.core.resources.actions.performSecretPropertyAction
-import net.svaroh.passly.core.resources.usecase.ResourceContentTypeProvider
+import net.svaroh.passly.core.navigation.AppContext
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.AVATAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.CLEAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.NONE
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.domain.metadata.interactor.ResourceAccessInteractor
+import net.svaroh.passly.domain.preferences.mapper.toHomeDisplayViewModel
+import net.svaroh.passly.domain.preferences.usecase.GetHomeDisplayViewPreferencesUseCase
+import net.svaroh.passly.domain.resources.actions.ResourceCommonActionsInteractor
+import net.svaroh.passly.domain.resources.actions.ResourcePropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.SecretPropertiesActionsInteractor
+import net.svaroh.passly.domain.resources.actions.performCommonResourceAction
+import net.svaroh.passly.domain.resources.actions.performResourcePropertyAction
+import net.svaroh.passly.domain.resources.actions.performSecretPropertyAction
+import net.svaroh.passly.domain.resources.usecase.ResourceContentTypeProvider
+import net.svaroh.passly.domain.users.profile.UserProfileInteractor
+import net.svaroh.passly.domain.users.profile.UserProfileInteractor.Output.Failure
+import net.svaroh.passly.domain.users.profile.UserProfileInteractor.Output.Success
+import net.svaroh.passly.domain.users.profile.UserProfileRefreshTrackingFlow
+import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
 import net.svaroh.passly.feature.home.screen.HomeIntent.CloseCreateResourceMenu
 import net.svaroh.passly.feature.home.screen.HomeIntent.CloseDeleteConfirmationDialog
 import net.svaroh.passly.feature.home.screen.HomeIntent.CloseFiltersBottomSheet
@@ -63,6 +75,7 @@ import net.svaroh.passly.feature.home.screen.HomeIntent.CopyResourceUsername
 import net.svaroh.passly.feature.home.screen.HomeIntent.CreateFolder
 import net.svaroh.passly.feature.home.screen.HomeIntent.CreateNote
 import net.svaroh.passly.feature.home.screen.HomeIntent.CreatePassword
+import net.svaroh.passly.feature.home.screen.HomeIntent.CreatePinCode
 import net.svaroh.passly.feature.home.screen.HomeIntent.CreateTotp
 import net.svaroh.passly.feature.home.screen.HomeIntent.DeleteResource
 import net.svaroh.passly.feature.home.screen.HomeIntent.EditResource
@@ -100,6 +113,7 @@ import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_DELETE_
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FAILED_TO_REFRESH_DATA
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.FETCH_FAILURE
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.NO_SHARED_KEY_ACCESS
+import net.svaroh.passly.feature.home.screen.SnackbarErrorType.PROFILE_FETCH_FAILURE
 import net.svaroh.passly.feature.home.screen.SnackbarErrorType.TOGGLE_FAVOURITE_FAILURE
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.PASSKEY_DELETED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_CREATED
@@ -107,16 +121,17 @@ import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_DELETE
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_EDITED
 import net.svaroh.passly.feature.home.screen.SnackbarSuccessType.RESOURCE_SHARED
 import net.svaroh.passly.feature.home.screen.data.HomeDataProvider
-import net.svaroh.passly.mappers.HomeDisplayViewMapper
-import net.svaroh.passly.metadata.usecase.CanCreateResourceUseCase
-import net.svaroh.passly.metadata.usecase.CanShareResourceUseCase
+import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.autofillSlugs
+import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.homeSlugs
 import net.svaroh.passly.ui.Folder.Child
 import net.svaroh.passly.ui.Folder.Root
 import net.svaroh.passly.ui.HomeDisplayViewModel
 import net.svaroh.passly.ui.HomeDisplayViewModel.Folders
 import net.svaroh.passly.ui.HomeDisplayViewModel.Groups
 import net.svaroh.passly.ui.HomeDisplayViewModel.Tags
+import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.LeadingContentType.PASSWORD
+import net.svaroh.passly.ui.LeadingContentType.PIN_CODE
 import net.svaroh.passly.ui.LeadingContentType.STANDALONE_NOTE
 import net.svaroh.passly.ui.LeadingContentType.TOTP
 import net.svaroh.passly.ui.ResourceMoreMenuModel.FavouriteOption
@@ -125,19 +140,19 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class HomeViewModel(
     private val coroutineLaunchContext: CoroutineLaunchContext,
     private val dataRefreshTrackingFlow: DataRefreshTrackingFlow,
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
-    private val getHomeDisplayViewPrefsUseCase: GetHomeDisplayViewPrefsUseCase,
-    private val homeModelMapper: HomeDisplayViewMapper,
+    private val getHomeDisplayViewPreferencesUseCase: GetHomeDisplayViewPreferencesUseCase,
     private val homeDataProvider: HomeDataProvider,
     private val getLocalFolderUseCase: GetLocalFolderDetailsUseCase,
-    private val canCreateResourceUse: CanCreateResourceUseCase,
-    private val canShareResourceUse: CanShareResourceUseCase,
+    private val resourceAccessInteractor: ResourceAccessInteractor,
     private val detectAutofillConflict: DetectAutofillConflict,
-    private val accountSwitchFlow: AccountSwitchFlow,
+    private val userProfileInteractor: UserProfileInteractor,
+    private val userProfileRefreshTrackingFlow: UserProfileRefreshTrackingFlow,
     private val resourceContentTypeProvider: ResourceContentTypeProvider,
 ) : SideEffectViewModel<HomeState, HomeSideEffect>(HomeState()),
     KoinComponent {
@@ -149,10 +164,40 @@ internal class HomeViewModel(
         get() = get { parametersOf(requireNotNull(viewState.value.moreMenuResource)) }
 
     private var dataRefreshJob: Job? = null
-    private var accountSwitchJob: Job? = null
+    private var lastInitializeIntent: Initialize? = null
+
+    private val searchQueryFlow = MutableStateFlow("")
 
     init {
         loadUserAvatar()
+        refreshUserProfile()
+        observeSearchQuery()
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeSearchQuery() {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            searchQueryFlow
+                .drop(1)
+                .debounce(SEARCH_DEBOUNCE)
+                .collectLatest { searchQuery ->
+                    Timber.d("Applying search query (length: ${searchQuery.length})")
+                    try {
+                        val homeData =
+                            getHomeData(
+                                viewState.value.homeView,
+                                searchQuery,
+                                viewState.value.showSuggestedModel,
+                            )
+                        updateViewState { copy(homeData = homeData, isSearching = false) }
+                    } catch (exception: CancellationException) {
+                        throw exception
+                    } catch (exception: Exception) {
+                        Timber.e(exception, "Failed to apply the search query")
+                        updateViewState { copy(isSearching = false) }
+                    }
+                }
+        }
     }
 
     private fun loadUserAvatar() {
@@ -163,6 +208,25 @@ internal class HomeViewModel(
                         .execute(Unit)
                         .avatarUrl,
             )
+        }
+    }
+
+    private fun refreshUserProfile() {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            userProfileRefreshTrackingFlow.setRefreshing(true)
+            try {
+                when (
+                    val result =
+                        runAuthenticatedOperation {
+                            userProfileInteractor.fetchAndUpdateUserProfile()
+                        }
+                ) {
+                    is Success -> loadUserAvatar()
+                    is Failure -> emitSideEffect(ShowErrorSnackbar(PROFILE_FETCH_FAILURE, result.message))
+                }
+            } finally {
+                userProfileRefreshTrackingFlow.setRefreshing(false)
+            }
         }
     }
 
@@ -181,10 +245,11 @@ internal class HomeViewModel(
             CloseFolderMoreMenu -> updateViewState { copy(showFolderMoreMenuBottomSheet = false) }
             ViewFolderDetails -> viewFolderDetails()
             ConfirmDeleteResource -> deleteResource()
-            CreateNote -> createNote()
-            CreatePassword -> createPassword()
+            CreateNote -> createResource(STANDALONE_NOTE)
+            CreatePassword -> createResource(PASSWORD)
             CreateTotp -> createTotp()
             CreateFolder -> createFolder()
+            CreatePinCode -> createResource(PIN_CODE)
             is Initialize -> initialize(intent)
             is OpenResourceMenu -> openResourceMoreMenu(intent)
             is Search -> searchQueryChanged(intent.searchQuery)
@@ -197,7 +262,10 @@ internal class HomeViewModel(
             CopyResourceUsername -> copyResourceUsername()
             EditResource -> emitSideEffect(NavigateToEditResourceForm(viewState.value.requireMoreMenuResource))
             LaunchResourceWebsite -> launchResourceWebsite()
-            ShareResource -> onCanShareResource { emitSideEffect(NavigateToShare(viewState.value.requireMoreMenuResource)) }
+            ShareResource ->
+                withResourceAccess({ resourceAccessInteractor.canShareResource() }) {
+                    emitSideEffect(NavigateToShare(viewState.value.requireMoreMenuResource))
+                }
             is ToggleResourceFavourite -> toggleFavourite(intent.option)
             is FolderCreateReturned -> folderCreationReturned(intent)
             is OtpQRScanReturned -> processOtpScanResult(intent)
@@ -235,27 +303,17 @@ internal class HomeViewModel(
 
     private fun createTotp() {
         updateViewState { copy(showCreateResourceBottomSheet = false) }
-        onCanCreateResource { emitSideEffect(NavigateToCreateTotp(folderId = viewState.value.currentFolderId)) }
-    }
-
-    private fun createPassword() {
-        updateViewState { copy(showCreateResourceBottomSheet = false) }
-        onCanCreateResource {
-            emitSideEffect(
-                NavigateToCreateResourceForm(
-                    leadingContentType = PASSWORD,
-                    folderId = viewState.value.currentFolderId,
-                ),
-            )
+        withResourceAccess({ resourceAccessInteractor.canCreateResource(viewState.value.currentFolderId) }) {
+            emitSideEffect(NavigateToCreateTotp(folderId = viewState.value.currentFolderId))
         }
     }
 
-    private fun createNote() {
+    private fun createResource(leadingContentType: LeadingContentType) {
         updateViewState { copy(showCreateResourceBottomSheet = false) }
-        onCanCreateResource {
+        withResourceAccess({ resourceAccessInteractor.canCreateResource(viewState.value.currentFolderId) }) {
             emitSideEffect(
                 NavigateToCreateResourceForm(
-                    leadingContentType = STANDALONE_NOTE,
+                    leadingContentType = leadingContentType,
                     folderId = viewState.value.currentFolderId,
                 ),
             )
@@ -399,12 +457,7 @@ internal class HomeViewModel(
                 // opened straight away: the list is served from the local replica, so there is nothing to wait for
                 updateViewState { copy(showAccountSwitchBottomSheet = true) }
             }
-            CLEAR -> {
-                searchQueryChanged("")
-                updateViewState {
-                    copy(searchInputEndIconMode = AVATAR)
-                }
-            }
+            CLEAR -> searchQueryChanged("")
             NONE -> {
                 // no-op
             }
@@ -412,16 +465,16 @@ internal class HomeViewModel(
     }
 
     private fun searchQueryChanged(searchQuery: String) {
-        val searchEndIcon = if (searchQuery.isNotBlank()) CLEAR else AVATAR
-        viewModelScope.launch {
-            val homeData = getHomeData(viewState.value.homeView, searchQuery, viewState.value.showSuggestedModel)
-            updateViewState {
-                copy(
-                    searchInputEndIconMode = searchEndIcon,
-                    searchQuery = searchQuery,
-                    homeData = homeData,
-                )
-            }
+        if (searchQuery == searchQueryFlow.value) {
+            return
+        }
+        searchQueryFlow.value = searchQuery
+        updateViewState {
+            copy(
+                searchInputEndIconMode = if (searchQuery.isNotBlank()) CLEAR else AVATAR,
+                searchQuery = searchQuery,
+                isSearching = true,
+            )
         }
     }
 
@@ -439,14 +492,17 @@ internal class HomeViewModel(
     }
 
     private fun initialize(intent: Initialize) {
-        val filterPreferences = getHomeDisplayViewPrefsUseCase.execute(Unit)
+        if (intent == lastInitializeIntent) {
+            return
+        }
+        lastInitializeIntent = intent
+        val filterPreferences = getHomeDisplayViewPreferencesUseCase.execute(Unit)
 
         viewModelScope.launch {
+            updateViewState { copy(appContext = intent.appContext) }
             val homeView =
-                intent.homeView ?: homeModelMapper.map(
-                    filterPreferences.userSetHomeView,
-                    filterPreferences.lastUsedHomeView,
-                )
+                intent.homeView
+                    ?: filterPreferences.userSetHomeView.toHomeDisplayViewModel(filterPreferences.lastUsedHomeView)
             val homeData = getHomeData(homeView, viewState.value.searchQuery, intent.showSuggestedModel)
             val isAutofillConflictDetected = detectAutofillConflict()
 
@@ -461,23 +517,7 @@ internal class HomeViewModel(
             dataRefreshJob?.cancel()
             dataRefreshJob =
                 viewModelScope.launch(coroutineLaunchContext.io) {
-                    synchronizeWithDataRefresh(intent.showSuggestedModel)
-                }
-            accountSwitchJob?.cancel()
-            accountSwitchJob =
-                viewModelScope.launch(coroutineLaunchContext.io) {
-                    accountSwitchFlow.selectedAccountFlow
-                        .drop(1)
-                        .collect {
-                            loadUserAvatar()
-                            val homeData =
-                                getHomeData(
-                                    viewState.value.homeView,
-                                    viewState.value.searchQuery,
-                                    intent.showSuggestedModel,
-                                )
-                            updateViewState { copy(homeData = homeData) }
-                        }
+                    synchronizeWithDataRefresh()
                 }
         }
     }
@@ -490,7 +530,14 @@ internal class HomeViewModel(
         searchQuery,
         homeView,
         showSuggestedModel,
+        slugsForCurrentContext(),
     )
+
+    private fun slugsForCurrentContext(): Set<String> =
+        when (viewState.value.appContext) {
+            AppContext.AUTOFILL -> autofillSlugs
+            AppContext.APP -> homeSlugs
+        }
 
     private suspend fun shouldShowCreateButton(): Boolean {
         viewState.value.homeView.let {
@@ -534,15 +581,16 @@ internal class HomeViewModel(
             resultIfActionFails
         }
 
-    private suspend fun synchronizeWithDataRefresh(showSuggestedModel: ShowSuggestedModel) {
+    private suspend fun synchronizeWithDataRefresh() {
         dataRefreshTrackingFlow.dataRefreshStatusFlow.collect {
             when (it) {
                 // a background refresh stays silent: the list is served from the local replica either way, so a
                 // spinner has nothing to make the user wait for and an unreachable server is not an app error
-                InProgress ->
+                is InProgress ->
                     updateViewState {
                         copy(
                             isRefreshing = dataRefreshTrackingFlow.isUserInitiated,
+                            refreshProgress = it.progress,
                             // creation is held back only while the user waits on a refresh they asked for; a
                             // background one must not take the button away from someone who is just using the app
                             canCreateResource = if (dataRefreshTrackingFlow.isUserInitiated) false else canCreateResource,
@@ -560,39 +608,38 @@ internal class HomeViewModel(
                 }
                 FinishedWithSuccess -> {
                     val showCreateResourceButton = shouldShowCreateButton()
-                    val homeData = getHomeData(viewState.value.homeView, viewState.value.searchQuery, showSuggestedModel)
                     updateViewState {
                         copy(
-                            homeData = homeData,
                             isRefreshing = false,
                             canCreateResource = showCreateResourceButton,
                         )
                     }
                 }
                 NotCompleted -> {
-                    // do nothing
+                    // autofill does not perform automatic data refresh - evaluate from local data
+                    if (viewState.value.appContext == AppContext.AUTOFILL) {
+                        val showCreateResourceButton = shouldShowCreateButton()
+                        updateViewState { copy(canCreateResource = showCreateResourceButton) }
+                    }
                 }
             }
         }
     }
 
-    private fun onCanShareResource(function: () -> Unit) {
+    private fun withResourceAccess(
+        hasAccess: suspend () -> Boolean,
+        onAllowed: () -> Unit,
+    ) {
         viewModelScope.launch(coroutineLaunchContext.io) {
-            if (canShareResourceUse.execute(Unit).canShareResource) {
-                function()
+            if (hasAccess()) {
+                onAllowed()
             } else {
                 emitSideEffect(ShowErrorSnackbar(NO_SHARED_KEY_ACCESS))
             }
         }
     }
 
-    private fun onCanCreateResource(function: () -> Unit) {
-        viewModelScope.launch(coroutineLaunchContext.io) {
-            if (canCreateResourceUse.execute(CanCreateResourceUseCase.Input(folderId = null)).canCreateResource) {
-                function()
-            } else {
-                emitSideEffect(ShowErrorSnackbar(NO_SHARED_KEY_ACCESS))
-            }
-        }
+    companion object {
+        val SEARCH_DEBOUNCE = 300.milliseconds
     }
 }

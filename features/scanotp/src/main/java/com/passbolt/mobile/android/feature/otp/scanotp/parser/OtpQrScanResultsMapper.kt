@@ -1,6 +1,6 @@
 package net.svaroh.passly.feature.otp.scanotp.parser
 
-import android.net.Uri
+import androidx.core.net.toUri
 import net.svaroh.passly.common.validation.UriIsOfAuthority
 import net.svaroh.passly.common.validation.UriIsOfScheme
 import net.svaroh.passly.common.validation.validation
@@ -34,7 +34,7 @@ class OtpQrScanResultsMapper {
     // hotp not supported yet
     private fun mapOtpQr(totpUri: URI): OtpParseResult =
         try {
-            val otpUri = Uri.parse(totpUri.toString())
+            val otpUri = totpUri.toString().toUri()
             val label = otpUri.lastPathSegment
             val secret = otpUri.getQueryParameter(OTP_URI_PARAMETER_SECRET)
             val issuer = otpUri.getQueryParameter(OTP_URI_PARAMETER_ISSUER)
@@ -68,7 +68,7 @@ class OtpQrScanResultsMapper {
                     period = period,
                 )
             }
-        } catch (exception: Exception) {
+        } catch (_: Exception) {
             // Note: don't log the exception here - the stacktrace might contain a secret from URI
             Timber.e("Error during parsing totp parameters")
             OtpParseResult.Failure(IOException("Error during parsing totp parameters"))
@@ -92,7 +92,7 @@ class OtpQrScanResultsMapper {
                 onInvalid { otpUriValid = false }
             }
             otpUriValid
-        } catch (exception: URISyntaxException) {
+        } catch (_: URISyntaxException) {
             // Note: don't log the exception here - the stacktrace might contain a secret from URI
             Timber.e("The URI syntax is incorrect")
             false

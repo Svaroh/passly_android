@@ -24,6 +24,13 @@
 package net.svaroh.passly.resourcepicker.screen
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.NotCompleted
@@ -31,7 +38,6 @@ import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
 import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.resourcetypes.usecase.db.GetResourceTypeIdToSlugMappingUseCase
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.CLEAR
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode.NONE
 import net.svaroh.passly.resourcepicker.model.ConfirmationType
@@ -40,7 +46,6 @@ import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.ApplyClick
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.CloseConfirmationDialog
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.ConfirmOtpLink
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.GoBack
-import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.Initialize
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.ResourcePicked
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.Search
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerIntent.SearchEndIconAction
@@ -55,25 +60,46 @@ import net.svaroh.passly.supportedresourceTypes.ContentType
 import net.svaroh.passly.ui.ResourcePickerListItem
 import net.svaroh.passly.ui.ResourcePickerListItem.Selection.NOT_SELECTABLE_NO_PERMISSION
 import net.svaroh.passly.ui.ResourcePickerListItem.Selection.NOT_SELECTABLE_UNSUPPORTED_RESOURCE_TYPE
-import net.svaroh.passly.ui.selectedOnly
-import kotlinx.coroutines.launch
-import java.util.UUID
+import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class ResourcePickerViewModel(
+    private val suggestionUri: String?,
     private val coroutineLaunchContext: CoroutineLaunchContext,
     private val dataRefreshTrackingFlow: DataRefreshTrackingFlow,
     private val resourcePickerDataProvider: ResourcePickerDataProvider,
-    private val getResourceTypeIdToSlugMappingUseCase: GetResourceTypeIdToSlugMappingUseCase,
 ) : SideEffectViewModel<ResourcePickerState, ResourcePickerSideEffect>(ResourcePickerState()) {
-    private var suggestionUri: String? = null
+    private val searchQueryFlow = MutableStateFlow("")
 
     init {
+        loadResources()
         synchronizeWithDataRefresh()
+        observeSearchQuery()
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeSearchQuery() {
+        viewModelScope.launch(coroutineLaunchContext.io) {
+            searchQueryFlow
+                .drop(1)
+                .debounce(SEARCH_DEBOUNCE)
+                .collectLatest { searchQuery ->
+                    Timber.d("Applying search query (length: ${searchQuery.length})")
+                    try {
+                        loadResourcesData(searchQuery)
+                        updateViewState { copy(isSearching = false) }
+                    } catch (exception: CancellationException) {
+                        throw exception
+                    } catch (exception: Exception) {
+                        Timber.e(exception, "Failed to apply the search query")
+                        updateViewState { copy(isSearching = false) }
+                    }
+                }
+        }
     }
 
     fun onIntent(intent: ResourcePickerIntent) {
         when (intent) {
-            is Initialize -> initialize(intent.suggestionUri)
             is Search -> searchQueryChanged(intent.searchQuery)
             is ResourcePicked -> resourcePicked(intent.resource)
             is ConfirmOtpLink -> confirmOtpLink(intent.pickAction)
@@ -84,32 +110,23 @@ internal class ResourcePickerViewModel(
         }
     }
 
-    private fun initialize(suggestionUri: String?) {
-        this.suggestionUri = suggestionUri
-        loadResources()
-    }
-
     private fun searchQueryChanged(query: String) {
-        val searchEndIcon = if (query.isBlank()) NONE else CLEAR
-        viewModelScope.launch {
-            updateViewState {
-                copy(
-                    searchQuery = query,
-                    searchInputEndIconMode = searchEndIcon,
-                )
-            }
-            loadResources()
+        if (query == searchQueryFlow.value) {
+            return
+        }
+        searchQueryFlow.value = query
+        updateViewState {
+            copy(
+                searchQuery = query,
+                searchInputEndIconMode = if (query.isBlank()) NONE else CLEAR,
+                isSearching = true,
+            )
         }
     }
 
     private fun searchEndIconAction() {
         when (viewState.value.searchInputEndIconMode) {
-            CLEAR -> {
-                searchQueryChanged("")
-                updateViewState {
-                    copy(searchInputEndIconMode = NONE)
-                }
-            }
+            CLEAR -> searchQueryChanged("")
             else -> {
                 // no-op
             }
@@ -118,23 +135,10 @@ internal class ResourcePickerViewModel(
 
     private fun resourcePicked(resource: ResourcePickerListItem) {
         if (resource.isSelectable) {
-            val resourceId = resource.resourceModel.resourceId
-            val updatedSuggestedResources =
-                viewState.value.resourcePickerData.suggestedResources
-                    .selectedOnly(resourceId)
-            val updatedResources =
-                viewState.value.resourcePickerData.resources
-                    .selectedOnly(resourceId)
-
             updateViewState {
                 copy(
                     pickedResource = resource,
                     isApplyButtonEnabled = true,
-                    resourcePickerData =
-                        resourcePickerData.copy(
-                            suggestedResources = updatedSuggestedResources,
-                            resources = updatedResources,
-                        ),
                 )
             }
         } else {
@@ -151,18 +155,12 @@ internal class ResourcePickerViewModel(
         val pickedResource = viewState.value.pickedResource ?: return
 
         viewModelScope.launch(coroutineLaunchContext.io) {
-            val selectableIdToSlugMapping =
-                getResourceTypeIdToSlugMappingUseCase
-                    .execute(Unit)
-                    .idToSlugMapping
-                    .filter { it.value in SELECTABLE_RESOURCE_TYPES_SLUGS }
+            val slug = pickedResource.resourceModel.slug
 
-            val pickedResourceResourceTypeId = UUID.fromString(pickedResource.resourceModel.resourceTypeId)
-
-            require(pickedResourceResourceTypeId in selectableIdToSlugMapping.keys)
+            require(slug in SELECTABLE_RESOURCE_TYPES_SLUGS)
 
             val (pickAction, confirmationType) =
-                when (val slug = selectableIdToSlugMapping[pickedResourceResourceTypeId]) {
+                when (slug) {
                     ContentType.PasswordAndDescription.slug, ContentType.V5Default.slug ->
                         PickResourceAction.TOTP_LINK to ConfirmationType.LINK_TOTP
                     ContentType.PasswordDescriptionTotp.slug, ContentType.V5DefaultWithTotp.slug ->
@@ -188,32 +186,25 @@ internal class ResourcePickerViewModel(
 
     private fun loadResources() {
         viewModelScope.launch(coroutineLaunchContext.io) {
-            val data =
-                resourcePickerDataProvider.provideData(
-                    searchQuery = viewState.value.searchQuery.takeIf { it.isNotBlank() },
-                    suggestionUri = suggestionUri,
-                )
-
-            // Restore selection if exists
-            val pickedResourceId =
-                viewState.value.pickedResource
-                    ?.resourceModel
-                    ?.resourceId
-            val updatedData =
-                data.copy(
-                    suggestedResources = data.suggestedResources.selectedOnly(pickedResourceId),
-                    resources = data.resources.selectedOnly(pickedResourceId),
-                )
-
-            updateViewState { copy(resourcePickerData = updatedData) }
+            loadResourcesData(viewState.value.searchQuery)
         }
+    }
+
+    private suspend fun loadResourcesData(searchQuery: String) {
+        val data =
+            resourcePickerDataProvider.provideData(
+                searchQuery = searchQuery.takeIf { it.isNotBlank() },
+                suggestionUri = suggestionUri,
+            )
+
+        updateViewState { copy(resourcePickerData = data) }
     }
 
     private fun synchronizeWithDataRefresh() {
         viewModelScope.launch(coroutineLaunchContext.ui) {
             dataRefreshTrackingFlow.dataRefreshStatusFlow.collect { status ->
                 when (status) {
-                    InProgress -> updateViewState { copy(isRefreshing = true) }
+                    is InProgress -> updateViewState { copy(isRefreshing = true, refreshProgress = status.progress) }
                     FinishedWithFailure -> {
                         emitSideEffect(ShowErrorSnackbar(FAILED_TO_REFRESH_DATA))
                         updateViewState { copy(isRefreshing = false) }
@@ -231,8 +222,10 @@ internal class ResourcePickerViewModel(
     }
 
     internal companion object {
+        val SEARCH_DEBOUNCE = 300.milliseconds
+
         internal val SELECTABLE_RESOURCE_TYPES_SLUGS =
-            listOf(
+            setOf(
                 ContentType.PasswordAndDescription.slug,
                 ContentType.V5Default.slug,
                 ContentType.PasswordDescriptionTotp.slug,

@@ -1,0 +1,91 @@
+package net.svaroh.passly.domain.metadata.interactor
+
+import com.google.gson.Gson
+import com.proton.gopenpgp.crypto.Crypto
+import net.svaroh.passly.core.passphrasememorycache.PassphraseMemoryCache
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.metadata.usecase.DeleteTrustedMetadataKeyUseCase
+import net.svaroh.passly.domain.metadata.usecase.GetTrustedMetadataKeyUseCase
+import net.svaroh.passly.domain.metadata.usecase.SaveTrustedMetadataKeyUseCase
+import net.svaroh.passly.domain.metadata.usecase.UpdateMetadataPrivateKeyUseCase
+import net.svaroh.passly.domain.metadata.usecase.db.GetLocalMetadataKeysUseCase
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
+import net.svaroh.passly.domain.users.usecase.GetLocalUserUseCase
+import net.svaroh.passly.gopenpgp.OpenPgp
+import net.svaroh.passly.gopenpgp.exception.GopenPgpExceptionParser
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
+import org.mockito.Mockito.mock
+
+/**
+ * Passbolt - Open source password manager for teams
+ * Copyright (c) 2021 Passbolt SA
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+ * Public License (AGPL) as published by the Free Software Foundation version 3.
+ *
+ * The name "Passbolt" is a registered trademark of Passbolt SA, and Passbolt SA hereby declines to grant a trademark
+ * license to "Passbolt" pursuant to the GNU Affero General Public License version 3 Section 7(e), without a separate
+ * agreement with Passbolt SA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License along with this program. If not,
+ * see GNU Affero General Public License v3 (http://www.gnu.org/licenses/agpl-3.0.html).
+ *
+ * @copyright Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link https://www.passbolt.com Passbolt (tm)
+ * @since v1.0
+ */
+
+internal val mockGetLocalMetadataKeysUseCase = mock<GetLocalMetadataKeysUseCase>()
+internal val mockUpdateMetadataPrivateKeyUseCase = mock<UpdateMetadataPrivateKeyUseCase>()
+internal val mockGetLocalUserUseCase = mock<GetLocalUserUseCase>()
+internal val mockGetSelectedAccountUseCase = mock<GetSelectedAccountUseCase>()
+internal val mockPrivateKeyRepository = mock<PrivateKeyRepository>()
+internal val mockPassphraseMemoryCache = mock<PassphraseMemoryCache>()
+internal val mockGetTrustedMetadataKeyUseCase = mock<GetTrustedMetadataKeyUseCase>()
+internal val mockSaveTrustedMetadataKeyUseCase = mock<SaveTrustedMetadataKeyUseCase>()
+internal val mockDeleteTrustedMetadataKeyUseCase = mock<DeleteTrustedMetadataKeyUseCase>()
+internal val mockGetSelectedAccountDataUseCase = mock<GetSelectedAccountDataUseCase>()
+internal val mockMetadataKeysInteractor = mock<MetadataKeysInteractor>()
+
+val testMetadataPrivateKeysInteractorModule =
+    module {
+        factory { Crypto.pgp() }
+        singleOf(::GopenPgpExceptionParser)
+        factoryOf(::OpenPgp)
+        factoryOf(::Gson)
+        factory {
+            MetadataPrivateKeysHelperInteractor(
+                openPgp = get(),
+                updateMetadataPrivateKeyUseCase = mockUpdateMetadataPrivateKeyUseCase,
+                getLocalUserUseCase = mockGetLocalUserUseCase,
+                saveTrustedMetadataKeyUseCase = mockSaveTrustedMetadataKeyUseCase,
+                getSelectedAccountDataUseCase = mockGetSelectedAccountDataUseCase,
+                deleteTrustedMetadataKeyUseCase = mockDeleteTrustedMetadataKeyUseCase,
+                getSelectedAccountUseCase = mockGetSelectedAccountUseCase,
+                privateKeyRepository = mockPrivateKeyRepository,
+                passphraseMemoryCache = mockPassphraseMemoryCache,
+                metadataKeysInteractor = mockMetadataKeysInteractor,
+                gson = get(),
+            )
+        }
+        factory {
+            MetadataPrivateKeysInteractor(
+                openPgp = get(),
+                metadataPrivateKeysHelperInteractor = get(),
+                getLocalMetadataKeysUseCase = mockGetLocalMetadataKeysUseCase,
+                getLocalUserUseCase = mockGetLocalUserUseCase,
+                getSelectedAccountUseCase = mockGetSelectedAccountUseCase,
+                privateKeyRepository = mockPrivateKeyRepository,
+                passphraseMemoryCache = mockPassphraseMemoryCache,
+                getTrustedMetadataKeyUseCase = mockGetTrustedMetadataKeyUseCase,
+                metadataKeysInteractor = mockMetadataKeysInteractor,
+            )
+        }
+    }

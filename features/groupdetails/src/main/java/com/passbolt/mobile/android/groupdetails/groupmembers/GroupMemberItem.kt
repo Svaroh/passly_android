@@ -1,6 +1,5 @@
 package net.svaroh.passly.groupdetails.groupmembers
 
-import PassboltTheme
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,16 +16,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.ui.circularimage.CircularProfileImage
-import net.svaroh.passly.ui.GpgKeyModel
-import net.svaroh.passly.ui.UserModel
-import net.svaroh.passly.ui.UserProfileModel
+import net.svaroh.passly.ui.GpgKeyUiModel
+import net.svaroh.passly.ui.UserProfileUiModel
+import net.svaroh.passly.ui.UserUiModel
 import java.time.ZonedDateTime
 import net.svaroh.passly.core.ui.R as CoreUiR
 
 @Composable
 internal fun GroupMemberItem(
-    member: UserModel,
+    member: UserUiModel,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -81,12 +81,12 @@ private fun GroupMemberItemPreview() {
     PassboltTheme {
         GroupMemberItem(
             member =
-                UserModel(
+                UserUiModel(
                     id = "1",
                     userName = "grace@passbolt.com",
                     disabled = false,
                     gpgKey =
-                        GpgKeyModel(
+                        GpgKeyUiModel(
                             id = "1",
                             armoredKey = "",
                             fingerprint = "93UT247Z1R1VF142",
@@ -98,7 +98,7 @@ private fun GroupMemberItemPreview() {
                             keyCreationDate = ZonedDateTime.now(),
                         ),
                     profile =
-                        UserProfileModel(
+                        UserProfileUiModel(
                             username = "grace",
                             firstName = "Grace",
                             lastName = "Hopper",

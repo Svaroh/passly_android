@@ -32,22 +32,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import net.svaroh.passly.core.clipboard.ClipboardAccess
 import net.svaroh.passly.core.compose.SideEffectDispatcher
+import net.svaroh.passly.core.compose.rememberDebouncedBoolean
 import net.svaroh.passly.core.fulldatarefresh.service.DataRefreshService
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.BottomTab
@@ -56,12 +58,14 @@ import net.svaroh.passly.core.navigation.compose.keys.FolderDetailsNavigationKey
 import net.svaroh.passly.core.navigation.compose.keys.HomeNavigationKey
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtpMode
-import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.Permissions
+import net.svaroh.passly.core.navigation.compose.keys.PermissionsNavigationKey.ConfirmPermissions
 import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.MainResourceForm
 import net.svaroh.passly.core.navigation.compose.keys.SettingsNavigationKey.Autofill
 import net.svaroh.passly.core.ui.dialogs.ConfirmResourceDeleteAlertDialog
 import net.svaroh.passly.core.ui.fab.AddFloatingActionButton
 import net.svaroh.passly.core.ui.progressdialog.ProgressDialog
+import net.svaroh.passly.core.ui.progressindicator.SearchProgressIndicator
+import net.svaroh.passly.core.ui.pulltorefresh.SlidingFeedbackPullToRefreshBox
 import net.svaroh.passly.core.ui.scaffold.HomeScaffold
 import net.svaroh.passly.core.ui.search.SearchInput
 import net.svaroh.passly.core.ui.snackbar.ColoredSnackbarVisuals
@@ -83,6 +87,7 @@ import net.svaroh.passly.feature.home.screen.HomeIntent.CopyResourceUsername
 import net.svaroh.passly.feature.home.screen.HomeIntent.CreateFolder
 import net.svaroh.passly.feature.home.screen.HomeIntent.CreateNote
 import net.svaroh.passly.feature.home.screen.HomeIntent.CreatePassword
+import net.svaroh.passly.feature.home.screen.HomeIntent.CreatePinCode
 import net.svaroh.passly.feature.home.screen.HomeIntent.CreateTotp
 import net.svaroh.passly.feature.home.screen.HomeIntent.DeleteResource
 import net.svaroh.passly.feature.home.screen.HomeIntent.EditResource
@@ -112,13 +117,11 @@ import net.svaroh.passly.feature.home.screen.snackbar.AutofillConflictSnackbarEf
 import net.svaroh.passly.feature.home.switchaccount.SwitchAccountBottomSheet
 import net.svaroh.passly.resourcemoremenu.ResourceMoreMenuBottomSheet
 import net.svaroh.passly.testtags.composetags.Home
+import net.svaroh.passly.ui.ConfirmPermissionsMode
 import net.svaroh.passly.ui.FiltersMenuModel
 import net.svaroh.passly.ui.HomeDisplayViewModel
 import net.svaroh.passly.ui.HomeDisplayViewModel.Folders
-import net.svaroh.passly.ui.PermissionsItem
-import net.svaroh.passly.ui.PermissionsMode
 import net.svaroh.passly.ui.ResourceFormMode
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR
@@ -139,6 +142,8 @@ internal fun HomeScreen(
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val errorColor = colorResource(CoreUiR.color.red)
+    val successColor = colorResource(CoreUiR.color.green)
 
     AutofillConflictSnackbarEffect(
         snackbarHostState = snackbarHostState,
@@ -156,6 +161,7 @@ internal fun HomeScreen(
             Initialize(
                 homeView = homeView,
                 showSuggestedModel = showSuggestedModel,
+                appContext = resourceHandlingStrategy.appContext,
             ),
         )
     }
@@ -183,7 +189,7 @@ internal fun HomeScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getErrorMessage(context, it.type, it.message),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorColor,
                         ),
                     )
                 }
@@ -192,7 +198,7 @@ internal fun HomeScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getSuccessMessage(context, it.type, it.message),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.green)),
+                            backgroundColor = successColor,
                         ),
                     )
                 }
@@ -217,7 +223,7 @@ internal fun HomeScreen(
             is NavigateToResourceUri -> navigator.openExternalWebsite(context, it.url)
             is NavigateToShare ->
                 navigator.navigateToKey(
-                    Permissions(it.resourceModel.resourceId, PermissionsMode.EDIT, PermissionsItem.RESOURCE),
+                    ConfirmPermissions(ConfirmPermissionsMode.Share(it.resourceModel.resourceId)),
                 )
             is NavigateToCreateFolder ->
                 navigator.navigateToKey(
@@ -234,7 +240,7 @@ internal fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeScreen(
+fun HomeScreen(
     state: HomeState,
     onIntent: (HomeIntent) -> Unit,
     snackbarHostState: SnackbarHostState,
@@ -244,6 +250,12 @@ private fun HomeScreen(
 ) {
     val activity = LocalActivity.current
     val context = LocalContext.current
+
+    val homeListData = rememberHomeListData(state)
+    val isAnyListRefreshing = rememberIsAnyListRefreshing(homeListData)
+    val isListLoading = state.isSearching || isAnyListRefreshing
+    val isSearchRunning = state.isSearching || (isAnyListRefreshing && state.searchQuery.isNotBlank())
+    val showSearchProgress = rememberDebouncedBoolean(isSearchRunning && !state.isRefreshing)
 
     HomeScaffold(
         snackbarHostState = snackbarHostState,
@@ -268,6 +280,7 @@ private fun HomeScreen(
                         .fillMaxWidth()
                         .padding(end = 16.dp),
                 avatarUrl = state.userAvatar,
+                avatarPlaceholderRes = CoreUiR.drawable.ic_avatar_placeholder,
                 initialValue = state.searchQuery,
                 onEndIconClick = { onIntent(SearchEndIconAction) },
                 leadingIcon = {
@@ -288,15 +301,26 @@ private fun HomeScreen(
             }
         },
         content = { paddingValues ->
-            PullToRefreshBox(
+            SlidingFeedbackPullToRefreshBox(
                 isRefreshing = state.isRefreshing,
+                refreshProgress = state.refreshProgress,
                 onRefresh = { DataRefreshService.start(context, isUserInitiated = true) },
                 modifier =
                     Modifier
                         .fillMaxSize()
                         .padding(paddingValues),
             ) {
-                HomeResourceList(state, navigator, resourceHandlingStrategy, onIntent)
+                HomeResourceList(
+                    state = state,
+                    homeListData = homeListData,
+                    isListLoading = isListLoading,
+                    navigator = navigator,
+                    resourceHandlingStrategy = resourceHandlingStrategy,
+                    onIntent = onIntent,
+                )
+                if (showSearchProgress) {
+                    SearchProgressIndicator(modifier = Modifier.align(Alignment.TopCenter))
+                }
             }
         },
     )
@@ -304,9 +328,11 @@ private fun HomeScreen(
     if (state.showCreateResourceBottomSheet) {
         CreateResourceMenuBottomSheet(
             homeDisplayViewModel = state.homeView,
+            appContext = state.appContext,
             onCreatePassword = { onIntent(CreatePassword) },
             onCreateTotp = { onIntent(CreateTotp) },
             onCreateNote = { onIntent(CreateNote) },
+            onCreatePinCode = { onIntent(CreatePinCode) },
             onCreateFolder = { onIntent(CreateFolder) },
             onDismissRequest = { onIntent(CloseCreateResourceMenu) },
         )

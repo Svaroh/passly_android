@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.createfolder
 
-import PassboltTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,12 +43,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.results.CreateFolderCompleteResult
@@ -73,7 +74,6 @@ import net.svaroh.passly.createfolder.CreateFolderSideEffect.FolderCreated
 import net.svaroh.passly.createfolder.CreateFolderSideEffect.NavigateUp
 import net.svaroh.passly.createfolder.CreateFolderSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.testtags.composetags.CreateFolder
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import net.svaroh.passly.core.localization.R as LocalizationR
@@ -91,6 +91,7 @@ internal fun CreateFolderScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val resultBus = NavigationResultEventBus.current
+    val errorColor = colorResource(CoreUiR.color.red)
 
     LaunchedEffect(parentFolderId) {
         viewModel.onIntent(Initialize(parentFolderId))
@@ -115,7 +116,7 @@ internal fun CreateFolderScreen(
                     snackbarHostState.showSnackbar(
                         ColoredSnackbarVisuals(
                             message = getErrorMessage(context, sideEffect.type, sideEffect.message),
-                            backgroundColor = Color(context.getColor(CoreUiR.color.red)),
+                            backgroundColor = errorColor,
                         ),
                     )
                 }

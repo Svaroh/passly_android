@@ -25,24 +25,14 @@ package net.svaroh.passly.createfolder
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.validation.StringMaxLength
 import net.svaroh.passly.common.validation.StringNotBlank
 import net.svaroh.passly.common.validation.validation
-import net.svaroh.passly.core.commonfolders.usecase.AddLocalFolderPermissionsUseCase
-import net.svaroh.passly.core.commonfolders.usecase.CreateFolderUseCase
-import net.svaroh.passly.core.commonfolders.usecase.CreateFolderUseCase.Output.Failure
-import net.svaroh.passly.core.commonfolders.usecase.CreateFolderUseCase.Output.Success
-import net.svaroh.passly.core.commonfolders.usecase.FolderShareInteractor
-import net.svaroh.passly.core.commonfolders.usecase.db.AddLocalFolderUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderDetailsUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderLocationUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalFolderPermissionsUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.GetLocalParentFolderPermissionsToApplyToNewItemUseCase
-import net.svaroh.passly.core.commonfolders.usecase.db.ItemIdFolderId
+import net.svaroh.passly.core.architecture.result.displayMessage
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.idlingresource.CreateFolderIdlingResource
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.users.usecase.db.GetLocalCurrentUserUseCase
 import net.svaroh.passly.createfolder.CreateFolderIntent.FolderNameChanged
 import net.svaroh.passly.createfolder.CreateFolderIntent.GoBack
 import net.svaroh.passly.createfolder.CreateFolderIntent.Initialize
@@ -53,13 +43,24 @@ import net.svaroh.passly.createfolder.CreateFolderSideEffect.ShowErrorSnackbar
 import net.svaroh.passly.createfolder.CreateFolderValidationError.MaxLengthExceeded
 import net.svaroh.passly.createfolder.SnackbarErrorType.CREATE_FOLDER_ERROR
 import net.svaroh.passly.createfolder.SnackbarErrorType.SHARE_FOLDER_ERROR
+import net.svaroh.passly.domain.folders.model.FolderModel
+import net.svaroh.passly.domain.folders.usecase.AddLocalFolderPermissionsUseCase
+import net.svaroh.passly.domain.folders.usecase.AddLocalFolderUseCase
+import net.svaroh.passly.domain.folders.usecase.CreateFolderUseCase
+import net.svaroh.passly.domain.folders.usecase.CreateFolderUseCase.Output.Failure
+import net.svaroh.passly.domain.folders.usecase.CreateFolderUseCase.Output.Success
+import net.svaroh.passly.domain.folders.usecase.FolderShareInteractor
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderDetailsUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderLocationUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalFolderPermissionsUseCase
+import net.svaroh.passly.domain.folders.usecase.GetLocalParentFolderPermissionsToApplyToNewItemUseCase
+import net.svaroh.passly.domain.folders.usecase.ItemIdFolderId
+import net.svaroh.passly.domain.users.usecase.GetLocalCurrentUserUseCase
 import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
 import net.svaroh.passly.mappers.SharePermissionsModelMapper
 import net.svaroh.passly.mappers.UsersModelMapper
-import net.svaroh.passly.ui.FolderModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.ResourcePermission
-import kotlinx.coroutines.launch
 
 internal class CreateFolderViewModel(
     private val getLocalFolderLocationUseCase: GetLocalFolderLocationUseCase,
@@ -172,7 +173,7 @@ internal class CreateFolderViewModel(
                     }
             ) {
                 is Failure -> {
-                    emitSideEffect(ShowErrorSnackbar(CREATE_FOLDER_ERROR, output.result.headerMessage))
+                    emitSideEffect(ShowErrorSnackbar(CREATE_FOLDER_ERROR, output.incomplete.displayMessage()))
                 }
                 is Success -> {
                     addLocalFolderUseCase.execute(AddLocalFolderUseCase.Input(output.folderWithAttributes.folderModel))
@@ -228,7 +229,7 @@ internal class CreateFolderViewModel(
                 }
         ) {
             is FolderShareInteractor.Output.ShareFailure -> {
-                emitSideEffect(ShowErrorSnackbar(SHARE_FOLDER_ERROR, output.exception.message))
+                emitSideEffect(ShowErrorSnackbar(SHARE_FOLDER_ERROR, output.message))
             }
             is FolderShareInteractor.Output.Success -> {
                 emitSideEffect(FolderCreated(folderName))

@@ -23,15 +23,16 @@
 
 package net.svaroh.passly.locationdetails
 
+import net.svaroh.passly.domain.folders.model.FolderModel
 import net.svaroh.passly.locationdetails.data.ExpandableFolderTree
-import net.svaroh.passly.ui.FolderModel
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 
 data class LocationDetailsState(
     val isRefreshing: Boolean = false,
+    val refreshProgress: Float = 0f,
     val itemName: String = "",
     val isSharedFolder: Boolean = false,
-    val resource: ResourceModel? = null,
+    val resource: ResourceUiModel? = null,
     val parentFolders: List<FolderModel> = emptyList(),
     val folderTree: ExpandableFolderTree? = null,
     val expandedItemIds: Set<String> = emptySet(),

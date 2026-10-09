@@ -61,12 +61,12 @@ import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.localization.R
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
-import net.svaroh.passly.core.resources.resourceicon.BackgroundColorIconProvider
-import net.svaroh.passly.core.resources.resourceicon.ResourceIconProvider
 import net.svaroh.passly.core.ui.button.PrimaryButton
 import net.svaroh.passly.core.ui.switch.TextSwitch
 import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
 import net.svaroh.passly.core.ui.topbar.TitleAppBar
+import net.svaroh.passly.domain.resources.resourceicon.BackgroundColorIconProvider
+import net.svaroh.passly.domain.resources.resourceicon.ResourceIconProvider
 import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.ApplyChanges
 import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.GoBack
 import net.svaroh.passly.feature.resourceform.metadata.appearance.AppearanceFormIntent.Initialize

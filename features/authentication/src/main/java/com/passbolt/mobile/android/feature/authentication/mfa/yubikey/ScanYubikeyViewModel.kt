@@ -12,8 +12,10 @@ import net.svaroh.passly.feature.authentication.auth.usecase.VerifyYubikeyUseCas
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.CancelYubikeyScan
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ChooseOtherProvider
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.Close
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ConfirmSetupLeave
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.DismissNotFromCurrentUserDialog
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.DismissScanCancelledDialog
+import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.DismissSetupLeave
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ScanYubikey
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ToggleRememberMe
 import net.svaroh.passly.feature.authentication.mfa.yubikey.ScanYubikeyIntent.ValidateYubikeyOtp
@@ -30,6 +32,7 @@ import timber.log.Timber
 
 class ScanYubikeyViewModel(
     hasOtherProvider: Boolean,
+    private val isSetupFlow: Boolean,
     private val authToken: String?,
     private val signOutUseCase: SignOutUseCase,
     private val verifyYubikeyUseCase: VerifyYubikeyUseCase,
@@ -43,10 +46,23 @@ class ScanYubikeyViewModel(
             is CancelYubikeyScan -> updateViewState { copy(showScanCancelledDialog = true) }
             is ChooseOtherProvider -> emitSideEffect(NotifyChooseOtherProvider(authToken))
             is ValidateYubikeyOtp -> validateYubikeyOtp(intent.otp)
-            is Close -> signOutAndClose()
+            is Close -> close()
+            is ConfirmSetupLeave -> {
+                updateViewState { copy(showSetupLeaveConfirmationDialog = false) }
+                signOutAndClose()
+            }
+            is DismissSetupLeave -> updateViewState { copy(showSetupLeaveConfirmationDialog = false) }
             is ToggleRememberMe -> updateViewState { copy(rememberMe = intent.checked) }
             is DismissScanCancelledDialog -> updateViewState { copy(showScanCancelledDialog = false) }
             is DismissNotFromCurrentUserDialog -> updateViewState { copy(showNotFromCurrentUserDialog = false) }
+        }
+    }
+
+    private fun close() {
+        if (isSetupFlow) {
+            updateViewState { copy(showSetupLeaveConfirmationDialog = true) }
+        } else {
+            signOutAndClose()
         }
     }
 
@@ -68,7 +84,7 @@ class ScanYubikeyViewModel(
                         VerifyYubikeyUseCase.Input(otp, authToken, viewState.value.rememberMe),
                     )
             ) {
-                is Failure<*> -> emitSideEffect(ShowErrorSnackbar(GENERIC))
+                is Failure -> emitSideEffect(ShowErrorSnackbar(GENERIC))
                 is NetworkFailure -> emitSideEffect(ShowErrorSnackbar(GENERIC))
                 is Success -> yubikeySuccess(result.mfaHeader)
                 is Unauthorized -> {

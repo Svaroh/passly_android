@@ -37,7 +37,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -46,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
 import net.svaroh.passly.core.ui.topbar.BackNavigationIcon
 import net.svaroh.passly.core.ui.topbar.TitleAppBar
 import net.svaroh.passly.feature.resourceform.additionalsecrets.customfields.CustomFieldsFormIntent.GoBack
@@ -64,6 +64,8 @@ internal fun CustomFieldsFormScreen(
     navigator: AppNavigator = koinInject(),
     viewModel: CustomFieldsFormViewModel = koinViewModel(parameters = { parametersOf(customFieldsUiModel) }),
 ) {
+    FlagSecureEffect()
+
     val state = viewModel.viewState.collectAsStateWithLifecycle()
 
     CustomFieldsFormScreen(
@@ -86,8 +88,6 @@ private fun CustomFieldsFormScreen(
     state: CustomFieldsFormState,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-
     Column(
         modifier =
             modifier
@@ -95,7 +95,7 @@ private fun CustomFieldsFormScreen(
                 .padding(16.dp),
     ) {
         TitleAppBar(
-            title = context.getString(LocalizationR.string.resource_form_create_resource_custom_fields),
+            title = stringResource(LocalizationR.string.resource_form_create_resource_custom_fields),
             navigationIcon = { BackNavigationIcon(onBackClick = { onIntent(GoBack) }) },
             modifier = Modifier.fillMaxWidth(),
         )

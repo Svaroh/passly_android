@@ -23,8 +23,9 @@
 
 package net.svaroh.passly.locationdetails.data
 
-import net.svaroh.passly.ui.FolderModel
+import net.svaroh.passly.domain.folders.model.FolderModel
 import net.svaroh.passly.ui.ResourcePermission
+import java.time.ZonedDateTime
 
 data class ExpandableFolderNode(
     val id: String,
@@ -63,6 +64,7 @@ class ExpandableFolderTreeCreator(
                 name = fakeRootFolderName,
                 isShared = false,
                 permission = ResourcePermission.OWNER,
+                modified = ZonedDateTime.now(),
             )
         return listOf(fakeRootFolder) + folders
     }

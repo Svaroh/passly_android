@@ -23,13 +23,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import net.svaroh.passly.core.compose.FingerprintText
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.formatter.FingerprintFormatter
 import net.svaroh.passly.core.navigation.compose.AppNavigator
@@ -55,7 +54,7 @@ import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsSideE
 import net.svaroh.passly.permissions.userpermissionsdetails.UserPermissionsSideEffect.SetUpdatedPermissionResult
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.PermissionsMode
-import net.svaroh.passly.ui.UserModel
+import net.svaroh.passly.ui.UserUiModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
@@ -67,7 +66,8 @@ fun UserPermissionsScreen(
     permission: PermissionModelUi.UserPermissionModel,
     mode: PermissionsMode,
     modifier: Modifier = Modifier,
-    viewModel: UserPermissionsViewModel = koinViewModel(parameters = { parametersOf(mode, permission) }),
+    fromSnapshot: Boolean = false,
+    viewModel: UserPermissionsViewModel = koinViewModel(parameters = { parametersOf(mode, permission, fromSnapshot) }),
     navigator: AppNavigator = koinInject(),
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle()
@@ -160,7 +160,7 @@ private fun UserPermissionsScreen(
 
 @Composable
 private fun UserHeader(
-    user: UserModel?,
+    user: UserUiModel?,
     modifier: Modifier = Modifier,
     disabledUserAlpha: Float = 0.5f,
     fingerprintFormatter: FingerprintFormatter = koinInject(),
@@ -208,18 +208,9 @@ private fun UserHeader(
         Spacer(modifier = Modifier.height(24.dp))
 
         if (user?.gpgKey?.fingerprint != null) {
-            Text(
-                text =
-                    fingerprintFormatter.formatWithRawFallback(
-                        user.gpgKey.fingerprint,
-                        appendMiddleSpacing = false,
-                    ),
-                style =
-                    MaterialTheme.typography.bodyMedium.copy(
-                        fontFamily = FontFamily(Font(CoreUiR.font.inconsolata)),
-                        fontSize = 18.sp,
-                    ),
-                color = colorResource(CoreUiR.color.text_secondary),
+            FingerprintText(
+                fingerprint = user.gpgKey.fingerprint,
+                fingerprintFormatter = fingerprintFormatter,
             )
         }
     }

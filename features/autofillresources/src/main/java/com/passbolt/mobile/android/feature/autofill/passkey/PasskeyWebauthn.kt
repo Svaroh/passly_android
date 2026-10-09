@@ -18,6 +18,7 @@
  */
 package net.svaroh.passly.feature.autofill.passkey
 
+import android.annotation.SuppressLint
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
@@ -40,6 +41,7 @@ import java.security.spec.ECGenParameterSpec
 import java.security.spec.PKCS8EncodedKeySpec
 import java.util.Locale
 
+@SuppressLint("RestrictedApi")
 internal object PasskeyWebauthn {
     fun extractRpId(requestJson: String): String? =
         runCatching {

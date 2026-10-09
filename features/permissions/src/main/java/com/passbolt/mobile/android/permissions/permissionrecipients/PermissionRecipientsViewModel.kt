@@ -24,12 +24,13 @@
 package net.svaroh.passly.permissions.permissionrecipients
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import net.svaroh.passly.common.search.SearchableMatcher
-import net.svaroh.passly.core.commongroups.usecase.db.GetLocalGroupsUseCase
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.core.ui.search.SearchInputEndIconMode
-import net.svaroh.passly.core.users.usecase.db.GetLocalUsersUseCase
+import net.svaroh.passly.domain.groups.usecase.GetLocalGroupsUseCase
+import net.svaroh.passly.domain.users.usecase.GetLocalUsersUseCase
 import net.svaroh.passly.mappers.PermissionsModelMapper
 import net.svaroh.passly.mappers.SharePermissionsModelMapper.Companion.TEMPORARY_NEW_PERMISSION_ID
 import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsIntent.GoBack
@@ -42,8 +43,7 @@ import net.svaroh.passly.permissions.permissionrecipients.PermissionRecipientsSi
 import net.svaroh.passly.ui.GroupModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.ResourcePermission
-import net.svaroh.passly.ui.UserModel
-import kotlinx.coroutines.launch
+import net.svaroh.passly.ui.UserUiModel
 
 class PermissionRecipientsViewModel(
     alreadyAddedGroupPermissions: Array<PermissionModelUi.GroupPermissionModel>,
@@ -150,7 +150,7 @@ class PermissionRecipientsViewModel(
         recomputeDisplayPermissions()
     }
 
-    private fun toggleUserSelection(user: UserModel) {
+    private fun toggleUserSelection(user: UserUiModel) {
         val currentIds = viewState.value.selectedUserIds
         val newIds =
             if (user.id in currentIds) {

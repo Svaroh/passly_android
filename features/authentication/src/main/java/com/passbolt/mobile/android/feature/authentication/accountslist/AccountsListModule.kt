@@ -37,7 +37,6 @@ fun Module.accountsListModule() {
             removeAllAccountDataUseCase = get(),
             signOutUseCase = get(),
             saveCurrentApiUrlUseCase = get(),
-            databaseProvider = get(),
         )
     }
 }

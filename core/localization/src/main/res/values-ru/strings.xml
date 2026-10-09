@@ -344,7 +344,6 @@
     <string name="settings_app_settings_biometry_error">Ошибка биометрии. %s</string>
     <string name="settings_app_settings_biometry_authentication_error">Ошибка биометрической аутентификации. %s</string>
     <string name="settings_app_settings_expert_settings">Экспертные настройки</string>
-    <string name="settings_app_settings_expert_settings_dev_mode">Режим разработчика</string>
     <string name="settings_app_settings_expert_settings_hide_root">Скрывать диалог «устройство с правами суперпользователя»</string>
     <string name="settings_autofill_autofill_title">Здесь вы можете изменить методы автозаполнения</string>
     <string name="settings_autofill_autofill_desc">Рекомендуется использовать метод службы автозаполнения, но производительность службы может зависеть от настроек оптимизации аккумулятора и устройства. \n\nЕсли Служба автозаполнения на вашем устройстве работает не надёжно, вы можете попробовать включить автозаполнение на основе службы специальных возможностей.</string>

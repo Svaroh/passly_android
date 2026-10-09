@@ -1,7 +1,7 @@
 package net.svaroh.passly.feature.home.screen
 
 import net.svaroh.passly.core.navigation.AppContext
-import net.svaroh.passly.ui.ResourceModel
+import net.svaroh.passly.ui.ResourceUiModel
 
 /**
  * Passbolt - Open source password manager for teams
@@ -32,7 +32,7 @@ interface ResourceHandlingStrategyProvider {
 interface ResourceHandlingStrategy {
     val appContext: AppContext
 
-    fun resourceItemClick(resourceModel: ResourceModel)
+    fun resourceItemClick(resourceModel: ResourceUiModel)
 
     fun shouldShowResourceMoreMenu(): Boolean
 

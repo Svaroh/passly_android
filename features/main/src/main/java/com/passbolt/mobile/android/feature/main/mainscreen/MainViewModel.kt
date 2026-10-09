@@ -4,9 +4,9 @@ import net.svaroh.passly.common.datarefresh.DataRefreshTrackingFlow
 import net.svaroh.passly.core.autofill.AutofillInformationProvider
 import net.svaroh.passly.core.autofill.AutofillInformationProvider.ChromeNativeAutofillStatus.ENABLED
 import net.svaroh.passly.core.compose.SideEffectViewModel
-import net.svaroh.passly.core.inappreview.InAppReviewInteractor
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.deeplink.BrowserFirstLoginDeepLinkStore
+import net.svaroh.passly.domain.inappreview.usecase.InAppReviewInteractor
 import net.svaroh.passly.feature.main.mainscreen.MainIntent.AppUpdateDownloaded
 import net.svaroh.passly.feature.main.mainscreen.MainIntent.CloseChromeNativeAutofill
 import net.svaroh.passly.feature.main.mainscreen.MainIntent.GoToSettings
@@ -112,7 +112,7 @@ class MainViewModel(
                     Timber.e("[BrowserFirstLogin] Could not parse pending deep link")
                     emitSideEffect(ShowSnackbar(SnackbarType.BROWSER_FIRST_LOGIN_FAILURE))
                     return
-        }
+                }
 
         launch {
             Timber.i("[BrowserFirstLogin] Completing pending deep link")

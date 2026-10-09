@@ -23,63 +23,67 @@
 
 package net.svaroh.passly.resourcepicker.screen.data
 
-import net.svaroh.passly.common.search.SearchableMatcher
+import androidx.paging.PagingData
+import androidx.paging.filter
+import androidx.paging.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import net.svaroh.passly.common.urimatcher.AutofillUriMatcher
-import net.svaroh.passly.core.resources.usecase.db.GetLocalResourcesUseCase
-import net.svaroh.passly.core.resourcetypes.usecase.db.GetResourceTypeIdToSlugMappingUseCase
+import net.svaroh.passly.domain.resources.usecase.db.GetLocalResourcesPaginatedUseCase
 import net.svaroh.passly.mappers.ResourcePickerMapper
 import net.svaroh.passly.resourcepicker.screen.ResourcePickerViewModel.Companion.SELECTABLE_RESOURCE_TYPES_SLUGS
 import net.svaroh.passly.supportedresourceTypes.SupportedContentTypes.allSlugs
+import net.svaroh.passly.ui.ResourceUiModel
 
 class ResourcePickerDataProvider(
-    private val getLocalResourcesUseCase: GetLocalResourcesUseCase,
+    private val getLocalResourcesPaginatedUseCase: GetLocalResourcesPaginatedUseCase,
     private val resourcePickerMapper: ResourcePickerMapper,
-    private val getResourceTypeIdToSlugMappingUseCase: GetResourceTypeIdToSlugMappingUseCase,
-    private val searchableMatcher: SearchableMatcher,
     private val autofillUriMatcher: AutofillUriMatcher,
 ) {
     suspend fun provideData(
         searchQuery: String?,
         suggestionUri: String?,
     ): ResourcePickerData {
-        val selectableResourceTypesIds =
-            getResourceTypeIdToSlugMappingUseCase
-                .execute(Unit)
-                .idToSlugMapping
-                .filter { it.value in SELECTABLE_RESOURCE_TYPES_SLUGS }
-                .keys
-
-        val allResources =
-            getLocalResourcesUseCase
-                .execute(GetLocalResourcesUseCase.Input(allSlugs))
-                .resources
-                .map { resourcePickerMapper.map(it, selectableResourceTypesIds) }
+        val resources =
+            getLocalResourcesPaginatedUseCase
+                .execute(
+                    GetLocalResourcesPaginatedUseCase.Input(
+                        slugs = allSlugs,
+                        searchQuery = searchQuery,
+                        enablePlaceholders = true,
+                    ),
+                ).pagedResourcesFlow
+                .mapToPickerItems()
 
         val suggestedResources =
-            if (!suggestionUri.isNullOrBlank()) {
-                allResources.filter {
-                    autofillUriMatcher.isMatching(
-                        suggestionUri,
-                        it.resourceModel.metadataJsonModel.uris
-                            .orEmpty() +
-                            it.resourceModel.metadataJsonModel.uri
-                                .orEmpty(),
-                    )
-                }
+            if (!suggestionUri.isNullOrBlank() && searchQuery.isNullOrBlank()) {
+                getLocalResourcesPaginatedUseCase
+                    .execute(GetLocalResourcesPaginatedUseCase.Input(slugs = allSlugs))
+                    .pagedResourcesFlow
+                    .mapToPickerItems()
+                    .map { pagingData ->
+                        pagingData.filter {
+                            autofillUriMatcher.isMatching(
+                                suggestionUri,
+                                it.resourceModel.metadataJsonModel.uris
+                                    .orEmpty() +
+                                    it.resourceModel.metadataJsonModel.uri
+                                        .orEmpty(),
+                            )
+                        }
+                    }
             } else {
-                emptyList()
-            }
-
-        val filteredResources =
-            if (!searchQuery.isNullOrBlank()) {
-                allResources.filter { searchableMatcher.matches(it, searchQuery) }
-            } else {
-                allResources
+                settledEmptyPagingData()
             }
 
         return ResourcePickerData(
             suggestedResources = suggestedResources,
-            resources = filteredResources,
+            resources = resources,
         )
     }
+
+    private fun Flow<PagingData<ResourceUiModel>>.mapToPickerItems() =
+        map { pagingData ->
+            pagingData.map { resourcePickerMapper.map(it, SELECTABLE_RESOURCE_TYPES_SLUGS) }
+        }
 }

@@ -29,8 +29,8 @@ import net.svaroh.passly.ui.MetadataJsonModel
 import net.svaroh.passly.ui.PermissionModelUi
 import net.svaroh.passly.ui.RbacModel
 import net.svaroh.passly.ui.RbacRuleModel.ALLOW
-import net.svaroh.passly.ui.ResourceModel
 import net.svaroh.passly.ui.ResourcePermission
+import net.svaroh.passly.ui.ResourceUiModel
 import net.svaroh.passly.ui.TagModel
 import net.svaroh.passly.ui.UserWithAvatar
 import java.time.ZonedDateTime
@@ -45,9 +45,10 @@ internal val RESOURCE_TYPE_ID: UUID = UUID.randomUUID()
 internal const val FOLDER_ID = "folderId"
 
 internal val DEFAULT_RESOURCE_MODEL by lazy {
-    ResourceModel(
+    ResourceUiModel(
         resourceId = ID,
         resourceTypeId = RESOURCE_TYPE_ID.toString(),
+        slug = "password-and-description",
         folderId = FOLDER_ID,
         permission = ResourcePermission.OWNER,
         favouriteId = null,

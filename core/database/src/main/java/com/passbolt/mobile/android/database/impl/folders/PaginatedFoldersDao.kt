@@ -65,7 +65,8 @@ interface PaginatedFoldersDao : BaseDao<Folder> {
             "       EXISTS (" +
             "           SELECT 1 FROM FolderFts WHERE FolderFts MATCH :ftsQuery AND FolderFts.docid = k.rowid" +
             "       )" +
-            ")",
+            ") " +
+            "ORDER BY k.modified DESC, k.folderId ASC",
     )
     fun getFolderDirectChildFolders(
         folderId: String?,
@@ -102,20 +103,21 @@ interface PaginatedFoldersDao : BaseDao<Folder> {
             "WHERE :ftsQuery IS NULL OR " +
             "   EXISTS (" +
             "       SELECT 1 FROM FolderFts WHERE FolderFts MATCH :ftsQuery AND FolderFts.docid = f.rowid" +
-            "   )",
+            "   ) " +
+            "ORDER BY f.modified DESC, f.folderId ASC",
     )
     fun getAllFolders(ftsQuery: String?): PagingSource<Int, FolderWithChildItemsCountAndPath>
 
     @Transaction
     @Query(
-        "WITH RECURSIVE ancestor(folderId, name, permission, parentId, isShared, level) as (" +
-            "SELECT folderId, name, permission, parentId, isShared, 0 " +
+        "WITH RECURSIVE ancestor(folderId, name, permission, parentId, isShared, modified, level) as (" +
+            "SELECT folderId, name, permission, parentId, isShared, modified, 0 " +
             "from Folder " +
             "WHERE folderId IS :folderId " +
             "" +
             "UNION ALL " +
             "" +
-            "SELECT f.folderId, f.name, f.permission, f.parentId, f.isShared, a.level + 1 " +
+            "SELECT f.folderId, f.name, f.permission, f.parentId, f.isShared, f.modified, a.level + 1 " +
             "FROM Folder f " +
             "JOIN ancestor a on f.parentId = a.folderId " +
             ") " +
@@ -152,7 +154,7 @@ interface PaginatedFoldersDao : BaseDao<Folder> {
             "       WHERE FolderFts.docid = Folder.rowid AND FolderFts MATCH :ftsQuery" +
             "   )" +
             ") " +
-            "ORDER BY level",
+            "ORDER BY level, modified DESC, folderId ASC",
     )
     fun getFolderAllChildFoldersRecursively(
         folderId: String,

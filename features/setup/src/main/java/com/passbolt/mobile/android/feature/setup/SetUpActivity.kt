@@ -26,11 +26,11 @@ package net.svaroh.passly.feature.setup
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.IntentCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation3.runtime.NavKey
-import net.svaroh.passly.common.lifecycleawarelazy.lifecycleAwareLazy
-import net.svaroh.passly.core.navigation.AccountSetupDataModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.json.Json
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.PartiallyAuthenticated
 import net.svaroh.passly.core.navigation.compose.APP_NAVIGATOR_SCOPE
@@ -41,8 +41,8 @@ import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.ImportP
 import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.ScanQrCodes
 import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.TransferDetails
 import net.svaroh.passly.core.navigation.compose.keys.SetupNavigationKey.Welcome
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import net.svaroh.passly.core.ui.orientation.LockCompactScreenOrientation
+import net.svaroh.passly.ui.AccountSetupDataModel
 import org.koin.compose.koinInject
 import org.koin.compose.scope.KoinScope
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -50,18 +50,16 @@ import java.util.UUID
 
 // NOTE: When changing name or package read core/navigation/README.md
 class SetUpActivity :
-    AppCompatActivity(),
+    FragmentActivity(),
     PartiallyAuthenticated,
     AccountSetupDataHolder {
     private val setupNavigatorScopeId = "setup_navigator_${UUID.randomUUID()}"
     private var currentBackStackItem: StateFlow<NavKey?> = MutableStateFlow(Welcome)
 
-    override val bundledAccountSetupData: AccountSetupDataModel? by lifecycleAwareLazy {
-        IntentCompat.getParcelableExtra(
-            intent,
-            ActivityIntents.EXTRA_ACCOUNT_SETUP_DATA,
-            AccountSetupDataModel::class.java,
-        )
+    override val bundledAccountSetupData: AccountSetupDataModel? by lazy {
+        intent
+            .getStringExtra(ActivityIntents.EXTRA_ACCOUNT_SETUP_DATA)
+            ?.let { Json.decodeFromString<AccountSetupDataModel>(it) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +67,7 @@ class SetUpActivity :
         enableEdgeToEdge()
 
         setContent {
+            LockCompactScreenOrientation()
             @OptIn(KoinExperimentalAPI::class)
             KoinScope(
                 scopeID = setupNavigatorScopeId,

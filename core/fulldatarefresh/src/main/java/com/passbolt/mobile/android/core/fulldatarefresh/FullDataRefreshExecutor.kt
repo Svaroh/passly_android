@@ -1,5 +1,7 @@
 package net.svaroh.passly.core.fulldatarefresh
 
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithFailure
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.Idle.FinishedWithSuccess
 import net.svaroh.passly.common.datarefresh.DataRefreshStatus.InProgress
@@ -8,10 +10,8 @@ import net.svaroh.passly.core.fulldatarefresh.HomeDataInteractor.Output.Failure
 import net.svaroh.passly.core.fulldatarefresh.HomeDataInteractor.Output.Success
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
 import net.svaroh.passly.feature.authentication.session.runAuthenticatedOperation
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Passbolt - Open source password manager for teams
@@ -39,50 +39,33 @@ import timber.log.Timber
 class FullDataRefreshExecutor(
     private val homeDataInteractor: HomeDataInteractor,
     private val dataRefreshTrackingFlow: DataRefreshTrackingFlow,
-    coroutineLaunchContext: CoroutineLaunchContext,
+    private val coroutineLaunchContext: CoroutineLaunchContext,
 ) {
-    private val job = SupervisorJob()
-    private val scope = CoroutineScope(job + coroutineLaunchContext.ui)
-
-    fun performFullDataRefresh(isUserInitiated: Boolean = false) {
-        scope.launch {
-            Timber.d("Full data refresh initiated")
-            if (!dataRefreshTrackingFlow.isInProgress()) {
-                dataRefreshTrackingFlow.startTracking(isUserInitiated)
-                val output =
-                    // a refresh nobody asked for never demands the passphrase: opening the app would otherwise
-                    // ask for it a second time whenever the session did not survive the process
-                    runAuthenticatedOperation(canPromptForAuthentication = isUserInitiated) {
-                        homeDataInteractor.refreshAllHomeScreenData()
-                    }
-
-                dataRefreshTrackingFlow.updateStatus(
-                    when (output) {
-                        is Success -> FinishedWithSuccess
-                        is Failure -> FinishedWithFailure
-                    },
-                )
-            }
-        }
-    }
-
-    suspend fun susPerformFullDataRefresh(isUserInitiated: Boolean = false) {
+    suspend fun performFullDataRefresh(isUserInitiated: Boolean = false) {
         Timber.d("Full data refresh initiated")
         if (!dataRefreshTrackingFlow.isInProgress()) {
             dataRefreshTrackingFlow.startTracking(isUserInitiated)
             val output =
-                // a refresh nobody asked for never demands the passphrase: opening the app would otherwise
-                // ask for it a second time whenever the session did not survive the process
                 runAuthenticatedOperation(canPromptForAuthentication = isUserInitiated) {
-                    homeDataInteractor.refreshAllHomeScreenData()
+                    withContext(coroutineLaunchContext.default) {
+                        homeDataInteractor.refreshAllHomeScreenData { progress ->
+                            dataRefreshTrackingFlow.updateStatus(InProgress(progress))
+                        }
+                    }
                 }
 
-            dataRefreshTrackingFlow.updateStatus(
-                when (output) {
-                    is Success -> FinishedWithSuccess
-                    is Failure -> FinishedWithFailure
-                },
-            )
+            when (output) {
+                is Success -> {
+                    dataRefreshTrackingFlow.updateStatus(InProgress(progress = 1f))
+                    delay(FULL_PROGRESS_DISPLAY_MILLIS.milliseconds)
+                    dataRefreshTrackingFlow.updateStatus(FinishedWithSuccess)
+                }
+                is Failure -> dataRefreshTrackingFlow.updateStatus(FinishedWithFailure)
+            }
         }
+    }
+
+    private companion object {
+        private const val FULL_PROGRESS_DISPLAY_MILLIS = 300L
     }
 }

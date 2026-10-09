@@ -1,9 +1,13 @@
 package net.svaroh.passly.feature.transferaccounttoanotherdevice.usecase
 
-import net.svaroh.passly.core.accounts.usecase.accountdata.GetSelectedAccountDataUseCase
-import net.svaroh.passly.core.accounts.usecase.privatekey.GetSelectedUserPrivateKeyUseCase
+import kotlinx.coroutines.withContext
+import net.svaroh.passly.core.architecture.result.DomainResult
+import net.svaroh.passly.core.architecture.result.displayMessage
 import net.svaroh.passly.core.mvp.coroutinecontext.CoroutineLaunchContext
-import net.svaroh.passly.core.networking.NetworkResult
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountDataUseCase
+import net.svaroh.passly.domain.accounts.usecase.GetSelectedAccountUseCase
+import net.svaroh.passly.domain.mobiletransfer.MobileTransferRepository
+import net.svaroh.passly.domain.privatekey.PrivateKeyRepository
 import net.svaroh.passly.dto.request.BrowserFirstLoginAccountRequestDto
 import net.svaroh.passly.dto.request.BrowserFirstLoginResponseRequestDto
 import net.svaroh.passly.dto.response.qrcode.BrowserFirstLoginPageDto
@@ -11,15 +15,14 @@ import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogi
 import net.svaroh.passly.feature.transferaccounttoanotherdevice.browserfirstlogin.BrowserFirstLoginPrivateKeyPayloadCrypto.PrivateKeyPayload
 import net.svaroh.passly.gopenpgp.OpenPgp
 import net.svaroh.passly.gopenpgp.exception.OpenPgpResult
-import net.svaroh.passly.passboltapi.registration.MobileTransferRepository
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.URI
 
 class CompleteBrowserFirstLoginUseCase(
     private val mobileTransferRepository: MobileTransferRepository,
+    private val getSelectedAccountUseCase: GetSelectedAccountUseCase,
     private val getSelectedAccountDataUseCase: GetSelectedAccountDataUseCase,
-    private val getSelectedUserPrivateKeyUseCase: GetSelectedUserPrivateKeyUseCase,
+    private val privateKeyRepository: PrivateKeyRepository,
     private val openPgp: OpenPgp,
     private val coroutineLaunchContext: CoroutineLaunchContext,
 ) {
@@ -75,9 +78,14 @@ class CompleteBrowserFirstLoginUseCase(
             return Output.DomainMismatch(page.domain, accountData.url)
         }
 
-        val privateKey = requireNotNull(getSelectedUserPrivateKeyUseCase.execute(Unit).privateKey) {
-            "Selected account private key is not available."
-        }
+        val userId =
+            requireNotNull(getSelectedAccountUseCase.execute(Unit).selectedAccount) {
+                "No selected account is available."
+            }
+        val privateKey =
+            requireNotNull(privateKeyRepository.getPrivateKey(userId)?.armoredKey) {
+                "Selected account private key is not available."
+            }
         val fingerprint =
             when (val result = openPgp.getKeyFingerprint(privateKey)) {
                 is OpenPgpResult.Error -> {
@@ -99,11 +107,11 @@ class CompleteBrowserFirstLoginUseCase(
                     BrowserFirstLoginAccountRequestDto(page.secret, serverUserId, fingerprint),
                 )
         ) {
-            is NetworkResult.Failure -> {
-                logNetworkFailure("set account", page.requestId, response)
-                return Output.Failure(response.headerMessage)
+            is DomainResult.Incomplete -> {
+                Timber.e("[BrowserFirstLogin] Network failure step=set account message=%s", response.displayMessage())
+                return Output.Failure(response.displayMessage())
             }
-            is NetworkResult.Success ->
+            is DomainResult.Finished ->
                 Timber.i("[BrowserFirstLogin] Account set request=%s", page.requestId.redactedId())
         }
 
@@ -131,11 +139,11 @@ class CompleteBrowserFirstLoginUseCase(
                     BrowserFirstLoginResponseRequestDto(page.secret, encryptedPrivateKey),
                 )
         ) {
-            is NetworkResult.Failure -> {
-                logNetworkFailure("set response", page.requestId, response)
-                Output.Failure(response.headerMessage)
+            is DomainResult.Incomplete -> {
+                Timber.e("[BrowserFirstLogin] Network failure step=set response message=%s", response.displayMessage())
+                Output.Failure(response.displayMessage())
             }
-            is NetworkResult.Success -> {
+            is DomainResult.Finished -> {
                 Timber.i("[BrowserFirstLogin] Completed request=%s", page.requestId.redactedId())
                 Output.Success
             }
@@ -153,25 +161,6 @@ class CompleteBrowserFirstLoginUseCase(
                 firstUri.host == secondUri.host &&
                 firstUri.effectivePort() == secondUri.effectivePort()
         }.getOrDefault(false)
-
-    private fun logNetworkFailure(
-        step: String,
-        requestId: String,
-        response: NetworkResult.Failure<*>,
-    ) {
-        Timber.e(
-            "[BrowserFirstLogin] Network failure step=%s request=%s type=%s code=%s unauthorized=%s noNetwork=%s " +
-                "timeout=%s message=%s",
-            step,
-            requestId.redactedId(),
-            response.javaClass.simpleName,
-            response.errorCode,
-            response.isUnauthorized,
-            response.isNoNetworkException,
-            response.isServerNotReachable,
-            response.headerMessage,
-        )
-    }
 
     private fun String.redactedId(): String = take(8).ifBlank { "empty" }
 

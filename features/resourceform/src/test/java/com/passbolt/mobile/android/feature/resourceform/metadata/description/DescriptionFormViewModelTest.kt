@@ -25,6 +25,12 @@ package net.svaroh.passly.feature.resourceform.metadata.description
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormIntent.ApplyChanges
 import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormIntent.DescriptionChanged
 import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormIntent.GoBack
@@ -32,12 +38,6 @@ import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFo
 import net.svaroh.passly.feature.resourceform.metadata.description.DescriptionFormSideEffect.NavigateBack
 import net.svaroh.passly.ui.LeadingContentType
 import net.svaroh.passly.ui.ResourceFormMode
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

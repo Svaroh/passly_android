@@ -36,6 +36,7 @@ fun Module.authWithDuoModule() {
         AuthWithDuoViewModel(
             authToken = params[0],
             hasOtherProvider = params[1],
+            isSetupFlow = params[2],
             getDuoPromptUseCase = get(),
             verifyDuoCallbackUseCase = get(),
             refreshSessionUseCase = get(),

@@ -1,6 +1,6 @@
 package net.svaroh.passly.feature.settings.screen.appsettings.defaultfilter
 
-import net.svaroh.passly.ui.DefaultFilterModel
+import net.svaroh.passly.ui.DefaultFilterUiModel
 
 /**
  * Passbolt - Open source password manager for teams
@@ -26,6 +26,6 @@ import net.svaroh.passly.ui.DefaultFilterModel
  */
 
 data class DefaultFilterState(
-    val allFilters: List<DefaultFilterModel> = emptyList(),
-    val selectedFilter: DefaultFilterModel? = null,
+    val allFilters: List<DefaultFilterUiModel> = emptyList(),
+    val selectedFilter: DefaultFilterUiModel? = null,
 )

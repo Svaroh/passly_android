@@ -43,6 +43,12 @@ import net.svaroh.passly.database.migrations.Migration20to21
 import net.svaroh.passly.database.migrations.Migration21to22
 import net.svaroh.passly.database.migrations.Migration22to23
 import net.svaroh.passly.database.migrations.Migration23to24
+import net.svaroh.passly.database.migrations.Migration24to25
+import net.svaroh.passly.database.migrations.Migration25to26
+import net.svaroh.passly.database.migrations.Migration26to27
+import net.svaroh.passly.database.migrations.Migration27to28
+import net.svaroh.passly.database.migrations.Migration28to29
+import net.svaroh.passly.database.migrations.Migration29to30
 import net.svaroh.passly.database.migrations.Migration2to3
 import net.svaroh.passly.database.migrations.Migration3to4
 import net.svaroh.passly.database.migrations.Migration4to5
@@ -630,20 +636,179 @@ class DatabaseMigrationsTest {
         helper
             .createDatabase(TEST_DB, 23)
             .apply {
-                execSQL("INSERT INTO ResourceType VALUES('1', 'resourceTypeName', 'resourceTypeSlug', 1644909225833)")
-                execSQL(
-                    "INSERT INTO Resource VALUES('resId','folderid','READ', '1'," +
-                        " 'favouriteId', 1644909225833, 1644909225833, null, 'SHARED', 'UPDATED')",
-                )
                 close()
             }
 
         helper
             .runMigrationsAndValidate(TEST_DB, 24, true, Migration23to24)
             .apply {
+                val cursor =
+                    query(
+                        "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'index_%'",
+                    )
+                val indexNames = mutableListOf<String>()
+                while (cursor.moveToNext()) {
+                    indexNames.add(cursor.getString(0))
+                }
+                cursor.close()
+
+                assertThat(indexNames).containsAtLeast(
+                    "index_Resource_folderId",
+                    "index_Resource_resourceTypeId",
+                    "index_ResourceAndTagsCrossRef_resourceId",
+                    "index_ResourceAndGroupsCrossRef_groupId",
+                    "index_UsersAndGroupCrossRef_groupId",
+                    "index_ResourceAndUsersCrossRef_userId",
+                    "index_FolderAndUsersCrossRef_folderId",
+                    "index_FolderAndGroupsCrossRef_groupId",
+                    "index_ResourceUri_resourceId",
+                    "index_MetadataPrivateKey_metadataKeyId",
+                )
+
+                close()
+            }
+    }
+
+    @Test
+    fun migrate24To25() {
+        helper
+            .createDatabase(TEST_DB, 24)
+            .apply {
+                execSQL("INSERT INTO Folder VALUES('folderId', 'folderName', 'READ', null, 0, 'UPDATED')")
+                close()
+            }
+
+        helper
+            .runMigrationsAndValidate(TEST_DB, 25, true, Migration24to25)
+            .apply {
+                val cursor = query("SELECT modified FROM Folder WHERE folderId = 'folderId'")
+                cursor.moveToFirst()
+                assertThat(cursor.getLong(0)).isEqualTo(0)
+                cursor.close()
+
                 execSQL(
-                    "INSERT INTO Secret VALUES('resId', 'secretId', '-----BEGIN PGP MESSAGE-----', " +
-                        "1644909225833, 1644909225900)",
+                    "INSERT INTO Folder VALUES('folderId2', 'folderName2', 'READ', null, 0, 'UPDATED', 1644909225833)",
+                )
+
+                close()
+            }
+    }
+
+    @Test
+    fun migrate25To26() {
+        helper
+            .createDatabase(TEST_DB, 25)
+            .apply {
+                execSQL(
+                    "INSERT INTO User VALUES('id','username',1,'fName','lName','avatar','userKeyId','armoredKey'," +
+                        "4096,'uid','keyId','fingerprint','type',1644909225833, 1644909225830)",
+                )
+                close()
+            }
+
+        helper
+            .runMigrationsAndValidate(TEST_DB, 26, true, Migration25to26)
+            .apply {
+                val cursor = query("SELECT updateState FROM User WHERE id = 'id'")
+                cursor.moveToFirst()
+                assertThat(cursor.getString(0)).isEqualTo("UPDATED")
+                cursor.close()
+
+                execSQL(
+                    "INSERT INTO User VALUES('id2','username',1,'fName','lName','avatar','userKeyId','armoredKey'," +
+                        "4096,'uid','keyId','fingerprint','type',1644909225833, 1644909225830, 'PENDING')",
+                )
+
+                close()
+            }
+    }
+
+    @Test
+    fun migrate26To27() {
+        helper
+            .createDatabase(TEST_DB, 26)
+            .apply {
+                execSQL("INSERT INTO UsersGroup VALUES('groupId', 'groupName')")
+                close()
+            }
+
+        helper
+            .runMigrationsAndValidate(TEST_DB, 27, true, Migration26to27)
+            .apply {
+                val cursor = query("SELECT updateState FROM UsersGroup WHERE groupId = 'groupId'")
+                cursor.moveToFirst()
+                assertThat(cursor.getString(0)).isEqualTo("UPDATED")
+                cursor.close()
+
+                execSQL("INSERT INTO UsersGroup VALUES('groupId2', 'groupName2', 'PENDING')")
+
+                close()
+            }
+    }
+
+    @Test
+    fun migrate27To28() {
+        helper
+            .createDatabase(TEST_DB, 27)
+            .apply {
+                execSQL(
+                    "INSERT INTO Folder(folderId, name, permission, parentId, isShared, modified, updateState) " +
+                        "VALUES('folderId1', 'parentFolder', 'READ', null, 0, 1644909225833, 'UPDATED')",
+                )
+                execSQL(
+                    "INSERT INTO Folder(folderId, name, permission, parentId, isShared, modified, updateState) " +
+                        "VALUES('folderId2', 'childFolder', 'READ', 'folderId1', 0, 1644909225834, 'UPDATED')",
+                )
+                close()
+            }
+
+        helper
+            .runMigrationsAndValidate(TEST_DB, 28, true, Migration27to28)
+            .apply {
+                val cursor =
+                    query(
+                        "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'index_%'",
+                    )
+                val indexNames = mutableListOf<String>()
+                while (cursor.moveToNext()) {
+                    indexNames.add(cursor.getString(0))
+                }
+                cursor.close()
+
+                assertThat(indexNames).containsAtLeast(
+                    "index_Folder_parentId",
+                    "index_Folder_modified_folderId",
+                    "index_Resource_modified_resourceId",
+                    "index_Resource_expiry_resourceId",
+                    "index_Resource_favouriteId",
+                )
+
+                val childFoldersCursor = query("SELECT count(*) FROM Folder WHERE parentId = 'folderId1'")
+                childFoldersCursor.moveToFirst()
+                assertThat(childFoldersCursor.getInt(0)).isEqualTo(1)
+                childFoldersCursor.close()
+
+                close()
+            }
+    }
+
+    @Test
+    fun migrate28To29() {
+        helper
+            .createDatabase(TEST_DB, 28)
+            .apply {
+                execSQL("INSERT INTO ResourceType VALUES('1', 'name', 'slug', null)")
+                execSQL(
+                    "INSERT INTO Resource VALUES('resId', null, 'READ', '1', null, 1644909225833, null, null, null, 'UPDATED')",
+                )
+                close()
+            }
+
+        helper
+            .runMigrationsAndValidate(TEST_DB, 29, true, Migration28to29)
+            .apply {
+                execSQL(
+                    "INSERT INTO Secret VALUES('resId', 'secretId', '-----BEGIN PGP MESSAGE-----', 1644909225833, 1644909225900)",
                 )
 
                 val cursor = query("SELECT armoredData FROM Secret WHERE resourceId = 'resId'")
@@ -658,18 +823,17 @@ class DatabaseMigrationsTest {
     @Test
     fun deletingAResourceRemovesItsSecret() {
         helper
-            .createDatabase(TEST_DB, 23)
+            .createDatabase(TEST_DB, 28)
             .apply {
-                execSQL("INSERT INTO ResourceType VALUES('1', 'resourceTypeName', 'resourceTypeSlug', 1644909225833)")
+                execSQL("INSERT INTO ResourceType VALUES('1', 'resourceTypeName', 'resourceTypeSlug', null)")
                 execSQL(
-                    "INSERT INTO Resource VALUES('resId','folderid','READ', '1'," +
-                        " 'favouriteId', 1644909225833, 1644909225833, null, 'SHARED', 'UPDATED')",
+                    "INSERT INTO Resource VALUES('resId', null, 'READ', '1', 'favouriteId', 1644909225833, null, null, null, 'UPDATED')",
                 )
                 close()
             }
 
         helper
-            .runMigrationsAndValidate(TEST_DB, 24, true, Migration23to24)
+            .runMigrationsAndValidate(TEST_DB, 29, true, Migration28to29)
             .apply {
                 execSQL("PRAGMA foreign_keys = ON")
                 execSQL(
@@ -721,9 +885,30 @@ class DatabaseMigrationsTest {
                 Migration21to22,
                 Migration22to23,
                 Migration23to24,
+                Migration24to25,
+                Migration25to26,
+                Migration26to27,
+                Migration27to28,
+                Migration28to29,
+                Migration29to30,
             ).build()
             .apply {
                 openHelper.writableDatabase
+                close()
+            }
+    }
+
+    @Test
+    fun migration29to30() {
+        helper
+            .createDatabase(TEST_DB, 29)
+            .apply {
+                close()
+            }
+
+        helper
+            .runMigrationsAndValidate(TEST_DB, 30, true, Migration29to30)
+            .apply {
                 close()
             }
     }

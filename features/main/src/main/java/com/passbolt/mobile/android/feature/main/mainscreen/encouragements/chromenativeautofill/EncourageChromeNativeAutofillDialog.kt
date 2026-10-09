@@ -1,6 +1,5 @@
 package net.svaroh.passly.feature.main.mainscreen.encouragements.chromenativeautofill
 
-import PassboltTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -32,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.ui.button.PrimaryButton
 import net.svaroh.passly.core.ui.circlestepsview.CircleStepIcon
 import net.svaroh.passly.core.ui.circlestepsview.CircleStepItemModel

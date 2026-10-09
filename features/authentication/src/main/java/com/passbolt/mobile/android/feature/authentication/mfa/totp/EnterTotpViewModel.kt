@@ -1,5 +1,6 @@
 package net.svaroh.passly.feature.authentication.mfa.totp
 
+import kotlinx.coroutines.delay
 import net.svaroh.passly.core.compose.SideEffectViewModel
 import net.svaroh.passly.feature.authentication.auth.usecase.RefreshSessionUseCase
 import net.svaroh.passly.feature.authentication.auth.usecase.SignOutUseCase
@@ -11,6 +12,8 @@ import net.svaroh.passly.feature.authentication.auth.usecase.VerifyTotpUseCase.O
 import net.svaroh.passly.feature.authentication.auth.usecase.VerifyTotpUseCase.Output.WrongCode
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.ChooseOtherProvider
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.Close
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.ConfirmSetupLeave
+import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.DismissSetupLeave
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.PasteFromClipboard
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.ToggleRememberMe
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpIntent.ValidateOtp
@@ -25,11 +28,12 @@ import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.Sna
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.NETWORK
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.SESSION_EXPIRED
 import net.svaroh.passly.feature.authentication.mfa.totp.EnterTotpSideEffect.SnackbarErrorType.WRONG_CODE
-import kotlinx.coroutines.delay
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 class EnterTotpViewModel(
     hasOtherProvider: Boolean,
+    private val isSetupFlow: Boolean,
     private val authToken: String?,
     private val signOutUseCase: SignOutUseCase,
     private val verifyTotpUseCase: VerifyTotpUseCase,
@@ -43,7 +47,20 @@ class EnterTotpViewModel(
             is ChooseOtherProvider -> emitSideEffect(NotifyChooseOtherProvider(authToken))
             is ToggleRememberMe -> updateViewState { copy(rememberMe = intent.checked) }
             is ValidateOtp -> validateOtp(intent.otp)
-            is Close -> signOutAndClose()
+            is Close -> close()
+            is ConfirmSetupLeave -> {
+                updateViewState { copy(showSetupLeaveConfirmationDialog = false) }
+                signOutAndClose()
+            }
+            is DismissSetupLeave -> updateViewState { copy(showSetupLeaveConfirmationDialog = false) }
+        }
+    }
+
+    private fun close() {
+        if (isSetupFlow) {
+            updateViewState { copy(showSetupLeaveConfirmationDialog = true) }
+        } else {
+            signOutAndClose()
         }
     }
 
@@ -57,7 +74,7 @@ class EnterTotpViewModel(
                         VerifyTotpUseCase.Input(otp, authToken.orEmpty(), viewState.value.rememberMe),
                     )
             ) {
-                is Failure<*> -> genericError()
+                is Failure -> genericError()
                 is NetworkFailure -> networkError()
                 is Success -> otpSuccess(result.mfaHeader)
                 is WrongCode -> totpError()
@@ -98,7 +115,7 @@ class EnterTotpViewModel(
     private fun totpError() {
         launch {
             updateViewState { copy(otpTextColor = EnterTotpState.OtpTextColor.ERROR) }
-            delay(CLEAR_INPUT_DELAY_MILLIS)
+            delay(CLEAR_INPUT_DELAY)
             updateViewState { copy(otpTextColor = EnterTotpState.OtpTextColor.DEFAULT) }
             emitSideEffect(ClearOtp)
         }
@@ -115,6 +132,6 @@ class EnterTotpViewModel(
     }
 
     private companion object {
-        private const val CLEAR_INPUT_DELAY_MILLIS = 1000L
+        private val CLEAR_INPUT_DELAY = 1000L.milliseconds
     }
 }

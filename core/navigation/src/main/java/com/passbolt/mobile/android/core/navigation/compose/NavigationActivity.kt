@@ -1,7 +1,7 @@
 package net.svaroh.passly.core.navigation.compose
 
-import net.svaroh.passly.core.navigation.AccountSetupDataModel
 import net.svaroh.passly.core.navigation.AppContext
+import net.svaroh.passly.ui.AccountSetupDataModel
 
 sealed interface NavigationActivity {
     data class AuthenticationStartUp(

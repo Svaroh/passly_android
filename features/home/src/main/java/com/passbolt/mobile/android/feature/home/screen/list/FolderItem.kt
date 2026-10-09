@@ -48,8 +48,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.svaroh.passly.common.extension.toSingleLine
+import net.svaroh.passly.domain.folders.model.FolderWithCountAndPath
 import net.svaroh.passly.testtags.composetags.Home
-import net.svaroh.passly.ui.FolderWithCountAndPath
 import net.svaroh.passly.ui.ResourcePermission
 import net.svaroh.passly.core.localization.R as LocalizationR
 import net.svaroh.passly.core.ui.R as CoreUiR
@@ -174,7 +174,6 @@ private fun SharedFolderItemPreview() {
             isShared = true,
             subItemsCount = 12,
             path = "Parent Folder",
-            searchCriteria = "Shared Team Folder",
         )
 
     MaterialTheme {

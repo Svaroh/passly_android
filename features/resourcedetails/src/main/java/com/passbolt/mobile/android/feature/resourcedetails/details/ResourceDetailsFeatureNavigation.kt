@@ -1,6 +1,6 @@
 package net.svaroh.passly.feature.resourcedetails.details
 
-import PassboltTheme
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.navigation.compose.base.EntryProviderInstaller
 import net.svaroh.passly.core.navigation.compose.base.FeatureModuleNavigation
 import net.svaroh.passly.core.navigation.compose.keys.ResourceDetailsNavigationKey.ResourceDetails

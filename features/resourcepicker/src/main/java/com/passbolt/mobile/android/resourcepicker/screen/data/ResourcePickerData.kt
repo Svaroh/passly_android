@@ -23,9 +23,23 @@
 
 package net.svaroh.passly.resourcepicker.screen.data
 
+import androidx.paging.LoadState
+import androidx.paging.LoadStates
+import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import net.svaroh.passly.ui.ResourcePickerListItem
 
 data class ResourcePickerData(
-    val suggestedResources: List<ResourcePickerListItem> = emptyList(),
-    val resources: List<ResourcePickerListItem> = emptyList(),
+    val suggestedResources: Flow<PagingData<ResourcePickerListItem>> = settledEmptyPagingData(),
+    val resources: Flow<PagingData<ResourcePickerListItem>> = settledEmptyPagingData(),
 )
+
+private val settledLoadStates =
+    LoadStates(
+        refresh = LoadState.NotLoading(endOfPaginationReached = true),
+        prepend = LoadState.NotLoading(endOfPaginationReached = true),
+        append = LoadState.NotLoading(endOfPaginationReached = true),
+    )
+
+internal fun <T : Any> settledEmptyPagingData(): Flow<PagingData<T>> = flowOf(PagingData.empty(settledLoadStates))

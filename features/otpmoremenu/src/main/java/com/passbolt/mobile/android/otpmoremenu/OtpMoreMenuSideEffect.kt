@@ -26,6 +26,8 @@ package net.svaroh.passly.otpmoremenu
 sealed interface OtpMoreMenuSideEffect {
     data object Dismiss : OtpMoreMenuSideEffect
 
+    data object ShowContentNotAvailable : OtpMoreMenuSideEffect
+
     data object InvokeShowOtp : OtpMoreMenuSideEffect
 
     data object InvokeCopyOtp : OtpMoreMenuSideEffect

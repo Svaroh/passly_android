@@ -23,7 +23,6 @@
 
 package net.svaroh.passly.feature.resourceform.additionalsecrets.totp
 
-import PassboltTheme
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -55,6 +54,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import net.svaroh.passly.core.compose.PassboltTheme
 import net.svaroh.passly.core.compose.SideEffectDispatcher
 import net.svaroh.passly.core.navigation.compose.AppNavigator
 import net.svaroh.passly.core.navigation.compose.keys.OtpNavigationKey.ScanOtp
@@ -63,6 +63,7 @@ import net.svaroh.passly.core.navigation.compose.keys.ResourceFormNavigationKey.
 import net.svaroh.passly.core.navigation.compose.results.NavigationResultEventBus
 import net.svaroh.passly.core.navigation.compose.results.ResultEffect
 import net.svaroh.passly.core.navigation.compose.results.ScanOtpResultEvent
+import net.svaroh.passly.core.security.flagsecure.FlagSecureEffect
 import net.svaroh.passly.core.ui.button.PrimaryButton
 import net.svaroh.passly.core.ui.button.SecondaryIconButton
 import net.svaroh.passly.core.ui.text.TextInput
@@ -104,6 +105,8 @@ internal fun TotpFormScreen(
     navigator: AppNavigator = koinInject(),
     viewModel: TotpFormViewModel = koinViewModel(parameters = { parametersOf(mode, totpUiModel) }),
 ) {
+    FlagSecureEffect()
+
     val state = viewModel.viewState.collectAsStateWithLifecycle()
     val resultBus = NavigationResultEventBus.current
 

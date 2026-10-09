@@ -4,15 +4,16 @@ import android.app.assist.AssistStructure
 import android.content.Intent
 import android.os.Bundle
 import android.view.autofill.AutofillManager.EXTRA_ASSIST_STRUCTURE
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.remember
 import androidx.core.content.IntentCompat
-import net.svaroh.passly.common.lifecycleawarelazy.lifecycleAwareLazy
 import net.svaroh.passly.core.navigation.ActivityIntents
 import net.svaroh.passly.core.navigation.AutofillMode
+import net.svaroh.passly.core.navigation.AutofillType
 import net.svaroh.passly.core.navigation.compose.APP_NAVIGATOR_SCOPE
+import net.svaroh.passly.core.ui.orientation.LockCompactScreenOrientation
 import net.svaroh.passly.feature.autofill.resources.AutofillResourcesIntent.NewResourceCreated
 import net.svaroh.passly.feature.autofill.resources.AutofillResourcesIntent.SelectAutofillItem
 import net.svaroh.passly.feature.autofill.resources.datasetstrategy.AutofillCallback
@@ -30,7 +31,7 @@ import java.util.UUID
 
 // NOTE: When changing name or package read core/navigation/README.md
 class AutofillResourcesActivity :
-    AppCompatActivity(),
+    ComponentActivity(),
     AndroidScopeComponent,
     AutofillCallback,
     ResourceHandlingStrategyProvider {
@@ -41,13 +42,19 @@ class AutofillResourcesActivity :
 
     override lateinit var resourceHandlingStrategy: AutofillResourceHandlingStrategy
 
-    private val bundledAutofillUri by lifecycleAwareLazy {
+    private val bundledAutofillUri by lazy {
         intent.getStringExtra(ActivityIntents.EXTRA_AUTOFILL_URI)
     }
-    private val bundledAutofillMode by lifecycleAwareLazy {
+    private val bundledAutofillMode by lazy {
         intent.getStringExtra(ActivityIntents.EXTRA_AUTOFILL_MODE_NAME).let {
             AutofillMode.valueOf(requireNotNull(it))
         }
+    }
+    private val bundledAutofillType by lazy {
+        intent
+            .getStringExtra(ActivityIntents.EXTRA_AUTOFILL_TYPE_NAME)
+            ?.let { AutofillType.valueOf(it) }
+            ?: AutofillType.CREDENTIALS
     }
 
     private lateinit var returnAutofillDatasetStrategy: ReturnAutofillDatasetStrategy
@@ -61,6 +68,7 @@ class AutofillResourcesActivity :
             scope.get(named(bundledAutofillMode)) { parametersOf(this as AutofillCallback) }
 
         setContent {
+            LockCompactScreenOrientation()
             viewModel =
                 koinViewModel(
                     parameters = { parametersOf(bundledAutofillUri) },
@@ -80,6 +88,7 @@ class AutofillResourcesActivity :
             ) {
                 AutofillResourcesScreen(
                     autofillUri = bundledAutofillUri,
+                    autofillType = bundledAutofillType,
                     returnAutofillDatasetStrategy = returnAutofillDatasetStrategy,
                     viewModel = viewModel,
                 )

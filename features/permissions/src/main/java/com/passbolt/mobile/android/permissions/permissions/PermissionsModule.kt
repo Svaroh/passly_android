@@ -23,11 +23,14 @@
 
 package net.svaroh.passly.permissions.permissions
 
+import net.svaroh.passly.permissions.common.PermissionsListMapper
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModel
 
 fun Module.permissionsModule() {
     single { PermissionModelUiComparator() }
+    factoryOf(::PermissionsListMapper)
     viewModel { params ->
         PermissionsViewModel(
             permissionsItem = params.get(),
@@ -37,15 +40,10 @@ fun Module.permissionsModule() {
             getLocalResourceUseCase = get(),
             getLocalFolderPermissionsUseCase = get(),
             getLocalFolderUseCase = get(),
-            permissionModelUiComparator = get(),
-            resourceShareInteractor = get(),
-            homeDataInteractor = get(),
-            resourceTypeIdToSlugMappingProvider = get(),
-            metadataPrivateKeysHelperInteractor = get(),
-            canShareResourceUseCase = get(),
+            permissionsListMapper = get(),
+            resourceAccessInteractor = get(),
             dataRefreshTrackingFlow = get(),
             coroutineLaunchContext = get(),
-            resourceUpdateActionsInteractorFactory = get(),
         )
     }
 }
