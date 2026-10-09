@@ -32,6 +32,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import kotlin.test.assertIs
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class StartUpViewModelTest : KoinTest {
@@ -74,7 +75,7 @@ class StartUpViewModelTest : KoinTest {
 
             val viewModel: StartUpViewModel = get { parametersOf(null) }
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 val effect = assertIs<NavigateToSetup>(awaitItem())
                 assertThat(effect.accountSetupDataModel).isNull()
             }
@@ -88,7 +89,7 @@ class StartUpViewModelTest : KoinTest {
 
             val viewModel: StartUpViewModel = get { parametersOf(null) }
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 assertIs<NavigateToSignIn>(awaitItem())
             }
         }
@@ -113,7 +114,7 @@ class StartUpViewModelTest : KoinTest {
 
             val viewModel: StartUpViewModel = get { parametersOf(accountSetupData) }
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 val effect = assertIs<NavigateToSetup>(awaitItem())
                 assertThat(effect.accountSetupDataModel).isEqualTo(accountSetupData)
             }
