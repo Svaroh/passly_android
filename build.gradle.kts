@@ -78,3 +78,12 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
+
+tasks.register("coverageReport") {
+    group = "verification"
+    description = "Runs JaCoCo unit-test coverage reports for all Android modules."
+    dependsOn(subprojects.map { subproject ->
+        subproject.tasks.matching { it.name == "jacocoDebugUnitTestReport" }
+    })
+}
+

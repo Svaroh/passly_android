@@ -55,6 +55,7 @@ kotlin {
 }
 
 registerUnitTestAggregate()
+registerCoverageTasks()
 
 dependencies {
     implementation(commonDeps.kotlinStdlib)
