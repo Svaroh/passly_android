@@ -662,19 +662,19 @@ class ResourceUpdateActionsInteractor(
 @Suppress("LongParameterList")
 suspend fun performResourceUpdateAction(
     action: suspend () -> Flow<ResourceUpdateActionResult>,
-    doOnCryptoFailure: (String) -> Unit,
-    doOnFailure: (String) -> Unit,
-    doOnSuccess: (ResourceUpdateActionResult.Success) -> Unit,
-    doOnSchemaValidationFailure: (SchemaEntity) -> Unit,
-    doOnCannotEditWithCurrentConfig: () -> Unit,
-    doOnMetadataKeyModified: (NewMetadataKeyToTrustModel) -> Unit,
-    doOnMetadataKeyDeleted: (TrustedKeyDeletedModel) -> Unit,
-    doOnFetchFailure: () -> Unit = {},
-    doOnUnauthorized: () -> Unit = {},
-    doOnMetadataKeyVerificationFailure: () -> Unit = {},
-    doOnShareFailure: (String) -> Unit = {},
-    doOnPermissionsDrifted: (ResourceUpdateActionResult.PermissionsDrifted) -> Unit = {},
-    doOnFinish: () -> Unit = {},
+    doOnCryptoFailure: suspend (String) -> Unit,
+    doOnFailure: suspend (String) -> Unit,
+    doOnSuccess: suspend (ResourceUpdateActionResult.Success) -> Unit,
+    doOnSchemaValidationFailure: suspend (SchemaEntity) -> Unit,
+    doOnCannotEditWithCurrentConfig: suspend () -> Unit,
+    doOnMetadataKeyModified: suspend (NewMetadataKeyToTrustModel) -> Unit,
+    doOnMetadataKeyDeleted: suspend (TrustedKeyDeletedModel) -> Unit,
+    doOnFetchFailure: suspend () -> Unit = {},
+    doOnUnauthorized: suspend () -> Unit = {},
+    doOnMetadataKeyVerificationFailure: suspend () -> Unit = {},
+    doOnShareFailure: suspend (String) -> Unit = {},
+    doOnPermissionsDrifted: suspend (ResourceUpdateActionResult.PermissionsDrifted) -> Unit = {},
+    doOnFinish: suspend () -> Unit = {},
 ) {
     action().single().let {
         doOnFinish()

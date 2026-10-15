@@ -1307,11 +1307,9 @@ class ResourceFormViewModel(
                 }
             },
             doOnSuccess = {
-                launch {
-                    resourceModelHandler.initializeModelForEdition((mode as Edit).resourceId)
-                    setupState()
-                    emitSideEffect(ShowSnackbar(SnackbarMessage.RESOURCE_UPGRADED))
-                }
+                resourceModelHandler.initializeModelForEdition((mode as Edit).resourceId)
+                setupState()
+                emitSideEffect(ShowSnackbar(SnackbarMessage.RESOURCE_UPGRADED))
             },
             doOnFailure = { emitSideEffect(ShowSnackbar(SnackbarMessage.COMMON_FAILURE)) },
             doOnCryptoFailure = { emitSideEffect(ShowSnackbar(SnackbarMessage.ENCRYPTION_FAILURE)) },
