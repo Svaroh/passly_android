@@ -21,8 +21,8 @@ package net.svaroh.passly.feature.autofill.passkey
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.credentials.CreateCredentialRequest
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.CreatePublicKeyCredentialResponse
@@ -66,7 +66,7 @@ import org.koin.core.component.inject
 import timber.log.Timber
 
 class PasskeyCredentialProviderActivity :
-    AppCompatActivity(),
+    ComponentActivity(),
     KoinComponent {
     private val secretInteractor: SecretInteractor by inject()
     private val createResourceInteractor: CreateResourceInteractor by inject()
@@ -176,6 +176,7 @@ class PasskeyCredentialProviderActivity :
         )
     }
 
+    @Suppress("ReturnCount")
     private suspend fun buildAssertionOutcome(): AssertionOutcome {
         val request =
             requireNotNull(PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)) {
@@ -398,6 +399,7 @@ class PasskeyCredentialProviderActivity :
             ?.callingRequest
             ?.toPasskeyCreateRequest() != null
 
+    @Suppress("ReturnCount")
     private fun CreateCredentialRequest.toPasskeyCreateRequest(): PasskeyCreateRequest? {
         if (this is CreatePublicKeyCredentialRequest) {
             return PasskeyCreateRequest(requestJson, clientDataHash)
