@@ -1,4 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>passbolt/passbolt-ops/renovate"]
+  "extends": ["local>passly/passly-ops/renovate"]
 }

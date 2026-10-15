@@ -1,6 +1,6 @@
 ---
 name: Report a bug
-about: Report a bug in the Passbolt Android application.
+about: Report a bug in the Passly Android application.
 title: ""
 labels: bug
 assignees: ""

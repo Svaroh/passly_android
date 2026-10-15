@@ -31,7 +31,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Passbolt"
+rootProject.name = "Passly"
 
 fun projectModule(
     name: String,
