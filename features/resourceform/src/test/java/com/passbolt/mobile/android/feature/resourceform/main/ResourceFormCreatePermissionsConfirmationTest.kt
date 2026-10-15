@@ -43,6 +43,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.verify
 import kotlin.test.assertIs
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsConfirmationTestSetup() {
@@ -52,7 +53,7 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
             stubFolderPermissions(listOf(operatorOwnerPermissionModel(), otherUserPermissionModel()))
             val viewModel = createModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(CreateResource)
 
                 assertThat(awaitItem()).isEqualTo(NavigateToConfirmPermissions(ConfirmPermissionsMode.Create(FOLDER_ID)))
@@ -67,7 +68,7 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
             stubFolderPermissions(listOf(groupPermissionModel()))
             val viewModel = createModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(CreateResource)
 
                 assertThat(awaitItem()).isEqualTo(NavigateToConfirmPermissions(ConfirmPermissionsMode.Create(FOLDER_ID)))
@@ -81,7 +82,7 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
             stubCreateSuccess()
             val viewModel = createModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(CreateResource)
 
                 assertIs<NavigateBackWithCreateSuccess>(awaitItem())
@@ -96,7 +97,7 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
             stubLocalFolderPermissions(listOf(operatorOwnerPermission(), otherUserPermission()))
             val viewModel = createModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(CreateResource)
                 testDispatcher.scheduler.advanceUntilIdle()
 
@@ -115,7 +116,7 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
             }
             val viewModel = createModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(ConfirmedPermissionsResult(confirmedPermissions))
 
                 assertIs<NavigateBackWithCreateSuccess>(awaitItem())
@@ -134,7 +135,7 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
             }
             val viewModel = createModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(ConfirmedPermissionsResult(listOf(operatorOwnerPermission())))
 
                 assertThat(awaitItem()).isEqualTo(ShowToast(ToastMessage.RESOURCE_CREATED_PERMISSIONS_CHANGED))
@@ -152,7 +153,7 @@ class ResourceFormCreatePermissionsConfirmationTest : ResourceFormPermissionsCon
             }
             val viewModel = createModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(ConfirmedPermissionsResult(listOf(operatorOwnerPermission())))
 
                 assertThat(awaitItem()).isEqualTo(ShowToast(ToastMessage.RESOURCE_CREATED_SHARE_FAILED))

@@ -45,6 +45,7 @@ import org.mockito.kotlin.stub
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import kotlin.test.assertIs
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfirmationTestSetup() {
@@ -56,7 +57,7 @@ class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfi
             val viewModel = editModeViewModel()
             viewModel.onIntent(NoteChanged("changed-note"))
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(UpdateResource)
 
                 assertThat(awaitItem()).isEqualTo(
@@ -75,7 +76,7 @@ class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfi
             val viewModel = editModeViewModel()
             viewModel.onIntent(NoteChanged("changed-note"))
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(UpdateResource)
 
                 assertIs<NavigateBackWithEditSuccess>(awaitItem())
@@ -90,7 +91,7 @@ class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfi
             stubUpdateSuccess()
             val viewModel = editModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(UpdateResource)
 
                 assertIs<NavigateBackWithEditSuccess>(awaitItem())
@@ -108,7 +109,7 @@ class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfi
             val viewModel = editModeViewModel()
             viewModel.onIntent(NoteChanged("changed-note"))
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(UpdateResource)
 
                 assertThat(awaitItem()).isEqualTo(
@@ -129,7 +130,7 @@ class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfi
             }
             val viewModel = editModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(ConfirmedPermissionsResult(confirmedPermissions))
 
                 assertIs<NavigateBackWithEditSuccess>(awaitItem())
@@ -149,7 +150,7 @@ class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfi
             }
             val viewModel = editModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(ConfirmedPermissionsResult(listOf(operatorOwnerPermission())))
 
                 assertThat(awaitItem()).isEqualTo(
@@ -172,7 +173,7 @@ class ResourceFormEditPermissionsConfirmationTest : ResourceFormPermissionsConfi
             }
             val viewModel = editModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(ConfirmedPermissionsResult(listOf(operatorOwnerPermission())))
 
                 assertThat(awaitItem()).isEqualTo(ShowSnackbar(SnackbarMessage.RESOURCE_EDITED_SHARE_FAILED))

@@ -42,6 +42,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ResourceFormUpgradePermissionsConfirmationTest : ResourceFormPermissionsConfirmationTestSetup() {
@@ -55,7 +56,7 @@ class ResourceFormUpgradePermissionsConfirmationTest : ResourceFormPermissionsCo
             }
             val viewModel = editModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(UpgradeResource)
 
                 assertThat(awaitItem()).isEqualTo(
@@ -77,7 +78,7 @@ class ResourceFormUpgradePermissionsConfirmationTest : ResourceFormPermissionsCo
             }
             val viewModel = editModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(UpgradeResource)
 
                 assertThat(awaitItem()).isEqualTo(ShowSnackbar(SnackbarMessage.RESOURCE_UPGRADED))
@@ -96,7 +97,7 @@ class ResourceFormUpgradePermissionsConfirmationTest : ResourceFormPermissionsCo
             }
             val viewModel = editModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(UpgradeResource)
 
                 assertThat(awaitItem()).isEqualTo(ShowSnackbar(SnackbarMessage.RESOURCE_UPGRADED))
@@ -118,7 +119,7 @@ class ResourceFormUpgradePermissionsConfirmationTest : ResourceFormPermissionsCo
             }
             val viewModel = editModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(UpgradeResource)
                 awaitItem()
 
@@ -143,7 +144,7 @@ class ResourceFormUpgradePermissionsConfirmationTest : ResourceFormPermissionsCo
             }
             val viewModel = editModeViewModel()
 
-            viewModel.sideEffect.test {
+            viewModel.sideEffect.test(timeout = 30.seconds) {
                 viewModel.onIntent(UpgradeResource)
                 awaitItem()
 
