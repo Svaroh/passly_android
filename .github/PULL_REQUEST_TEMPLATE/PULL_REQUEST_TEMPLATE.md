@@ -3,7 +3,7 @@
 The best way to propose a feature is to open an issue on the community forum and discuss your
 ideas there before implementing them: https://community.passbolt.com/
 
-This is only a issue tracker for issues related to the Passbolt Android App.
+This is only a issue tracker for issues related to the Passly Android App.
 For passbolt docker, browser extension, command line interface, in short any other issues
 please use this [the other relevant repositories](https://github.com/passbolt).
 

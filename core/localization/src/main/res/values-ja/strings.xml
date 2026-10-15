@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">パスボルト</string>
+    <string name="app_name">Passly</string>
     <string name="ok">OK</string>
     <string name="cancel">キャンセル</string>
     <string name="settings">設定</string>
@@ -177,7 +177,7 @@
     <string name="dialog_mfa_unknown_provider_description">別のプロバイダをWebアプリで設定してください。\n    詳しくは管理者にお問い合わせください。</string>
     <string name="dialog_unable_to_generate_password_title">強力なパスワードを生成できません</string>
     <string name="dialog_unable_to_generate_password_message">パスワードジェネレーターでは十分に強力なパスワードを生成できません。最低%dビットが必要です</string>
-    <string name="autofill_service_name">パスボルト自動入力</string>
+    <string name="autofill_service_name">Passly自動入力</string>
     <string name="dialog_encourage_autofill_header">お気に入りのアプリに <b>3</b> 秒でログインしよう！</string>
     <string name="dialog_autofill_header">自動入力</string>
     <string name="dialog_encourage_autofill_accessibility_samsung">Samsung（サムスン）</string>
@@ -186,9 +186,9 @@
     <string name="dialog_encourage_autofill_accessibility_other">その他</string>
     <string name="dialog_encourage_autofill_go_to_settings">設定に移動</string>
     <string name="dialog_encourage_autofill_service_header">ほとんどのアプリで自動入力を有効にする</string>
-    <string name="dialog_encourage_autofill_service_description">Androidの設定画面で「パスボルト」を選択し、トグルをオンにして「OK」を押してください。\n    またはデバイス別のガイドを確認してください：</string>
+    <string name="dialog_encourage_autofill_service_description">Androidの設定画面で「Passly」を選択し、トグルをオンにして「OK」を押してください。\n    またはデバイス別のガイドを確認してください：</string>
     <string name="dialog_encourage_autofill_overlay_header">オーバーレイ権限を有効にする</string>
-    <string name="dialog_encourage_autofill_overlay_description">Androidの設定画面で「他のアプリの上に重ねて表示」の権限をパスボルト自動入力に付与するか、\n    またはデバイス別のガイドを参照してください：</string>
+    <string name="dialog_encourage_autofill_overlay_description">Androidの設定画面で「他のアプリの上に重ねて表示」の権限をPassly自動入力に付与するか、\n    またはデバイス別のガイドを参照してください：</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_title">自動入力はサポートされていません</string>
     <string name="dialog_encourage_autofill_autofill_not_supported_message">このデバイスでは自動入力がサポートされていません。</string>
     <string name="dialog_encourage_chrome_autofill_title">Chromeネイティブ自動入力を有効にする</string>
@@ -203,11 +203,11 @@
     <string name="autofill_select_password">パスワードを選択</string>
     <string name="autofill_service_channel_name">Passly自動入力サービス</string>
     <string name="data_sync_service_channel_name">Passly データ同期サービス</string>
-    <string name="autofill_service_title">パスボルト</string>
+    <string name="autofill_service_title">Passly</string>
     <string name="autofill_service_content">アクセシビリティ自動入力サービスが有効</string>
     <string name="data_sync_service_content">リソースを更新しています</string>
     <string name="autofill_service_enable_overlay">オーバーレイ権限を有効にする</string>
-    <string name="autofill_service_overlay_description"><![CDATA[Androidウェブブラウザでユーザー名とパスワードを自動入力します。パスボルト自動入力に「他のアプリの上に重ねて表示」の権限を付与してください]]></string>
+    <string name="autofill_service_overlay_description"><![CDATA[Androidウェブブラウザでユーザー名とパスワードを自動入力します。Passly自動入力に「他のアプリの上に重ねて表示」の権限を付与してください]]></string>
     <string name="autofill_service_enable_service">ほとんどのアプリで自動入力を有効にする</string>
     <string name="autofill_dropdown_select">Passlyから選択</string>
     <string name="autofill_dropdown_fill">Passlyで入力</string>
@@ -558,7 +558,7 @@
     </string-array>
     <string-array name="dialog_encourage_autofill_setup_steps">
         <item>&lt;b&gt;自動入力を有効にする&lt;/b&gt; 設定</item>
-        <item>「<b>パスボルト！</b>」を選択；</item>
+        <item>「<b>Passly</b>」を選択；</item>
     </string-array>
     <string-array name="dialog_encourage_chrome_native_autofill_setup_steps">
         <item>Android OSの設定でPasslyネイティブ自動入力がオンになっていることを確認してください</item>
