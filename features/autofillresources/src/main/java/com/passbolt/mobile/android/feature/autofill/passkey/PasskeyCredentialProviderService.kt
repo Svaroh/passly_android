@@ -67,8 +67,52 @@ class PasskeyCredentialProviderService :
     private val serviceScope by lazy { CoroutineScope(serviceJob + coroutineLaunchContext.ui) }
 
     override fun onDestroy() {
+        serviceJob.cancel()
         serviceScope.cancel()
+        cleanUpFrameworkLeak()
         super.onDestroy()
+    }
+
+    private fun cleanUpFrameworkLeak() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            runCatching {
+                var currentClass: Class<*>? = javaClass
+                while (currentClass != null && currentClass != Any::class.java) {
+                    val className = currentClass.name
+                    if (className == "android.service.credentials.CredentialProviderService" ||
+                        className == "androidx.credentials.provider.CredentialProviderService"
+                    ) {
+                        for (field in currentClass.declaredFields) {
+                            runCatching {
+                                field.isAccessible = true
+                                val fieldValue = field.get(this) ?: return@runCatching
+                                clearServiceReferences(fieldValue)
+                            }
+                        }
+                    }
+                    currentClass = currentClass.superclass
+                }
+            }.onFailure { error ->
+                Timber.w(error, "Failed to clean up CredentialProviderService framework leak")
+            }
+        }
+    }
+
+    private fun clearServiceReferences(target: Any) {
+        var targetClass: Class<*>? = target.javaClass
+        while (targetClass != null && targetClass != Any::class.java) {
+            for (field in targetClass.declaredFields) {
+                if (field.name.startsWith("this$") ||
+                    android.app.Service::class.java.isAssignableFrom(field.type)
+                ) {
+                    runCatching {
+                        field.isAccessible = true
+                        field.set(target, null)
+                    }
+                }
+            }
+            targetClass = targetClass.superclass
+        }
     }
 
     override fun onBeginGetCredentialRequest(

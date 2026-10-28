@@ -251,7 +251,10 @@ dependencies {
     testImplementation(libs.truth)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.androidx.navigation3.runtime)
+    testImplementation(libs.paging.compose)
+    testImplementation(libs.paging.runtime)
     testImplementation(project(":commontest"))
+    testImplementation(project(":dto"))
 
     androidTestImplementation(project(":testtags"))
     androidTestImplementation(project(":resourcetypes-domain"))
