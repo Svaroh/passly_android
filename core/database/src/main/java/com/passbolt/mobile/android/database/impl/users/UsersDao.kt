@@ -44,4 +44,10 @@ interface UsersDao : BaseDao<User> {
 
     @Query("DELETE FROM User WHERE updateState = :updateState")
     suspend fun removeWithUpdateState(updateState: UserUpdateState)
+
+    @Query("DELETE FROM User WHERE id = :userId")
+    suspend fun delete(userId: String)
+
+    @Query("DELETE FROM User WHERE id IN (:userIds)")
+    suspend fun deleteAll(userIds: List<String>)
 }

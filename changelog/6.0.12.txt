@@ -1,0 +1,4 @@
+6.0.12
+- Wired FullDataRefreshExecutor into SyncEngine to enforce offline-first fast delta synchronization when local replica data exists.
+- Ensured full data refresh / bootstrap is strictly executed only when local data is completely absent.
+- Eliminated prolonged blocking full refresh spinners on HomeScreen and OtpScreen during user refresh actions.

@@ -229,4 +229,10 @@ interface FoldersDao : BaseDao<Folder> {
     @Transaction
     @Query("DELETE FROM Folder WHERE updateState = :updateState")
     suspend fun removeWithUpdateState(updateState: FolderUpdateState)
+
+    @Query("DELETE FROM Folder WHERE folderId = :folderId")
+    suspend fun delete(folderId: String)
+
+    @Query("DELETE FROM Folder WHERE folderId IN (:folderIds)")
+    suspend fun deleteAll(folderIds: List<String>)
 }

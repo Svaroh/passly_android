@@ -66,4 +66,10 @@ interface GroupsDao : BaseDao<UsersGroup> {
     @Transaction
     @Query("SELECT * FROM UsersGroup WHERE groupId=:groupId ORDER BY name ASC")
     suspend fun getGroupWithUsers(groupId: String): GroupWithUsers
+
+    @Query("DELETE FROM UsersGroup WHERE groupId = :groupId")
+    suspend fun delete(groupId: String)
+
+    @Query("DELETE FROM UsersGroup WHERE groupId IN (:groupIds)")
+    suspend fun deleteAll(groupIds: List<String>)
 }

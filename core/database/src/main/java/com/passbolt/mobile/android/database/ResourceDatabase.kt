@@ -20,6 +20,7 @@ import net.svaroh.passly.database.impl.resources.PaginatedResourcesDao
 import net.svaroh.passly.database.impl.resources.ResourcesDao
 import net.svaroh.passly.database.impl.resourcetypes.ResourceTypesDao
 import net.svaroh.passly.database.impl.secrets.SecretsDao
+import net.svaroh.passly.database.impl.sync.SyncStateDao
 import net.svaroh.passly.database.impl.tags.PaginatedTagsDao
 import net.svaroh.passly.database.impl.tags.TagsDao
 import net.svaroh.passly.database.impl.users.UsersDao
@@ -45,6 +46,7 @@ import net.svaroh.passly.entity.resource.ResourceUriFts
 import net.svaroh.passly.entity.resource.Tag
 import net.svaroh.passly.entity.resource.TagFts
 import net.svaroh.passly.entity.secret.Secret
+import net.svaroh.passly.entity.sync.SyncState
 import net.svaroh.passly.entity.user.ResourceAndUsersCrossRef
 import net.svaroh.passly.entity.user.User
 
@@ -95,8 +97,9 @@ import net.svaroh.passly.entity.user.User
         MetadataKey::class,
         MetadataPrivateKey::class,
         Secret::class,
+        SyncState::class,
     ],
-    version = 30,
+    version = 31,
 )
 @TypeConverters(Converters::class)
 abstract class ResourceDatabase : RoomDatabase() {
@@ -141,4 +144,6 @@ abstract class ResourceDatabase : RoomDatabase() {
     abstract fun metadataPrivateKeysDao(): MetadataPrivateKeysDao
 
     abstract fun secretsDao(): SecretsDao
+
+    abstract fun syncStateDao(): SyncStateDao
 }

@@ -405,4 +405,10 @@ interface ResourcesDao : BaseDao<Resource> {
     @Transaction
     @Query("DELETE FROM Resource WHERE updateState = :updateState")
     suspend fun removeWithUpdateState(updateState: ResourceUpdateState)
+
+    @Query("DELETE FROM Resource WHERE resourceId = :resourceId")
+    suspend fun delete(resourceId: String)
+
+    @Query("DELETE FROM Resource WHERE resourceId IN (:resourceIds)")
+    suspend fun deleteAll(resourceIds: List<String>)
 }
