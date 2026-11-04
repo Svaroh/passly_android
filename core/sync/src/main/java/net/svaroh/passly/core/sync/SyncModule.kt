@@ -18,6 +18,9 @@
  */
 package net.svaroh.passly.core.sync
 
+import net.svaroh.passly.core.networking.RestService
+import net.svaroh.passly.core.sync.api.SyncApi
+import net.svaroh.passly.core.sync.work.SyncScheduler
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -26,4 +29,11 @@ val syncModule =
     module {
         single { NetworkStateProvider(androidApplication()) }
         singleOf(::SyncStatusRepository)
+        single<SyncApi> { get<RestService>().service(SyncApi::class.java) }
+        singleOf(::ChangesApplier)
+        singleOf(::DeltaSyncStrategy)
+        singleOf(::BootstrapStrategy)
+        singleOf(::ManifestReconciler)
+        singleOf(::SyncEngine)
+        single { SyncScheduler(androidApplication()) }
     }

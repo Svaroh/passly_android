@@ -85,6 +85,7 @@ camerax-mlvision = { module = "androidx.camera:camera-mlkit-vision", version.ref
 lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 app-startup = { module = "androidx.startup:startup-runtime", version.ref = "appStartUp" }
 work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
+work-testing = { module = "androidx.work:work-testing", version.ref = "work" }
 splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }

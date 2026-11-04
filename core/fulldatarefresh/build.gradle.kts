@@ -22,6 +22,8 @@ dependencies {
     implementation(project(":database"))
     implementation(project(":coreui"))
     implementation(project(":notifications"))
+    implementation(project(":accounts-domain"))
+    implementation(project(":sync"))
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin)
@@ -30,4 +32,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.service)
 
     testImplementation(project(":commontest"))
+    testImplementation(project(":navigation"))
+    testImplementation(project(":passphrasememorycache"))
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.truth)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit)
 }

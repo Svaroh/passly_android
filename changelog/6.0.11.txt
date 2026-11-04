@@ -1,0 +1,4 @@
+6.0.11
+- Milestone M3 (sync/1): Implemented incremental delta synchronization engine (DeltaSyncStrategy, ChangesApplier, BootstrapStrategy, ManifestReconciler).
+- Implemented Room database migration 30 -> 31 with SyncState persistent table.
+- Added background WorkManager scheduler (SyncWorker, SyncScheduler) for periodic and immediate delta sync.

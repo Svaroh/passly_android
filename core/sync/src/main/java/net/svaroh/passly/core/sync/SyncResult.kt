@@ -77,4 +77,17 @@ data class SyncStats(
 ) {
     val isEmpty: Boolean
         get() = upserted == 0 && deleted == 0 && secretsUpdated == 0 && pushedOperations == 0
+
+    operator fun plus(other: SyncStats): SyncStats =
+        SyncStats(
+            upserted = this.upserted + other.upserted,
+            deleted = this.deleted + other.deleted,
+            secretsUpdated = this.secretsUpdated + other.secretsUpdated,
+            pushedOperations = this.pushedOperations + other.pushedOperations,
+            reconciled = this.reconciled || other.reconciled,
+        )
+
+    companion object {
+        val EMPTY = SyncStats()
+    }
 }

@@ -54,8 +54,50 @@ class PassboltApplication :
 
     override fun onCreate() {
         super.onCreate()
+        configureLeakCanary()
         applyAutomaticPageSizeUseCase.execute(Unit)
         registerAppForegroundListener()
+    }
+
+    private fun configureLeakCanary() {
+        if (!BuildConfig.DEBUG) return
+        runCatching {
+            val leakCanaryClass = Class.forName("leakcanary.LeakCanary")
+            val getConfigMethod = leakCanaryClass.getMethod("getConfig")
+            val setConfigMethod = leakCanaryClass.getMethod("setConfig", Class.forName("leakcanary.LeakCanary\$Config"))
+            val matchersClass = Class.forName("shark.AndroidReferenceMatchers")
+            val ignoredFieldMethod = matchersClass.getMethod("ignoredInstanceField", String::class.java, String::class.java)
+
+            val currentConfig = getConfigMethod.invoke(null) ?: return@runCatching
+            val builderMethod = currentConfig.javaClass.getMethod("newBuilder")
+            val builder = builderMethod.invoke(currentConfig)
+            val getMatchersMethod = currentConfig.javaClass.getMethod("getReferenceMatchers")
+            @Suppress("UNCHECKED_CAST")
+            val currentMatchers = getMatchersMethod.invoke(currentConfig) as? List<Any> ?: emptyList()
+
+            val ignoredStubThis0 = ignoredFieldMethod.invoke(
+                null,
+                "android.service.credentials.CredentialProviderService\$1",
+                "this$0",
+            )
+            val ignoredInterface = ignoredFieldMethod.invoke(
+                null,
+                "android.service.credentials.CredentialProviderService",
+                "mInterface",
+            )
+            val ignoredAndroidxService = ignoredFieldMethod.invoke(
+                null,
+                "androidx.credentials.provider.CredentialProviderService",
+                "mInterface",
+            )
+
+            val newMatchers = currentMatchers + listOfNotNull(ignoredStubThis0, ignoredInterface, ignoredAndroidxService)
+            val referenceMatchersMethod = builder.javaClass.getMethod("referenceMatchers", List::class.java)
+            referenceMatchersMethod.invoke(builder, newMatchers)
+            val buildMethod = builder.javaClass.getMethod("build")
+            val newConfig = buildMethod.invoke(builder)
+            setConfigMethod.invoke(null, newConfig)
+        }
     }
 
     /**
